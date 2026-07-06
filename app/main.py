@@ -2,11 +2,12 @@ from fastapi import FastAPI, UploadFile, File
 from parser.fits_parser import parse_fits
 from app.database.database import SessionLocal
 from app.services.capture_service import create_capture_from_parsed_fits
+from app.api.captures import router as capture_router
+app = FastAPI(title="Project Polaris API")
+app.include_router(capture_router)
 
 import tempfile
 import os
-
-app = FastAPI(title="Project Polaris API")
 
 
 @app.get("/")
@@ -52,14 +53,17 @@ async def ingest_fits_upload(file: UploadFile = File(...)):
             "status": "saved",
             "capture": {
                 "id": capture.id,
+                "polaris_id": capture.polaris_id,
                 "object_name": capture.object_name,
                 "filename": capture.filename,
+                "asset_path": capture.asset_path,
                 "observation_utc": capture.observation_utc,
                 "gain": capture.gain,
                 "ra": capture.ra,
                 "dec": capture.dec,
                 "telescope": capture.telescope,
                 "firmware": capture.firmware,
+                "status": capture.status,
             },
             "parsed": parsed,
         }
