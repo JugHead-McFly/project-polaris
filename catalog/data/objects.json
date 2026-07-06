@@ -1,0 +1,57 @@
+[
+  {
+    "id": "M8",
+    "aliases": ["M 8", "MESSIER 8"],
+    "common_name": "Lagoon Nebula",
+    "type": "Emission Nebula",
+    "constellation": "Sagittarius",
+    "best_months": ["June", "July", "August"],
+    "moon_tolerance": "Low",
+    "dwarf_suitability": "Excellent",
+    "recommended_integration_hours": 3
+  },
+  {
+    "id": "M16",
+    "aliases": ["M 16", "MESSIER 16"],
+    "common_name": "Eagle Nebula",
+    "type": "Emission Nebula",
+    "constellation": "Serpens",
+    "best_months": ["June", "July", "August"],
+    "moon_tolerance": "Low",
+    "dwarf_suitability": "Excellent",
+    "recommended_integration_hours": 4
+  },
+  {
+    "id": "M17",
+    "aliases": ["M 17", "MESSIER 17"],
+    "common_name": "Omega / Swan Nebula",
+    "type": "Emission Nebula",
+    "constellation": "Sagittarius",
+    "best_months": ["June", "July", "August"],
+    "moon_tolerance": "Low",
+    "dwarf_suitability": "Excellent",
+    "recommended_integration_hours": 4
+  },
+  {
+    "id": "M22",
+    "aliases": ["M 22", "MESSIER 22"],
+    "common_name": "Great Sagittarius Cluster",
+    "type": "Globular Cluster",
+    "constellation": "Sagittarius",
+    "best_months": ["June", "July", "August"],
+    "moon_tolerance": "High",
+    "dwarf_suitability": "Excellent",
+    "recommended_integration_hours": 2
+  },
+  {
+    "id": "M11",
+    "aliases": ["M 11", "MESSIER 11"],
+    "common_name": "Wild Duck Cluster",
+    "type": "Open Cluster",
+    "constellation": "Scutum",
+    "best_months": ["June", "July", "August"],
+    "moon_tolerance": "High",
+    "dwarf_suitability": "Excellent",
+    "recommended_integration_hours": 1.5
+  }
+]

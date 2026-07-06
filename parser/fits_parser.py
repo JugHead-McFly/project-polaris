@@ -1,24 +1,6 @@
 from astropy.io import fits
-from typing import Any, Dict
-import re
-
-
-MESSIER_LOOKUP = {
-    "M 8": {"object": "M8", "common_name": "Lagoon Nebula", "type": "Emission Nebula", "constellation": "Sagittarius"},
-    "M8": {"object": "M8", "common_name": "Lagoon Nebula", "type": "Emission Nebula", "constellation": "Sagittarius"},
-    "M 16": {"object": "M16", "common_name": "Eagle Nebula", "type": "Emission Nebula", "constellation": "Serpens"},
-    "M16": {"object": "M16", "common_name": "Eagle Nebula", "type": "Emission Nebula", "constellation": "Serpens"},
-    "M 17": {"object": "M17", "common_name": "Omega / Swan Nebula", "type": "Emission Nebula", "constellation": "Sagittarius"},
-    "M17": {"object": "M17", "common_name": "Omega / Swan Nebula", "type": "Emission Nebula", "constellation": "Sagittarius"},
-    "M 22": {"object": "M22", "common_name": "Great Sagittarius Cluster", "type": "Globular Cluster", "constellation": "Sagittarius"},
-    "M22": {"object": "M22", "common_name": "Great Sagittarius Cluster", "type": "Globular Cluster", "constellation": "Sagittarius"},
-    "M 31": {"object": "M31", "common_name": "Andromeda Galaxy", "type": "Galaxy", "constellation": "Andromeda"},
-    "M31": {"object": "M31", "common_name": "Andromeda Galaxy", "type": "Galaxy", "constellation": "Andromeda"},
-    "M 51": {"object": "M51", "common_name": "Whirlpool Galaxy", "type": "Galaxy", "constellation": "Canes Venatici"},
-    "M51": {"object": "M51", "common_name": "Whirlpool Galaxy", "type": "Galaxy", "constellation": "Canes Venatici"},
-    "M 57": {"object": "M57", "common_name": "Ring Nebula", "type": "Planetary Nebula", "constellation": "Lyra"},
-    "M57": {"object": "M57", "common_name": "Ring Nebula", "type": "Planetary Nebula", "constellation": "Lyra"},
-}
+from typing import Any
+from catalog.object_catalog import lookup_object
 
 
 def _clean_value(value: Any) -> Any:
@@ -27,30 +9,6 @@ def _clean_value(value: Any) -> Any:
     if isinstance(value, (int, float, bool)):
         return value
     return str(value).strip()
-
-
-def _normalize_object_name(raw: str) -> str:
-    raw = (raw or "").strip().upper()
-    raw = re.sub(r"\s+", " ", raw)
-    raw = raw.replace("MESSIER ", "M ")
-    return raw
-
-
-def _target_info(raw_object: str) -> Dict[str, Any]:
-    key = _normalize_object_name(raw_object)
-    if key in MESSIER_LOOKUP:
-        return MESSIER_LOOKUP[key]
-
-    compact = key.replace(" ", "")
-    if compact in MESSIER_LOOKUP:
-        return MESSIER_LOOKUP[compact]
-
-    return {
-        "object": raw_object or "",
-        "common_name": "",
-        "type": "",
-        "constellation": "",
-    }
 
 
 def parse_fits(path: str) -> dict:
@@ -68,11 +26,12 @@ def parse_fits(path: str) -> dict:
             comments[key] = card.comment or ""
 
         raw_object = raw_header.get("OBJECT", "")
-        target = _target_info(str(raw_object))
+        catalog_object = lookup_object(str(raw_object))
 
-        parsed = {
+        return {
             "project": "Project Polaris",
-            "target": target,
+            "version": "0.2",
+            "target": catalog_object,
             "observation": {
                 "object_raw": raw_object,
                 "observation_utc": raw_header.get("DATE-OBS", ""),
@@ -103,7 +62,6 @@ def parse_fits(path: str) -> dict:
             "header_comments": comments,
         }
 
-        return parsed
 
 if __name__ == "__main__":
     import json
