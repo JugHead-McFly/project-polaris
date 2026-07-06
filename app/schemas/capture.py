@@ -14,6 +14,8 @@ class CaptureSummary(BaseModel):
 
 class CaptureDetail(CaptureSummary):
     id: int
+    session_id: Optional[int] = None
+    asset_path: Optional[str] = None
     asset_path: Optional[str] = None
     gain: Optional[float] = None
     ra: Optional[float] = None

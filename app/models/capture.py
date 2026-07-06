@@ -5,6 +5,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import Float
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import ForeignKey
 
 from app.database.database import Base
 
@@ -15,7 +16,11 @@ class Capture(Base):
     id = Column(Integer, primary_key=True)
 
     polaris_id = Column(String, unique=True, index=True)
-
+    session_id = Column(
+    Integer,
+    ForeignKey("sessions.id"),
+    nullable=True,
+    )   
     object_name = Column(String)
     filename = Column(String)
     asset_path = Column(String)

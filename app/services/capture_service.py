@@ -1,8 +1,7 @@
 from datetime import datetime
-
 from sqlalchemy.orm import Session
-
 from app.models import Capture
+from app.models import ObservingSession
 
 
 def _to_float(value):
@@ -38,9 +37,15 @@ def create_capture_from_parsed_fits(
     observation = parsed.get("observation", {})
     settings = parsed.get("capture_settings", {})
     equipment = parsed.get("equipment", {})
+    latest_session = (
+    db.query(ObservingSession)
+    .order_by(ObservingSession.id.desc())
+    .first()
+)
 
     capture = Capture(
         polaris_id=_next_polaris_id(db),
+        session_id=latest_session.id if latest_session else None,
         object_name=target.get("id", ""),
         filename=filename,
         asset_path=asset_path,

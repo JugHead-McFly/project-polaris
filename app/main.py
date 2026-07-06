@@ -4,9 +4,15 @@ from app.database.database import SessionLocal
 from app.services.capture_service import create_capture_from_parsed_fits
 from app.api.captures import router as capture_router
 from app.api.mission import router as mission_router
+from app.api.dashboard import router as dashboard_router
+from app.api.sessions import router as sessions_router
+
 app = FastAPI(title="Project Polaris API")
+
 app.include_router(capture_router)
 app.include_router(mission_router)
+app.include_router(dashboard_router)
+app.include_router(sessions_router)
 
 import tempfile
 import os
