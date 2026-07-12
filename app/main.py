@@ -8,6 +8,7 @@ from app.api.dashboard import router as dashboard_router
 from app.api.sessions import router as sessions_router
 from app.api.objects import router as objects_router
 from app.api.portfolio import router as portfolio_router
+from app.api.tonight import router as tonight_router
 
 app = FastAPI(title="Project Polaris API")
 
@@ -17,6 +18,7 @@ app.include_router(dashboard_router)
 app.include_router(sessions_router)
 app.include_router(objects_router)
 app.include_router(portfolio_router)
+app.include_router(tonight_router)
 
 import tempfile
 import os

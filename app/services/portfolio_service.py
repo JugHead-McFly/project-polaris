@@ -219,4 +219,10 @@ def build_portfolio_target(
         "estimated_nights_remaining": get_estimated_nights_remaining(
             remaining_hours
         ),
+        "observable": True,
+        "current_altitude": None,
+        "transit_time": None,
+        "moon_warning": None,
+        "recommended_start": None,
+        "recommended_end": None,
     }
