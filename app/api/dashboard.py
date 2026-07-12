@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from app.database.database import SessionLocal
 from app.models import Capture
 from app.models import ObservingSession
+from datetime import datetime
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -29,9 +30,20 @@ def dashboard():
             total_integration_seconds / 3600,
             2,
         )
+        imaging_efficiency = round(
+            (
+                total_integration_hours
+                / max(total_captures, 1)
+            ),
+            2,
+        )
         integration_by_object = {}
+        captures_by_object = {}
 
         for capture in captures:
+            captures_by_object[capture.object_name] = (
+            captures_by_object.get(capture.object_name, 0) + 1
+        )
             if not capture.object_name:
                 continue
 
@@ -78,9 +90,11 @@ def dashboard():
         }
 
         portfolio_level_by_object = {}
-
+       
         for object_name, progress in progress_by_object.items():
-            if progress >= 100:
+            if progress >= 125:
+                level = "Platinum"
+            elif progress >= 100:
                 level = "Gold"
             elif progress >= 60:
                 level = "Silver"
@@ -101,6 +115,19 @@ def dashboard():
             "M11",
             "M22",
         ]
+
+        portfolio_counts = {
+            "Not Started": 0,
+            "Bronze": 0,
+            "Silver": 0,
+            "Gold": 0,
+            "Platinum": 0,
+        }
+
+        for target in target_priority:
+            level = portfolio_level_by_object.get(target, "Not Started")
+            portfolio_counts[level] += 1
+
 
         recommended_target = next(
             (
@@ -166,16 +193,47 @@ def dashboard():
 
 
         latest = captures[-1] if captures else None
+        capture_age_days = None
+
+        if latest and latest.observation_utc:
+            observation_datetime = datetime.fromisoformat(
+                latest.observation_utc.replace("Z", "+00:00")
+            )
+
+            capture_age_days = (
+                datetime.utcnow() - observation_datetime.replace(tzinfo=None)
+            ).days
+        total_sessions = db.query(ObservingSession).count()
+
+        raw_captures = db.query(Capture).count()
+        raw_sessions = db.query(ObservingSession).count()
+
+        database_metrics = {
+            "captures": raw_captures,
+            "sessions": raw_sessions,
+            "objects": len(unique_objects),
+        }
 
         return {
+            "api_version": "0.6",
+            "system": {
+                "status": "Healthy",
+                "database": "Connected",
+                "last_updated": datetime.utcnow().isoformat(),
+            },
+            "metrics": database_metrics,
             "observatory": {
                 "name": "Doug's Observatory",
-            "location": latest_session.location if latest_session else None,            },
+                "location": latest_session.location if latest_session else None,
+            },
             "statistics": {
                 "total_integration_seconds": total_integration_seconds,
                 "total_integration_hours": total_integration_hours,
                 "integration_by_object_hours": integration_by_object_hours,
+                "average_hours_per_capture": imaging_efficiency,
                 "portfolio_level_by_object": portfolio_level_by_object,
+                "captures_by_object": captures_by_object,
+                "portfolio_counts": portfolio_counts,
                 "progress_by_object": progress_by_object,
                 "total_captures": total_captures,
                 "objects_imaged": len(unique_objects),
@@ -186,6 +244,15 @@ def dashboard():
             "latest_capture": {
                 "polaris_id": latest.polaris_id if latest else None,
                 "object": latest.object_name if latest else None,
+                "filename": latest.filename if latest else None,
+                "observation_utc": latest.observation_utc if latest else None,
+                "exposure_seconds": latest.exposure_seconds if latest else None,
+                "telescope": latest.telescope if latest else None,
+                "firmware": latest.firmware if latest else None,
+                "gain": latest.gain if latest else None,
+                "ra": latest.ra if latest else None,
+                "dec": latest.dec if latest else None,
+                "capture_age_days": capture_age_days,
                 "status": latest.status if latest else None,
             },
             "current_session": {
