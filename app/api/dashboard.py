@@ -4,6 +4,9 @@ from app.database.database import SessionLocal
 from app.models import Capture
 from app.models import ObservingSession
 from datetime import datetime
+from app.services.portfolio_service import INTEGRATION_GOALS_HOURS
+from app.services.portfolio_service import TARGET_PRIORITY
+from app.services.portfolio_service import get_portfolio_level
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -56,13 +59,7 @@ def dashboard():
             object_name: round(seconds / 3600, 2)
             for object_name, seconds in integration_by_object.items()
         }
-        integration_goals_hours = {
-            "M16": 6.0,
-            "M17": 6.0,
-            "M20": 4.0,
-            "M11": 2.0,
-            "M22": 2.0,
-        }
+        integration_goals_hours = INTEGRATION_GOALS_HOURS
 
         remaining_hours_by_object = {}
 
@@ -92,29 +89,13 @@ def dashboard():
         portfolio_level_by_object = {}
        
         for object_name, progress in progress_by_object.items():
-            if progress >= 125:
-                level = "Platinum"
-            elif progress >= 100:
-                level = "Gold"
-            elif progress >= 60:
-                level = "Silver"
-            elif progress > 0:
-                level = "Bronze"
-            else:
-                level = "Not Started"
-
+            level = get_portfolio_level(progress)
             portfolio_level_by_object[object_name] = level
 
         unique_objects = sorted(
             set(c.object_name for c in captures if c.object_name)
         )
-        target_priority = [
-            "M16",
-            "M17",
-            "M20",
-            "M11",
-            "M22",
-        ]
+        target_priority = TARGET_PRIORITY
 
         portfolio_counts = {
             "Not Started": 0,
