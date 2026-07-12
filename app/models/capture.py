@@ -38,3 +38,4 @@ class Capture(Base):
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
+    exposure_seconds = Column(Integer, nullable=True)

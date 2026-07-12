@@ -56,6 +56,7 @@ def create_capture_from_parsed_fits(
         telescope=equipment.get("telescope", ""),
         firmware=equipment.get("firmware", ""),
         status="Raw",
+        exposure_seconds=_to_float(settings.get("integration_seconds")),
     )
 
     db.add(capture)
