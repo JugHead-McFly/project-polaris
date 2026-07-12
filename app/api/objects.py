@@ -23,7 +23,7 @@ def get_object_summary(object_name: str):
         total_hours = round(total_seconds / 3600, 2)
 
         portfolio = build_portfolio_target(
-            object_name=object_name.upper(),
+        object_name=object_name.upper(),
             total_hours=total_hours,
 
 )
