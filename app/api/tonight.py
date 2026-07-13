@@ -9,6 +9,20 @@ from app.services.portfolio_service import build_portfolio_target
 from app.services.recommendation_service import get_backup_reason
 from app.services.recommendation_service import get_recommendation_reason
 from app.services.recommendation_service import get_recommended_targets
+from app.core.observatory import DEFAULT_POSTAL_CODE
+from app.core.observatory import OBSERVATORY_NAME
+from app.core.observatory import TIMEZONE
+from app.core.observatory import ELEVATION_METERS
+from app.core.observatory import LATITUDE
+from app.core.observatory import LONGITUDE
+from app.services.astronomy_service import get_altitude
+from app.services.astronomy_service import is_observable
+from app.services.astronomy_service import get_transit_time
+from app.services.astronomy_service import get_recommended_window
+from app.services.astronomy_service import get_moon_info
+from app.services.astronomy_service import get_moon_separation
+from app.services.astronomy_service import get_moon_warning
+from app.services.astronomy_service import get_darkness_info
 
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
 
@@ -46,27 +60,94 @@ def tonight():
 
         if recommended_name:
             recommended_target = portfolio[recommended_name].copy()
-            recommended_target["reason"] = (
-                get_recommendation_reason(recommended_name)
+
+            recommended_target["current_altitude"] = get_altitude(
+                recommended_target["object"]
             )
+            recommended_target["observable"] = is_observable(
+                recommended_target["object"]
+            )
+            recommended_target["transit_time"] = get_transit_time(
+                recommended_target["object"]
+            )
+
+            window = get_recommended_window(
+                recommended_target["object"]
+            )
+
+            recommended_target["recommended_start"] = (
+                window["recommended_start"]
+            )
+            recommended_target["recommended_end"] = (
+                window["recommended_end"]
+            )
+            target_name = recommended_target["object"]
+
+            recommended_target["moon_separation_degrees"] = (
+                get_moon_separation(target_name)
+            )
+
+            recommended_target["moon_warning"] = (
+                get_moon_warning(
+            recommended_target["object"]
+                )
+)
         else:
             recommended_target = None
 
         if backup_name:
             backup_target = portfolio[backup_name].copy()
-            backup_target["reason"] = (
-                get_backup_reason(backup_name)
+
+            backup_target["current_altitude"] = get_altitude(
+                backup_target["object"]
             )
+            backup_target["observable"] = is_observable(
+                backup_target["object"]
+            )
+            backup_target["transit_time"] = get_transit_time(
+                backup_target["object"]
+            )
+
+            window = get_recommended_window(
+                backup_target["object"]
+            )
+
+            backup_target["recommended_start"] = (
+                window["recommended_start"]
+            )
+            backup_target["recommended_end"] = (
+                window["recommended_end"]
+            )
+
+            backup_target["moon_warning"] = (
+                get_moon_warning(
+                    backup_target["object"]
+                )
+            )
+            target_name = backup_target["object"]
+
+            backup_target["moon_separation_degrees"] = (
+                get_moon_separation(target_name)
+            ) 
         else:
             backup_target = None
-            
+
         return {
             "date": datetime.now().date().isoformat(),
+            "observatory": {
+                "name": OBSERVATORY_NAME,
+                "postal_code": DEFAULT_POSTAL_CODE,
+                "timezone": TIMEZONE,
+                "latitude": LATITUDE,
+                "longitude": LONGITUDE,
+                "elevation_meters": ELEVATION_METERS,
+            },
             "recommended_target": recommended_target,
             "backup_target": backup_target, 
-            "moon": None,
+            "moon": get_moon_info(),
             "weather": None,
             "message": "Astronomy calculations coming soon.",
+            "darkness": get_darkness_info(),
         }
 
     finally:
