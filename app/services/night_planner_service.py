@@ -47,7 +47,24 @@ def build_night_plan(
             "reason": backup_target["next_action"],
         }
 
+        observing_rating = weather.get("observing_rating", 1)
+
+        if observing_rating >= 4:
+            decision = "Proceed"
+        elif observing_rating == 3:
+            decision = "Use Caution"
+        else:
+            decision = "Do Not Image"
+
+            if decision == "Do Not Image":
+                target_sequence = []
+                backup_option = None
+                notes.append(
+                    "No imaging schedule generated because conditions are unsuitable."
+                )
+
     return {
+        "decision": decision,
         "overall_rating": weather["observing_rating"],
         "start_imaging": darkness["astronomical_darkness_start"],
         "shutdown_time": darkness["astronomical_darkness_end"],

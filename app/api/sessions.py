@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Path
 from pydantic import BaseModel
 from app.models import Capture
 from app.database.database import SessionLocal
@@ -57,8 +57,22 @@ def list_sessions():
     finally:
         db.close()
 
-@router.get("/{session_id}")
-def get_session(session_id: str):
+@router.get(
+    "/{session_id}",
+    responses={
+        404: {
+            "description": "Session not found",
+        }
+    },
+)
+def get_session(
+    session_id: str = Path(
+        ...,
+        title="Session ID",
+        description="Observing session identifier, for example SES-20260712-195949",
+        examples=["SES-20260712-195949"],
+    )
+):
     db = SessionLocal()
 
     try:
@@ -69,33 +83,12 @@ def get_session(session_id: str):
         )
 
         if session is None:
-            return {"error": "Session not found"}
+            raise HTTPException(
+                status_code=404,
+                detail=f"Session '{session_id}' was not found.",
+            )
 
-        captures = (
-            db.query(Capture)
-            .filter(Capture.session_id == session.id)
-            .order_by(Capture.id)
-            .all()
-        )
-
-        return {
-            "session_id": session.session_id,
-            "date": session.date,
-            "location": session.location,
-            "observatory": session.observatory,
-            "moon_phase": session.moon_phase,
-            "weather_summary": session.weather_summary,
-            "notes": session.notes,
-            "captures": [
-                {
-                    "polaris_id": c.polaris_id,
-                    "object_name": c.object_name,
-                    "filename": c.filename,
-                    "status": c.status,
-                }
-                for c in captures
-            ],
-        }
+        return session
 
     finally:
         db.close()

@@ -25,6 +25,7 @@ from app.services.astronomy_service import get_moon_warning
 from app.services.astronomy_service import get_darkness_info
 from app.services.weather_service import get_weather_summary
 from app.services.night_rating_service import calculate_night_rating
+from app.schemas.tonight import TonightResponse
 from app.services.night_planner_service import (
     build_night_plan,
 )
@@ -32,7 +33,7 @@ from app.services.night_planner_service import (
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
 
 
-@router.get("")
+@router.get("", response_model=TonightResponse)
 def tonight():
     db = SessionLocal()
 

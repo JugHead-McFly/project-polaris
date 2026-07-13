@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Path
 
 from app.database.database import SessionLocal
 from app.models import Capture
@@ -21,8 +21,23 @@ def list_captures():
         db.close()
 
 
-@router.get("/{polaris_id}", response_model=CaptureDetail)
-def get_capture(polaris_id: str):
+@router.get(
+    "/{polaris_id}",
+    response_model=CaptureDetail,
+    responses={
+        404: {
+            "description": "Capture not found",
+        }
+    },
+)
+def get_capture(
+    polaris_id: str = Path(
+        ...,
+        title="Polaris Capture ID",
+        description="Unique capture identifier, for example POL-2026-000001",
+        examples=["POL-2026-000001"],
+    )
+):
     db = SessionLocal()
 
     try:
@@ -33,7 +48,10 @@ def get_capture(polaris_id: str):
         )
 
         if capture is None:
-            return {"error": "Capture not found"}
+            raise HTTPException(
+                status_code=404,
+                detail=f"Capture '{polaris_id}' was not found.",
+            )
 
         return capture
 
