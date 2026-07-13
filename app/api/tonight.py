@@ -23,6 +23,11 @@ from app.services.astronomy_service import get_moon_info
 from app.services.astronomy_service import get_moon_separation
 from app.services.astronomy_service import get_moon_warning
 from app.services.astronomy_service import get_darkness_info
+from app.services.weather_service import get_weather_summary
+from app.services.night_rating_service import calculate_night_rating
+from app.services.night_planner_service import (
+    build_night_plan,
+)
 
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
 
@@ -87,11 +92,10 @@ def tonight():
                 get_moon_separation(target_name)
             )
 
-            recommended_target["moon_warning"] = (
-                get_moon_warning(
-            recommended_target["object"]
-                )
-)
+            recommended_target["moon_warning"] = get_moon_warning(
+                recommended_target["object"]
+            )
+
         else:
             recommended_target = None
 
@@ -132,6 +136,25 @@ def tonight():
         else:
             backup_target = None
 
+        moon = get_moon_info()
+        weather = get_weather_summary(DEFAULT_POSTAL_CODE)
+
+        night_rating = calculate_night_rating(
+            weather,
+            moon,
+            recommended_target,
+        )
+
+        darkness = get_darkness_info()
+
+        night_plan = build_night_plan(
+            recommended_target,
+            backup_target,
+            darkness,
+            weather,
+        )
+
+        
         return {
             "date": datetime.now().date().isoformat(),
             "observatory": {
@@ -144,10 +167,12 @@ def tonight():
             },
             "recommended_target": recommended_target,
             "backup_target": backup_target, 
-            "moon": get_moon_info(),
-            "weather": None,
+            "moon": moon,
+            "weather": weather,
+            "night_rating": night_rating,
             "message": "Astronomy calculations coming soon.",
-            "darkness": get_darkness_info(),
+            "night_plan": night_plan,
+            "darkness": darkness,
         }
 
     finally:
