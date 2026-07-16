@@ -1,21 +1,26 @@
-from datetime import datetime, timezone
-
-from astropy.coordinates import AltAz
-from astropy.coordinates import EarthLocation
-from astropy.coordinates import SkyCoord
-from astropy.time import Time
-import astropy.units as u
-
-from app.core.observatory import ELEVATION_METERS
-from app.core.observatory import LATITUDE
-from app.core.observatory import LONGITUDE
-from app.data.targets import TARGETS
-from astroplan import Observer
+import math
+from datetime import datetime, timedelta, timezone
+from typing import Dict, Optional, Tuple
 from zoneinfo import ZoneInfo
-from app.core.observatory import TIMEZONE
-from datetime import timedelta
-from astropy.coordinates import get_body
-from astropy.coordinates import get_sun
+
+import astropy.units as u
+from astroplan import Observer
+from astropy.coordinates import (
+    AltAz,
+    EarthLocation,
+    SkyCoord,
+    get_body,
+    get_sun,
+)
+from astropy.time import Time
+
+from app.core.observatory import (
+    ELEVATION_METERS,
+    LATITUDE,
+    LONGITUDE,
+    TIMEZONE,
+)
+from app.data.targets import TARGETS
 
 
 OBSERVATORY_LOCATION = EarthLocation(
@@ -30,149 +35,272 @@ OBSERVER = Observer(
 )
 
 
-def get_target(target_name: str):
-    return TARGETS.get(target_name)
+def get_target(
+    target_name: str,
+) -> Optional[Dict]:
+    return TARGETS.get(
+        target_name.strip().upper()
+    )
 
 
-from typing import Optional
-def get_altitude(target_name: str) -> Optional[float]:
+def normalize_datetime(
+    observation_datetime: Optional[datetime] = None,
+) -> datetime:
+    if observation_datetime is None:
+        return datetime.now(timezone.utc)
+
+    if observation_datetime.tzinfo is None:
+        return observation_datetime.replace(
+            tzinfo=ZoneInfo(TIMEZONE)
+        )
+
+    return observation_datetime
+
+
+def to_astropy_time(
+    observation_datetime: Optional[datetime] = None,
+) -> Time:
+    normalized = normalize_datetime(
+        observation_datetime
+    )
+
+    return Time(
+        normalized.astimezone(timezone.utc)
+    )
+
+
+def get_target_coordinate(
+    target_name: str,
+) -> Optional[SkyCoord]:
     target = get_target(target_name)
 
-    if not target:
+    if target is None:
         return None
 
-    coordinate = SkyCoord(
+    return SkyCoord(
         target["ra"],
         target["dec"],
         frame="icrs",
     )
 
-    observation_time = Time(datetime.now(timezone.utc))
+
+def get_altitude_at(
+    target_name: str,
+    observation_datetime: datetime,
+) -> Optional[float]:
+    coordinate = get_target_coordinate(
+        target_name
+    )
+
+    if coordinate is None:
+        return None
+
+    observation_time = to_astropy_time(
+        observation_datetime
+    )
 
     altaz_frame = AltAz(
         obstime=observation_time,
         location=OBSERVATORY_LOCATION,
     )
 
-    altitude = coordinate.transform_to(altaz_frame).alt.deg
+    altitude = coordinate.transform_to(
+        altaz_frame
+    ).alt.deg
 
-    return round(float(altitude), 1)
+    return round(
+        float(altitude),
+        1,
+    )
 
 
-def is_observable(target_name: str) -> bool:
-    altitude = get_altitude(target_name)
+def get_altitude(
+    target_name: str,
+    observation_datetime: Optional[datetime] = None,
+) -> Optional[float]:
+    return get_altitude_at(
+        target_name=target_name,
+        observation_datetime=normalize_datetime(
+            observation_datetime
+        ),
+    )
+
+
+def is_observable_at(
+    target_name: str,
+    observation_datetime: datetime,
+    minimum_altitude: float = 20.0,
+) -> bool:
+    altitude = get_altitude_at(
+        target_name=target_name,
+        observation_datetime=observation_datetime,
+    )
 
     if altitude is None:
         return False
 
-    return altitude >= 20
+    return altitude >= minimum_altitude
 
 
-def get_transit_time(target_name: str) -> Optional[str]:
-    target = get_target(target_name)
+def is_observable(
+    target_name: str,
+    observation_datetime: Optional[datetime] = None,
+    minimum_altitude: float = 20.0,
+) -> bool:
+    return is_observable_at(
+        target_name=target_name,
+        observation_datetime=normalize_datetime(
+            observation_datetime
+        ),
+        minimum_altitude=minimum_altitude,
+    )
 
-    if not target:
+
+def get_transit_datetime(
+    target_name: str,
+    reference_datetime: Optional[datetime] = None,
+) -> Optional[datetime]:
+    coordinate = get_target_coordinate(
+        target_name
+    )
+
+    if coordinate is None:
         return None
 
-    coordinate = SkyCoord(
-        target["ra"],
-        target["dec"],
-        frame="icrs",
+    reference_time = to_astropy_time(
+        reference_datetime
     )
 
-    current_time = Time(datetime.now(timezone.utc))
-
-    transit = OBSERVER.target_meridian_transit_time(
-        current_time,
-        coordinate,
-        which="next",
+    transit = (
+        OBSERVER.target_meridian_transit_time(
+            reference_time,
+            coordinate,
+            which="next",
+        )
     )
 
-    local_datetime = transit.to_datetime(
+    return transit.to_datetime(
         timezone=ZoneInfo(TIMEZONE)
     )
 
-    return local_datetime.strftime("%Y-%m-%d %I:%M %p")
 
-def get_recommended_window(target_name: str):
-    transit_time = get_transit_time(target_name)
+def get_transit_time(
+    target_name: str,
+    reference_datetime: Optional[datetime] = None,
+) -> Optional[str]:
+    transit_datetime = get_transit_datetime(
+        target_name=target_name,
+        reference_datetime=reference_datetime,
+    )
 
-    if transit_time is None:
+    if transit_datetime is None:
+        return None
+
+    return transit_datetime.strftime(
+        "%Y-%m-%d %I:%M %p"
+    )
+
+
+def get_recommended_window(
+    target_name: str,
+    reference_datetime: Optional[datetime] = None,
+) -> Dict:
+    transit_datetime = get_transit_datetime(
+        target_name=target_name,
+        reference_datetime=reference_datetime,
+    )
+
+    if transit_datetime is None:
         return {
             "recommended_start": None,
             "recommended_end": None,
         }
 
-    return {
-        "recommended_start": "2 hours before transit",
-        "recommended_end": "2 hours after transit",
-    }
-
-def get_recommended_window(target_name: str):
-    target = get_target(target_name)
-
-    if not target:
-        return {
-            "recommended_start": None,
-            "recommended_end": None,
-        }
-
-    coordinate = SkyCoord(
-        target["ra"],
-        target["dec"],
-        frame="icrs",
+    start_local = (
+        transit_datetime
+        - timedelta(hours=2)
     )
 
-    current_time = Time(datetime.now(timezone.utc))
-
-    transit = OBSERVER.target_meridian_transit_time(
-        current_time,
-        coordinate,
-        which="next",
+    end_local = (
+        transit_datetime
+        + timedelta(hours=2)
     )
-
-    transit_local = transit.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
-    )
-
-    start_local = transit_local - timedelta(hours=2)
-    end_local = transit_local + timedelta(hours=2)
 
     return {
-        "recommended_start": start_local.strftime(
-            "%Y-%m-%d %I:%M %p"
+        "recommended_start": (
+            start_local.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
         ),
-        "recommended_end": end_local.strftime(
-            "%Y-%m-%d %I:%M %p"
+        "recommended_end": (
+            end_local.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
         ),
     }
 
-def get_moon_info():
-    observation_time = Time(datetime.now(timezone.utc))
+
+def get_moon_info_at(
+    observation_datetime: datetime,
+) -> Dict:
+    observation_time = to_astropy_time(
+        observation_datetime
+    )
 
     moon = get_body(
         "moon",
         observation_time,
         OBSERVATORY_LOCATION,
     )
+
     moon_altaz = moon.transform_to(
-    AltAz(
-        obstime=observation_time,
-        location=OBSERVATORY_LOCATION,
+        AltAz(
+            obstime=observation_time,
+            location=OBSERVATORY_LOCATION,
         )
     )
 
-    moon_altitude = moon_altaz.alt.deg
+    moon_altitude = float(
+        moon_altaz.alt.deg
+    )
 
-    sun = get_sun(observation_time)
+    sun = get_sun(
+        observation_time
+    )
 
-    elongation = moon.separation(sun).deg
+    elongation = moon.separation(
+        sun
+    ).deg
 
     illumination = (
-        1 - __import__("math").cos(
-            __import__("math").radians(elongation)
+        1
+        - math.cos(
+            math.radians(elongation)
         )
     ) / 2
+
+    return {
+        "illumination_percent": round(
+            illumination * 100,
+            1,
+        ),
+        "altitude_degrees": round(
+            moon_altitude,
+            1,
+        ),
+        "above_horizon": (
+            moon_altitude > 0
+        ),
+    }
+
+
+def get_moon_info() -> Dict:
+    now = datetime.now(timezone.utc)
+    observation_time = to_astropy_time(now)
+
+    current_info = get_moon_info_at(
+        now
+    )
 
     moonrise = OBSERVER.moon_rise_time(
         observation_time,
@@ -184,44 +312,46 @@ def get_moon_info():
         which="next",
     )
 
+    local_timezone = ZoneInfo(
+        TIMEZONE
+    )
+
     moonrise_local = moonrise.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
+        timezone=local_timezone
     )
 
     moonset_local = moonset.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
+        timezone=local_timezone
     )
 
     return {
-    "illumination_percent": round(
-        illumination * 100,
-        1,
-    ),
-    "altitude_degrees": round(
-        float(moon_altitude),
-        1,
-    ),
-    "above_horizon": bool(moon_altitude > 0),
-            "next_moonrise": moonrise_local.strftime(
-            "%Y-%m-%d %I:%M %p"
+        **current_info,
+        "next_moonrise": (
+            moonrise_local.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
         ),
-        "next_moonset": moonset_local.strftime(
-            "%Y-%m-%d %I:%M %p"
+        "next_moonset": (
+            moonset_local.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
         ),
-}
+    }
 
-def get_moon_separation(target_name: str) -> Optional[float]:
-    target = get_target(target_name)
 
-    if not target:
+def get_moon_separation_at(
+    target_name: str,
+    observation_datetime: datetime,
+) -> Optional[float]:
+    target_coordinate = get_target_coordinate(
+        target_name
+    )
+
+    if target_coordinate is None:
         return None
 
-    observation_time = Time(datetime.now(timezone.utc))
-
-    target_coordinate = SkyCoord(
-        target["ra"],
-        target["dec"],
-        frame="icrs",
+    observation_time = to_astropy_time(
+        observation_datetime
     )
 
     moon_coordinate = get_body(
@@ -234,73 +364,197 @@ def get_moon_separation(target_name: str) -> Optional[float]:
         moon_coordinate
     ).deg
 
-    return round(float(separation), 1)
+    return round(
+        float(separation),
+        1,
+    )
 
-def get_moon_warning(target_name: str) -> str:
-    separation = get_moon_separation(target_name)
-    moon_info = get_moon_info()
+
+def get_moon_separation(
+    target_name: str,
+    observation_datetime: Optional[datetime] = None,
+) -> Optional[float]:
+    return get_moon_separation_at(
+        target_name=target_name,
+        observation_datetime=normalize_datetime(
+            observation_datetime
+        ),
+    )
+
+
+def get_moon_warning_at(
+    target_name: str,
+    observation_datetime: datetime,
+) -> str:
+    separation = get_moon_separation_at(
+        target_name=target_name,
+        observation_datetime=observation_datetime,
+    )
+
+    moon_info = get_moon_info_at(
+        observation_datetime
+    )
 
     if separation is None:
         return "Unknown"
 
-    illumination = moon_info["illumination_percent"]
-    above_horizon = moon_info["above_horizon"]
+    illumination = moon_info[
+        "illumination_percent"
+    ]
+
+    above_horizon = moon_info[
+        "above_horizon"
+    ]
 
     if not above_horizon:
-        return "None — Moon is below the horizon."
+        return (
+            "None — Moon is below the horizon."
+        )
 
     if illumination < 10:
-        return "Minimal — Moon illumination is very low."
+        return (
+            "Minimal — Moon illumination is very low."
+        )
 
     if separation >= 60:
-        return "None — Excellent Moon separation."
+        return (
+            "None — Excellent Moon separation."
+        )
 
     if separation >= 30:
-        return "Low — Minor Moon interference expected."
+        return (
+            "Low — Minor Moon interference expected."
+        )
 
     if separation >= 20:
-        return "Moderate — Some loss of contrast is possible."
+        return (
+            "Moderate — Some loss of contrast is possible."
+        )
 
-    return "High — Moon is close and may reduce contrast."
-
-def get_darkness_info():
-    current_time = Time(datetime.now(timezone.utc))
-
-    sunset = OBSERVER.sun_set_time(
-        current_time,
-        which="next",
+    return (
+        "High — Moon is close and may reduce contrast."
     )
 
-    astronomical_dusk = OBSERVER.twilight_evening_astronomical(
-        current_time,
-        which="next",
+
+def get_moon_warning(
+    target_name: str,
+    observation_datetime: Optional[datetime] = None,
+) -> str:
+    return get_moon_warning_at(
+        target_name=target_name,
+        observation_datetime=normalize_datetime(
+            observation_datetime
+        ),
     )
 
-    astronomical_dawn = OBSERVER.twilight_morning_astronomical(
-        current_time,
-        which="next",
+
+def get_darkness_window_datetimes(
+    reference_datetime: Optional[datetime] = None,
+) -> Tuple[datetime, datetime, datetime]:
+    reference_time = to_astropy_time(
+        reference_datetime
+    )
+
+    sun_altitude = float(
+        OBSERVER.sun_altaz(
+            reference_time
+        ).alt.deg
+    )
+
+    if sun_altitude <= -18:
+        astronomical_dusk = (
+            OBSERVER
+            .twilight_evening_astronomical(
+                reference_time,
+                which="previous",
+            )
+        )
+
+        sunset = OBSERVER.sun_set_time(
+            astronomical_dusk,
+            which="previous",
+        )
+
+        astronomical_dawn = (
+            OBSERVER
+            .twilight_morning_astronomical(
+                reference_time,
+                which="next",
+            )
+        )
+
+    else:
+        astronomical_dusk = (
+            OBSERVER
+            .twilight_evening_astronomical(
+                reference_time,
+                which="next",
+            )
+        )
+
+        sunset = OBSERVER.sun_set_time(
+            astronomical_dusk,
+            which="previous",
+        )
+
+        astronomical_dawn = (
+            OBSERVER
+            .twilight_morning_astronomical(
+                astronomical_dusk,
+                which="next",
+            )
+        )
+
+    local_timezone = ZoneInfo(
+        TIMEZONE
     )
 
     sunset_local = sunset.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
+        timezone=local_timezone
     )
 
-    dusk_local = astronomical_dusk.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
+    dusk_local = (
+        astronomical_dusk.to_datetime(
+            timezone=local_timezone
+        )
     )
 
-    dawn_local = astronomical_dawn.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
+    dawn_local = (
+        astronomical_dawn.to_datetime(
+            timezone=local_timezone
+        )
+    )
+
+    return (
+        sunset_local,
+        dusk_local,
+        dawn_local,
+    )
+
+
+def get_darkness_info(
+    reference_datetime: Optional[datetime] = None,
+) -> Dict:
+    (
+        sunset_local,
+        dusk_local,
+        dawn_local,
+    ) = get_darkness_window_datetimes(
+        reference_datetime
     )
 
     return {
         "sunset": sunset_local.strftime(
             "%Y-%m-%d %I:%M %p"
         ),
-        "astronomical_darkness_start": dusk_local.strftime(
-            "%Y-%m-%d %I:%M %p"
+        "astronomical_darkness_start": (
+            dusk_local.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
         ),
-        "astronomical_darkness_end": dawn_local.strftime(
-            "%Y-%m-%d %I:%M %p"
+        "astronomical_darkness_end": (
+            dawn_local.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
         ),
     }

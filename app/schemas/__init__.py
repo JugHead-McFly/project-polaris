@@ -8,3 +8,4 @@ from .target import RecommendedExposure
 from .target import TargetSummary
 from .tonight import TonightResponse
 from .weather import WeatherSummary
+from .capture_analysis import CaptureAnalysisResponse
