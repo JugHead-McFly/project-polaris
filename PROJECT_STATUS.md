@@ -50,6 +50,7 @@ Safety behavior:
 - `4f74905` - Safe C20 and dynamic Jupiter positioning
 - `6c1ae7a` - Fail-safe JPL Horizons comet ephemeris support
 - `b1496e1` - Equipment-aware, goal-limited schedule blocks
+- `980e44a` - Repeatable automated test suite and API checks
 
 ## Verification status
 
@@ -57,9 +58,12 @@ The scheduler, route registration, safe weather fallback, C20 coordinates,
 dynamic Jupiter position, Moon separation, transit calculations, batched comet
 ephemerides, cache reuse, and ephemeris failure behavior have focused regression
 checks. Equipment-change suppression, setup allowances, subframe counts,
-integration-goal handoffs, darkness coverage, and the schedule response schema
-also have focused checks. The current virtual environment does not include
-`pytest`, so the test functions were also executed directly during development.
+integration-goal handoffs, darkness coverage, weather failure, and the live API
+response contract also have focused checks.
+
+The Python 3.9-compatible development environment pins pytest 8.4.2 in
+`requirements-dev.txt`. The complete suite currently has 14 passing tests and is
+run with `.venv/bin/python -m pytest`.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
 astronomical-darkness window and ranked C20 as a valid alternative. A second
@@ -72,6 +76,5 @@ unscheduled because they do not meet the 30-minute minimum block requirement.
 
 ## Next planned work
 
-1. Add a documented development-test dependency and run the full API suite.
-2. Improve capture synchronization from the image library without modifying
+1. Improve capture synchronization from the image library without modifying
    the original files.
