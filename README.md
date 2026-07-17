@@ -5,7 +5,7 @@ Project Polaris is the engine behind Doug's Observatory.
 See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current implementation state,
 safety rules, and next planned work.
 
-Current Version: v1.2.0
+Current Version: v1.3.0
 
 ## Features
 
@@ -16,6 +16,7 @@ Current Version: v1.2.0
 - AI astrophotography analysis (coming soon)
 - Planner V3 advisory night schedule at `GET /planner/schedule`
 - Read-only night operations dashboard at `GET /operator`
+- Typed portfolio and recent-history feed at `GET /dashboard`
 
 ## Run
 

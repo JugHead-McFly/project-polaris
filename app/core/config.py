@@ -3,7 +3,7 @@ from pathlib import Path
 
 class Settings:
     PROJECT_NAME = "Project Polaris"
-    VERSION = "1.2.0"
+    VERSION = "1.3.0"
 
     BASE_DIR = Path(__file__).resolve().parents[2]
     DATABASE_FILE = BASE_DIR / "polaris.db"

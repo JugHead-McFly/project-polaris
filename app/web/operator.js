@@ -26,6 +26,17 @@ const durationLabel = (minutes) => {
   return `${hours} hr ${remaining} min`;
 };
 
+const displayDate = (value) => {
+  if (!value) return "Date unavailable";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return parsed.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
 const appendTextElement = (parent, tag, className, text) => {
   const element = document.createElement(tag);
   if (className) element.className = className;
@@ -171,6 +182,119 @@ const renderSystem = (data) => {
   setText("conflict-count", library.conflict_count);
 };
 
+const renderPortfolio = (data) => {
+  const container = byId("target-portfolio");
+  container.replaceChildren();
+  setText(
+    "portfolio-summary",
+    `${data.metrics.targets} targets · ${data.metrics.total_integration_hours} hours`,
+  );
+
+  if (!data.targets.length) {
+    appendTextElement(container, "div", "empty-state", "No captured targets yet.");
+    return;
+  }
+
+  data.targets.forEach((target) => {
+    const card = appendTextElement(container, "article", "target-card", "");
+    const heading = appendTextElement(card, "div", "target-card-heading", "");
+    appendTextElement(heading, "strong", "", target.object);
+    appendTextElement(heading, "span", "", target.portfolio_level);
+
+    const progress = document.createElement("progress");
+    progress.max = 125;
+    progress.value = Math.min(target.progress_percent, 125);
+    progress.setAttribute(
+      "aria-label",
+      `${target.object} integration progress ${target.progress_percent} percent`,
+    );
+    card.appendChild(progress);
+
+    const progressCopy = appendTextElement(card, "div", "target-progress-copy", "");
+    appendTextElement(
+      progressCopy,
+      "span",
+      "",
+      `${target.current_hours} / ${target.goal_hours} hr`,
+    );
+    appendTextElement(progressCopy, "span", "", `${target.progress_percent}%`);
+
+    appendTextElement(
+      card,
+      "p",
+      "target-quality",
+      target.best_quality === null
+        ? `${target.capture_count} capture${target.capture_count === 1 ? "" : "s"}`
+        : `${target.capture_count} capture${target.capture_count === 1 ? "" : "s"} · best quality ${target.best_quality}`,
+    );
+  });
+};
+
+const renderRecentCaptures = (data) => {
+  const container = byId("recent-captures");
+  container.replaceChildren();
+  setText("capture-summary", `${data.metrics.captures} total`);
+
+  if (!data.recent_captures.length) {
+    appendTextElement(container, "div", "empty-state", "No captures recorded yet.");
+    return;
+  }
+
+  data.recent_captures.forEach((capture) => {
+    const card = appendTextElement(container, "article", "activity-card", "");
+    const heading = appendTextElement(card, "div", "activity-heading", "");
+    appendTextElement(heading, "strong", "", capture.object || "Unknown target");
+    appendTextElement(heading, "span", "", displayDate(capture.observation_utc));
+
+    const meta = appendTextElement(card, "div", "activity-meta", "");
+    appendTextElement(meta, "span", "", capture.polaris_id);
+    appendTextElement(meta, "span", "", durationLabel(Math.round(capture.total_integration_seconds / 60)));
+    if (capture.filter_name) appendTextElement(meta, "span", "", capture.filter_name);
+    if (capture.quality_score !== null) {
+      appendTextElement(meta, "span", "", `Quality ${capture.quality_score}`);
+    }
+  });
+};
+
+const renderRecentSessions = (data) => {
+  const container = byId("recent-sessions");
+  container.replaceChildren();
+  setText("session-summary", `${data.metrics.sessions} total`);
+
+  if (!data.recent_sessions.length) {
+    appendTextElement(container, "div", "empty-state", "No observing sessions recorded yet.");
+    return;
+  }
+
+  data.recent_sessions.forEach((session) => {
+    const card = appendTextElement(container, "article", "activity-card", "");
+    const heading = appendTextElement(card, "div", "activity-heading", "");
+    appendTextElement(heading, "strong", "", session.targets.join(", ") || "No linked targets");
+    appendTextElement(heading, "span", "", displayDate(session.date));
+
+    const meta = appendTextElement(card, "div", "activity-meta", "");
+    appendTextElement(meta, "span", "", session.session_id);
+    appendTextElement(
+      meta,
+      "span",
+      "",
+      `${session.capture_count} capture${session.capture_count === 1 ? "" : "s"}`,
+    );
+    appendTextElement(meta, "span", "", `${session.total_integration_hours} hr`);
+  });
+};
+
+const renderHistoryError = () => {
+  setText("portfolio-summary", "Unavailable");
+  setText("capture-summary", "Unavailable");
+  setText("session-summary", "Unavailable");
+  ["target-portfolio", "recent-captures", "recent-sessions"].forEach((id) => {
+    const container = byId(id);
+    container.replaceChildren();
+    appendTextElement(container, "div", "empty-state", "History is temporarily unavailable.");
+  });
+};
+
 const showPlanError = (message) => {
   const panel = byId("decision-panel");
   panel.className = "decision-panel status-error";
@@ -187,13 +311,17 @@ const loadDashboard = async () => {
   refresh.textContent = "Refreshing…";
   byId("load-error").hidden = true;
 
-  const [planResult, systemResult] = await Promise.allSettled([
+  const [planResult, systemResult, dashboardResult] = await Promise.allSettled([
     fetch("/tonight", { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`Tonight endpoint returned ${response.status}.`);
       return response.json();
     }),
     fetch("/system", { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`System endpoint returned ${response.status}.`);
+      return response.json();
+    }),
+    fetch("/dashboard", { cache: "no-store" }).then((response) => {
+      if (!response.ok) throw new Error(`Dashboard endpoint returned ${response.status}.`);
       return response.json();
     }),
   ]);
@@ -213,6 +341,14 @@ const loadDashboard = async () => {
   } else {
     setText("system-status", "Unavailable");
     setText("library-status", "Health check failed");
+  }
+
+  if (dashboardResult.status === "fulfilled") {
+    renderPortfolio(dashboardResult.value);
+    renderRecentCaptures(dashboardResult.value);
+    renderRecentSessions(dashboardResult.value);
+  } else {
+    renderHistoryError();
   }
 
   setText("last-updated", `Last refreshed ${new Date().toLocaleString()}`);

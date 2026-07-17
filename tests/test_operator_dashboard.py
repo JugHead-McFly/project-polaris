@@ -15,11 +15,15 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert response.headers["cache-control"] == "no-store"
     assert "Tonight's safety decision" in response.text
     assert "Read-only advisory" in response.text
+    assert "Target progress" in response.text
+    assert "Latest captures" in response.text
+    assert "Recent sessions" in response.text
     assert "Planner V3 · advisory only · no equipment control" in response.text
     assert stylesheet.status_code == 200
     assert script.status_code == 200
     assert 'fetch("/tonight"' in script.text
     assert 'fetch("/system"' in script.text
+    assert 'fetch("/dashboard"' in script.text
 
     methods = {
         method
