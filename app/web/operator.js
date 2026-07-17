@@ -26,6 +26,24 @@ const durationLabel = (minutes) => {
   return `${hours} hr ${remaining} min`;
 };
 
+const uptimeLabel = (seconds) => {
+  if (seconds === null || seconds === undefined) return "—";
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  if (days) return `${days}d ${hours}h`;
+  if (hours) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
+};
+
+const setStatusText = (id, status) => {
+  const element = byId(id);
+  element.textContent = status || "Unknown";
+  element.className = `status-${(status || "unknown")
+    .toLowerCase()
+    .replaceAll(" ", "-")}`;
+};
+
 const displayDate = (value) => {
   if (!value) return "Date unavailable";
   const parsed = new Date(value);
@@ -172,6 +190,10 @@ const renderNotes = (notes) => {
 
 const renderSystem = (data) => {
   const library = data.capture_library;
+  const diagnostics = data.diagnostics;
+  const serviceByName = Object.fromEntries(
+    diagnostics.services.map((service) => [service.service, service]),
+  );
   setText("system-status", data.status);
   setText("library-status", `Capture library ${library.status.toLowerCase()}`);
   setText("version", `v${data.version}`);
@@ -180,6 +202,16 @@ const renderSystem = (data) => {
   setText("session-count", data.sessions);
   setText("matched-count", library.matched_count);
   setText("conflict-count", library.conflict_count);
+  setStatusText("data-freshness", diagnostics.data_freshness.status);
+  setStatusText(
+    "weather-service",
+    serviceByName["Open-Meteo weather"]?.status,
+  );
+  setStatusText(
+    "ephemeris-service",
+    serviceByName["NASA JPL Horizons"]?.status,
+  );
+  setText("runtime-uptime", uptimeLabel(diagnostics.uptime_seconds));
 };
 
 const renderPortfolio = (data) => {

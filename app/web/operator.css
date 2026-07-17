@@ -692,6 +692,24 @@ dd {
   font-weight: 700;
 }
 
+.health-list dd.status-healthy,
+.health-list dd.status-current,
+.health-list dd.status-recent {
+  color: var(--green);
+}
+
+.health-list dd.status-degraded,
+.health-list dd.status-not-checked {
+  color: var(--amber);
+}
+
+.health-list dd.status-stale,
+.health-list dd.status-empty,
+.health-list dd.status-attention-required,
+.health-list dd.status-unavailable {
+  color: var(--red);
+}
+
 .notes-panel ul {
   margin: 0;
   padding-left: 18px;

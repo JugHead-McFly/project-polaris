@@ -15,6 +15,9 @@ from app.core.observatory import (
     LATITUDE,
     LONGITUDE,
 )
+from app.core.config import settings
+from app.core.diagnostics import record_service_failure
+from app.core.diagnostics import record_service_success
 from app.data.targets import EPHEMERIS_TARGETS
 
 
@@ -138,7 +141,7 @@ def _fetch_coordinates(
     )
     request = Request(
         url,
-        headers={"User-Agent": "Project-Polaris/0.5"},
+        headers={"User-Agent": f"Project-Polaris/{settings.VERSION}"},
     )
 
     with urlopen(
@@ -174,12 +177,26 @@ def get_ephemeris_coordinates(
     )
 
     if missing_times:
+        checked_at = datetime.now(timezone.utc)
         try:
             fetched = _fetch_coordinates(
                 command=command,
                 observation_times=missing_times,
             )
-        except (URLError, TimeoutError, OSError, ValueError, KeyError):
+            record_service_success(
+                "jpl_horizons",
+                (
+                    "Observer ephemeris received for "
+                    f"{len(fetched)} timestamp(s)."
+                ),
+                checked_at=checked_at,
+            )
+        except (URLError, TimeoutError, OSError, ValueError, KeyError) as error:
+            record_service_failure(
+                "jpl_horizons",
+                f"Observer ephemeris unavailable: {error}",
+                checked_at=checked_at,
+            )
             fetched = {}
 
         for observation_time, coordinate in fetched.items():

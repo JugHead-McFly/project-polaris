@@ -1,13 +1,17 @@
 import json
+from datetime import datetime, timezone
 from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
 from app.core.observatory import LATITUDE
 from app.core.observatory import LONGITUDE
+from app.core.diagnostics import record_service_failure
+from app.core.diagnostics import record_service_success
 
 
 def get_weather_summary(postal_code: str):
+    checked_at = datetime.now(timezone.utc)
     params = {
         "latitude": LATITUDE,
         "longitude": LONGITUDE,
@@ -55,6 +59,12 @@ def get_weather_summary(postal_code: str):
 
         rating = max(1, rating)
 
+        record_service_success(
+            "weather",
+            "Live weather data received successfully.",
+            checked_at=checked_at,
+        )
+
         return {
             "postal_code": postal_code,
             "temperature_f": current.get("temperature_2m"),
@@ -68,9 +78,16 @@ def get_weather_summary(postal_code: str):
             "transparency": None,
             "observing_rating": rating,
             "status": "Live weather connected.",
+            "observed_at": current.get("time"),
+            "fetched_at": checked_at.isoformat(),
         }
 
     except (URLError, TimeoutError, ValueError) as error:
+        record_service_failure(
+            "weather",
+            f"Live weather unavailable: {error}",
+            checked_at=checked_at,
+        )
         return {
             "postal_code": postal_code,
             "temperature_f": None,
@@ -84,4 +101,6 @@ def get_weather_summary(postal_code: str):
             # observing conditions by the planner.
             "observing_rating": 0,
             "status": f"Weather unavailable: {error}",
+            "observed_at": None,
+            "fetched_at": checked_at.isoformat(),
         }

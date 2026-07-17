@@ -1,7 +1,10 @@
 import os
 import tempfile
+from time import perf_counter
+from uuid import uuid4
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, Request, UploadFile
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api.advisor import router as advisor_router
@@ -15,6 +18,7 @@ from app.api.sessions import router as sessions_router
 from app.api.system import router as system_router
 from app.api.tonight import router as tonight_router
 from app.core.config import settings
+from app.core.runtime_logging import configure_logging
 from app.database.database import SessionLocal
 from app.services.capture_service import (
     create_capture_from_parsed_fits,
@@ -26,10 +30,53 @@ from app.api.planner import (
 from app.api.schedule import router as schedule_router
 
 
+logger = configure_logging()
+
 app = FastAPI(
     title="Project Polaris API",
     version=settings.VERSION,
 )
+
+
+@app.middleware("http")
+async def log_request(request: Request, call_next):
+    request_id = uuid4().hex[:12]
+    started_at = perf_counter()
+
+    try:
+        response = await call_next(request)
+    except Exception:
+        duration_ms = round((perf_counter() - started_at) * 1000, 1)
+        logger.exception(
+            "request_failed request_id=%s method=%s path=%s duration_ms=%s",
+            request_id,
+            request.method,
+            request.url.path,
+            duration_ms,
+        )
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": "Internal server error.",
+                "request_id": request_id,
+            },
+            headers={"X-Request-ID": request_id},
+        )
+
+    duration_ms = round((perf_counter() - started_at) * 1000, 1)
+    response.headers["X-Request-ID"] = request_id
+    logger.info(
+        (
+            "request_complete request_id=%s method=%s path=%s "
+            "status=%s duration_ms=%s"
+        ),
+        request_id,
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+    return response
 
 WEB_DIRECTORY = settings.BASE_DIR / "app" / "web"
 app.mount(

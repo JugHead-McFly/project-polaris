@@ -35,6 +35,43 @@ def system_response():
             "status": "Healthy",
             "message": None,
         },
+        "diagnostics": {
+            "checked_at": "2026-07-17T12:00:00+00:00",
+            "uptime_seconds": 120,
+            "database_status": "Healthy",
+            "data_freshness": {
+                "status": "Recent",
+                "latest_capture_observation_utc": (
+                    "2026-07-09T00:56:11.704000+00:00"
+                ),
+                "capture_age_hours": 203.1,
+                "latest_database_update_utc": (
+                    "2026-07-15T01:34:25.895623+00:00"
+                ),
+                "latest_session_update_utc": (
+                    "2026-07-14T17:17:22.360807+00:00"
+                ),
+                "latest_analysis_utc": (
+                    "2026-07-15T00:46:13.554113+00:00"
+                ),
+            },
+            "services": [
+                {
+                    "service": "Open-Meteo weather",
+                    "status": "Healthy",
+                    "checked_at": "2026-07-17T11:59:00+00:00",
+                    "last_success_at": "2026-07-17T11:59:00+00:00",
+                    "message": "Live weather data received successfully.",
+                },
+                {
+                    "service": "NASA JPL Horizons",
+                    "status": "Not Checked",
+                    "checked_at": None,
+                    "last_success_at": None,
+                    "message": "No request has been made during this process.",
+                },
+            ],
+        },
         "status": "Healthy",
     }
 
@@ -59,6 +96,7 @@ def test_system_endpoint_includes_read_only_library_health():
     assert payload["capture_library"]["clean"]
     assert payload["capture_library"]["matched_count"] == 19
     assert payload["version"] == settings.VERSION
+    assert payload["diagnostics"]["data_freshness"]["status"] == "Recent"
     assert database.closed
 
 

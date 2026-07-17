@@ -5,7 +5,7 @@ Project Polaris is the engine behind Doug's Observatory.
 See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current implementation state,
 safety rules, and next planned work.
 
-Current Version: v1.3.0
+Current Version: v1.4.0
 
 ## Features
 
@@ -57,3 +57,6 @@ does not copy, rename, modify, or delete library files.
 The read-only `GET /system` endpoint includes compact capture-library health
 counts. Database-changing synchronization remains available only through the
 explicit CLI command above.
+
+See [docs/OPERATIONS.md](docs/OPERATIONS.md) for startup verification,
+diagnostics, logging, matched database/library backups, and recovery guidance.

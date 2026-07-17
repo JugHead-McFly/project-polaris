@@ -18,6 +18,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Target progress" in response.text
     assert "Latest captures" in response.text
     assert "Recent sessions" in response.text
+    assert "Capture freshness" in response.text
+    assert "Weather service" in response.text
+    assert "JPL ephemeris" in response.text
     assert "Planner V3 · advisory only · no equipment control" in response.text
     assert stylesheet.status_code == 200
     assert script.status_code == 200

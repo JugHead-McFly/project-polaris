@@ -14,3 +14,5 @@ class WeatherSummary(BaseModel):
     transparency: Optional[str] = None
     observing_rating: int
     status: str
+    observed_at: Optional[str] = None
+    fetched_at: Optional[str] = None
