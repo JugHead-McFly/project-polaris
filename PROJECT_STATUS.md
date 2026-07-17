@@ -21,6 +21,11 @@ It builds chronological, non-overlapping blocks from Planner V2 target rankings.
 It excludes unobservable targets and blocks shorter than 30 minutes. It does not
 control observatory equipment.
 
+Each block includes proven exposure, gain, and filter settings from capture
+history, a five-minute setup allowance, planned imaging minutes, and the number
+of subframes needed. The scheduler avoids marginal equipment changes and moves
+to an alternative target when the current target reaches its integration goal.
+
 Safety behavior:
 
 - A `Do Not Image` weather decision produces no schedule blocks.
@@ -44,23 +49,29 @@ Safety behavior:
 - `ca8f922` - Planner V3 advisory night scheduler
 - `4f74905` - Safe C20 and dynamic Jupiter positioning
 - `6c1ae7a` - Fail-safe JPL Horizons comet ephemeris support
+- `b1496e1` - Equipment-aware, goal-limited schedule blocks
 
 ## Verification status
 
 The scheduler, route registration, safe weather fallback, C20 coordinates,
 dynamic Jupiter position, Moon separation, transit calculations, batched comet
 ephemerides, cache reuse, and ephemeris failure behavior have focused regression
-checks. The current virtual environment does not include `pytest`, so the test
-functions were also executed directly during development.
+checks. Equipment-change suppression, setup allowances, subframe counts,
+integration-goal handoffs, darkness coverage, and the schedule response schema
+also have focused checks. The current virtual environment does not include
+`pytest`, so the test functions were also executed directly during development.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
 astronomical-darkness window and ranked C20 as a valid alternative. A second
 live validation using JPL Horizons successfully positioned the comet without
 changing the recommended M57 schedule.
 
+The equipment-aware validation schedules M57 until its remaining 497 subframes
+are complete, then M27, then M13. It reports the final 22 dark minutes as
+unscheduled because they do not meet the 30-minute minimum block requirement.
+
 ## Next planned work
 
-1. Add equipment and filter constraints to scheduled blocks.
-2. Add a documented development-test dependency and run the full API suite.
-3. Improve capture synchronization from the image library without modifying
+1. Add a documented development-test dependency and run the full API suite.
+2. Improve capture synchronization from the image library without modifying
    the original files.
