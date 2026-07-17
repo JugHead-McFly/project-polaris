@@ -7,14 +7,14 @@ Last updated: 2026-07-17
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.2.0`
+- Application version: `1.3.0`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
-Version `1.2.0` is defined once in `app/core/config.py` and is shared by the
-root API response, OpenAPI metadata, `GET /system`, and the legacy dashboard.
-The code is release-ready, but the `v1.2.0` Git tag and remote push remain
+Version `1.3.0` is defined once in `app/core/config.py` and is shared by the
+root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
+The code is release-ready, but the `v1.3.0` Git tag and remote push remain
 explicit release actions and have not been performed.
 
 ## Operator dashboard
@@ -23,12 +23,20 @@ Version 1.2 adds a responsive, read-only night operations dashboard at:
 
     GET /operator
 
-The dashboard uses only the consolidated `GET /tonight` and read-only
-`GET /system` responses. It makes the safety decision the primary visual,
-shows the recommended target or weather-safe fallback, renders chronological
-schedule blocks and equipment settings, and summarizes weather, Moon,
-darkness, planner notes, and capture-library health. Its only interaction is a
-manual data refresh; it has no equipment-control or database-write action.
+The dashboard uses the consolidated `GET /tonight`, typed `GET /dashboard`, and
+read-only `GET /system` responses. It makes the safety decision the primary
+visual, shows the recommended target or weather-safe fallback, renders
+chronological schedule blocks and equipment settings, and summarizes weather,
+Moon, darkness, planner notes, capture-library health, target progress, recent
+captures, and recent observing sessions. Its only interaction is a manual data
+refresh; it has no equipment-control or database-write action.
+
+Version 1.3 replaces the duplicated v0.6 calculations formerly embedded in
+`GET /dashboard` with a typed response service. Integration totals, quality,
+capture settings, and portfolio progress now use the same shared helpers as the
+target and planner APIs. The endpoint returns metrics for the complete library,
+all captured targets, the eight most recent captures, and the six most recent
+sessions.
 
 The dashboard is served by the existing local FastAPI application. No external
 hosting or deployment was performed.
@@ -97,6 +105,7 @@ does not expose any database-changing synchronization route.
 - `6005397` - Legacy tonight workflow consolidated on Planner V3
 - `21e8a5b` - Centralized v1.1 application version metadata
 - `232dd7e` - v1.2 read-only night operations dashboard
+- `e97fa28` - v1.3 typed dashboard history consolidation
 
 ## Verification status
 
@@ -110,12 +119,14 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 22 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 24 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
-The root response, OpenAPI metadata, `GET /system`, and legacy dashboard all
-report version `1.2.0` from the shared application setting. The dashboard HTML,
+The root response, OpenAPI metadata, `GET /system`, and dashboard API all
+report version `1.3.0` from the shared application setting. The dashboard HTML,
 local assets, GET-only route, and JavaScript syntax have focused checks.
+The typed dashboard service also has an isolated database regression check for
+integration totals, quality, target history, capture ordering, and sessions.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
 astronomical-darkness window and ranked C20 as a valid alternative. A second
@@ -143,9 +154,12 @@ The live v1.2 dashboard validation returned HTTP 200 from `/operator`,
 schedule blocks, M57 as the fallback, and a `Healthy` capture library, which is
 the intended fail-safe display path.
 
+The live v1.3 dashboard response reports 19 captures across 18 targets and 21
+sessions, 19 analysis records, and 32.66 total integration hours. It returns
+eight recent captures and six recent sessions through the typed contract.
+
 ## Next planned work
 
-1. Begin v1.3 by replacing the duplicated v0.6 calculations in the legacy
-   `/dashboard` JSON endpoint with shared current services and typed schemas,
-   then extend the operator dashboard with consolidated target, session,
-   capture, and recent-history views.
+1. Begin v1.4 operational readiness: expose data-freshness and degraded-service
+   diagnostics, improve runtime logging and failure visibility, expand date and
+   night-boundary tests, and document startup, backup, and recovery procedures.
