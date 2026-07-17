@@ -35,3 +35,16 @@ Install the development dependencies once:
 Run the complete automated suite:
 
     .venv/bin/python -m pytest
+
+## Capture-library sync
+
+Audit the capture library without changing files or the database:
+
+    .venv/bin/python scripts/sync_capture_library.py /Users/doug/ProjectPolaris
+
+After reviewing a dry-run report, register valid orphan FITS files with:
+
+    .venv/bin/python scripts/sync_capture_library.py /Users/doug/ProjectPolaris --apply
+
+Apply mode only adds database records that reference existing FITS files. It
+does not copy, rename, modify, or delete library files.
