@@ -7,9 +7,15 @@ Last updated: 2026-07-17
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
+- Application version: `1.1.0`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
+
+Version `1.1.0` is defined once in `app/core/config.py` and is shared by the
+root API response, OpenAPI metadata, `GET /system`, and the legacy dashboard.
+The code is release-ready, but the `v1.1.0` Git tag and remote push remain
+explicit release actions and have not been performed.
 
 ## Current planner
 
@@ -73,6 +79,7 @@ does not expose any database-changing synchronization route.
 - `64eba37` - Dry-run-first capture library synchronization
 - `88f6d4c` - Read-only capture-library health in system status
 - `6005397` - Legacy tonight workflow consolidated on Planner V3
+- `21e8a5b` - Centralized v1.1 application version metadata
 
 ## Verification status
 
@@ -86,8 +93,11 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 20 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 21 passing tests and is
 run with `.venv/bin/python -m pytest`.
+
+The live root response, OpenAPI metadata, `GET /system`, and legacy dashboard
+all report version `1.1.0` from the shared application setting.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
 astronomical-darkness window and ranked C20 as a valid alternative. A second
