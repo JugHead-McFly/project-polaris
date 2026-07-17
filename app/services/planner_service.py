@@ -588,16 +588,18 @@ def get_tonight_plan(db: Session) -> Dict:
             "altitude during astronomical darkness."
         )
 
-    unknown_position_count = sum(
-        1
+    unknown_position_targets = [
+        plan["advisor"]["object"]
         for plan in plans
         if plan["maximum_dark_altitude"] is None
-    )
+    ]
 
-    if unknown_position_count:
+    if unknown_position_targets:
         notes.append(
-            f"{unknown_position_count} target(s) were not fully ranked "
-            "because Polaris has no coordinate metadata for them."
+            "Targets excluded because Polaris has no reliable position "
+            "for tonight: "
+            + ", ".join(unknown_position_targets)
+            + "."
         )
 
     cloud_cover = weather.get("cloud_cover_percent")

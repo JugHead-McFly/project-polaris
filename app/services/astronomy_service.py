@@ -20,6 +20,7 @@ from app.core.observatory import (
     LONGITUDE,
     TIMEZONE,
 )
+from app.data.targets import SOLAR_SYSTEM_TARGETS
 from app.data.targets import TARGETS
 
 
@@ -84,12 +85,32 @@ def get_target_coordinate(
     )
 
 
+def get_target_coordinate_at(
+    target_name: str,
+    observation_datetime: datetime,
+) -> Optional[SkyCoord]:
+    normalized_name = target_name.strip().upper()
+    solar_system_body = SOLAR_SYSTEM_TARGETS.get(
+        normalized_name
+    )
+
+    if solar_system_body is not None:
+        return get_body(
+            solar_system_body,
+            to_astropy_time(observation_datetime),
+            OBSERVATORY_LOCATION,
+        )
+
+    return get_target_coordinate(normalized_name)
+
+
 def get_altitude_at(
     target_name: str,
     observation_datetime: datetime,
 ) -> Optional[float]:
-    coordinate = get_target_coordinate(
-        target_name
+    coordinate = get_target_coordinate_at(
+        target_name=target_name,
+        observation_datetime=observation_datetime,
     )
 
     if coordinate is None:
@@ -160,15 +181,19 @@ def get_transit_datetime(
     target_name: str,
     reference_datetime: Optional[datetime] = None,
 ) -> Optional[datetime]:
-    coordinate = get_target_coordinate(
-        target_name
+    normalized_reference = normalize_datetime(
+        reference_datetime
+    )
+    coordinate = get_target_coordinate_at(
+        target_name=target_name,
+        observation_datetime=normalized_reference,
     )
 
     if coordinate is None:
         return None
 
     reference_time = to_astropy_time(
-        reference_datetime
+        normalized_reference
     )
 
     transit = (
@@ -343,8 +368,9 @@ def get_moon_separation_at(
     target_name: str,
     observation_datetime: datetime,
 ) -> Optional[float]:
-    target_coordinate = get_target_coordinate(
-        target_name
+    target_coordinate = get_target_coordinate_at(
+        target_name=target_name,
+        observation_datetime=observation_datetime,
     )
 
     if target_coordinate is None:

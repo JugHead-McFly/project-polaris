@@ -1,4 +1,9 @@
 TARGETS = {
+    "C 20": {
+        "name": "North America Nebula",
+        "ra": "20h58m47s",
+        "dec": "+44d19m48s",
+    },
     "M8": {
         "name": "Lagoon Nebula",
         "ra": "18h03m37s",
@@ -79,4 +84,11 @@ TARGETS = {
         "ra": "18h27m15s",
         "dec": "+06d30m30s",
     },
+}
+
+
+# Solar-system coordinates change with time and must never be stored as a
+# fixed catalog position. Values are Astropy body names.
+SOLAR_SYSTEM_TARGETS = {
+    "JUPITER": "jupiter",
 }
