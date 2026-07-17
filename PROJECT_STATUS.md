@@ -50,6 +50,8 @@ Safety behavior:
 mode by default. Explicit `--apply` mode can register valid orphan FITS files in
 the database, but it never copies, renames, modifies, or deletes library files.
 Duplicate IDs, target mismatches, and asset-path mismatches block apply mode.
+The read-only `GET /system` endpoint exposes compact library-health counts. It
+does not expose any database-changing synchronization route.
 
 ## Completed checkpoints
 
@@ -59,6 +61,7 @@ Duplicate IDs, target mismatches, and asset-path mismatches block apply mode.
 - `b1496e1` - Equipment-aware, goal-limited schedule blocks
 - `980e44a` - Repeatable automated test suite and API checks
 - `64eba37` - Dry-run-first capture library synchronization
+- `88f6d4c` - Read-only capture-library health in system status
 
 ## Verification status
 
@@ -70,7 +73,7 @@ integration-goal handoffs, darkness coverage, weather failure, and the live API
 response contract also have focused checks.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 16 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 18 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
@@ -86,7 +89,11 @@ The capture-library dry run found 19 database captures and 19 matching FITS
 files, with zero orphans, missing assets, or conflicts. A before/after file-state
 checksum confirmed the audit did not alter the library.
 
+The live `GET /system` validation reports 19 captures, 19 matched FITS files,
+zero orphans, missing assets, or conflicts, and an overall `Healthy` status.
+
 ## Next planned work
 
-1. Expose read-only capture-library health in the system-status API while
-   keeping database-changing synchronization restricted to the explicit CLI.
+1. Consolidate the legacy `/tonight` workflow with Planner V3 through a
+   compatibility-safe transition, then use the consolidated API for the first
+   operator-facing dashboard.
