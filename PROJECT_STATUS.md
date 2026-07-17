@@ -7,15 +7,31 @@ Last updated: 2026-07-17
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.1.0`
+- Application version: `1.2.0`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
-Version `1.1.0` is defined once in `app/core/config.py` and is shared by the
+Version `1.2.0` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the legacy dashboard.
-The code is release-ready, but the `v1.1.0` Git tag and remote push remain
+The code is release-ready, but the `v1.2.0` Git tag and remote push remain
 explicit release actions and have not been performed.
+
+## Operator dashboard
+
+Version 1.2 adds a responsive, read-only night operations dashboard at:
+
+    GET /operator
+
+The dashboard uses only the consolidated `GET /tonight` and read-only
+`GET /system` responses. It makes the safety decision the primary visual,
+shows the recommended target or weather-safe fallback, renders chronological
+schedule blocks and equipment settings, and summarizes weather, Moon,
+darkness, planner notes, and capture-library health. Its only interaction is a
+manual data refresh; it has no equipment-control or database-write action.
+
+The dashboard is served by the existing local FastAPI application. No external
+hosting or deployment was performed.
 
 ## Current planner
 
@@ -80,6 +96,7 @@ does not expose any database-changing synchronization route.
 - `88f6d4c` - Read-only capture-library health in system status
 - `6005397` - Legacy tonight workflow consolidated on Planner V3
 - `21e8a5b` - Centralized v1.1 application version metadata
+- `232dd7e` - v1.2 read-only night operations dashboard
 
 ## Verification status
 
@@ -93,11 +110,12 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 21 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 22 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
-The live root response, OpenAPI metadata, `GET /system`, and legacy dashboard
-all report version `1.1.0` from the shared application setting.
+The root response, OpenAPI metadata, `GET /system`, and legacy dashboard all
+report version `1.2.0` from the shared application setting. The dashboard HTML,
+local assets, GET-only route, and JavaScript syntax have focused checks.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
 astronomical-darkness window and ranked C20 as a valid alternative. A second
@@ -120,9 +138,14 @@ of its previous response-validation error. On 2026-07-17 the weather decision
 was `Do Not Image`, so both the V3 schedule and legacy target sequence safely
 contained no imaging blocks while M57 remained available as the fallback.
 
+The live v1.2 dashboard validation returned HTTP 200 from `/operator`,
+`/tonight`, and `/system`. Current conditions produced `Do Not Image`, zero
+schedule blocks, M57 as the fallback, and a `Healthy` capture library, which is
+the intended fail-safe display path.
+
 ## Next planned work
 
-1. Build the first operator-facing dashboard from the consolidated `/tonight`
-   response, keeping it read-only and clearly distinguishing tonight's safety
-   decision, primary recommendation or fallback, equipment settings, and
-   chronological schedule.
+1. Begin v1.3 by replacing the duplicated v0.6 calculations in the legacy
+   `/dashboard` JSON endpoint with shared current services and typed schemas,
+   then extend the operator dashboard with consolidated target, session,
+   capture, and recent-history views.
