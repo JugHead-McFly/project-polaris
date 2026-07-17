@@ -6,6 +6,7 @@ from app.schemas.darkness import DarknessSummary
 from app.schemas.moon import MoonSummary
 from app.schemas.night_rating import NightRating
 from app.schemas.observatory import ObservatorySummary
+from app.schemas.schedule import TonightScheduleResponse
 from app.schemas.target import TargetSummary
 from app.schemas.weather import WeatherSummary
 
@@ -38,3 +39,4 @@ class TonightResponse(BaseModel):
     message: str
     night_plan: NightPlan
     darkness: DarknessSummary
+    schedule: TonightScheduleResponse

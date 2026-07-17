@@ -3,6 +3,7 @@ from unittest.mock import patch
 from app.services.scheduler_service import (
     _darkness_minutes,
     build_schedule_blocks,
+    build_tonight_schedule,
     get_tonight_schedule,
 )
 
@@ -200,3 +201,5 @@ def test_do_not_image_returns_no_blocks_and_full_unscheduled_darkness():
         "will not create imaging blocks" in note
         for note in schedule["notes"]
     )
+
+    assert build_tonight_schedule(planner) == schedule

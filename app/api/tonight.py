@@ -1,36 +1,98 @@
-from datetime import datetime
+from typing import Dict, Optional
 
 from fastapi import APIRouter
 
-from app.database.database import SessionLocal
-from app.models import Capture
-from app.services.portfolio_service import TARGET_PRIORITY
-from app.services.portfolio_service import build_portfolio_target
-from app.services.recommendation_service import get_backup_reason
-from app.services.recommendation_service import get_recommendation_reason
-from app.services.recommendation_service import get_recommended_targets
 from app.core.observatory import DEFAULT_POSTAL_CODE
-from app.core.observatory import OBSERVATORY_NAME
-from app.core.observatory import TIMEZONE
 from app.core.observatory import ELEVATION_METERS
 from app.core.observatory import LATITUDE
 from app.core.observatory import LONGITUDE
-from app.services.astronomy_service import get_altitude
-from app.services.astronomy_service import is_observable
-from app.services.astronomy_service import get_transit_time
-from app.services.astronomy_service import get_recommended_window
-from app.services.astronomy_service import get_moon_info
-from app.services.astronomy_service import get_moon_separation
-from app.services.astronomy_service import get_moon_warning
-from app.services.astronomy_service import get_darkness_info
-from app.services.weather_service import get_weather_summary
-from app.services.night_rating_service import calculate_night_rating
+from app.core.observatory import OBSERVATORY_NAME
+from app.core.observatory import TIMEZONE
+from app.database.database import SessionLocal
 from app.schemas.tonight import TonightResponse
-from app.services.night_planner_service import (
-    build_night_plan,
-)
+from app.services.night_rating_service import calculate_night_rating
+from app.services.planner_service import get_tonight_plan
+from app.services.scheduler_service import build_tonight_schedule
+from app.services.target_service import build_target_response
+
 
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
+
+
+def _build_legacy_target(
+    db,
+    planner_target: Optional[Dict],
+) -> Optional[Dict]:
+    if planner_target is None:
+        return None
+
+    target = build_target_response(
+        db=db,
+        target_name=planner_target["advisor"]["object"],
+    )
+    target.update(
+        {
+            "observable": planner_target["observable"],
+            "current_altitude": planner_target["current_altitude"],
+            "transit_time": planner_target["transit_time"],
+            "moon_warning": planner_target["moon_warning"],
+            "recommended_start": planner_target["recommended_start"],
+            "recommended_end": planner_target["recommended_end"],
+            "moon_separation_degrees": planner_target[
+                "moon_separation_degrees"
+            ],
+            "reason": planner_target["selection_reason"],
+        }
+    )
+    return target
+
+
+def _select_backup_plan(planner: Dict) -> Optional[Dict]:
+    alternatives = planner.get("alternatives") or []
+
+    if planner.get("recommended_target") is not None:
+        return alternatives[0] if alternatives else None
+
+    return planner.get("best_theoretical_target")
+
+
+def _build_legacy_night_plan(
+    schedule: Dict,
+    backup_target: Optional[Dict],
+) -> Dict:
+    backup_option = None
+
+    if backup_target is not None:
+        backup_option = {
+            "object": backup_target["object"],
+            "start": backup_target["recommended_start"],
+            "end": backup_target["recommended_end"],
+            "reason": backup_target["reason"],
+        }
+
+    return {
+        "decision": schedule["decision"],
+        "overall_rating": (
+            schedule["weather"].get("observing_rating") or 0
+        ),
+        "start_imaging": schedule["darkness"][
+            "astronomical_darkness_start"
+        ],
+        "shutdown_time": schedule["darkness"][
+            "astronomical_darkness_end"
+        ],
+        "target_sequence": [
+            {
+                "object": block["object"],
+                "start": block["start"],
+                "end": block["end"],
+                "reason": block["reason"],
+            }
+            for block in schedule["blocks"]
+        ],
+        "backup_option": backup_option,
+        "notes": schedule["notes"],
+    }
 
 
 @router.get("", response_model=TonightResponse)
@@ -38,126 +100,19 @@ def tonight():
     db = SessionLocal()
 
     try:
-        integration_by_object = {}
-
-        captures = db.query(Capture).all()
-
-        for capture in captures:
-            if not capture.object_name:
-                continue
-
-            integration_by_object[capture.object_name] = (
-                integration_by_object.get(capture.object_name, 0)
-                + (capture.exposure_seconds or 0)
-            )
-
-        portfolio = {
-            target: build_portfolio_target(
-                object_name=target,
-                total_hours=round(
-                    integration_by_object.get(target, 0) / 3600,
-                    2,
-                ),
-            )
-            for target in TARGET_PRIORITY
-        }
-
-        recommended_name, backup_name = get_recommended_targets(portfolio)
-
-        if recommended_name:
-            recommended_target = portfolio[recommended_name].copy()
-
-            recommended_target["current_altitude"] = get_altitude(
-                recommended_target["object"]
-            )
-            recommended_target["observable"] = is_observable(
-                recommended_target["object"]
-            )
-            recommended_target["transit_time"] = get_transit_time(
-                recommended_target["object"]
-            )
-
-            window = get_recommended_window(
-                recommended_target["object"]
-            )
-
-            recommended_target["recommended_start"] = (
-                window["recommended_start"]
-            )
-            recommended_target["recommended_end"] = (
-                window["recommended_end"]
-            )
-            target_name = recommended_target["object"]
-
-            recommended_target["moon_separation_degrees"] = (
-                get_moon_separation(target_name)
-            )
-
-            recommended_target["moon_warning"] = get_moon_warning(
-                recommended_target["object"]
-            )
-
-        else:
-            recommended_target = None
-
-        if backup_name:
-            backup_target = portfolio[backup_name].copy()
-
-            backup_target["current_altitude"] = get_altitude(
-                backup_target["object"]
-            )
-            backup_target["observable"] = is_observable(
-                backup_target["object"]
-            )
-            backup_target["transit_time"] = get_transit_time(
-                backup_target["object"]
-            )
-
-            window = get_recommended_window(
-                backup_target["object"]
-            )
-
-            backup_target["recommended_start"] = (
-                window["recommended_start"]
-            )
-            backup_target["recommended_end"] = (
-                window["recommended_end"]
-            )
-
-            backup_target["moon_warning"] = (
-                get_moon_warning(
-                    backup_target["object"]
-                )
-            )
-            target_name = backup_target["object"]
-
-            backup_target["moon_separation_degrees"] = (
-                get_moon_separation(target_name)
-            ) 
-        else:
-            backup_target = None
-
-        moon = get_moon_info()
-        weather = get_weather_summary(DEFAULT_POSTAL_CODE)
-
-        night_rating = calculate_night_rating(
-            weather,
-            moon,
-            recommended_target,
+        planner = get_tonight_plan(db)
+        schedule = build_tonight_schedule(planner)
+        recommended_target = _build_legacy_target(
+            db,
+            planner.get("recommended_target"),
+        )
+        backup_target = _build_legacy_target(
+            db,
+            _select_backup_plan(planner),
         )
 
-        darkness = get_darkness_info()
-
-        night_plan = build_night_plan(
-            recommended_target,
-            backup_target,
-            darkness,
-            weather,
-        )
-
-        
         return {
-            "date": datetime.now().date().isoformat(),
+            "date": schedule["date"],
             "observatory": {
                 "name": OBSERVATORY_NAME,
                 "postal_code": DEFAULT_POSTAL_CODE,
@@ -167,13 +122,24 @@ def tonight():
                 "elevation_meters": ELEVATION_METERS,
             },
             "recommended_target": recommended_target,
-            "backup_target": backup_target, 
-            "moon": moon,
-            "weather": weather,
-            "night_rating": night_rating,
-            "message": "Astronomy calculations coming soon.",
-            "night_plan": night_plan,
-            "darkness": darkness,
+            "backup_target": backup_target,
+            "moon": planner["moon"],
+            "weather": planner["weather"],
+            "night_rating": calculate_night_rating(
+                planner["weather"],
+                planner["moon"],
+                recommended_target,
+            ),
+            "message": (
+                "Planner V3 advisory schedule generated: "
+                f"{schedule['decision']}."
+            ),
+            "night_plan": _build_legacy_night_plan(
+                schedule,
+                backup_target,
+            ),
+            "darkness": planner["darkness"],
+            "schedule": schedule,
         }
 
     finally:

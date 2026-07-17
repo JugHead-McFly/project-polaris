@@ -380,8 +380,8 @@ def build_schedule_blocks(candidates: Iterable[Dict]) -> List[Dict]:
     return scheduled_blocks[:MAXIMUM_BLOCKS]
 
 
-def get_tonight_schedule(db: Session) -> Dict:
-    planner = get_tonight_plan(db)
+def build_tonight_schedule(planner: Dict) -> Dict:
+    """Build the advisory schedule from one Planner V3 result."""
     decision = planner["decision"]
     fallback = planner.get("best_theoretical_target")
     notes = list(planner["notes"])
@@ -440,3 +440,9 @@ def get_tonight_schedule(db: Session) -> Dict:
             fallback["advisor"]["object"] if fallback else None
         ),
     }
+
+
+def get_tonight_schedule(db: Session) -> Dict:
+    return build_tonight_schedule(
+        get_tonight_plan(db)
+    )

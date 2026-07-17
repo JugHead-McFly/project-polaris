@@ -1,4 +1,5 @@
 def calculate_night_rating(weather, moon, target):
+    target = target or {}
     score = 100
 
     cloud_cover = weather.get("cloud_cover_percent")

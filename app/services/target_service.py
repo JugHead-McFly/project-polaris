@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models import Capture
 from app.models import CaptureAnalysis
+from app.services.portfolio_service import build_portfolio_target
 
 
 def get_capture_integration_seconds(
@@ -284,4 +285,101 @@ def get_target_summary(
         ),
         "recommended_more_time": None,
         "completion_status": None,
+    }
+
+
+def build_target_response(
+    db: Session,
+    target_name: str,
+) -> Dict:
+    """Build the complete, API-ready summary for a captured target."""
+    normalized_name = target_name.strip().upper()
+    summary = get_target_summary(
+        db=db,
+        target_name=normalized_name,
+    )
+    captures = (
+        db.query(Capture)
+        .filter(Capture.object_name == normalized_name)
+        .order_by(Capture.id)
+        .all()
+    )
+    analyses_by_capture = get_latest_analysis_by_capture(
+        db=db,
+        capture_ids=[capture.id for capture in captures],
+    )
+    total_seconds = summary["total_integration_seconds"]
+    total_hours = round(total_seconds / 3600, 2)
+    portfolio = build_portfolio_target(
+        object_name=normalized_name,
+        total_hours=total_hours,
+    )
+    capture_results = []
+
+    for capture in captures:
+        capture_integration_seconds = get_capture_integration_seconds(
+            capture
+        )
+        analysis = analyses_by_capture.get(capture.id)
+        capture_results.append(
+            {
+                "polaris_id": capture.polaris_id,
+                "filename": capture.filename,
+                "observation_utc": capture.observation_utc,
+                "status": capture.status,
+                "sub_exposure_seconds": capture.sub_exposure_seconds,
+                "subframe_count": capture.subframe_count,
+                "total_integration_seconds": capture_integration_seconds,
+                "total_integration_hours": round(
+                    capture_integration_seconds / 3600,
+                    2,
+                ),
+                "gain": capture.gain,
+                "filter_name": capture.filter_name,
+                "quality_score": (
+                    analysis.quality_score
+                    if analysis is not None
+                    else None
+                ),
+            }
+        )
+
+    return {
+        "object": normalized_name,
+        "capture_count": summary["captures"],
+        "session_count": summary["sessions"],
+        "total_integration_seconds": total_seconds,
+        "total_integration_hours": total_hours,
+        "best_quality": summary["best_quality"],
+        "average_quality": summary["average_quality"],
+        "latest_capture": summary["latest_capture"],
+        "recommended_settings": summary["recommended_settings"],
+        "constellation": portfolio["constellation"],
+        "target_type": portfolio["target_type"],
+        "difficulty": portfolio["difficulty"],
+        "recommended_filter": portfolio["recommended_filter"],
+        "recommended_exposure": portfolio["recommended_exposure"],
+        "season_score": portfolio["season_score"],
+        "science_priority": portfolio["science_priority"],
+        "readiness_score": portfolio["readiness_score"],
+        "status": portfolio["status"],
+        "best_window": portfolio["best_window"],
+        "progress_percent": portfolio["progress_percent"],
+        "portfolio_level": portfolio["portfolio_level"],
+        "next_action": portfolio["next_action"],
+        "current_hours": portfolio["current_hours"],
+        "goal_hours": portfolio["goal_hours"],
+        "remaining_hours": portfolio["remaining_hours"],
+        "estimated_nights_remaining": portfolio[
+            "estimated_nights_remaining"
+        ],
+        "observable": portfolio["observable"],
+        "current_altitude": portfolio["current_altitude"],
+        "transit_time": portfolio["transit_time"],
+        "moon_warning": portfolio["moon_warning"],
+        "recommended_start": portfolio["recommended_start"],
+        "recommended_end": portfolio["recommended_end"],
+        "moon_separation_degrees": None,
+        "reason": None,
+        "captures": capture_results,
     }
