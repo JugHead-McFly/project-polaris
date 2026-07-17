@@ -1,6 +1,9 @@
+from unittest.mock import patch
+
 from app.services.scheduler_service import (
     _darkness_minutes,
     build_schedule_blocks,
+    get_tonight_schedule,
 )
 
 
@@ -156,3 +159,44 @@ def test_darkness_duration_is_reported_in_minutes():
             "astronomical_darkness_end": "2026-07-18 03:51 AM",
         }
     ) == 397
+
+
+def test_do_not_image_returns_no_blocks_and_full_unscheduled_darkness():
+    planner = {
+        "decision": "Do Not Image",
+        "recommended_target": None,
+        "best_theoretical_target": None,
+        "alternatives": [],
+        "notes": [],
+        "weather": {
+            "postal_code": "85297",
+            "observing_rating": 0,
+            "status": "Weather unavailable",
+        },
+        "moon": {
+            "illumination_percent": 15.0,
+            "altitude_degrees": -5.0,
+            "above_horizon": False,
+            "next_moonrise": "2026-07-18 10:16 AM",
+            "next_moonset": "2026-07-17 09:57 PM",
+        },
+        "darkness": {
+            "sunset": "2026-07-17 07:31 PM",
+            "astronomical_darkness_start": "2026-07-17 09:14 PM",
+            "astronomical_darkness_end": "2026-07-18 03:51 AM",
+        },
+    }
+
+    with patch(
+        "app.services.scheduler_service.get_tonight_plan",
+        return_value=planner,
+    ):
+        schedule = get_tonight_schedule(db=object())
+
+    assert schedule["blocks"] == []
+    assert schedule["allocated_minutes"] == 0
+    assert schedule["unscheduled_dark_minutes"] == 397
+    assert any(
+        "will not create imaging blocks" in note
+        for note in schedule["notes"]
+    )

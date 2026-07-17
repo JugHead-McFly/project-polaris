@@ -25,3 +25,13 @@ Activate the virtual environment:
 Start the API:
 
     uvicorn app.main:app --reload
+
+## Test
+
+Install the development dependencies once:
+
+    .venv/bin/pip install -r requirements-dev.txt
+
+Run the complete automated suite:
+
+    .venv/bin/python -m pytest

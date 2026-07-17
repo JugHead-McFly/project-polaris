@@ -1,0 +1,4 @@
+-r requirements.txt
+
+# Pytest 9 requires Python 3.10; Polaris currently runs Python 3.9.
+pytest==8.4.2

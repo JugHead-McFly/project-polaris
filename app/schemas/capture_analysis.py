@@ -1,10 +1,12 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CaptureAnalysisResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     capture_id: int
     stars_detected: Optional[int] = None
@@ -16,6 +18,3 @@ class CaptureAnalysisResponse(BaseModel):
     quality_score: Optional[int] = None
     recommendation: Optional[str] = None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
