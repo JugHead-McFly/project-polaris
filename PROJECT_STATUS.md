@@ -17,9 +17,19 @@ Planner V3 is an advisory night scheduler exposed at:
 
     GET /planner/schedule
 
+The compatibility endpoint is exposed at:
+
+    GET /tonight
+
 It builds chronological, non-overlapping blocks from Planner V2 target rankings.
 It excludes unobservable targets and blocks shorter than 30 minutes. It does not
 control observatory equipment.
+
+`GET /tonight` now computes Planner V3 once and derives its legacy target,
+night-plan, Moon, weather, darkness, and night-rating fields from that result.
+It also includes the complete typed V3 schedule. The legacy response shape is
+preserved for existing clients while the duplicated earlier planning workflow
+has been removed.
 
 Each block includes proven exposure, gain, and filter settings from capture
 history, a five-minute setup allowance, planned imaging minutes, and the number
@@ -62,6 +72,7 @@ does not expose any database-changing synchronization route.
 - `980e44a` - Repeatable automated test suite and API checks
 - `64eba37` - Dry-run-first capture library synchronization
 - `88f6d4c` - Read-only capture-library health in system status
+- `6005397` - Legacy tonight workflow consolidated on Planner V3
 
 ## Verification status
 
@@ -70,10 +81,12 @@ dynamic Jupiter position, Moon separation, transit calculations, batched comet
 ephemerides, cache reuse, and ephemeris failure behavior have focused regression
 checks. Equipment-change suppression, setup allowances, subframe counts,
 integration-goal handoffs, darkness coverage, weather failure, and the live API
-response contract also have focused checks.
+response contract also have focused checks. The `/tonight` compatibility layer
+is covered for its required legacy target fields, embedded V3 schedule, and
+missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 18 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 20 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
@@ -92,8 +105,14 @@ checksum confirmed the audit did not alter the library.
 The live `GET /system` validation reports 19 captures, 19 matched FITS files,
 zero orphans, missing assets, or conflicts, and an overall `Healthy` status.
 
+The live `GET /tonight` compatibility validation now returns HTTP 200 instead
+of its previous response-validation error. On 2026-07-17 the weather decision
+was `Do Not Image`, so both the V3 schedule and legacy target sequence safely
+contained no imaging blocks while M57 remained available as the fallback.
+
 ## Next planned work
 
-1. Consolidate the legacy `/tonight` workflow with Planner V3 through a
-   compatibility-safe transition, then use the consolidated API for the first
-   operator-facing dashboard.
+1. Build the first operator-facing dashboard from the consolidated `/tonight`
+   response, keeping it read-only and clearly distinguishing tonight's safety
+   decision, primary recommendation or fallback, equipment settings, and
+   chronological schedule.
