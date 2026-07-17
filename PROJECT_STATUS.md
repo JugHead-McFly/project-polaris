@@ -7,15 +7,40 @@ Last updated: 2026-07-17
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.3.0`
+- Application version: `1.4.0`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
-Version `1.3.0` is defined once in `app/core/config.py` and is shared by the
+Version `1.4.0` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-The code is release-ready, but the `v1.3.0` Git tag and remote push remain
+The code is release-ready, but the `v1.4.0` Git tag and remote push remain
 explicit release actions and have not been performed.
+
+## Operational readiness
+
+Version 1.4 expands `GET /system` with read-only runtime diagnostics:
+
+- Process uptime and database availability.
+- Latest capture, database, session, and analysis timestamps.
+- Capture-history freshness classified as Current, Recent, Stale, or Empty.
+- Last-known Open-Meteo and NASA JPL Horizons service state without additional
+  health-check network requests.
+- Last successful external-service timestamp preserved across later failures.
+
+Weather and ephemeris calls update this process-local diagnostic state. Service
+failure remains fail-safe: unavailable weather produces `Do Not Image`, and an
+unavailable ephemeris excludes affected moving targets.
+
+Every API response includes a twelve-character `X-Request-ID`. Runtime logs
+record that ID with request method, path, result, and elapsed time. Unhandled
+failures return a safe error body containing the same ID while the private log
+retains the exception detail.
+
+The operator dashboard shows capture freshness, weather state, JPL state, and
+runtime uptime. `docs/OPERATIONS.md` documents startup verification, diagnostic
+states, logging, matched database/library backups, recovery, and failure
+response.
 
 ## Operator dashboard
 
@@ -106,6 +131,7 @@ does not expose any database-changing synchronization route.
 - `21e8a5b` - Centralized v1.1 application version metadata
 - `232dd7e` - v1.2 read-only night operations dashboard
 - `e97fa28` - v1.3 typed dashboard history consolidation
+- `5a0694e` - v1.4 operational diagnostics, logging, and recovery runbook
 
 ## Verification status
 
@@ -119,11 +145,11 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 24 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 28 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
-report version `1.3.0` from the shared application setting. The dashboard HTML,
+report version `1.4.0` from the shared application setting. The dashboard HTML,
 local assets, GET-only route, and JavaScript syntax have focused checks.
 The typed dashboard service also has an isolated database regression check for
 integration totals, quality, target history, capture ordering, and sessions.
@@ -158,8 +184,16 @@ The live v1.3 dashboard response reports 19 captures across 18 targets and 21
 sessions, 19 analysis records, and 32.66 total integration hours. It returns
 eight recent captures and six recent sessions through the typed contract.
 
+The live v1.4 validation began with weather and JPL diagnostics at
+`Not Checked`. After one `/tonight` plan both services reported `Healthy`
+without a separate probe. The system remained `Healthy`, capture freshness was
+`Recent` at 209.3 hours, and the root, plan, and system responses each emitted
+a request ID. The current safety decision remained `Do Not Image` because healthy
+weather connectivity does not imply suitable imaging conditions.
+
 ## Next planned work
 
-1. Begin v1.4 operational readiness: expose data-freshness and degraded-service
-   diagnostics, improve runtime logging and failure visibility, expand date and
-   night-boundary tests, and document startup, backup, and recovery procedures.
+1. Begin v1.5 release hardening with a read-only backup-pair verification tool,
+   startup configuration preflight, and a repeatable release checklist. Actual
+   observatory equipment control remains outside the approved scope and requires
+   a separate v2 safety and architecture decision.
