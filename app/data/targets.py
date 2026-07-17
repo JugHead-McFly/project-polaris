@@ -92,3 +92,10 @@ TARGETS = {
 SOLAR_SYSTEM_TARGETS = {
     "JUPITER": "jupiter",
 }
+
+
+# Small bodies require a current JPL Horizons ephemeris. The command values
+# are unique small-body designations, not display-name searches.
+EPHEMERIS_TARGETS = {
+    "C 2026 B3 PANSTARRS": "DES=2026 B3;",
+}

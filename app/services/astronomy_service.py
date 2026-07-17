@@ -22,6 +22,11 @@ from app.core.observatory import (
 )
 from app.data.targets import SOLAR_SYSTEM_TARGETS
 from app.data.targets import TARGETS
+from app.services.ephemeris_service import (
+    get_ephemeris_coordinate_at,
+    get_ephemeris_coordinates,
+    is_ephemeris_target,
+)
 
 
 OBSERVATORY_LOCATION = EarthLocation(
@@ -101,38 +106,75 @@ def get_target_coordinate_at(
             OBSERVATORY_LOCATION,
         )
 
+    if is_ephemeris_target(normalized_name):
+        return get_ephemeris_coordinate_at(
+            target_name=normalized_name,
+            observation_datetime=observation_datetime,
+        )
+
     return get_target_coordinate(normalized_name)
+
+
+def _altitude_from_coordinate(
+    coordinate: SkyCoord,
+    observation_datetime: datetime,
+) -> float:
+    observation_time = to_astropy_time(
+        observation_datetime
+    )
+    altaz_frame = AltAz(
+        obstime=observation_time,
+        location=OBSERVATORY_LOCATION,
+    )
+    altitude = coordinate.transform_to(
+        altaz_frame
+    ).alt.deg
+
+    return round(float(altitude), 1)
+
+
+def get_altitudes_at(
+    target_name: str,
+    observation_datetimes: list,
+) -> list:
+    if is_ephemeris_target(target_name):
+        coordinates = get_ephemeris_coordinates(
+            target_name=target_name,
+            observation_times=observation_datetimes,
+        )
+    else:
+        coordinates = [
+            get_target_coordinate_at(
+                target_name=target_name,
+                observation_datetime=observation_datetime,
+            )
+            for observation_datetime in observation_datetimes
+        ]
+
+    return [
+        (
+            _altitude_from_coordinate(
+                coordinate=coordinate,
+                observation_datetime=observation_datetime,
+            )
+            if coordinate is not None
+            else None
+        )
+        for coordinate, observation_datetime in zip(
+            coordinates,
+            observation_datetimes,
+        )
+    ]
 
 
 def get_altitude_at(
     target_name: str,
     observation_datetime: datetime,
 ) -> Optional[float]:
-    coordinate = get_target_coordinate_at(
+    return get_altitudes_at(
         target_name=target_name,
-        observation_datetime=observation_datetime,
-    )
-
-    if coordinate is None:
-        return None
-
-    observation_time = to_astropy_time(
-        observation_datetime
-    )
-
-    altaz_frame = AltAz(
-        obstime=observation_time,
-        location=OBSERVATORY_LOCATION,
-    )
-
-    altitude = coordinate.transform_to(
-        altaz_frame
-    ).alt.deg
-
-    return round(
-        float(altitude),
-        1,
-    )
+        observation_datetimes=[observation_datetime],
+    )[0]
 
 
 def get_altitude(

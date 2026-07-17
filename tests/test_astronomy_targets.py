@@ -8,6 +8,7 @@ from app.services.astronomy_service import (
     get_target_coordinate_at,
     get_transit_datetime,
 )
+from app.services.ephemeris_service import is_ephemeris_target
 
 
 OBSERVATION_TIME = datetime(
@@ -40,10 +41,6 @@ def test_jupiter_uses_a_time_specific_coordinate():
     assert get_transit_datetime("JUPITER", OBSERVATION_TIME) is not None
 
 
-def test_uncataloged_comet_remains_excluded():
-    coordinate = get_target_coordinate_at(
-        "C 2026 B3 PANSTARRS",
-        OBSERVATION_TIME,
-    )
-
-    assert coordinate is None
+def test_comet_requires_a_date_specific_ephemeris():
+    assert is_ephemeris_target("C 2026 B3 PANSTARRS")
+    assert get_target_coordinate("C 2026 B3 PANSTARRS") is None

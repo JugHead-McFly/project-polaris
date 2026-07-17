@@ -7,8 +7,8 @@ from app.core.observatory import DEFAULT_POSTAL_CODE
 from app.models import Capture
 from app.services.advisor_service import get_exposure_advice
 from app.services.astronomy_service import (
-    get_altitude,
     get_altitude_at,
+    get_altitudes_at,
     get_darkness_info,
     get_darkness_window_datetimes,
     get_moon_info,
@@ -114,20 +114,28 @@ def get_dark_visibility(
     object_name: str,
     dark_start: datetime,
     dark_end: datetime,
+    additional_sample_times: Optional[List[datetime]] = None,
 ) -> Dict:
     sample_times = generate_sample_times(
         dark_start=dark_start,
         dark_end=dark_end,
     )
 
+    all_sample_times = [
+        *sample_times,
+        *(additional_sample_times or []),
+    ]
+    all_altitudes = get_altitudes_at(
+        target_name=object_name,
+        observation_datetimes=all_sample_times,
+    )
+    sampled_altitudes = all_altitudes[:len(sample_times)]
     altitude_samples = []
 
-    for sample_time in sample_times:
-        altitude = get_altitude_at(
-            target_name=object_name,
-            observation_datetime=sample_time,
-        )
-
+    for sample_time, altitude in zip(
+        sample_times,
+        sampled_altitudes,
+    ):
         if altitude is None:
             return {
                 "known_position": False,
@@ -342,13 +350,18 @@ def build_target_plan(
         object_name=object_name,
     )
 
+    midpoint = dark_start + (dark_end - dark_start) / 2
+    current_time = datetime.now(dark_start.tzinfo)
+
     visibility = get_dark_visibility(
         object_name=object_name,
         dark_start=dark_start,
         dark_end=dark_end,
+        additional_sample_times=[
+            midpoint,
+            current_time,
+        ],
     )
-
-    midpoint = dark_start + (dark_end - dark_start) / 2
 
     altitude_at_midpoint = get_altitude_at(
         target_name=object_name,
@@ -473,7 +486,10 @@ def build_target_plan(
         "advisor": advisor,
         "planner_score": round(score, 1),
         "observable": observable,
-        "current_altitude": get_altitude(object_name),
+        "current_altitude": get_altitude_at(
+            target_name=object_name,
+            observation_datetime=current_time,
+        ),
         "altitude_at_dark_midpoint": altitude_at_midpoint,
         "maximum_dark_altitude": visibility["maximum_dark_altitude"],
         "average_dark_altitude": visibility["average_dark_altitude"],
