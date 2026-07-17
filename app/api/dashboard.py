@@ -2,6 +2,7 @@ from datetime import datetime
 
 from fastapi import APIRouter
 
+from app.core.config import settings
 from app.database.database import SessionLocal
 from app.models import Capture
 from app.models import ObservingSession
@@ -184,7 +185,7 @@ def dashboard():
         )
 
         return {
-            "api_version": "0.6",
+            "api_version": settings.VERSION,
             "system": {
                 "status": "Healthy",
                 "database": "Connected",

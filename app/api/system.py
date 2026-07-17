@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.core.config import settings
 from app.database.database import SessionLocal
 from app.models import Capture
 from app.models import CaptureAnalysis
@@ -63,8 +64,8 @@ def build_system_status(db) -> dict:
     )
 
     return {
-        "project": "Project Polaris",
-        "version": "1.1.0",
+        "project": settings.PROJECT_NAME,
+        "version": settings.VERSION,
         "database_version": 1,
         "captures": capture_count,
         "targets": target_count,

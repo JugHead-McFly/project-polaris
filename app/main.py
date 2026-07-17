@@ -12,6 +12,7 @@ from app.api.portfolio import router as portfolio_router
 from app.api.sessions import router as sessions_router
 from app.api.system import router as system_router
 from app.api.tonight import router as tonight_router
+from app.core.config import settings
 from app.database.database import SessionLocal
 from app.services.capture_service import (
     create_capture_from_parsed_fits,
@@ -25,6 +26,7 @@ from app.api.schedule import router as schedule_router
 
 app = FastAPI(
     title="Project Polaris API",
+    version=settings.VERSION,
 )
 
 
@@ -47,6 +49,7 @@ app.include_router(schedule_router)
 def root():
     return {
         "status": "Project Polaris API is running",
+        "version": settings.VERSION,
     }
 
 

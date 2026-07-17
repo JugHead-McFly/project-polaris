@@ -5,7 +5,7 @@ Project Polaris is the engine behind Doug's Observatory.
 See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current implementation state,
 safety rules, and next planned work.
 
-Current Version: v0.1
+Current Version: v1.1.0
 
 ## Features
 
