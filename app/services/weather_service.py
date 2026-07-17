@@ -80,6 +80,8 @@ def get_weather_summary(postal_code: str):
             "wind_speed_mph": None,
             "seeing": None,
             "transparency": None,
-            "observing_rating": rating,
+            # A missing live forecast must never be interpreted as safe
+            # observing conditions by the planner.
+            "observing_rating": 0,
             "status": f"Weather unavailable: {error}",
         }

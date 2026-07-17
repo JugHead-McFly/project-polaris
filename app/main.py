@@ -20,6 +20,7 @@ from parser.fits_parser import parse_fits
 from app.api.planner import (
     router as planner_router,
 )
+from app.api.schedule import router as schedule_router
 
 
 app = FastAPI(
@@ -39,6 +40,7 @@ app.include_router(advisor_router)
 app.include_router(
     planner_router
 )
+app.include_router(schedule_router)
 
 
 @app.get("/")
