@@ -44,6 +44,13 @@ Safety behavior:
 - C 2026 B3 PANSTARRS uses a batched, date-specific observer ephemeris from
   NASA JPL Horizons. Results are cached only in memory for exact UTC instants.
 
+## Capture-library synchronization
+
+`scripts/sync_capture_library.py` audits `/Users/doug/ProjectPolaris` in dry-run
+mode by default. Explicit `--apply` mode can register valid orphan FITS files in
+the database, but it never copies, renames, modifies, or deletes library files.
+Duplicate IDs, target mismatches, and asset-path mismatches block apply mode.
+
 ## Completed checkpoints
 
 - `ca8f922` - Planner V3 advisory night scheduler
@@ -51,6 +58,7 @@ Safety behavior:
 - `6c1ae7a` - Fail-safe JPL Horizons comet ephemeris support
 - `b1496e1` - Equipment-aware, goal-limited schedule blocks
 - `980e44a` - Repeatable automated test suite and API checks
+- `64eba37` - Dry-run-first capture library synchronization
 
 ## Verification status
 
@@ -62,7 +70,7 @@ integration-goal handoffs, darkness coverage, weather failure, and the live API
 response contract also have focused checks.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 14 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 16 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The live validation on 2026-07-17 returned `Proceed`, selected M57 for the full
@@ -74,7 +82,11 @@ The equipment-aware validation schedules M57 until its remaining 497 subframes
 are complete, then M27, then M13. It reports the final 22 dark minutes as
 unscheduled because they do not meet the 30-minute minimum block requirement.
 
+The capture-library dry run found 19 database captures and 19 matching FITS
+files, with zero orphans, missing assets, or conflicts. A before/after file-state
+checksum confirmed the audit did not alter the library.
+
 ## Next planned work
 
-1. Improve capture synchronization from the image library without modifying
-   the original files.
+1. Expose read-only capture-library health in the system-status API while
+   keeping database-changing synchronization restricted to the explicit CLI.
