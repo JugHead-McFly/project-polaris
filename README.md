@@ -48,3 +48,7 @@ After reviewing a dry-run report, register valid orphan FITS files with:
 
 Apply mode only adds database records that reference existing FITS files. It
 does not copy, rename, modify, or delete library files.
+
+The read-only `GET /system` endpoint includes compact capture-library health
+counts. Database-changing synchronization remains available only through the
+explicit CLI command above.
