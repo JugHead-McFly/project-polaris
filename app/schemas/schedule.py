@@ -12,8 +12,16 @@ class ScheduledImagingBlock(BaseModel):
     start: str
     end: str
     duration_minutes: int
+    setup_minutes: int
+    imaging_minutes: int
     planner_score: float
     reason: str
+    recommended_sub_exposure_seconds: Optional[int] = None
+    recommended_gain: Optional[float] = None
+    recommended_filter: Optional[str] = None
+    recommendation_source: str
+    planned_subframes: Optional[int] = None
+    setup_changes: List[str]
 
 
 class TonightScheduleResponse(BaseModel):
@@ -21,6 +29,8 @@ class TonightScheduleResponse(BaseModel):
     decision: str
     advisory_only: bool = True
     blocks: List[ScheduledImagingBlock]
+    allocated_minutes: int
+    unscheduled_dark_minutes: int
     weather: WeatherSummary
     moon: MoonSummary
     darkness: DarknessSummary
