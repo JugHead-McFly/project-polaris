@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
+from app.core.config import settings
 from app.main import app
 
 
@@ -15,7 +16,7 @@ class FakeDatabase:
 def system_response():
     return {
         "project": "Project Polaris",
-        "version": "1.1.0",
+        "version": settings.VERSION,
         "database_version": 1,
         "captures": 19,
         "targets": 18,
@@ -57,6 +58,7 @@ def test_system_endpoint_includes_read_only_library_health():
     payload = response.json()
     assert payload["capture_library"]["clean"]
     assert payload["capture_library"]["matched_count"] == 19
+    assert payload["version"] == settings.VERSION
     assert database.closed
 
 

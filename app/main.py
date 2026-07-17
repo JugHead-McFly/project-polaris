@@ -2,12 +2,14 @@ import os
 import tempfile
 
 from fastapi import FastAPI, File, UploadFile
+from fastapi.staticfiles import StaticFiles
 
 from app.api.advisor import router as advisor_router
 from app.api.captures import router as capture_router
 from app.api.dashboard import router as dashboard_router
 from app.api.mission import router as mission_router
 from app.api.objects import router as objects_router
+from app.api.operator import router as operator_router
 from app.api.portfolio import router as portfolio_router
 from app.api.sessions import router as sessions_router
 from app.api.system import router as system_router
@@ -29,12 +31,20 @@ app = FastAPI(
     version=settings.VERSION,
 )
 
+WEB_DIRECTORY = settings.BASE_DIR / "app" / "web"
+app.mount(
+    "/operator-assets",
+    StaticFiles(directory=str(WEB_DIRECTORY)),
+    name="operator-assets",
+)
+
 
 app.include_router(capture_router)
 app.include_router(mission_router)
 app.include_router(dashboard_router)
 app.include_router(sessions_router)
 app.include_router(objects_router)
+app.include_router(operator_router)
 app.include_router(portfolio_router)
 app.include_router(tonight_router)
 app.include_router(system_router)
@@ -50,6 +60,7 @@ def root():
     return {
         "status": "Project Polaris API is running",
         "version": settings.VERSION,
+        "operator_dashboard": "/operator",
     }
 
 

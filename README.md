@@ -5,7 +5,7 @@ Project Polaris is the engine behind Doug's Observatory.
 See [PROJECT_STATUS.md](PROJECT_STATUS.md) for the current implementation state,
 safety rules, and next planned work.
 
-Current Version: v1.1.0
+Current Version: v1.2.0
 
 ## Features
 
@@ -15,6 +15,7 @@ Current Version: v1.1.0
 - Google Sheets integration (coming soon)
 - AI astrophotography analysis (coming soon)
 - Planner V3 advisory night schedule at `GET /planner/schedule`
+- Read-only night operations dashboard at `GET /operator`
 
 ## Run
 
@@ -25,6 +26,9 @@ Activate the virtual environment:
 Start the API:
 
     uvicorn app.main:app --reload
+
+Then open `http://127.0.0.1:8000/operator` for the read-only night operations
+dashboard.
 
 ## Test
 

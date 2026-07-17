@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#071119">
+    <title>Project Polaris — Night Operations</title>
+    <meta
+      name="description"
+      content="Read-only night planning dashboard for Doug's Observatory."
+    >
+    <link rel="stylesheet" href="/operator-assets/operator.css">
+    <script defer src="/operator-assets/operator.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to tonight's plan</a>
+
+    <header class="site-header">
+      <a class="brand" href="/operator" aria-label="Project Polaris dashboard">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>
+          <strong>Project Polaris</strong>
+          <small>Doug's Observatory</small>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <span class="readonly-badge">Read-only advisory</span>
+        <button class="refresh-button" id="refresh-button" type="button">
+          Refresh conditions
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="decision-panel status-loading" id="decision-panel">
+        <div class="decision-copy">
+          <p class="eyebrow">Tonight's safety decision</p>
+          <div class="decision-line">
+            <span class="status-light" aria-hidden="true"></span>
+            <h1 id="decision">Loading plan…</h1>
+          </div>
+          <p class="decision-message" id="decision-message" aria-live="polite">
+            Checking weather, darkness, Moon conditions, and target visibility.
+          </p>
+          <p class="advisory-note">
+            Polaris advises. The operator makes the final decision.
+          </p>
+        </div>
+
+        <div class="target-focus">
+          <p class="eyebrow" id="target-label">Primary target</p>
+          <div class="target-name" id="target-name">—</div>
+          <p id="target-reason">Waiting for tonight's recommendation.</p>
+          <dl class="target-facts">
+            <div>
+              <dt>Altitude now</dt>
+              <dd id="target-altitude">—</dd>
+            </div>
+            <div>
+              <dt>Transit</dt>
+              <dd id="target-transit">—</dd>
+            </div>
+            <div>
+              <dt>Moon separation</dt>
+              <dd id="target-moon-separation">—</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <p class="load-error" id="load-error" role="alert" hidden></p>
+
+      <section class="night-summary" aria-label="Night summary">
+        <article class="summary-card">
+          <p class="eyebrow">Astronomical darkness</p>
+          <strong id="darkness-window">—</strong>
+          <span id="sunset">Sunset —</span>
+        </article>
+        <article class="summary-card">
+          <p class="eyebrow">Scheduled imaging</p>
+          <strong id="allocated-time">—</strong>
+          <span id="unscheduled-time">—</span>
+        </article>
+        <article class="summary-card">
+          <p class="eyebrow">Night rating</p>
+          <strong id="night-rating">—</strong>
+          <span id="weather-status">Waiting for conditions</span>
+        </article>
+        <article class="summary-card">
+          <p class="eyebrow">System</p>
+          <strong id="system-status">Checking…</strong>
+          <span id="library-status">Capture library —</span>
+        </article>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="panel schedule-panel" aria-labelledby="schedule-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Advisory timeline</p>
+              <h2 id="schedule-title">Tonight's schedule</h2>
+            </div>
+            <span id="schedule-count">0 blocks</span>
+          </div>
+          <div class="schedule-list" id="schedule-list">
+            <div class="empty-state">Building tonight's timeline…</div>
+          </div>
+        </section>
+
+        <aside class="conditions-column">
+          <section class="panel" aria-labelledby="conditions-title">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Live conditions</p>
+                <h2 id="conditions-title">Weather &amp; Moon</h2>
+              </div>
+            </div>
+            <dl class="condition-grid">
+              <div><dt>Cloud cover</dt><dd id="cloud-cover">—</dd></div>
+              <div><dt>Humidity</dt><dd id="humidity">—</dd></div>
+              <div><dt>Wind</dt><dd id="wind">—</dd></div>
+              <div><dt>Temperature</dt><dd id="temperature">—</dd></div>
+              <div><dt>Moon</dt><dd id="moon-illumination">—</dd></div>
+              <div><dt>Moon altitude</dt><dd id="moon-altitude">—</dd></div>
+            </dl>
+          </section>
+
+          <section class="panel" aria-labelledby="health-title">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Data confidence</p>
+                <h2 id="health-title">System health</h2>
+              </div>
+              <span id="version">v—</span>
+            </div>
+            <dl class="health-list">
+              <div><dt>Captures</dt><dd id="capture-count">—</dd></div>
+              <div><dt>Targets</dt><dd id="target-count">—</dd></div>
+              <div><dt>Sessions</dt><dd id="session-count">—</dd></div>
+              <div><dt>Matched FITS</dt><dd id="matched-count">—</dd></div>
+              <div><dt>Library conflicts</dt><dd id="conflict-count">—</dd></div>
+            </dl>
+          </section>
+
+          <section class="panel notes-panel" aria-labelledby="notes-title">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Planner context</p>
+                <h2 id="notes-title">Notes</h2>
+              </div>
+            </div>
+            <ul id="planner-notes">
+              <li>Waiting for planner notes.</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <span id="last-updated">Not yet refreshed</span>
+      <span>Planner V3 · advisory only · no equipment control</span>
+    </footer>
+  </body>
+</html>
