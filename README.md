@@ -8,7 +8,7 @@ safety rules, and next planned work.
 See [PROJECT_TIME.md](PROJECT_TIME.md) for the cumulative development-time log
 and coding-timer state.
 
-Current Version: v1.4.0
+Current Version: v1.5.0
 
 ## Features
 
@@ -78,3 +78,16 @@ Verify a timestamped backup folder containing both `polaris.db` and a copied
 The verifier is read-only. It runs SQLite's quick check and reconciles every
 database capture with the copied FITS library. It exits successfully only when
 the pair is complete and consistent.
+
+## Release readiness
+
+With a clean candidate branch, a verified timestamped backup, and the local API
+running, execute all release gates together:
+
+    .venv/bin/python scripts/release_check.py \
+        --expected-version 1.5.0 \
+        --backup-root /path/to/timestamped-backup \
+        --base-url http://127.0.0.1:8000
+
+See [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md) for the required
+release sequence, approval boundary, and rollback guidance.

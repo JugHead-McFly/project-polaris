@@ -1,21 +1,22 @@
 # Project Polaris Status
 
-Last updated: 2026-07-17
+Last updated: 2026-07-18
 
 ## Project locations
 
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.4.0`
+- Application version: `1.5.0`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
-Version `1.4.0` is defined once in `app/core/config.py` and is shared by the
+Version `1.5.0` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-The code is release-ready, but the `v1.4.0` Git tag and remote push remain
-explicit release actions and have not been performed.
+The v1.5 code is release-candidate ready, but verification against a genuine
+timestamped backup, the `v1.5.0` Git tag, and remote push remain explicit
+release actions and have not been performed.
 
 ## Operational readiness
 
@@ -44,11 +45,13 @@ response.
 
 ## Release hardening
 
-Version 1.5 is in progress. Its first two checkpoints add read-only backup-pair
-verification and startup configuration preflight commands:
+Version 1.5 release-hardening implementation is complete. Its checkpoints add
+backup-pair verification, startup preflight, and combined release gates:
 
     .venv/bin/python scripts/verify_backup_pair.py /path/to/timestamped-backup
     .venv/bin/python scripts/check_startup.py
+    .venv/bin/python scripts/release_check.py --expected-version 1.5.0 \
+        --backup-root /path/to/timestamped-backup
 
 The verifier requires both a copied `polaris.db` and `ProjectPolaris` library,
 opens SQLite in read-only mode, runs `PRAGMA quick_check`, and reconciles capture
@@ -62,6 +65,12 @@ library paths, and log level. The API runs the same preflight during its lifespa
 startup and refuses to serve requests when a required check fails. The checks
 are read-only so advisory planning remains available without requiring capture
 ingestion permissions.
+
+The release check requires a clean expected branch and exact version, then runs
+the startup preflight, complete test suite, backup-pair verification, and five
+live endpoint smoke checks. It is read-only with respect to project data and
+does not tag or push. `docs/RELEASE_CHECKLIST.md` defines the operator approval,
+backup, tag, publish, and rollback sequence.
 
 ## Operator dashboard
 
@@ -155,6 +164,7 @@ does not expose any database-changing synchronization route.
 - `5a0694e` - v1.4 operational diagnostics, logging, and recovery runbook
 - `d71dbff` - v1.5 read-only backup-pair verification
 - `86d2643` - v1.5 startup configuration preflight
+- `25a6c32` - v1.5 repeatable release-readiness gates
 
 ## Verification status
 
@@ -168,11 +178,11 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 38 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 43 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
-report version `1.4.0` from the shared application setting. The dashboard HTML,
+report version `1.5.0` from the shared application setting. The dashboard HTML,
 local assets, GET-only route, and JavaScript syntax have focused checks.
 The typed dashboard service also has an isolated database regression check for
 integration totals, quality, target history, capture ordering, and sessions.
@@ -222,9 +232,16 @@ The v1.5 startup preflight passed all seven checks against the live Polaris
 installation. An application-lifespan validation then completed startup and
 returned HTTP 200 from the root endpoint.
 
+The combined v1.5 release workflow passed all six gates in an end-to-end test:
+clean source state, exact version, startup preflight, full suite, a disposable
+19-capture matched-pair fixture, and HTTP 200 from all five live endpoints. A
+genuine timestamped recovery backup is still required before tagging.
+
 ## Next planned work
 
-1. Add a repeatable v1.5 release checklist covering tests, backup validation,
-   versioning, tagging, and live smoke checks.
-2. Keep actual observatory equipment control outside the approved scope. It
+1. Execute the v1.5 release checklist using a genuine timestamped backup, then
+   tag and push only with explicit operator approval.
+2. Define the next advisory-software milestone after observing v1.5 in routine
+   use.
+3. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.

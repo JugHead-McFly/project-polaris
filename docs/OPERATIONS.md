@@ -8,6 +8,10 @@ Polaris is advisory software. A healthy application does not replace the
 operator's weather, equipment, or safety judgment, and the application does
 not control observatory equipment.
 
+For a software release, follow `docs/RELEASE_CHECKLIST.md` in addition to this
+operations runbook. A valid operational startup alone does not authorize a Git
+tag or remote push.
+
 ## Start and verify
 
 From the application repository:
