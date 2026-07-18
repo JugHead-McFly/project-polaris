@@ -8,6 +8,7 @@ from app.services.release_readiness_service import (
     build_release_readiness_report,
 )
 from app.services.release_readiness_service import check_live_endpoints
+from app.services.release_readiness_service import check_test_suite
 from app.services.release_readiness_service import check_version
 
 
@@ -90,6 +91,22 @@ def test_live_smoke_rejects_version_drift():
         "/system",
         "/dashboard",
     }
+
+
+def test_quiet_test_success_has_a_clear_summary(tmp_path):
+    completed = MagicMock(
+        returncode=0,
+        stdout="................................ [100%]\n",
+        stderr="",
+    )
+    with patch(
+        "app.services.release_readiness_service.subprocess.run",
+        return_value=completed,
+    ):
+        report = check_test_suite(tmp_path)
+
+    assert report["status"] == "pass"
+    assert report["message"] == "Test suite passed."
 
 
 @patch("app.services.release_readiness_service.check_live_endpoints")

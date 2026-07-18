@@ -143,8 +143,18 @@ def check_test_suite(project_root: Path, timeout_seconds: int = 300) -> Dict:
     ]
     summary = next(
         (line for line in reversed(output_lines) if " passed" in line),
-        output_lines[-1] if output_lines else "No test output was produced.",
+        None,
     )
+    if summary is None:
+        summary = (
+            "Test suite passed."
+            if result.returncode == 0
+            else (
+                output_lines[-1]
+                if output_lines
+                else "Test suite failed without output."
+            )
+        )
     return _check(
         "test_suite",
         result.returncode == 0,
@@ -265,4 +275,3 @@ def build_release_readiness_report(
         "checks": checks,
         "failures": failures,
     }
-
