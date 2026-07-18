@@ -7,18 +7,18 @@ Last updated: 2026-07-18
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.5.1` (in development)
-- Current release tag: `v1.5.0`
-- Release commit: `5bee291`
+- Application version: `1.5.1` (released)
+- Current release tag: `v1.5.1`
+- Release commit: `77c0234`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
 Version `1.5.1` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-Version 1.5.1 is under development on `develop`. Version 1.5.0 was verified
-against a genuine encrypted timestamped backup and released from commit
-`5bee291`; the annotated `v1.5.0` tag remains the current published release.
+Version 1.5.1 was released from commit `77c0234` and tagged `v1.5.1`.
+Version 1.5.0 remains available as the earlier tagged release at commit
+`5bee291`.
 
 ## Operational readiness
 
@@ -267,29 +267,33 @@ HTTP 200 from all five live endpoints. The backup also contains a verified,
 complete Git bundle and an identical database checksum. The annotated `v1.5.0`
 tag and `develop` branch were then published to GitHub at commit `5bee291`.
 
+The final v1.5.1 release workflow passed all six gates using the genuine
+encrypted backup `2026-07-18-v1.5.1-77c0234`: clean source state, exact version,
+all seven startup checks, all 55 tests, 19 database captures matched to 19 FITS
+files, and HTTP 200 from all five live endpoints. The backup includes a portable
+Git bundle of the candidate. The annotated `v1.5.1` tag and `develop` branch
+were then published to GitHub at commit `77c0234`; the post-release startup and
+endpoint checks also passed.
+
 ## Next planned work
 
-1. Complete the v1.5.1 operator-dashboard visual rehearsal and address any
-   remaining usability regressions.
-2. Run the documented release gates against a fresh verified backup before
-   tagging or publishing v1.5.1.
-3. Plan v1.6 Locations: an opt-in interactive world map for potential
+1. Plan v1.6 Locations: an opt-in interactive world map for potential
    observing sites, straight-line distance rings from a selected observatory,
    public dark-sky/place references, and saved site notes. Do not collect or
    expose an exact home address by default; road distance and routing are a
    later separately sourced capability.
-4. Plan a future Goal Engine: replace generic integration defaults with
+2. Plan a future Goal Engine: replace generic integration defaults with
    target-specific, explainable starting goals for quick, detailed, and
    showcase results. Adjust recommendations from the user's equipment,
    sky profile, and capture-quality history, while always allowing a user
    override.
-5. Plan Quality Scoring v2: add explainable sharpness, star-roundness, and
+3. Plan Quality Scoring v2: add explainable sharpness, star-roundness, and
    noise measures to the capture score. Record Sky Quality Meter (SQM) values
    with the observing session for context, rather than mixing site darkness
    into an individual capture score.
-6. Before public distribution, replace the hard-coded Doug's Observatory
+4. Before public distribution, replace the hard-coded Doug's Observatory
    location with an installation profile covering observatory name, postal
    code, coordinates, elevation, timezone, and storage location. The operator
    banner already reads the name from the observatory API response.
-7. Keep actual observatory equipment control outside the approved scope. It
+5. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.
