@@ -6,7 +6,7 @@ push. Tagging and pushing remain explicit operator decisions.
 
 ## Required inputs
 
-- Exact release version, such as `1.5.0`.
+- Exact release version, such as `1.5.1`.
 - Clean `develop` branch containing the intended release code and documentation.
 - New timestamped backup folder containing matched `polaris.db` and
   `ProjectPolaris` copies.
@@ -49,7 +49,7 @@ Start the candidate using the normal operations runbook. Confirm the startup
 preflight reports `Ready`, then run the complete release gate:
 
     .venv/bin/python scripts/release_check.py \
-        --expected-version 1.5.0 \
+        --expected-version 1.5.1 \
         --backup-root /path/to/timestamped-backup \
         --base-url http://127.0.0.1:8000
 
@@ -81,7 +81,7 @@ Before tagging, confirm:
 
 Only after explicit operator approval:
 
-1. Create an annotated tag matching the application version, such as `v1.5.0`.
+1. Create an annotated tag matching the application version, such as `v1.5.1`.
 2. Push the `develop` branch.
 3. Push the exact release tag.
 4. Confirm the remote branch and tag point to the reviewed candidate commit.
@@ -95,4 +95,3 @@ After publishing, rerun the startup preflight and live smoke endpoints. If code
 validation fails, stop the candidate and diagnose before continued use. If data
 integrity is in question, stop all writes and follow the matched-pair recovery
 procedure in `docs/OPERATIONS.md`; do not automatically overwrite live data.
-

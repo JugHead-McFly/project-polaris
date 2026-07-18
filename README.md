@@ -8,7 +8,7 @@ safety rules, and next planned work.
 See [PROJECT_TIME.md](PROJECT_TIME.md) for the cumulative development-time log
 and coding-timer state.
 
-Current Version: v1.5.0
+Current Version: v1.5.1
 
 ## Features
 
@@ -20,6 +20,22 @@ Current Version: v1.5.0
 - Planner V3 advisory night schedule at `GET /planner/schedule`
 - Read-only night operations dashboard at `GET /operator`
 - Typed portfolio and recent-history feed at `GET /dashboard`
+- Locations planning (next version): an opt-in interactive map for potential
+  observing sites, straight-line distance rings, site notes, and saved
+  candidate locations
+- Goal Engine (future): target-specific, explainable integration goals with
+  quick/detailed/showcase aims, equipment and sky-profile adjustments, and
+  user overrides
+- Quality scoring v2 (future): add explainable sharpness, star-roundness, and
+  noise measures to the per-capture score; record Sky Quality Meter (SQM)
+  readings as session context instead of treating them as an image-score input
+
+## Map data attribution
+
+The History view uses Leaflet with OpenStreetMap base tiles. The required
+OpenStreetMap attribution appears inside the interactive map. City-level
+location pins and Bortle classes are Polaris session records, not supplied by
+the base map.
 
 ## Run
 
@@ -85,7 +101,7 @@ With a clean candidate branch, a verified timestamped backup, and the local API
 running, execute all release gates together:
 
     .venv/bin/python scripts/release_check.py \
-        --expected-version 1.5.0 \
+        --expected-version 1.5.1 \
         --backup-root /path/to/timestamped-backup \
         --base-url http://127.0.0.1:8000
 

@@ -115,6 +115,7 @@ def test_schedule_includes_settings_setup_time_and_subframes():
     assert block["setup_minutes"] == 5
     assert block["imaging_minutes"] == 115
     assert block["planned_subframes"] == 460
+    assert block["common_name"] == "Ring Nebula"
     assert block["recommended_filter"] == "Duo-Band"
     assert "Select Duo-Band filter" in block["setup_changes"]
 
@@ -203,3 +204,42 @@ def test_do_not_image_returns_no_blocks_and_full_unscheduled_darkness():
     )
 
     assert build_tonight_schedule(planner) == schedule
+
+
+def test_use_caution_includes_weather_warning_and_block_reminder():
+    planner = {
+        "decision": "Use Caution",
+        "recommended_target": candidate(
+            "M57",
+            120,
+            "2026-07-17 09:00 PM",
+            "2026-07-17 11:00 PM",
+            exposure=15,
+            gain=100,
+            filter_name="Duo-Band",
+        ),
+        "best_theoretical_target": None,
+        "alternatives": [],
+        "notes": [
+            "Use caution: the current weather rating is 3/5. "
+            "Verify live conditions before opening the observatory.",
+            "Cloud cover is 50%, which reduced the weather rating by 2 points.",
+        ],
+        "weather": {"observing_rating": 3},
+        "moon": {},
+        "darkness": {
+            "astronomical_darkness_start": "2026-07-17 09:00 PM",
+            "astronomical_darkness_end": "2026-07-17 11:00 PM",
+        },
+    }
+
+    schedule = build_tonight_schedule(planner)
+
+    assert (
+        "Use caution: the current weather rating is 3/5. "
+        "Verify live conditions before opening the observatory."
+    ) in schedule["notes"]
+    assert (
+        "Cloud cover is 50%, which reduced the weather rating by 2 points."
+    ) in schedule["notes"]
+    assert "Review live conditions before starting any scheduled block." in schedule["notes"]

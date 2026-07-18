@@ -2,6 +2,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from app.services.astronomy_service import (
+    _moon_phase_name,
     get_altitude_at,
     get_moon_separation_at,
     get_target_coordinate,
@@ -44,3 +45,11 @@ def test_jupiter_uses_a_time_specific_coordinate():
 def test_comet_requires_a_date_specific_ephemeris():
     assert is_ephemeris_target("C 2026 B3 PANSTARRS")
     assert get_target_coordinate("C 2026 B3 PANSTARRS") is None
+
+
+def test_moon_phase_name_adds_plain_language_context():
+    assert _moon_phase_name(30) == "Waxing Crescent"
+    assert _moon_phase_name(90) == "First Quarter"
+    assert _moon_phase_name(180) == "Full Moon"
+    assert _moon_phase_name(270) == "Last Quarter"
+    assert _moon_phase_name(330) == "Waning Crescent"

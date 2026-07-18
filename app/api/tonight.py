@@ -19,6 +19,42 @@ from app.services.target_service import build_target_response
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
 
 
+def _build_operator_message(schedule: Dict) -> str:
+    decision = schedule["decision"]
+    weather = schedule["weather"]
+    rating = weather.get("observing_rating")
+
+    if decision == "Proceed":
+        return (
+            "Conditions currently support imaging. Review the advisory "
+            "timeline before starting."
+        )
+
+    if decision == "Use Caution":
+        return (
+            f"Use caution: the current weather rating is {rating}/5. "
+            "Verify live conditions before opening the observatory."
+        )
+
+    reasons = []
+    cloud_cover = weather.get("cloud_cover_percent")
+    humidity = weather.get("humidity_percent")
+    wind_speed = weather.get("wind_speed_mph")
+
+    if rating == 0:
+        reasons.append("live weather data is unavailable")
+    if cloud_cover is not None and cloud_cover >= 50:
+        reasons.append(f"cloud cover is {cloud_cover}%")
+    if humidity is not None and humidity >= 80:
+        reasons.append(f"humidity is {humidity}%")
+    if wind_speed is not None and wind_speed >= 15:
+        reasons.append(f"wind is {wind_speed:g} mph")
+    if not reasons:
+        reasons.append(f"the weather rating is {rating}/5")
+
+    return "Do not image: " + ", ".join(reasons) + "."
+
+
 def _build_legacy_target(
     db,
     planner_target: Optional[Dict],
@@ -130,10 +166,7 @@ def tonight():
                 planner["moon"],
                 recommended_target,
             ),
-            "message": (
-                "Planner V3 advisory schedule generated: "
-                f"{schedule['decision']}."
-            ),
+            "message": _build_operator_message(schedule),
             "night_plan": _build_legacy_night_plan(
                 schedule,
                 backup_target,

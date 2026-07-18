@@ -306,7 +306,6 @@ def build_selection_reason(
     maximum_altitude: Optional[float],
     usable_dark_hours: float,
     remaining_hours: float,
-    confidence: int,
     moon_warning: Optional[str],
 ) -> str:
     reasons = []
@@ -325,9 +324,10 @@ def build_selection_reason(
     else:
         reasons.append("has reached its current integration goal")
 
-    reasons.append(f"recommendation confidence is {confidence}%")
-
-    if moon_warning:
+    if (
+        moon_warning
+        and not moon_warning.lower().startswith("none")
+    ):
         reasons.append(moon_warning)
 
     cleaned_reasons = [reason.rstrip(".") for reason in reasons]
@@ -478,7 +478,6 @@ def build_target_plan(
         maximum_altitude=visibility["maximum_dark_altitude"],
         usable_dark_hours=visibility["usable_dark_hours"],
         remaining_hours=advisor["remaining_hours"],
-        confidence=advisor["confidence"],
         moon_warning=moon_warning,
     )
 
@@ -594,6 +593,29 @@ def get_tonight_plan(db: Session) -> Dict:
                 f"{best_theoretical_target['advisor']['object']}."
             )
 
+    elif decision == "Use Caution":
+        notes.append(
+            f"Use caution: the current weather rating is "
+            f"{weather.get('observing_rating')}/5. Verify live conditions "
+            "before opening the observatory."
+        )
+
+        cloud_cover = weather.get("cloud_cover_percent")
+        if cloud_cover is not None and cloud_cover >= 50:
+            notes.append(
+                f"Cloud cover is {cloud_cover}%, which reduced the weather "
+                "rating by 2 points."
+            )
+
+        if best_theoretical_target is not None:
+            recommended_target = best_theoretical_target
+        else:
+            notes.append(
+                "No cataloged target has at least "
+                f"{MINIMUM_USABLE_DARK_MINUTES} minutes above the minimum "
+                "altitude during astronomical darkness."
+            )
+
     elif best_theoretical_target is not None:
         recommended_target = best_theoretical_target
 
@@ -620,7 +642,11 @@ def get_tonight_plan(db: Session) -> Dict:
 
     cloud_cover = weather.get("cloud_cover_percent")
 
-    if cloud_cover is not None and cloud_cover > 50:
+    if (
+        decision != "Use Caution"
+        and cloud_cover is not None
+        and cloud_cover > 50
+    ):
         notes.append(
             "Cloud cover may significantly reduce image quality."
         )

@@ -9,6 +9,7 @@ from app.schemas.weather import WeatherSummary
 
 class ScheduledImagingBlock(BaseModel):
     object: str
+    common_name: Optional[str] = None
     start: str
     end: str
     duration_minutes: int

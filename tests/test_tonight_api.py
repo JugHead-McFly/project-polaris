@@ -3,6 +3,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.api.tonight import _build_operator_message
 from app.services.night_rating_service import calculate_night_rating
 
 
@@ -166,7 +167,43 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["backup_target"]["object"] == "M27"
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
+    assert payload["message"].startswith("Conditions currently support imaging")
     assert database.closed
+
+
+def test_do_not_image_message_names_the_weather_reasons():
+    message = _build_operator_message(
+        {
+            "decision": "Do Not Image",
+            "weather": {
+                "observing_rating": 1,
+                "cloud_cover_percent": 82,
+                "humidity_percent": 84,
+                "wind_speed_mph": 17,
+            },
+        }
+    )
+
+    assert message == (
+        "Do not image: cloud cover is 82%, humidity is 84%, "
+        "wind is 17 mph."
+    )
+
+
+def test_do_not_image_message_fails_closed_when_weather_is_unavailable():
+    message = _build_operator_message(
+        {
+            "decision": "Do Not Image",
+            "weather": {
+                "observing_rating": 0,
+                "cloud_cover_percent": None,
+                "humidity_percent": None,
+                "wind_speed_mph": None,
+            },
+        }
+    )
+
+    assert message == "Do not image: live weather data is unavailable."
 
 
 def test_night_rating_allows_no_recommended_target():
@@ -181,3 +218,17 @@ def test_night_rating_allows_no_recommended_target():
     )
 
     assert rating == {"score": 10, "quality": "Very Poor"}
+
+
+def test_night_rating_allows_missing_weather_and_moon_measurements():
+    rating = calculate_night_rating(
+        weather={
+            "cloud_cover_percent": None,
+            "humidity_percent": None,
+            "wind_speed_mph": None,
+        },
+        moon={"illumination_percent": None},
+        target={"moon_separation_degrees": None},
+    )
+
+    assert rating == {"score": 0, "quality": "Unavailable"}

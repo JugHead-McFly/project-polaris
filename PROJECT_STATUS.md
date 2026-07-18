@@ -7,18 +7,18 @@ Last updated: 2026-07-18
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.5.0`
+- Application version: `1.5.1` (in development)
 - Current release tag: `v1.5.0`
 - Release commit: `5bee291`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
-Version `1.5.0` is defined once in `app/core/config.py` and is shared by the
+Version `1.5.1` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-Version 1.5.0 was verified against a genuine encrypted timestamped backup and
-released from commit `5bee291`. The `develop` branch and annotated `v1.5.0` tag
-are published to GitHub and resolve to that release commit.
+Version 1.5.1 is under development on `develop`. Version 1.5.0 was verified
+against a genuine encrypted timestamped backup and released from commit
+`5bee291`; the annotated `v1.5.0` tag remains the current published release.
 
 ## Operational readiness
 
@@ -94,6 +94,31 @@ capture settings, and portfolio progress now use the same shared helpers as the
 target and planner APIs. The endpoint returns metrics for the complete library,
 all captured targets, the eight most recent captures, and the six most recent
 sessions.
+
+Version 1.5.1 is an operator-usability refinement based on the first guided
+v1.5 rehearsal. The top panel is an imaging recommendation rather than a
+safety-decision claim, and its planner context is kept with the recommendation
+instead of in a separate card. The panel is more compact, an empty Scheduled
+Imaging summary is hidden, and the redundant System summary has been removed.
+It makes unsafe-weather reasons prominent, distinguishes the
+fallback target's usable window from astronomical darkness, exposes proven
+sub-exposure/gain/filter settings, adds plain-language Moon phase and timing
+context with a phase-shaped illumination visual, and separates page refresh
+time from source-data timestamps. Capture
+and observing-session history is ordered by observation time instead of
+database insertion order. History cards use labeled operational facts and
+common target names while internal IDs and the misleading stacked-capture count
+are removed from the visible tiles. Target Progress uses capture-library JPGs
+as small lazy-loaded thumbnails. Empty session records no longer displace
+sessions that produced captures. Bronze, Silver, Gold, and Platinum are now
+explicitly labeled as integration-time tiers, while the displayed image's
+quality score and interpretation are shown separately. Filter names include a
+plain-language purpose, expanded object profiles report the number of stars
+detected in the displayed capture, and History identifies the capture location.
+Each historical session also retains its Bortle class, so the location context
+does not change when the observatory is moved.
+The desktop layout keeps the primary Tonight workflow compact while Portfolio,
+Quality, History, and Data Status remain separate views.
 
 The dashboard is served by the existing local FastAPI application. No external
 hosting or deployment was performed.
@@ -181,11 +206,11 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 43 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 55 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
-report version `1.5.0` from the shared application setting. The dashboard HTML,
+report version `1.5.1` from the shared application setting. The dashboard HTML,
 local assets, GET-only route, and JavaScript syntax have focused checks.
 The typed dashboard service also has an isolated database regression check for
 integration totals, quality, target history, capture ordering, and sessions.
@@ -244,7 +269,27 @@ tag and `develop` branch were then published to GitHub at commit `5bee291`.
 
 ## Next planned work
 
-1. Observe v1.5 in routine use and record any operational issues or friction.
-2. Define the next advisory-software milestone using those observations.
-3. Keep actual observatory equipment control outside the approved scope. It
+1. Complete the v1.5.1 operator-dashboard visual rehearsal and address any
+   remaining usability regressions.
+2. Run the documented release gates against a fresh verified backup before
+   tagging or publishing v1.5.1.
+3. Plan v1.6 Locations: an opt-in interactive world map for potential
+   observing sites, straight-line distance rings from a selected observatory,
+   public dark-sky/place references, and saved site notes. Do not collect or
+   expose an exact home address by default; road distance and routing are a
+   later separately sourced capability.
+4. Plan a future Goal Engine: replace generic integration defaults with
+   target-specific, explainable starting goals for quick, detailed, and
+   showcase results. Adjust recommendations from the user's equipment,
+   sky profile, and capture-quality history, while always allowing a user
+   override.
+5. Plan Quality Scoring v2: add explainable sharpness, star-roundness, and
+   noise measures to the capture score. Record Sky Quality Meter (SQM) values
+   with the observing session for context, rather than mixing site darkness
+   into an individual capture score.
+6. Before public distribution, replace the hard-coded Doug's Observatory
+   location with an installation profile covering observatory name, postal
+   code, coordinates, elevation, timezone, and storage location. The operator
+   banner already reads the name from the observatory API response.
+7. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.

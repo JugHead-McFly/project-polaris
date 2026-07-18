@@ -9,6 +9,22 @@ INTEGRATION_GOALS_HOURS = {
     "M22": 2.0,
 }
 
+INTEGRATION_GOAL_NOTES = {
+    "M16": (
+        "Expanded 6-hour project goal for faint, extended emission detail."
+    ),
+    "M17": "Expanded 6-hour project goal for faint emission detail.",
+    "M20": (
+        "Four-hour project goal for the nebula's mixed emission and reflection detail."
+    ),
+    "M11": "Two-hour project goal for a compact, bright open cluster.",
+    "M22": "Two-hour project goal for a compact, bright globular cluster.",
+}
+
+DEFAULT_INTEGRATION_GOAL_NOTE = (
+    "Default 4-hour project goal; adjust it after reviewing your own results."
+)
+
 TARGET_PRIORITY = [
     "M16",
     "M20",
@@ -215,6 +231,10 @@ def build_portfolio_target(
         "next_action": get_next_action(progress),
         "current_hours": total_hours,
         "goal_hours": goal_hours,
+        "integration_goal_note": INTEGRATION_GOAL_NOTES.get(
+            object_name,
+            DEFAULT_INTEGRATION_GOAL_NOTE,
+        ),
         "remaining_hours": remaining_hours,
         "estimated_nights_remaining": get_estimated_nights_remaining(
             remaining_hours

@@ -8,6 +8,7 @@ from astroplan import Observer
 from astropy.coordinates import (
     AltAz,
     EarthLocation,
+    GeocentricTrueEcliptic,
     SkyCoord,
     get_body,
     get_sun,
@@ -39,6 +40,26 @@ OBSERVER = Observer(
     location=OBSERVATORY_LOCATION,
     timezone=TIMEZONE,
 )
+
+
+def _moon_phase_name(phase_angle_degrees: float) -> str:
+    phase_angle = phase_angle_degrees % 360
+
+    if phase_angle < 22.5 or phase_angle >= 337.5:
+        return "New Moon"
+    if phase_angle < 67.5:
+        return "Waxing Crescent"
+    if phase_angle < 112.5:
+        return "First Quarter"
+    if phase_angle < 157.5:
+        return "Waxing Gibbous"
+    if phase_angle < 202.5:
+        return "Full Moon"
+    if phase_angle < 247.5:
+        return "Waning Gibbous"
+    if phase_angle < 292.5:
+        return "Last Quarter"
+    return "Waning Crescent"
 
 
 def get_target(
@@ -335,6 +356,19 @@ def get_moon_info_at(
         observation_time
     )
 
+    ecliptic_frame = GeocentricTrueEcliptic(
+        equinox=observation_time,
+    )
+    moon_longitude = moon.transform_to(
+        ecliptic_frame
+    ).lon.deg
+    sun_longitude = sun.transform_to(
+        ecliptic_frame
+    ).lon.deg
+    phase_angle = (
+        moon_longitude - sun_longitude
+    ) % 360
+
     elongation = moon.separation(
         sun
     ).deg
@@ -351,6 +385,7 @@ def get_moon_info_at(
             illumination * 100,
             1,
         ),
+        "phase_name": _moon_phase_name(phase_angle),
         "altitude_degrees": round(
             moon_altitude,
             1,

@@ -35,6 +35,7 @@ class TargetCaptureSummary(BaseModel):
 
 class TargetSummary(BaseModel):
     object: str
+    common_name: Optional[str] = None
 
     capture_count: int
     session_count: int

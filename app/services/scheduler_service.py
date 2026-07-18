@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 from sqlalchemy.orm import Session
 
 from app.core.observatory import TIMEZONE
+from app.data.targets import get_target_common_name
 from app.services.planner_service import get_tonight_plan
 
 
@@ -352,6 +353,7 @@ def build_schedule_blocks(candidates: Iterable[Dict]) -> List[Dict]:
         scheduled_blocks.append(
             {
                 "object": block["object"],
+                "common_name": get_target_common_name(block["object"]),
                 "start": _format_schedule_time(block["start_datetime"]),
                 "end": _format_schedule_time(block["end_datetime"]),
                 "duration_minutes": duration_minutes,

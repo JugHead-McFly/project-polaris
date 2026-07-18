@@ -18,6 +18,7 @@ class ObservingSession(Base):
     date = Column(String)
     location = Column(String)
     observatory = Column(String)
+    bortle_class = Column(Integer, nullable=True)
 
     moon_phase = Column(String)
     weather_summary = Column(String)
