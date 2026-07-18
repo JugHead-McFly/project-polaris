@@ -8,15 +8,17 @@ Last updated: 2026-07-18
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
 - Application version: `1.5.0`
+- Current release tag: `v1.5.0`
+- Release commit: `5bee291`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
 Version `1.5.0` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-The v1.5 code is release-candidate ready, but verification against a genuine
-timestamped backup, the `v1.5.0` Git tag, and remote push remain explicit
-release actions and have not been performed.
+Version 1.5.0 was verified against a genuine encrypted timestamped backup and
+released from commit `5bee291`. The `develop` branch and annotated `v1.5.0` tag
+are published to GitHub and resolve to that release commit.
 
 ## Operational readiness
 
@@ -165,6 +167,7 @@ does not expose any database-changing synchronization route.
 - `d71dbff` - v1.5 read-only backup-pair verification
 - `86d2643` - v1.5 startup configuration preflight
 - `25a6c32` - v1.5 repeatable release-readiness gates
+- `5bee291` - v1.5.0 release candidate and checklist
 
 ## Verification status
 
@@ -232,16 +235,16 @@ The v1.5 startup preflight passed all seven checks against the live Polaris
 installation. An application-lifespan validation then completed startup and
 returned HTTP 200 from the root endpoint.
 
-The combined v1.5 release workflow passed all six gates in an end-to-end test:
-clean source state, exact version, startup preflight, full suite, a disposable
-19-capture matched-pair fixture, and HTTP 200 from all five live endpoints. A
-genuine timestamped recovery backup is still required before tagging.
+The final v1.5 release workflow passed all six gates using the genuine encrypted
+backup `2026-07-18-v1.5.0-5bee291`: clean source state, exact version, all seven
+startup checks, all 43 tests, 19 database captures matched to 19 FITS files, and
+HTTP 200 from all five live endpoints. The backup also contains a verified,
+complete Git bundle and an identical database checksum. The annotated `v1.5.0`
+tag and `develop` branch were then published to GitHub at commit `5bee291`.
 
 ## Next planned work
 
-1. Execute the v1.5 release checklist using a genuine timestamped backup, then
-   tag and push only with explicit operator approval.
-2. Define the next advisory-software milestone after observing v1.5 in routine
-   use.
+1. Observe v1.5 in routine use and record any operational issues or friction.
+2. Define the next advisory-software milestone using those observations.
 3. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.
