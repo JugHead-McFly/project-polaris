@@ -1,5 +1,6 @@
 import os
 import tempfile
+from contextlib import asynccontextmanager
 from time import perf_counter
 from uuid import uuid4
 
@@ -19,6 +20,9 @@ from app.api.system import router as system_router
 from app.api.tonight import router as tonight_router
 from app.core.config import settings
 from app.core.runtime_logging import configure_logging
+from app.core.startup_preflight import format_preflight_failure
+from app.core.startup_preflight import log_preflight_report
+from app.core.startup_preflight import run_startup_preflight
 from app.database.database import SessionLocal
 from app.services.capture_service import (
     create_capture_from_parsed_fits,
@@ -32,9 +36,20 @@ from app.api.schedule import router as schedule_router
 
 logger = configure_logging()
 
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    report = run_startup_preflight()
+    log_preflight_report(report, logger)
+    if not report["ready"]:
+        raise RuntimeError(format_preflight_failure(report))
+    yield
+
+
 app = FastAPI(
     title="Project Polaris API",
     version=settings.VERSION,
+    lifespan=lifespan,
 )
 
 
@@ -81,7 +96,7 @@ async def log_request(request: Request, call_next):
 WEB_DIRECTORY = settings.BASE_DIR / "app" / "web"
 app.mount(
     "/operator-assets",
-    StaticFiles(directory=str(WEB_DIRECTORY)),
+    StaticFiles(directory=str(WEB_DIRECTORY), check_dir=False),
     name="operator-assets",
 )
 
