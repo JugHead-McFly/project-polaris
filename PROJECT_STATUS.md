@@ -44,16 +44,24 @@ response.
 
 ## Release hardening
 
-Version 1.5 is in progress. Its first checkpoint adds a read-only backup-pair
-verification command:
+Version 1.5 is in progress. Its first two checkpoints add read-only backup-pair
+verification and startup configuration preflight commands:
 
     .venv/bin/python scripts/verify_backup_pair.py /path/to/timestamped-backup
+    .venv/bin/python scripts/check_startup.py
 
 The verifier requires both a copied `polaris.db` and `ProjectPolaris` library,
 opens SQLite in read-only mode, runs `PRAGMA quick_check`, and reconciles capture
 IDs, targets, and managed FITS locations. A backup is valid only when both halves
 are present, every database capture and FITS file is matched, and there are no
 conflicts. Relocating a matched pair does not create false asset-path failures.
+
+The startup preflight checks the application root, required dashboard assets,
+database path and URL agreement, SQLite health and required schema, capture
+library paths, and log level. The API runs the same preflight during its lifespan
+startup and refuses to serve requests when a required check fails. The checks
+are read-only so advisory planning remains available without requiring capture
+ingestion permissions.
 
 ## Operator dashboard
 
@@ -146,6 +154,7 @@ does not expose any database-changing synchronization route.
 - `e97fa28` - v1.3 typed dashboard history consolidation
 - `5a0694e` - v1.4 operational diagnostics, logging, and recovery runbook
 - `d71dbff` - v1.5 read-only backup-pair verification
+- `86d2643` - v1.5 startup configuration preflight
 
 ## Verification status
 
@@ -159,7 +168,7 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 33 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 38 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
@@ -209,11 +218,13 @@ The first v1.5 live verification opened the current database/library pair in
 read-only mode, passed SQLite's quick check, and matched all 19 database captures
 to all 19 FITS files with zero orphans, missing assets, or conflicts.
 
+The v1.5 startup preflight passed all seven checks against the live Polaris
+installation. An application-lifespan validation then completed startup and
+returned HTTP 200 from the root endpoint.
+
 ## Next planned work
 
-1. Add the v1.5 startup configuration preflight so invalid paths, database
-   settings, and required runtime configuration fail clearly before startup.
-2. Add a repeatable v1.5 release checklist covering tests, backup validation,
+1. Add a repeatable v1.5 release checklist covering tests, backup validation,
    versioning, tagging, and live smoke checks.
-3. Keep actual observatory equipment control outside the approved scope. It
+2. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.

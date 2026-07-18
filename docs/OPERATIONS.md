@@ -13,7 +13,18 @@ not control observatory equipment.
 From the application repository:
 
     source .venv/bin/activate
+    python scripts/check_startup.py
     uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+The preflight must report `Ready` before startup. The API also runs the same
+checks automatically and refuses to serve requests when a required check fails.
+It verifies the application root, operator assets, database URL, SQLite health
+and schema, capture-library paths, and log level. These startup checks require
+read access; they do not modify the database or capture library.
+
+When startup is blocked, read each failed check in the JSON report, correct the
+path or setting, and rerun the command. Do not bypass a database integrity or
+schema failure.
 
 Open `http://127.0.0.1:8000/operator` for the night operations dashboard.
 
@@ -29,6 +40,7 @@ Before relying on a nightly plan, confirm:
 
 For a more detailed check:
 
+    .venv/bin/python scripts/check_startup.py
     .venv/bin/python -m pytest
     .venv/bin/python scripts/sync_capture_library.py /Users/doug/ProjectPolaris
     sqlite3 polaris.db "PRAGMA quick_check;"

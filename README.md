@@ -27,6 +27,10 @@ Activate the virtual environment:
 
     source .venv/bin/activate
 
+Check the required startup configuration:
+
+    python scripts/check_startup.py
+
 Start the API:
 
     uvicorn app.main:app --reload
