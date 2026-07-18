@@ -63,3 +63,14 @@ explicit CLI command above.
 
 See [docs/OPERATIONS.md](docs/OPERATIONS.md) for startup verification,
 diagnostics, logging, matched database/library backups, and recovery guidance.
+
+## Backup-pair verification
+
+Verify a timestamped backup folder containing both `polaris.db` and a copied
+`ProjectPolaris` capture-library folder:
+
+    .venv/bin/python scripts/verify_backup_pair.py /path/to/timestamped-backup
+
+The verifier is read-only. It runs SQLite's quick check and reconciles every
+database capture with the copied FITS library. It exits successfully only when
+the pair is complete and consistent.

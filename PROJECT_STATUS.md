@@ -42,6 +42,19 @@ runtime uptime. `docs/OPERATIONS.md` documents startup verification, diagnostic
 states, logging, matched database/library backups, recovery, and failure
 response.
 
+## Release hardening
+
+Version 1.5 is in progress. Its first checkpoint adds a read-only backup-pair
+verification command:
+
+    .venv/bin/python scripts/verify_backup_pair.py /path/to/timestamped-backup
+
+The verifier requires both a copied `polaris.db` and `ProjectPolaris` library,
+opens SQLite in read-only mode, runs `PRAGMA quick_check`, and reconciles capture
+IDs, targets, and managed FITS locations. A backup is valid only when both halves
+are present, every database capture and FITS file is matched, and there are no
+conflicts. Relocating a matched pair does not create false asset-path failures.
+
 ## Operator dashboard
 
 Version 1.2 adds a responsive, read-only night operations dashboard at:
@@ -132,6 +145,7 @@ does not expose any database-changing synchronization route.
 - `232dd7e` - v1.2 read-only night operations dashboard
 - `e97fa28` - v1.3 typed dashboard history consolidation
 - `5a0694e` - v1.4 operational diagnostics, logging, and recovery runbook
+- `d71dbff` - v1.5 read-only backup-pair verification
 
 ## Verification status
 
@@ -145,7 +159,7 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 28 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 33 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
@@ -191,9 +205,15 @@ without a separate probe. The system remained `Healthy`, capture freshness was
 a request ID. The current safety decision remained `Do Not Image` because healthy
 weather connectivity does not imply suitable imaging conditions.
 
+The first v1.5 live verification opened the current database/library pair in
+read-only mode, passed SQLite's quick check, and matched all 19 database captures
+to all 19 FITS files with zero orphans, missing assets, or conflicts.
+
 ## Next planned work
 
-1. Begin v1.5 release hardening with a read-only backup-pair verification tool,
-   startup configuration preflight, and a repeatable release checklist. Actual
-   observatory equipment control remains outside the approved scope and requires
-   a separate v2 safety and architecture decision.
+1. Add the v1.5 startup configuration preflight so invalid paths, database
+   settings, and required runtime configuration fail clearly before startup.
+2. Add a repeatable v1.5 release checklist covering tests, backup validation,
+   versioning, tagging, and live smoke checks.
+3. Keep actual observatory equipment control outside the approved scope. It
+   requires a separate v2 safety and architecture decision.

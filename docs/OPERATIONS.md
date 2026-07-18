@@ -84,12 +84,40 @@ inconsistent state.
 4. Copy `/Users/doug/ProjectPolaris` into the same timestamped folder without
    renaming or reorganizing its contents.
 5. Record the application commit and the backup date with the pair.
-6. Run SQLite's `PRAGMA quick_check` against the copied database.
-7. Compare capture and FITS counts with the current `/system` report before
-   considering the backup complete.
+6. Verify the copied pair from the application repository:
+
+       .venv/bin/python scripts/verify_backup_pair.py /path/to/timestamped-backup
+
+7. Keep the resulting valid report with the backup record before considering
+   the backup complete.
 
 Keep more than one dated backup. Never use the live capture library as the only
 backup copy.
+
+### Backup verification results
+
+The verification command is read-only. By default, it expects this structure:
+
+    timestamped-backup/
+    ├── polaris.db
+    └── ProjectPolaris/
+        └── targets/
+
+It opens the copied database in SQLite read-only mode, runs `PRAGMA quick_check`,
+and compares every database capture with the copied FITS files by Polaris ID,
+target, and managed asset location. The historical source filename stored in a
+capture record is not expected to match the Polaris-managed FITS filename.
+
+The JSON report sets `valid` to `true` and the command exits with status zero
+only when both halves are present, SQLite is healthy, every capture is matched,
+and there are no orphans, missing assets, or conflicts. A nonzero exit means the
+backup must not be treated as recovery-ready.
+
+For a backup that uses different names, provide paths relative to the backup
+folder or absolute paths:
+
+    .venv/bin/python scripts/verify_backup_pair.py /path/to/backup \
+        --database copied-polaris.db --library CopiedProjectPolaris
 
 ## Recovery
 
@@ -100,7 +128,8 @@ operation rather than an automatic application action.
 2. Preserve the current database and capture library as a separate recovery
    copy, even if one appears damaged.
 3. Select a database and capture library from the same timestamped backup.
-4. Validate the backup database with `PRAGMA integrity_check` before restoring.
+4. Run the backup-pair verification command before restoring. For a suspected
+   database problem, also run `PRAGMA integrity_check` before proceeding.
 5. Restore the matched pair without changing FITS filenames, target folders,
    or Polaris IDs.
 6. Start Polaris and run the capture-library synchronization command in its
