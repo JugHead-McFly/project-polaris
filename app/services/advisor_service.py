@@ -3,10 +3,8 @@ from typing import Dict, Optional
 
 from sqlalchemy.orm import Session
 
-from app.services.portfolio_service import (
-    INTEGRATION_GOALS_HOURS,
-    get_target_metadata,
-)
+from app.services.goal_engine_service import build_integration_goal
+from app.services.portfolio_service import get_target_metadata
 from app.services.target_service import get_target_summary
 
 
@@ -108,10 +106,8 @@ def get_exposure_advice(
         2,
     )
 
-    goal_hours = INTEGRATION_GOALS_HOURS.get(
-        normalized_name,
-        4.0,
-    )
+    integration_goal = build_integration_goal(normalized_name)
+    goal_hours = integration_goal["hours"]
 
     goal_seconds = int(
         round(
@@ -233,6 +229,11 @@ def get_exposure_advice(
             current_hours
         ),
         "goal_hours": goal_hours,
+        "goal_tier": integration_goal["tier"],
+        "goal_source": integration_goal["source"],
+        "goal_options": integration_goal["options"],
+        "goal_factors": integration_goal["factors"],
+        "integration_goal_note": integration_goal["note"],
         "remaining_seconds": (
             remaining_seconds
         ),

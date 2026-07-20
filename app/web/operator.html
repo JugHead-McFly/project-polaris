@@ -42,6 +42,7 @@
       <a href="/operator/portfolio" data-view-link="portfolio">Portfolio</a>
       <a href="/operator/quality" data-view-link="quality">Quality</a>
       <a href="/operator/history" data-view-link="history">History</a>
+      <a href="/operator/locations" data-view-link="locations">Locations</a>
       <a href="/operator/data" data-view-link="data">Data status</a>
     </nav>
 
@@ -203,9 +204,9 @@
             <span id="portfolio-summary">Loading targets</span>
           </div>
           <p class="panel-intro">
-            Integration tiers measure only how much exposure time has been
-            collected—not image sharpness or quality. Image quality is shown
-            separately on every target.
+            Imaging aims measure only how much exposure time is planned—not
+            image sharpness or quality. Image quality is shown separately on
+            every target.
           </p>
           <div class="target-grid" id="target-portfolio">
             <div class="empty-state">Loading target history…</div>
@@ -294,6 +295,171 @@
           </div>
         </section>
       </div>
+      </section>
+
+      <section class="app-view" data-app-view="locations" hidden>
+        <header class="view-header">
+          <p class="eyebrow">v1.6 locations planning</p>
+          <h1>Potential observing sites</h1>
+          <p>Save places you want to explore without replacing your observatory or sharing a home address.</p>
+        </header>
+        <section class="panel candidate-sites-panel" aria-labelledby="candidate-sites-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Planning map</p>
+              <h2 id="candidate-sites-title">Where could you image next?</h2>
+            </div>
+            <span id="candidate-site-summary">Loading sites</span>
+          </div>
+          <p class="location-map-note">
+            Your planning origin is marked without showing its address. Rings show straight-line distance: 25, 50, and 100 miles.
+          </p>
+          <div class="candidate-site-map" id="candidate-site-map">
+            <div class="empty-state">Loading potential sites…</div>
+          </div>
+          <div class="location-map-footer">
+            <div class="candidate-site-map-key" id="candidate-site-map-key" aria-label="Potential-site map key"></div>
+          </div>
+        </section>
+
+        <details class="panel location-research-panel">
+          <summary>
+            <span>
+              <span class="eyebrow">Trusted references</span>
+              <strong id="location-research-title">Research before you save</strong>
+            </span>
+            <span class="location-research-summary-hint">Optional</span>
+          </summary>
+          <p class="location-research-intro">Use these sources to find places worth researching.</p>
+          <div class="location-research-grid">
+            <article class="location-research-card">
+              <span class="location-research-badge">Certified places</span>
+              <h3>DarkSky International</h3>
+              <p>Certified parks, communities, reserves, and sanctuaries.</p>
+              <a class="location-map-link" href="https://darksky.org/places/" target="_blank" rel="noreferrer">Browse certified places</a>
+            </article>
+            <article class="location-research-card">
+              <span class="location-research-badge">Sky brightness</span>
+              <h3>Light Pollution Map</h3>
+              <p>Compare modeled sky brightness near your planning area.</p>
+              <a class="location-map-link" id="candidate-light-pollution-link" href="https://lightpollutionmap.app/" target="_blank" rel="noreferrer">Explore nearby darkness</a>
+            </article>
+          </div>
+        </details>
+
+        <section class="panel candidate-site-form-panel" aria-labelledby="candidate-site-form-title">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Save a site</p>
+                <h2 id="candidate-site-form-title">Add a potential location</h2>
+              </div>
+            </div>
+            <form class="candidate-site-form" id="candidate-site-form">
+              <label>Name<input id="candidate-site-name" name="name" maxlength="120" required placeholder="e.g., Prescott overlook"></label>
+              <div class="candidate-coordinate-grid">
+                <label>Latitude<input id="candidate-site-latitude" name="latitude" type="number" step="any" min="-90" max="90" required></label>
+                <label>Longitude<input id="candidate-site-longitude" name="longitude" type="number" step="any" min="-180" max="180" required></label>
+              </div>
+              <label>Bortle class <span class="field-optional">optional</span>
+                <select id="candidate-site-bortle" name="bortle_class">
+                  <option value="">Not known yet</option>
+                  <option value="1">1 · excellent dark sky</option>
+                  <option value="2">2 · average dark sky</option>
+                  <option value="3">3 · rural sky</option>
+                  <option value="4">4 · rural/suburban transition</option>
+                  <option value="5">5 · suburban</option>
+                  <option value="6">6 · bright suburban</option>
+                  <option value="7">7 · suburban/urban transition</option>
+                  <option value="8">8 · city sky</option>
+                  <option value="9">9 · inner city sky</option>
+                </select>
+              </label>
+              <details class="candidate-site-form-details">
+                <summary>Site details <span class="field-optional">optional</span></summary>
+                <div class="candidate-site-form-details-content">
+                  <label>Access hours <span class="field-optional">optional</span><input id="candidate-site-hours" name="access_hours" maxlength="250" placeholder="e.g., dawn–10 PM"></label>
+                  <div class="candidate-coordinate-grid">
+                    <label>Vehicle access <span class="field-optional">optional</span>
+                      <select id="candidate-site-vehicle" name="vehicle_requirement">
+                        <option value="">Not known yet</option>
+                        <option value="standard_vehicle">Standard vehicle</option>
+                        <option value="high_clearance">High-clearance recommended</option>
+                        <option value="four_wheel_drive">4x4 required</option>
+                      </select>
+                    </label>
+                    <label>Property access <span class="field-optional">optional</span>
+                      <select id="candidate-site-property" name="property_access">
+                        <option value="">Not known yet</option>
+                        <option value="public_property">Public property</option>
+                        <option value="private_permission">Private · permission required</option>
+                        <option value="restricted">Restricted access</option>
+                      </select>
+                    </label>
+                  </div>
+                  <fieldset class="candidate-site-readiness">
+                    <legend>Site readiness <span class="field-optional">optional</span></legend>
+                    <label><input id="candidate-site-parking" type="checkbox" name="parking_setup_confirmed"> Parking / setup confirmed</label>
+                    <label><input id="candidate-site-horizon" type="checkbox" name="horizon_confirmed"> Horizon reviewed</label>
+                    <label><input id="candidate-site-access" type="checkbox" name="access_confirmed"> Access / permission confirmed</label>
+                    <label><input id="candidate-site-amenities" type="checkbox" name="amenities_confirmed"> Facilities / cell plan confirmed</label>
+                  </fieldset>
+                  <label>Notes <span class="field-optional">optional</span><textarea id="candidate-site-notes" name="notes" maxlength="1000" rows="4" placeholder="Access, horizon, amenities, or a reminder to investigate."></textarea></label>
+                  <label>Reference link <span class="field-optional">optional</span><input id="candidate-site-source" name="source_url" type="url" maxlength="500" placeholder="https://"></label>
+                </div>
+              </details>
+              <button class="candidate-site-submit" type="submit">Save potential site</button>
+              <p class="candidate-site-status" id="candidate-site-status" role="status"></p>
+            </form>
+        </section>
+        <div class="candidate-site-library">
+            <section class="panel" aria-labelledby="candidate-sites-title">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Saved places</p>
+                  <h2 id="candidate-sites-title">Candidate sites</h2>
+                </div>
+                <label class="candidate-site-sort" for="candidate-site-sort">
+                  Sort
+                  <select id="candidate-site-sort">
+                    <option value="newest">Newest</option>
+                    <option value="distance">Closest first</option>
+                    <option value="bortle_distance">Darkest sky, then closest</option>
+                  </select>
+                </label>
+              </div>
+              <section class="candidate-site-comparison" id="candidate-site-comparison" hidden aria-live="polite">
+                <div class="candidate-site-comparison-heading">
+                  <strong>Compare sites</strong>
+                  <button class="candidate-site-comparison-clear" id="candidate-site-comparison-clear" type="button">Clear selection</button>
+                </div>
+                <div class="candidate-site-comparison-grid" id="candidate-site-comparison-grid"></div>
+              </section>
+              <div class="candidate-site-list" id="candidate-site-list">
+                <div class="empty-state">Loading candidate sites…</div>
+              </div>
+            </section>
+            <section class="panel visited-site-panel" aria-labelledby="visited-sites-title">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Proven places</p>
+                  <h2 id="visited-sites-title">Visited sites</h2>
+                </div>
+                <div class="visited-site-heading-actions">
+                  <label class="candidate-site-sort" for="visited-site-sort">
+                    Sort
+                    <select id="visited-site-sort">
+                      <option value="recent">Most recently visited</option>
+                      <option value="rating">Highest rated</option>
+                    </select>
+                  </label>
+                  <span id="visited-site-summary">Loading sites</span>
+                </div>
+              </div>
+              <div class="candidate-site-list" id="visited-site-list">
+                <div class="empty-state">Loading visited sites…</div>
+              </div>
+            </section>
+        </div>
       </section>
 
       <section class="app-view" data-app-view="data" hidden>

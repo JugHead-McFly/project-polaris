@@ -167,8 +167,16 @@ def test_dashboard_service_builds_consolidated_history():
     assert payload["targets"][0]["average_quality"] == 95
     assert payload["targets"][0]["scored_capture_count"] == 1
     assert payload["targets"][0]["integration_goal_note"] == (
-        "Default 4-hour project goal; adjust it after reviewing your own results."
+        "Detailed starter goal for a planetary nebula. Its compact, bright "
+        "ring reduces the starter goal by 1 hour. This is a planning baseline, "
+        "not an image-quality score or guarantee."
     )
+    assert payload["targets"][0]["goal_tier"] == "detailed"
+    assert [option["hours"] for option in payload["targets"][0]["goal_options"]] == [
+        2.0,
+        4.0,
+        8.0,
+    ]
     quality_capture = payload["targets"][0]["quality_captures"][0]
     assert quality_capture["quality_score"] == 95
     assert quality_capture["components"] == {

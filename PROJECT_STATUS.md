@@ -1,22 +1,23 @@
 # Project Polaris Status
 
-Last updated: 2026-07-18
+Last updated: 2026-07-19
 
 ## Project locations
 
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.5.1` (released)
+- Application version: `1.6.0` (in development)
 - Current release tag: `v1.5.1`
 - Release commit: `77c0234`
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
 
-Version `1.5.1` is defined once in `app/core/config.py` and is shared by the
+Version `1.6.0` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-Version 1.5.1 was released from commit `77c0234` and tagged `v1.5.1`.
+Version 1.6.0 is under development on `develop`. Version 1.5.1 was released
+from commit `77c0234` and tagged `v1.5.1`.
 Version 1.5.0 remains available as the earlier tagged release at commit
 `5bee291`.
 
@@ -206,7 +207,7 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 55 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 63 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
@@ -277,16 +278,26 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Plan v1.6 Locations: an opt-in interactive world map for potential
-   observing sites, straight-line distance rings from a selected observatory,
-   public dark-sky/place references, and saved site notes. Do not collect or
-   expose an exact home address by default; road distance and routing are a
-   later separately sourced capability.
-2. Plan a future Goal Engine: replace generic integration defaults with
-   target-specific, explainable starting goals for quick, detailed, and
-   showcase results. Adjust recommendations from the user's equipment,
-   sky profile, and capture-quality history, while always allowing a user
-   override.
+1. Complete v1.6 Locations Planning: the first foundation adds an opt-in
+   interactive world map, 25/50/100-mile straight-line rings from the selected
+   observatory, and manually saved candidate sites with notes, optional
+   Bortle/reference information, access details, and readiness checks. Sites
+   move between Candidate and Visited lists, and visited sites support personal
+   1–5-star ratings with rating-based sorting. Trusted-research links now open
+   DarkSky International's certified-place directory and a light-pollution map
+   only when the user requests them; the light-pollution link rounds the
+   planning origin to one decimal place.
+   Polaris does not automatically import or endorse sites because no dependable
+   global source currently combines community recommendations, public nighttime
+   access, and clear commercial reuse terms. Do not collect or expose an exact
+   home address by default; automated source adapters, road distance, and routing
+   remain later, separately sourced capabilities.
+2. Continue the Goal Engine after its first foundation: target-class and
+   reviewed object-specific rules now replace the generic four-hour fallback,
+   and the Portfolio view explains Quick, Detailed, and Showcase aims while
+   keeping integration separate from image quality. Persistent aim selection,
+   user overrides, and adjustments from saved equipment, sky profile, and
+   capture-quality history remain later work.
 3. Plan Quality Scoring v2: add explainable sharpness, star-roundness, and
    noise measures to the capture score. Record Sky Quality Meter (SQM) values
    with the observing session for context, rather than mixing site darkness

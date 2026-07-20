@@ -1,6 +1,8 @@
-from typing import Optional
+from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from app.schemas.target import IntegrationGoalOption
 
 
 class ExposureAdvisorResponse(BaseModel):
@@ -11,6 +13,11 @@ class ExposureAdvisorResponse(BaseModel):
     current_integration_hours: float
 
     goal_hours: float
+    goal_tier: str = "detailed"
+    goal_source: str = "Polaris target-class starter"
+    goal_options: List[IntegrationGoalOption] = Field(default_factory=list)
+    goal_factors: List[str] = Field(default_factory=list)
+    integration_goal_note: str = ""
     remaining_seconds: int
     remaining_hours: float
 

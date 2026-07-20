@@ -371,6 +371,10 @@ def build_target_response(
         "next_action": portfolio["next_action"],
         "current_hours": portfolio["current_hours"],
         "goal_hours": portfolio["goal_hours"],
+        "goal_tier": portfolio["goal_tier"],
+        "goal_source": portfolio["goal_source"],
+        "goal_options": portfolio["goal_options"],
+        "goal_factors": portfolio["goal_factors"],
         "remaining_hours": portfolio["remaining_hours"],
         "estimated_nights_remaining": portfolio[
             "estimated_nights_remaining"

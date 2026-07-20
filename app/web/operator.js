@@ -7,6 +7,7 @@ const VIEW_PATHS = {
   "/operator/portfolio": "portfolio",
   "/operator/quality": "quality",
   "/operator/history": "history",
+  "/operator/locations": "locations",
   "/operator/data": "data",
 };
 
@@ -15,6 +16,7 @@ const VIEW_TITLES = {
   portfolio: "Portfolio",
   quality: "Quality by Target",
   history: "History",
+  locations: "Locations",
   data: "Data Status",
 };
 
@@ -860,8 +862,23 @@ const renderPortfolio = (data) => {
       card,
       "p",
       "target-goal-note",
-      `Project integration goal: ${target.goal_hours} hr · ${target.integration_goal_note}`,
+      `Imaging aim: ${(target.goal_options || []).find((option) => option.tier === target.goal_tier)?.label || "Detailed"} · ${target.goal_hours} hr`,
     );
+    const goalDetails = document.createElement("details");
+    goalDetails.className = "target-goal-details";
+    const goalSummary = document.createElement("summary");
+    goalSummary.textContent = "Why this goal?";
+    goalDetails.appendChild(goalSummary);
+    appendTextElement(goalDetails, "p", "target-goal-explanation", target.integration_goal_note);
+    card.appendChild(goalDetails);
+    if ((target.goal_options || []).length) {
+      appendTextElement(
+        card,
+        "p",
+        "target-goal-options",
+        `Aim guide: ${target.goal_options.map((option) => `${option.label} ${option.hours} hr`).join(" · ")}`,
+      );
+    }
 
     appendTextElement(
       card,
@@ -1287,6 +1304,601 @@ const renderCaptureLocations = (data) => {
   }
 };
 
+let candidateSiteMap;
+let candidateSiteLayers;
+let candidateSiteOrigin = null;
+let savedCandidateSites = [];
+let candidateSiteSort = "newest";
+let visitedSiteSort = "recent";
+let selectedCandidateSiteIds = [];
+
+const milesToMeters = (miles) => miles * 1609.344;
+
+const CANDIDATE_VEHICLE_LABELS = {
+  standard_vehicle: "Standard vehicle",
+  high_clearance: "High-clearance recommended",
+  four_wheel_drive: "4x4 required",
+};
+
+const CANDIDATE_PROPERTY_ACCESS_LABELS = {
+  public_property: "Public property",
+  private_permission: "Private · permission required",
+  restricted: "Restricted access",
+};
+
+const CANDIDATE_READINESS_CHECKS = [
+  { key: "parking_setup_confirmed", label: "Parking / setup confirmed" },
+  { key: "horizon_confirmed", label: "Horizon reviewed" },
+  { key: "access_confirmed", label: "Access / permission confirmed" },
+  { key: "amenities_confirmed", label: "Facilities / cell plan confirmed" },
+];
+
+const candidateVehicleLabel = (value) => CANDIDATE_VEHICLE_LABELS[value] || value;
+const candidatePropertyAccessLabel = (value) => CANDIDATE_PROPERTY_ACCESS_LABELS[value] || value;
+
+const appendCandidateSiteDetail = (details, label, value) => {
+  if (!value) return;
+  const item = appendTextElement(details, "div", "candidate-site-detail", "");
+  appendTextElement(item, "dt", "", label);
+  appendTextElement(item, "dd", "", value);
+};
+
+const appendCandidateSiteOption = (select, value, label, selectedValue) => {
+  const option = appendTextElement(select, "option", "", label);
+  option.value = value;
+  option.selected = value === (selectedValue || "");
+};
+
+const candidateReadinessCount = (site) => CANDIDATE_READINESS_CHECKS.filter(
+  ({ key }) => site[key],
+).length;
+
+const candidateDirectionsUrl = (site) => (
+  `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${site.latitude},${site.longitude}`)}`
+);
+
+const appendDirectionsIcon = (container) => {
+  const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  icon.classList.add("candidate-site-directions-icon");
+  icon.setAttribute("viewBox", "0 0 24 24");
+  icon.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M12 2.8a6.2 6.2 0 0 0-6.2 6.2c0 4.65 6.2 12.2 6.2 12.2S18.2 13.65 18.2 9A6.2 6.2 0 0 0 12 2.8Zm0 8.6A2.4 2.4 0 1 1 12 6.6a2.4 2.4 0 0 1 0 4.8Z");
+  icon.appendChild(path);
+  container.appendChild(icon);
+};
+
+const candidateSiteDistanceLabel = (site) => {
+  if (!candidateSiteOrigin || !window.L) return "Distance unavailable";
+  const miles = window.L.latLng(
+    candidateSiteOrigin.latitude,
+    candidateSiteOrigin.longitude,
+  ).distanceTo([site.latitude, site.longitude]) / 1609.344;
+  return miles < 10 ? `${miles.toFixed(1)} mi away` : `${Math.round(miles)} mi away`;
+};
+
+const candidateSiteDistanceMiles = (site) => {
+  if (!candidateSiteOrigin || !window.L) return Number.POSITIVE_INFINITY;
+  return window.L.latLng(
+    candidateSiteOrigin.latitude,
+    candidateSiteOrigin.longitude,
+  ).distanceTo([site.latitude, site.longitude]) / 1609.344;
+};
+
+const sortedCandidateSites = () => [...savedCandidateSites].sort((left, right) => {
+  if (candidateSiteSort === "distance") {
+    return candidateSiteDistanceMiles(left) - candidateSiteDistanceMiles(right);
+  }
+  if (candidateSiteSort === "bortle_distance") {
+    const bortleDifference = (left.bortle_class ?? 10) - (right.bortle_class ?? 10);
+    return bortleDifference || candidateSiteDistanceMiles(left) - candidateSiteDistanceMiles(right);
+  }
+  return new Date(right.created_at) - new Date(left.created_at);
+});
+
+const sortedVisitedSites = () => savedCandidateSites
+  .filter((site) => site.visited_at)
+  .sort((left, right) => {
+    if (visitedSiteSort === "rating") {
+      const ratingDifference = (right.star_rating || 0) - (left.star_rating || 0);
+      if (ratingDifference) return ratingDifference;
+    }
+    return new Date(right.visited_at) - new Date(left.visited_at);
+  });
+
+const starRatingLabel = (rating) => (
+  rating ? `${"★".repeat(rating)}${"☆".repeat(5 - rating)} ${rating}/5` : "Not rated"
+);
+
+const appendStarRating = (card, site) => {
+  if (!site.visited_at) return;
+  const rating = document.createElement("div");
+  rating.className = "candidate-site-rating";
+  const label = appendTextElement(rating, "span", "", "Your rating");
+  label.id = `candidate-site-rating-label-${site.id}`;
+  const controls = document.createElement("span");
+  controls.className = "candidate-site-rating-controls";
+  controls.setAttribute("role", "group");
+  controls.setAttribute("aria-labelledby", label.id);
+  for (let value = 1; value <= 5; value += 1) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = value <= (site.star_rating || 0) ? "selected" : "";
+    button.textContent = "★";
+    button.setAttribute("aria-label", `Rate ${value} out of 5 stars`);
+    button.setAttribute("aria-pressed", String(site.star_rating === value));
+    button.addEventListener("click", () => updateCandidateSite(site.id, { star_rating: value }));
+    controls.appendChild(button);
+  }
+  appendTextElement(rating, "strong", "", starRatingLabel(site.star_rating));
+  rating.appendChild(controls);
+  card.appendChild(rating);
+};
+
+const renderCandidateSiteComparison = (candidateSites) => {
+  const comparison = byId("candidate-site-comparison");
+  const grid = byId("candidate-site-comparison-grid");
+  selectedCandidateSiteIds = selectedCandidateSiteIds.filter((siteId) => (
+    candidateSites.some((site) => site.id === siteId)
+  ));
+  const sites = selectedCandidateSiteIds
+    .map((siteId) => candidateSites.find((site) => site.id === siteId))
+    .filter(Boolean);
+  comparison.hidden = sites.length < 2;
+  grid.replaceChildren();
+  if (sites.length < 2) return;
+  sites.forEach((site) => {
+    const card = appendTextElement(grid, "article", "candidate-site-comparison-card", "");
+    appendTextElement(card, "strong", "", site.name);
+    const details = appendTextElement(card, "dl", "candidate-site-comparison-details", "");
+    appendCandidateSiteDetail(details, "Distance", candidateSiteDistanceLabel(site));
+    appendCandidateSiteDetail(
+      details,
+      "Bortle",
+      site.bortle_class === null || site.bortle_class === undefined
+        ? "Not recorded"
+        : `Bortle ${site.bortle_class}`,
+    );
+    appendCandidateSiteDetail(details, "Hours", site.access_hours || "Not recorded");
+    appendCandidateSiteDetail(
+      details,
+      "Vehicle",
+      candidateVehicleLabel(site.vehicle_requirement) || "Not recorded",
+    );
+    appendCandidateSiteDetail(
+      details,
+      "Property",
+      candidatePropertyAccessLabel(site.property_access) || "Not recorded",
+    );
+    appendCandidateSiteDetail(
+      details,
+      "Readiness",
+      `${candidateReadinessCount(site)} / ${CANDIDATE_READINESS_CHECKS.length} confirmed`,
+    );
+  });
+};
+
+const toggleCandidateSiteComparison = (siteId) => {
+  if (selectedCandidateSiteIds.includes(siteId)) {
+    selectedCandidateSiteIds = selectedCandidateSiteIds.filter((id) => id !== siteId);
+  } else if (selectedCandidateSiteIds.length < 3) {
+    selectedCandidateSiteIds = [...selectedCandidateSiteIds, siteId];
+  }
+  renderSavedSiteLists();
+};
+
+const setCandidateCoordinates = (latitude, longitude) => {
+  byId("candidate-site-latitude").value = Number(latitude).toFixed(5);
+  byId("candidate-site-longitude").value = Number(longitude).toFixed(5);
+};
+
+const updateCandidateResearchLinks = () => {
+  const lightPollutionLink = byId("candidate-light-pollution-link");
+  if (!lightPollutionLink || !candidateSiteOrigin) return;
+  const latitude = Number(candidateSiteOrigin.latitude).toFixed(1);
+  const longitude = Number(candidateSiteOrigin.longitude).toFixed(1);
+  lightPollutionLink.href = `https://lightpollutionmap.app/?lat=${latitude}&lng=${longitude}&zoom=8`;
+};
+
+const renderCandidateSiteList = ({
+  listId,
+  sites,
+  includeComparison = false,
+  emptyMessage,
+}) => {
+  const list = byId(listId);
+  list.replaceChildren();
+  if (includeComparison) renderCandidateSiteComparison(sites);
+  if (!sites.length) {
+    appendTextElement(
+      list,
+      "div",
+      "empty-state",
+      emptyMessage,
+    );
+    return;
+  }
+  sites.forEach((site) => {
+    const card = appendTextElement(list, "article", "candidate-site-card", "");
+    const heading = appendTextElement(card, "div", "candidate-site-card-heading", "");
+    appendTextElement(heading, "strong", "", site.name);
+    const badges = appendTextElement(heading, "span", "candidate-site-badges", "");
+    appendTextElement(
+      badges,
+      "span",
+      site.visited_at ? "candidate-site-visited" : "candidate-site-pending",
+      site.visited_at ? "Visited" : "Candidate",
+    );
+    appendTextElement(
+      badges,
+      "span",
+      "",
+      site.bortle_class === null || site.bortle_class === undefined
+        ? "Bortle not recorded"
+        : `Bortle ${site.bortle_class}`,
+    );
+    appendTextElement(card, "p", "", candidateSiteDistanceLabel(site));
+    appendTextElement(
+      card,
+      "p",
+      "candidate-site-coordinates",
+      `${Number(site.latitude).toFixed(4)}, ${Number(site.longitude).toFixed(4)}`,
+    );
+    appendStarRating(card, site);
+    if (site.access_hours || site.vehicle_requirement || site.property_access) {
+      const detailsList = appendTextElement(card, "dl", "candidate-site-details", "");
+      appendCandidateSiteDetail(detailsList, "Hours", site.access_hours);
+      appendCandidateSiteDetail(
+        detailsList,
+        "Vehicle",
+        candidateVehicleLabel(site.vehicle_requirement),
+      );
+      appendCandidateSiteDetail(
+        detailsList,
+        "Property",
+        candidatePropertyAccessLabel(site.property_access),
+      );
+    }
+    const readinessCount = candidateReadinessCount(site);
+    if (readinessCount) {
+      appendTextElement(
+        card,
+        "p",
+        "candidate-site-readiness-summary",
+        `Site readiness: ${readinessCount} / ${CANDIDATE_READINESS_CHECKS.length} confirmed`,
+      );
+    }
+    if (site.notes) appendTextElement(card, "p", "candidate-site-notes", site.notes);
+    const actions = appendTextElement(card, "div", "candidate-site-actions", "");
+    if (site.source_url) {
+      const link = appendTextElement(actions, "a", "candidate-site-link-button candidate-site-reference", "Open reference");
+      link.href = site.source_url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+    }
+    const directions = document.createElement("a");
+    directions.className = "candidate-site-link-button candidate-site-directions";
+    appendDirectionsIcon(directions);
+    appendTextElement(directions, "span", "", "Get directions");
+    directions.href = candidateDirectionsUrl(site);
+    directions.target = "_blank";
+    directions.rel = "noreferrer";
+    actions.appendChild(directions);
+    const visited = appendTextElement(
+      actions,
+      "button",
+      "candidate-site-visit-toggle",
+      site.visited_at ? "Mark as candidate" : "Mark visited",
+    );
+    visited.type = "button";
+    visited.addEventListener("click", () => updateCandidateSite(site.id, {
+      visited: !site.visited_at,
+    }));
+    if (includeComparison) {
+      const isSelectedForComparison = selectedCandidateSiteIds.includes(site.id);
+      const compare = appendTextElement(
+        actions,
+        "button",
+        isSelectedForComparison ? "candidate-site-compare selected" : "candidate-site-compare",
+        isSelectedForComparison ? "Selected for comparison" : "Compare",
+      );
+      compare.type = "button";
+      compare.disabled = !isSelectedForComparison && selectedCandidateSiteIds.length >= 3;
+      compare.addEventListener("click", () => toggleCandidateSiteComparison(site.id));
+    }
+    const details = document.createElement("details");
+    details.className = "candidate-site-editor";
+    const summary = document.createElement("summary");
+    summary.textContent = "Update site details";
+    details.appendChild(summary);
+    const form = document.createElement("form");
+    const hoursLabel = document.createElement("label");
+    hoursLabel.textContent = "Access hours";
+    const hours = document.createElement("input");
+    hours.maxLength = 250;
+    hours.value = site.access_hours || "";
+    hoursLabel.appendChild(hours);
+    form.appendChild(hoursLabel);
+    const editorGrid = document.createElement("div");
+    editorGrid.className = "candidate-coordinate-grid";
+    const vehicleLabel = document.createElement("label");
+    vehicleLabel.textContent = "Vehicle access";
+    const vehicle = document.createElement("select");
+    appendCandidateSiteOption(vehicle, "", "Not known yet", site.vehicle_requirement);
+    Object.entries(CANDIDATE_VEHICLE_LABELS).forEach(([value, labelText]) => {
+      appendCandidateSiteOption(vehicle, value, labelText, site.vehicle_requirement);
+    });
+    vehicleLabel.appendChild(vehicle);
+    editorGrid.appendChild(vehicleLabel);
+    const propertyLabel = document.createElement("label");
+    propertyLabel.textContent = "Property access";
+    const property = document.createElement("select");
+    appendCandidateSiteOption(property, "", "Not known yet", site.property_access);
+    Object.entries(CANDIDATE_PROPERTY_ACCESS_LABELS).forEach(([value, labelText]) => {
+      appendCandidateSiteOption(property, value, labelText, site.property_access);
+    });
+    propertyLabel.appendChild(property);
+    editorGrid.appendChild(propertyLabel);
+    form.appendChild(editorGrid);
+    const readiness = document.createElement("fieldset");
+    readiness.className = "candidate-site-readiness";
+    const readinessLegend = document.createElement("legend");
+    readinessLegend.textContent = "Site readiness";
+    readiness.appendChild(readinessLegend);
+    const readinessInputs = {};
+    CANDIDATE_READINESS_CHECKS.forEach(({ key, label: labelText }) => {
+      const readinessLabel = document.createElement("label");
+      const readinessInput = document.createElement("input");
+      readinessInput.type = "checkbox";
+      readinessInput.checked = Boolean(site[key]);
+      readinessLabel.appendChild(readinessInput);
+      readinessLabel.append(` ${labelText}`);
+      readinessInputs[key] = readinessInput;
+      readiness.appendChild(readinessLabel);
+    });
+    form.appendChild(readiness);
+    const label = document.createElement("label");
+    label.textContent = "Field notes";
+    const notes = document.createElement("textarea");
+    notes.rows = 4;
+    notes.maxLength = 1000;
+    notes.value = site.notes || "";
+    label.appendChild(notes);
+    form.appendChild(label);
+    const save = appendTextElement(form, "button", "candidate-site-note-save", "Save notes");
+    save.type = "submit";
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      updateCandidateSite(site.id, {
+        access_hours: hours.value.trim() || null,
+        vehicle_requirement: vehicle.value || null,
+        property_access: property.value || null,
+        ...Object.fromEntries(
+          CANDIDATE_READINESS_CHECKS.map(({ key }) => [key, readinessInputs[key].checked]),
+        ),
+        notes: notes.value.trim(),
+      });
+    });
+    details.appendChild(form);
+    card.appendChild(details);
+    const remove = appendTextElement(card, "button", "candidate-site-remove", "Remove");
+    remove.type = "button";
+    remove.addEventListener("click", () => removeCandidateSite(site.id));
+  });
+};
+
+const renderSavedSiteLists = () => {
+  const candidates = sortedCandidateSites().filter((site) => !site.visited_at);
+  const visited = sortedVisitedSites();
+  setText(
+    "candidate-site-summary",
+    candidates.length === 1 ? "1 candidate" : `${candidates.length} candidates`,
+  );
+  setText(
+    "visited-site-summary",
+    visited.length === 1 ? "1 visited site" : `${visited.length} visited sites`,
+  );
+  renderCandidateSiteList({
+    listId: "candidate-site-list",
+    sites: candidates,
+    includeComparison: true,
+    emptyMessage: "No candidate sites saved yet. Click the map or enter coordinates to add one.",
+  });
+  renderCandidateSiteList({
+    listId: "visited-site-list",
+    sites: visited,
+    emptyMessage: "No visited sites yet. Mark a candidate as visited after you have observed there.",
+  });
+};
+
+const renderCandidateSiteMapKey = () => {
+  const key = byId("candidate-site-map-key");
+  key.replaceChildren();
+  const items = [];
+  [...new Set(
+    savedCandidateSites
+      .map((site) => site.bortle_class)
+      .filter((bortleClass) => bortleClass !== null && bortleClass !== undefined),
+  )]
+    .sort((left, right) => left - right)
+    .forEach((bortleClass) => {
+      items.push({
+        color: BORTLE_COLORS[bortleClass] || "#4fd4c5",
+        label: `Bortle ${bortleClass}`,
+      });
+    });
+  items.forEach((item) => {
+    const keyItem = appendTextElement(key, "span", "candidate-site-map-key-item", "");
+    const swatch = appendTextElement(keyItem, "span", "candidate-site-map-key-swatch", "");
+    swatch.style.background = item.color;
+    appendTextElement(keyItem, "span", "", item.label);
+  });
+};
+
+const renderCandidateSiteMap = () => {
+  const container = byId("candidate-site-map");
+  if (!candidateSiteOrigin) return;
+  if (!window.L) {
+    container.replaceChildren();
+    appendTextElement(container, "div", "empty-state", "Interactive map controls are unavailable.");
+    return;
+  }
+  if (!candidateSiteMap) {
+    container.replaceChildren();
+    candidateSiteMap = window.L.map(container, {
+      scrollWheelZoom: true,
+      worldCopyJump: true,
+      minZoom: 2,
+    }).setView([candidateSiteOrigin.latitude, candidateSiteOrigin.longitude], 7);
+    window.L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      { maxZoom: 19, attribution: "© OpenStreetMap contributors" },
+    ).addTo(candidateSiteMap);
+    candidateSiteLayers = window.L.featureGroup().addTo(candidateSiteMap);
+    candidateSiteMap.on("click", (event) => {
+      setCandidateCoordinates(event.latlng.lat, event.latlng.lng);
+      setText("candidate-site-status", "Map point selected. Add a name, then save the site.");
+    });
+  } else {
+    candidateSiteLayers.clearLayers();
+    candidateSiteMap.invalidateSize();
+  }
+
+  const origin = [candidateSiteOrigin.latitude, candidateSiteOrigin.longitude];
+  window.L.circleMarker(origin, {
+    radius: 8,
+    color: "#efffff",
+    weight: 2,
+    fillColor: "#4fd4c5",
+    fillOpacity: 1,
+  }).addTo(candidateSiteLayers).bindPopup("Your planning origin");
+  [25, 50, 100].forEach((miles) => {
+    window.L.circle(origin, {
+      radius: milesToMeters(miles),
+      color: "#d58cff",
+      weight: 3,
+      opacity: 0.92,
+      fill: false,
+      interactive: false,
+    }).addTo(candidateSiteLayers);
+  });
+  savedCandidateSites.forEach((site) => {
+    const marker = window.L.circleMarker([site.latitude, site.longitude], {
+      radius: 10,
+      color: "#efffff",
+      weight: 2,
+      fillColor: BORTLE_COLORS[site.bortle_class] || "#4fd4c5",
+      fillOpacity: 0.94,
+    }).addTo(candidateSiteLayers);
+    const popup = document.createElement("div");
+    appendTextElement(popup, "strong", "", site.name);
+    appendTextElement(popup, "div", "", candidateSiteDistanceLabel(site));
+    appendTextElement(
+      popup,
+      "div",
+      "",
+      site.bortle_class === null || site.bortle_class === undefined
+        ? "Bortle not recorded"
+        : bortleLabel(site.bortle_class),
+    );
+    appendTextElement(popup, "div", "", site.visited_at ? "Visited site" : "Candidate site");
+    marker.bindPopup(popup);
+  });
+};
+
+const renderCandidateSites = (origin, sites) => {
+  candidateSiteOrigin = origin;
+  savedCandidateSites = sites;
+  updateCandidateResearchLinks();
+  renderCandidateSiteMap();
+  renderSavedSiteLists();
+  renderCandidateSiteMapKey();
+};
+
+const loadCandidateSites = async (origin) => {
+  const response = await fetch("/candidate-sites", { cache: "no-store" });
+  if (!response.ok) throw new Error(`Candidate sites endpoint returned ${response.status}.`);
+  renderCandidateSites(origin, await response.json());
+};
+
+const updateCandidateSite = async (siteId, payload) => {
+  try {
+    const response = await fetch(`/candidate-sites/${siteId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error("The site could not be updated. Please try again.");
+    const updatedSite = await response.json();
+    savedCandidateSites = savedCandidateSites.map((site) => (
+      site.id === siteId ? updatedSite : site
+    ));
+    renderCandidateSiteMap();
+    renderSavedSiteLists();
+    renderCandidateSiteMapKey();
+    setText("candidate-site-status", "Potential site updated.");
+  } catch (error) {
+    setText("candidate-site-status", error.message);
+  }
+};
+
+const removeCandidateSite = async (siteId) => {
+  if (!window.confirm("Remove this saved potential site?")) return;
+  const response = await fetch(`/candidate-sites/${siteId}`, { method: "DELETE" });
+  if (!response.ok) {
+    setText("candidate-site-status", "The site could not be removed. Please try again.");
+    return;
+  }
+  savedCandidateSites = savedCandidateSites.filter((site) => site.id !== siteId);
+  selectedCandidateSiteIds = selectedCandidateSiteIds.filter((id) => id !== siteId);
+  renderCandidateSiteMap();
+  renderSavedSiteLists();
+  renderCandidateSiteMapKey();
+  setText("candidate-site-status", "Potential site removed.");
+};
+
+const saveCandidateSite = async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const bortleValue = byId("candidate-site-bortle").value;
+  const payload = {
+    name: byId("candidate-site-name").value.trim(),
+    latitude: Number(byId("candidate-site-latitude").value),
+    longitude: Number(byId("candidate-site-longitude").value),
+    bortle_class: bortleValue ? Number(bortleValue) : null,
+    access_hours: byId("candidate-site-hours").value.trim() || null,
+    vehicle_requirement: byId("candidate-site-vehicle").value || null,
+    property_access: byId("candidate-site-property").value || null,
+    parking_setup_confirmed: byId("candidate-site-parking").checked,
+    horizon_confirmed: byId("candidate-site-horizon").checked,
+    access_confirmed: byId("candidate-site-access").checked,
+    amenities_confirmed: byId("candidate-site-amenities").checked,
+    notes: byId("candidate-site-notes").value.trim(),
+    source_url: byId("candidate-site-source").value.trim() || null,
+  };
+  const submit = form.querySelector("button[type='submit']");
+  submit.disabled = true;
+  setText("candidate-site-status", "Saving potential site…");
+  try {
+    const response = await fetch("/candidate-sites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error("The site could not be saved. Check the coordinates and try again.");
+    savedCandidateSites = [await response.json(), ...savedCandidateSites];
+    form.reset();
+    renderCandidateSiteMap();
+    renderSavedSiteLists();
+    renderCandidateSiteMapKey();
+    setText("candidate-site-status", "Potential site saved.");
+  } catch (error) {
+    setText("candidate-site-status", error.message);
+  } finally {
+    submit.disabled = false;
+  }
+};
+
 const renderHistoryError = () => {
   setText("portfolio-summary", "Unavailable");
   setText("quality-summary", "Unavailable");
@@ -1340,8 +1952,22 @@ const loadDashboard = async () => {
     renderSchedule(data.schedule);
     renderConditions(data);
     renderNotes(data.schedule.notes, data.schedule.decision);
+    try {
+      await loadCandidateSites(data.observatory);
+    } catch (error) {
+      setText("candidate-site-summary", "Unavailable");
+      setText("visited-site-summary", "Unavailable");
+      const list = byId("candidate-site-list");
+      list.replaceChildren();
+      appendTextElement(list, "div", "empty-state", error.message);
+      const visitedList = byId("visited-site-list");
+      visitedList.replaceChildren();
+      appendTextElement(visitedList, "div", "empty-state", error.message);
+    }
   } else {
     showPlanError(planResult.reason.message);
+    setText("candidate-site-summary", "Unavailable");
+    setText("visited-site-summary", "Unavailable");
   }
 
   if (systemResult.status === "fulfilled") {
@@ -1452,5 +2078,18 @@ activateCurrentView();
 byId("refresh-button").addEventListener("click", runDashboardLoad);
 byId("history-toggle").addEventListener("click", () => {
   toggleHistory();
+});
+byId("candidate-site-form").addEventListener("submit", saveCandidateSite);
+byId("candidate-site-sort").addEventListener("change", (event) => {
+  candidateSiteSort = event.target.value;
+  renderSavedSiteLists();
+});
+byId("visited-site-sort").addEventListener("change", (event) => {
+  visitedSiteSort = event.target.value;
+  renderSavedSiteLists();
+});
+byId("candidate-site-comparison-clear").addEventListener("click", () => {
+  selectedCandidateSiteIds = [];
+  renderSavedSiteLists();
 });
 runDashboardLoad();

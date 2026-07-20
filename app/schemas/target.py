@@ -1,6 +1,13 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class IntegrationGoalOption(BaseModel):
+    tier: str
+    label: str
+    hours: float
+    description: str
 
 
 class RecommendedExposure(BaseModel):
@@ -67,6 +74,10 @@ class TargetSummary(BaseModel):
 
     current_hours: float
     goal_hours: float
+    goal_tier: str = "detailed"
+    goal_source: str = "Polaris target-class starter"
+    goal_options: List[IntegrationGoalOption] = Field(default_factory=list)
+    goal_factors: List[str] = Field(default_factory=list)
     remaining_hours: float
     estimated_nights_remaining: float
 

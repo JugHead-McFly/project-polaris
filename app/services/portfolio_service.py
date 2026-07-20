@@ -1,29 +1,12 @@
 from typing import Any, Dict, List
 
+from app.data.targets import TARGETS
+from app.services.goal_engine_service import build_integration_goal
 
 INTEGRATION_GOALS_HOURS = {
-    "M16": 6.0,
-    "M17": 6.0,
-    "M20": 4.0,
-    "M11": 2.0,
-    "M22": 2.0,
+    object_name: build_integration_goal(object_name)["hours"]
+    for object_name in TARGETS
 }
-
-INTEGRATION_GOAL_NOTES = {
-    "M16": (
-        "Expanded 6-hour project goal for faint, extended emission detail."
-    ),
-    "M17": "Expanded 6-hour project goal for faint emission detail.",
-    "M20": (
-        "Four-hour project goal for the nebula's mixed emission and reflection detail."
-    ),
-    "M11": "Two-hour project goal for a compact, bright open cluster.",
-    "M22": "Two-hour project goal for a compact, bright globular cluster.",
-}
-
-DEFAULT_INTEGRATION_GOAL_NOTE = (
-    "Default 4-hour project goal; adjust it after reviewing your own results."
-)
 
 TARGET_PRIORITY = [
     "M16",
@@ -193,7 +176,8 @@ def build_portfolio_target(
     object_name: str,
     total_hours: float,
 ):
-    goal_hours = INTEGRATION_GOALS_HOURS.get(object_name, 4.0)
+    integration_goal = build_integration_goal(object_name)
+    goal_hours = integration_goal["hours"]
 
     progress = min(
         round((total_hours / goal_hours) * 100, 1),
@@ -231,10 +215,11 @@ def build_portfolio_target(
         "next_action": get_next_action(progress),
         "current_hours": total_hours,
         "goal_hours": goal_hours,
-        "integration_goal_note": INTEGRATION_GOAL_NOTES.get(
-            object_name,
-            DEFAULT_INTEGRATION_GOAL_NOTE,
-        ),
+        "goal_tier": integration_goal["tier"],
+        "goal_source": integration_goal["source"],
+        "goal_options": integration_goal["options"],
+        "goal_factors": integration_goal["factors"],
+        "integration_goal_note": integration_goal["note"],
         "remaining_hours": remaining_hours,
         "estimated_nights_remaining": get_estimated_nights_remaining(
             remaining_hours

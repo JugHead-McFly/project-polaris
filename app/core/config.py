@@ -4,7 +4,7 @@ from pathlib import Path
 
 class Settings:
     PROJECT_NAME = "Project Polaris"
-    VERSION = "1.5.1"
+    VERSION = "1.6.0"
     LOG_LEVEL = os.getenv("POLARIS_LOG_LEVEL", "INFO").upper()
 
     BASE_DIR = Path(__file__).resolve().parents[2]

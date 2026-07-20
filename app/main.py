@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api.advisor import router as advisor_router
 from app.api.captures import router as capture_router
+from app.api.candidate_sites import router as candidate_sites_router
 from app.api.dashboard import router as dashboard_router
 from app.api.mission import router as mission_router
 from app.api.objects import router as objects_router
@@ -102,6 +103,7 @@ app.mount(
 
 
 app.include_router(capture_router)
+app.include_router(candidate_sites_router)
 app.include_router(mission_router)
 app.include_router(dashboard_router)
 app.include_router(sessions_router)

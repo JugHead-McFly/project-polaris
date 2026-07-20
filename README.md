@@ -8,7 +8,7 @@ safety rules, and next planned work.
 See [PROJECT_TIME.md](PROJECT_TIME.md) for the cumulative development-time log
 and coding-timer state.
 
-Current Version: v1.5.1
+Current Version: v1.6.0 (in development)
 
 ## Features
 
@@ -20,12 +20,18 @@ Current Version: v1.5.1
 - Planner V3 advisory night schedule at `GET /planner/schedule`
 - Read-only night operations dashboard at `GET /operator`
 - Typed portfolio and recent-history feed at `GET /dashboard`
-- Locations planning (next version): an opt-in interactive map for potential
-  observing sites, straight-line distance rings, site notes, and saved
-  candidate locations
-- Goal Engine (future): target-specific, explainable integration goals with
-  quick/detailed/showcase aims, equipment and sky-profile adjustments, and
-  user overrides
+- Locations planning (v1.6 in development): an opt-in interactive map for
+  potential observing sites, straight-line distance rings, site notes, and
+  saved candidate locations, with visit status and field notes so a researched
+  site can become a proven observing location. Visited sites support a personal
+  1–5-star rating and rating-based sorting; trusted-research links open only on
+  user request and use an approximate planning origin where coordinates are
+  needed.
+- Goal Engine foundation: target-class and reviewed object-specific starter
+  goals replace the generic four-hour fallback. Quick, Detailed, and Showcase
+  aims are shown separately from image quality; equipment/sky adjustments and
+  persistent user overrides remain future work. See
+  [docs/GOAL_ENGINE.md](docs/GOAL_ENGINE.md).
 - Quality scoring v2 (future): add explainable sharpness, star-roundness, and
   noise measures to the per-capture score; record Sky Quality Meter (SQM)
   readings as session context instead of treating them as an image-score input
@@ -35,7 +41,9 @@ Current Version: v1.5.1
 The History view uses Leaflet with OpenStreetMap base tiles. The required
 OpenStreetMap attribution appears inside the interactive map. City-level
 location pins and Bortle classes are Polaris session records, not supplied by
-the base map.
+the base map. Locations links to DarkSky International's certified-place
+directory and LightPollutionMap.app for user-initiated research; Polaris does
+not copy those sources into its database or treat them as access guarantees.
 
 ## Run
 

@@ -32,6 +32,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'href="/operator/portfolio" data-view-link="portfolio"' in response.text
     assert 'href="/operator/quality" data-view-link="quality"' in response.text
     assert 'href="/operator/history" data-view-link="history"' in response.text
+    assert 'href="/operator/locations" data-view-link="locations"' in response.text
     assert 'href="/operator/data" data-view-link="data"' in response.text
     assert 'id="simulation-banner"' in response.text
     assert "Target progress" in response.text
@@ -67,7 +68,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "portfolio-preview-button" in script.text
     assert "displayMeasuredNumber" in script.text
     assert "friendlyFilterLabel" in script.text
-    assert "Project integration goal:" in script.text
+    assert "Imaging aim:" in script.text
+    assert "Aim guide:" in script.text
     assert "Colors and science of ${objectName}" in script.text
     assert "Displayed image quality:" in script.text
     assert "Stars detected in this image" in script.text
@@ -79,11 +81,36 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "tile.openstreetmap.org" in script.text
     assert "scrollWheelZoom" in script.text
     assert "lightpollutionmap.app" in response.text
+    assert "DarkSky International" in response.text
+    assert 'id="candidate-light-pollution-link"' in response.text
+    assert "updateCandidateResearchLinks" in script.text
+    assert ".toFixed(1)" in script.text
     assert 'id="bortle-map-key"' in response.text
     assert 'id="tracked-location-summary"' in response.text
     assert "Bortle not recorded" in script.text
     assert "list.hidden = decision === \"Proceed\"" in script.text
     assert 'id="capture-location-map"' in response.text
+    assert 'id="candidate-site-map-key"' in response.text
+    assert 'id="candidate-site-sort"' in response.text
+    assert "Darkest sky, then closest" in response.text
+    assert "renderCandidateSiteMapKey" in script.text
+    assert "sortedCandidateSites" in script.text
+    assert 'id="candidate-site-comparison"' in response.text
+    assert "Compare sites" in response.text
+    assert "toggleCandidateSiteComparison" in script.text
+    assert 'id="visited-site-list"' in response.text
+    assert "Visited sites" in response.text
+    assert "renderSavedSiteLists" in script.text
+    assert "candidateDirectionsUrl" in script.text
+    assert "appendDirectionsIcon" in script.text
+    assert "Get directions" in script.text
+    assert "candidate-site-actions" in script.text
+    assert "Mark visited" in script.text
+    assert "Update site details" in script.text
+    assert "4x4 required" in script.text
+    assert "Public property" in script.text
+    assert "Site readiness" in response.text
+    assert "Site readiness:" in script.text
     assert "applyImmaculateDemo" in script.text
     assert 'demoMode === "immaculate"' in script.text
     assert 'demoMode === "map-overlap"' in script.text
@@ -113,6 +140,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
         "/operator/portfolio",
         "/operator/quality",
         "/operator/history",
+        "/operator/locations",
         "/operator/data",
     }
     for path in section_paths:

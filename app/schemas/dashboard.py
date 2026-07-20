@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
+from app.schemas.target import IntegrationGoalOption
 from app.schemas.target import RecommendedSettings
 
 
@@ -76,6 +77,10 @@ class DashboardTarget(BaseModel):
     portfolio_level: str
     current_hours: float
     goal_hours: float
+    goal_tier: str = "detailed"
+    goal_source: str = "Polaris target-class starter"
+    goal_options: List[IntegrationGoalOption] = Field(default_factory=list)
+    goal_factors: List[str] = Field(default_factory=list)
     integration_goal_note: str
     remaining_hours: float
     readiness_score: int

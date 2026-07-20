@@ -61,6 +61,11 @@ def _find_preview_path(capture: Capture):
 
 
 @router.get(
+    "/operator/locations",
+    response_class=HTMLResponse,
+    include_in_schema=False,
+)
+@router.get(
     "/operator/data",
     response_class=HTMLResponse,
     include_in_schema=False,
