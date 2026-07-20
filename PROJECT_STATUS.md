@@ -302,9 +302,14 @@ endpoint checks also passed.
    noise measures to the capture score. Record Sky Quality Meter (SQM) values
    with the observing session for context, rather than mixing site darkness
    into an individual capture score.
-4. Before public distribution, replace the hard-coded Doug's Observatory
+4. Before publishing or making the repository public, audit the complete Git
+   history for previously committed `polaris.db` files or other private
+   observatory data. Remove sensitive historical blobs from the public history,
+   verify that the live database remains ignored, and preserve the private data
+   only in the local installation and encrypted backups.
+5. Before public distribution, replace the hard-coded Doug's Observatory
    location with an installation profile covering observatory name, postal
    code, coordinates, elevation, timezone, and storage location. The operator
    banner already reads the name from the observatory API response.
-5. Keep actual observatory equipment control outside the approved scope. It
+6. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.
