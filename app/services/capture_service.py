@@ -21,13 +21,25 @@ def _to_float(value):
 def _next_polaris_id(db: Session) -> str:
     year = datetime.utcnow().year
 
-    count = (
-        db.query(Capture)
+    existing_ids = (
+        db.query(Capture.polaris_id)
         .filter(Capture.polaris_id.like(f"POL-{year}-%"))
-        .count()
+        .all()
     )
 
-    return f"POL-{year}-{count + 1:06d}"
+    sequence_numbers = []
+
+    for (polaris_id,) in existing_ids:
+        try:
+            sequence_numbers.append(
+                int(str(polaris_id).rsplit("-", 1)[1])
+            )
+        except (IndexError, TypeError, ValueError):
+            continue
+
+    next_sequence = max(sequence_numbers, default=0) + 1
+
+    return f"POL-{year}-{next_sequence:06d}"
 
 
 def create_capture_from_parsed_fits(

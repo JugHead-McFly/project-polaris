@@ -158,6 +158,41 @@ def find_optional_file(
     return None
 
 
+def count_accepted_subframes(
+    session_folder: Path,
+) -> int:
+    """Count usable source frames without counting the final stack."""
+    return sum(
+        1
+        for path in session_folder.iterdir()
+        if path.is_file()
+        and path.suffix.lower() in {
+            ".fits",
+            ".fit",
+            ".fts",
+        }
+        and not path.name.lower().startswith("stacked-")
+        and not path.name.lower().startswith("failed_")
+    )
+
+
+def detect_filter_name(
+    stacked_fits: Path,
+) -> Optional[str]:
+    filename = stacked_fits.name.lower()
+
+    if "duo-band" in filename:
+        return "Duo-Band"
+
+    if "_astro_" in filename:
+        return "Astro"
+
+    if "uv-ir" in filename or "uv_ir" in filename:
+        return "UV/IR Cut"
+
+    return None
+
+
 def get_or_create_session(
     db: Session,
     session_info: Dict,
@@ -337,6 +372,17 @@ def import_dwarf_session(
     capture.exposure_seconds = int(
         session_info["exposure_seconds"]
     )
+    capture.sub_exposure_seconds = int(
+        round(session_info["exposure_seconds"])
+    )
+    capture.subframe_count = count_accepted_subframes(
+        session_folder
+    )
+    capture.total_integration_seconds = (
+        capture.sub_exposure_seconds
+        * capture.subframe_count
+    )
+    capture.filter_name = detect_filter_name(stacked_fits)
     capture.updated_at = datetime.utcnow()
 
     db.commit()
@@ -399,4 +445,12 @@ def import_dwarf_session(
         "exposure_seconds": (
             capture.exposure_seconds
         ),
+        "sub_exposure_seconds": (
+            capture.sub_exposure_seconds
+        ),
+        "subframe_count": capture.subframe_count,
+        "total_integration_seconds": (
+            capture.total_integration_seconds
+        ),
+        "filter_name": capture.filter_name,
     }
