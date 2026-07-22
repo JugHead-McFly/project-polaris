@@ -18,6 +18,8 @@ class DashboardMetrics(BaseModel):
 
 class DashboardImage(BaseModel):
     preview_url: str
+    processed_preview_url: Optional[str] = None
+    display_preview_url: Optional[str] = None
     object: Optional[str] = None
     common_name: Optional[str] = None
     observation_utc: Optional[str] = None
@@ -63,6 +65,7 @@ class DashboardTarget(BaseModel):
     profile: Optional[DashboardTargetProfile] = None
     preview_url: Optional[str] = None
     preview_image: Optional[DashboardImage] = None
+    presentation_preview_image: Optional[DashboardImage] = None
     capture_count: int
     session_count: int
     total_integration_seconds: int

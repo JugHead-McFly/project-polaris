@@ -1277,6 +1277,13 @@ dd {
   margin-top: 12px;
 }
 
+.image-dialog-variant-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
 .image-dialog-facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

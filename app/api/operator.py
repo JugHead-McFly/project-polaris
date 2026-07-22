@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 
 from app.core.storage import TARGETS_ROOT
+from app.core.storage import get_processed_preview_path
 from app.database.database import SessionLocal
 from app.models import Capture
 
@@ -35,7 +36,10 @@ def _dashboard_html() -> str:
     )
 
 
-def _find_preview_path(capture: Capture):
+def _find_preview_path(
+    capture: Capture,
+    processed: bool = False,
+):
     if not capture.object_name or not capture.polaris_id:
         return None
 
@@ -47,6 +51,17 @@ def _find_preview_path(capture: Capture):
 
     if library_root not in target_root.parents:
         return None
+
+    if processed:
+        candidate = get_processed_preview_path(
+            object_name=capture.object_name,
+            polaris_id=capture.polaris_id,
+        ).resolve()
+        return (
+            candidate
+            if target_root in candidate.parents and candidate.is_file()
+            else None
+        )
 
     for folder, suffix in (("jpg", ".jpg"), ("png", ".png")):
         candidate = (
@@ -102,7 +117,16 @@ def operator_dashboard():
     response_class=FileResponse,
     include_in_schema=False,
 )
-def operator_preview(polaris_id: str):
+def operator_preview(
+    polaris_id: str,
+    variant: str = "original",
+):
+    if variant not in {"original", "processed"}:
+        raise HTTPException(
+            status_code=404,
+            detail="Capture preview variant was not found.",
+        )
+
     db = SessionLocal()
 
     try:
@@ -112,7 +136,10 @@ def operator_preview(polaris_id: str):
             .first()
         )
         preview_path = (
-            _find_preview_path(capture)
+            _find_preview_path(
+                capture,
+                processed=variant == "processed",
+            )
             if capture is not None
             else None
         )

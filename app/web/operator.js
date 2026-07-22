@@ -348,6 +348,7 @@ const appendFact = (parent, label, value) => {
 
 let imageViewerItems = [];
 let imageViewerIndex = 0;
+let imageViewerVariant = "original";
 
 const pointsLabel = (points) => `${points > 0 ? "+" : ""}${points} pts`;
 
@@ -368,6 +369,14 @@ const renderImageViewerItem = () => {
   const item = imageViewerItems[imageViewerIndex];
   if (!item) return;
 
+  if (imageViewerVariant === "processed" && !item.processed_preview_url) {
+    imageViewerVariant = "original";
+  }
+  const displayingProcessed = imageViewerVariant === "processed";
+  const imageUrl = displayingProcessed
+    ? item.processed_preview_url
+    : item.preview_url;
+
   const image = byId("image-dialog-image");
   const error = byId("image-dialog-error");
   image.hidden = true;
@@ -376,7 +385,7 @@ const renderImageViewerItem = () => {
   image.alt = `${item.object || "Capture"}${
     item.common_name ? ` — ${item.common_name}` : ""
   } preview`;
-  image.src = item.preview_url;
+  image.src = imageUrl;
 
   setText(
     "image-dialog-title",
@@ -405,6 +414,19 @@ const renderImageViewerItem = () => {
   );
   setText("image-dialog-analysis", qualityAnalysisSummary(item.components));
 
+  const original = byId("image-dialog-original");
+  const processed = byId("image-dialog-processed");
+  original.hidden = !item.preview_url;
+  processed.hidden = !item.processed_preview_url;
+  original.disabled = !displayingProcessed;
+  processed.disabled = displayingProcessed;
+  setText(
+    "image-dialog-variant-note",
+    displayingProcessed
+      ? "Processed presentation image — excluded from quality scoring and integration totals."
+      : "Original scientific preview — used for capture review and quality scoring.",
+  );
+
   const previous = byId("image-dialog-previous");
   const next = byId("image-dialog-next");
   previous.hidden = imageViewerItems.length <= 1;
@@ -413,10 +435,14 @@ const renderImageViewerItem = () => {
   next.disabled = imageViewerIndex === imageViewerItems.length - 1;
 };
 
-const openImageViewer = (items, startIndex = 0) => {
+const openImageViewer = (items, startIndex = 0, preferredVariant = "original") => {
   imageViewerItems = items.filter((item) => item.preview_url);
   if (!imageViewerItems.length) return;
   imageViewerIndex = Math.max(0, Math.min(startIndex, imageViewerItems.length - 1));
+  imageViewerVariant = (
+    preferredVariant === "processed"
+    && imageViewerItems[imageViewerIndex].processed_preview_url
+  ) ? "processed" : "original";
   renderImageViewerItem();
   const dialog = byId("image-dialog");
   if (typeof dialog.showModal === "function") dialog.showModal();
@@ -809,7 +835,15 @@ const renderPortfolio = (data) => {
   data.targets.forEach((target) => {
     const card = appendTextElement(container, "article", "target-card", "");
     const top = appendTextElement(card, "div", "target-card-top", "");
-    if (target.preview_url) {
+    const presentationImage = (
+      target.presentation_preview_image
+      || target.preview_image
+    );
+    const portfolioPreviewUrl = (
+      presentationImage?.display_preview_url
+      || target.preview_url
+    );
+    if (portfolioPreviewUrl) {
       const previewButton = document.createElement("button");
       previewButton.className = "portfolio-preview-button";
       previewButton.type = "button";
@@ -821,7 +855,7 @@ const renderPortfolio = (data) => {
       preview.className = "target-preview";
       preview.width = 76;
       preview.height = 76;
-      preview.src = target.preview_url;
+      preview.src = portfolioPreviewUrl;
       preview.alt = `${target.object}${target.common_name ? ` — ${target.common_name}` : ""} preview`;
       preview.decoding = "async";
       preview.addEventListener(
@@ -835,7 +869,7 @@ const renderPortfolio = (data) => {
       top.classList.add("has-preview");
       previewButton.appendChild(preview);
       previewButton.addEventListener("click", () => {
-        if (target.preview_image) openImageViewer([target.preview_image]);
+        if (presentationImage) openImageViewer([presentationImage], 0, "processed");
       });
       top.appendChild(previewButton);
     }
@@ -2060,6 +2094,16 @@ byId("image-dialog-previous").addEventListener("click", () => {
 byId("image-dialog-next").addEventListener("click", () => {
   if (imageViewerIndex < imageViewerItems.length - 1) {
     imageViewerIndex += 1;
+    renderImageViewerItem();
+  }
+});
+byId("image-dialog-original").addEventListener("click", () => {
+  imageViewerVariant = "original";
+  renderImageViewerItem();
+});
+byId("image-dialog-processed").addEventListener("click", () => {
+  if (imageViewerItems[imageViewerIndex]?.processed_preview_url) {
+    imageViewerVariant = "processed";
     renderImageViewerItem();
   }
 });

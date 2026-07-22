@@ -104,3 +104,21 @@ def get_preview_path(
     raise ValueError(
         f"Unsupported preview suffix: {suffix}"
     )
+
+
+def get_processed_preview_path(
+    object_name: str,
+    polaris_id: str,
+) -> Path:
+    """Return the optional presentation-image path for one capture.
+
+    Processed images are deliberately kept separate from the original preview
+    produced from the imported FITS file.  They are display assets only and
+    never participate in capture analysis or integration accounting.
+    """
+    return (
+        TARGETS_ROOT
+        / object_name.upper()
+        / "png"
+        / f"{polaris_id}.processed.png"
+    )

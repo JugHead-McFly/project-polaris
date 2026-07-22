@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.observatory import OBSERVATORY_NAME
+from app.core.storage import get_processed_preview_path
 from app.data.targets import get_target_common_name
 from app.data.targets import get_target_profile
 from app.models import Capture
@@ -130,8 +131,24 @@ def _build_dashboard_image(
 ) -> Dict:
     integration_seconds = get_capture_integration_seconds(capture)
     standard_deviation = _analysis_standard_deviation(analysis)
+    processed_preview_path = (
+        get_processed_preview_path(
+            object_name=capture.object_name,
+            polaris_id=capture.polaris_id,
+        )
+        if capture.object_name and capture.polaris_id
+        else None
+    )
+    processed_preview_url = (
+        f"/operator-preview/{capture.polaris_id}?variant=processed"
+        if processed_preview_path is not None and processed_preview_path.is_file()
+        else None
+    )
+    preview_url = f"/operator-preview/{capture.polaris_id}"
     return {
-        "preview_url": f"/operator-preview/{capture.polaris_id}",
+        "preview_url": preview_url,
+        "processed_preview_url": processed_preview_url,
+        "display_preview_url": processed_preview_url or preview_url,
         "object": capture.object_name,
         "common_name": get_target_common_name(capture.object_name),
         "observation_utc": capture.observation_utc,
@@ -220,6 +237,21 @@ def _build_target_history(
         ),
         None,
     )
+    presentation_capture = next(
+        (
+            capture
+            for capture in captures
+            if (
+                capture.object_name
+                and capture.polaris_id
+                and get_processed_preview_path(
+                    object_name=capture.object_name,
+                    polaris_id=capture.polaris_id,
+                ).is_file()
+            )
+        ),
+        None,
+    )
 
     return {
         "object": object_name,
@@ -236,6 +268,14 @@ def _build_target_history(
                 analyses_by_capture.get(preview_capture.id),
             )
             if preview_capture is not None
+            else None
+        ),
+        "presentation_preview_image": (
+            _build_dashboard_image(
+                presentation_capture,
+                analyses_by_capture.get(presentation_capture.id),
+            )
+            if presentation_capture is not None
             else None
         ),
         "capture_count": len(captures),
