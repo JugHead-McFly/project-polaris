@@ -93,6 +93,8 @@ class DashboardTarget(BaseModel):
 class DashboardCapture(BaseModel):
     polaris_id: str
     preview_url: Optional[str] = None
+    processed_preview_url: Optional[str] = None
+    display_preview_url: Optional[str] = None
     object: Optional[str] = None
     common_name: Optional[str] = None
     filename: Optional[str] = None

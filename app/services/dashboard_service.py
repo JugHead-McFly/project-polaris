@@ -329,14 +329,11 @@ def _build_recent_capture(
     integration_seconds = get_capture_integration_seconds(capture)
     analysis = analyses_by_capture.get(capture.id)
     session = sessions_by_id.get(capture.session_id)
+    dashboard_image = _build_dashboard_image(capture, analysis)
 
     return {
         "polaris_id": capture.polaris_id,
-        "preview_url": (
-            f"/operator-preview/{capture.polaris_id}"
-            if capture.polaris_id
-            else None
-        ),
+        **dashboard_image,
         "object": capture.object_name,
         "common_name": get_target_common_name(capture.object_name),
         "filename": capture.filename,
@@ -360,21 +357,6 @@ def _build_recent_capture(
         ),
         "total_integration_seconds": integration_seconds,
         "total_integration_hours": round(integration_seconds / 3600, 2),
-        "sub_exposure_seconds": capture.sub_exposure_seconds,
-        "subframe_count": capture.subframe_count,
-        "gain": capture.gain,
-        "filter_name": capture.filter_name,
-        "quality_score": (
-            analysis.quality_score
-            if analysis is not None
-            else None
-        ),
-        "quality_recommendation": build_quality_improvement_recommendation(
-            stars_detected=analysis.stars_detected if analysis is not None else None,
-            median_value=analysis.background_level if analysis is not None else None,
-            standard_deviation=_analysis_standard_deviation(analysis),
-            trailing_detected=analysis.trailing_detected if analysis is not None else None,
-        ),
         "components": (
             _build_quality_capture(capture, analysis)["components"]
             if analysis is not None
