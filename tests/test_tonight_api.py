@@ -190,6 +190,26 @@ def test_do_not_image_message_names_the_weather_reasons():
     )
 
 
+def test_do_not_image_message_names_excessive_heat():
+    message = _build_operator_message(
+        {
+            "decision": "Do Not Image",
+            "weather": {
+                "observing_rating": 2,
+                "cloud_cover_percent": 0,
+                "humidity_percent": 25,
+                "wind_speed_mph": 2,
+                "temperature_f": 105,
+            },
+        }
+    )
+
+    assert message == (
+        "Do not image: air temperature is 105°F, above Polaris's "
+        "conservative heat limit."
+    )
+
+
 def test_do_not_image_message_fails_closed_when_weather_is_unavailable():
     message = _build_operator_message(
         {

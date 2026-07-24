@@ -40,6 +40,7 @@ def _build_operator_message(schedule: Dict) -> str:
     cloud_cover = weather.get("cloud_cover_percent")
     humidity = weather.get("humidity_percent")
     wind_speed = weather.get("wind_speed_mph")
+    temperature_f = weather.get("temperature_f")
 
     if rating == 0:
         reasons.append("live weather data is unavailable")
@@ -49,6 +50,11 @@ def _build_operator_message(schedule: Dict) -> str:
         reasons.append(f"humidity is {humidity}%")
     if wind_speed is not None and wind_speed >= 15:
         reasons.append(f"wind is {wind_speed:g} mph")
+    if temperature_f is not None and temperature_f >= 105:
+        reasons.append(
+            f"air temperature is {temperature_f:g}°F, above Polaris's "
+            "conservative heat limit"
+        )
     if not reasons:
         reasons.append(f"the weather rating is {rating}/5")
 

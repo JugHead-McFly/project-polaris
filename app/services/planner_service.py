@@ -586,6 +586,14 @@ def get_tonight_plan(db: Session) -> Dict:
             "No target was scheduled because the weather rating is unsuitable."
         )
 
+        temperature_f = weather.get("temperature_f")
+        if temperature_f is not None and temperature_f >= 105:
+            notes.append(
+                f"Air temperature is {temperature_f:g}°F, at or above "
+                "Polaris's conservative heat limit of 105°F. Allow the "
+                "DWARF mini to cool before imaging."
+            )
+
         if best_theoretical_target is not None:
             notes.append(
                 "If conditions improve, the best target during "
@@ -605,6 +613,14 @@ def get_tonight_plan(db: Session) -> Dict:
             notes.append(
                 f"Cloud cover is {cloud_cover}%, which reduced the weather "
                 "rating by 2 points."
+            )
+
+        temperature_f = weather.get("temperature_f")
+        if temperature_f is not None and 95 <= temperature_f < 105:
+            notes.append(
+                f"Air temperature is {temperature_f:g}°F. This is a hot "
+                "operating condition for the DWARF mini; avoid charging, "
+                "keep it out of stored heat, and monitor it throughout the session."
             )
 
         if best_theoretical_target is not None:

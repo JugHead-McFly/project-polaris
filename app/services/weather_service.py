@@ -10,6 +10,14 @@ from app.core.diagnostics import record_service_failure
 from app.core.diagnostics import record_service_success
 
 
+# DWARFLAB documents a 45°C / 113°F high-temperature charging cutoff for
+# DWARF mini.  Polaris intentionally applies a lower ambient-air limit: the
+# telescope generates its own heat, and the forecast temperature is not an
+# internal sensor reading.
+HEAT_CAUTION_F = 95
+HEAT_STOP_F = 105
+
+
 def get_weather_summary(postal_code: str):
     checked_at = datetime.now(timezone.utc)
     params = {
@@ -57,6 +65,16 @@ def get_weather_summary(postal_code: str):
         if wind_speed is not None and wind_speed >= 15:
             rating -= 1
 
+        temperature_f = current.get("temperature_2m")
+        if temperature_f is not None:
+            if temperature_f >= HEAT_STOP_F:
+                # A hard advisory stop.  This preserves a buffer below the
+                # manufacturer's high-temperature battery charging cutoff.
+                rating = min(rating, 2)
+            elif temperature_f >= HEAT_CAUTION_F:
+                # Heat alone should never result in a green-light decision.
+                rating = min(rating, 3)
+
         rating = max(1, rating)
 
         record_service_success(
@@ -67,7 +85,7 @@ def get_weather_summary(postal_code: str):
 
         return {
             "postal_code": postal_code,
-            "temperature_f": current.get("temperature_2m"),
+            "temperature_f": temperature_f,
             "cloud_cover_percent": current.get("cloud_cover"),
             "humidity_percent": current.get(
                 "relative_humidity_2m"
