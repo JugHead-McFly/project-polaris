@@ -57,6 +57,24 @@ Strong adjacent competitors include:
   does not state equipment-aware planning, capture history, or
   capture-derived quality feedback.
 
+### Workflow-adjacent: mobile processing
+
+- [Cosmic Cartography](https://www.cosmiccartography.app/) was surfaced by a
+  community post on 2026-07-24. Its public marketing copy claims offline,
+  mobile-first FITS and master-stack processing; direct imports from Seestar,
+  DWARF, and Vespera devices; an image vault; a 3D sky atlas; lunar-specific
+  processing; and export/watermark tools. Its site was not independently
+  accessible during this review, so treat every capability here as an
+  unverified vendor claim until a hands-on trial is completed.
+
+Cosmic Cartography is not currently a direct substitute for Polaris's nightly
+decision workflow. It is strategically relevant because it may own the
+post-capture, phone-first processing step for the same smart-telescope user.
+Polaris should not build a full image processor to match it. Instead, alpha
+research should test whether users want Polaris to hand an imported capture
+off to a processor, receive a processed result back, or simply retain the
+planning and capture-history context around that separate workflow.
+
 ## Capability comparison
 
 `Listed` means the capability is stated in the public store description.
