@@ -1,16 +1,22 @@
 # Polaris Voice of Customer Tracker
 
-Last updated: 2026-07-23
+Last updated: 2026-07-24
 
-This tracker is intentionally empty until discovery feedback arrives. Preserve
-the customer's words alongside the interpretation; do not convert every comment
-into a feature request.
+Preserve the customer's words alongside the interpretation; do not convert
+every comment into a feature request. Group-level observations are useful
+directionally, but do not establish customer demand without direct quotes,
+frequency, and workflow context.
 
 ## Entry template
 
 | Date | Source | User type | Telescope | Exact feedback | Underlying problem | Current workaround | Frequency | Severity | Beta interest | Excitement signal | Proposed response | Polaris Score | Decision |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 2026-07-24 | Facebook-group observation, reported by Doug | Mixed/unknown | Mixed/unknown | “Weather an issue for many users.” This is a group-level theme, not a direct quote. | Users lack confidence in whether conditions justify imaging. | Unknown; likely multiple weather sources, but not observed. | Repeated theme; not quantified. | Unknown. | Not stated. | None observed. | Validate which weather uncertainty matters most: cloud timing, seeing, transparency, wind, heat, or explanation. Polaris already addresses the nightly decision; do not add weather features yet. | Not scored—insufficient evidence. | Core validation priority |
+| 2026-07-24 | Facebook-group observation, reported by Doug | Mixed/unknown | Mixed/unknown | “Tips for exposure / filter recommendations.” This is a group-level theme, not a direct quote. | Users need confidence selecting capture settings for a target and conditions. | Community advice; exact workaround unknown. | Observed discussion; not quantified. | Unknown. | Not stated. | None observed. | Test whether users trust Polaris's existing settings advice and what explanation they need before following it. | Not scored—insufficient evidence. | Core validation priority |
+| 2026-07-24 | Facebook-group observation, reported by Doug | Mixed/unknown | Mixed/unknown | “Mosaic feature frustrating.” This is a group-level theme, not a direct quote. | Multi-panel imaging setup or execution may be difficult. | Unknown. | Observed discussion; not quantified. | Unknown. | Not stated. | None observed. | Ask what part fails: target selection, framing, device operation, stacking, or processing. | Not scored—insufficient evidence. | Parking Lot—outside initial alpha unless it blocks the nightly decision |
+| 2026-07-24 | Facebook-group observation, reported by Doug | Mixed/unknown | Mixed/unknown | “Lots of discussion of post processing (Siril / Lightshop).” This is a group-level theme, not a direct quote. | Users need help turning captures into finished images. | Siril, Lightshop, and other processors. | Repeated discussion; not quantified. | Unknown. | Not stated. | None observed. | Do not build a processor. Research whether a handoff to a processing tool or preservation of capture context would help users. | Not scored—insufficient evidence. | Workflow-adjacent research |
+| 2026-07-24 | Facebook-group observation, reported by Doug | Mixed/unknown | Mixed/unknown | “Social idea…automatically include target name and Dwarf measurements when posting to social sites.” This is a group-level feature idea, not a direct quote. | Sharing a result requires manually assembling useful capture context. | Unknown. | One idea; not quantified. | Unknown. | Not stated. | None observed. | Preserve as a possible export/share card after core value is proven; do not add social-network integration in alpha. | Not scored—insufficient evidence. | Parking Lot |
 
 ## Interpretation rules
 
@@ -26,4 +32,3 @@ into a feature request.
 See [PRODUCT_BIBLE.md](PRODUCT_BIBLE.md) for scoring and decision rules, and
 [CUSTOMER_DISCOVERY_SPRINT.md](CUSTOMER_DISCOVERY_SPRINT.md) for the research
 questions.
-
