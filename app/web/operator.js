@@ -2259,7 +2259,7 @@ const toggleHistory = async () => {
   const button = byId("history-toggle");
   const nextExpanded = !historyExpanded;
   button.disabled = true;
-  button.textContent = nextExpanded ? "Loading all history…" : "Showing recent history…";
+  button.textContent = nextExpanded ? "Loading all captures…" : "Showing fewer captures…";
 
   try {
     const response = await fetch(
@@ -2271,9 +2271,9 @@ const toggleHistory = async () => {
     historyExpanded = nextExpanded;
     latestDashboardData = data;
     renderRecentCaptures(data);
-    button.textContent = historyExpanded ? "Show recent history" : "Show all history";
+    button.textContent = historyExpanded ? "Show fewer captures" : "View all captures";
   } catch (error) {
-    button.textContent = "Show all history";
+    button.textContent = "View all captures";
     byId("load-error").textContent = error.message;
     byId("load-error").hidden = false;
   } finally {

@@ -43,6 +43,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'id="quality-search"' in response.text
     assert 'id="quality-filter"' in response.text
     assert 'class="history-panel-actions"' in response.text
+    assert "View all captures" in response.text
     assert "Scores are not\n            used to rank unrelated objects" in response.text
     assert "Latest captures" in response.text
     assert "Observing log" not in response.text
@@ -81,6 +82,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert '"Captured at"' in script.text
     assert "bortleLabel" in script.text
     assert "toggleHistory" in script.text
+    assert "Show fewer captures" in script.text
     assert "include_all_history" in script.text
     assert "renderCaptureLocations" in script.text
     assert "tile.openstreetmap.org" in script.text
