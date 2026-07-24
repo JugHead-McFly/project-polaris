@@ -32,9 +32,12 @@ Current Version: v1.6.0 (in development)
   aims are shown separately from image quality; equipment/sky adjustments and
   persistent user overrides remain future work. See
   [docs/GOAL_ENGINE.md](docs/GOAL_ENGINE.md).
-- Quality scoring v2 (future): add explainable sharpness, star-roundness, and
-  noise measures to the per-capture score; record Sky Quality Meter (SQM)
-  readings as session context instead of treating them as an image-score input
+- Quality Scoring v2: versioned, explainable sharpness, star-roundness,
+  star-signal, background-uniformity, and clipping measurements replace the
+  target-dependent raw star-count score. Existing v1 scores are preserved;
+  planetary/lunar scoring and user equipment calibration remain future work.
+  Sky Quality Meter (SQM) readings remain session context rather than an
+  image-score input. See [docs/QUALITY_SCORING_V2.md](docs/QUALITY_SCORING_V2.md).
 
 ## Map data attribution
 

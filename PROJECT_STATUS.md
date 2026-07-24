@@ -298,10 +298,13 @@ endpoint checks also passed.
    keeping integration separate from image quality. Persistent aim selection,
    user overrides, and adjustments from saved equipment, sky profile, and
    capture-quality history remain later work.
-3. Plan Quality Scoring v2: add explainable sharpness, star-roundness, and
-   noise measures to the capture score. Record Sky Quality Meter (SQM) values
-   with the observing session for context, rather than mixing site darkness
-   into an individual capture score.
+3. Continue Quality Scoring v2 after its deep-sky foundation: the versioned
+   engine now scores sharpness, star roundness, star signal, background
+   uniformity, and clipping while keeping raw star count diagnostic-only.
+   Existing v1 scores are preserved during reanalysis. Add user-calibrated
+   equipment profiles and a separate planetary/lunar quality model next.
+   Record Sky Quality Meter (SQM) values with the observing session for
+   context, rather than mixing site darkness into an individual capture score.
 4. Before publishing or making the repository public, audit the complete Git
    history for previously committed `polaris.db` files or other private
    observatory data. Remove sensitive historical blobs from the public history,

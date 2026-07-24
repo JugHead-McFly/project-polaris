@@ -69,6 +69,14 @@ const displayMeasuredNumber = (value) => {
   return numeric.toFixed(2).replace(/\.?0+$/, "");
 };
 
+const displayFractionPercent = (value) => {
+  if (value === null || value === undefined) return "—";
+  const percent = Number(value) * 100;
+  if (!Number.isFinite(percent)) return value;
+  const digits = Math.abs(percent) < 0.01 ? 4 : 2;
+  return `${percent.toFixed(digits).replace(/\.?0+$/, "")}%`;
+};
+
 const friendlyFilterLabel = (value) => {
   if (!value) return "Not recorded";
   const descriptions = {
@@ -354,6 +362,16 @@ const pointsLabel = (points) => `${points > 0 ? "+" : ""}${points} pts`;
 
 const qualityAnalysisSummary = (components) => {
   if (!components) return "This image has not been broken down into individual quality measurements yet.";
+  if (components.scoring_version === "2.0") {
+    return [
+      `Sharpness: ${displayMeasuredNumber(components.median_fwhm)} px FWHM (${pointsLabel(components.sharpness_points)} / 30)`,
+      `Star roundness: ${displayMeasuredNumber(components.median_roundness)} (${pointsLabel(components.roundness_points)} / 25)`,
+      `Star signal-to-noise: ${displayMeasuredNumber(components.median_star_snr)} (${pointsLabel(components.signal_points)} / 20)`,
+      `Background gradient: ${displayFractionPercent(components.background_gradient)} (${pointsLabel(components.uniformity_points)} / 15)`,
+      `Clipped pixels: ${displayFractionPercent(components.clipped_pixel_fraction)} (${pointsLabel(components.clipping_points)} / 10)`,
+      `Detected stars: ${displayNumber(components.stars_detected)} (diagnostic only)`,
+    ].join(" · ");
+  }
   const trailing = components.trailing_detected === null
     ? "Not measured"
     : components.trailing_detected ? "Detected" : "Not detected";
@@ -461,8 +479,33 @@ const appendImageButton = (parent, label, items, className = "image-view-button"
 const qualityComponentInfo = {
   stars: {
     title: "Stars detected",
-    body: "This is the number of star-like points Polaris can identify in the image. More detected stars often suggests clear skies and good focus, but the count also depends on the target, exposure, camera, and how crowded that part of the sky is—so it is only one clue, not a verdict on the image.",
-    range: "Best-scoring range: 5,000 or more stars. 2,500–4,999 earns 15 of 20 points; 1,000–2,499 earns 10; 300–999 earns 5. Fewer than 100 deducts points.",
+    body: "This is the number of star-like points Polaris can identify. It helps establish whether enough stars were available for reliable measurements, but it depends strongly on the target and field of view.",
+    range: "Quality v2 awards no points for raw star count. At least 25 usable stellar measurements are required for a deep-sky score; 50 or more provides high confidence.",
+  },
+  sharpness: {
+    title: "Sharpness (FWHM)",
+    body: "FWHM measures the width of a typical detected star in pixels. Smaller values mean the star image is tighter and usually indicate better focus and steadier atmospheric seeing.",
+    range: "The point range comes from the named equipment profile. For the DWARF mini starter profile, 1.8 px or lower earns 30 points and 2.5 px or higher earns 0.",
+  },
+  roundness: {
+    title: "Star roundness",
+    body: "Roundness measures how stretched the detected stars are. Values nearer zero represent rounder stars; larger values can indicate tracking, alignment, focus, or optical issues.",
+    range: "0.08 or lower earns 25 points. Credit decreases gradually to 0 points at 0.35.",
+  },
+  signal: {
+    title: "Star signal-to-noise",
+    body: "This compares a typical detected star peak with the robust background noise. Higher values mean stellar signal stands out more clearly from the background.",
+    range: "50 or higher earns 20 points. Credit decreases gradually to 0 points at 5.",
+  },
+  uniformity: {
+    title: "Background uniformity",
+    body: "Polaris compares sigma-clipped background tiles across the image. A smaller gradient means the background is more even after bright outliers are rejected.",
+    range: "A 5% gradient or lower earns 15 points. Credit decreases gradually to 0 points at 60%.",
+  },
+  clipping: {
+    title: "Highlight protection",
+    body: "This measures the fraction of pixels pinned at the image maximum. Too many clipped pixels can erase detail in bright stars or target cores.",
+    range: "0.01% or less earns 10 points. Credit decreases gradually to 0 points at 1%.",
   },
   background: {
     title: "Background level",
@@ -503,6 +546,19 @@ const appendQualityComponent = (parent, label, value, points, maxPoints, infoKey
   }
   appendTextElement(component, "strong", "", value);
   appendTextElement(component, "small", "", `${pointsLabel(points)} / ${maxPoints} pts`);
+};
+
+const appendQualityDiagnostic = (parent, label, value, note, infoKey = null) => {
+  const component = appendTextElement(parent, "div", "quality-component", "");
+  const labelElement = appendTextElement(component, "span", "", label);
+  if (infoKey) {
+    const button = appendTextElement(labelElement, "button", "quality-info-button", "i");
+    button.type = "button";
+    button.setAttribute("aria-label", `About ${label}`);
+    button.addEventListener("click", () => openQualityInfo(infoKey));
+  }
+  appendTextElement(component, "strong", "", value);
+  appendTextElement(component, "small", "", note);
 };
 
 const appendObjectProfile = (
@@ -948,16 +1004,24 @@ const renderQualityByTarget = (data) => {
   const container = byId("quality-targets");
   container.replaceChildren();
 
-  const scoredTargets = [...data.targets]
-    .filter((target) => target.average_quality !== null)
+  const analyzedTargets = [...data.targets]
+    .filter((target) => target.quality_captures.length)
     .sort((left, right) => left.object.localeCompare(right.object));
+  const scoredTargetCount = analyzedTargets.filter(
+    (target) => target.average_quality !== null,
+  ).length;
+  const alternateModelCount = analyzedTargets.length - scoredTargetCount;
 
   setText(
     "quality-summary",
-    `${scoredTargets.length} scored target${scoredTargets.length === 1 ? "" : "s"}`,
+    `${scoredTargetCount} scored target${scoredTargetCount === 1 ? "" : "s"}${
+      alternateModelCount
+        ? ` · ${alternateModelCount} needs another model`
+        : ""
+    }`,
   );
 
-  if (!scoredTargets.length) {
+  if (!analyzedTargets.length) {
     appendTextElement(
       container,
       "div",
@@ -967,7 +1031,7 @@ const renderQualityByTarget = (data) => {
     return;
   }
 
-  scoredTargets.forEach((target) => {
+  analyzedTargets.forEach((target) => {
     const card = appendTextElement(container, "article", "quality-target-card", "");
     const top = appendTextElement(card, "div", "quality-target-top", "");
 
@@ -1038,23 +1102,35 @@ const renderQualityByTarget = (data) => {
     const facts = appendTextElement(card, "dl", "quality-facts", "");
     const averageFact = appendTextElement(facts, "div", "", "");
     appendTextElement(averageFact, "dt", "", "Average score");
-    appendTextElement(averageFact, "dd", "", `${target.average_quality}/100`);
+    appendTextElement(
+      averageFact,
+      "dd",
+      "",
+      target.average_quality === null ? "Not scored" : `${target.average_quality}/100`,
+    );
     const bestFact = appendTextElement(facts, "div", "", "");
     appendTextElement(bestFact, "dt", "", "Best score");
-    appendTextElement(bestFact, "dd", "", `${target.best_quality}/100`);
+    appendTextElement(
+      bestFact,
+      "dd",
+      "",
+      target.best_quality === null ? "Not scored" : `${target.best_quality}/100`,
+    );
     const latestFact = appendTextElement(facts, "div", "", "");
     appendTextElement(latestFact, "dt", "", "Latest capture");
     appendTextElement(latestFact, "dd", "", displayDate(target.latest_capture));
 
-    const scoreBar = document.createElement("progress");
-    scoreBar.className = "quality-score-bar";
-    scoreBar.max = 100;
-    scoreBar.value = target.average_quality;
-    scoreBar.setAttribute(
-      "aria-label",
-      `${target.object} average quality ${target.average_quality} out of 100`,
-    );
-    card.appendChild(scoreBar);
+    if (target.average_quality !== null) {
+      const scoreBar = document.createElement("progress");
+      scoreBar.className = "quality-score-bar";
+      scoreBar.max = 100;
+      scoreBar.value = target.average_quality;
+      scoreBar.setAttribute(
+        "aria-label",
+        `${target.object} average quality ${target.average_quality} out of 100`,
+      );
+      card.appendChild(scoreBar);
+    }
 
     const breakdown = document.createElement("details");
     breakdown.className = "quality-breakdown";
@@ -1062,8 +1138,8 @@ const renderQualityByTarget = (data) => {
       breakdown,
       "summary",
       "",
-      `Score components for ${target.scored_capture_count} capture${
-        target.scored_capture_count === 1 ? "" : "s"
+      `Analysis details for ${target.quality_captures.length} capture${
+        target.quality_captures.length === 1 ? "" : "s"
       }`,
     );
     summary.setAttribute("aria-label", `Show ${target.object} score components`);
@@ -1096,7 +1172,9 @@ const renderQualityByTarget = (data) => {
         captureHeading,
         "span",
         "",
-        `${capture.quality_score}/100`,
+        capture.quality_score === null
+          ? "Not scored"
+          : `${capture.quality_score}/100`,
       );
 
       const components = capture.components;
@@ -1106,47 +1184,120 @@ const renderQualityByTarget = (data) => {
         "quality-component-grid",
         "",
       );
-      appendQualityComponent(
-        componentGrid,
-        "Base score",
-        "Starting value",
-        components.base_points,
-        50,
-      );
-      appendQualityComponent(
-        componentGrid,
-        "Stars detected",
-        displayNumber(components.stars_detected),
-        components.star_points,
-        20,
-        "stars",
-      );
-      appendQualityComponent(
-        componentGrid,
-        "Background level",
-        displayMeasuredNumber(components.background_level),
-        components.background_points,
-        10,
-        "background",
-      );
-      appendQualityComponent(
-        componentGrid,
-        "Background variation",
-        displayMeasuredNumber(components.background_variation),
-        components.variation_points,
-        15,
-        "variation",
-      );
-      appendQualityComponent(
-        componentGrid,
-        "Trailing",
-        components.trailing_detected === null
-          ? "Not measured"
-          : components.trailing_detected ? "Detected" : "Not detected",
-        components.trailing_points,
-        5,
-        "trailing",
-      );
+      if (
+        components.scoring_version === "2.0"
+        && components.confidence === "unsupported"
+      ) {
+        appendQualityDiagnostic(
+          componentGrid,
+          "Scoring model",
+          "Planetary model required",
+          "Deep-sky Quality v2 does not score this capture",
+        );
+        appendQualityDiagnostic(
+          componentGrid,
+          "Stars detected",
+          displayNumber(components.stars_detected),
+          `${displayNumber(components.star_sample_count)} used · diagnostic only`,
+          "stars",
+        );
+      } else if (components.scoring_version === "2.0") {
+        appendQualityDiagnostic(
+          componentGrid,
+          "Scoring model",
+          "Quality v2",
+          `${components.profile_label} · ${components.confidence} confidence`,
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Sharpness",
+          `${displayMeasuredNumber(components.median_fwhm)} px FWHM`,
+          components.sharpness_points,
+          30,
+          "sharpness",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Star roundness",
+          displayMeasuredNumber(components.median_roundness),
+          components.roundness_points,
+          25,
+          "roundness",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Star signal-to-noise",
+          displayMeasuredNumber(components.median_star_snr),
+          components.signal_points,
+          20,
+          "signal",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Background gradient",
+          displayFractionPercent(components.background_gradient),
+          components.uniformity_points,
+          15,
+          "uniformity",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Clipped pixels",
+          displayFractionPercent(components.clipped_pixel_fraction),
+          components.clipping_points,
+          10,
+          "clipping",
+        );
+        appendQualityDiagnostic(
+          componentGrid,
+          "Stars detected",
+          displayNumber(components.stars_detected),
+          `${displayNumber(components.star_sample_count)} used · diagnostic only`,
+          "stars",
+        );
+      } else {
+        appendQualityComponent(
+          componentGrid,
+          "Base score",
+          "Starting value",
+          components.base_points,
+          50,
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Stars detected",
+          displayNumber(components.stars_detected),
+          components.star_points,
+          20,
+          "stars",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Background level",
+          displayMeasuredNumber(components.background_level),
+          components.background_points,
+          10,
+          "background",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Background variation",
+          displayMeasuredNumber(components.background_variation),
+          components.variation_points,
+          15,
+          "variation",
+        );
+        appendQualityComponent(
+          componentGrid,
+          "Trailing",
+          components.trailing_detected === null
+            ? "Not measured"
+            : components.trailing_detected ? "Detected" : "Not detected",
+          components.trailing_points,
+          5,
+          "trailing",
+        );
+      }
       appendImageButton(captureRow, "View image", [capture]);
     });
     card.appendChild(breakdown);

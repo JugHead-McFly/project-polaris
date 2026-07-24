@@ -29,19 +29,36 @@ class DashboardImage(BaseModel):
     gain: Optional[float] = None
     filter_name: Optional[str] = None
     quality_score: Optional[int] = None
+    legacy_quality_score: Optional[int] = None
+    scoring_version: Optional[str] = None
+    analysis_confidence: Optional[str] = None
     quality_recommendation: Optional[str] = None
 
 
 class DashboardQualityComponents(BaseModel):
-    base_points: int
+    scoring_version: str = "1.0"
+    profile_label: Optional[str] = None
+    confidence: Optional[str] = None
+    base_points: Optional[int] = None
     stars_detected: Optional[int] = None
-    star_points: int
+    star_sample_count: Optional[int] = None
+    star_points: Optional[int] = None
     background_level: Optional[float] = None
-    background_points: int
+    background_points: Optional[int] = None
     background_variation: Optional[float] = None
-    variation_points: int
+    variation_points: Optional[int] = None
     trailing_detected: Optional[bool] = None
-    trailing_points: int
+    trailing_points: Optional[int] = None
+    median_fwhm: Optional[float] = None
+    sharpness_points: Optional[int] = None
+    median_roundness: Optional[float] = None
+    roundness_points: Optional[int] = None
+    median_star_snr: Optional[float] = None
+    signal_points: Optional[int] = None
+    background_gradient: Optional[float] = None
+    uniformity_points: Optional[int] = None
+    clipped_pixel_fraction: Optional[float] = None
+    clipping_points: Optional[int] = None
 
 
 class DashboardQualityCapture(DashboardImage):
@@ -111,6 +128,9 @@ class DashboardCapture(BaseModel):
     gain: Optional[float] = None
     filter_name: Optional[str] = None
     quality_score: Optional[int] = None
+    legacy_quality_score: Optional[int] = None
+    scoring_version: Optional[str] = None
+    analysis_confidence: Optional[str] = None
     quality_recommendation: Optional[str] = None
     components: Optional[DashboardQualityComponents] = None
 

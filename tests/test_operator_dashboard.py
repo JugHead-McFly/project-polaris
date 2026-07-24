@@ -130,6 +130,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "${pointsLabel(points)} / ${maxPoints} pts" in script.text
     assert "qualityComponentInfo" in script.text
     assert '"stars"' in script.text
+    assert "Quality v2" in script.text
+    assert "Sharpness (FWHM)" in script.text
+    assert "diagnostic only" in script.text
     assert "quality-info-dialog" in response.text
     assert "Individual image analysis" in response.text
     assert "renderMoonVisual" in script.text

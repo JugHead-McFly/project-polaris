@@ -26,11 +26,21 @@ class CaptureAnalysis(Base):
     stars_detected = Column(Integer, nullable=True)
     median_fwhm = Column(Float, nullable=True)
     eccentricity = Column(Float, nullable=True)
+    median_roundness = Column(Float, nullable=True)
+    median_sharpness = Column(Float, nullable=True)
     background_level = Column(Float, nullable=True)
+    background_noise = Column(Float, nullable=True)
+    relative_background_noise = Column(Float, nullable=True)
+    background_gradient = Column(Float, nullable=True)
+    clipped_pixel_fraction = Column(Float, nullable=True)
     snr = Column(Float, nullable=True)
+    star_sample_count = Column(Integer, nullable=True)
     trailing_detected = Column(Boolean, nullable=True)
 
     quality_score = Column(Integer, nullable=True)
+    legacy_quality_score = Column(Integer, nullable=True)
+    scoring_version = Column(String, nullable=True)
+    analysis_confidence = Column(String, nullable=True)
     recommendation = Column(String, nullable=True)
 
     created_at = Column(

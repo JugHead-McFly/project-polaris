@@ -189,6 +189,7 @@ def test_dashboard_service_builds_consolidated_history():
         "background_level": 10000,
         "background_variation": 500.0,
         "trailing_detected": False,
+        "scoring_version": "1.0",
     }
     assert payload["recent_captures"][0]["polaris_id"] == "POL-TEST-2"
     assert payload["recent_captures"][0]["preview_url"] == (
@@ -329,5 +330,70 @@ def test_dashboard_history_is_sorted_by_observation_time_not_database_id():
     ]
     assert payload["metrics"]["sessions"] == 3
     assert payload["metrics"]["sessions_with_captures"] == 2
+
+    database.close()
+
+
+def test_dashboard_exposes_quality_v2_components_and_version():
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    database = sessionmaker(bind=engine)()
+
+    capture = Capture(
+        polaris_id="POL-V2",
+        object_name="M57",
+        observation_utc="2026-07-20T06:00:00Z",
+        telescope="DWARF mini",
+        total_integration_seconds=900,
+    )
+    database.add(capture)
+    database.flush()
+    database.add(
+        CaptureAnalysis(
+            capture_id=capture.id,
+            stars_detected=1141,
+            star_sample_count=250,
+            median_fwhm=2.03,
+            median_roundness=0.102,
+            snr=37.978,
+            background_gradient=0.00805,
+            clipped_pixel_fraction=0.0000072,
+            quality_score=83,
+            legacy_quality_score=80,
+            scoring_version="2.0",
+            analysis_confidence="high",
+            recommendation="Sharpness is the largest opportunity.",
+        )
+    )
+    database.commit()
+
+    payload = build_dashboard_response(database)
+    quality_capture = payload["targets"][0][
+        "quality_captures"
+    ][0]
+
+    assert quality_capture["scoring_version"] == "2.0"
+    assert quality_capture["legacy_quality_score"] == 80
+    assert quality_capture["analysis_confidence"] == "high"
+    assert quality_capture["quality_recommendation"] == (
+        "Sharpness is the largest opportunity."
+    )
+    assert quality_capture["components"] == {
+        "scoring_version": "2.0",
+        "profile_label": "DWARF mini starter",
+        "confidence": "high",
+        "star_sample_count": 250,
+        "median_fwhm": 2.03,
+        "sharpness_points": 20,
+        "median_roundness": 0.102,
+        "roundness_points": 23,
+        "median_star_snr": 37.978,
+        "signal_points": 15,
+        "background_gradient": 0.00805,
+        "uniformity_points": 15,
+        "clipped_pixel_fraction": 0.0000072,
+        "clipping_points": 10,
+        "stars_detected": 1141,
+    }
 
     database.close()

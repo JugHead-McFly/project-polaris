@@ -15,6 +15,7 @@ from app.models import CaptureAnalysis
 from app.models import ObservingSession
 from app.services.portfolio_service import build_portfolio_target
 from app.services.capture_analysis_service import calculate_quality_components
+from app.services.capture_analysis_service import calculate_quality_components_v2
 from app.services.capture_analysis_service import build_quality_improvement_recommendation
 from app.services.target_service import get_capture_integration_seconds
 from app.services.target_service import get_latest_analysis_by_capture
@@ -145,6 +146,21 @@ def _build_dashboard_image(
         else None
     )
     preview_url = f"/operator-preview/{capture.polaris_id}"
+    if analysis is None:
+        quality_recommendation = (
+            "Quality analysis is not available for this capture yet."
+        )
+    else:
+        quality_recommendation = (
+            analysis.recommendation
+            if analysis.scoring_version == "2.0"
+            else build_quality_improvement_recommendation(
+                stars_detected=analysis.stars_detected,
+                median_value=analysis.background_level,
+                standard_deviation=standard_deviation,
+                trailing_detected=analysis.trailing_detected,
+            )
+        )
     return {
         "preview_url": preview_url,
         "processed_preview_url": processed_preview_url,
@@ -162,12 +178,22 @@ def _build_dashboard_image(
             if analysis is not None
             else None
         ),
-        "quality_recommendation": build_quality_improvement_recommendation(
-            stars_detected=analysis.stars_detected if analysis is not None else None,
-            median_value=analysis.background_level if analysis is not None else None,
-            standard_deviation=standard_deviation,
-            trailing_detected=analysis.trailing_detected if analysis is not None else None,
+        "legacy_quality_score": (
+            analysis.legacy_quality_score
+            if analysis is not None
+            else None
         ),
+        "scoring_version": (
+            analysis.scoring_version
+            if analysis is not None
+            else None
+        ),
+        "analysis_confidence": (
+            analysis.analysis_confidence
+            if analysis is not None
+            else None
+        ),
+        "quality_recommendation": quality_recommendation,
     }
 
 
@@ -176,21 +202,38 @@ def _build_quality_capture(
     analysis: CaptureAnalysis,
 ) -> Dict:
     standard_deviation = _analysis_standard_deviation(analysis)
-    components = calculate_quality_components(
-        stars_detected=analysis.stars_detected,
-        median_value=analysis.background_level,
-        standard_deviation=standard_deviation,
-        trailing_detected=analysis.trailing_detected,
-    )
-    return {
-        **_build_dashboard_image(capture, analysis),
-        "components": {
-            **components,
+    if analysis.scoring_version == "2.0":
+        components = {
+            **calculate_quality_components_v2(
+                object_name=capture.object_name,
+                telescope=capture.telescope,
+                star_sample_count=analysis.star_sample_count,
+                median_fwhm=analysis.median_fwhm,
+                median_roundness=analysis.median_roundness,
+                median_star_snr=analysis.snr,
+                background_gradient=analysis.background_gradient,
+                clipped_pixel_fraction=analysis.clipped_pixel_fraction,
+            ),
+            "stars_detected": analysis.stars_detected,
+        }
+        components.pop("quality_score", None)
+    else:
+        components = {
+            "scoring_version": analysis.scoring_version or "1.0",
+            **calculate_quality_components(
+                stars_detected=analysis.stars_detected,
+                median_value=analysis.background_level,
+                standard_deviation=standard_deviation,
+                trailing_detected=analysis.trailing_detected,
+            ),
             "stars_detected": analysis.stars_detected,
             "background_level": analysis.background_level,
             "background_variation": standard_deviation,
             "trailing_detected": analysis.trailing_detected,
-        },
+        }
+    return {
+        **_build_dashboard_image(capture, analysis),
+        "components": components,
     }
 
 
@@ -315,7 +358,10 @@ def _build_target_history(
             if (
                 (analysis := analyses_by_capture.get(capture.id))
                 is not None
-                and analysis.quality_score is not None
+                and (
+                    analysis.quality_score is not None
+                    or analysis.scoring_version == "2.0"
+                )
             )
         ],
     }
