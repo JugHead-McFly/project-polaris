@@ -1,6 +1,6 @@
 # Polaris Commercialization and Private-Alpha Plan
 
-Last reviewed: 2026-07-23
+Last reviewed: 2026-07-24
 
 ## Honest assessment
 
@@ -96,23 +96,25 @@ Private alpha requires explicit work for:
 - Responsive onboarding and production deployment.
 
 This means “move Polaris online” is not a one-click hosting task. It is a
-separate productization milestone, and its architecture must be selected after
-an audit of what can be safely reused from the current FastAPI planner.
+separate productization milestone. Its architecture was selected only after an
+audit of what can be safely reused from the current FastAPI planner.
 
-## Architecture direction — proposal, not commitment
+## Architecture direction — accepted for v1.7
 
-Keep one recommendation domain model and avoid three separate products. Two
-credible paths should be evaluated:
+The audit selected a modular-monolith path that keeps the FastAPI/Python
+recommendation engine and responsive web interface, hosts the application on
+Render, and uses Supabase for authentication and PostgreSQL. Raw FITS uploads
+and Doug's local capture archive are deliberately outside the first hosted
+alpha.
 
-| Option | Strength | Tradeoff |
-| --- | --- | --- |
-| Extend FastAPI with a responsive web frontend and hosted PostgreSQL | Reuses the current Python recommendation engine and minimizes rewrite risk | Requires careful web-product and multi-tenant design |
-| Create a TypeScript/React web layer with shared services and migrate planner logic gradually | Strong web/mobile ecosystem and future cross-platform options | Adds an architectural rewrite before validation |
+The complete decision, security boundary, cost guardrail, alternatives, and
+implementation slices are in
+[`ALPHA_ARCHITECTURE_DECISION.md`](ALPHA_ARCHITECTURE_DECISION.md).
 
-Do not commit to Next.js, Supabase, React Native, or Expo solely because they
-are popular. The fastest credible alpha is likely the path that safely reuses
-the existing planner while adding only the productization capabilities alpha
-needs. A technical architecture decision record is required before a rewrite.
+This is an implementation direction, not permission to purchase services or a
+claim that its assumptions have been proven. v1.7 must still exercise
+PostgreSQL tenant isolation, pooled-connection behavior, backup restoration,
+monitoring, and actual operating cost before any external user is invited.
 
 ## 10-week alpha work plan
 
@@ -189,4 +191,3 @@ methods, legal identity verification, domains, recovery contacts, and
 credentials. Codex can guide setup, prepare technical material, and work inside
 the accounts only within explicit authorization; it cannot accept legal
 agreements, make legal representations, or hold credentials on Doug's behalf.
-

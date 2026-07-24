@@ -1,6 +1,6 @@
 # Polaris Roadmap to Private Alpha and Beta
 
-Last updated: 2026-07-23
+Last updated: 2026-07-24
 
 ## How to read this plan
 
@@ -75,10 +75,13 @@ Run the 14-day smart-telescope discovery sprint while closing v1.6. Capture
 specific problems, current workarounds, frequency, and interest in testing.
 At the same time, audit the current FastAPI/SQLite app for safe reuse.
 
-The outcome is an architecture decision record covering: user accounts,
-observatory/data isolation, hosted database, capture/upload assumptions,
-configuration/secrets, deployment, backup/recovery, monitoring, and the
-minimal support path. Do not select a framework because it is fashionable.
+The architecture decision is recorded in
+[`ALPHA_ARCHITECTURE_DECISION.md`](ALPHA_ARCHITECTURE_DECISION.md). Polaris
+will keep its FastAPI/Python core as a modular monolith, use Render for the web
+service, and use Supabase for authentication and PostgreSQL. The first hosted
+loop intentionally excludes raw FITS uploads and the local capture archive.
+Implementation must still prove the decision's tenant-isolation, backup,
+recovery, monitoring, and cost assumptions before external alpha access.
 
 ### Alpha: prove one repeatable habit
 
