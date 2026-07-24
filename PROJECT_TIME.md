@@ -6,8 +6,8 @@ Times use the `America/Phoenix` time zone (MST).
 ## Current total
 
 - Opening balance on 2026-07-17: `83:00:00`
-- Recorded sessions since opening balance: `13:26:04`
-- **Total project time: `96:26:04`**
+- Recorded sessions since opening balance: `14:40:48`
+- **Total project time: `97:40:48`**
 - Timer status: **stopped**
 
 ## Session log
@@ -19,6 +19,7 @@ Times use the `America/Phoenix` time zone (MST).
 | 2026-07-19 | 18:11:41 MST | 20:25:08 MST | 2:13:27 | v1.6 Locations planning refinements, visited-site ratings, and Goal Engine foundation. |
 | 2026-07-23 | 18:13:45 MST | 21:51:08 MST | 3:37:23 | v1.6 Quality Scoring v2, product/alpha planning, naming workbook, and printable roadmap. Stop time corrected to eight hours before the delayed stop request. |
 | 2026-07-24 | 09:38:43 MST | 10:25:10 MST | 0:46:27 | v1.6 forecast-based DWARF mini heat guidance, operator transparency, backup verification, and release checkpoint preparation. |
+| 2026-07-24 | 11:16:35 MST | 12:31:19 MST | 1:14:44 | Hosted-alpha architecture implementation: PostgreSQL migration foundation, request-scoped sessions, Supabase authentication boundary, and tenant-isolation foundation. |
 
 ## Timer convention
 
