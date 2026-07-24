@@ -691,8 +691,9 @@ def get_tonight_plan(db: Session) -> Dict:
             notes.append(
                 f"Forecast temperature near the planned start is "
                 f"{temperature_f:g}°F. This is a hot operating condition for "
-                "the DWARF mini; avoid charging, keep it out of stored heat, "
-                "and monitor it throughout the session."
+                "the DWARF mini and may add thermal noise to the image. Avoid "
+                "charging, keep it out of stored heat, use temperature-matched "
+                "dark frames when prompted, and monitor it throughout the session."
             )
 
         if best_theoretical_target is not None:
