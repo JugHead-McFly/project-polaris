@@ -49,6 +49,13 @@ Strong adjacent competitors include:
 - [Astrospheric (Apple App Store)](https://apps.apple.com/us/app/astrospheric/id1166046863),
   a mature astronomy-weather specialist with cloud, transparency, seeing,
   smoke, wind, temperature, humidity, alerts, and society features.
+- [Astro Skies (Google Play)](https://play.google.com/store/apps/details?id=com.astroskies.app),
+  which lists observing conditions, a night-quality score, cloud/humidity/wind/
+  seeing/transparency forecasts, Moon impact, Bortle context, location-based
+  recommended targets, visibility curves, catalog search, an approximate
+  camera-based sky pointer, and astronomical events. Its public description
+  does not state equipment-aware planning, capture history, or
+  capture-derived quality feedback.
 
 ## Capability comparison
 
@@ -66,6 +73,7 @@ Strong adjacent competitors include:
 | Telescopius | Filtered discovery | Listed | Weather listed | Profile/gallery listed | Not stated |
 | AstroTool | Manual scheduling | Listed | Conditions logged | Listed | Not stated |
 | Astrospheric | No target planner stated | Site tools | Listed specialist | Not stated | Not stated |
+| Astro Skies | Listed | Not stated | Listed | Not stated | Not stated |
 
 ## Defensible Polaris differentiation
 
@@ -131,4 +139,3 @@ Before pricing or public positioning:
    after importing a session.
 5. Avoid feature additions that do not improve the central decision or its
    credibility.
-
