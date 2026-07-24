@@ -1016,7 +1016,9 @@ const renderQualityByTarget = (data) => {
     "quality-summary",
     `${scoredTargetCount} scored target${scoredTargetCount === 1 ? "" : "s"}${
       alternateModelCount
-        ? ` · ${alternateModelCount} needs another model`
+        ? ` · ${alternateModelCount} planetary/lunar target${
+            alternateModelCount === 1 ? "" : "s"
+          } awaiting specialized scoring`
         : ""
     }`,
   );
@@ -1089,7 +1091,19 @@ const renderQualityByTarget = (data) => {
 
     const heading = appendTextElement(top, "div", "quality-target-heading", "");
     appendTargetIdentity(heading, target.object, target.common_name);
-    if (target.scored_capture_count < target.capture_count) {
+    const needsSpecializedModel = target.quality_captures.some(
+      (capture) =>
+        capture.components?.scoring_version === "2.0" &&
+        capture.components?.confidence === "unsupported",
+    );
+    if (needsSpecializedModel) {
+      appendTextElement(
+        heading,
+        "span",
+        "quality-sample",
+        "Planetary/lunar scoring is not available yet",
+      );
+    } else if (target.scored_capture_count < target.capture_count) {
       appendTextElement(
         heading,
         "span",

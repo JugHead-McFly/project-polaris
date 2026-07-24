@@ -126,6 +126,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "right.average_quality - left.average_quality" not in script.text
     assert "scored_capture_count" in script.text
     assert "target.scored_capture_count < target.capture_count" in script.text
+    assert "planetary/lunar target" in script.text
+    assert "Planetary/lunar scoring is not available yet" in script.text
     assert "average as a baseline" not in script.text
     assert "${pointsLabel(points)} / ${maxPoints} pts" in script.text
     assert "qualityComponentInfo" in script.text
