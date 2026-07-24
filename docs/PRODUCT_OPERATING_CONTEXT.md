@@ -132,10 +132,9 @@ and current alpha/beta strategy are in [PRODUCT_BIBLE.md](PRODUCT_BIBLE.md).
 
 ## Branding and naming status
 
-Product and company naming are within scope, but no naming criteria, candidate
-count, shortlist, or approved naming direction were present in the phone
-conversation copied into the project task on 2026-07-23. Do not invent those
-requirements from incomplete context. Capture the missing naming discussion
-here, or in a dedicated naming brief, before beginning formal name generation
-and screening. Naming may proceed internally, but the 14-day customer-discovery
-sprint must not ask community participants to choose names, logos, or colors.
+Product and company naming are within scope. **Project Polaris** remains an
+internal codename, not a selected public brand. The creative criteria, 175-name
+workbook, family-voting process, and required preliminary/legal screening are
+recorded in [NAMING_BRIEF.md](NAMING_BRIEF.md). Naming may proceed internally,
+but the 14-day customer-discovery sprint must not ask community participants to
+choose names, logos, or colors.

@@ -26,6 +26,10 @@ See [docs/COMMERCIALIZATION_AND_ALPHA_PLAN.md](docs/COMMERCIALIZATION_AND_ALPHA_
 for the web-first private-alpha strategy, productization requirements, and
 current operating-cost guardrails.
 
+See [docs/NAMING_BRIEF.md](docs/NAMING_BRIEF.md) for the public-brand naming
+process and creative-screening guardrails. The current family workbook is at
+`output/pdf/Polaris_Naming_Workbook_v1.pdf`.
+
 Current Version: v1.6.0 (in development)
 
 ## Features
