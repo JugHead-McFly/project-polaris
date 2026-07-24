@@ -187,7 +187,7 @@ def make_pdf():
     story.extend([
         p("EXECUTIVE ROADMAP", s["kicker"]),
         p("The shortest credible path", s["h1"]),
-        p("Polaris already has a working local advisory engine. The next step is not to add every good idea. It is to validate one repeatable habit: a smart-telescope user opens Polaris before imaging, understands the recommendation, and comes back because it made the night easier.", s["body"]),
+        p("Polaris has already learned much of the sky, how to make suggestions, how to plan a night, and how to show the result in Mission Control. The next step is not to add every good idea. It is to prove one repeatable habit: a smart-telescope user opens Polaris before imaging, understands the recommendation, and comes back because it made the night easier.", s["body"]),
         Spacer(1, 0.07 * inch),
     ])
     metrics = Table([[
@@ -200,10 +200,10 @@ def make_pdf():
 
     story.append(p("TIMELINE", s["kicker"]))
     timeline = [
-        ("NOW", "v1.6 local closeout", "Finish and validate the real local capture-to-learning loop.", TEAL),
-        ("LATE JULY - EARLY AUG", "Discovery + alpha architecture", "Learn the real pain; decide the smallest safe hosted design.", GOLD),
-        ("AUGUST - SEPTEMBER", "Build the hosted nightly loop", "Onboard, recommend, explain, and collect useful feedback.", colors.HexColor("#5796C5")),
-        ("OCTOBER - NOVEMBER", "Private alpha", "Invite 10-20 users only after the core flow is reliable.", GREEN),
+        ("NOW", "Finish Mission Control (v1.6)", "Validate the real local capture-to-learning loop.", TEAL),
+        ("LATE JULY - EARLY AUG", "Listen to future explorers", "Learn the real pain; choose the smallest safe hosted design.", GOLD),
+        ("AUGUST - SEPTEMBER", "Prepare the online observatory", "Onboard, recommend, explain, and collect useful feedback.", colors.HexColor("#5796C5")),
+        ("OCTOBER - NOVEMBER", "Invite the First Explorers", "Invite 10-20 users only after the core flow is reliable.", GREEN),
         ("DECEMBER - FEBRUARY", "Closed beta decision", "Expand carefully if evidence shows repeat use and trust.", colors.HexColor("#8267AF")),
     ]
     timeline_rows = []
@@ -236,10 +236,10 @@ def make_pdf():
     # Milestones and gates
     story.extend([
         p("VERSION PLAN", s["kicker"]),
-        p("What each milestone must prove", s["h1"]),
+        p("What Polaris is learning next", s["h1"]),
         p("Dates are planning ranges. Each version exits only when its user-facing result is credible, not merely when its code compiles.", s["body"]),
     ])
-    header = Table([[p("MILESTONE", s["table_head"]), p("OUTCOME", s["table_head"]), p("EXIT TEST", s["table_head"])]], colWidths=[1.35 * inch, 2.72 * inch, 2.85 * inch])
+    header = Table([[p("PLAIN-ENGLISH STEP", s["table_head"]), p("OUTCOME", s["table_head"]), p("EXIT TEST", s["table_head"])]], colWidths=[1.35 * inch, 2.72 * inch, 2.85 * inch])
     header.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), DEEP),
         ("TEXTCOLOR", (0, 0), (-1, -1), colors.white),
@@ -250,13 +250,13 @@ def make_pdf():
     ]))
     story.append(header)
     phases = [
-        ("v1.6<br/>Now - early Aug", "Close the local single-user loop: plan, capture, ingest, review, and learn.", "Doug can complete that loop without manual database work.", True),
-        ("Discovery<br/>2 weeks", "Log user pain and select one minimal hosted-product architecture.", "A written decision covers tenancy, security, deployment, data, backups, and monitoring.", False),
-        ("v1.7<br/>Mid-late Aug", "Add accounts, data isolation, secure configuration, and a deployable baseline.", "Two users cannot access or alter each other's observatory data.", False),
-        ("v1.8<br/>Late Aug-mid Sep", "Build mobile-friendly onboarding and the hosted tonight recommendation loop.", "A new user reaches a credible recommendation without Doug's help.", False),
-        ("v1.9<br/>Mid-late Sep", "Make feedback, support, privacy basics, and reliability part of the product.", "Doug and 2-3 trusted testers use the core loop repeatedly without a critical failure.", False),
-        ("v1.10<br/>Oct-Nov", "Run private alpha with 10-20 invited smart-telescope users.", "Users return, understand the advice, and say they would miss Polaris.", False),
-        ("v2.0<br/>Dec-Feb", "Run a controlled closed beta, expanding only on evidence.", "Service is stable and evidence supports continued investment or a change in direction.", False),
+        ("Finish Mission Control<br/>v1.6 / now", "Close the local single-user loop: plan, capture, ingest, review, and learn.", "Doug can complete that loop without manual database work.", True),
+        ("Listen and choose<br/>2 weeks", "Log user pain and select one minimal hosted-product architecture.", "A written decision covers tenancy, security, deployment, data, backups, and monitoring.", False),
+        ("Prepare the online observatory<br/>v1.7", "Add accounts, data isolation, secure configuration, and a deployable baseline.", "Two users cannot access or alter each other's observatory data.", False),
+        ("Give a simple night plan<br/>v1.8", "Build mobile-friendly onboarding and the hosted tonight recommendation loop.", "A new user reaches a credible recommendation without Doug's help.", False),
+        ("Make first visits trustworthy<br/>v1.9", "Make feedback, support, privacy basics, and reliability part of the product.", "Doug and 2-3 trusted testers use the core loop repeatedly without a critical failure.", False),
+        ("Invite First Explorers<br/>v1.10", "Run private alpha with 10-20 invited smart-telescope users.", "Users return, understand the advice, and say they would miss Polaris.", False),
+        ("Closed beta<br/>v2.0", "Run a controlled closed beta, expanding only on evidence.", "Service is stable and evidence supports continued investment or a change in direction.", False),
     ]
     for version, outcome, gate, active in phases:
         story.append(phase_row(version, "", outcome, gate, s, active=active))
@@ -309,7 +309,7 @@ def make_pdf():
         ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
     ]))
     story.extend([done_table, Spacer(1, 0.16 * inch)])
-    final = Table([[p("<b>Project-manager commitment:</b> I will flag scope creep, distinguish facts from guesses, and recommend the smallest useful next step. We will not solve future problems before there is evidence they are real.", s["callout"])]], colWidths=[6.7 * inch])
+    final = Table([[p("<b>Parallel business track:</b> naming, preliminary availability checks, a domain, a simple landing page, and launch-readiness work move alongside the product. We will ask qualified professionals to review decisions with legal or tax consequences. <br/><br/><b>Project-manager commitment:</b> I will flag scope creep, distinguish facts from guesses, and recommend the smallest useful next step.", s["callout"])]], colWidths=[6.7 * inch])
     final.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), MIST),
         ("BOX", (0, 0), (-1, -1), 0.75, TEAL),

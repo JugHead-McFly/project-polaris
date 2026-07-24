@@ -26,6 +26,34 @@ what to do and more time under the sky.
 | **v2.0 — Closed beta** | December 2026–February 2027 (6–10 weeks) | Carefully expand toward 100 users; measure retention and support load | Stable service, no unresolved privacy/security blocker, and repeatable evidence of value |
 | **Public-launch decision** | After closed beta | Decide whether to launch, narrow the audience, extend beta, or stop | Decision is based on retention, trust, support burden, and willingness-to-pay evidence—not feature count |
 
+## Plain-English map
+
+These names are how we will talk about progress in session briefings. The
+technical names remain useful in code and architecture discussions, but should
+not be the primary way Doug has to carry the project in his head.
+
+| What Polaris is becoming | Plain-English outcome | Where we are |
+| --- | --- | --- |
+| **Teach Polaris About the Sky** | It understands the location, weather, darkness, Moon, targets, and capture context that matter for a night of imaging. | Largely complete for the local single-observatory product. |
+| **Teach Polaris to Make Smart Suggestions** | It weighs tradeoffs and explains a realistic target recommendation. | Largely complete locally; quality scoring and goal refinement remain active work. |
+| **Help Users Plan Their Night** | It turns a recommendation into a practical imaging window and sequence. | Largely complete locally through Planner V3. |
+| **Build Mission Control** | A person can see the meaningful state of their observing work in one understandable place. | Largely complete locally; v1.6 is closing the real capture-to-learning loop. |
+| **Invite the First Explorers** | Real smart-telescope users try the hosted core workflow and teach us where it fails. | Next major product milestone: private alpha. |
+| **Launch Polaris** | A public product earns continued investment through repeat use and trust. | Future; only after alpha and closed-beta evidence. |
+
+## Business workstream - parallel, not a delay
+
+Product development is one lane. Naming, a domain, a landing page, launch
+materials, and legal/business preparation run alongside it, but they do not
+justify delaying a trustworthy core experience.
+
+| Timing | Business work | Decision rule |
+| --- | --- | --- |
+| **Now** | Family naming review, customer discovery, product language, and a preliminary finalists screen. | Project Polaris stays the internal codename; no public brand claim yet. |
+| **After a provisional finalist** | Preliminary web, app-store, domain, social-handle, and USPTO screen; reserve a suitable domain only after that check. | A creative shortlist is not availability clearance. |
+| **Before external alpha** | Simple landing page, support contact, privacy/terms preparation, and a clear invitation/feedback process. | Obtain qualified legal review where a decision carries legal consequences. |
+| **Before public launch** | Brand system, public site, store assets, pricing tests, documentation, and launch checklist. | Build only what beta evidence says is necessary. |
+
 ## What matters in each stage
 
 ### v1.6: finish the product we have

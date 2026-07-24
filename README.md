@@ -34,6 +34,10 @@ See [docs/PROJECT_ROADMAP.md](docs/PROJECT_ROADMAP.md) for the current
 high-level path from local v1.6 work through private alpha and closed beta.
 The printable desk reference is `output/pdf/Project_Polaris_Roadmap_v1.pdf`.
 
+See [docs/LAUNCH_READINESS.md](docs/LAUNCH_READINESS.md) for the parallel
+product, branding, and professional-review gates before external alpha, beta,
+and public launch.
+
 Current Version: v1.6.0 (in development)
 
 ## Features
