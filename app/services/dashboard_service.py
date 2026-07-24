@@ -278,7 +278,7 @@ def _build_target_history(
             for capture in captures
             if capture.polaris_id == recommended_settings.get("polaris_id")
         ),
-        None,
+        latest_capture,
     )
     presentation_capture = next(
         (
@@ -301,8 +301,8 @@ def _build_target_history(
         "common_name": get_target_common_name(object_name),
         "profile": get_target_profile(object_name),
         "preview_url": (
-            f"/operator-preview/{recommended_settings['polaris_id']}"
-            if recommended_settings.get("polaris_id")
+            f"/operator-preview/{preview_capture.polaris_id}"
+            if preview_capture.polaris_id
             else None
         ),
         "preview_image": (

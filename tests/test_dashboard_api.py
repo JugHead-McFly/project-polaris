@@ -397,3 +397,30 @@ def test_dashboard_exposes_quality_v2_components_and_version():
     }
 
     database.close()
+
+
+def test_dashboard_uses_latest_preview_when_target_has_no_quality_score():
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    database = sessionmaker(bind=engine)()
+
+    capture = Capture(
+        polaris_id="POL-JUPITER",
+        object_name="JUPITER",
+        observation_utc="2026-07-20T06:00:00Z",
+        total_integration_seconds=900,
+    )
+    database.add(capture)
+    database.commit()
+
+    payload = build_dashboard_response(database)
+    target = payload["targets"][0]
+
+    assert target["object"] == "JUPITER"
+    assert target["average_quality"] is None
+    assert target["preview_url"] == "/operator-preview/POL-JUPITER"
+    assert target["preview_image"]["preview_url"] == (
+        "/operator-preview/POL-JUPITER"
+    )
+
+    database.close()
