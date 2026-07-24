@@ -678,6 +678,44 @@ dd {
   margin-top: 0;
 }
 
+.collection-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+
+.collection-controls label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.collection-controls input,
+.collection-controls select {
+  min-height: 38px;
+  padding: 8px 10px;
+  color: var(--text);
+  background: rgba(7, 17, 25, 0.54);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  letter-spacing: normal;
+}
+
+.collection-controls input {
+  min-width: min(100%, 260px);
+}
+
+.collection-controls input:focus-visible,
+.collection-controls select:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
 .target-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1335,7 +1373,7 @@ dd {
 }
 
 .history-toggle {
-  margin-top: 0.75rem;
+  margin: 0;
   border: 1px solid var(--border-strong);
   border-radius: 0.5rem;
   background: transparent;
@@ -1343,6 +1381,14 @@ dd {
   padding: 0.55rem 0.8rem;
   font: inherit;
   font-weight: 700;
+}
+
+.history-panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .history-toggle:hover,

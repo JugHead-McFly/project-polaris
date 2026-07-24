@@ -208,6 +208,20 @@
             image sharpness or quality. Image quality is shown separately on
             every target.
           </p>
+          <div class="collection-controls" aria-label="Portfolio controls">
+            <label>
+              <span>Find a target</span>
+              <input id="portfolio-search" type="search" placeholder="Search object or common name" autocomplete="off">
+            </label>
+            <label>
+              <span>Show</span>
+              <select id="portfolio-filter">
+                <option value="all">All targets</option>
+                <option value="in-progress">Still needs imaging time</option>
+                <option value="complete">Integration goal reached</option>
+              </select>
+            </label>
+          </div>
           <div class="target-grid" id="target-portfolio">
             <div class="empty-state">Loading target history…</div>
           </div>
@@ -235,6 +249,20 @@
             Quality v2 measures sharpness, star shape, star signal, background
             uniformity, and clipping. Compare scores within the same target.
           </p>
+          <div class="collection-controls" aria-label="Quality controls">
+            <label>
+              <span>Find a target</span>
+              <input id="quality-search" type="search" placeholder="Search object or common name" autocomplete="off">
+            </label>
+            <label>
+              <span>Show</span>
+              <select id="quality-filter">
+                <option value="all">All analyzed targets</option>
+                <option value="scored">Deep-sky scores</option>
+                <option value="specialized">Awaiting specialized scoring</option>
+              </select>
+            </label>
+          </div>
           <div class="quality-target-grid" id="quality-targets">
             <div class="empty-state">Loading quality summaries…</div>
           </div>
@@ -246,9 +274,6 @@
           <p class="eyebrow">Observatory records</p>
           <h1>History</h1>
           <p>Review your captures in chronological order.</p>
-          <button class="history-toggle" id="history-toggle" type="button">
-            Show all history
-          </button>
         </header>
         <section class="panel location-map-panel" aria-labelledby="location-map-title">
           <div class="panel-heading">
@@ -288,7 +313,12 @@
               <p class="eyebrow">Recent history</p>
               <h2 id="captures-title">Latest captures</h2>
             </div>
-            <span id="capture-summary">—</span>
+            <div class="history-panel-actions">
+              <span id="capture-summary">—</span>
+              <button class="history-toggle" id="history-toggle" type="button">
+                Show all history
+              </button>
+            </div>
           </div>
           <div class="activity-list" id="recent-captures">
             <div class="empty-state">Loading recent captures…</div>

@@ -38,6 +38,11 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Target progress" in response.text
     assert "Quality by target" in response.text
     assert "Target quality summaries" in response.text
+    assert 'id="portfolio-search"' in response.text
+    assert 'id="portfolio-filter"' in response.text
+    assert 'id="quality-search"' in response.text
+    assert 'id="quality-filter"' in response.text
+    assert 'class="history-panel-actions"' in response.text
     assert "Scores are not\n            used to rank unrelated objects" in response.text
     assert "Latest captures" in response.text
     assert "Observing log" not in response.text
@@ -123,6 +128,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "appendObjectProfile" in script.text
     assert "Why it’s remarkable" in script.text
     assert "renderQualityByTarget" in script.text
+    assert "targetMatchesSearch" in script.text
+    assert "targetNeedsSpecializedScoring" in script.text
     assert "right.average_quality - left.average_quality" not in script.text
     assert "scored_capture_count" in script.text
     assert "target.scored_capture_count < target.capture_count" in script.text

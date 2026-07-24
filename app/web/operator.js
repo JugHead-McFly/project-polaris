@@ -26,6 +26,11 @@ const demoMode = new URLSearchParams(window.location.search).get("demo");
 const isImmaculateDemo = activeView === "tonight" && demoMode === "immaculate";
 const isMapOverlapDemo = activeView === "history" && demoMode === "map-overlap";
 let historyExpanded = false;
+let portfolioSearch = "";
+let portfolioFilter = "all";
+let qualitySearch = "";
+let qualityFilter = "all";
+let latestDashboardData = null;
 const refreshButtonLabel = () => (
   isImmaculateDemo
     ? "Refresh simulation"
@@ -96,6 +101,17 @@ const qualityInterpretation = (score) => {
   if (score >= 70) return "Acceptable result";
   return "Review recommended";
 };
+
+const targetMatchesSearch = (target, search) => {
+  const haystack = `${target.object || ""} ${target.common_name || ""}`.toLowerCase();
+  return haystack.includes(search.trim().toLowerCase());
+};
+
+const targetNeedsSpecializedScoring = (target) => target.quality_captures.some(
+  (capture) =>
+    capture.components?.scoring_version === "2.0" &&
+    capture.components?.confidence === "unsupported",
+);
 
 const bortleLabel = (bortleClass) => {
   if (bortleClass === null || bortleClass === undefined) {
@@ -878,17 +894,30 @@ const renderSystem = (data) => {
 const renderPortfolio = (data) => {
   const container = byId("target-portfolio");
   container.replaceChildren();
+  const targets = data.targets.filter((target) => {
+    if (!targetMatchesSearch(target, portfolioSearch)) return false;
+    if (portfolioFilter === "in-progress") return target.status !== "Complete";
+    if (portfolioFilter === "complete") return target.status === "Complete";
+    return true;
+  });
   setText(
     "portfolio-summary",
-    `${data.metrics.targets} targets · ${data.metrics.total_integration_hours} hours`,
+    `${targets.length} of ${data.metrics.targets} targets · ${data.metrics.total_integration_hours} hours`,
   );
 
-  if (!data.targets.length) {
-    appendTextElement(container, "div", "empty-state", "No captured targets yet.");
+  if (!targets.length) {
+    appendTextElement(
+      container,
+      "div",
+      "empty-state",
+      data.targets.length
+        ? "No targets match this search or filter."
+        : "No captured targets yet.",
+    );
     return;
   }
 
-  data.targets.forEach((target) => {
+  targets.forEach((target) => {
     const card = appendTextElement(container, "article", "target-card", "");
     const top = appendTextElement(card, "div", "target-card-top", "");
     const presentationImage = (
@@ -1011,6 +1040,12 @@ const renderQualityByTarget = (data) => {
     (target) => target.average_quality !== null,
   ).length;
   const alternateModelCount = analyzedTargets.length - scoredTargetCount;
+  const targets = analyzedTargets.filter((target) => {
+    if (!targetMatchesSearch(target, qualitySearch)) return false;
+    if (qualityFilter === "scored") return target.average_quality !== null;
+    if (qualityFilter === "specialized") return targetNeedsSpecializedScoring(target);
+    return true;
+  });
 
   setText(
     "quality-summary",
@@ -1020,20 +1055,22 @@ const renderQualityByTarget = (data) => {
             alternateModelCount === 1 ? "" : "s"
           } awaiting specialized scoring`
         : ""
-    }`,
+    } · showing ${targets.length} of ${analyzedTargets.length}`,
   );
 
-  if (!analyzedTargets.length) {
+  if (!targets.length) {
     appendTextElement(
       container,
       "div",
       "empty-state",
-      "No targets have quality scores yet.",
+      analyzedTargets.length
+        ? "No targets match this search or filter."
+        : "No targets have quality scores yet.",
     );
     return;
   }
 
-  analyzedTargets.forEach((target) => {
+  targets.forEach((target) => {
     const card = appendTextElement(container, "article", "quality-target-card", "");
     const top = appendTextElement(card, "div", "quality-target-top", "");
 
@@ -1091,11 +1128,7 @@ const renderQualityByTarget = (data) => {
 
     const heading = appendTextElement(top, "div", "quality-target-heading", "");
     appendTargetIdentity(heading, target.object, target.common_name);
-    const needsSpecializedModel = target.quality_captures.some(
-      (capture) =>
-        capture.components?.scoring_version === "2.0" &&
-        capture.components?.confidence === "unsupported",
-    );
+    const needsSpecializedModel = targetNeedsSpecializedScoring(target);
     if (needsSpecializedModel) {
       appendTextElement(
         heading,
@@ -2176,6 +2209,7 @@ const loadDashboard = async () => {
   }
 
   if (dashboardResult.status === "fulfilled") {
+    latestDashboardData = dashboardResult.value;
     renderPortfolio(dashboardResult.value);
     renderQualityByTarget(dashboardResult.value);
     await renderCaptureLocations(dashboardResult.value);
@@ -2214,6 +2248,7 @@ const toggleHistory = async () => {
     if (!response.ok) throw new Error(`Dashboard endpoint returned ${response.status}.`);
     const data = await response.json();
     historyExpanded = nextExpanded;
+    latestDashboardData = data;
     renderRecentCaptures(data);
     button.textContent = historyExpanded ? "Show recent history" : "Show all history";
   } catch (error) {
@@ -2287,6 +2322,22 @@ activateCurrentView();
 byId("refresh-button").addEventListener("click", runDashboardLoad);
 byId("history-toggle").addEventListener("click", () => {
   toggleHistory();
+});
+byId("portfolio-search").addEventListener("input", (event) => {
+  portfolioSearch = event.target.value;
+  if (latestDashboardData) renderPortfolio(latestDashboardData);
+});
+byId("portfolio-filter").addEventListener("change", (event) => {
+  portfolioFilter = event.target.value;
+  if (latestDashboardData) renderPortfolio(latestDashboardData);
+});
+byId("quality-search").addEventListener("input", (event) => {
+  qualitySearch = event.target.value;
+  if (latestDashboardData) renderQualityByTarget(latestDashboardData);
+});
+byId("quality-filter").addEventListener("change", (event) => {
+  qualityFilter = event.target.value;
+  if (latestDashboardData) renderQualityByTarget(latestDashboardData);
 });
 byId("candidate-site-form").addEventListener("submit", saveCandidateSite);
 byId("candidate-site-sort").addEventListener("change", (event) => {
