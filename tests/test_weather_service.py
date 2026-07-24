@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 from urllib.error import URLError
 
+from app.services.planner_service import _apply_planned_heat_safeguard
 from app.services.weather_service import get_weather_summary
 
 
@@ -33,12 +34,16 @@ def _weather_response(temperature_f):
             "dew_point_2m": 50,
             "wind_speed_10m": 2,
             "time": "2026-07-24T22:00",
-        }
+        },
+        "hourly": {
+            "time": ["2026-07-24T22:00"],
+            "temperature_2m": [temperature_f],
+        },
     }
     return response, response_data
 
 
-def test_hot_weather_requires_caution_even_when_sky_conditions_are_good():
+def test_live_heat_does_not_change_the_imaging_decision_rating():
     response, response_data = _weather_response(102.9)
     with (
         patch("app.services.weather_service.urlopen", return_value=response),
@@ -46,10 +51,11 @@ def test_hot_weather_requires_caution_even_when_sky_conditions_are_good():
     ):
         weather = get_weather_summary("85297")
 
-    assert weather["observing_rating"] == 3
+    assert weather["observing_rating"] == 5
+    assert weather["hourly_temperature_f"] == {"2026-07-24T22:00": 102.9}
 
 
-def test_extreme_heat_prevents_a_proceed_decision():
+def test_hourly_forecast_is_available_for_the_planner():
     response, response_data = _weather_response(105)
     with (
         patch("app.services.weather_service.urlopen", return_value=response),
@@ -57,4 +63,35 @@ def test_extreme_heat_prevents_a_proceed_decision():
     ):
         weather = get_weather_summary("85297")
 
+    assert weather["observing_rating"] == 5
+    assert weather["hourly_temperature_f"] == {"2026-07-24T22:00": 105}
+
+
+def test_heat_safeguard_uses_forecast_at_the_planned_start_not_live_heat():
+    weather = {
+        "temperature_f": 102.9,
+        "observing_rating": 5,
+        "hourly_temperature_f": {
+            "2026-07-24T21:00": 90,
+            "2026-07-24T22:00": 88,
+        },
+    }
+
+    _apply_planned_heat_safeguard(weather, "2026-07-24 09:13 PM")
+
+    assert weather["observing_rating"] == 5
+    assert weather["planned_temperature_f"] == 90
+    assert weather["planned_temperature_at"] == "2026-07-24 09:00 PM"
+
+
+def test_forecast_heat_prevents_a_proceed_decision_at_the_planned_start():
+    weather = {
+        "temperature_f": 85,
+        "observing_rating": 5,
+        "hourly_temperature_f": {"2026-07-24T21:00": 105},
+    }
+
+    _apply_planned_heat_safeguard(weather, "2026-07-24 09:13 PM")
+
     assert weather["observing_rating"] == 2
+    assert weather["planned_temperature_f"] == 105

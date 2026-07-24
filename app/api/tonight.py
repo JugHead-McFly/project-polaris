@@ -32,7 +32,7 @@ def _build_operator_message(schedule: Dict) -> str:
 
     if decision == "Use Caution":
         return (
-            f"Use caution: the current weather rating is {rating}/5. "
+            f"Use caution: the imaging-start weather rating is {rating}/5. "
             "Verify live conditions before opening the observatory."
         )
 
@@ -40,7 +40,7 @@ def _build_operator_message(schedule: Dict) -> str:
     cloud_cover = weather.get("cloud_cover_percent")
     humidity = weather.get("humidity_percent")
     wind_speed = weather.get("wind_speed_mph")
-    temperature_f = weather.get("temperature_f")
+    temperature_f = weather.get("planned_temperature_f")
 
     if rating == 0:
         reasons.append("live weather data is unavailable")
@@ -52,7 +52,8 @@ def _build_operator_message(schedule: Dict) -> str:
         reasons.append(f"wind is {wind_speed:g} mph")
     if temperature_f is not None and temperature_f >= 105:
         reasons.append(
-            f"air temperature is {temperature_f:g}°F, above Polaris's "
+            f"forecast temperature near the planned start is "
+            f"{temperature_f:g}°F, above Polaris's "
             "conservative heat limit"
         )
     if not reasons:

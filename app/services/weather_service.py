@@ -30,6 +30,7 @@ def get_weather_summary(postal_code: str):
             "cloud_cover,"
             "wind_speed_10m"
         ),
+        "hourly": "temperature_2m",
         "temperature_unit": "fahrenheit",
         "wind_speed_unit": "mph",
         "timezone": "auto",
@@ -66,14 +67,15 @@ def get_weather_summary(postal_code: str):
             rating -= 1
 
         temperature_f = current.get("temperature_2m")
-        if temperature_f is not None:
-            if temperature_f >= HEAT_STOP_F:
-                # A hard advisory stop.  This preserves a buffer below the
-                # manufacturer's high-temperature battery charging cutoff.
-                rating = min(rating, 2)
-            elif temperature_f >= HEAT_CAUTION_F:
-                # Heat alone should never result in a green-light decision.
-                rating = min(rating, 3)
+
+        hourly = data.get("hourly", {})
+        hourly_times = hourly.get("time") or []
+        hourly_temperatures = hourly.get("temperature_2m") or []
+        hourly_temperature_f = {
+            time: temperature
+            for time, temperature in zip(hourly_times, hourly_temperatures)
+            if temperature is not None
+        }
 
         rating = max(1, rating)
 
@@ -92,6 +94,9 @@ def get_weather_summary(postal_code: str):
             ),
             "dew_point_f": current.get("dew_point_2m"),
             "wind_speed_mph": current.get("wind_speed_10m"),
+            # This is intentionally kept separate from the live reading.
+            # The planner selects the relevant value for the scheduled start.
+            "hourly_temperature_f": hourly_temperature_f,
             "seeing": None,
             "transparency": None,
             "observing_rating": rating,
@@ -113,6 +118,7 @@ def get_weather_summary(postal_code: str):
             "humidity_percent": None,
             "dew_point_f": None,
             "wind_speed_mph": None,
+            "hourly_temperature_f": {},
             "seeing": None,
             "transparency": None,
             # A missing live forecast must never be interpreted as safe

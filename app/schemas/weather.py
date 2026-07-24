@@ -6,6 +6,8 @@ from pydantic import BaseModel
 class WeatherSummary(BaseModel):
     postal_code: str
     temperature_f: Optional[float] = None
+    planned_temperature_f: Optional[float] = None
+    planned_temperature_at: Optional[str] = None
     cloud_cover_percent: Optional[int] = None
     humidity_percent: Optional[int] = None
     dew_point_f: Optional[float] = None

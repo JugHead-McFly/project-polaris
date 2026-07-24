@@ -221,7 +221,7 @@ def test_use_caution_includes_weather_warning_and_block_reminder():
         "best_theoretical_target": None,
         "alternatives": [],
         "notes": [
-            "Use caution: the current weather rating is 3/5. "
+            "Use caution: the imaging-start weather rating is 3/5. "
             "Verify live conditions before opening the observatory.",
             "Cloud cover is 50%, which reduced the weather rating by 2 points.",
         ],
@@ -236,7 +236,7 @@ def test_use_caution_includes_weather_warning_and_block_reminder():
     schedule = build_tonight_schedule(planner)
 
     assert (
-        "Use caution: the current weather rating is 3/5. "
+        "Use caution: the imaging-start weather rating is 3/5. "
         "Verify live conditions before opening the observatory."
     ) in schedule["notes"]
     assert (

@@ -17,6 +17,8 @@ from app.services.astronomy_service import (
     get_transit_time,
 )
 from app.services.portfolio_service import TARGET_PRIORITY
+from app.services.weather_service import HEAT_CAUTION_F
+from app.services.weather_service import HEAT_STOP_F
 from app.services.weather_service import get_weather_summary
 from app.core.planner_config import (
     ALTITUDE_SCORES,
@@ -537,6 +539,64 @@ def get_weather_decision(weather: Dict) -> str:
     return "Do Not Image"
 
 
+def _forecast_temperature_for_start(
+    weather: Dict,
+    scheduled_start: Optional[str],
+) -> Optional[Dict]:
+    """Return the hourly forecast nearest a planned local start time."""
+    if not scheduled_start:
+        return None
+
+    try:
+        planned_start = datetime.strptime(
+            scheduled_start,
+            "%Y-%m-%d %I:%M %p",
+        )
+    except ValueError:
+        return None
+
+    forecast = weather.get("hourly_temperature_f") or {}
+    candidates = []
+    for time_text, temperature_f in forecast.items():
+        try:
+            forecast_time = datetime.fromisoformat(time_text)
+        except (TypeError, ValueError):
+            continue
+        candidates.append((abs(forecast_time - planned_start), forecast_time, temperature_f))
+
+    if not candidates:
+        return None
+
+    _difference, forecast_time, temperature_f = min(candidates, key=lambda item: item[0])
+    return {
+        "temperature_f": temperature_f,
+        "forecast_time": forecast_time.strftime("%Y-%m-%d %I:%M %p"),
+    }
+
+
+def _apply_planned_heat_safeguard(
+    weather: Dict,
+    scheduled_start: Optional[str],
+) -> None:
+    """Adjust the imaging decision from forecast heat, never live heat."""
+    forecast = _forecast_temperature_for_start(weather, scheduled_start)
+    if forecast is None:
+        return
+
+    temperature_f = forecast["temperature_f"]
+    weather["planned_temperature_f"] = temperature_f
+    weather["planned_temperature_at"] = forecast["forecast_time"]
+
+    rating = weather.get("observing_rating")
+    if rating is None or temperature_f is None:
+        return
+
+    if temperature_f >= HEAT_STOP_F:
+        weather["observing_rating"] = min(rating, 2)
+    elif temperature_f >= HEAT_CAUTION_F:
+        weather["observing_rating"] = min(rating, 3)
+
+
 def get_tonight_plan(db: Session) -> Dict:
     weather = get_weather_summary(DEFAULT_POSTAL_CODE)
     moon = get_moon_info()
@@ -578,6 +638,13 @@ def get_tonight_plan(db: Session) -> Dict:
     )
     alternatives = observable_plans[1:6]
 
+    _apply_planned_heat_safeguard(
+        weather,
+        best_theoretical_target.get("recommended_start")
+        if best_theoretical_target
+        else None,
+    )
+
     decision = get_weather_decision(weather)
     recommended_target = None
 
@@ -586,12 +653,13 @@ def get_tonight_plan(db: Session) -> Dict:
             "No target was scheduled because the weather rating is unsuitable."
         )
 
-        temperature_f = weather.get("temperature_f")
-        if temperature_f is not None and temperature_f >= 105:
+        temperature_f = weather.get("planned_temperature_f")
+        if temperature_f is not None and temperature_f >= HEAT_STOP_F:
             notes.append(
-                f"Air temperature is {temperature_f:g}°F, at or above "
-                "Polaris's conservative heat limit of 105°F. Allow the "
-                "DWARF mini to cool before imaging."
+                f"Forecast temperature near the planned start is "
+                f"{temperature_f:g}°F, at or above Polaris's conservative "
+                f"heat limit of {HEAT_STOP_F}°F. Allow the DWARF mini to cool before "
+                "imaging."
             )
 
         if best_theoretical_target is not None:
@@ -603,7 +671,7 @@ def get_tonight_plan(db: Session) -> Dict:
 
     elif decision == "Use Caution":
         notes.append(
-            f"Use caution: the current weather rating is "
+            f"Use caution: the imaging-start weather rating is "
             f"{weather.get('observing_rating')}/5. Verify live conditions "
             "before opening the observatory."
         )
@@ -615,12 +683,16 @@ def get_tonight_plan(db: Session) -> Dict:
                 "rating by 2 points."
             )
 
-        temperature_f = weather.get("temperature_f")
-        if temperature_f is not None and 95 <= temperature_f < 105:
+        temperature_f = weather.get("planned_temperature_f")
+        if (
+            temperature_f is not None
+            and HEAT_CAUTION_F <= temperature_f < HEAT_STOP_F
+        ):
             notes.append(
-                f"Air temperature is {temperature_f:g}°F. This is a hot "
-                "operating condition for the DWARF mini; avoid charging, "
-                "keep it out of stored heat, and monitor it throughout the session."
+                f"Forecast temperature near the planned start is "
+                f"{temperature_f:g}°F. This is a hot operating condition for "
+                "the DWARF mini; avoid charging, keep it out of stored heat, "
+                "and monitor it throughout the session."
             )
 
         if best_theoretical_target is not None:

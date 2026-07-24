@@ -199,13 +199,13 @@ def test_do_not_image_message_names_excessive_heat():
                 "cloud_cover_percent": 0,
                 "humidity_percent": 25,
                 "wind_speed_mph": 2,
-                "temperature_f": 105,
+                "planned_temperature_f": 105,
             },
         }
     )
 
     assert message == (
-        "Do not image: air temperature is 105°F, above Polaris's "
+        "Do not image: forecast temperature near the planned start is 105°F, above Polaris's "
         "conservative heat limit."
     )
 
