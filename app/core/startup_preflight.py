@@ -4,8 +4,16 @@ import sqlite3
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from sqlalchemy import create_engine
+from sqlalchemy import inspect
+from sqlalchemy import text
+from sqlalchemy.engine import make_url
+from sqlalchemy.exc import ArgumentError
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.core.config import settings
 from app.core.storage import POLARIS_ROOT
+from app.database.database import engine_options
 
 
 REQUIRED_DATABASE_TABLES = {
@@ -59,6 +67,28 @@ def _database_path_from_url(database_url: str) -> Optional[Path]:
 
 
 def _check_database_url(database_url: str, database_file: Path) -> Dict[str, str]:
+    try:
+        backend = make_url(database_url).get_backend_name()
+    except ArgumentError:
+        return _check(
+            "database_url",
+            "fail",
+            "POLARIS_DATABASE_URL is not a valid database URL.",
+        )
+
+    if backend == "postgresql":
+        return _check(
+            "database_url",
+            "pass",
+            "POLARIS_DATABASE_URL selects PostgreSQL.",
+        )
+    if backend != "sqlite":
+        return _check(
+            "database_url",
+            "fail",
+            "Polaris supports only SQLite or PostgreSQL database URLs.",
+        )
+
     configured_path = _database_path_from_url(database_url)
     expected_path = database_file.expanduser().resolve()
     if configured_path is None:
@@ -83,7 +113,7 @@ def _check_database_url(database_url: str, database_file: Path) -> Dict[str, str
     )
 
 
-def _check_database(database_file: Path) -> Dict[str, str]:
+def _check_sqlite_database(database_file: Path) -> Dict[str, str]:
     resolved_path = database_file.expanduser().resolve()
     if not resolved_path.is_file():
         return _check(
@@ -141,6 +171,61 @@ def _check_database(database_file: Path) -> Dict[str, str]:
     )
 
 
+def _check_postgresql_database(database_url: str) -> Dict[str, str]:
+    database_engine = None
+    try:
+        database_engine = create_engine(
+            database_url,
+            **engine_options(database_url),
+        )
+        with database_engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+            table_names = set(inspect(connection).get_table_names())
+    except (ArgumentError, SQLAlchemyError):
+        return _check(
+            "database",
+            "fail",
+            "PostgreSQL is not reachable with the configured credentials.",
+        )
+    finally:
+        if database_engine is not None:
+            database_engine.dispose()
+
+    missing_tables = sorted(REQUIRED_DATABASE_TABLES - table_names)
+    if missing_tables:
+        return _check(
+            "database",
+            "fail",
+            "PostgreSQL is missing required tables: "
+            f"{', '.join(missing_tables)}",
+        )
+    return _check(
+        "database",
+        "pass",
+        "PostgreSQL is reachable and has the required schema.",
+    )
+
+
+def _check_database(database_url: str, database_file: Path) -> Dict[str, str]:
+    try:
+        backend = make_url(database_url).get_backend_name()
+    except ArgumentError:
+        return _check(
+            "database",
+            "fail",
+            "Database health cannot be checked until the URL is valid.",
+        )
+    if backend == "sqlite":
+        return _check_sqlite_database(database_file)
+    if backend == "postgresql":
+        return _check_postgresql_database(database_url)
+    return _check(
+        "database",
+        "fail",
+        "Database health cannot be checked for an unsupported backend.",
+    )
+
+
 def _check_web_assets(web_directory: Path) -> Dict[str, str]:
     directory_check = _check_directory("web_assets", web_directory)
     if directory_check["status"] == "fail":
@@ -171,6 +256,9 @@ def run_startup_preflight(
     database_url: str = settings.DATABASE_URL,
     library_root: Path = POLARIS_ROOT,
     log_level: str = settings.LOG_LEVEL,
+    require_local_capture_library: bool = (
+        settings.REQUIRE_LOCAL_CAPTURE_LIBRARY
+    ),
     web_directory: Optional[Path] = None,
 ) -> Dict:
     resolved_base = base_dir.expanduser().resolve()
@@ -186,16 +274,21 @@ def run_startup_preflight(
         _check_directory("application_root", resolved_base),
         _check_web_assets(resolved_web),
         _check_database_url(database_url, resolved_database),
-        _check_database(resolved_database),
-        _check_directory(
-            "capture_library",
-            resolved_library,
-        ),
-        _check_directory(
-            "capture_targets",
-            resolved_library / "targets",
-        ),
+        _check_database(database_url, resolved_database),
     ]
+    if require_local_capture_library:
+        checks.extend(
+            [
+                _check_directory(
+                    "capture_library",
+                    resolved_library,
+                ),
+                _check_directory(
+                    "capture_targets",
+                    resolved_library / "targets",
+                ),
+            ]
+        )
     if normalized_log_level in VALID_LOG_LEVELS:
         checks.append(
             _check(

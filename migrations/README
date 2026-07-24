@@ -1,0 +1,10 @@
+Polaris database migrations
+===========================
+
+Run `python -m alembic upgrade head` only against a new or already-versioned
+database.
+
+The existing local `polaris.db` predates Alembic. Do not run the baseline
+upgrade against it. The local database must be backed up, schema-verified, and
+stamped at the baseline revision in a separate migration step before Alembic
+manages it.

@@ -1,5 +1,6 @@
 annotated-doc==0.0.4
 annotated-types==0.7.0
+alembic==1.16.5
 anyio==4.12.1
 astroplan==0.10.1
 astropy==6.0.1
@@ -26,6 +27,7 @@ packaging==26.2
 pandas==2.3.3
 photutils==1.11.0
 pillow==11.3.0
+psycopg[binary]==3.2.9
 pydantic==2.13.4
 pydantic_core==2.46.4
 pyerfa==2.0.1.5
