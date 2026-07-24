@@ -8,6 +8,20 @@ safety rules, and next planned work.
 See [PROJECT_TIME.md](PROJECT_TIME.md) for the cumulative development-time log
 and coding-timer state.
 
+See [docs/PRODUCT_OPERATING_CONTEXT.md](docs/PRODUCT_OPERATING_CONTEXT.md) for
+the durable product, customer-research, branding, launch-planning, and
+professional-review operating brief.
+
+See [docs/COMPETITIVE_LANDSCAPE.md](docs/COMPETITIVE_LANDSCAPE.md) for the
+current app-store comparison and Polaris positioning strategy.
+
+See [docs/CUSTOMER_DISCOVERY_SPRINT.md](docs/CUSTOMER_DISCOVERY_SPRINT.md) for
+the staged 14-day smart-telescope customer-research plan.
+
+See [docs/PRODUCT_BIBLE.md](docs/PRODUCT_BIBLE.md) and
+[docs/VOICE_OF_CUSTOMER.md](docs/VOICE_OF_CUSTOMER.md) for the product source
+of truth and the evidence tracker that guide alpha and beta priorities.
+
 Current Version: v1.6.0 (in development)
 
 ## Features
