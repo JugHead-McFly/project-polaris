@@ -30,6 +30,9 @@ See [docs/NAMING_BRIEF.md](docs/NAMING_BRIEF.md) for the public-brand naming
 process and creative-screening guardrails. The current family workbook is at
 `output/pdf/Polaris_Naming_Workbook_v1.pdf`.
 
+See [docs/PROJECT_ROADMAP.md](docs/PROJECT_ROADMAP.md) for the current
+high-level path from local v1.6 work through private alpha and closed beta.
+
 Current Version: v1.6.0 (in development)
 
 ## Features
