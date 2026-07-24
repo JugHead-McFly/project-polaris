@@ -45,10 +45,12 @@ Authenticated data and file routes:
 - `/ingest-fits`
 - `/mission/*`
 - `/objects/*`
+- `/observatories/*`
 - `/operator-preview/*`
 - `/parse-fits`
 - `/planner/*`
 - `/portfolio`
+- `/profile`
 - `/sessions/*`
 - `/system`
 - `/tonight`
@@ -62,10 +64,13 @@ supplies a valid access token.
 This slice establishes authentication: Polaris can determine who is making a
 request and rejects missing or invalid hosted credentials.
 
-It does **not** yet establish tenant authorization. Existing domain tables do
-not have an owner ID, so the next database slice must add user/observatory
-ownership and enforce it in both application queries and PostgreSQL Row Level
-Security policies before any external alpha user is invited.
+The hosted `profiles`, `observatories`, `recommendation_runs`, and
+`recommendation_feedback` tables now carry tenant ownership and PostgreSQL Row
+Level Security policies. Existing capture/session/analysis/candidate-site
+tables remain local-product data and are not approved for the hosted alpha.
+
+See `docs/TENANT_ISOLATION.md` for the implemented controls and the remaining
+staging-database proof required before any external alpha user is invited.
 
 Reference:
 

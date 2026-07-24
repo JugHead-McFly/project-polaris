@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.schemas.target import TargetSummary
 from app.services.target_service import build_target_response
 
@@ -31,7 +31,7 @@ def get_object_summary(
         ),
         examples=["M17"],
     ),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     normalized_name = object_name.strip().upper()
 

@@ -7,7 +7,7 @@ from fastapi import HTTPException
 from fastapi import status
 from sqlalchemy.orm import Session
 
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.models import CandidateSite
 from app.schemas.candidate_site import CandidateSiteCreate
 from app.schemas.candidate_site import CandidateSiteResponse
@@ -18,14 +18,14 @@ router = APIRouter(prefix="/candidate-sites", tags=["Candidate Sites"])
 
 
 @router.get("", response_model=List[CandidateSiteResponse])
-def list_candidate_sites(db: Session = Depends(get_db)):
+def list_candidate_sites(db: Session = Depends(get_tenant_db)):
     return db.query(CandidateSite).order_by(CandidateSite.created_at.desc()).all()
 
 
 @router.post("", response_model=CandidateSiteResponse, status_code=status.HTTP_201_CREATED)
 def create_candidate_site(
     payload: CandidateSiteCreate,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     site = CandidateSite(**payload.model_dump())
     db.add(site)
@@ -38,7 +38,7 @@ def create_candidate_site(
 def update_candidate_site(
     site_id: int,
     payload: CandidateSiteUpdate,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     site = db.query(CandidateSite).filter(CandidateSite.id == site_id).first()
     if site is None:
@@ -75,7 +75,7 @@ def update_candidate_site(
 @router.delete("/{site_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_candidate_site(
     site_id: int,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     site = db.query(CandidateSite).filter(CandidateSite.id == site_id).first()
     if site is None:

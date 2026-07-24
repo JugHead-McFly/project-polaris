@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.models import Capture
 from app.models import CaptureAnalysis
 from app.schemas import (
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/captures", tags=["Captures"])
 
 
 @router.get("", response_model=List[CaptureSummary])
-def list_captures(db: Session = Depends(get_db)):
+def list_captures(db: Session = Depends(get_tenant_db)):
     return db.query(Capture).order_by(Capture.id).all()
 
 
@@ -39,7 +39,7 @@ def get_capture(
         description="Unique capture identifier, for example POL-2026-000001",
         examples=["POL-2026-000001"],
     ),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     capture = (
         db.query(Capture)
@@ -72,7 +72,7 @@ def get_capture_analysis(
         description="Unique capture identifier, for example POL-2026-000001",
         examples=["POL-2026-000001"],
     ),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     capture = (
         db.query(Capture)
@@ -118,7 +118,7 @@ def analyze_capture(
         description="Unique capture identifier, for example POL-2026-000001",
         examples=["POL-2026-000001"],
     ),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     capture = (
         db.query(Capture)

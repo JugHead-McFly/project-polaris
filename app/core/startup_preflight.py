@@ -16,10 +16,16 @@ from app.core.storage import POLARIS_ROOT
 from app.database.database import engine_options
 
 
-REQUIRED_DATABASE_TABLES = {
+LOCAL_REQUIRED_DATABASE_TABLES = {
     "capture_analyses",
     "captures",
     "sessions",
+}
+HOSTED_REQUIRED_DATABASE_TABLES = {
+    "observatories",
+    "profiles",
+    "recommendation_feedback",
+    "recommendation_runs",
 }
 REQUIRED_WEB_ASSETS = {
     "operator.css",
@@ -113,7 +119,17 @@ def _check_database_url(database_url: str, database_file: Path) -> Dict[str, str
     )
 
 
-def _check_sqlite_database(database_file: Path) -> Dict[str, str]:
+def required_database_tables(environment: str) -> set:
+    required_tables = set(LOCAL_REQUIRED_DATABASE_TABLES)
+    if environment in {"production", "staging"}:
+        required_tables.update(HOSTED_REQUIRED_DATABASE_TABLES)
+    return required_tables
+
+
+def _check_sqlite_database(
+    database_file: Path,
+    required_tables: set,
+) -> Dict[str, str]:
     resolved_path = database_file.expanduser().resolve()
     if not resolved_path.is_file():
         return _check(
@@ -157,7 +173,7 @@ def _check_sqlite_database(database_file: Path) -> Dict[str, str]:
             "fail",
             f"SQLite quick_check failed: {quick_check}",
         )
-    missing_tables = sorted(REQUIRED_DATABASE_TABLES - table_names)
+    missing_tables = sorted(required_tables - table_names)
     if missing_tables:
         return _check(
             "database",
@@ -171,7 +187,10 @@ def _check_sqlite_database(database_file: Path) -> Dict[str, str]:
     )
 
 
-def _check_postgresql_database(database_url: str) -> Dict[str, str]:
+def _check_postgresql_database(
+    database_url: str,
+    required_tables: set,
+) -> Dict[str, str]:
     database_engine = None
     try:
         database_engine = create_engine(
@@ -191,7 +210,7 @@ def _check_postgresql_database(database_url: str) -> Dict[str, str]:
         if database_engine is not None:
             database_engine.dispose()
 
-    missing_tables = sorted(REQUIRED_DATABASE_TABLES - table_names)
+    missing_tables = sorted(required_tables - table_names)
     if missing_tables:
         return _check(
             "database",
@@ -206,7 +225,11 @@ def _check_postgresql_database(database_url: str) -> Dict[str, str]:
     )
 
 
-def _check_database(database_url: str, database_file: Path) -> Dict[str, str]:
+def _check_database(
+    database_url: str,
+    database_file: Path,
+    required_tables: set,
+) -> Dict[str, str]:
     try:
         backend = make_url(database_url).get_backend_name()
     except ArgumentError:
@@ -216,9 +239,9 @@ def _check_database(database_url: str, database_file: Path) -> Dict[str, str]:
             "Database health cannot be checked until the URL is valid.",
         )
     if backend == "sqlite":
-        return _check_sqlite_database(database_file)
+        return _check_sqlite_database(database_file, required_tables)
     if backend == "postgresql":
-        return _check_postgresql_database(database_url)
+        return _check_postgresql_database(database_url, required_tables)
     return _check(
         "database",
         "fail",
@@ -259,6 +282,7 @@ def run_startup_preflight(
     require_local_capture_library: bool = (
         settings.REQUIRE_LOCAL_CAPTURE_LIBRARY
     ),
+    environment: str = settings.ENVIRONMENT,
     web_directory: Optional[Path] = None,
 ) -> Dict:
     resolved_base = base_dir.expanduser().resolve()
@@ -270,11 +294,16 @@ def run_startup_preflight(
         else resolved_base / "app" / "web"
     )
     normalized_log_level = log_level.upper().strip()
+    required_tables = required_database_tables(environment)
     checks: List[Dict[str, str]] = [
         _check_directory("application_root", resolved_base),
         _check_web_assets(resolved_web),
         _check_database_url(database_url, resolved_database),
-        _check_database(database_url, resolved_database),
+        _check_database(
+            database_url,
+            resolved_database,
+            required_tables,
+        ),
     ]
     if require_local_capture_library:
         checks.extend(

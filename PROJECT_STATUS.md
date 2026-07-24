@@ -39,8 +39,14 @@ expiration, issued-at time, authenticated role, and UUID subject. All
 data-bearing APIs and capture previews require this dependency; the operator
 HTML and static assets remain public so a future sign-in flow can load.
 Authentication does not yet imply tenant isolation. No external alpha user may
-be invited until owner fields, application predicates, PostgreSQL row security,
-and two-user crossover tests are complete.
+be invited until the PostgreSQL staging exercise is complete. The hosted tables
+now have non-null UUID ownership, composite owner-preserving foreign keys,
+forced Row Level Security policies, transaction-local user context, and
+owner-filtered profile/observatory APIs. Local two-user tests prevent Alice/Bob
+crossover for list, direct read, forged-owner create, update, and delete.
+PostgreSQL policy SQL compiles successfully, but this Mac has no PostgreSQL
+runtime; the policies and restricted runtime role must still be exercised
+against the real staging service before they are treated as verified.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
@@ -229,7 +235,7 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 103 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 110 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
@@ -300,12 +306,12 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Complete hosted tenant authorization: add user and observatory ownership to
-   the hosted schema, pass the validated UUID into every owned query, force
-   PostgreSQL Row Level Security, and prove Alice/Bob isolation for list,
-   direct-ID read, create, update, and delete operations.
-2. Build the invitation-only browser sign-in and session flow only after the
-   tenant boundary passes. Then add liveness/readiness, deployment
+1. Provision a user-owned Supabase development/staging project and run the
+   documented PostgreSQL tenant-isolation exercise with the exact restricted
+   runtime role. This is the next security gate and requires Doug to create the
+   account/project; no recurring purchase has been authorized.
+2. After that gate passes, build the invitation-only browser sign-in and
+   session flow. Then add liveness/readiness, deployment
    configuration, monitoring, backup/restore verification, and a staging
    security rehearsal before inviting an external alpha user.
 3. Complete v1.6 Locations Planning: the first foundation adds an opt-in

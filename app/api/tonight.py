@@ -9,7 +9,7 @@ from app.core.observatory import LATITUDE
 from app.core.observatory import LONGITUDE
 from app.core.observatory import OBSERVATORY_NAME
 from app.core.observatory import TIMEZONE
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
 from app.services.night_rating_service import calculate_night_rating
 from app.services.planner_service import get_tonight_plan
@@ -140,7 +140,7 @@ def _build_legacy_night_plan(
 
 
 @router.get("", response_model=TonightResponse)
-def tonight(db: Session = Depends(get_db)):
+def tonight(db: Session = Depends(get_tenant_db)):
     planner = get_tonight_plan(db)
     schedule = build_tonight_schedule(planner)
     recommended_target = _build_legacy_target(

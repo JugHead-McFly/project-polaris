@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from fastapi import Path
 from sqlalchemy.orm import Session
 
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.schemas.advisor import (
     ExposureAdvisorResponse,
 )
@@ -37,7 +37,7 @@ def get_target_advice(
         ),
         examples=["M17"],
     ),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     try:
         return get_exposure_advice(

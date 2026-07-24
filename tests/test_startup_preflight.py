@@ -6,6 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.core.startup_preflight import format_preflight_failure
+from app.core.startup_preflight import required_database_tables
 from app.core.startup_preflight import run_startup_preflight
 from app.main import app
 
@@ -27,6 +28,23 @@ def create_runtime_layout(tmp_path: Path):
     library_root = tmp_path / "ProjectPolaris"
     (library_root / "targets").mkdir(parents=True)
     return base_dir, database_file, library_root, web_directory
+
+
+def test_hosted_runtime_requires_tenant_schema():
+    assert required_database_tables("local") == {
+        "capture_analyses",
+        "captures",
+        "sessions",
+    }
+    assert required_database_tables("production") == {
+        "capture_analyses",
+        "captures",
+        "observatories",
+        "profiles",
+        "recommendation_feedback",
+        "recommendation_runs",
+        "sessions",
+    }
 
 
 def test_valid_startup_configuration_is_ready(tmp_path):

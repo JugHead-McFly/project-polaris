@@ -8,7 +8,7 @@ from app.core.auth import CurrentUser
 from app.core.auth import get_current_user
 from app.core.storage import TARGETS_ROOT
 from app.core.storage import get_processed_preview_path
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.models import Capture
 
 
@@ -124,7 +124,7 @@ def operator_preview(
     polaris_id: str,
     variant: str = "original",
     _current_user: CurrentUser = Depends(get_current_user),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     if variant not in {"original", "processed"}:
         raise HTTPException(

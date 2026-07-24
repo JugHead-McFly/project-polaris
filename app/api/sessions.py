@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from app.models import Capture
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.models import ObservingSession
 
 router = APIRouter(prefix="/sessions", tags=["Sessions"])
@@ -26,7 +26,7 @@ def _next_session_id():
 @router.post("")
 def create_session(
     payload: SessionCreate,
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     session = ObservingSession(
         session_id=_next_session_id(),
@@ -46,7 +46,7 @@ def create_session(
 
 
 @router.get("")
-def list_sessions(db: Session = Depends(get_db)):
+def list_sessions(db: Session = Depends(get_tenant_db)):
     return db.query(ObservingSession).order_by(ObservingSession.id).all()
 
 @router.get(
@@ -64,7 +64,7 @@ def get_session(
         description="Observing session identifier, for example SES-20260712-195949",
         examples=["SES-20260712-195949"],
     ),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_tenant_db),
 ):
     session = (
         db.query(ObservingSession)

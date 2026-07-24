@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.models import Capture
 
 router = APIRouter(prefix="/mission", tags=["Mission"])
 
 
 @router.get("/summary")
-def mission_summary(db: Session = Depends(get_db)):
+def mission_summary(db: Session = Depends(get_tenant_db)):
     captures = db.query(Capture).order_by(Capture.id).all()
 
     total_captures = len(captures)

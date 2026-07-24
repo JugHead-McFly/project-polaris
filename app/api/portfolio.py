@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database.database import get_db
+from app.database.database import get_tenant_db
 from app.models import Capture
 from app.services.portfolio_service import INTEGRATION_GOALS_HOURS
 from app.services.portfolio_service import TARGET_PRIORITY
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/portfolio", tags=["Portfolio"])
 
 
 @router.get("")
-def portfolio(db: Session = Depends(get_db)):
+def portfolio(db: Session = Depends(get_tenant_db)):
     goals = INTEGRATION_GOALS_HOURS
     results = []
 
