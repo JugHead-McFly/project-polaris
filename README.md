@@ -22,6 +22,10 @@ See [docs/PRODUCT_BIBLE.md](docs/PRODUCT_BIBLE.md) and
 [docs/VOICE_OF_CUSTOMER.md](docs/VOICE_OF_CUSTOMER.md) for the product source
 of truth and the evidence tracker that guide alpha and beta priorities.
 
+See [docs/COMMERCIALIZATION_AND_ALPHA_PLAN.md](docs/COMMERCIALIZATION_AND_ALPHA_PLAN.md)
+for the web-first private-alpha strategy, productization requirements, and
+current operating-cost guardrails.
+
 Current Version: v1.6.0 (in development)
 
 ## Features

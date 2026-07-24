@@ -25,6 +25,11 @@ The product source of truth is [PRODUCT_BIBLE.md](PRODUCT_BIBLE.md). It records
 the mission, principles, customer evidence, feature decisions, milestones, and
 deliberate deferrals.
 
+The guidance standard is evidence over reassurance. Codex must identify facts,
+inferences, hypotheses, unknowns, and material risks; correct earlier advice
+when new evidence changes it; and never present optimism as a forecast or
+guarantee.
+
 ## Areas Codex can lead or prepare
 
 - Product strategy, feature prioritization, roadmaps, and release planning.

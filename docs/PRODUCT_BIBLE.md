@@ -75,6 +75,10 @@ feedback loop remain roadmap work.
 See [COMPETITIVE_LANDSCAPE.md](COMPETITIVE_LANDSCAPE.md) for evidence and
 competitor context.
 
+See [COMMERCIALIZATION_AND_ALPHA_PLAN.md](COMMERCIALIZATION_AND_ALPHA_PLAN.md)
+for the honest business-assessment framework, web-first alpha plan,
+productization requirements, and current cost guardrails.
+
 ## Customers to validate
 
 These are working personas, not established facts. Discovery findings can
@@ -193,6 +197,7 @@ official relationship with DwarfLab during early customer research.
 | 2026-07-23 | Treat October 1 as a private-alpha target, not a public launch promise | Create urgency while preserving room to learn |
 | 2026-07-23 | Keep Polaris advisory and user-controlled | Safety, trust, and current product boundary |
 | 2026-07-23 | Do not ask communities to select names, logos, or colors during discovery | Prevent leading questions and preserve focus on real pain |
+| 2026-07-23 | Pursue a web-first alpha before native mobile distribution | Validate the core decision workflow with faster iteration and less platform overhead |
 
 ## Weekly product review
 
@@ -205,4 +210,3 @@ Every week:
 5. Place deliberately deferred ideas in the Parking Lot.
 6. Check whether current work moves Polaris toward the private-alpha target.
 7. Record decisions and their supporting evidence here.
-
