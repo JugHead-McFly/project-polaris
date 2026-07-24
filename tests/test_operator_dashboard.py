@@ -50,6 +50,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Latest capture" in response.text
     assert "History updated" in response.text
     assert "Usable target window" in response.text
+    assert 'id="target-forecast"' in response.text
     assert "Sub-exposure" in response.text
     assert "Capture library" in response.text
     assert "Capture files linked" in response.text
@@ -74,6 +75,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "portfolio-preview-button" in script.text
     assert "displayMeasuredNumber" in script.text
     assert "friendlyFilterLabel" in script.text
+    assert "Forecast at planned start:" in script.text
     assert "Imaging aim:" in script.text
     assert "Aim guide:" in script.text
     assert "Colors and science of ${objectName}" in script.text

@@ -724,6 +724,8 @@ const renderDecision = (data) => {
 
   const recommended = data.recommended_target;
   const target = recommended || data.backup_target;
+  const plannedTemperature = data.weather?.planned_temperature_f;
+  const targetForecast = byId("target-forecast");
   setText("target-label", recommended ? "Primary target" : "Fallback if conditions improve");
 
   if (!target) {
@@ -737,12 +739,22 @@ const renderDecision = (data) => {
     setText("target-exposure", null);
     setText("target-gain", null);
     setText("target-filter", null);
+    targetForecast.hidden = true;
     return;
   }
 
   setText("target-name", target.object);
   setText("target-common-name", target.common_name, "");
   setText("target-reason", target.reason, "Planner recommendation available.");
+  if (plannedTemperature === null || plannedTemperature === undefined) {
+    targetForecast.hidden = true;
+  } else {
+    targetForecast.hidden = false;
+    setText(
+      "target-forecast",
+      `Forecast at planned start: ${displayNumber(plannedTemperature, "°F")}`,
+    );
+  }
   setText("target-altitude", displayNumber(target.current_altitude, "°"));
   setText("target-transit", shortTime(target.transit_time));
   setText(

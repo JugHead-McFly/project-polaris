@@ -441,6 +441,14 @@ h2 {
   color: #b4c7cc;
 }
 
+.target-focus > .target-forecast {
+  min-height: 0;
+  margin: 12px 0 -8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
 .target-facts {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
