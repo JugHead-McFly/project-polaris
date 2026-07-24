@@ -32,6 +32,7 @@ process and creative-screening guardrails. The current family workbook is at
 
 See [docs/PROJECT_ROADMAP.md](docs/PROJECT_ROADMAP.md) for the current
 high-level path from local v1.6 work through private alpha and closed beta.
+The printable desk reference is `output/pdf/Project_Polaris_Roadmap_v1.pdf`.
 
 Current Version: v1.6.0 (in development)
 
