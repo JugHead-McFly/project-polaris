@@ -44,7 +44,7 @@ def test_dashboard_endpoint_is_typed_get_only_and_closes_database():
     database = FakeDatabase()
 
     with (
-        patch("app.api.dashboard.SessionLocal", return_value=database),
+        patch("app.database.database.SessionLocal", return_value=database),
         patch(
             "app.api.dashboard.build_dashboard_response",
             return_value=empty_dashboard_response(),
@@ -69,7 +69,7 @@ def test_dashboard_endpoint_passes_history_expansion_request():
     database = FakeDatabase()
 
     with (
-        patch("app.api.dashboard.SessionLocal", return_value=database),
+        patch("app.database.database.SessionLocal", return_value=database),
         patch(
             "app.api.dashboard.build_dashboard_response",
             return_value=empty_dashboard_response(),

@@ -4,9 +4,10 @@ from contextlib import asynccontextmanager
 from time import perf_counter
 from uuid import uuid4
 
-from fastapi import FastAPI, File, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.orm import Session
 
 from app.api.advisor import router as advisor_router
 from app.api.captures import router as capture_router
@@ -24,7 +25,7 @@ from app.core.runtime_logging import configure_logging
 from app.core.startup_preflight import format_preflight_failure
 from app.core.startup_preflight import log_preflight_report
 from app.core.startup_preflight import run_startup_preflight
-from app.database.database import SessionLocal
+from app.database.database import get_db
 from app.services.capture_service import (
     create_capture_from_parsed_fits,
 )
@@ -165,6 +166,7 @@ async def parse_fits_upload(
 @app.post("/ingest-fits")
 async def ingest_fits_upload(
     file: UploadFile = File(...),
+    db: Session = Depends(get_db),
 ):
     suffix = (
         os.path.splitext(file.filename or "")[1]
@@ -179,8 +181,6 @@ async def ingest_fits_upload(
             await file.read()
         )
         tmp_path = tmp.name
-
-    db = SessionLocal()
 
     try:
         parsed = parse_fits(
@@ -232,12 +232,6 @@ async def ingest_fits_upload(
             "parsed": parsed,
         }
 
-    except Exception:
-        db.rollback()
-        raise
-
     finally:
-        db.close()
-
         if os.path.exists(tmp_path):
             os.remove(tmp_path)

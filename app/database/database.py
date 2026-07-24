@@ -1,6 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
+from typing import Generator
 
 from app.core.config import settings
 
@@ -28,3 +30,17 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+
+def get_db() -> Generator[Session, None, None]:
+    """Yield one database session per request and always release it."""
+    db = SessionLocal()
+    try:
+        yield db
+    except Exception:
+        rollback = getattr(db, "rollback", None)
+        if callable(rollback):
+            rollback()
+        raise
+    finally:
+        db.close()

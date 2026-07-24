@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path
+from sqlalchemy.orm import Session
 
-from app.database.database import SessionLocal
+from app.database.database import get_db
 from app.schemas.target import TargetSummary
 from app.services.target_service import build_target_response
 
@@ -29,27 +30,22 @@ def get_object_summary(
             "for example M17, M51, or NGC6633."
         ),
         examples=["M17"],
-    )
+    ),
+    db: Session = Depends(get_db),
 ):
     normalized_name = object_name.strip().upper()
 
-    db = SessionLocal()
-
     try:
-        try:
-            return build_target_response(
-                db=db,
-                target_name=normalized_name,
-            )
+        return build_target_response(
+            db=db,
+            target_name=normalized_name,
+        )
 
-        except ValueError:
-            raise HTTPException(
-                status_code=404,
-                detail=(
-                    f"Target '{normalized_name}' "
-                    "was not found."
-                ),
-            )
-
-    finally:
-        db.close()
+    except ValueError:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"Target '{normalized_name}' "
+                "was not found."
+            ),
+        )

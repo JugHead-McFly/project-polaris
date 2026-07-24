@@ -67,7 +67,7 @@ def test_schedule_endpoint_returns_typed_equipment_plan():
 
     with (
         patch(
-            "app.api.schedule.SessionLocal",
+            "app.database.database.SessionLocal",
             return_value=database,
         ),
         patch(

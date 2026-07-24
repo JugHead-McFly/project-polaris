@@ -81,7 +81,7 @@ def test_system_endpoint_includes_read_only_library_health():
 
     with (
         patch(
-            "app.api.system.SessionLocal",
+            "app.database.database.SessionLocal",
             return_value=database,
         ),
         patch(

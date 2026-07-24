@@ -148,7 +148,7 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     planner = planner_response()
 
     with (
-        patch("app.api.tonight.SessionLocal", return_value=database),
+        patch("app.database.database.SessionLocal", return_value=database),
         patch("app.api.tonight.get_tonight_plan", return_value=planner),
         patch(
             "app.api.tonight.build_tonight_schedule",

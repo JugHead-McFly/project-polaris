@@ -1,11 +1,12 @@
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
+from sqlalchemy.orm import Session
 
 from app.core.storage import TARGETS_ROOT
 from app.core.storage import get_processed_preview_path
-from app.database.database import SessionLocal
+from app.database.database import get_db
 from app.models import Capture
 
 
@@ -120,6 +121,7 @@ def operator_dashboard():
 def operator_preview(
     polaris_id: str,
     variant: str = "original",
+    db: Session = Depends(get_db),
 ):
     if variant not in {"original", "processed"}:
         raise HTTPException(
@@ -127,37 +129,32 @@ def operator_preview(
             detail="Capture preview variant was not found.",
         )
 
-    db = SessionLocal()
-
-    try:
-        capture = (
-            db.query(Capture)
-            .filter(Capture.polaris_id == polaris_id)
-            .first()
+    capture = (
+        db.query(Capture)
+        .filter(Capture.polaris_id == polaris_id)
+        .first()
+    )
+    preview_path = (
+        _find_preview_path(
+            capture,
+            processed=variant == "processed",
         )
-        preview_path = (
-            _find_preview_path(
-                capture,
-                processed=variant == "processed",
-            )
-            if capture is not None
-            else None
+        if capture is not None
+        else None
+    )
+
+    if preview_path is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Capture preview was not found.",
         )
 
-        if preview_path is None:
-            raise HTTPException(
-                status_code=404,
-                detail="Capture preview was not found.",
-            )
-
-        return FileResponse(
-            preview_path,
-            media_type=(
-                "image/jpeg"
-                if preview_path.suffix.lower() == ".jpg"
-                else "image/png"
-            ),
-            headers={"Cache-Control": "private, max-age=3600"},
-        )
-    finally:
-        db.close()
+    return FileResponse(
+        preview_path,
+        media_type=(
+            "image/jpeg"
+            if preview_path.suffix.lower() == ".jpg"
+            else "image/png"
+        ),
+        headers={"Cache-Control": "private, max-age=3600"},
+    )

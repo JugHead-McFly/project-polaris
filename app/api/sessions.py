@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from fastapi import APIRouter, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 from app.models import Capture
-from app.database.database import SessionLocal
+from app.database.database import get_db
 from app.models import ObservingSession
 
 router = APIRouter(prefix="/sessions", tags=["Sessions"])
@@ -23,39 +24,30 @@ def _next_session_id():
 
 
 @router.post("")
-def create_session(payload: SessionCreate):
-    db = SessionLocal()
+def create_session(
+    payload: SessionCreate,
+    db: Session = Depends(get_db),
+):
+    session = ObservingSession(
+        session_id=_next_session_id(),
+        date=payload.date,
+        location=payload.location,
+        observatory=payload.observatory,
+        moon_phase=payload.moon_phase,
+        weather_summary=payload.weather_summary,
+        notes=payload.notes,
+    )
 
-    try:
-        session = ObservingSession(
-            session_id=_next_session_id(),
-            date=payload.date,
-            location=payload.location,
-            observatory=payload.observatory,
-            moon_phase=payload.moon_phase,
-            weather_summary=payload.weather_summary,
-            notes=payload.notes,
-        )
+    db.add(session)
+    db.commit()
+    db.refresh(session)
 
-        db.add(session)
-        db.commit()
-        db.refresh(session)
-
-        return session
-
-    finally:
-        db.close()
+    return session
 
 
 @router.get("")
-def list_sessions():
-    db = SessionLocal()
-
-    try:
-        return db.query(ObservingSession).order_by(ObservingSession.id).all()
-
-    finally:
-        db.close()
+def list_sessions(db: Session = Depends(get_db)):
+    return db.query(ObservingSession).order_by(ObservingSession.id).all()
 
 @router.get(
     "/{session_id}",
@@ -71,24 +63,19 @@ def get_session(
         title="Session ID",
         description="Observing session identifier, for example SES-20260712-195949",
         examples=["SES-20260712-195949"],
-    )
+    ),
+    db: Session = Depends(get_db),
 ):
-    db = SessionLocal()
+    session = (
+        db.query(ObservingSession)
+        .filter(ObservingSession.session_id == session_id)
+        .first()
+    )
 
-    try:
-        session = (
-            db.query(ObservingSession)
-            .filter(ObservingSession.session_id == session_id)
-            .first()
+    if session is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Session '{session_id}' was not found.",
         )
 
-        if session is None:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Session '{session_id}' was not found.",
-            )
-
-        return session
-
-    finally:
-        db.close()
+    return session

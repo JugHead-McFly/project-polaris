@@ -1,6 +1,7 @@
 from typing import Dict, Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
 from app.core.observatory import DEFAULT_POSTAL_CODE
 from app.core.observatory import ELEVATION_METERS
@@ -8,7 +9,7 @@ from app.core.observatory import LATITUDE
 from app.core.observatory import LONGITUDE
 from app.core.observatory import OBSERVATORY_NAME
 from app.core.observatory import TIMEZONE
-from app.database.database import SessionLocal
+from app.database.database import get_db
 from app.schemas.tonight import TonightResponse
 from app.services.night_rating_service import calculate_night_rating
 from app.services.planner_service import get_tonight_plan
@@ -139,48 +140,42 @@ def _build_legacy_night_plan(
 
 
 @router.get("", response_model=TonightResponse)
-def tonight():
-    db = SessionLocal()
+def tonight(db: Session = Depends(get_db)):
+    planner = get_tonight_plan(db)
+    schedule = build_tonight_schedule(planner)
+    recommended_target = _build_legacy_target(
+        db,
+        planner.get("recommended_target"),
+    )
+    backup_target = _build_legacy_target(
+        db,
+        _select_backup_plan(planner),
+    )
 
-    try:
-        planner = get_tonight_plan(db)
-        schedule = build_tonight_schedule(planner)
-        recommended_target = _build_legacy_target(
-            db,
-            planner.get("recommended_target"),
-        )
-        backup_target = _build_legacy_target(
-            db,
-            _select_backup_plan(planner),
-        )
-
-        return {
-            "date": schedule["date"],
-            "observatory": {
-                "name": OBSERVATORY_NAME,
-                "postal_code": DEFAULT_POSTAL_CODE,
-                "timezone": TIMEZONE,
-                "latitude": LATITUDE,
-                "longitude": LONGITUDE,
-                "elevation_meters": ELEVATION_METERS,
-            },
-            "recommended_target": recommended_target,
-            "backup_target": backup_target,
-            "moon": planner["moon"],
-            "weather": planner["weather"],
-            "night_rating": calculate_night_rating(
-                planner["weather"],
-                planner["moon"],
-                recommended_target,
-            ),
-            "message": _build_operator_message(schedule),
-            "night_plan": _build_legacy_night_plan(
-                schedule,
-                backup_target,
-            ),
-            "darkness": planner["darkness"],
-            "schedule": schedule,
-        }
-
-    finally:
-        db.close()
+    return {
+        "date": schedule["date"],
+        "observatory": {
+            "name": OBSERVATORY_NAME,
+            "postal_code": DEFAULT_POSTAL_CODE,
+            "timezone": TIMEZONE,
+            "latitude": LATITUDE,
+            "longitude": LONGITUDE,
+            "elevation_meters": ELEVATION_METERS,
+        },
+        "recommended_target": recommended_target,
+        "backup_target": backup_target,
+        "moon": planner["moon"],
+        "weather": planner["weather"],
+        "night_rating": calculate_night_rating(
+            planner["weather"],
+            planner["moon"],
+            recommended_target,
+        ),
+        "message": _build_operator_message(schedule),
+        "night_plan": _build_legacy_night_plan(
+            schedule,
+            backup_target,
+        ),
+        "darkness": planner["darkness"],
+        "schedule": schedule,
+    }

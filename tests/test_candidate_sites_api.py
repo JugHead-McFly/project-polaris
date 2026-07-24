@@ -19,7 +19,7 @@ def test_candidate_sites_can_be_saved_listed_and_removed():
     database = sessionmaker(bind=engine)()
     client = TestClient(app)
 
-    with patch("app.api.candidate_sites.SessionLocal", return_value=database):
+    with patch("app.database.database.SessionLocal", return_value=database):
         created = client.post(
             "/candidate-sites",
             json={
@@ -93,7 +93,7 @@ def test_candidate_sites_can_only_be_rated_after_a_visit():
     database = sessionmaker(bind=engine)()
     client = TestClient(app)
 
-    with patch("app.api.candidate_sites.SessionLocal", return_value=database):
+    with patch("app.database.database.SessionLocal", return_value=database):
         created = client.post(
             "/candidate-sites",
             json={"name": "Unvisited site", "latitude": 34.54, "longitude": -112.46},

@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi import HTTPException
 from fastapi import Path
+from sqlalchemy.orm import Session
 
-from app.database.database import SessionLocal
+from app.database.database import get_db
 from app.schemas.advisor import (
     ExposureAdvisorResponse,
 )
@@ -35,29 +36,24 @@ def get_target_advice(
             "for example M17, M51, or NGC6633."
         ),
         examples=["M17"],
-    )
+    ),
+    db: Session = Depends(get_db),
 ):
-    db = SessionLocal()
-
     try:
-        try:
-            return get_exposure_advice(
-                db=db,
-                object_name=object_name,
-            )
+        return get_exposure_advice(
+            db=db,
+            object_name=object_name,
+        )
 
-        except ValueError:
-            normalized_name = (
-                object_name.strip().upper()
-            )
+    except ValueError:
+        normalized_name = (
+            object_name.strip().upper()
+        )
 
-            raise HTTPException(
-                status_code=404,
-                detail=(
-                    f"Target '{normalized_name}' "
-                    "was not found."
-                ),
-            )
-
-    finally:
-        db.close()
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"Target '{normalized_name}' "
+                "was not found."
+            ),
+        )
