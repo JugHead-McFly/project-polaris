@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from app.api.advisor import router as advisor_router
+from app.api.auth import router as auth_router
 from app.api.captures import router as capture_router
 from app.api.candidate_sites import router as candidate_sites_router
 from app.api.dashboard import router as dashboard_router
@@ -20,6 +21,7 @@ from app.api.portfolio import router as portfolio_router
 from app.api.sessions import router as sessions_router
 from app.api.system import router as system_router
 from app.api.tonight import router as tonight_router
+from app.core.auth import get_current_user
 from app.core.config import settings
 from app.core.runtime_logging import configure_logging
 from app.core.startup_preflight import format_preflight_failure
@@ -103,21 +105,58 @@ app.mount(
 )
 
 
-app.include_router(capture_router)
-app.include_router(candidate_sites_router)
-app.include_router(mission_router)
-app.include_router(dashboard_router)
-app.include_router(sessions_router)
-app.include_router(objects_router)
-app.include_router(operator_router)
-app.include_router(portfolio_router)
-app.include_router(tonight_router)
-app.include_router(system_router)
-app.include_router(advisor_router)
+protected_api_dependencies = [Depends(get_current_user)]
+
 app.include_router(
-    planner_router
+    capture_router,
+    dependencies=protected_api_dependencies,
 )
-app.include_router(schedule_router)
+app.include_router(
+    candidate_sites_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    mission_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    dashboard_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    sessions_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    objects_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(operator_router)
+app.include_router(
+    portfolio_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    tonight_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    system_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    advisor_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    planner_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    schedule_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(auth_router)
 
 
 @app.get("/")
@@ -129,7 +168,10 @@ def root():
     }
 
 
-@app.post("/parse-fits")
+@app.post(
+    "/parse-fits",
+    dependencies=protected_api_dependencies,
+)
 async def parse_fits_upload(
     file: UploadFile = File(...),
 ):
@@ -163,7 +205,10 @@ async def parse_fits_upload(
             os.remove(tmp_path)
 
 
-@app.post("/ingest-fits")
+@app.post(
+    "/ingest-fits",
+    dependencies=protected_api_dependencies,
+)
 async def ingest_fits_upload(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),

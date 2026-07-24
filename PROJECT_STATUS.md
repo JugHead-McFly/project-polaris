@@ -1,13 +1,13 @@
 # Project Polaris Status
 
-Last updated: 2026-07-19
+Last updated: 2026-07-24
 
 ## Project locations
 
 - Application repository: `/Users/doug/dougs-observatory`
 - Capture and image library: `/Users/doug/ProjectPolaris`
 - Active development branch: `develop`
-- Application version: `1.6.0` (in development)
+- Application version: `1.6.0` (local product checkpoint)
 - Current release tag: `v1.5.1`
 - Release commit: `77c0234`
 
@@ -16,12 +16,31 @@ rename, or rewrite it as part of application changes.
 
 Version `1.6.0` is defined once in `app/core/config.py` and is shared by the
 root API response, OpenAPI metadata, `GET /system`, and the dashboard API.
-Version 1.6.0 is under development on `develop`. Version 1.5.1 was released
+Version 1.6.0 is the current local product checkpoint on `develop`; it has not
+been tagged as a published release. Version 1.5.1 was released
 from commit `77c0234` and tagged `v1.5.1`.
 Version 1.5.0 remains available as the earlier tagged release at commit
 `5bee291`.
 
 ## Operational readiness
+
+The hosted-alpha foundation is being built on `develop` without changing Doug's
+local SQLite database or capture library. The accepted architecture keeps the
+FastAPI modular monolith, adds PostgreSQL migrations and request-scoped
+database sessions, and uses Supabase Auth as the future hosted identity
+provider.
+
+The authentication boundary now has explicit local and Supabase modes. Local
+mode supplies one stable operator identity and leaves the current workflow
+unchanged. Staging and production fail closed unless Supabase authentication,
+HTTPS, and PostgreSQL are configured. Hosted bearer tokens are validated
+against Supabase's public signing keys for signature, issuer, audience,
+expiration, issued-at time, authenticated role, and UUID subject. All
+data-bearing APIs and capture previews require this dependency; the operator
+HTML and static assets remain public so a future sign-in flow can load.
+Authentication does not yet imply tenant isolation. No external alpha user may
+be invited until owner fields, application predicates, PostgreSQL row security,
+and two-user crossover tests are complete.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
@@ -194,6 +213,9 @@ does not expose any database-changing synchronization route.
 - `86d2643` - v1.5 startup configuration preflight
 - `25a6c32` - v1.5 repeatable release-readiness gates
 - `5bee291` - v1.5.0 release candidate and checklist
+- `625f7e3` - Hosted-alpha architecture decision
+- `0d3660b` - PostgreSQL and Alembic migration foundation
+- `b8f0d37` - Request-scoped database sessions
 
 ## Verification status
 
@@ -207,7 +229,7 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 63 passing tests and is
+`requirements-dev.txt`. The complete suite currently has 103 passing tests and is
 run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
@@ -278,7 +300,15 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Complete v1.6 Locations Planning: the first foundation adds an opt-in
+1. Complete hosted tenant authorization: add user and observatory ownership to
+   the hosted schema, pass the validated UUID into every owned query, force
+   PostgreSQL Row Level Security, and prove Alice/Bob isolation for list,
+   direct-ID read, create, update, and delete operations.
+2. Build the invitation-only browser sign-in and session flow only after the
+   tenant boundary passes. Then add liveness/readiness, deployment
+   configuration, monitoring, backup/restore verification, and a staging
+   security rehearsal before inviting an external alpha user.
+3. Complete v1.6 Locations Planning: the first foundation adds an opt-in
    interactive world map, 25/50/100-mile straight-line rings from the selected
    observatory, and manually saved candidate sites with notes, optional
    Bortle/reference information, access details, and readiness checks. Sites
@@ -292,27 +322,27 @@ endpoint checks also passed.
    access, and clear commercial reuse terms. Do not collect or expose an exact
    home address by default; automated source adapters, road distance, and routing
    remain later, separately sourced capabilities.
-2. Continue the Goal Engine after its first foundation: target-class and
+4. Continue the Goal Engine after its first foundation: target-class and
    reviewed object-specific rules now replace the generic four-hour fallback,
    and the Portfolio view explains Quick, Detailed, and Showcase aims while
    keeping integration separate from image quality. Persistent aim selection,
    user overrides, and adjustments from saved equipment, sky profile, and
    capture-quality history remain later work.
-3. Continue Quality Scoring v2 after its deep-sky foundation: the versioned
+5. Continue Quality Scoring v2 after its deep-sky foundation: the versioned
    engine now scores sharpness, star roundness, star signal, background
    uniformity, and clipping while keeping raw star count diagnostic-only.
    Existing v1 scores are preserved during reanalysis. Add user-calibrated
    equipment profiles and a separate planetary/lunar quality model next.
    Record Sky Quality Meter (SQM) values with the observing session for
    context, rather than mixing site darkness into an individual capture score.
-4. Before publishing or making the repository public, audit the complete Git
+6. Before publishing or making the repository public, audit the complete Git
    history for previously committed `polaris.db` files or other private
    observatory data. Remove sensitive historical blobs from the public history,
    verify that the live database remains ignored, and preserve the private data
    only in the local installation and encrypted backups.
-5. Before public distribution, replace the hard-coded Doug's Observatory
+7. Before public distribution, replace the hard-coded Doug's Observatory
    location with an installation profile covering observatory name, postal
    code, coordinates, elevation, timezone, and storage location. The operator
    banner already reads the name from the observatory API response.
-6. Keep actual observatory equipment control outside the approved scope. It
+8. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.

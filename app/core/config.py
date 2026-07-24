@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from typing import Optional
+from uuid import UUID
 
 
 class Settings:
@@ -13,6 +14,11 @@ class Settings:
         "staging",
         "test",
     }
+    VALID_AUTH_MODES = {
+        "local",
+        "supabase",
+    }
+    DEFAULT_LOCAL_USER_ID = "00000000-0000-0000-0000-000000000001"
 
     def __init__(
         self,
@@ -23,6 +29,10 @@ class Settings:
         database_url: Optional[str] = None,
         log_level: Optional[str] = None,
         require_local_capture_library: Optional[bool] = None,
+        auth_mode: Optional[str] = None,
+        supabase_url: Optional[str] = None,
+        supabase_audience: Optional[str] = None,
+        local_user_id: Optional[str] = None,
     ):
         self.ENVIRONMENT = (
             environment
@@ -59,6 +69,55 @@ class Settings:
                 default=self.ENVIRONMENT == "local",
             )
         )
+        self.AUTH_MODE = (
+            auth_mode
+            or os.getenv("POLARIS_AUTH_MODE", "local")
+        ).lower().strip()
+        if self.AUTH_MODE not in self.VALID_AUTH_MODES:
+            choices = ", ".join(sorted(self.VALID_AUTH_MODES))
+            raise ValueError(
+                "Unsupported POLARIS_AUTH_MODE "
+                f"'{self.AUTH_MODE}'. Choose one of: {choices}."
+            )
+
+        configured_supabase_url = (
+            supabase_url
+            if supabase_url is not None
+            else os.getenv("POLARIS_SUPABASE_URL")
+        )
+        self.SUPABASE_URL = (
+            configured_supabase_url.rstrip("/")
+            if configured_supabase_url
+            else None
+        )
+        self.SUPABASE_AUDIENCE = (
+            supabase_audience
+            or os.getenv("POLARIS_SUPABASE_AUDIENCE", "authenticated")
+        ).strip()
+        self.LOCAL_USER_ID = (
+            local_user_id
+            or os.getenv(
+                "POLARIS_LOCAL_USER_ID",
+                self.DEFAULT_LOCAL_USER_ID,
+            )
+        ).strip()
+        try:
+            UUID(self.LOCAL_USER_ID)
+        except ValueError as error:
+            raise ValueError(
+                "POLARIS_LOCAL_USER_ID must be a valid UUID."
+            ) from error
+
+        self.SUPABASE_ISSUER = (
+            f"{self.SUPABASE_URL}/auth/v1"
+            if self.SUPABASE_URL
+            else None
+        )
+        self.SUPABASE_JWKS_URL = (
+            f"{self.SUPABASE_ISSUER}/.well-known/jwks.json"
+            if self.SUPABASE_ISSUER
+            else None
+        )
 
         if (
             self.ENVIRONMENT in {"production", "staging"}
@@ -68,6 +127,29 @@ class Settings:
                 "Hosted Polaris environments require PostgreSQL. "
                 "Set POLARIS_DATABASE_URL to a PostgreSQL connection URL."
             )
+        if (
+            self.ENVIRONMENT in {"production", "staging"}
+            and self.AUTH_MODE != "supabase"
+        ):
+            raise ValueError(
+                "Hosted Polaris environments require Supabase authentication. "
+                "Set POLARIS_AUTH_MODE=supabase."
+            )
+        if self.AUTH_MODE == "supabase" and not self.SUPABASE_URL:
+            raise ValueError(
+                "Supabase authentication requires POLARIS_SUPABASE_URL."
+            )
+        if (
+            self.AUTH_MODE == "supabase"
+            and self.ENVIRONMENT in {"production", "staging"}
+            and not self.SUPABASE_URL.startswith("https://")
+        ):
+            raise ValueError(
+                "Hosted Supabase authentication requires an HTTPS "
+                "POLARIS_SUPABASE_URL."
+            )
+        if not self.SUPABASE_AUDIENCE:
+            raise ValueError("POLARIS_SUPABASE_AUDIENCE cannot be empty.")
 
 
 def normalize_database_url(database_url: str) -> str:

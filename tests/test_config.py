@@ -48,6 +48,68 @@ def test_hosted_environment_does_not_require_local_archive():
     configured = Settings(
         environment="staging",
         database_url="postgresql://user:pass@db.example/polaris",
+        auth_mode="supabase",
+        supabase_url="https://project-ref.supabase.co",
     )
 
     assert not configured.REQUIRE_LOCAL_CAPTURE_LIBRARY
+
+
+def test_hosted_environment_rejects_local_authentication():
+    with pytest.raises(
+        ValueError,
+        match="require Supabase authentication",
+    ):
+        Settings(
+            environment="staging",
+            database_url="postgresql://user:pass@db.example/polaris",
+        )
+
+
+def test_supabase_authentication_builds_verification_endpoints():
+    configured = Settings(
+        environment="test",
+        auth_mode="supabase",
+        supabase_url="https://project-ref.supabase.co/",
+    )
+
+    assert configured.SUPABASE_URL == "https://project-ref.supabase.co"
+    assert (
+        configured.SUPABASE_ISSUER
+        == "https://project-ref.supabase.co/auth/v1"
+    )
+    assert (
+        configured.SUPABASE_JWKS_URL
+        == (
+            "https://project-ref.supabase.co/auth/v1/"
+            ".well-known/jwks.json"
+        )
+    )
+    assert configured.SUPABASE_AUDIENCE == "authenticated"
+
+
+def test_supabase_authentication_requires_project_url():
+    with pytest.raises(ValueError, match="POLARIS_SUPABASE_URL"):
+        Settings(
+            environment="test",
+            auth_mode="supabase",
+            supabase_url="",
+        )
+
+
+def test_hosted_supabase_url_requires_https():
+    with pytest.raises(ValueError, match="requires an HTTPS"):
+        Settings(
+            environment="production",
+            database_url="postgresql://user:pass@db.example/polaris",
+            auth_mode="supabase",
+            supabase_url="http://project-ref.supabase.co",
+        )
+
+
+def test_local_user_id_must_be_a_uuid():
+    with pytest.raises(ValueError, match="valid UUID"):
+        Settings(
+            environment="test",
+            local_user_id="not-a-uuid",
+        )

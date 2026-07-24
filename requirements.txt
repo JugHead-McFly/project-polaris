@@ -36,6 +36,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.2.1
 python-multipart==0.0.20
 pytz==2026.2
+PyJWT[crypto]==2.13.0
 PyYAML==6.0.3
 scikit-image==0.24.0
 scipy==1.13.1
