@@ -130,6 +130,10 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "renderQualityByTarget" in script.text
     assert "targetMatchesSearch" in script.text
     assert "targetNeedsSpecializedScoring" in script.text
+    assert "targetMatchesGroup" in script.text
+    assert "Messier catalog" in response.text
+    assert "Planets and solar-system objects" in response.text
+    assert "planetary nebula" not in script.text
     assert "right.average_quality - left.average_quality" not in script.text
     assert "scored_capture_count" in script.text
     assert "target.scored_capture_count < target.capture_count" in script.text

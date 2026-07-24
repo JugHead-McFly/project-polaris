@@ -113,6 +113,31 @@ const targetNeedsSpecializedScoring = (target) => target.quality_captures.some(
     capture.components?.confidence === "unsupported",
 );
 
+const targetMatchesGroup = (target, group) => {
+  if (group === "all") return true;
+  const objectName = (target.object || "").trim().toUpperCase();
+  const objectType = (target.profile?.object_type || "").toLowerCase();
+  const isLunar = objectName === "MOON" || objectType.includes("lunar");
+  const isSolarSystem = [
+    "SUN", "MERCURY", "VENUS", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE", "PLUTO",
+  ].includes(objectName) || /(^|\s)planet(\s|$)/.test(objectType);
+  const isNebula = objectType.includes("nebula");
+  const isGalaxy = objectType.includes("galaxy");
+  const isCluster = objectType.includes("cluster");
+  const isMessier = /^M\d+$/.test(objectName);
+
+  if (group === "messier") return isMessier;
+  if (group === "nebula") return isNebula;
+  if (group === "galaxy") return isGalaxy;
+  if (group === "cluster") return isCluster;
+  if (group === "solar-system") return isSolarSystem;
+  if (group === "lunar") return isLunar;
+  if (group === "other") {
+    return !isMessier && !isNebula && !isGalaxy && !isCluster && !isSolarSystem && !isLunar;
+  }
+  return true;
+};
+
 const bortleLabel = (bortleClass) => {
   if (bortleClass === null || bortleClass === undefined) {
     return "Not recorded";
@@ -896,9 +921,7 @@ const renderPortfolio = (data) => {
   container.replaceChildren();
   const targets = data.targets.filter((target) => {
     if (!targetMatchesSearch(target, portfolioSearch)) return false;
-    if (portfolioFilter === "in-progress") return target.status !== "Complete";
-    if (portfolioFilter === "complete") return target.status === "Complete";
-    return true;
+    return targetMatchesGroup(target, portfolioFilter);
   });
   setText(
     "portfolio-summary",
@@ -1042,9 +1065,7 @@ const renderQualityByTarget = (data) => {
   const alternateModelCount = analyzedTargets.length - scoredTargetCount;
   const targets = analyzedTargets.filter((target) => {
     if (!targetMatchesSearch(target, qualitySearch)) return false;
-    if (qualityFilter === "scored") return target.average_quality !== null;
-    if (qualityFilter === "specialized") return targetNeedsSpecializedScoring(target);
-    return true;
+    return targetMatchesGroup(target, qualityFilter);
   });
 
   setText(
