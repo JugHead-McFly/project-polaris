@@ -12,6 +12,9 @@ const invitationQuery = new URLSearchParams(window.location.search);
 let isInvitationFlow = (
   invitationHash.get("type") === "invite" || invitationQuery.get("type") === "invite"
 );
+let isPasswordRecoveryFlow = (
+  invitationHash.get("type") === "recovery" || invitationQuery.get("type") === "recovery"
+);
 
 const apiFetch = async (input, options = {}) => {
   const headers = new Headers(options.headers || {});
@@ -36,13 +39,16 @@ const setHostedShell = (signedIn) => {
   document.querySelector(".readonly-badge").hidden = signedIn;
 };
 
-const showInvitationPassword = () => {
+const showPasswordSetup = () => {
   setHostedShell(false);
   byId("sign-in-form").hidden = true;
   byId("accept-invite-form").hidden = false;
-  setText("auth-gate-title", "Choose your Polaris password");
+  const isRecovery = isPasswordRecoveryFlow;
+  setText("auth-gate-title", isRecovery ? "Reset your Polaris password" : "Choose your Polaris password");
   setAuthMessage(
-    "You have been invited to the private Polaris alpha. Choose a password to finish setting up your account.",
+    isRecovery
+      ? "Choose a new password to regain access to your private Polaris account."
+      : "You have been invited to the private Polaris alpha. Choose a password to finish setting up your account.",
     "invite-message",
   );
 };
@@ -159,8 +165,8 @@ const handleHostedSession = async (session) => {
     setAuthMessage("");
     return;
   }
-  if (isInvitationFlow) {
-    showInvitationPassword();
+  if (isInvitationFlow || isPasswordRecoveryFlow) {
+    showPasswordSetup();
     return;
   }
   setHostedShell(true);
@@ -246,10 +252,13 @@ const acceptInvitation = async (event) => {
   setAuthMessage("Saving your password…", "invite-message");
   try {
     const { error } = await supabaseClient.auth.updateUser({ password });
-    if (error) throw new Error("Polaris could not save that password. Please try again.");
+    if (error) {
+      throw new Error(error.message || "Polaris could not save that password. Please try again.");
+    }
     byId("invite-password").value = "";
     byId("invite-password-confirmation").value = "";
     isInvitationFlow = false;
+    isPasswordRecoveryFlow = false;
     window.history.replaceState({}, document.title, window.location.pathname);
     await handleHostedSession(hostedSession);
   } catch (error) {
