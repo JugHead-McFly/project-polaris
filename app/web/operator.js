@@ -206,19 +206,12 @@ const initializeHostedAuth = async () => {
     if (!session) void handleHostedSession(null);
   });
 
-  // Supabase invitation links can use either an implicit token in the URL hash
-  // or an authorization code in the query string. The latter must be exchanged
-  // before a password can be saved for the invited person.
-  const authorizationCode = invitationQuery.get("code");
-  const sessionResult = authorizationCode
-    ? await supabaseClient.auth.exchangeCodeForSession(authorizationCode)
-    : await supabaseClient.auth.getSession();
-  const { data, error } = sessionResult;
+  // The browser client detects both implicit and PKCE recovery links during
+  // initialization. Do not exchange a code here: doing so races that built-in
+  // handling and consumes the link before the recovery event can reach the UI.
+  const { data, error } = await supabaseClient.auth.getSession();
   if (error) {
     setAuthMessage("Polaris could not complete the secure invitation link. Please request a new invitation.");
-  }
-  if (authorizationCode) {
-    window.history.replaceState({}, document.title, window.location.pathname);
   }
   await handleHostedSession(data?.session || null);
 };
