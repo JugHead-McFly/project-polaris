@@ -188,9 +188,20 @@ const initializeHostedAuth = async () => {
     authConfig.supabaseUrl,
     authConfig.supabasePublishableKey,
   );
-  const { data, error } = await supabaseClient.auth.getSession();
+
+  // Supabase invitation links can use either an implicit token in the URL hash
+  // or an authorization code in the query string. The latter must be exchanged
+  // before a password can be saved for the invited person.
+  const authorizationCode = invitationQuery.get("code");
+  const sessionResult = authorizationCode
+    ? await supabaseClient.auth.exchangeCodeForSession(authorizationCode)
+    : await supabaseClient.auth.getSession();
+  const { data, error } = sessionResult;
   if (error) {
-    setAuthMessage("Polaris could not restore your secure session. Please sign in again.");
+    setAuthMessage("Polaris could not complete the secure invitation link. Please request a new invitation.");
+  }
+  if (authorizationCode) {
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
   await handleHostedSession(data?.session || null);
   supabaseClient.auth.onAuthStateChange((_event, session) => {

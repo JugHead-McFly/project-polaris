@@ -136,6 +136,11 @@ footer {
   display: none;
 }
 
+/* Component display rules must never override the semantic hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
 .simulation-banner {
   width: min(1440px, calc(100% - 48px));
   margin: 0 auto 18px;
