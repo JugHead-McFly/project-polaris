@@ -43,6 +43,9 @@ the display name and observing location needed for later personalized planning.
 Users may mark coordinates as approximate instead of saving an exact observing
 address.
 
+An invitation link opens a short password-setup screen first. The invited
+person chooses their own password there; Polaris never stores or displays it.
+
 This is intentionally not a hosted copy of Doug's existing dashboard yet. The
 current local dashboard reads the personal capture library, and that library is
 deliberately denied to the hosted runtime. Until planner and portfolio data are

@@ -7,6 +7,11 @@ const usesHostedAuth = authConfig.mode === "supabase";
 let supabaseClient = null;
 let hostedSession = null;
 let hostedObservatory = null;
+const invitationHash = new URLSearchParams(window.location.hash.slice(1));
+const invitationQuery = new URLSearchParams(window.location.search);
+let isInvitationFlow = (
+  invitationHash.get("type") === "invite" || invitationQuery.get("type") === "invite"
+);
 
 const apiFetch = async (input, options = {}) => {
   const headers = new Headers(options.headers || {});
@@ -29,6 +34,23 @@ const setHostedShell = (signedIn) => {
   byId("account-control").hidden = !signedIn;
   byId("refresh-button").closest(".refresh-control").hidden = signedIn;
   document.querySelector(".readonly-badge").hidden = signedIn;
+};
+
+const showInvitationPassword = () => {
+  setHostedShell(false);
+  byId("sign-in-form").hidden = true;
+  byId("accept-invite-form").hidden = false;
+  setText("auth-gate-title", "Choose your Polaris password");
+  setAuthMessage(
+    "You have been invited to the private Polaris alpha. Choose a password to finish setting up your account.",
+    "invite-message",
+  );
+};
+
+const showSignIn = () => {
+  byId("sign-in-form").hidden = false;
+  byId("accept-invite-form").hidden = true;
+  setText("auth-gate-title", "Sign in to Polaris");
 };
 
 const updateHostedAccountForm = (profile, observatory) => {
@@ -133,7 +155,12 @@ const handleHostedSession = async (session) => {
   hostedSession = session;
   if (!session) {
     setHostedShell(false);
+    showSignIn();
     setAuthMessage("");
+    return;
+  }
+  if (isInvitationFlow) {
+    showInvitationPassword();
     return;
   }
   setHostedShell(true);
@@ -189,6 +216,33 @@ const signIn = async (event) => {
     await handleHostedSession(data.session);
   } catch (error) {
     setAuthMessage(error.message);
+  } finally {
+    submit.disabled = false;
+  }
+};
+
+const acceptInvitation = async (event) => {
+  event.preventDefault();
+  const password = byId("invite-password").value;
+  const confirmation = byId("invite-password-confirmation").value;
+  if (password !== confirmation) {
+    setAuthMessage("The two passwords do not match.", "invite-message");
+    return;
+  }
+
+  const submit = event.currentTarget.querySelector("button[type='submit']");
+  submit.disabled = true;
+  setAuthMessage("Saving your password…", "invite-message");
+  try {
+    const { error } = await supabaseClient.auth.updateUser({ password });
+    if (error) throw new Error("Polaris could not save that password. Please try again.");
+    byId("invite-password").value = "";
+    byId("invite-password-confirmation").value = "";
+    isInvitationFlow = false;
+    window.history.replaceState({}, document.title, window.location.pathname);
+    await handleHostedSession(hostedSession);
+  } catch (error) {
+    setAuthMessage(error.message, "invite-message");
   } finally {
     submit.disabled = false;
   }
@@ -2584,6 +2638,7 @@ byId("candidate-site-comparison-clear").addEventListener("click", () => {
   renderSavedSiteLists();
 });
 byId("sign-in-form").addEventListener("submit", signIn);
+byId("accept-invite-form").addEventListener("submit", acceptInvitation);
 byId("sign-out-button").addEventListener("click", signOut);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 

@@ -66,6 +66,18 @@
         <button class="refresh-button" type="submit">Sign in</button>
         <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
       </form>
+      <form class="auth-form" id="accept-invite-form" hidden>
+        <label>
+          <span>Choose a password</span>
+          <input id="invite-password" name="invite-password" type="password" minlength="8" autocomplete="new-password" required>
+        </label>
+        <label>
+          <span>Confirm password</span>
+          <input id="invite-password-confirmation" name="invite-password-confirmation" type="password" minlength="8" autocomplete="new-password" required>
+        </label>
+        <button class="refresh-button" type="submit">Set password and continue</button>
+        <p class="auth-message" id="invite-message" role="status" aria-live="polite"></p>
+      </form>
     </section>
 
     <nav class="app-nav" aria-label="Project Polaris sections">
