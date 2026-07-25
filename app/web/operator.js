@@ -194,6 +194,17 @@ const initializeHostedAuth = async () => {
     authConfig.supabaseUrl,
     authConfig.supabasePublishableKey,
   );
+  // Register immediately: Supabase emits PASSWORD_RECOVERY while it restores
+  // the session embedded in a password-reset link.
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    hostedSession = session;
+    if (event === "PASSWORD_RECOVERY") {
+      isPasswordRecoveryFlow = true;
+      void handleHostedSession(session);
+      return;
+    }
+    if (!session) void handleHostedSession(null);
+  });
 
   // Supabase invitation links can use either an implicit token in the URL hash
   // or an authorization code in the query string. The latter must be exchanged
@@ -210,10 +221,6 @@ const initializeHostedAuth = async () => {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
   await handleHostedSession(data?.session || null);
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
-    hostedSession = session;
-    if (!session) void handleHostedSession(null);
-  });
 };
 
 const signIn = async (event) => {
