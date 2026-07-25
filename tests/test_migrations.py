@@ -67,7 +67,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "recommendation_runs",
         "sessions",
     }
-    assert revision == "20260724_0002"
+    assert revision == "20260725_0004"
 
 
 def test_postgresql_migration_enables_forced_tenant_rls():
@@ -95,7 +95,19 @@ def test_postgresql_migration_enables_forced_tenant_rls():
 
     assert result.returncode == 0, result.stderr
     generated_sql = result.stdout.lower()
+    assert (
+        "alter table alembic_version enable row level security"
+        in generated_sql
+    )
+    assert (
+        "alter table alembic_version force row level security"
+        not in generated_sql
+    )
     for table_name in (
+        "sessions",
+        "candidate_sites",
+        "captures",
+        "capture_analyses",
         "profiles",
         "observatories",
         "recommendation_runs",
@@ -109,8 +121,24 @@ def test_postgresql_migration_enables_forced_tenant_rls():
             f"alter table {table_name} force row level security"
             in generated_sql
         )
+    for table_name in (
+        "profiles",
+        "observatories",
+        "recommendation_runs",
+        "recommendation_feedback",
+    ):
         assert (
             f"create policy {table_name}_owner_isolation"
             in generated_sql
         )
     assert "current_setting('app.current_user_id', true)" in generated_sql
+    assert "create role polaris_app" in generated_sql
+    assert "nobypassrls" in generated_sql
+    assert (
+        "grant select, insert, update, delete "
+        "on table profiles, observatories, recommendation_runs, "
+        "recommendation_feedback to polaris_app"
+        in " ".join(generated_sql.split())
+    )
+    assert "from authenticated" in generated_sql
+    assert "'grant polaris_app to %i'" in generated_sql

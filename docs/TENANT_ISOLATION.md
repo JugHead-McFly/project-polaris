@@ -1,7 +1,8 @@
 # Hosted tenant isolation
 
-Status: application boundary and migration are implemented; execution against
-a real PostgreSQL staging database remains an alpha blocker.
+Status: database-level isolation and the restricted runtime connection have
+passed against the Project Polaris Supabase staging database. An authenticated
+API-level rehearsal remains required before inviting external alpha users.
 
 ## Implemented controls
 
@@ -23,6 +24,24 @@ direct-ID read, update, and delete query includes the authenticated owner
 predicate. Cross-owner resources return the same not-found response as an
 unknown UUID.
 
+Migration `20260725_0003` creates a non-login `polaris_app` role with no
+superuser, database-creation, role-creation, or RLS-bypass capability. It
+receives schema usage and read/write access only to the four hosted tables.
+Browser-facing `anon` and `authenticated` roles receive no direct table
+privileges; the FastAPI service remains the sole hosted application-data
+interface.
+
+Migration `20260725_0004` makes the migration owner a member of
+`polaris_app`. This does not give the application role more power; it lets the
+administrator temporarily assume the restricted role during repeatable
+security rehearsals.
+
+The environment-specific login role `polaris_runtime` is created outside
+source control with a generated password and membership in `polaris_app`.
+Its credentials live only in the ignored `.env.staging` file. The checked-in
+`.env.staging.example` documents the required settings without containing a
+credential.
+
 ## PostgreSQL enforcement
 
 Migration `20260724_0002` enables and forces Row Level Security on all four
@@ -36,6 +55,16 @@ user_id = NULLIF(
 ```
 
 Missing transaction identity therefore grants no row access.
+
+The migration also enables and forces Row Level Security on the empty
+local-product compatibility tables (`sessions`, `candidate_sites`, `captures`,
+and `capture_analyses`) without granting them any policy. Those deferred
+features are therefore deny-by-default in hosted PostgreSQL rather than
+silently exposed through its Data API.
+
+The Alembic version-tracking table has ordinary Row Level Security enabled
+without a client policy. It contains no user data and remains writable by the
+database owner for future migrations while browser roles receive no rows.
 
 Each authenticated database session carries the validated user UUID.
 SQLAlchemy's transaction-start hook calls:
@@ -63,21 +92,40 @@ the same request.
 - Hosted startup requires the complete hosted schema while local startup
   continues to require only Doug's existing local tables.
 
-## Required staging proof
+## Supabase staging proof
 
-SQLite cannot execute PostgreSQL Row Level Security. Before inviting an alpha
-user, a real PostgreSQL staging test must:
+SQLite cannot execute PostgreSQL Row Level Security, so the database controls
+were exercised against the Project Polaris Supabase staging database on
+July 25, 2026.
 
-1. connect with the exact restricted runtime role intended for Render;
-2. verify that the role is not the table owner and does not have `BYPASSRLS`;
-3. migrate a blank database to the current Alembic head;
-4. create Alice and Bob through separate authenticated transactions;
-5. attempt cross-user list, direct-ID read, forged-owner insert, update, and
-   delete at both the API and raw-SQL levels;
-6. commit and reuse a pooled connection to prove the prior UUID is gone;
-7. run the same checks with the tenant setting missing;
-8. record the results and database role grants in this document.
+The clean migration reached revision `20260725_0004`. The repeatable rehearsal
+is stored in
+`scripts/verify_postgresql_tenant_isolation.sql`. It uses recognizable
+synthetic UUIDs, tests the restricted role, verifies transaction-local identity
+reset, and deletes all synthetic rows before returning its result.
 
-Until that exercise passes, RLS behavior is a compiled design rather than a
-verified hosted fact. No production or external-alpha claim should say tenant
-isolation is complete.
+The rehearsal passed with:
+
+- a non-superuser role with no `BYPASSRLS`;
+- access to all four hosted tables and no access to local capture tables;
+- Bob unable to see, update, delete, or forge ownership of Alice's data;
+- no retained identity after a committed transaction;
+- no visibility or inserts when the tenant identity is missing; and
+- zero synthetic rows left behind.
+
+The exact `polaris_runtime` login then connected from Doug's Mac through the
+Supabase IPv4 session pooler. It remained non-superuser, kept RLS enforcement,
+inherited `polaris_app`, could access the four hosted tables, and could not
+access the local capture library.
+
+## Remaining external-alpha proof
+
+Before inviting an alpha user:
+
+1. run the same Alice/Bob separation through authenticated FastAPI requests
+   against Supabase, not only raw SQL;
+2. exercise pooled API requests across commit and rollback boundaries; and
+3. record the passing API results here.
+
+Database-level isolation is now a verified hosted fact. End-to-end hosted
+tenant isolation is not complete until the authenticated API rehearsal passes.

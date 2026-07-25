@@ -25,6 +25,12 @@ TENANT_TABLES = (
     "recommendation_runs",
     "recommendation_feedback",
 )
+LOCAL_ONLY_TABLES = (
+    "sessions",
+    "candidate_sites",
+    "captures",
+    "capture_analyses",
+)
 OWNER_EXPRESSION = (
     "user_id = NULLIF("
     "current_setting('app.current_user_id', true), ''"
@@ -236,6 +242,25 @@ def upgrade() -> None:
     )
 
     if op.get_context().dialect.name == "postgresql":
+        op.execute(
+            sa.text(
+                "ALTER TABLE alembic_version "
+                "ENABLE ROW LEVEL SECURITY"
+            )
+        )
+        for table_name in LOCAL_ONLY_TABLES:
+            op.execute(
+                sa.text(
+                    f"ALTER TABLE {table_name} "
+                    "ENABLE ROW LEVEL SECURITY"
+                )
+            )
+            op.execute(
+                sa.text(
+                    f"ALTER TABLE {table_name} "
+                    "FORCE ROW LEVEL SECURITY"
+                )
+            )
         for table_name in TENANT_TABLES:
             op.execute(
                 sa.text(
