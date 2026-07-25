@@ -50,6 +50,7 @@ def test_hosted_environment_does_not_require_local_archive():
         database_url="postgresql://user:pass@db.example/polaris",
         auth_mode="supabase",
         supabase_url="https://project-ref.supabase.co",
+        supabase_publishable_key="sb_publishable_test",
     )
 
     assert not configured.REQUIRE_LOCAL_CAPTURE_LIBRARY
@@ -86,6 +87,16 @@ def test_supabase_authentication_builds_verification_endpoints():
         )
     )
     assert configured.SUPABASE_AUDIENCE == "authenticated"
+
+
+def test_hosted_supabase_authentication_requires_publishable_key():
+    with pytest.raises(ValueError, match="PUBLISHABLE_KEY"):
+        Settings(
+            environment="staging",
+            database_url="postgresql://user:pass@db.example/polaris",
+            auth_mode="supabase",
+            supabase_url="https://project-ref.supabase.co",
+        )
 
 
 def test_supabase_authentication_requires_project_url():

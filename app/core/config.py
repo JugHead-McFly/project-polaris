@@ -31,6 +31,7 @@ class Settings:
         require_local_capture_library: Optional[bool] = None,
         auth_mode: Optional[str] = None,
         supabase_url: Optional[str] = None,
+        supabase_publishable_key: Optional[str] = None,
         supabase_audience: Optional[str] = None,
         local_user_id: Optional[str] = None,
     ):
@@ -90,6 +91,15 @@ class Settings:
             if configured_supabase_url
             else None
         )
+        self.SUPABASE_PUBLISHABLE_KEY = (
+            supabase_publishable_key
+            if supabase_publishable_key is not None
+            else os.getenv("POLARIS_SUPABASE_PUBLISHABLE_KEY")
+        )
+        if self.SUPABASE_PUBLISHABLE_KEY:
+            self.SUPABASE_PUBLISHABLE_KEY = (
+                self.SUPABASE_PUBLISHABLE_KEY.strip()
+            )
         self.SUPABASE_AUDIENCE = (
             supabase_audience
             or os.getenv("POLARIS_SUPABASE_AUDIENCE", "authenticated")
@@ -147,6 +157,15 @@ class Settings:
             raise ValueError(
                 "Hosted Supabase authentication requires an HTTPS "
                 "POLARIS_SUPABASE_URL."
+            )
+        if (
+            self.AUTH_MODE == "supabase"
+            and self.ENVIRONMENT in {"production", "staging"}
+            and not self.SUPABASE_PUBLISHABLE_KEY
+        ):
+            raise ValueError(
+                "Hosted Supabase authentication requires "
+                "POLARIS_SUPABASE_PUBLISHABLE_KEY."
             )
         if not self.SUPABASE_AUDIENCE:
             raise ValueError("POLARIS_SUPABASE_AUDIENCE cannot be empty.")

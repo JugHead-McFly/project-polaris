@@ -2,6 +2,204 @@
 
 const byId = (id) => document.getElementById(id);
 
+const authConfig = window.POLARIS_AUTH_CONFIG || { mode: "local" };
+const usesHostedAuth = authConfig.mode === "supabase";
+let supabaseClient = null;
+let hostedSession = null;
+let hostedObservatory = null;
+
+const apiFetch = async (input, options = {}) => {
+  const headers = new Headers(options.headers || {});
+  if (hostedSession?.access_token) {
+    headers.set("Authorization", `Bearer ${hostedSession.access_token}`);
+  }
+  return fetch(input, { ...options, headers });
+};
+
+const setAuthMessage = (message, targetId = "auth-message") => {
+  setText(targetId, message, "");
+};
+
+const setHostedShell = (signedIn) => {
+  byId("auth-gate").hidden = signedIn;
+  byId("hosted-account-main").hidden = !signedIn;
+  byId("main-content").hidden = signedIn;
+  document.querySelector(".app-nav").hidden = signedIn;
+  byId("simulation-banner").hidden = true;
+  byId("account-control").hidden = !signedIn;
+  byId("refresh-button").closest(".refresh-control").hidden = signedIn;
+  document.querySelector(".readonly-badge").hidden = signedIn;
+};
+
+const updateHostedAccountForm = (profile, observatory) => {
+  byId("profile-display-name").value = profile?.display_name || "";
+  byId("hosted-observatory-name").value = observatory?.name || "";
+  byId("hosted-latitude").value = observatory?.latitude ?? "";
+  byId("hosted-longitude").value = observatory?.longitude ?? "";
+  byId("hosted-timezone").value = observatory?.timezone_name || "";
+  byId("hosted-bortle").value = observatory?.bortle_class ?? "";
+  byId("hosted-coordinates-approximate").checked = Boolean(
+    observatory?.coordinates_are_approximate,
+  );
+};
+
+const loadHostedAccount = async () => {
+  const profileResponse = await apiFetch("/profile", { cache: "no-store" });
+  let profile = null;
+  if (profileResponse.status === 404) {
+    setText("hosted-account-state", "Setup needed");
+    setText(
+      "hosted-account-intro",
+      "Add your name and one observing location. You can use an approximate location if you prefer not to save your exact address.",
+    );
+  } else if (!profileResponse.ok) {
+    throw new Error("Polaris could not load your account. Please sign out and try again.");
+  } else {
+    profile = await profileResponse.json();
+  }
+
+  const observatoryResponse = await apiFetch("/observatories", { cache: "no-store" });
+  if (!observatoryResponse.ok) {
+    throw new Error("Polaris could not load your observing location. Please try again.");
+  }
+  const observatories = await observatoryResponse.json();
+  hostedObservatory = observatories[0] || null;
+  updateHostedAccountForm(profile, hostedObservatory);
+
+  if (profile && hostedObservatory) {
+    setText("hosted-account-state", "Observing home saved");
+    setText(
+      "hosted-account-intro",
+      "Your account and observing home are ready. Personalized nightly recommendations are the next hosted Polaris milestone.",
+    );
+  }
+};
+
+const saveHostedAccount = async (event) => {
+  event.preventDefault();
+  const submit = event.currentTarget.querySelector("button[type='submit']");
+  submit.disabled = true;
+  setAuthMessage("Saving your observing home…", "hosted-account-message");
+
+  try {
+    const profileResponse = await apiFetch("/profile", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        display_name: byId("profile-display-name").value.trim(),
+        onboarding_state: "observatory",
+      }),
+    });
+    if (!profileResponse.ok) {
+      throw new Error("Polaris could not save your profile. Please try again.");
+    }
+
+    const observatoryPayload = {
+      name: byId("hosted-observatory-name").value.trim(),
+      latitude: Number(byId("hosted-latitude").value),
+      longitude: Number(byId("hosted-longitude").value),
+      timezone_name: byId("hosted-timezone").value.trim(),
+      bortle_class: byId("hosted-bortle").value
+        ? Number(byId("hosted-bortle").value)
+        : null,
+      coordinates_are_approximate: byId("hosted-coordinates-approximate").checked,
+    };
+    const observatoryResponse = await apiFetch(
+      hostedObservatory ? `/observatories/${hostedObservatory.id}` : "/observatories",
+      {
+        method: hostedObservatory ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(observatoryPayload),
+      },
+    );
+    if (!observatoryResponse.ok) {
+      throw new Error("Polaris could not save your observing location. Check the values and try again.");
+    }
+    hostedObservatory = await observatoryResponse.json();
+    setText("hosted-account-state", "Observing home saved");
+    setText(
+      "hosted-account-intro",
+      "Your account and observing home are ready. Personalized nightly recommendations are the next hosted Polaris milestone.",
+    );
+    setAuthMessage("Saved.", "hosted-account-message");
+  } catch (error) {
+    setAuthMessage(error.message, "hosted-account-message");
+  } finally {
+    submit.disabled = false;
+  }
+};
+
+const handleHostedSession = async (session) => {
+  hostedSession = session;
+  if (!session) {
+    setHostedShell(false);
+    setAuthMessage("");
+    return;
+  }
+  setHostedShell(true);
+  setText("account-email", session.user?.email || "Signed in");
+  try {
+    await loadHostedAccount();
+  } catch (error) {
+    setAuthMessage(error.message, "hosted-account-message");
+  }
+};
+
+const initializeHostedAuth = async () => {
+  if (!authConfig.supabaseUrl || !authConfig.supabasePublishableKey) {
+    setHostedShell(false);
+    setAuthMessage("Polaris sign-in is not configured yet. Please contact the operator.");
+    return;
+  }
+  if (!window.supabase?.createClient) {
+    setHostedShell(false);
+    setAuthMessage("Polaris could not load secure sign-in. Please refresh the page.");
+    return;
+  }
+
+  supabaseClient = window.supabase.createClient(
+    authConfig.supabaseUrl,
+    authConfig.supabasePublishableKey,
+  );
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) {
+    setAuthMessage("Polaris could not restore your secure session. Please sign in again.");
+  }
+  await handleHostedSession(data?.session || null);
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    hostedSession = session;
+    if (!session) void handleHostedSession(null);
+  });
+};
+
+const signIn = async (event) => {
+  event.preventDefault();
+  const submit = event.currentTarget.querySelector("button[type='submit']");
+  submit.disabled = true;
+  setAuthMessage("Signing in…");
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: byId("sign-in-email").value.trim(),
+      password: byId("sign-in-password").value,
+    });
+    if (error || !data.session) {
+      throw new Error("Email or password was not accepted. Please try again.");
+    }
+    byId("sign-in-password").value = "";
+    await handleHostedSession(data.session);
+  } catch (error) {
+    setAuthMessage(error.message);
+  } finally {
+    submit.disabled = false;
+  }
+};
+
+const signOut = async () => {
+  if (supabaseClient) await supabaseClient.auth.signOut();
+  hostedObservatory = null;
+  await handleHostedSession(null);
+};
+
 const VIEW_PATHS = {
   "/operator": "tonight",
   "/operator/portfolio": "portfolio",
@@ -2081,14 +2279,14 @@ const renderCandidateSites = (origin, sites) => {
 };
 
 const loadCandidateSites = async (origin) => {
-  const response = await fetch("/candidate-sites", { cache: "no-store" });
+  const response = await apiFetch("/candidate-sites", { cache: "no-store" });
   if (!response.ok) throw new Error(`Candidate sites endpoint returned ${response.status}.`);
   renderCandidateSites(origin, await response.json());
 };
 
 const updateCandidateSite = async (siteId, payload) => {
   try {
-    const response = await fetch(`/candidate-sites/${siteId}`, {
+    const response = await apiFetch(`/candidate-sites/${siteId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -2109,7 +2307,7 @@ const updateCandidateSite = async (siteId, payload) => {
 
 const removeCandidateSite = async (siteId) => {
   if (!window.confirm("Remove this saved potential site?")) return;
-  const response = await fetch(`/candidate-sites/${siteId}`, { method: "DELETE" });
+  const response = await apiFetch(`/candidate-sites/${siteId}`, { method: "DELETE" });
   if (!response.ok) {
     setText("candidate-site-status", "The site could not be removed. Please try again.");
     return;
@@ -2145,7 +2343,7 @@ const saveCandidateSite = async (event) => {
   submit.disabled = true;
   setText("candidate-site-status", "Saving potential site…");
   try {
-    const response = await fetch("/candidate-sites", {
+    const response = await apiFetch("/candidate-sites", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -2192,15 +2390,15 @@ const loadDashboard = async () => {
   byId("load-error").hidden = true;
 
   const [planResult, systemResult, dashboardResult] = await Promise.allSettled([
-    fetch("/tonight", { cache: "no-store" }).then((response) => {
+    apiFetch("/tonight", { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`Tonight endpoint returned ${response.status}.`);
       return response.json();
     }),
-    fetch("/system", { cache: "no-store" }).then((response) => {
+    apiFetch("/system", { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`System endpoint returned ${response.status}.`);
       return response.json();
     }),
-    fetch(`/dashboard?include_all_history=${historyExpanded}`, { cache: "no-store" }).then((response) => {
+    apiFetch(`/dashboard?include_all_history=${historyExpanded}`, { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`Dashboard endpoint returned ${response.status}.`);
       return response.json();
     }),
@@ -2274,7 +2472,7 @@ const toggleHistory = async () => {
   button.textContent = nextExpanded ? "Loading all captures…" : "Showing fewer captures…";
 
   try {
-    const response = await fetch(
+    const response = await apiFetch(
       `/dashboard?include_all_history=${nextExpanded}`,
       { cache: "no-store" },
     );
@@ -2385,4 +2583,16 @@ byId("candidate-site-comparison-clear").addEventListener("click", () => {
   selectedCandidateSiteIds = [];
   renderSavedSiteLists();
 });
-runDashboardLoad();
+byId("sign-in-form").addEventListener("submit", signIn);
+byId("sign-out-button").addEventListener("click", signOut);
+byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
+
+const bootApplication = async () => {
+  if (usesHostedAuth) {
+    await initializeHostedAuth();
+    return;
+  }
+  runDashboardLoad();
+};
+
+bootApplication();

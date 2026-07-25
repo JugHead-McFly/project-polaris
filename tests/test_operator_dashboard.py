@@ -63,9 +63,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert script.status_code == 200
     assert leaflet_stylesheet.status_code == 200
     assert leaflet_script.status_code == 200
-    assert 'fetch("/tonight"' in script.text
-    assert 'fetch("/system"' in script.text
-    assert 'fetch(`/dashboard?include_all_history=${historyExpanded}`' in script.text
+    assert 'apiFetch("/tonight"' in script.text
+    assert 'apiFetch("/system"' in script.text
+    assert 'apiFetch(`/dashboard?include_all_history=${historyExpanded}`' in script.text
     assert "capture.polaris_id" not in script.text
     assert "Capture quality" in script.text
     assert "Average capture quality" not in script.text
@@ -174,6 +174,29 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
             for method in getattr(route, "methods", set())
         }
         assert methods == {"GET"}
+
+
+def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
+    monkeypatch.setattr(
+        operator_api,
+        "settings",
+        SimpleNamespace(
+            AUTH_MODE="supabase",
+            SUPABASE_URL="https://project-ref.supabase.co",
+            SUPABASE_PUBLISHABLE_KEY="sb_publishable_test",
+        ),
+    )
+
+    html = operator_api._dashboard_html()
+
+    assert '"mode": "supabase"' in html
+    assert '"supabaseUrl": "https://project-ref.supabase.co"' in html
+    assert '"supabasePublishableKey": "sb_publishable_test"' in html
+    assert "supabase-js@2" in html
+    assert "Private alpha access" in html
+    assert "Your observing home" in html
+    assert "Sign out" in html
+    assert "secret" not in html.lower()
 
 
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):

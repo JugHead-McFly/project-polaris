@@ -11,7 +11,9 @@
     >
     <link rel="stylesheet" href="/operator-assets/leaflet.css">
     <link rel="stylesheet" href="/operator-assets/operator.css?v=__ASSET_VERSION__">
+    <script>window.POLARIS_AUTH_CONFIG = __POLARIS_AUTH_CONFIG__;</script>
     <script defer src="/operator-assets/leaflet.js"></script>
+    __SUPABASE_CLIENT_SCRIPT__
     <script defer src="/operator-assets/operator.js?v=__ASSET_VERSION__"></script>
   </head>
   <body>
@@ -27,6 +29,12 @@
       </a>
 
       <div class="header-actions">
+        <div class="account-control" id="account-control" hidden>
+          <span class="account-email" id="account-email"></span>
+          <button class="account-button" id="sign-out-button" type="button">
+            Sign out
+          </button>
+        </div>
         <span class="readonly-badge">Read-only advisory</span>
         <div class="refresh-control">
           <button class="refresh-button" id="refresh-button" type="button">
@@ -37,6 +45,29 @@
       </div>
     </header>
 
+    <section class="auth-gate panel" id="auth-gate" hidden aria-labelledby="auth-gate-title">
+      <div class="auth-gate-copy">
+        <p class="eyebrow">Private alpha access</p>
+        <h1 id="auth-gate-title">Sign in to Polaris</h1>
+        <p>
+          Polaris uses a private account so your observatory and future
+          recommendations remain separate from every other observer's.
+        </p>
+      </div>
+      <form class="auth-form" id="sign-in-form">
+        <label>
+          <span>Email address</span>
+          <input id="sign-in-email" name="email" type="email" autocomplete="email" required>
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="sign-in-password" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="refresh-button" type="submit">Sign in</button>
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <nav class="app-nav" aria-label="Project Polaris sections">
       <a href="/operator" data-view-link="tonight">Tonight</a>
       <a href="/operator/portfolio" data-view-link="portfolio">Portfolio</a>
@@ -45,6 +76,67 @@
       <a href="/operator/locations" data-view-link="locations">Locations</a>
       <a href="/operator/data" data-view-link="data">Data status</a>
     </nav>
+
+    <main class="hosted-account-main" id="hosted-account-main" hidden>
+      <section class="panel hosted-account-panel" aria-labelledby="hosted-account-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Hosted alpha setup</p>
+            <h1 id="hosted-account-title">Your observing home</h1>
+          </div>
+          <span id="hosted-account-state">Checking account</span>
+        </div>
+        <p class="panel-intro" id="hosted-account-intro">
+          Add the one observing location Polaris should use for your upcoming
+          personalized nightly recommendations.
+        </p>
+        <form class="hosted-account-form" id="hosted-account-form">
+          <div class="hosted-form-grid">
+            <label>
+              <span>Your name</span>
+              <input id="profile-display-name" name="display-name" maxlength="100" autocomplete="name" required>
+            </label>
+            <label>
+              <span>Observatory name</span>
+              <input id="hosted-observatory-name" name="observatory-name" maxlength="100" placeholder="e.g., Backyard Observatory" required>
+            </label>
+            <label>
+              <span>Latitude</span>
+              <input id="hosted-latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="33.25" required>
+            </label>
+            <label>
+              <span>Longitude</span>
+              <input id="hosted-longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-111.75" required>
+            </label>
+            <label>
+              <span>Time zone</span>
+              <input id="hosted-timezone" name="timezone" maxlength="64" placeholder="America/Phoenix" required>
+            </label>
+            <label>
+              <span>Bortle class <small>optional</small></span>
+              <select id="hosted-bortle" name="bortle">
+                <option value="">Not known yet</option>
+                <option value="1">Bortle 1</option>
+                <option value="2">Bortle 2</option>
+                <option value="3">Bortle 3</option>
+                <option value="4">Bortle 4</option>
+                <option value="5">Bortle 5</option>
+                <option value="6">Bortle 6</option>
+                <option value="7">Bortle 7</option>
+                <option value="8">Bortle 8</option>
+                <option value="9">Bortle 9</option>
+              </select>
+            </label>
+          </div>
+          <label class="approximate-location">
+            <input id="hosted-coordinates-approximate" type="checkbox">
+            <span>Use an approximate location to protect my exact observing address.</span>
+          </label>
+          <button class="refresh-button" type="submit">Save my observing home</button>
+          <p class="auth-message" id="hosted-account-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
 
     <aside class="simulation-banner" id="simulation-banner" role="status" hidden>
       <div>

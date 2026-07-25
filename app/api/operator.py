@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,6 +9,7 @@ from app.core.auth import CurrentUser
 from app.core.auth import get_current_user
 from app.core.storage import TARGETS_ROOT
 from app.core.storage import get_processed_preview_path
+from app.core.config import settings
 from app.database.database import get_tenant_db
 from app.models import Capture
 
@@ -33,9 +35,24 @@ def _dashboard_html() -> str:
         asset.stat().st_mtime_ns
         for asset in ASSET_FILES
     )
-    return DASHBOARD_FILE.read_text(encoding="utf-8").replace(
-        "__ASSET_VERSION__",
-        str(asset_version),
+    auth_config = json.dumps(
+        {
+            "mode": settings.AUTH_MODE,
+            "supabaseUrl": settings.SUPABASE_URL,
+            "supabasePublishableKey": settings.SUPABASE_PUBLISHABLE_KEY,
+        },
+    ).replace("<", "\\u003c")
+    auth_script = (
+        '<script defer src="https://cdn.jsdelivr.net/npm/'
+        '@supabase/supabase-js@2"></script>'
+        if settings.AUTH_MODE == "supabase"
+        else ""
+    )
+    return (
+        DASHBOARD_FILE.read_text(encoding="utf-8")
+        .replace("__ASSET_VERSION__", str(asset_version))
+        .replace("__POLARIS_AUTH_CONFIG__", auth_config)
+        .replace("__SUPABASE_CLIENT_SCRIPT__", auth_script)
     )
 
 

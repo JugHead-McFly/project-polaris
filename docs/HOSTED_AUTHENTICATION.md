@@ -1,7 +1,8 @@
 # Polaris hosted authentication boundary
 
-Status: implemented foundation for the hosted alpha; tenant ownership and the
-browser sign-in flow are intentionally separate follow-on slices.
+Status: the hosted authentication foundation, browser sign-in screen, and
+first observing-home setup screen are implemented. Invitation-only live-user
+testing remains outstanding.
 
 ## Runtime modes
 
@@ -17,6 +18,7 @@ For Supabase mode, configure:
 ```text
 POLARIS_AUTH_MODE=supabase
 POLARIS_SUPABASE_URL=https://<project-ref>.supabase.co
+POLARIS_SUPABASE_PUBLISHABLE_KEY=sb_publishable_<browser-safe-project-key>
 POLARIS_SUPABASE_AUDIENCE=authenticated
 ```
 
@@ -25,6 +27,32 @@ accepts only Supabase's asymmetric `ES256` and `RS256` signing algorithms and
 validates the signature, issuer, audience, expiration, issued-at time, role,
 and UUID subject. Signing keys are cached for five minutes; private JWT secrets
 are neither needed nor accepted by this implementation.
+
+The browser receives only the Supabase project URL and its publishable key.
+That key is designed for browser use; it does not grant server or database
+administrator access. The restricted `polaris_runtime` database password and
+all Supabase secret keys remain in ignored environment settings and are never
+rendered into HTML.
+
+## Hosted browser flow
+
+When `POLARIS_AUTH_MODE=supabase`, the public operator shell initially shows a
+sign-in form. A successful email-and-password sign-in provides the browser
+access token to Polaris data requests. The first signed-in screen collects only
+the display name and observing location needed for later personalized planning.
+Users may mark coordinates as approximate instead of saving an exact observing
+address.
+
+This is intentionally not a hosted copy of Doug's existing dashboard yet. The
+current local dashboard reads the personal capture library, and that library is
+deliberately denied to the hosted runtime. Until planner and portfolio data are
+fully migrated to hosted tenant records, the signed-in screen communicates that
+honestly rather than displaying misleading personal data.
+
+For the private alpha, configure Supabase to disallow public sign-ups and
+invite individual testers. Supabase documents that disabling new sign-ups still
+allows existing invited users to sign in, and its browser client is intended to
+use the project URL plus a publishable key.
 
 ## Route inventory
 

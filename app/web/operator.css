@@ -275,6 +275,135 @@ footer {
   border-radius: 999px;
 }
 
+.account-control {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.account-email {
+  max-width: 190px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-button {
+  min-height: 36px;
+  padding: 0 12px;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.account-button:hover,
+.account-button:focus-visible {
+  border-color: rgba(82, 214, 199, 0.55);
+  background: var(--cyan-soft);
+}
+
+.auth-gate,
+.hosted-account-main {
+  width: min(760px, calc(100% - 48px));
+  margin: 34px auto;
+}
+
+.auth-gate {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: 28px;
+  padding: 30px;
+}
+
+.auth-gate h1,
+.hosted-account-panel h1 {
+  margin: 8px 0 0;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.05;
+}
+
+.auth-gate-copy > p:last-child {
+  margin: 14px 0 0;
+  color: #b5c8cc;
+}
+
+.auth-form,
+.hosted-account-form {
+  display: grid;
+  gap: 14px;
+}
+
+.auth-form label,
+.hosted-account-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.auth-form input,
+.hosted-account-form input,
+.hosted-account-form select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: var(--text);
+  background: rgba(5, 15, 22, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font: inherit;
+}
+
+.auth-form input:focus,
+.hosted-account-form input:focus,
+.hosted-account-form select:focus {
+  border-color: rgba(82, 214, 199, 0.65);
+  outline: 3px solid rgba(82, 214, 199, 0.16);
+}
+
+.auth-message {
+  min-height: 1.5em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hosted-account-panel {
+  padding: 30px;
+}
+
+.hosted-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hosted-account-form label span small {
+  font-weight: 500;
+}
+
+.hosted-account-form .approximate-location {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: #b5c8cc;
+  font-weight: 500;
+}
+
+.hosted-account-form .approximate-location input {
+  width: 17px;
+  min-height: 17px;
+  margin: 2px 0 0;
+  accent-color: var(--cyan);
+}
+
 .refresh-button {
   min-height: 42px;
   padding: 0 16px;
@@ -2449,6 +2578,33 @@ footer {
 
   .refresh-button {
     min-height: 44px;
+  }
+
+  .account-control {
+    max-width: 145px;
+  }
+
+  .account-email {
+    display: none;
+  }
+
+  .auth-gate,
+  .hosted-account-main {
+    width: min(100% - 28px, 760px);
+    margin: 20px auto;
+  }
+
+  .auth-gate {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .hosted-account-panel {
+    padding: 24px;
+  }
+
+  .hosted-form-grid {
+    grid-template-columns: 1fr;
   }
 
   .decision-panel {
