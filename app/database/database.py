@@ -24,6 +24,10 @@ def engine_options(database_url: str):
         options["connect_args"] = {
             "check_same_thread": False,
         }
+    elif database_url.startswith(("postgresql:", "postgresql+")):
+        options["connect_args"] = {
+            "connect_timeout": 10,
+        }
     return options
 
 
