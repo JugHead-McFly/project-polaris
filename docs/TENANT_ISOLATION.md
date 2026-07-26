@@ -1,8 +1,9 @@
 # Hosted tenant isolation
 
-Status: database-level isolation and the restricted runtime connection have
-passed against the Project Polaris Supabase staging database. An authenticated
-API-level rehearsal remains required before inviting external alpha users.
+Status: database-level isolation, the restricted runtime connection, and an
+authenticated API-level rehearsal have passed against the Project Polaris
+Supabase staging database. The tenant boundary is ready for a small external
+private-alpha rehearsal.
 
 ## Implemented controls
 
@@ -118,14 +119,31 @@ Supabase IPv4 session pooler. It remained non-superuser, kept RLS enforcement,
 inherited `polaris_app`, could access the four hosted tables, and could not
 access the local capture library.
 
-## Remaining external-alpha proof
+## Authenticated hosted API proof
 
-Before inviting an alpha user:
+The end-to-end rehearsal passed on July 26, 2026. A temporary, auto-confirmed
+Supabase user authenticated through the same password flow an alpha user will
+use. Requests then passed through the running FastAPI service and its pooled
+restricted PostgreSQL connection.
 
-1. run the same Alice/Bob separation through authenticated FastAPI requests
-   against Supabase, not only raw SQL;
-2. exercise pooled API requests across commit and rollback boundaries; and
-3. record the passing API results here.
+The temporary user:
 
-Database-level isolation is now a verified hosted fact. End-to-end hosted
-tenant isolation is not complete until the authenticated API rehearsal passes.
+- received a distinct validated identity;
+- could not see Doug's observatory in list results;
+- received the same not-found response for direct read, update, and delete
+  attempts against Doug's observatory;
+- could not inject Doug's `user_id` while creating a record;
+- could create, read, update, and delete its own observatory normally; and
+- left no observatory, profile, Auth user, credential file, or browser session
+  behind after cleanup.
+
+Doug's protected observatory was queried again after the attacks and remained
+unchanged. The repeatable utility is
+`scripts/verify_hosted_api_isolation.py`. It accepts temporary credentials only
+through process environment or a restricted temporary file and never prints
+the password or access token.
+
+Database-level and authenticated API-level tenant isolation are now verified
+hosted facts. A small external private alpha still needs to validate the human
+onboarding and recommendation experience, but it is no longer blocked on this
+specific data-separation proof.

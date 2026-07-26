@@ -1,8 +1,8 @@
 # Polaris hosted authentication boundary
 
-Status: the hosted authentication foundation, browser sign-in screen, and
-first observing-home setup screen are implemented. Invitation-only live-user
-testing remains outstanding.
+Status: hosted sign-in, password recovery, first observing-home setup, and
+authenticated tenant isolation have passed against the Supabase staging
+project. Invitation-only external-user testing remains outstanding.
 
 ## Runtime modes
 
@@ -45,6 +45,9 @@ address.
 
 An invitation link opens a short password-setup screen first. The invited
 person chooses their own password there; Polaris never stores or displays it.
+Existing users can request a password-recovery message from the Polaris sign-in
+screen. The recovery link returns to the same Polaris origin and displays the
+password-update screen before restoring the signed-in session.
 
 This is intentionally not a hosted copy of Doug's existing dashboard yet. The
 current local dashboard reads the personal capture library, and that library is

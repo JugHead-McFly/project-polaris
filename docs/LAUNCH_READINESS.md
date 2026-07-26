@@ -1,6 +1,6 @@
 # Polaris Launch Readiness
 
-Last updated: 2026-07-23
+Last updated: 2026-07-26
 
 This is a living business and product checklist. It is not legal or tax advice.
 Items with legal, tax, or regulatory consequences require qualified professional
@@ -10,7 +10,7 @@ review before Doug relies on them.
 
 ### Product and operations
 
-- [ ] The hosted alpha has separate user accounts and observatory data isolation.
+- [x] The hosted alpha has separate user accounts and observatory data isolation.
 - [ ] Onboarding gets a new user to a credible nightly recommendation.
 - [ ] The recommendation explains the important reasons without exposing internal scoring recipes.
 - [ ] Feedback, support contact, error monitoring, backups, and recovery are tested.
