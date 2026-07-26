@@ -30,6 +30,9 @@ and disposable-restore gates passed on July 25–26, 2026. A retained encrypted
 recovery point, separate-project restore, and basic error monitoring remain
 open.
 
+The code-side monitoring boundary is implemented but intentionally inactive
+until a dedicated monitoring project is approved, configured, and tested.
+
 ## Suggested first cohort
 
 Start with two or three people who:

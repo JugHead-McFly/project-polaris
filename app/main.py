@@ -24,6 +24,8 @@ from app.api.system import router as system_router
 from app.api.tonight import router as tonight_router
 from app.core.auth import get_current_user
 from app.core.config import settings
+from app.core.monitoring import capture_request_exception
+from app.core.monitoring import configure_monitoring
 from app.core.runtime_logging import configure_logging
 from app.core.startup_preflight import format_preflight_failure
 from app.core.startup_preflight import log_preflight_report
@@ -39,6 +41,7 @@ from app.api.planner import (
 from app.api.schedule import router as schedule_router
 
 
+monitoring_enabled = configure_monitoring()
 logger = configure_logging()
 
 
@@ -65,14 +68,24 @@ async def log_request(request: Request, call_next):
 
     try:
         response = await call_next(request)
-    except Exception:
+    except Exception as error:
         duration_ms = round((perf_counter() - started_at) * 1000, 1)
-        logger.exception(
-            "request_failed request_id=%s method=%s path=%s duration_ms=%s",
+        capture_request_exception(
+            error,
+            request_id=request_id,
+            method=request.method,
+            path=request.url.path,
+        )
+        logger.error(
+            (
+                "request_failed request_id=%s method=%s path=%s "
+                "duration_ms=%s error_type=%s"
+            ),
             request_id,
             request.method,
             request.url.path,
             duration_ms,
+            type(error).__name__,
         )
         return JSONResponse(
             status_code=500,

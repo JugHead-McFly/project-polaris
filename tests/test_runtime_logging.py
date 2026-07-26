@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from unittest.mock import patch
 
 from app.main import log_request
 
 
-def test_unhandled_request_failure_returns_traceable_safe_response():
+@patch("app.main.capture_request_exception")
+def test_unhandled_request_failure_returns_traceable_safe_response(
+    capture_exception,
+):
     failing_app = FastAPI()
     failing_app.middleware("http")(log_request)
 
@@ -21,3 +25,8 @@ def test_unhandled_request_failure_returns_traceable_safe_response():
     assert response.json()["detail"] == "Internal server error."
     assert response.json()["request_id"] == response.headers["x-request-id"]
     assert "sensitive internal detail" not in response.text
+    capture_exception.assert_called_once()
+    _, keyword_arguments = capture_exception.call_args
+    assert keyword_arguments["request_id"] == response.json()["request_id"]
+    assert keyword_arguments["method"] == "GET"
+    assert keyword_arguments["path"] == "/failure"

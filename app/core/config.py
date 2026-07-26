@@ -34,6 +34,7 @@ class Settings:
         supabase_publishable_key: Optional[str] = None,
         supabase_audience: Optional[str] = None,
         local_user_id: Optional[str] = None,
+        sentry_dsn: Optional[str] = None,
     ):
         self.ENVIRONMENT = (
             environment
@@ -117,6 +118,13 @@ class Settings:
             raise ValueError(
                 "POLARIS_LOCAL_USER_ID must be a valid UUID."
             ) from error
+        self.SENTRY_DSN = (
+            sentry_dsn
+            if sentry_dsn is not None
+            else os.getenv("POLARIS_SENTRY_DSN")
+        )
+        if self.SENTRY_DSN:
+            self.SENTRY_DSN = self.SENTRY_DSN.strip()
 
         self.SUPABASE_ISSUER = (
             f"{self.SUPABASE_URL}/auth/v1"
