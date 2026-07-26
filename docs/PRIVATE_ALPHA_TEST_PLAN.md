@@ -25,8 +25,10 @@ Do not invite an external tester until all of these are true:
 - the invitation explains that this is an unfinished private alpha; and
 - Doug knows how to disable an account and remove its stored data.
 
-The account, password-recovery, observatory-setup, and data-isolation gates
-passed on July 25–26, 2026.
+The account, password-recovery, observatory-setup, data-isolation, tenant-export,
+and disposable-restore gates passed on July 25–26, 2026. A retained encrypted
+recovery point, separate-project restore, and basic error monitoring remain
+open.
 
 ## Suggested first cohort
 

@@ -13,7 +13,10 @@ review before Doug relies on them.
 - [x] The hosted alpha has separate user accounts and observatory data isolation.
 - [ ] Onboarding gets a new user to a credible nightly recommendation.
 - [ ] The recommendation explains the important reasons without exposing internal scoring recipes.
-- [ ] Feedback, support contact, error monitoring, backups, and recovery are tested.
+- [x] Tenant export and a disposable restore rehearsal have passed.
+- [ ] A dated hosted export is retained on encrypted off-device media.
+- [ ] A full restore into a separate Supabase project has passed.
+- [ ] Feedback, support contact, and error monitoring are tested.
 - [ ] A narrow alpha invitation and an acceptance/support process are ready.
 
 ### Brand and communication
