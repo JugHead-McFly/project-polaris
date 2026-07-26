@@ -252,7 +252,9 @@ const requestPasswordReset = async () => {
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}${window.location.pathname}`,
     });
-    if (error) throw new Error("Polaris could not send a reset link. Please try again later.");
+    if (error) {
+      throw new Error(error.message || "Polaris could not send a reset link. Please try again later.");
+    }
     setAuthMessage("Check your email for the reset link. Open it in this same browser.");
   } catch (error) {
     setAuthMessage(error.message);
