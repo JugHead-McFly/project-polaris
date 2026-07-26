@@ -380,6 +380,23 @@ footer {
   font-size: 13px;
 }
 
+.auth-link-button {
+  justify-self: start;
+  padding: 0;
+  color: var(--cyan);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-link-button:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 .hosted-account-panel {
   padding: 30px;
 }

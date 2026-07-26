@@ -238,6 +238,29 @@ const signIn = async (event) => {
   }
 };
 
+const requestPasswordReset = async () => {
+  const email = byId("sign-in-email").value.trim();
+  if (!email) {
+    setAuthMessage("Enter your email address first, then choose Forgot password.");
+    return;
+  }
+
+  const button = byId("forgot-password-button");
+  button.disabled = true;
+  setAuthMessage("Sending a secure reset link…");
+  try {
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}${window.location.pathname}`,
+    });
+    if (error) throw new Error("Polaris could not send a reset link. Please try again later.");
+    setAuthMessage("Check your email for the reset link. Open it in this same browser.");
+  } catch (error) {
+    setAuthMessage(error.message);
+  } finally {
+    button.disabled = false;
+  }
+};
+
 const acceptInvitation = async (event) => {
   event.preventDefault();
   const password = byId("invite-password").value;
@@ -2658,6 +2681,7 @@ byId("candidate-site-comparison-clear").addEventListener("click", () => {
   renderSavedSiteLists();
 });
 byId("sign-in-form").addEventListener("submit", signIn);
+byId("forgot-password-button").addEventListener("click", requestPasswordReset);
 byId("accept-invite-form").addEventListener("submit", acceptInvitation);
 byId("sign-out-button").addEventListener("click", signOut);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);

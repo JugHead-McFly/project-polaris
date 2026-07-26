@@ -195,6 +195,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "supabase-js@2" in html
     assert "Private alpha access" in html
     assert "Set password and continue" in html
+    assert "Forgot password?" in html
     assert "Your observing home" in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
