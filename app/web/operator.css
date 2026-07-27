@@ -331,6 +331,7 @@ footer {
 }
 
 .auth-gate h1,
+.hosted-account-loading h1,
 .hosted-account-panel h1 {
   margin: 8px 0 0;
   font-size: clamp(30px, 4vw, 42px);
@@ -399,6 +400,17 @@ footer {
 .auth-link-button:hover {
   color: var(--text);
   text-decoration: underline;
+}
+
+.hosted-account-loading {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 30px;
+}
+
+.hosted-account-loading > p:last-child {
+  margin: 14px 0 0;
+  color: #b5c8cc;
 }
 
 .hosted-account-panel {

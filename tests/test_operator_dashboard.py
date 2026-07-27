@@ -197,6 +197,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Set password and continue" in html
     assert "Forgot password?" in html
     assert "Your observing home" in html
+    assert "Loading your observatory" in html
     assert "Your imaging plan" in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
@@ -205,6 +206,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
 
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
     assert "loadHostedTonight" in script
+    assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderHostedSchedule" in script
     assert 'apiFetch("/tonight"' in script

@@ -72,7 +72,19 @@ const updateHostedAccountForm = (profile, observatory) => {
   );
 };
 
+const showHostedAccountLoading = (message = "") => {
+  byId("hosted-account-panel").hidden = true;
+  byId("hosted-tonight-panel").hidden = true;
+  byId("hosted-account-loading").hidden = false;
+  setText(
+    "hosted-account-loading-message",
+    message,
+    "Checking your saved observing home before building tonight's plan.",
+  );
+};
+
 const showHostedAccountSetup = (message = "") => {
+  byId("hosted-account-loading").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
   byId("hosted-account-panel").hidden = false;
   byId("hosted-account-cancel").hidden = !hostedObservatory;
@@ -80,6 +92,7 @@ const showHostedAccountSetup = (message = "") => {
 };
 
 const showHostedTonight = () => {
+  byId("hosted-account-loading").hidden = true;
   byId("hosted-account-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = false;
   setAuthMessage("", "hosted-account-message");
@@ -284,6 +297,11 @@ const loadHostedAccount = async () => {
   hostedObservatory = observatories[0] || null;
   hostedProfile = profile;
   updateHostedAccountForm(profile, hostedObservatory);
+  setText(
+    "observatory-name",
+    hostedObservatory?.name,
+    hostedObservatory ? "Your observatory" : "Setup required",
+  );
 
   if (profile && hostedObservatory) {
     setText("hosted-account-state", "Observing home saved");
@@ -366,11 +384,12 @@ const handleHostedSession = async (session) => {
     return;
   }
   setHostedShell(true);
+  showHostedAccountLoading();
   setText("account-email", session.user?.email || "Signed in");
   try {
     await loadHostedAccount();
   } catch (error) {
-    setAuthMessage(error.message, "hosted-account-message");
+    showHostedAccountLoading(error.message);
   }
 };
 

@@ -93,6 +93,19 @@
     </nav>
 
     <main class="hosted-account-main" id="hosted-account-main" hidden>
+      <section
+        class="panel hosted-account-loading"
+        id="hosted-account-loading"
+        aria-labelledby="hosted-account-loading-title"
+        aria-live="polite"
+      >
+        <p class="eyebrow">Private alpha access</p>
+        <h1 id="hosted-account-loading-title">Loading your observatory…</h1>
+        <p id="hosted-account-loading-message">
+          Checking your saved observing home before building tonight's plan.
+        </p>
+      </section>
+
       <section class="hosted-tonight" id="hosted-tonight-panel" hidden aria-labelledby="hosted-tonight-title">
         <div class="hosted-tonight-heading">
           <div>
@@ -181,7 +194,7 @@
         <p class="auth-message hosted-plan-message" id="hosted-plan-message" role="status" aria-live="polite"></p>
       </section>
 
-      <section class="panel hosted-account-panel" id="hosted-account-panel" aria-labelledby="hosted-account-title">
+      <section class="panel hosted-account-panel" id="hosted-account-panel" hidden aria-labelledby="hosted-account-title">
         <div class="panel-heading">
           <div>
             <p class="eyebrow">Hosted alpha setup</p>
