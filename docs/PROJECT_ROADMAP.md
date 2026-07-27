@@ -92,6 +92,9 @@ The hosted alpha must do only a few things well:
    usable window.
 3. Explain why a target is recommended or deferred.
 4. Let the user say whether the recommendation was useful.
+5. Keep every scheduled block within the selected telescope's operating
+   limits. For DWARF devices, split recommendations above the 999-frame limit
+   into multiple clearly labeled capture blocks.
 
 The first v1.8 foundation and browser slices are complete: protected planning
 routes resolve the signed-in user's observing home and use its coordinates and
