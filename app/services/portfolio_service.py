@@ -24,12 +24,34 @@ SCIENCE_PRIORITY = {
     "M22": 10,
 }
 
+TARGET_FILTER_RECOMMENDATIONS = {
+    # Emission-line targets benefit from the DWARF nebula filter.
+    "C 20": "Duo-Band",
+    "M8": "Duo-Band",
+    "M16": "Duo-Band",
+    "M17": "Duo-Band",
+    "M20": "Duo-Band",
+    "M27": "Duo-Band",
+    "M57": "Duo-Band",
+    "M97": "Duo-Band",
+    # Galaxies and star clusters are broadband targets.
+    "M11": "Astro",
+    "M13": "Astro",
+    "M22": "Astro",
+    "M31": "Astro",
+    "M51": "Astro",
+    "M63": "Astro",
+    "M64": "Astro",
+    "IC4665": "Astro",
+    "NGC6633": "Astro",
+}
+
 TARGET_METADATA = {
     "M16": {
         "constellation": "Serpens",
         "target_type": "Emission Nebula",
         "difficulty": "Intermediate",
-        "recommended_filter": "Dual Narrowband",
+        "recommended_filter": "Duo-Band",
         "exposure_seconds": 15,
         "gain": 80,
         "best_window": "Summer",
@@ -38,7 +60,7 @@ TARGET_METADATA = {
         "constellation": "Sagittarius",
         "target_type": "Emission Nebula",
         "difficulty": "Intermediate",
-        "recommended_filter": "Dual Narrowband",
+        "recommended_filter": "Duo-Band",
         "exposure_seconds": 15,
         "gain": 80,
         "best_window": "Summer",
@@ -47,7 +69,7 @@ TARGET_METADATA = {
         "constellation": "Sagittarius",
         "target_type": "Emission Nebula",
         "difficulty": "Intermediate",
-        "recommended_filter": "Dual Narrowband",
+        "recommended_filter": "Duo-Band",
         "exposure_seconds": 15,
         "gain": 80,
         "best_window": "Summer",
@@ -56,7 +78,7 @@ TARGET_METADATA = {
         "constellation": "Scutum",
         "target_type": "Open Cluster",
         "difficulty": "Easy",
-        "recommended_filter": "UV/IR Cut",
+        "recommended_filter": "Astro",
         "exposure_seconds": 10,
         "gain": 60,
         "best_window": "Summer / Early Fall",
@@ -65,7 +87,7 @@ TARGET_METADATA = {
         "constellation": "Sagittarius",
         "target_type": "Globular Cluster",
         "difficulty": "Easy",
-        "recommended_filter": "UV/IR Cut",
+        "recommended_filter": "Astro",
         "exposure_seconds": 10,
         "gain": 60,
         "best_window": "Summer / Early Fall",
@@ -86,13 +108,17 @@ def get_portfolio_level(progress_percent: float) -> str:
 
 
 def get_target_metadata(object_name: str) -> Dict[str, Any]:
+    normalized_name = object_name.strip().upper()
     return TARGET_METADATA.get(
-        object_name,
+        normalized_name,
         {
             "constellation": "Unknown",
             "target_type": "Unknown",
             "difficulty": "Unknown",
-            "recommended_filter": "Unknown",
+            "recommended_filter": TARGET_FILTER_RECOMMENDATIONS.get(
+                normalized_name,
+                "Unknown",
+            ),
             "exposure_seconds": 15,
             "gain": 60,
             "best_window": "Unknown",

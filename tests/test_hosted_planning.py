@@ -11,9 +11,11 @@ from sqlalchemy.pool import StaticPool
 
 from app.api.tonight import tonight
 from app.core.auth import CurrentUser
+from app.data.targets import TARGETS
 from app.database.database import Base
 from app.models import HostedObservatory
 from app.models import Profile
+from app.services.advisor_service import get_catalog_exposure_advice
 from app.services.hosted_account_service import get_planning_context
 from app.services.planner_service import build_target_plan
 
@@ -222,3 +224,15 @@ def test_hosted_target_plan_does_not_query_private_capture_history():
 
     assert plan["advisor"]["recommendation_source"] == "catalog_fallback"
     assert plan["advisor"]["current_integration_seconds"] == 0
+
+
+def test_hosted_catalog_recommends_a_filter_for_every_supported_target():
+    recommendations = {
+        target_name: get_catalog_exposure_advice(target_name)[
+            "recommended_filter"
+        ]
+        for target_name in TARGETS
+    }
+
+    assert recommendations["C 20"] == "Duo-Band"
+    assert set(recommendations.values()) <= {"Duo-Band", "Astro"}
