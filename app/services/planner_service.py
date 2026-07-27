@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Dict, Iterable, List, Optional
 
 from sqlalchemy.orm import Session
 
-from app.core.observatory import DEFAULT_POSTAL_CODE
+from app.core.planning_context import ObservatoryContext
+from app.core.planning_context import use_observatory_context
+from app.data.targets import TARGETS
 from app.models import Capture
+from app.services.advisor_service import get_catalog_exposure_advice
 from app.services.advisor_service import get_exposure_advice
 from app.services.astronomy_service import (
     get_altitude_at,
@@ -117,6 +120,7 @@ def get_dark_visibility(
     dark_start: datetime,
     dark_end: datetime,
     additional_sample_times: Optional[List[datetime]] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
     sample_times = generate_sample_times(
         dark_start=dark_start,
@@ -130,6 +134,7 @@ def get_dark_visibility(
     all_altitudes = get_altitudes_at(
         target_name=object_name,
         observation_datetimes=all_sample_times,
+        observatory=observatory,
     )
     sampled_altitudes = all_altitudes[:len(sample_times)]
     altitude_samples = []
@@ -346,10 +351,16 @@ def build_target_plan(
     object_name: str,
     dark_start: datetime,
     dark_end: datetime,
+    observatory: Optional[ObservatoryContext] = None,
+    use_capture_history: bool = True,
 ) -> Dict:
-    advisor = get_exposure_advice(
-        db=db,
-        object_name=object_name,
+    advisor = (
+        get_exposure_advice(
+            db=db,
+            object_name=object_name,
+        )
+        if use_capture_history
+        else get_catalog_exposure_advice(object_name)
     )
 
     midpoint = dark_start + (dark_end - dark_start) / 2
@@ -363,21 +374,25 @@ def build_target_plan(
             midpoint,
             current_time,
         ],
+        observatory=observatory,
     )
 
     altitude_at_midpoint = get_altitude_at(
         target_name=object_name,
         observation_datetime=midpoint,
+        observatory=observatory,
     )
 
     moon_separation = get_moon_separation_at(
         target_name=object_name,
         observation_datetime=midpoint,
+        observatory=observatory,
     )
 
     moon_warning = get_moon_warning_at(
         target_name=object_name,
         observation_datetime=midpoint,
+        observatory=observatory,
     )
 
     usable_dark_minutes = visibility["usable_dark_minutes"]
@@ -395,7 +410,11 @@ def build_target_plan(
     )
 
     priority_score = (
-        get_priority_bonus(object_name)
+        (
+            get_priority_bonus(object_name)
+            if use_capture_history
+            else 0
+        )
         * PLANNER_WEIGHTS[
             "portfolio_priority"
         ]
@@ -490,6 +509,7 @@ def build_target_plan(
         "current_altitude": get_altitude_at(
             target_name=object_name,
             observation_datetime=current_time,
+            observatory=observatory,
         ),
         "altitude_at_dark_midpoint": altitude_at_midpoint,
         "maximum_dark_altitude": visibility["maximum_dark_altitude"],
@@ -499,6 +519,7 @@ def build_target_plan(
         "transit_time": get_transit_time(
             object_name,
             reference_datetime=dark_start,
+            observatory=observatory,
         ),
         "recommended_start": recommended_start,
         "recommended_end": recommended_end,
@@ -597,17 +618,41 @@ def _apply_planned_heat_safeguard(
         weather["observing_rating"] = min(rating, 3)
 
 
-def get_tonight_plan(db: Session) -> Dict:
-    weather = get_weather_summary(DEFAULT_POSTAL_CODE)
-    moon = get_moon_info()
-    darkness = get_darkness_info()
+def get_tonight_plan(
+    db: Session,
+    observatory: Optional[ObservatoryContext] = None,
+    *,
+    target_names: Optional[Iterable[str]] = None,
+    use_capture_history: bool = True,
+) -> Dict:
+    context = use_observatory_context(observatory)
+    weather = get_weather_summary(
+        context.postal_code or "",
+        observatory=context,
+    )
+    moon = get_moon_info(observatory=context)
+    darkness = get_darkness_info(observatory=context)
 
-    _sunset, dark_start, dark_end = get_darkness_window_datetimes()
+    _sunset, dark_start, dark_end = get_darkness_window_datetimes(
+        observatory=context
+    )
 
     plans = []
     notes = []
 
-    for object_name in get_distinct_targets(db):
+    planning_targets = (
+        get_distinct_targets(db)
+        if target_names is None and use_capture_history
+        else sorted(
+            {
+                name.strip().upper()
+                for name in (target_names or TARGETS)
+                if name
+            }
+        )
+    )
+
+    for object_name in planning_targets:
         try:
             plans.append(
                 build_target_plan(
@@ -615,6 +660,8 @@ def get_tonight_plan(db: Session) -> Dict:
                     object_name=object_name,
                     dark_start=dark_start,
                     dark_end=dark_end,
+                    observatory=context,
+                    use_capture_history=use_capture_history,
                 )
             )
         except ValueError:

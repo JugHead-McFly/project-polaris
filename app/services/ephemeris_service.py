@@ -10,14 +10,11 @@ from urllib.request import Request, urlopen
 import astropy.units as u
 from astropy.coordinates import SkyCoord
 
-from app.core.observatory import (
-    ELEVATION_METERS,
-    LATITUDE,
-    LONGITUDE,
-)
 from app.core.config import settings
 from app.core.diagnostics import record_service_failure
 from app.core.diagnostics import record_service_success
+from app.core.planning_context import ObservatoryContext
+from app.core.planning_context import use_observatory_context
 from app.data.targets import EPHEMERIS_TARGETS
 
 
@@ -27,7 +24,10 @@ SUPPORTED_API_VERSIONS = {"1.2", "1.3"}
 
 # Coordinates are immutable for an exact UTC instant. This process-local cache
 # avoids repeated network calls during one planner run and is never persisted.
-_coordinate_cache: Dict[Tuple[str, datetime], SkyCoord] = {}
+_coordinate_cache: Dict[
+    Tuple[str, datetime, float, float, float],
+    SkyCoord,
+] = {}
 
 
 def is_ephemeris_target(target_name: str) -> bool:
@@ -52,13 +52,16 @@ def _horizons_time(value: datetime) -> str:
 def _build_horizons_url(
     command: str,
     observation_times: Iterable[datetime],
+    observatory: Optional[ObservatoryContext] = None,
 ) -> str:
+    context = use_observatory_context(observatory)
     time_list = " ".join(
         f"'{_horizons_time(value)}'"
         for value in observation_times
     )
     site_coordinates = (
-        f"{LONGITUDE},{LATITUDE},{ELEVATION_METERS / 1000}"
+        f"{context.longitude},{context.latitude},"
+        f"{context.elevation_meters / 1000}"
     )
     params = {
         "format": "json",
@@ -134,10 +137,12 @@ def _parse_horizons_result(result: str) -> Dict[datetime, SkyCoord]:
 def _fetch_coordinates(
     command: str,
     observation_times: List[datetime],
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Dict[datetime, SkyCoord]:
     url = _build_horizons_url(
         command=command,
         observation_times=observation_times,
+        observatory=observatory,
     )
     request = Request(
         url,
@@ -157,7 +162,9 @@ def _fetch_coordinates(
 def get_ephemeris_coordinates(
     target_name: str,
     observation_times: Iterable[datetime],
+    observatory: Optional[ObservatoryContext] = None,
 ) -> List[Optional[SkyCoord]]:
+    context = use_observatory_context(observatory)
     normalized_name = target_name.strip().upper()
     command = EPHEMERIS_TARGETS.get(normalized_name)
     normalized_times = [
@@ -168,11 +175,20 @@ def get_ephemeris_coordinates(
     if command is None or not normalized_times:
         return [None for _ in normalized_times]
 
+    location_key = (
+        context.latitude,
+        context.longitude,
+        context.elevation_meters,
+    )
     missing_times = list(
         dict.fromkeys(
             value
             for value in normalized_times
-            if (normalized_name, value) not in _coordinate_cache
+            if (
+                normalized_name,
+                value,
+                *location_key,
+            ) not in _coordinate_cache
         )
     )
 
@@ -182,6 +198,7 @@ def get_ephemeris_coordinates(
             fetched = _fetch_coordinates(
                 command=command,
                 observation_times=missing_times,
+                observatory=context,
             )
             record_service_success(
                 "jpl_horizons",
@@ -200,10 +217,22 @@ def get_ephemeris_coordinates(
             fetched = {}
 
         for observation_time, coordinate in fetched.items():
-            _coordinate_cache[(normalized_name, observation_time)] = coordinate
+            _coordinate_cache[
+                (
+                    normalized_name,
+                    observation_time,
+                    *location_key,
+                )
+            ] = coordinate
 
     return [
-        _coordinate_cache.get((normalized_name, value))
+        _coordinate_cache.get(
+            (
+                normalized_name,
+                value,
+                *location_key,
+            )
+        )
         for value in normalized_times
     ]
 
@@ -211,8 +240,10 @@ def get_ephemeris_coordinates(
 def get_ephemeris_coordinate_at(
     target_name: str,
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[SkyCoord]:
     return get_ephemeris_coordinates(
         target_name=target_name,
         observation_times=[observation_datetime],
+        observatory=observatory,
     )[0]

@@ -4,11 +4,49 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
+from app.core.auth import CurrentUser
+from app.core.planning_context import LOCAL_OBSERVATORY_CONTEXT
+from app.core.planning_context import ObservatoryContext
 from app.models import HostedObservatory
 from app.models import Profile
 from app.schemas.hosted_account import ObservatoryCreate
 from app.schemas.hosted_account import ObservatoryUpdate
 from app.schemas.hosted_account import ProfileUpdate
+
+
+class MissingObservatoryError(Exception):
+    """Raised when a hosted user has not completed observing-home setup."""
+
+
+def get_planning_context(
+    db: Session,
+    *,
+    current_user: CurrentUser,
+) -> ObservatoryContext:
+    if current_user.auth_mode == "local":
+        return LOCAL_OBSERVATORY_CONTEXT
+
+    observatories = list_observatories(
+        db,
+        user_id=current_user.user_id,
+    )
+    if not observatories:
+        raise MissingObservatoryError(
+            "Add an observing home before requesting tonight's plan."
+        )
+
+    observatory = observatories[0]
+    return ObservatoryContext(
+        name=observatory.name,
+        latitude=observatory.latitude,
+        longitude=observatory.longitude,
+        timezone_name=observatory.timezone_name,
+        elevation_meters=observatory.elevation_m or 0.0,
+        bortle_class=observatory.bortle_class,
+        coordinates_are_approximate=(
+            observatory.coordinates_are_approximate
+        ),
+    )
 
 
 def get_profile(

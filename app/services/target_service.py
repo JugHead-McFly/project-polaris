@@ -7,6 +7,7 @@ from app.data.targets import get_target_common_name
 from app.models import Capture
 from app.models import CaptureAnalysis
 from app.services.portfolio_service import build_portfolio_target
+from app.services.portfolio_service import get_target_metadata
 
 
 def get_capture_integration_seconds(
@@ -388,4 +389,67 @@ def build_target_response(
         "moon_separation_degrees": None,
         "reason": None,
         "captures": capture_results,
+    }
+
+
+def build_catalog_target_response(
+    target_name: str,
+) -> Dict:
+    """Build a target response without reading a user's capture history."""
+    normalized_name = target_name.strip().upper()
+    portfolio = build_portfolio_target(
+        object_name=normalized_name,
+        total_hours=0.0,
+    )
+    metadata = get_target_metadata(normalized_name)
+
+    return {
+        "object": normalized_name,
+        "common_name": get_target_common_name(normalized_name),
+        "capture_count": 0,
+        "session_count": 0,
+        "total_integration_seconds": 0,
+        "total_integration_hours": 0.0,
+        "best_quality": None,
+        "average_quality": None,
+        "latest_capture": None,
+        "recommended_settings": {
+            "source": "catalog_fallback",
+            "polaris_id": None,
+            "exposure_seconds": metadata["exposure_seconds"],
+            "gain": metadata["gain"],
+            "filter_name": metadata["recommended_filter"],
+        },
+        "constellation": portfolio["constellation"],
+        "target_type": portfolio["target_type"],
+        "difficulty": portfolio["difficulty"],
+        "recommended_filter": portfolio["recommended_filter"],
+        "recommended_exposure": portfolio["recommended_exposure"],
+        "season_score": portfolio["season_score"],
+        "science_priority": portfolio["science_priority"],
+        "readiness_score": portfolio["readiness_score"],
+        "status": portfolio["status"],
+        "best_window": portfolio["best_window"],
+        "progress_percent": portfolio["progress_percent"],
+        "portfolio_level": portfolio["portfolio_level"],
+        "next_action": portfolio["next_action"],
+        "current_hours": portfolio["current_hours"],
+        "goal_hours": portfolio["goal_hours"],
+        "goal_tier": portfolio["goal_tier"],
+        "goal_source": portfolio["goal_source"],
+        "goal_options": portfolio["goal_options"],
+        "goal_factors": portfolio["goal_factors"],
+        "remaining_hours": portfolio["remaining_hours"],
+        "estimated_nights_remaining": portfolio[
+            "estimated_nights_remaining"
+        ],
+        "observable": portfolio["observable"],
+        "current_altitude": None,
+        "transit_time": None,
+        "moon_warning": None,
+        "recommended_start": None,
+        "recommended_end": None,
+        "moon_separation_degrees": None,
+        "reason": None,
+        "captures": [],
     }

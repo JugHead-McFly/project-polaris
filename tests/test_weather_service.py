@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 from urllib.error import URLError
 
+from app.core.planning_context import ObservatoryContext
 from app.services.planner_service import _apply_planned_heat_safeguard
 from app.services.weather_service import get_weather_summary
 
@@ -95,3 +96,23 @@ def test_forecast_heat_prevents_a_proceed_decision_at_the_planned_start():
 
     assert weather["observing_rating"] == 2
     assert weather["planned_temperature_f"] == 105
+
+
+def test_weather_request_uses_the_planning_observatory_coordinates():
+    response, response_data = _weather_response(70)
+    observatory = ObservatoryContext(
+        name="Sydney",
+        latitude=-33.8688,
+        longitude=151.2093,
+        timezone_name="Australia/Sydney",
+    )
+
+    with (
+        patch("app.services.weather_service.urlopen", return_value=response) as opened,
+        patch("app.services.weather_service.json.load", return_value=response_data),
+    ):
+        get_weather_summary("", observatory=observatory)
+
+    requested_url = opened.call_args.args[0]
+    assert "latitude=-33.8688" in requested_url
+    assert "longitude=151.2093" in requested_url

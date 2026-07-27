@@ -51,9 +51,12 @@ password-update screen before restoring the signed-in session.
 
 This is intentionally not a hosted copy of Doug's existing dashboard yet. The
 current local dashboard reads the personal capture library, and that library is
-deliberately denied to the hosted runtime. Until planner and portfolio data are
-fully migrated to hosted tenant records, the signed-in screen communicates that
-honestly rather than displaying misleading personal data.
+deliberately denied to the hosted runtime. The hosted planning engine now uses
+the signed-in user's saved latitude, longitude, elevation, and timezone for
+weather, darkness, Moon, visibility, transit, and schedule calculations. It
+uses shared catalog settings instead of Doug's capture history or priorities.
+The signed-in browser still shows setup only until the hosted Tonight
+presentation and recommendation-record work are complete.
 
 For the private alpha, configure Supabase to disallow public sign-ups and
 invite individual testers. Supabase documents that disabling new sign-ups still

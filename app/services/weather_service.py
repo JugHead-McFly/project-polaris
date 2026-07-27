@@ -1,13 +1,14 @@
 import json
 from datetime import datetime, timezone
+from typing import Optional
 from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from app.core.observatory import LATITUDE
-from app.core.observatory import LONGITUDE
 from app.core.diagnostics import record_service_failure
 from app.core.diagnostics import record_service_success
+from app.core.planning_context import ObservatoryContext
+from app.core.planning_context import use_observatory_context
 
 
 # DWARFLAB documents a 45°C / 113°F high-temperature charging cutoff for
@@ -18,11 +19,15 @@ HEAT_CAUTION_F = 95
 HEAT_STOP_F = 105
 
 
-def get_weather_summary(postal_code: str):
+def get_weather_summary(
+    postal_code: str,
+    observatory: Optional[ObservatoryContext] = None,
+):
+    context = use_observatory_context(observatory)
     checked_at = datetime.now(timezone.utc)
     params = {
-        "latitude": LATITUDE,
-        "longitude": LONGITUDE,
+        "latitude": context.latitude,
+        "longitude": context.longitude,
         "current": (
             "temperature_2m,"
             "relative_humidity_2m,"

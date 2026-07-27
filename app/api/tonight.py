@@ -1,19 +1,18 @@
 from typing import Dict, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.observatory import DEFAULT_POSTAL_CODE
-from app.core.observatory import ELEVATION_METERS
-from app.core.observatory import LATITUDE
-from app.core.observatory import LONGITUDE
-from app.core.observatory import OBSERVATORY_NAME
-from app.core.observatory import TIMEZONE
+from app.core.auth import CurrentUser
+from app.core.auth import get_current_user
 from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
 from app.services.night_rating_service import calculate_night_rating
 from app.services.planner_service import get_tonight_plan
 from app.services.scheduler_service import build_tonight_schedule
+from app.services.hosted_account_service import get_planning_context
+from app.services.hosted_account_service import MissingObservatoryError
+from app.services.target_service import build_catalog_target_response
 from app.services.target_service import build_target_response
 
 
@@ -66,13 +65,21 @@ def _build_operator_message(schedule: Dict) -> str:
 def _build_legacy_target(
     db,
     planner_target: Optional[Dict],
+    *,
+    use_capture_history: bool = True,
 ) -> Optional[Dict]:
     if planner_target is None:
         return None
 
-    target = build_target_response(
-        db=db,
-        target_name=planner_target["advisor"]["object"],
+    target = (
+        build_target_response(
+            db=db,
+            target_name=planner_target["advisor"]["object"],
+        )
+        if use_capture_history
+        else build_catalog_target_response(
+            planner_target["advisor"]["object"]
+        )
     )
     target.update(
         {
@@ -140,27 +147,51 @@ def _build_legacy_night_plan(
 
 
 @router.get("", response_model=TonightResponse)
-def tonight(db: Session = Depends(get_tenant_db)):
-    planner = get_tonight_plan(db)
-    schedule = build_tonight_schedule(planner)
+def tonight(
+    current_user: CurrentUser = Depends(get_current_user),
+    db: Session = Depends(get_tenant_db),
+):
+    try:
+        observatory = get_planning_context(
+            db,
+            current_user=current_user,
+        )
+    except MissingObservatoryError as error:
+        raise HTTPException(
+            status_code=409,
+            detail=str(error),
+        ) from error
+
+    use_capture_history = current_user.auth_mode == "local"
+    planner = get_tonight_plan(
+        db,
+        observatory=observatory,
+        use_capture_history=use_capture_history,
+    )
+    schedule = build_tonight_schedule(
+        planner,
+        timezone_name=observatory.timezone_name,
+    )
     recommended_target = _build_legacy_target(
         db,
         planner.get("recommended_target"),
+        use_capture_history=use_capture_history,
     )
     backup_target = _build_legacy_target(
         db,
         _select_backup_plan(planner),
+        use_capture_history=use_capture_history,
     )
 
     return {
         "date": schedule["date"],
         "observatory": {
-            "name": OBSERVATORY_NAME,
-            "postal_code": DEFAULT_POSTAL_CODE,
-            "timezone": TIMEZONE,
-            "latitude": LATITUDE,
-            "longitude": LONGITUDE,
-            "elevation_meters": ELEVATION_METERS,
+            "name": observatory.name,
+            "postal_code": observatory.postal_code,
+            "timezone": observatory.timezone_name,
+            "latitude": observatory.latitude,
+            "longitude": observatory.longitude,
+            "elevation_meters": observatory.elevation_meters,
         },
         "recommended_target": recommended_target,
         "backup_target": backup_target,

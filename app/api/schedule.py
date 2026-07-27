@@ -1,8 +1,12 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.auth import CurrentUser
+from app.core.auth import get_current_user
 from app.database.database import get_tenant_db
 from app.schemas.schedule import TonightScheduleResponse
+from app.services.hosted_account_service import get_planning_context
+from app.services.hosted_account_service import MissingObservatoryError
 from app.services.scheduler_service import get_tonight_schedule
 
 
@@ -10,5 +14,22 @@ router = APIRouter(prefix="/planner", tags=["Planner"])
 
 
 @router.get("/schedule", response_model=TonightScheduleResponse)
-def get_schedule_for_tonight(db: Session = Depends(get_tenant_db)):
-    return get_tonight_schedule(db)
+def get_schedule_for_tonight(
+    current_user: CurrentUser = Depends(get_current_user),
+    db: Session = Depends(get_tenant_db),
+):
+    try:
+        observatory = get_planning_context(
+            db,
+            current_user=current_user,
+        )
+    except MissingObservatoryError as error:
+        raise HTTPException(
+            status_code=409,
+            detail=str(error),
+        ) from error
+    return get_tonight_schedule(
+        db,
+        observatory=observatory,
+        use_capture_history=current_user.auth_mode == "local",
+    )

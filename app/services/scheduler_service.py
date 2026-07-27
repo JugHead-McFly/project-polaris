@@ -6,6 +6,8 @@ from zoneinfo import ZoneInfo
 from sqlalchemy.orm import Session
 
 from app.core.observatory import TIMEZONE
+from app.core.planning_context import ObservatoryContext
+from app.core.planning_context import use_observatory_context
 from app.data.targets import get_target_common_name
 from app.services.planner_service import get_tonight_plan
 
@@ -17,26 +19,34 @@ SETUP_BUFFER_MINUTES = 5
 EQUIPMENT_CHANGE_SCORE_MARGIN = 12.0
 
 
-def _parse_schedule_time(value: Optional[str]) -> Optional[datetime]:
+def _parse_schedule_time(
+    value: Optional[str],
+    timezone_name: str = TIMEZONE,
+) -> Optional[datetime]:
     if not value:
         return None
 
     return datetime.strptime(
         value,
         SCHEDULE_TIME_FORMAT,
-    ).replace(tzinfo=ZoneInfo(TIMEZONE))
+    ).replace(tzinfo=ZoneInfo(timezone_name))
 
 
 def _format_schedule_time(value: datetime) -> str:
     return value.strftime(SCHEDULE_TIME_FORMAT)
 
 
-def _darkness_minutes(darkness: Dict) -> int:
+def _darkness_minutes(
+    darkness: Dict,
+    timezone_name: str = TIMEZONE,
+) -> int:
     start = _parse_schedule_time(
-        darkness.get("astronomical_darkness_start")
+        darkness.get("astronomical_darkness_start"),
+        timezone_name=timezone_name,
     )
     end = _parse_schedule_time(
-        darkness.get("astronomical_darkness_end")
+        darkness.get("astronomical_darkness_end"),
+        timezone_name=timezone_name,
     )
 
     if start is None or end is None or end <= start:
@@ -45,15 +55,24 @@ def _darkness_minutes(darkness: Dict) -> int:
     return int((end - start).total_seconds() / 60)
 
 
-def _candidate_windows(candidates: Iterable[Dict]) -> List[Dict]:
+def _candidate_windows(
+    candidates: Iterable[Dict],
+    timezone_name: str = TIMEZONE,
+) -> List[Dict]:
     windows = []
 
     for candidate in candidates:
         if not candidate or not candidate.get("observable"):
             continue
 
-        start = _parse_schedule_time(candidate.get("recommended_start"))
-        end = _parse_schedule_time(candidate.get("recommended_end"))
+        start = _parse_schedule_time(
+            candidate.get("recommended_start"),
+            timezone_name=timezone_name,
+        )
+        end = _parse_schedule_time(
+            candidate.get("recommended_end"),
+            timezone_name=timezone_name,
+        )
 
         if start is None or end is None or end <= start:
             continue
@@ -192,9 +211,15 @@ def _remaining_imaging_minutes(candidate: Dict) -> Optional[int]:
     return None
 
 
-def build_schedule_blocks(candidates: Iterable[Dict]) -> List[Dict]:
+def build_schedule_blocks(
+    candidates: Iterable[Dict],
+    timezone_name: str = TIMEZONE,
+) -> List[Dict]:
     """Build a non-overlapping, advisory schedule from Planner V2 windows."""
-    windows = _candidate_windows(candidates)
+    windows = _candidate_windows(
+        candidates,
+        timezone_name=timezone_name,
+    )
     boundaries = sorted(
         {
             boundary
@@ -382,7 +407,10 @@ def build_schedule_blocks(candidates: Iterable[Dict]) -> List[Dict]:
     return scheduled_blocks[:MAXIMUM_BLOCKS]
 
 
-def build_tonight_schedule(planner: Dict) -> Dict:
+def build_tonight_schedule(
+    planner: Dict,
+    timezone_name: str = TIMEZONE,
+) -> Dict:
     """Build the advisory schedule from one Planner V3 result."""
     decision = planner["decision"]
     fallback = planner.get("best_theoretical_target")
@@ -396,7 +424,10 @@ def build_tonight_schedule(planner: Dict) -> Dict:
         )
     else:
         candidates = [planner.get("recommended_target"), *planner["alternatives"]]
-        blocks = build_schedule_blocks(candidates)
+        blocks = build_schedule_blocks(
+            candidates,
+            timezone_name=timezone_name,
+        )
 
         if not blocks:
             notes.append(
@@ -413,7 +444,10 @@ def build_tonight_schedule(planner: Dict) -> Dict:
         for block in blocks
     )
     unscheduled_dark_minutes = max(
-        _darkness_minutes(planner["darkness"])
+        _darkness_minutes(
+            planner["darkness"],
+            timezone_name=timezone_name,
+        )
         - allocated_minutes,
         0,
     )
@@ -425,7 +459,7 @@ def build_tonight_schedule(planner: Dict) -> Dict:
             "requirements."
         )
 
-    date = datetime.now(ZoneInfo(TIMEZONE)).date().isoformat()
+    date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
 
     return {
         "date": date,
@@ -444,7 +478,18 @@ def build_tonight_schedule(planner: Dict) -> Dict:
     }
 
 
-def get_tonight_schedule(db: Session) -> Dict:
+def get_tonight_schedule(
+    db: Session,
+    observatory: Optional[ObservatoryContext] = None,
+    *,
+    use_capture_history: bool = True,
+) -> Dict:
+    context = use_observatory_context(observatory)
     return build_tonight_schedule(
-        get_tonight_plan(db)
+        get_tonight_plan(
+            db,
+            observatory=context,
+            use_capture_history=use_capture_history,
+        ),
+        timezone_name=context.timezone_name,
     )

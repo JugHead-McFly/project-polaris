@@ -307,6 +307,11 @@ wrong-issuer, wrong-audience, or malformed tokens fail closed.
 **Done when:** Alice and Bob can configure different locations and receive
 recommendations calculated from their own location and timezone.
 
+**Status (2026-07-26):** complete in the planning core and protected APIs.
+Hosted planning uses the shared target catalog and does not query Doug's
+private capture library. Browser presentation and persisted recommendation
+runs remain v1.8 work.
+
 ### Slice 4 — defense-in-depth isolation
 
 - Create restricted runtime and migration database roles.

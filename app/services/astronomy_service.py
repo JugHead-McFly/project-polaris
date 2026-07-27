@@ -15,12 +15,8 @@ from astropy.coordinates import (
 )
 from astropy.time import Time
 
-from app.core.observatory import (
-    ELEVATION_METERS,
-    LATITUDE,
-    LONGITUDE,
-    TIMEZONE,
-)
+from app.core.planning_context import ObservatoryContext
+from app.core.planning_context import use_observatory_context
 from app.data.targets import SOLAR_SYSTEM_TARGETS
 from app.data.targets import TARGETS
 from app.services.ephemeris_service import (
@@ -30,16 +26,25 @@ from app.services.ephemeris_service import (
 )
 
 
-OBSERVATORY_LOCATION = EarthLocation(
-    lat=LATITUDE * u.deg,
-    lon=LONGITUDE * u.deg,
-    height=ELEVATION_METERS * u.m,
-)
+def _get_location(
+    observatory: Optional[ObservatoryContext] = None,
+) -> EarthLocation:
+    context = use_observatory_context(observatory)
+    return EarthLocation(
+        lat=context.latitude * u.deg,
+        lon=context.longitude * u.deg,
+        height=context.elevation_meters * u.m,
+    )
 
-OBSERVER = Observer(
-    location=OBSERVATORY_LOCATION,
-    timezone=TIMEZONE,
-)
+
+def _get_observer(
+    observatory: Optional[ObservatoryContext] = None,
+) -> Observer:
+    context = use_observatory_context(observatory)
+    return Observer(
+        location=_get_location(context),
+        timezone=context.timezone_name,
+    )
 
 
 def _moon_phase_name(phase_angle_degrees: float) -> str:
@@ -72,13 +77,15 @@ def get_target(
 
 def normalize_datetime(
     observation_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> datetime:
+    context = use_observatory_context(observatory)
     if observation_datetime is None:
         return datetime.now(timezone.utc)
 
     if observation_datetime.tzinfo is None:
         return observation_datetime.replace(
-            tzinfo=ZoneInfo(TIMEZONE)
+            tzinfo=ZoneInfo(context.timezone_name)
         )
 
     return observation_datetime
@@ -86,9 +93,11 @@ def normalize_datetime(
 
 def to_astropy_time(
     observation_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Time:
     normalized = normalize_datetime(
-        observation_datetime
+        observation_datetime,
+        observatory=observatory,
     )
 
     return Time(
@@ -114,6 +123,7 @@ def get_target_coordinate(
 def get_target_coordinate_at(
     target_name: str,
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[SkyCoord]:
     normalized_name = target_name.strip().upper()
     solar_system_body = SOLAR_SYSTEM_TARGETS.get(
@@ -123,14 +133,18 @@ def get_target_coordinate_at(
     if solar_system_body is not None:
         return get_body(
             solar_system_body,
-            to_astropy_time(observation_datetime),
-            OBSERVATORY_LOCATION,
+            to_astropy_time(
+                observation_datetime,
+                observatory=observatory,
+            ),
+            _get_location(observatory),
         )
 
     if is_ephemeris_target(normalized_name):
         return get_ephemeris_coordinate_at(
             target_name=normalized_name,
             observation_datetime=observation_datetime,
+            observatory=observatory,
         )
 
     return get_target_coordinate(normalized_name)
@@ -139,13 +153,15 @@ def get_target_coordinate_at(
 def _altitude_from_coordinate(
     coordinate: SkyCoord,
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> float:
     observation_time = to_astropy_time(
-        observation_datetime
+        observation_datetime,
+        observatory=observatory,
     )
     altaz_frame = AltAz(
         obstime=observation_time,
-        location=OBSERVATORY_LOCATION,
+        location=_get_location(observatory),
     )
     altitude = coordinate.transform_to(
         altaz_frame
@@ -157,17 +173,20 @@ def _altitude_from_coordinate(
 def get_altitudes_at(
     target_name: str,
     observation_datetimes: list,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> list:
     if is_ephemeris_target(target_name):
         coordinates = get_ephemeris_coordinates(
             target_name=target_name,
             observation_times=observation_datetimes,
+            observatory=observatory,
         )
     else:
         coordinates = [
             get_target_coordinate_at(
                 target_name=target_name,
                 observation_datetime=observation_datetime,
+                observatory=observatory,
             )
             for observation_datetime in observation_datetimes
         ]
@@ -177,6 +196,7 @@ def get_altitudes_at(
             _altitude_from_coordinate(
                 coordinate=coordinate,
                 observation_datetime=observation_datetime,
+                observatory=observatory,
             )
             if coordinate is not None
             else None
@@ -191,22 +211,27 @@ def get_altitudes_at(
 def get_altitude_at(
     target_name: str,
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[float]:
     return get_altitudes_at(
         target_name=target_name,
         observation_datetimes=[observation_datetime],
+        observatory=observatory,
     )[0]
 
 
 def get_altitude(
     target_name: str,
     observation_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[float]:
     return get_altitude_at(
         target_name=target_name,
         observation_datetime=normalize_datetime(
-            observation_datetime
+            observation_datetime,
+            observatory=observatory,
         ),
+        observatory=observatory,
     )
 
 
@@ -214,10 +239,12 @@ def is_observable_at(
     target_name: str,
     observation_datetime: datetime,
     minimum_altitude: float = 20.0,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> bool:
     altitude = get_altitude_at(
         target_name=target_name,
         observation_datetime=observation_datetime,
+        observatory=observatory,
     )
 
     if altitude is None:
@@ -230,37 +257,45 @@ def is_observable(
     target_name: str,
     observation_datetime: Optional[datetime] = None,
     minimum_altitude: float = 20.0,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> bool:
     return is_observable_at(
         target_name=target_name,
         observation_datetime=normalize_datetime(
-            observation_datetime
+            observation_datetime,
+            observatory=observatory,
         ),
         minimum_altitude=minimum_altitude,
+        observatory=observatory,
     )
 
 
 def get_transit_datetime(
     target_name: str,
     reference_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[datetime]:
+    context = use_observatory_context(observatory)
     normalized_reference = normalize_datetime(
-        reference_datetime
+        reference_datetime,
+        observatory=context,
     )
     coordinate = get_target_coordinate_at(
         target_name=target_name,
         observation_datetime=normalized_reference,
+        observatory=context,
     )
 
     if coordinate is None:
         return None
 
     reference_time = to_astropy_time(
-        normalized_reference
+        normalized_reference,
+        observatory=context,
     )
 
     transit = (
-        OBSERVER.target_meridian_transit_time(
+        _get_observer(context).target_meridian_transit_time(
             reference_time,
             coordinate,
             which="next",
@@ -268,17 +303,19 @@ def get_transit_datetime(
     )
 
     return transit.to_datetime(
-        timezone=ZoneInfo(TIMEZONE)
+        timezone=ZoneInfo(context.timezone_name)
     )
 
 
 def get_transit_time(
     target_name: str,
     reference_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[str]:
     transit_datetime = get_transit_datetime(
         target_name=target_name,
         reference_datetime=reference_datetime,
+        observatory=observatory,
     )
 
     if transit_datetime is None:
@@ -292,10 +329,12 @@ def get_transit_time(
 def get_recommended_window(
     target_name: str,
     reference_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
     transit_datetime = get_transit_datetime(
         target_name=target_name,
         reference_datetime=reference_datetime,
+        observatory=observatory,
     )
 
     if transit_datetime is None:
@@ -330,21 +369,24 @@ def get_recommended_window(
 
 def get_moon_info_at(
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
+    location = _get_location(observatory)
     observation_time = to_astropy_time(
-        observation_datetime
+        observation_datetime,
+        observatory=observatory,
     )
 
     moon = get_body(
         "moon",
         observation_time,
-        OBSERVATORY_LOCATION,
+        location,
     )
 
     moon_altaz = moon.transform_to(
         AltAz(
             obstime=observation_time,
-            location=OBSERVATORY_LOCATION,
+            location=location,
         )
     )
 
@@ -396,26 +438,34 @@ def get_moon_info_at(
     }
 
 
-def get_moon_info() -> Dict:
+def get_moon_info(
+    observatory: Optional[ObservatoryContext] = None,
+) -> Dict:
+    context = use_observatory_context(observatory)
+    observer = _get_observer(context)
     now = datetime.now(timezone.utc)
-    observation_time = to_astropy_time(now)
-
-    current_info = get_moon_info_at(
-        now
+    observation_time = to_astropy_time(
+        now,
+        observatory=context,
     )
 
-    moonrise = OBSERVER.moon_rise_time(
+    current_info = get_moon_info_at(
+        now,
+        observatory=context,
+    )
+
+    moonrise = observer.moon_rise_time(
         observation_time,
         which="next",
     )
 
-    moonset = OBSERVER.moon_set_time(
+    moonset = observer.moon_set_time(
         observation_time,
         which="next",
     )
 
     local_timezone = ZoneInfo(
-        TIMEZONE
+        context.timezone_name
     )
 
     moonrise_local = moonrise.to_datetime(
@@ -444,23 +494,26 @@ def get_moon_info() -> Dict:
 def get_moon_separation_at(
     target_name: str,
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[float]:
     target_coordinate = get_target_coordinate_at(
         target_name=target_name,
         observation_datetime=observation_datetime,
+        observatory=observatory,
     )
 
     if target_coordinate is None:
         return None
 
     observation_time = to_astropy_time(
-        observation_datetime
+        observation_datetime,
+        observatory=observatory,
     )
 
     moon_coordinate = get_body(
         "moon",
         observation_time,
-        OBSERVATORY_LOCATION,
+        _get_location(observatory),
     )
 
     separation = target_coordinate.separation(
@@ -476,26 +529,32 @@ def get_moon_separation_at(
 def get_moon_separation(
     target_name: str,
     observation_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[float]:
     return get_moon_separation_at(
         target_name=target_name,
         observation_datetime=normalize_datetime(
-            observation_datetime
+            observation_datetime,
+            observatory=observatory,
         ),
+        observatory=observatory,
     )
 
 
 def get_moon_warning_at(
     target_name: str,
     observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> str:
     separation = get_moon_separation_at(
         target_name=target_name,
         observation_datetime=observation_datetime,
+        observatory=observatory,
     )
 
     moon_info = get_moon_info_at(
-        observation_datetime
+        observation_datetime,
+        observatory=observatory,
     )
 
     if separation is None:
@@ -542,44 +601,51 @@ def get_moon_warning_at(
 def get_moon_warning(
     target_name: str,
     observation_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> str:
     return get_moon_warning_at(
         target_name=target_name,
         observation_datetime=normalize_datetime(
-            observation_datetime
+            observation_datetime,
+            observatory=observatory,
         ),
+        observatory=observatory,
     )
 
 
 def get_darkness_window_datetimes(
     reference_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Tuple[datetime, datetime, datetime]:
+    context = use_observatory_context(observatory)
+    observer = _get_observer(context)
     reference_time = to_astropy_time(
-        reference_datetime
+        reference_datetime,
+        observatory=context,
     )
 
     sun_altitude = float(
-        OBSERVER.sun_altaz(
+        observer.sun_altaz(
             reference_time
         ).alt.deg
     )
 
     if sun_altitude <= -18:
         astronomical_dusk = (
-            OBSERVER
+            observer
             .twilight_evening_astronomical(
                 reference_time,
                 which="previous",
             )
         )
 
-        sunset = OBSERVER.sun_set_time(
+        sunset = observer.sun_set_time(
             astronomical_dusk,
             which="previous",
         )
 
         astronomical_dawn = (
-            OBSERVER
+            observer
             .twilight_morning_astronomical(
                 reference_time,
                 which="next",
@@ -588,20 +654,20 @@ def get_darkness_window_datetimes(
 
     else:
         astronomical_dusk = (
-            OBSERVER
+            observer
             .twilight_evening_astronomical(
                 reference_time,
                 which="next",
             )
         )
 
-        sunset = OBSERVER.sun_set_time(
+        sunset = observer.sun_set_time(
             astronomical_dusk,
             which="previous",
         )
 
         astronomical_dawn = (
-            OBSERVER
+            observer
             .twilight_morning_astronomical(
                 astronomical_dusk,
                 which="next",
@@ -609,7 +675,7 @@ def get_darkness_window_datetimes(
         )
 
     local_timezone = ZoneInfo(
-        TIMEZONE
+        context.timezone_name
     )
 
     sunset_local = sunset.to_datetime(
@@ -637,13 +703,15 @@ def get_darkness_window_datetimes(
 
 def get_darkness_info(
     reference_datetime: Optional[datetime] = None,
+    observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
     (
         sunset_local,
         dusk_local,
         dawn_local,
     ) = get_darkness_window_datetimes(
-        reference_datetime
+        reference_datetime,
+        observatory=observatory,
     )
 
     return {

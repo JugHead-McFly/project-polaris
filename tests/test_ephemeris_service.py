@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from unittest.mock import patch
 from urllib.error import URLError
 
+from app.core.planning_context import ObservatoryContext
 from app.services.ephemeris_service import (
     clear_ephemeris_cache,
     get_ephemeris_coordinates,
@@ -84,3 +85,44 @@ def test_ephemeris_failure_returns_no_coordinates():
         )
 
     assert coordinates == [None]
+
+
+def test_ephemeris_cache_is_separate_for_each_observatory():
+    clear_ephemeris_cache()
+    observation_time = datetime(
+        2026,
+        7,
+        18,
+        4,
+        0,
+        tzinfo=timezone.utc,
+    )
+    phoenix = ObservatoryContext(
+        name="Phoenix",
+        latitude=33.4484,
+        longitude=-112.0740,
+        timezone_name="America/Phoenix",
+    )
+    sydney = ObservatoryContext(
+        name="Sydney",
+        latitude=-33.8688,
+        longitude=151.2093,
+        timezone_name="Australia/Sydney",
+    )
+
+    with patch(
+        "app.services.ephemeris_service.urlopen",
+        side_effect=[horizons_response(), horizons_response()],
+    ) as mocked_urlopen:
+        get_ephemeris_coordinates(
+            "C 2026 B3 PANSTARRS",
+            [observation_time],
+            observatory=phoenix,
+        )
+        get_ephemeris_coordinates(
+            "C 2026 B3 PANSTARRS",
+            [observation_time],
+            observatory=sydney,
+        )
+
+    assert mocked_urlopen.call_count == 2

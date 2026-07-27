@@ -1,6 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+from app.core.planning_context import ObservatoryContext
 from app.services.astronomy_service import (
     _moon_phase_name,
     get_altitude_at,
@@ -53,3 +54,31 @@ def test_moon_phase_name_adds_plain_language_context():
     assert _moon_phase_name(180) == "Full Moon"
     assert _moon_phase_name(270) == "Last Quarter"
     assert _moon_phase_name(330) == "Waning Crescent"
+
+
+def test_target_altitude_changes_with_the_planning_observatory():
+    phoenix = ObservatoryContext(
+        name="Phoenix",
+        latitude=33.4484,
+        longitude=-112.0740,
+        timezone_name="America/Phoenix",
+    )
+    sydney = ObservatoryContext(
+        name="Sydney",
+        latitude=-33.8688,
+        longitude=151.2093,
+        timezone_name="Australia/Sydney",
+    )
+
+    phoenix_altitude = get_altitude_at(
+        "M57",
+        OBSERVATION_TIME,
+        observatory=phoenix,
+    )
+    sydney_altitude = get_altitude_at(
+        "M57",
+        OBSERVATION_TIME,
+        observatory=sydney,
+    )
+
+    assert phoenix_altitude != sydney_altitude

@@ -257,3 +257,56 @@ def get_exposure_advice(
         "confidence": confidence,
         "recommendation": recommendation,
     }
+
+
+def get_catalog_exposure_advice(
+    object_name: str,
+) -> Dict:
+    """Build first-night advice without reading a private capture library."""
+    normalized_name = object_name.strip().upper()
+    integration_goal = build_integration_goal(normalized_name)
+    metadata = get_target_metadata(normalized_name)
+    goal_hours = integration_goal["hours"]
+    goal_seconds = int(round(goal_hours * 3600))
+    sub_exposure_seconds = metadata.get("exposure_seconds")
+    gain = metadata.get("gain")
+    filter_name = metadata.get("recommended_filter")
+    additional_subframes = (
+        math.ceil(goal_seconds / sub_exposure_seconds)
+        if sub_exposure_seconds
+        else None
+    )
+
+    return {
+        "object": normalized_name,
+        "status": "Start Imaging",
+        "current_integration_seconds": 0,
+        "current_integration_hours": 0.0,
+        "goal_hours": goal_hours,
+        "goal_tier": integration_goal["tier"],
+        "goal_source": integration_goal["source"],
+        "goal_options": integration_goal["options"],
+        "goal_factors": integration_goal["factors"],
+        "integration_goal_note": integration_goal["note"],
+        "remaining_seconds": goal_seconds,
+        "remaining_hours": goal_hours,
+        "recommended_sub_exposure_seconds": sub_exposure_seconds,
+        "recommended_gain": gain,
+        "recommended_filter": filter_name,
+        "additional_subframes_needed": additional_subframes,
+        "recommendation_source": "catalog_fallback",
+        "source_capture_id": None,
+        "confidence": calculate_confidence(
+            capture_count=0,
+            quality_score=None,
+            recommendation_source="catalog_fallback",
+        ),
+        "recommendation": build_advisor_recommendation(
+            object_name=normalized_name,
+            remaining_hours=goal_hours,
+            additional_subframes=additional_subframes,
+            sub_exposure_seconds=sub_exposure_seconds,
+            gain=gain,
+            filter_name=filter_name,
+        ),
+    }

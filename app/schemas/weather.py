@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class WeatherSummary(BaseModel):
-    postal_code: str
+    postal_code: Optional[str] = None
     temperature_f: Optional[float] = None
     planned_temperature_f: Optional[float] = None
     planned_temperature_at: Optional[str] = None
