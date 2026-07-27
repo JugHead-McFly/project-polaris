@@ -37,6 +37,26 @@ refuses all monitoring transmission from local and staging environments.
 Monitoring remains off until a production-host test confirms that no observer
 or developer location reaches Sentry.
 
+## Hosted smoke-test record
+
+On July 26, 2026, Doug completed the first real-browser smoke test against the
+Render-hosted private alpha:
+
+- hosted sign-in, sign-out, and sign-in persistence passed;
+- observing-home setup and persistence passed;
+- the Tonight recommendation loaded and refreshed successfully;
+- password recovery returned to the hosted Polaris reset screen and the new
+  password opened the personalized account successfully; and
+- the privacy-first approximate-location default was corrected, tested, and
+  deployed.
+
+The second human-account isolation walkthrough remains open. Supabase rejected
+the test invitation because the password-recovery checks had temporarily
+exhausted the project's email rate limit. The existing authenticated hosted API
+isolation proof still passes; resend the second-account invitation after the
+email limit clears and complete the browser walkthrough before inviting an
+external tester.
+
 ## Suggested first cohort
 
 Start with two or three people who:

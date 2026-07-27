@@ -86,6 +86,12 @@ invite individual testers. Supabase documents that disabling new sign-ups still
 allows existing invited users to sign in, and its browser client is intended to
 use the project URL plus a publishable key.
 
+Supabase Authentication URL Configuration must use the public hosted
+`/operator` URL as its Site URL. Add that same hosted URL to the redirect allow
+list, along with the explicit local `/operator` URLs used for development.
+Without this configuration, password-recovery emails can fall back to a local
+test address that an external tester cannot open.
+
 ## Route inventory
 
 Public shell routes:
