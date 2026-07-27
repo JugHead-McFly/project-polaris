@@ -32,6 +32,12 @@ def test_monitoring_event_removes_personal_and_credential_data():
                 {"message": "database parameters may be present"},
             ]
         },
+        "server_name": "Doug-MacBook-Air.local",
+        "contexts": {
+            "runtime": {"name": "CPython"},
+            "user": {"geo": {"city": "Mesa"}},
+            "polaris_request": {"request_id": "abc123", "method": "POST"},
+        },
         "exception": {
             "values": [
                 {
@@ -59,6 +65,10 @@ def test_monitoring_event_removes_personal_and_credential_data():
 
     assert "user" not in sanitized
     assert "breadcrumbs" not in sanitized
+    assert "server_name" not in sanitized
+    assert sanitized["contexts"] == {
+        "polaris_request": {"request_id": "abc123", "method": "POST"}
+    }
     assert "data" not in sanitized["request"]
     assert "cookies" not in sanitized["request"]
     assert "query_string" not in sanitized["request"]
@@ -109,6 +119,7 @@ def test_monitoring_uses_privacy_safe_defaults(tmp_path):
     assert enabled
     options = initialize.call_args.kwargs
     assert not options["default_integrations"]
+    assert options["server_name"] == ""
     assert not options["send_default_pii"]
     assert not options["include_local_variables"]
     assert options["max_request_body_size"] == "never"

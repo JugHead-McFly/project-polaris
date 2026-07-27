@@ -30,8 +30,11 @@ and disposable-restore gates passed on July 25–26, 2026. A retained encrypted
 recovery point, separate-project restore, and basic error monitoring remain
 open.
 
-The code-side monitoring boundary is implemented but intentionally inactive
-until a dedicated monitoring project is approved, configured, and tested.
+The code-side monitoring boundary is implemented. The first live test exposed
+Sentry's default IP-derived location and device-hostname collection. The
+hostname was removed by Polaris, but Sentry continued to display an
+IP-derived city after its IP-scrubbing setting was enabled. Monitoring is
+disabled in staging until a privacy-safe transport and repeat test pass.
 
 ## Suggested first cohort
 

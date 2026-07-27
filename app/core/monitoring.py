@@ -47,6 +47,16 @@ def scrub_monitoring_event(event: Dict, hint: Dict) -> Dict:
     sanitized = _scrub(deepcopy(event))
     sanitized.pop("user", None)
     sanitized.pop("breadcrumbs", None)
+    sanitized.pop("server_name", None)
+
+    contexts = sanitized.get("contexts")
+    if isinstance(contexts, dict):
+        request_context = contexts.get("polaris_request")
+        sanitized["contexts"] = (
+            {"polaris_request": request_context}
+            if isinstance(request_context, dict)
+            else {}
+        )
 
     request_data = sanitized.get("request")
     if isinstance(request_data, dict):
@@ -73,6 +83,7 @@ def configure_monitoring(config: Settings = settings) -> bool:
     sentry_sdk.init(
         dsn=config.SENTRY_DSN,
         default_integrations=False,
+        server_name="",
         environment=config.ENVIRONMENT,
         release=f"polaris@{config.VERSION}",
         send_default_pii=False,

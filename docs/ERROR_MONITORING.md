@@ -1,9 +1,11 @@
 # Hosted-alpha error monitoring
 
 Status: the privacy-safe Sentry integration is implemented and disabled by
-default. No event is transmitted until Doug explicitly creates a Sentry
-project and adds its DSN to the hosted environment. A real test event and alert
-delivery remain required before external alpha access.
+default. A Sentry project was created and tested on July 26, 2026, but Polaris
+removed its staging DSN after Sentry displayed an IP-derived approximate city
+despite its IP-scrubbing option being enabled. No event is currently
+transmitted. A privacy-safe transport and a repeat test remain required before
+external alpha access.
 
 Official references:
 
@@ -53,6 +55,8 @@ With a DSN configured, Polaris initializes Sentry with:
 - request bodies disabled;
 - performance traces and profiles disabled for the alpha;
 - user context and breadcrumbs removed;
+- the device hostname and all automatic contexts removed, retaining only the
+  Polaris request ID, method, and path; and
 - headers, cookies, query strings, and request environment removed;
 - credential, email, address, and coordinate fields filtered; and
 - exception values redacted while retaining code locations and stack shape.
@@ -64,13 +68,11 @@ future host's protected environment-variable store. Do not commit it.
 
 Before an external tester is invited:
 
-1. create a dedicated Polaris Sentry project;
-2. review Sentry organization and project data-scrubbing settings;
-3. enable default server-side scrubbing and IP-address scrubbing;
-4. configure the DSN in staging;
-5. trigger one synthetic failure that contains fake sensitive values;
-6. confirm the event arrives with those values absent;
-7. configure and receive an alert; and
-8. document how Doug finds the event using the user's request ID.
+1. identify a monitoring transport that does not expose an observer's or
+   developer's network-derived location to the monitoring provider;
+2. configure that transport and repeat the fake-sensitive-value test;
+3. confirm the event has no hostname, IP address, city, or coordinates;
+4. configure and receive an alert; and
+5. document how Doug finds the event using the user's request ID.
 
 Until those steps pass, monitoring is implemented but not operational.
