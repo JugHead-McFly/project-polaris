@@ -93,7 +93,95 @@
     </nav>
 
     <main class="hosted-account-main" id="hosted-account-main" hidden>
-      <section class="panel hosted-account-panel" aria-labelledby="hosted-account-title">
+      <section class="hosted-tonight" id="hosted-tonight-panel" hidden aria-labelledby="hosted-tonight-title">
+        <div class="hosted-tonight-heading">
+          <div>
+            <p class="eyebrow">Tonight at <span id="hosted-tonight-observatory">your observatory</span></p>
+            <h1 id="hosted-tonight-title">Your imaging plan</h1>
+            <p id="hosted-tonight-date">Building tonight's recommendation…</p>
+          </div>
+          <div class="hosted-tonight-actions">
+            <button class="account-button" id="hosted-edit-home-button" type="button">
+              Edit observing home
+            </button>
+            <button class="refresh-button" id="hosted-refresh-button" type="button">
+              Refresh tonight
+            </button>
+          </div>
+        </div>
+
+        <section class="hosted-recommendation status-loading" id="hosted-recommendation">
+          <div class="hosted-decision">
+            <p class="eyebrow">Tonight's recommendation</p>
+            <div class="decision-line">
+              <span class="status-light" aria-hidden="true"></span>
+              <h2 id="hosted-decision">Checking conditions…</h2>
+            </div>
+            <p id="hosted-decision-message">
+              Comparing weather, darkness, Moon conditions, and target visibility.
+            </p>
+            <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
+          </div>
+          <div class="hosted-target">
+            <p class="eyebrow" id="hosted-target-label">Primary target</p>
+            <strong id="hosted-target-name">—</strong>
+            <span id="hosted-target-common-name"></span>
+            <p id="hosted-target-reason">Waiting for tonight's target.</p>
+            <dl class="hosted-target-facts">
+              <div>
+                <dt>Best window</dt>
+                <dd id="hosted-target-window">—</dd>
+              </div>
+              <div>
+                <dt>Sub-exposure</dt>
+                <dd id="hosted-target-exposure">—</dd>
+              </div>
+              <div>
+                <dt>Gain</dt>
+                <dd id="hosted-target-gain">—</dd>
+              </div>
+              <div>
+                <dt>Filter</dt>
+                <dd id="hosted-target-filter">—</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="hosted-summary-grid" aria-label="Tonight's conditions">
+          <article class="panel hosted-summary-card">
+            <p class="eyebrow">Astronomical darkness</p>
+            <strong id="hosted-darkness-window">—</strong>
+            <span id="hosted-night-rating">Rating unavailable</span>
+          </article>
+          <article class="panel hosted-summary-card">
+            <p class="eyebrow">Weather at planned start</p>
+            <strong id="hosted-weather-summary">—</strong>
+            <span id="hosted-weather-updated">Weather time unavailable</span>
+          </article>
+          <article class="panel hosted-summary-card">
+            <p class="eyebrow">Moon</p>
+            <strong id="hosted-moon-summary">—</strong>
+            <span id="hosted-moon-context">Moon position unavailable</span>
+          </article>
+        </section>
+
+        <section class="panel hosted-schedule-panel" aria-labelledby="hosted-schedule-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Advisory timeline</p>
+              <h2 id="hosted-schedule-title">Tonight's schedule</h2>
+            </div>
+            <span id="hosted-schedule-count">0 blocks</span>
+          </div>
+          <div class="hosted-schedule-list" id="hosted-schedule-list">
+            <div class="empty-state">Building tonight's schedule…</div>
+          </div>
+        </section>
+        <p class="auth-message hosted-plan-message" id="hosted-plan-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="panel hosted-account-panel" id="hosted-account-panel" aria-labelledby="hosted-account-title">
         <div class="panel-heading">
           <div>
             <p class="eyebrow">Hosted alpha setup</p>
@@ -147,7 +235,12 @@
             <input id="hosted-coordinates-approximate" type="checkbox">
             <span>Use an approximate location to protect my exact observing address.</span>
           </label>
-          <button class="refresh-button" type="submit">Save my observing home</button>
+          <div class="hosted-form-actions">
+            <button class="refresh-button" type="submit">Save my observing home</button>
+            <button class="account-button" id="hosted-account-cancel" type="button" hidden>
+              Back to tonight
+            </button>
+          </div>
           <p class="auth-message" id="hosted-account-message" role="status" aria-live="polite"></p>
         </form>
       </section>

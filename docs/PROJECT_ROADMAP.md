@@ -93,12 +93,14 @@ The hosted alpha must do only a few things well:
 3. Explain why a target is recommended or deferred.
 4. Let the user say whether the recommendation was useful.
 
-The first v1.8 foundation slice is complete: protected planning routes resolve
-the signed-in user's observing home and use its coordinates and timezone
-through weather, darkness, Moon, target-visibility, moving-object, and schedule
-calculations. Hosted planning uses catalog defaults rather than Doug's local
-capture history. The remaining work is to present that result in the signed-in
-browser, persist recommendation runs, and collect feedback.
+The first v1.8 foundation and browser slices are complete: protected planning
+routes resolve the signed-in user's observing home and use its coordinates and
+timezone through weather, darkness, Moon, target-visibility, moving-object, and
+schedule calculations. Hosted planning uses catalog defaults rather than
+Doug's local capture history. After onboarding, the signed-in browser now
+presents a phone-friendly recommendation, target settings, conditions, and
+advisory timeline. The remaining work is to verify the complete hosted flow
+with a real account, persist recommendation runs, and collect feedback.
 
 Advanced portfolio, quality, locations, image-processing, native mobile,
 subscriptions, and a broad device matrix remain optional until user evidence

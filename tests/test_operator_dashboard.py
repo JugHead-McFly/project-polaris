@@ -197,8 +197,19 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Set password and continue" in html
     assert "Forgot password?" in html
     assert "Your observing home" in html
+    assert "Your imaging plan" in html
+    assert "Refresh tonight" in html
+    assert "Edit observing home" in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
+
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    assert "loadHostedTonight" in script
+    assert "renderHostedTonight" in script
+    assert "renderHostedSchedule" in script
+    assert 'apiFetch("/tonight"' in script
+    assert '`${value}T12:00:00`' in script
+    assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script
 
 
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):

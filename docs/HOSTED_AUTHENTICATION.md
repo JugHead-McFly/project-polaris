@@ -1,8 +1,9 @@
 # Polaris hosted authentication boundary
 
-Status: hosted sign-in, password recovery, first observing-home setup, and
-authenticated tenant isolation have passed against the Supabase staging
-project. Invitation-only external-user testing remains outstanding.
+Status: hosted sign-in, password recovery, first observing-home setup,
+phone-friendly Tonight presentation, and authenticated tenant isolation have
+passed against the Supabase staging project. Invitation-only external-user
+testing remains outstanding.
 
 ## Runtime modes
 
@@ -55,8 +56,11 @@ deliberately denied to the hosted runtime. The hosted planning engine now uses
 the signed-in user's saved latitude, longitude, elevation, and timezone for
 weather, darkness, Moon, visibility, transit, and schedule calculations. It
 uses shared catalog settings instead of Doug's capture history or priorities.
-The signed-in browser still shows setup only until the hosted Tonight
-presentation and recommendation-record work are complete.
+After a signed-in user saves an observing home, the browser now opens the
+hosted Tonight presentation. It intentionally shows only the first alpha loop:
+recommendation, target settings, conditions, and advisory schedule. Doug's
+local Portfolio, Quality, History, Locations, and Data Status views remain
+outside the hosted runtime. Recommendation-run persistence remains v1.8 work.
 
 For the private alpha, configure Supabase to disallow public sign-ups and
 invite individual testers. Supabase documents that disabling new sign-ups still

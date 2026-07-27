@@ -7,6 +7,7 @@ const usesHostedAuth = authConfig.mode === "supabase";
 let supabaseClient = null;
 let hostedSession = null;
 let hostedObservatory = null;
+let hostedProfile = null;
 const invitationHash = new URLSearchParams(window.location.hash.slice(1));
 const invitationQuery = new URLSearchParams(window.location.search);
 let isInvitationFlow = (
@@ -71,6 +72,195 @@ const updateHostedAccountForm = (profile, observatory) => {
   );
 };
 
+const showHostedAccountSetup = (message = "") => {
+  byId("hosted-tonight-panel").hidden = true;
+  byId("hosted-account-panel").hidden = false;
+  byId("hosted-account-cancel").hidden = !hostedObservatory;
+  if (message) setAuthMessage(message, "hosted-account-message");
+};
+
+const showHostedTonight = () => {
+  byId("hosted-account-panel").hidden = true;
+  byId("hosted-tonight-panel").hidden = false;
+  setAuthMessage("", "hosted-account-message");
+};
+
+const setHostedPlanLoading = () => {
+  const card = byId("hosted-recommendation");
+  card.className = "hosted-recommendation status-loading";
+  setText("hosted-decision", "Checking conditions…");
+  setText(
+    "hosted-decision-message",
+    "Comparing weather, darkness, Moon conditions, and target visibility.",
+  );
+  setText("hosted-target-name", "—");
+  setText("hosted-target-common-name", "");
+  setText("hosted-target-reason", "Waiting for tonight's target.");
+  setText("hosted-plan-message", "Refreshing tonight's recommendation…");
+};
+
+const renderHostedSchedule = (schedule) => {
+  const container = byId("hosted-schedule-list");
+  const blocks = schedule?.blocks || [];
+  container.replaceChildren();
+  setText(
+    "hosted-schedule-count",
+    `${blocks.length} block${blocks.length === 1 ? "" : "s"}`,
+  );
+
+  if (!blocks.length) {
+    appendTextElement(
+      container,
+      "div",
+      "empty-state",
+      schedule?.decision === "Do Not Image"
+        ? "No imaging is scheduled while conditions are unsuitable."
+        : "No target met the visibility and minimum-time requirements.",
+    );
+    return;
+  }
+
+  blocks.forEach((block) => {
+    const card = appendTextElement(container, "article", "hosted-schedule-block", "");
+    const time = appendTextElement(card, "div", "hosted-schedule-time", "");
+    appendTextElement(time, "strong", "", shortTime(block.start));
+    appendTextElement(time, "span", "", `to ${shortTime(block.end)}`);
+
+    const body = appendTextElement(card, "div", "hosted-schedule-body", "");
+    const identity = appendTextElement(body, "div", "hosted-schedule-identity", "");
+    appendTextElement(identity, "strong", "", block.object || "Unknown target");
+    appendTextElement(identity, "span", "", block.common_name || "");
+    if (block.reason) appendTextElement(body, "p", "", block.reason);
+
+    const settings = appendTextElement(body, "div", "hosted-schedule-settings", "");
+    equipmentChips(block).forEach((label) => {
+      appendTextElement(settings, "span", "", label);
+    });
+  });
+};
+
+const renderHostedTonight = (data) => {
+  const schedule = data.schedule || {};
+  const decision = schedule.decision || "Conditions Unknown";
+  const statusClass = `status-${decision.toLowerCase().replaceAll(" ", "-")}`;
+  byId("hosted-recommendation").className = `hosted-recommendation ${statusClass}`;
+  setText("hosted-tonight-observatory", data.observatory?.name, "your observatory");
+  setText("observatory-name", data.observatory?.name, "Your observatory");
+  setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
+  setText("hosted-decision", decision);
+  setText("hosted-decision-message", data.message, "Recommendation available.");
+
+  const target = data.recommended_target || data.backup_target;
+  setText(
+    "hosted-target-label",
+    data.recommended_target ? "Primary target" : "Fallback if conditions improve",
+  );
+  if (target) {
+    const settings = target.recommended_settings || {};
+    setText("hosted-target-name", target.object, "Unknown target");
+    setText("hosted-target-common-name", target.common_name, "");
+    setText("hosted-target-reason", target.reason, "Planner recommendation available.");
+    setText(
+      "hosted-target-window",
+      targetWindowLabel(target.recommended_start, target.recommended_end),
+    );
+    setText(
+      "hosted-target-exposure",
+      displayNumber(settings.exposure_seconds, " sec"),
+    );
+    setText("hosted-target-gain", displayNumber(settings.gain));
+    setText("hosted-target-filter", friendlyFilterLabel(settings.filter_name));
+  } else {
+    setText("hosted-target-name", "No target");
+    setText("hosted-target-common-name", "");
+    setText("hosted-target-reason", "No target currently meets the planner requirements.");
+    setText("hosted-target-window", "No usable window");
+    setText("hosted-target-exposure", null);
+    setText("hosted-target-gain", null);
+    setText("hosted-target-filter", null);
+  }
+
+  const darkness = data.darkness || {};
+  const weather = data.weather || {};
+  const moon = data.moon || {};
+  setText(
+    "hosted-darkness-window",
+    `${shortTime(darkness.astronomical_darkness_start)}–${shortTime(
+      darkness.astronomical_darkness_end,
+    )}`,
+  );
+  setText(
+    "hosted-night-rating",
+    data.night_rating
+      ? `${data.night_rating.score} · ${data.night_rating.quality}`
+      : "Rating unavailable",
+  );
+  setText(
+    "hosted-weather-summary",
+    `${displayNumber(weather.cloud_cover_percent, "% clouds")} · ${displayNumber(
+      weather.wind_speed_mph,
+      " mph wind",
+    )}`,
+  );
+  setText(
+    "hosted-weather-updated",
+    weather.observed_at
+      ? `Observed ${displayDateTime(weather.observed_at)}`
+      : "Weather time unavailable",
+  );
+  setText(
+    "hosted-moon-summary",
+    `${moon.phase_name || "Moon"} · ${displayNumber(
+      moon.illumination_percent,
+      "% illuminated",
+    )}`,
+  );
+  setText(
+    "hosted-moon-context",
+    moon.above_horizon ? "Currently above the horizon" : "Currently below the horizon",
+  );
+
+  const notes = byId("hosted-plan-notes");
+  notes.replaceChildren();
+  notes.hidden = decision === "Proceed";
+  if (!notes.hidden) {
+    (schedule.notes || []).forEach((note) => appendTextElement(notes, "li", "", note));
+  }
+  renderHostedSchedule(schedule);
+  setText(
+    "hosted-plan-message",
+    `Plan refreshed ${new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.`,
+  );
+};
+
+const loadHostedTonight = async () => {
+  const refresh = byId("hosted-refresh-button");
+  refresh.disabled = true;
+  refresh.textContent = "Refreshing…";
+  setHostedPlanLoading();
+  showHostedTonight();
+
+  try {
+    const response = await apiFetch("/tonight", { cache: "no-store" });
+    if (response.status === 409) {
+      showHostedAccountSetup("Add an observing home before building tonight's plan.");
+      return;
+    }
+    if (!response.ok) {
+      throw new Error("Polaris could not build tonight's recommendation. Please try again.");
+    }
+    renderHostedTonight(await response.json());
+  } catch (error) {
+    byId("hosted-recommendation").className = "hosted-recommendation status-error";
+    setText("hosted-decision", "Plan unavailable");
+    setText("hosted-decision-message", error.message);
+    setText("hosted-plan-message", "Your observing home is still saved.");
+  } finally {
+    refresh.disabled = false;
+    refresh.textContent = "Refresh tonight";
+  }
+};
+
 const loadHostedAccount = async () => {
   const profileResponse = await apiFetch("/profile", { cache: "no-store" });
   let profile = null;
@@ -92,14 +282,18 @@ const loadHostedAccount = async () => {
   }
   const observatories = await observatoryResponse.json();
   hostedObservatory = observatories[0] || null;
+  hostedProfile = profile;
   updateHostedAccountForm(profile, hostedObservatory);
 
   if (profile && hostedObservatory) {
     setText("hosted-account-state", "Observing home saved");
     setText(
       "hosted-account-intro",
-      "Your account and observing home are ready. Personalized nightly recommendations are the next hosted Polaris milestone.",
+      "Update the location Polaris uses for your nightly recommendations.",
     );
+    await loadHostedTonight();
+  } else {
+    showHostedAccountSetup();
   }
 };
 
@@ -144,12 +338,14 @@ const saveHostedAccount = async (event) => {
       throw new Error("Polaris could not save your observing location. Check the values and try again.");
     }
     hostedObservatory = await observatoryResponse.json();
+    hostedProfile = await profileResponse.json();
     setText("hosted-account-state", "Observing home saved");
     setText(
       "hosted-account-intro",
-      "Your account and observing home are ready. Personalized nightly recommendations are the next hosted Polaris milestone.",
+      "Update the location Polaris uses for your nightly recommendations.",
     );
-    setAuthMessage("Saved.", "hosted-account-message");
+    setAuthMessage("Saved. Building tonight's plan…", "hosted-account-message");
+    await loadHostedTonight();
   } catch (error) {
     setAuthMessage(error.message, "hosted-account-message");
   } finally {
@@ -296,6 +492,7 @@ const acceptInvitation = async (event) => {
 const signOut = async () => {
   if (supabaseClient) await supabaseClient.auth.signOut();
   hostedObservatory = null;
+  hostedProfile = null;
   await handleHostedSession(null);
 };
 
@@ -488,7 +685,9 @@ const setStatusText = (id, status) => {
 
 const displayDate = (value) => {
   if (!value) return "Date unavailable";
-  const parsed = new Date(value);
+  const parsed = new Date(
+    /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T12:00:00` : value,
+  );
   if (Number.isNaN(parsed.getTime())) return value;
   return parsed.toLocaleDateString(undefined, {
     year: "numeric",
@@ -2687,6 +2886,12 @@ byId("forgot-password-button").addEventListener("click", requestPasswordReset);
 byId("accept-invite-form").addEventListener("submit", acceptInvitation);
 byId("sign-out-button").addEventListener("click", signOut);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
+byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
+byId("hosted-edit-home-button").addEventListener("click", () => {
+  updateHostedAccountForm(hostedProfile, hostedObservatory);
+  showHostedAccountSetup();
+});
+byId("hosted-account-cancel").addEventListener("click", showHostedTonight);
 
 const bootApplication = async () => {
   if (usesHostedAuth) {
