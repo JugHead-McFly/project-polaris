@@ -1268,7 +1268,12 @@ const renderDecision = (data) => {
   panel.className = `decision-panel ${statusClass}`;
   setText("observatory-name", data.observatory?.name, "Local observatory");
   setText("decision", decision);
-  setText("decision-message", data.message);
+  setText(
+    "decision-message",
+    decision === "Use Caution"
+      ? "Conditions are usable, but one or more factors need attention before imaging."
+      : data.message,
+  );
 
   const recommended = data.recommended_target;
   const target = recommended || data.backup_target;
@@ -1398,8 +1403,26 @@ const renderConditions = (data) => {
     "unscheduled-time",
     `${durationLabel(data.schedule.unscheduled_dark_minutes)} unscheduled`,
   );
-  setText("night-rating", `${data.night_rating.score} · ${data.night_rating.quality}`);
-  setText("weather-status", weather.status);
+  setText(
+    "night-rating",
+    data.night_rating
+      ? `${data.night_rating.quality} (${data.night_rating.score}/100)`
+      : "Unavailable",
+  );
+  const ratingDeductions = data.night_rating?.deductions || [];
+  setText(
+    "weather-status",
+    ratingDeductions.length
+      ? ratingDeductions
+          .map(
+            (deduction) =>
+              `${deduction.label}: −${displayMeasuredNumber(deduction.points)} points`,
+          )
+          .join(" · ")
+      : data.night_rating?.quality === "Unavailable"
+        ? "Weather measurements unavailable"
+        : "No sky-quality deductions",
+  );
   setText("cloud-cover", displayNumber(weather.cloud_cover_percent, "%"));
   setText("humidity", displayNumber(weather.humidity_percent, "%"));
   setText("wind", displayNumber(weather.wind_speed_mph, " mph"));
@@ -1416,16 +1439,20 @@ const renderConditions = (data) => {
   renderMoonVisual(moon);
 
   const target = data.recommended_target || data.backup_target;
-  const moonPosition = moon.above_horizon ? "above the horizon" : "below the horizon";
+  const moonPosition = moon.above_horizon ? "Above horizon now" : "Below horizon now";
   const nextMoonEvent = moon.above_horizon
-    ? `sets ${shortTime(moon.next_moonset)}`
-    : `rises ${shortTime(moon.next_moonrise)}`;
+    ? moon.next_moonset
+      ? ` · sets ${shortTime(moon.next_moonset)}`
+      : ""
+    : moon.next_moonrise
+      ? ` · rises ${shortTime(moon.next_moonrise)}`
+      : "";
   const moonImpact = target?.moon_warning
     ? target.moon_warning.replace(/^(None|Minimal) — /, "")
     : "Target impact is unavailable.";
   setText(
     "moon-context",
-    `${moon.phase_name || "Moon phase unavailable"} · now ${moonPosition}; ${nextMoonEvent}. During the target window: ${moonImpact}`,
+    `${moonPosition}${nextMoonEvent}. During the target window: ${moonImpact}`,
   );
   setText(
     "weather-updated",
@@ -1437,17 +1464,18 @@ const renderConditions = (data) => {
 
 const renderNotes = (notes, decision) => {
   const list = byId("planner-notes");
-  list.hidden = decision === "Proceed";
   list.replaceChildren();
+  const visibleNotes = (notes || []).filter(
+    (note) =>
+      note &&
+      !note.toLowerCase().startsWith("use caution:") &&
+      note !== "Review live conditions before starting any scheduled block.",
+  );
+  list.hidden = decision === "Proceed" || visibleNotes.length === 0;
 
   if (list.hidden) return;
 
-  if (!notes || !notes.length) {
-    appendTextElement(list, "li", "", "No additional planner cautions tonight.");
-    return;
-  }
-
-  notes.forEach((note) => appendTextElement(list, "li", "", note));
+  visibleNotes.forEach((note) => appendTextElement(list, "li", "", note));
 };
 
 const renderSystem = (data) => {

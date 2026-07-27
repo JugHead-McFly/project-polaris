@@ -213,6 +213,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Above horizon now · sets" in script
     assert "Conditions are usable, but one or more factors need attention" in script
     assert 'startsWith("use caution:")' in script
+    assert "<p class=\"eyebrow\">Sky quality</p>" in html
+    assert "No sky-quality deductions" in script
     assert 'apiFetch("/tonight"' in script
     assert '`${value}T12:00:00`' in script
     assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script
