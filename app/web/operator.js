@@ -67,9 +67,9 @@ const updateHostedAccountForm = (profile, observatory) => {
   byId("hosted-longitude").value = observatory?.longitude ?? "";
   byId("hosted-timezone").value = observatory?.timezone_name || "";
   byId("hosted-bortle").value = observatory?.bortle_class ?? "";
-  byId("hosted-coordinates-approximate").checked = Boolean(
-    observatory?.coordinates_are_approximate,
-  );
+  byId("hosted-coordinates-approximate").checked = observatory
+    ? Boolean(observatory.coordinates_are_approximate)
+    : true;
 };
 
 const showHostedAccountLoading = (message = "") => {

@@ -40,7 +40,7 @@ class ObservatoryFields(BaseModel):
     name: str = Field(min_length=1, max_length=100)
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
-    coordinates_are_approximate: bool = False
+    coordinates_are_approximate: bool = True
     elevation_m: Optional[float] = Field(
         default=None,
         ge=-500,

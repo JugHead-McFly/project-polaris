@@ -81,7 +81,7 @@ class HostedObservatory(Base):
     coordinates_are_approximate = Column(
         Boolean,
         nullable=False,
-        default=False,
+        default=True,
     )
     elevation_m = Column(Float, nullable=True)
     timezone_name = Column(String(64), nullable=False)

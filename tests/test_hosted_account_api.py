@@ -11,6 +11,7 @@ from app.core.auth import get_auth_service
 from app.database.database import Base
 from app.database.database import get_tenant_db
 from app.main import app
+from app.schemas.hosted_account import ObservatoryCreate
 
 
 ALICE_ID = UUID("d5fe97a5-dfc1-4a78-96b9-719dec266ca7")
@@ -51,6 +52,17 @@ def observatory_payload(name="Alice's Observatory"):
         "timezone_name": "America/Phoenix",
         "bortle_class": 6,
     }
+
+
+def test_new_observatories_default_to_approximate_coordinates():
+    observatory = ObservatoryCreate(
+        name="Privacy-first Observatory",
+        latitude=33.25,
+        longitude=-111.75,
+        timezone_name="America/Phoenix",
+    )
+
+    assert observatory.coordinates_are_approximate is True
 
 
 def test_alice_and_bob_cannot_cross_observatory_boundary():
