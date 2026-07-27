@@ -1,11 +1,11 @@
 # Hosted-alpha error monitoring
 
-Status: the privacy-safe Sentry integration is implemented and disabled by
+Status: the privacy-safe Sentry integration is implemented and locked off by
 default. A Sentry project was created and tested on July 26, 2026, but Polaris
 removed its staging DSN after Sentry displayed an IP-derived approximate city
-despite its IP-scrubbing option being enabled. No event is currently
-transmitted. A privacy-safe transport and a repeat test remain required before
-external alpha access.
+despite its IP-scrubbing option being enabled. Polaris now refuses to transmit
+from local and staging environments. A repeat test from the eventual production
+host remains required before external alpha access.
 
 Official references:
 
@@ -44,9 +44,15 @@ Set the following only after a Sentry project is approved:
 
 ```text
 POLARIS_SENTRY_DSN=https://<public-dsn>
+POLARIS_SENTRY_ALLOW_TRANSMISSION=true
 ```
 
-With a DSN configured, Polaris initializes Sentry with:
+Both values are effective only when `POLARIS_ENVIRONMENT=production`. This
+prevents a developer's home-network location from reaching Sentry during local
+or staging tests. In production, the FastAPI host sends the event, so its
+network endpoint belongs to the hosting provider rather than the observer.
+
+With an approved production configuration, Polaris initializes Sentry with:
 
 - automatic integrations disabled so Polaris reports only the failures it
   explicitly chooses to report;
@@ -54,12 +60,12 @@ With a DSN configured, Polaris initializes Sentry with:
 - local variables excluded from stack frames;
 - request bodies disabled;
 - performance traces and profiles disabled for the alpha;
-- user context and breadcrumbs removed;
-- the device hostname and all automatic contexts removed, retaining only the
-  Polaris request ID, method, and path; and
-- headers, cookies, query strings, and request environment removed;
-- credential, email, address, and coordinate fields filtered; and
-- exception values redacted while retaining code locations and stack shape.
+- source code excerpts and local variables excluded;
+- no browser request, user context, breadcrumbs, hostname, arbitrary extras,
+  or automatic contexts retained;
+- only the Polaris request ID and HTTP method retained as request context; and
+- exception values redacted while retaining a minimal error type, relative code
+  location, function, line number, and stack shape.
 
 The Sentry DSN belongs only in ignored local environment configuration or the
 future host's protected environment-variable store. Do not commit it.
@@ -68,11 +74,13 @@ future host's protected environment-variable store. Do not commit it.
 
 Before an external tester is invited:
 
-1. identify a monitoring transport that does not expose an observer's or
-   developer's network-derived location to the monitoring provider;
-2. configure that transport and repeat the fake-sensitive-value test;
-3. confirm the event has no hostname, IP address, city, or coordinates;
-4. configure and receive an alert; and
-5. document how Doug finds the event using the user's request ID.
+1. deploy the production FastAPI service without enabling Sentry;
+2. add the DSN and explicit transmission approval only to the production host;
+3. repeat the fake-sensitive-value test from that host;
+4. confirm the event has no observer or developer hostname, IP address, city,
+   coordinates, request contents, or arbitrary text (a hosting-region label is
+   acceptable because it identifies infrastructure, not a person);
+5. configure and receive an alert; and
+6. document how Doug finds the event using the user's request ID.
 
 Until those steps pass, monitoring is implemented but not operational.

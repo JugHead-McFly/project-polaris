@@ -31,10 +31,11 @@ recovery point, separate-project restore, and basic error monitoring remain
 open.
 
 The code-side monitoring boundary is implemented. The first live test exposed
-Sentry's default IP-derived location and device-hostname collection. The
-hostname was removed by Polaris, but Sentry continued to display an
-IP-derived city after its IP-scrubbing setting was enabled. Monitoring is
-disabled in staging until a privacy-safe transport and repeat test pass.
+Sentry's default IP-derived location and device-hostname collection. Polaris
+now sends a minimal allowlisted event, excludes host and request data, and
+refuses all monitoring transmission from local and staging environments.
+Monitoring remains off until a production-host test confirms that no observer
+or developer location reaches Sentry.
 
 ## Suggested first cohort
 

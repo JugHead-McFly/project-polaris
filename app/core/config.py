@@ -35,6 +35,7 @@ class Settings:
         supabase_audience: Optional[str] = None,
         local_user_id: Optional[str] = None,
         sentry_dsn: Optional[str] = None,
+        sentry_allow_transmission: Optional[bool] = None,
     ):
         self.ENVIRONMENT = (
             environment
@@ -125,6 +126,14 @@ class Settings:
         )
         if self.SENTRY_DSN:
             self.SENTRY_DSN = self.SENTRY_DSN.strip()
+        self.SENTRY_ALLOW_TRANSMISSION = (
+            sentry_allow_transmission
+            if sentry_allow_transmission is not None
+            else _environment_boolean(
+                "POLARIS_SENTRY_ALLOW_TRANSMISSION",
+                default=False,
+            )
+        )
 
         self.SUPABASE_ISSUER = (
             f"{self.SUPABASE_URL}/auth/v1"

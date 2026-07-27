@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 from app.core.config import Settings
-from app.core.monitoring import FILTERED
+from app.core.monitoring import REDACTED_EXCEPTION
 from app.core.monitoring import configure_monitoring
 from app.core.monitoring import scrub_monitoring_event
 
@@ -36,7 +36,16 @@ def test_monitoring_event_removes_personal_and_credential_data():
         "contexts": {
             "runtime": {"name": "CPython"},
             "user": {"geo": {"city": "Mesa"}},
-            "polaris_request": {"request_id": "abc123", "method": "POST"},
+            "polaris_request": {
+                "request_id": "abc123",
+                "method": "POST",
+                "path": "/observatories/private-id",
+            },
+        },
+        "tags": {
+            "polaris.request_id": "abc123",
+            "http.request.method": "POST",
+            "server_name": "Doug-MacBook-Air.local",
         },
         "exception": {
             "values": [
@@ -46,8 +55,14 @@ def test_monitoring_event_removes_personal_and_credential_data():
                     "stacktrace": {
                         "frames": [
                             {
-                                "filename": "app/service.py",
+                                "filename": (
+                                    "/Users/doug/dougs-observatory/"
+                                    "app/service.py"
+                                ),
                                 "lineno": 10,
+                                "function": "save_observatory",
+                                "vars": {"exact_address": "private"},
+                                "context_line": "save(private_address)",
                             }
                         ]
                     },
@@ -58,7 +73,9 @@ def test_monitoring_event_removes_personal_and_credential_data():
             "access_token": "private",
             "observatory_address": "private",
             "safe_request_id": "abc123",
+            "unlabeled_personal_note": "Doug lives in Mesa",
         },
+        "message": "observer@example.com failed at 33.25,-111.75",
     }
 
     sanitized = scrub_monitoring_event(event, {})
@@ -69,23 +86,22 @@ def test_monitoring_event_removes_personal_and_credential_data():
     assert sanitized["contexts"] == {
         "polaris_request": {"request_id": "abc123", "method": "POST"}
     }
-    assert "data" not in sanitized["request"]
-    assert "cookies" not in sanitized["request"]
-    assert "query_string" not in sanitized["request"]
-    assert sanitized["request"]["headers"] == FILTERED
-    assert sanitized["request"]["env"] == FILTERED
-    assert sanitized["extra"]["access_token"] == FILTERED
-    assert sanitized["extra"]["observatory_address"] == FILTERED
-    assert sanitized["extra"]["safe_request_id"] == "abc123"
+    assert "request" not in sanitized
+    assert "extra" not in sanitized
+    assert "message" not in sanitized
+    assert sanitized["tags"] == {
+        "polaris.request_id": "abc123",
+        "http.request.method": "POST",
+    }
     assert sanitized["exception"]["values"][0]["value"] == (
-        "Internal exception details redacted."
+        REDACTED_EXCEPTION
     )
-    assert (
-        sanitized["exception"]["values"][0]["stacktrace"]["frames"][0][
-            "filename"
-        ]
-        == "app/service.py"
-    )
+    frame = sanitized["exception"]["values"][0]["stacktrace"]["frames"][0]
+    assert frame == {
+        "filename": "app/service.py",
+        "lineno": 10,
+        "function": "save_observatory",
+    }
 
 
 def test_monitoring_stays_disabled_without_a_dsn(tmp_path):
@@ -105,12 +121,13 @@ def test_monitoring_stays_disabled_without_a_dsn(tmp_path):
 def test_monitoring_uses_privacy_safe_defaults(tmp_path):
     config = Settings(
         base_dir=tmp_path,
-        environment="staging",
+        environment="production",
         database_url="postgresql://user:pass@db.example/polaris",
         auth_mode="supabase",
         supabase_url="https://example.supabase.co",
         supabase_publishable_key="sb_publishable_test",
         sentry_dsn="https://public@example.ingest.sentry.io/1",
+        sentry_allow_transmission=True,
     )
 
     with patch("app.core.monitoring.sentry_sdk.init") as initialize:
@@ -122,7 +139,45 @@ def test_monitoring_uses_privacy_safe_defaults(tmp_path):
     assert options["server_name"] == ""
     assert not options["send_default_pii"]
     assert not options["include_local_variables"]
+    assert not options["include_source_context"]
     assert options["max_request_body_size"] == "never"
     assert options["traces_sample_rate"] == 0.0
     assert options["profiles_sample_rate"] == 0.0
     assert options["before_send"] is scrub_monitoring_event
+
+
+def test_monitoring_stays_disabled_outside_production(tmp_path):
+    config = Settings(
+        base_dir=tmp_path,
+        environment="staging",
+        database_url="postgresql://user:pass@db.example/polaris",
+        auth_mode="supabase",
+        supabase_url="https://example.supabase.co",
+        supabase_publishable_key="sb_publishable_test",
+        sentry_dsn="https://public@example.ingest.sentry.io/1",
+        sentry_allow_transmission=True,
+    )
+
+    with patch("app.core.monitoring.sentry_sdk.init") as initialize:
+        enabled = configure_monitoring(config)
+
+    assert not enabled
+    initialize.assert_not_called()
+
+
+def test_monitoring_requires_explicit_transmission_approval(tmp_path):
+    config = Settings(
+        base_dir=tmp_path,
+        environment="production",
+        database_url="postgresql://user:pass@db.example/polaris",
+        auth_mode="supabase",
+        supabase_url="https://example.supabase.co",
+        supabase_publishable_key="sb_publishable_test",
+        sentry_dsn="https://public@example.ingest.sentry.io/1",
+    )
+
+    with patch("app.core.monitoring.sentry_sdk.init") as initialize:
+        enabled = configure_monitoring(config)
+
+    assert not enabled
+    initialize.assert_not_called()

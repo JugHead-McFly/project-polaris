@@ -1,6 +1,5 @@
-from copy import deepcopy
+from pathlib import PurePath
 from typing import Dict
-from typing import Optional
 
 import sentry_sdk
 
@@ -8,76 +7,116 @@ from app.core.config import Settings
 from app.core.config import settings
 
 
-FILTERED = "[Filtered]"
-SENSITIVE_KEY_PARTS = {
-    "address",
-    "authorization",
-    "cookie",
-    "email",
-    "latitude",
-    "longitude",
-    "password",
-    "secret",
-    "token",
+REDACTED_EXCEPTION = "Internal exception details redacted."
+SAFE_EVENT_FIELDS = {
+    "event_id",
+    "environment",
+    "level",
+    "platform",
+    "release",
+    "timestamp",
+}
+SAFE_FRAME_FIELDS = {
+    "colno",
+    "function",
+    "in_app",
+    "lineno",
+    "module",
+}
+SAFE_TAGS = {
+    "http.request.method",
+    "polaris.request_id",
 }
 
-
-def _sensitive_key(key) -> bool:
-    normalized = str(key).lower().replace("-", "_")
-    return any(part in normalized for part in SENSITIVE_KEY_PARTS)
+_monitoring_enabled = False
 
 
-def _scrub(value, *, key: Optional[str] = None):
-    if key is not None and _sensitive_key(key):
-        return FILTERED
-    if isinstance(value, dict):
-        return {
-            item_key: _scrub(item_value, key=item_key)
-            for item_key, item_value in value.items()
+def _safe_frame(frame: Dict) -> Dict:
+    sanitized = {
+        key: frame[key]
+        for key in SAFE_FRAME_FIELDS
+        if key in frame
+    }
+    filename = frame.get("filename")
+    if filename:
+        parts = PurePath(str(filename)).parts
+        if "app" in parts:
+            sanitized["filename"] = "/".join(
+                parts[parts.index("app"):]
+            )
+        else:
+            sanitized["filename"] = PurePath(str(filename)).name
+    return sanitized
+
+
+def _safe_exception(exception: Dict) -> Dict:
+    values = []
+    for value in exception.get("values", []):
+        if not isinstance(value, dict):
+            continue
+        sanitized_value = {
+            "type": str(value.get("type") or "Exception"),
+            "value": REDACTED_EXCEPTION,
         }
-    if isinstance(value, list):
-        return [_scrub(item) for item in value]
-    if isinstance(value, tuple):
-        return tuple(_scrub(item) for item in value)
-    return value
+        stacktrace = value.get("stacktrace")
+        if isinstance(stacktrace, dict):
+            frames = [
+                _safe_frame(frame)
+                for frame in stacktrace.get("frames", [])
+                if isinstance(frame, dict)
+            ]
+            if frames:
+                sanitized_value["stacktrace"] = {"frames": frames}
+        values.append(sanitized_value)
+    return {"values": values}
 
 
 def scrub_monitoring_event(event: Dict, hint: Dict) -> Dict:
-    """Remove Polaris personal and credential data before transmission."""
-    sanitized = _scrub(deepcopy(event))
-    sanitized.pop("user", None)
-    sanitized.pop("breadcrumbs", None)
-    sanitized.pop("server_name", None)
+    """Build a minimal allowlisted event before transmission."""
+    sanitized = {
+        key: event[key]
+        for key in SAFE_EVENT_FIELDS
+        if key in event
+    }
 
-    contexts = sanitized.get("contexts")
+    exception = event.get("exception")
+    if isinstance(exception, dict):
+        sanitized["exception"] = _safe_exception(exception)
+
+    tags = event.get("tags")
+    if isinstance(tags, dict):
+        sanitized_tags = {
+            key: tags[key]
+            for key in SAFE_TAGS
+            if key in tags
+        }
+        if sanitized_tags:
+            sanitized["tags"] = sanitized_tags
+
+    contexts = event.get("contexts")
     if isinstance(contexts, dict):
         request_context = contexts.get("polaris_request")
-        sanitized["contexts"] = (
-            {"polaris_request": request_context}
-            if isinstance(request_context, dict)
-            else {}
-        )
-
-    request_data = sanitized.get("request")
-    if isinstance(request_data, dict):
-        request_data.pop("data", None)
-        request_data.pop("cookies", None)
-        request_data.pop("query_string", None)
-        request_data["headers"] = FILTERED
-        request_data["env"] = FILTERED
-
-    exception = sanitized.get("exception")
-    if isinstance(exception, dict):
-        for value in exception.get("values", []):
-            if isinstance(value, dict):
-                value["value"] = "Internal exception details redacted."
-
+        if isinstance(request_context, dict):
+            sanitized["contexts"] = {
+                "polaris_request": {
+                    key: request_context[key]
+                    for key in ("request_id", "method")
+                    if key in request_context
+                }
+            }
     return sanitized
 
 
 def configure_monitoring(config: Settings = settings) -> bool:
     """Initialize optional hosted monitoring without collecting PII."""
-    if not config.SENTRY_DSN:
+    global _monitoring_enabled
+    _monitoring_enabled = False
+
+    if (
+        not config.SENTRY_DSN
+        or config.ENVIRONMENT != "production"
+        or not config.SENTRY_ALLOW_TRANSMISSION
+    ):
         return False
 
     sentry_sdk.init(
@@ -88,11 +127,13 @@ def configure_monitoring(config: Settings = settings) -> bool:
         release=f"polaris@{config.VERSION}",
         send_default_pii=False,
         include_local_variables=False,
+        include_source_context=False,
         max_request_body_size="never",
         traces_sample_rate=0.0,
         profiles_sample_rate=0.0,
         before_send=scrub_monitoring_event,
     )
+    _monitoring_enabled = True
     return True
 
 
@@ -104,8 +145,12 @@ def capture_request_exception(
     path: str,
 ) -> None:
     """Capture a scrubbed failure with only safe request identifiers."""
-    if not settings.SENTRY_DSN:
+    if not _monitoring_enabled:
         return
+
+    # The path remains available to Polaris's local structured log but is
+    # intentionally not attached to the third-party monitoring event.
+    del path
 
     with sentry_sdk.isolation_scope() as scope:
         scope.set_tag("polaris.request_id", request_id)
@@ -115,7 +160,6 @@ def capture_request_exception(
             {
                 "request_id": request_id,
                 "method": method,
-                "path": path,
             },
         )
         sentry_sdk.capture_exception(error)
