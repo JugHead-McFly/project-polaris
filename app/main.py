@@ -45,6 +45,20 @@ monitoring_enabled = configure_monitoring()
 logger = configure_logging()
 
 
+def apply_browser_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = (
+        "camera=(), geolocation=(), microphone=()"
+    )
+    if settings.ENVIRONMENT == "production":
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=31536000; includeSubDomains"
+        )
+    return response
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     report = run_startup_preflight()
@@ -58,6 +72,21 @@ app = FastAPI(
     title="Project Polaris API",
     version=settings.VERSION,
     lifespan=lifespan,
+    docs_url=(
+        None
+        if settings.ENVIRONMENT == "production"
+        else "/docs"
+    ),
+    redoc_url=(
+        None
+        if settings.ENVIRONMENT == "production"
+        else "/redoc"
+    ),
+    openapi_url=(
+        None
+        if settings.ENVIRONMENT == "production"
+        else "/openapi.json"
+    ),
 )
 
 
@@ -87,17 +116,20 @@ async def log_request(request: Request, call_next):
             duration_ms,
             type(error).__name__,
         )
-        return JSONResponse(
-            status_code=500,
-            content={
-                "detail": "Internal server error.",
-                "request_id": request_id,
-            },
-            headers={"X-Request-ID": request_id},
+        return apply_browser_security_headers(
+            JSONResponse(
+                status_code=500,
+                content={
+                    "detail": "Internal server error.",
+                    "request_id": request_id,
+                },
+                headers={"X-Request-ID": request_id},
+            )
         )
 
     duration_ms = round((perf_counter() - started_at) * 1000, 1)
     response.headers["X-Request-ID"] = request_id
+    apply_browser_security_headers(response)
     logger.info(
         (
             "request_complete request_id=%s method=%s path=%s "

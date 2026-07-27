@@ -35,6 +35,25 @@ administrator access. The restricted `polaris_runtime` database password and
 all Supabase secret keys remain in ignored environment settings and are never
 rendered into HTML.
 
+## Browser response protections
+
+Polaris adds a browser security boundary to every response:
+
+- pages cannot be embedded in another site, reducing clickjacking risk;
+- browsers cannot reinterpret a response as a different file type;
+- links do not send the Polaris page address as a referrer;
+- camera, microphone, and browser geolocation access are denied;
+- the operator page accepts scripts only from Polaris, its one-time approved
+  inline configuration, and the Supabase browser library;
+- maps may load only their approved OpenStreetMap image tiles;
+- the page may connect only to Polaris and the configured Supabase project; and
+- production HTTPS responses instruct the browser to keep using HTTPS.
+
+The per-response script approval changes on every page load. This lets Polaris
+include its browser-safe Supabase configuration without permitting arbitrary
+inline scripts. The local and staging API explorers remain available for
+development; production disables `/docs`, `/redoc`, and `/openapi.json`.
+
 ## Hosted browser flow
 
 When `POLARIS_AUTH_MODE=supabase`, the public operator shell initially shows a
@@ -69,12 +88,14 @@ use the project URL plus a publishable key.
 
 ## Route inventory
 
-Public shell and discovery routes:
+Public shell routes:
 
 - `/`
 - `/operator` and its section URLs
 - `/operator-assets/*`
-- FastAPI schema/documentation URLs
+
+FastAPI schema/documentation URLs are available in local and staging modes only
+and are disabled in production.
 
 Authenticated data and file routes:
 

@@ -8,6 +8,10 @@ from app.api import operator as operator_api
 def test_operator_dashboard_is_read_only_and_loads_local_assets():
     client = TestClient(app)
 
+    assert app.docs_url == "/docs"
+    assert app.redoc_url == "/redoc"
+    assert app.openapi_url == "/openapi.json"
+
     response = client.get("/operator")
     stylesheet = client.get("/operator-assets/operator.css")
     script = client.get("/operator-assets/operator.js")
@@ -190,7 +194,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
         ),
     )
 
-    html = operator_api._dashboard_html()
+    html = operator_api._dashboard_html(script_nonce="safe-test-nonce")
 
     assert '"mode": "supabase"' in html
     assert '"supabaseUrl": "https://project-ref.supabase.co"' in html
@@ -206,6 +210,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Edit observing home" in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
+    assert 'nonce="safe-test-nonce"' in html
 
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
     assert "loadHostedTonight" in script
@@ -221,6 +226,20 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'apiFetch("/tonight"' in script
     assert '`${value}T12:00:00`' in script
     assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script
+
+
+def test_operator_dashboard_sets_restrictive_content_policy():
+    client = TestClient(app)
+    response = client.get("/operator")
+
+    assert response.status_code == 200
+    policy = response.headers["content-security-policy"]
+    assert "default-src 'self'" in policy
+    assert "object-src 'none'" in policy
+    assert "frame-ancestors 'none'" in policy
+    assert "https://cdn.jsdelivr.net" not in policy
+    nonce = response.text.split('nonce="', 1)[1].split('"', 1)[0]
+    assert f"'nonce-{nonce}'" in policy
 
 
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):

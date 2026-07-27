@@ -1,5 +1,7 @@
 import json
+import secrets
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
@@ -30,7 +32,7 @@ ASSET_FILES = (
 )
 
 
-def _dashboard_html() -> str:
+def _dashboard_html(*, script_nonce: str = "test-nonce") -> str:
     asset_version = max(
         asset.stat().st_mtime_ns
         for asset in ASSET_FILES
@@ -53,6 +55,42 @@ def _dashboard_html() -> str:
         .replace("__ASSET_VERSION__", str(asset_version))
         .replace("__POLARIS_AUTH_CONFIG__", auth_config)
         .replace("__SUPABASE_CLIENT_SCRIPT__", auth_script)
+        .replace("__SCRIPT_NONCE__", script_nonce)
+    )
+
+
+def _dashboard_content_security_policy(script_nonce: str) -> str:
+    script_sources = ["'self'", f"'nonce-{script_nonce}'"]
+    connect_sources = ["'self'"]
+    if settings.AUTH_MODE == "supabase" and settings.SUPABASE_URL:
+        supabase_url = urlsplit(settings.SUPABASE_URL)
+        supabase_origin = (
+            f"{supabase_url.scheme}://{supabase_url.netloc}"
+        )
+        script_sources.append("https://cdn.jsdelivr.net")
+        connect_sources.extend(
+            [
+                supabase_origin,
+                f"wss://{supabase_url.netloc}",
+            ]
+        )
+
+    return "; ".join(
+        [
+            "default-src 'self'",
+            f"script-src {' '.join(script_sources)}",
+            "style-src 'self' 'unsafe-inline'",
+            (
+                "img-src 'self' data: blob: "
+                "https://*.tile.openstreetmap.org"
+            ),
+            f"connect-src {' '.join(connect_sources)}",
+            "font-src 'self' data:",
+            "object-src 'none'",
+            "base-uri 'self'",
+            "frame-ancestors 'none'",
+            "form-action 'self'",
+        ]
     )
 
 
@@ -126,9 +164,15 @@ def _find_preview_path(
     include_in_schema=False,
 )
 def operator_dashboard():
+    script_nonce = secrets.token_urlsafe(18)
     return HTMLResponse(
-        _dashboard_html(),
-        headers={"Cache-Control": "no-store"},
+        _dashboard_html(script_nonce=script_nonce),
+        headers={
+            "Cache-Control": "no-store",
+            "Content-Security-Policy": (
+                _dashboard_content_security_policy(script_nonce)
+            ),
+        },
     )
 
 

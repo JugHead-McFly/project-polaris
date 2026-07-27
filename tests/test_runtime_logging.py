@@ -30,3 +30,22 @@ def test_unhandled_request_failure_returns_traceable_safe_response(
     assert keyword_arguments["request_id"] == response.json()["request_id"]
     assert keyword_arguments["method"] == "GET"
     assert keyword_arguments["path"] == "/failure"
+
+
+def test_successful_response_receives_browser_security_headers():
+    secured_app = FastAPI()
+    secured_app.middleware("http")(log_request)
+
+    @secured_app.get("/healthy")
+    def healthy():
+        return {"status": "ok"}
+
+    response = TestClient(secured_app).get("/healthy")
+
+    assert response.status_code == 200
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["x-frame-options"] == "DENY"
+    assert response.headers["referrer-policy"] == "no-referrer"
+    assert response.headers["permissions-policy"] == (
+        "camera=(), geolocation=(), microphone=()"
+    )
