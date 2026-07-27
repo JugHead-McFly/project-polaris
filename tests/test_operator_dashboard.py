@@ -209,6 +209,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderHostedSchedule" in script
+    assert "Sky quality:" in script
+    assert "Above horizon now · sets" in script
+    assert "Conditions are usable, but one or more factors need attention" in script
+    assert 'startsWith("use caution:")' in script
     assert 'apiFetch("/tonight"' in script
     assert '`${value}T12:00:00`' in script
     assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script

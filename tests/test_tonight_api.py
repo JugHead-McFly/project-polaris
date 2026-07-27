@@ -237,7 +237,16 @@ def test_night_rating_allows_no_recommended_target():
         target=None,
     )
 
-    assert rating == {"score": 10, "quality": "Very Poor"}
+    assert rating == {
+        "score": 10,
+        "quality": "Very Poor",
+        "deductions": [
+            {"label": "Cloud cover", "points": 50.0},
+            {"label": "High humidity", "points": 10},
+            {"label": "Strong wind", "points": 10},
+            {"label": "Bright Moon", "points": 20},
+        ],
+    }
 
 
 def test_night_rating_allows_missing_weather_and_moon_measurements():
@@ -251,4 +260,22 @@ def test_night_rating_allows_missing_weather_and_moon_measurements():
         target={"moon_separation_degrees": None},
     )
 
-    assert rating == {"score": 0, "quality": "Unavailable"}
+    assert rating == {"score": 0, "quality": "Unavailable", "deductions": []}
+
+
+def test_night_rating_explains_bright_moon_deduction():
+    rating = calculate_night_rating(
+        weather={
+            "cloud_cover_percent": 0,
+            "humidity_percent": 44,
+            "wind_speed_mph": 5.6,
+        },
+        moon={"illumination_percent": 94.3},
+        target={"moon_separation_degrees": 55.7},
+    )
+
+    assert rating == {
+        "score": 80,
+        "quality": "Good",
+        "deductions": [{"label": "Bright Moon", "points": 20}],
+    }

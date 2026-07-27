@@ -161,7 +161,13 @@ const renderHostedTonight = (data) => {
   setText("observatory-name", data.observatory?.name, "Your observatory");
   setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
   setText("hosted-decision", decision);
-  setText("hosted-decision-message", data.message, "Recommendation available.");
+  setText(
+    "hosted-decision-message",
+    decision === "Use Caution"
+      ? "Conditions are usable, but one or more factors need attention before imaging."
+      : data.message,
+    "Recommendation available.",
+  );
 
   const target = data.recommended_target || data.backup_target;
   setText(
@@ -205,8 +211,22 @@ const renderHostedTonight = (data) => {
   setText(
     "hosted-night-rating",
     data.night_rating
-      ? `${data.night_rating.score} · ${data.night_rating.quality}`
-      : "Rating unavailable",
+      ? `Sky quality: ${data.night_rating.quality} (${data.night_rating.score}/100)`
+      : "Sky quality unavailable",
+  );
+  const ratingDeductions = data.night_rating?.deductions || [];
+  setText(
+    "hosted-night-rating-reason",
+    ratingDeductions.length
+      ? ratingDeductions
+          .map(
+            (deduction) =>
+              `${deduction.label}: −${displayMeasuredNumber(deduction.points)} points`,
+          )
+          .join(" · ")
+      : data.night_rating?.quality === "Unavailable"
+        ? "Weather measurements unavailable"
+        : "No sky-quality deductions",
   );
   setText(
     "hosted-weather-summary",
@@ -230,14 +250,27 @@ const renderHostedTonight = (data) => {
   );
   setText(
     "hosted-moon-context",
-    moon.above_horizon ? "Currently above the horizon" : "Currently below the horizon",
+    moon.above_horizon
+      ? moon.next_moonset
+        ? `Above horizon now · sets ${shortTime(moon.next_moonset)}`
+        : "Above horizon now"
+      : moon.next_moonrise
+        ? `Below horizon now · rises ${shortTime(moon.next_moonrise)}`
+        : "Below horizon now",
   );
 
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
-  notes.hidden = decision === "Proceed";
+  const visibleNotes = (schedule.notes || []).filter(
+    (note) =>
+      note &&
+      note !== data.message &&
+      !note.toLowerCase().startsWith("use caution:") &&
+      note !== "Review live conditions before starting any scheduled block.",
+  );
+  notes.hidden = decision === "Proceed" || visibleNotes.length === 0;
   if (!notes.hidden) {
-    (schedule.notes || []).forEach((note) => appendTextElement(notes, "li", "", note));
+    visibleNotes.forEach((note) => appendTextElement(notes, "li", "", note));
   }
   renderHostedSchedule(schedule);
   setText(
