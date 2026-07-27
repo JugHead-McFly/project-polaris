@@ -7,6 +7,8 @@ from uuid import uuid4
 from fastapi import Depends, FastAPI, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.api.advisor import router as advisor_router
@@ -30,6 +32,7 @@ from app.core.runtime_logging import configure_logging
 from app.core.startup_preflight import format_preflight_failure
 from app.core.startup_preflight import log_preflight_report
 from app.core.startup_preflight import run_startup_preflight
+from app.database.database import get_db
 from app.database.database import get_tenant_db
 from app.services.capture_service import (
     create_capture_from_parsed_fits,
@@ -215,6 +218,34 @@ def root():
         "status": "Project Polaris API is running",
         "version": settings.VERSION,
         "operator_dashboard": "/operator",
+    }
+
+
+@app.get("/health/live", include_in_schema=False)
+def live_health():
+    """Confirm that the Polaris web process is responding."""
+    return {
+        "status": "alive",
+        "version": settings.VERSION,
+    }
+
+
+@app.get("/health/ready", include_in_schema=False)
+def ready_health(db: Session = Depends(get_db)):
+    """Confirm that Polaris can reach its operational database."""
+    try:
+        db.execute(text("SELECT 1"))
+    except SQLAlchemyError:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "not_ready",
+                "version": settings.VERSION,
+            },
+        )
+    return {
+        "status": "ready",
+        "version": settings.VERSION,
     }
 
 

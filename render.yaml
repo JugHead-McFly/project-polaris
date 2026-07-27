@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: project-polaris-private-alpha
+    runtime: python
+    plan: free
+    region: oregon
+    branch: develop
+    autoDeployTrigger: "off"
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health/ready
+    envVars:
+      - key: POLARIS_ENVIRONMENT
+        value: production
+      - key: POLARIS_AUTH_MODE
+        value: supabase
+      - key: POLARIS_SUPABASE_AUDIENCE
+        value: authenticated
+      - key: POLARIS_REQUIRE_LOCAL_CAPTURE_LIBRARY
+        value: "false"
+      - key: POLARIS_LOG_LEVEL
+        value: INFO
+      - key: POLARIS_SENTRY_ALLOW_TRANSMISSION
+        value: "false"
+      - key: POLARIS_DATABASE_URL
+        sync: false
+      - key: POLARIS_SUPABASE_URL
+        sync: false
+      - key: POLARIS_SUPABASE_PUBLISHABLE_KEY
+        sync: false
