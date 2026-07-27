@@ -452,13 +452,6 @@ def build_tonight_schedule(
         0,
     )
 
-    if decision != "Do Not Image" and unscheduled_dark_minutes:
-        notes.append(
-            f"{unscheduled_dark_minutes} dark minute(s) remain unscheduled "
-            "because no additional block met the target and minimum-duration "
-            "requirements."
-        )
-
     date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
 
     return {

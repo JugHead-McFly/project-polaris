@@ -146,8 +146,9 @@ const renderHostedSchedule = (schedule) => {
     if (block.reason) appendTextElement(body, "p", "", block.reason);
 
     const settings = appendTextElement(body, "div", "hosted-schedule-settings", "");
-    equipmentChips(block).forEach((label) => {
-      appendTextElement(settings, "span", "", label);
+    equipmentChips(block).forEach((chip) => {
+      const element = appendTextElement(settings, "span", "", chip.label);
+      if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
     });
   });
 };
@@ -188,7 +189,7 @@ const renderHostedTonight = (data) => {
       displayNumber(settings.exposure_seconds, " sec"),
     );
     setText("hosted-target-gain", displayNumber(settings.gain));
-    setText("hosted-target-filter", friendlyFilterLabel(settings.filter_name));
+    renderFilterValue("hosted-target-filter", settings.filter_name);
   } else {
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
@@ -628,17 +629,76 @@ const displayFractionPercent = (value) => {
   return `${percent.toFixed(digits).replace(/\.?0+$/, "")}%`;
 };
 
-const friendlyFilterLabel = (value) => {
-  if (!value) return "Not recorded";
-  const descriptions = {
-    "duo-band": "Duo-Band · emphasizes glowing nebula gases",
-    astro: "Astro · general deep-sky imaging",
-    vis: "VIS · natural-color visible light",
-    uhc: "UHC · increases nebula contrast",
-    clear: "Clear · no light-filtering effect",
-    none: "No filter · full available light",
+const filterDetails = (value) => {
+  if (!value) return { name: "Not recorded", description: "" };
+  const filters = {
+    "duo-band": {
+      name: "Duo-Band",
+      description:
+        "Passes the hydrogen-alpha and oxygen-III wavelengths emitted by many nebulae. It blocks much of the surrounding skyglow, making glowing gas easier to capture.",
+    },
+    astro: {
+      name: "Astro",
+      description:
+        "A general-purpose deep-sky filter that keeps a broad range of visible light for galaxies, clusters, and other natural-color targets.",
+    },
+    vis: {
+      name: "VIS",
+      description:
+        "A visible-light filter intended for natural-color imaging while limiting wavelengths outside the normal visible range.",
+    },
+    uhc: {
+      name: "UHC",
+      description:
+        "A contrast-enhancing nebula filter that passes selected emission wavelengths while reducing common sources of light pollution.",
+    },
+    clear: {
+      name: "Clear",
+      description:
+        "A clear optical window with no intentional light-filtering effect, allowing the camera to use its full available wavelength range.",
+    },
+    none: {
+      name: "No filter",
+      description:
+        "No imaging filter is selected, so the camera receives the full available light from the telescope.",
+    },
   };
-  return descriptions[value.trim().toLowerCase()] || value;
+  return filters[value.trim().toLowerCase()] || { name: value, description: "" };
+};
+
+const friendlyFilterLabel = (value) => filterDetails(value).name;
+
+const openInfoDialog = (eyebrow, title, body, range = "") => {
+  setText("quality-info-eyebrow", eyebrow);
+  setText("quality-info-title", title);
+  setText("quality-info-body", body);
+  setText("quality-info-range", range);
+  byId("quality-info-range").hidden = !range;
+  const dialog = byId("quality-info-dialog");
+  if (typeof dialog.showModal === "function") dialog.showModal();
+  else dialog.setAttribute("open", "");
+};
+
+const openFilterInfo = (value) => {
+  const filter = filterDetails(value);
+  if (!filter.description) return;
+  openInfoDialog("Imaging filter", filter.name, filter.description);
+};
+
+const appendFilterInfoButton = (parent, value) => {
+  const filter = filterDetails(value);
+  if (!filter.description) return;
+  const button = appendTextElement(parent, "button", "quality-info-button", "i");
+  button.type = "button";
+  button.setAttribute("aria-label", `About the ${filter.name} filter`);
+  button.addEventListener("click", () => openFilterInfo(value));
+};
+
+const renderFilterValue = (id, value) => {
+  const container = byId(id);
+  container.replaceChildren();
+  appendTextElement(container, "span", "", friendlyFilterLabel(value));
+  appendFilterInfoButton(container, value);
 };
 
 const qualityInterpretation = (score) => {
@@ -1116,12 +1176,7 @@ const qualityComponentInfo = {
 const openQualityInfo = (infoKey) => {
   const info = qualityComponentInfo[infoKey];
   if (!info) return;
-  setText("quality-info-title", info.title);
-  setText("quality-info-body", info.body);
-  setText("quality-info-range", info.range);
-  const dialog = byId("quality-info-dialog");
-  if (typeof dialog.showModal === "function") dialog.showModal();
-  else dialog.setAttribute("open", "");
+  openInfoDialog("Quality component", info.title, info.body, info.range);
 };
 
 const appendQualityComponent = (parent, label, value, points, maxPoints, infoKey = null) => {
@@ -1322,21 +1377,28 @@ const renderDecision = (data) => {
   const settings = target.recommended_settings || {};
   setText("target-exposure", displayNumber(settings.exposure_seconds, " sec"));
   setText("target-gain", displayNumber(settings.gain));
-  setText("target-filter", friendlyFilterLabel(settings.filter_name));
+  renderFilterValue("target-filter", settings.filter_name);
 };
 
 const equipmentChips = (block) => {
   const chips = [];
   if (block.recommended_sub_exposure_seconds !== null) {
-    chips.push(`${block.recommended_sub_exposure_seconds} sec subs`);
+    chips.push({ label: `${block.recommended_sub_exposure_seconds} sec subs` });
   }
-  if (block.recommended_gain !== null) chips.push(`Gain ${block.recommended_gain}`);
+  if (block.recommended_gain !== null) {
+    chips.push({ label: `Gain ${block.recommended_gain}` });
+  }
   if (block.recommended_filter) {
-    chips.push(friendlyFilterLabel(block.recommended_filter));
+    chips.push({
+      label: friendlyFilterLabel(block.recommended_filter),
+      filterValue: block.recommended_filter,
+    });
   }
-  if (block.planned_subframes !== null) chips.push(`${block.planned_subframes} frames`);
-  chips.push(`${block.imaging_minutes} min imaging`);
-  if (block.setup_minutes) chips.push(`${block.setup_minutes} min setup`);
+  if (block.planned_subframes !== null) {
+    chips.push({ label: `${block.planned_subframes} frames` });
+  }
+  chips.push({ label: `${block.imaging_minutes} min imaging` });
+  if (block.setup_minutes) chips.push({ label: `${block.setup_minutes} min setup` });
   return chips;
 };
 
@@ -1374,8 +1436,9 @@ const renderSchedule = (schedule) => {
     }
 
     const chips = appendTextElement(card, "div", "equipment-row", "");
-    equipmentChips(block).forEach((label) => {
-      appendTextElement(chips, "span", "equipment-chip", label);
+    equipmentChips(block).forEach((chip) => {
+      const element = appendTextElement(chips, "span", "equipment-chip", chip.label);
+      if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
     });
 
     if (block.setup_changes && block.setup_changes.length) {
