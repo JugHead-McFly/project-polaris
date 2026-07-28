@@ -6,6 +6,8 @@ from typing import Dict, Optional
 
 from sqlalchemy.orm import Session
 
+from app.config.observatory import BORTLE
+from app.config.observatory import CAPTURE_LOCATION
 from app.core.storage import get_preview_path
 from app.models import Capture
 from app.models import ObservingSession
@@ -213,8 +215,9 @@ def get_or_create_session(
     session = ObservingSession(
         session_id=session_info["session_id"],
         date=session_info["session_date"],
-        location="",
+        location=CAPTURE_LOCATION,
         observatory="DWARF 3",
+        bortle_class=BORTLE,
         moon_phase="",
         weather_summary="",
         notes=(

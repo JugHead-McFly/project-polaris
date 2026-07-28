@@ -204,6 +204,7 @@ def restore_hosted_tenant(
     db: Session,
     *,
     document: Dict,
+    target_user_id: UUID = None,
 ) -> Dict:
     """Restore one verified tenant into an empty target tenant boundary."""
     report = verify_hosted_tenant_export(document)
@@ -213,7 +214,8 @@ def restore_hosted_tenant(
             + "; ".join(report["errors"])
         )
 
-    user_id = UUID(report["user_id"])
+    source_user_id = UUID(report["user_id"])
+    user_id = target_user_id or source_user_id
     existing = db.query(Profile).filter(Profile.user_id == user_id).first()
     if existing is not None:
         raise HostedBackupError(
@@ -223,10 +225,22 @@ def restore_hosted_tenant(
     try:
         for table_name, model in BACKUP_MODELS:
             for record in document["tables"][table_name]:
-                db.add(model(**_deserialize_record(model, record)))
+                values = _deserialize_record(model, record)
+                if "user_id" in values:
+                    values["user_id"] = user_id
+                db.add(model(**values))
+            # Preserve the explicit dependency order in BACKUP_MODELS.
+            # PostgreSQL must receive the profile before observatories,
+            # observatories before runs, and runs before feedback.
+            db.flush()
         db.commit()
     except Exception:
         db.rollback()
         raise
 
-    return report
+    return {
+        **report,
+        "source_user_id": str(source_user_id),
+        "target_user_id": str(user_id),
+        "user_id_remapped": user_id != source_user_id,
+    }

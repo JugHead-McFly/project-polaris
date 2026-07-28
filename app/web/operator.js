@@ -8,6 +8,7 @@ let supabaseClient = null;
 let hostedSession = null;
 let hostedObservatory = null;
 let hostedProfile = null;
+let hostedRecommendationRunId = null;
 const invitationHash = new URLSearchParams(window.location.hash.slice(1));
 const invitationQuery = new URLSearchParams(window.location.search);
 let isInvitationFlow = (
@@ -110,6 +111,11 @@ const setHostedPlanLoading = () => {
   setText("hosted-target-common-name", "");
   setText("hosted-target-reason", "Waiting for tonight's target.");
   setText("hosted-plan-message", "Refreshing tonight's recommendation…");
+  hostedRecommendationRunId = null;
+  byId("hosted-feedback-panel").hidden = true;
+  byId("hosted-feedback-yes").classList.remove("selected");
+  byId("hosted-feedback-no").classList.remove("selected");
+  setText("hosted-feedback-message", "");
 };
 
 const renderHostedSchedule = (schedule) => {
@@ -274,6 +280,8 @@ const renderHostedTonight = (data) => {
     visibleNotes.forEach((note) => appendTextElement(notes, "li", "", note));
   }
   renderHostedSchedule(schedule);
+  hostedRecommendationRunId = data.recommendation_run_id || null;
+  byId("hosted-feedback-panel").hidden = !hostedRecommendationRunId;
   setText(
     "hosted-plan-message",
     `Plan refreshed ${new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.`,
@@ -288,7 +296,10 @@ const loadHostedTonight = async () => {
   showHostedTonight();
 
   try {
-    const response = await apiFetch("/tonight", { cache: "no-store" });
+    const response = await apiFetch("/tonight", {
+      method: "POST",
+      cache: "no-store",
+    });
     if (response.status === 409) {
       showHostedAccountSetup("Add an observing home before building tonight's plan.");
       return;
@@ -305,6 +316,38 @@ const loadHostedTonight = async () => {
   } finally {
     refresh.disabled = false;
     refresh.textContent = "Refresh tonight";
+  }
+};
+
+const saveHostedPlanFeedback = async (useful) => {
+  if (!hostedRecommendationRunId) return;
+
+  const yesButton = byId("hosted-feedback-yes");
+  const noButton = byId("hosted-feedback-no");
+  yesButton.disabled = true;
+  noButton.disabled = true;
+  setText("hosted-feedback-message", "Saving your response…");
+
+  try {
+    const response = await apiFetch(
+      `/recommendations/${hostedRecommendationRunId}/feedback`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ useful }),
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Polaris could not save your response. Please try again.");
+    }
+    yesButton.classList.toggle("selected", useful);
+    noButton.classList.toggle("selected", !useful);
+    setText("hosted-feedback-message", "Thank you—your response was saved.");
+  } catch (error) {
+    setText("hosted-feedback-message", error.message);
+  } finally {
+    yesButton.disabled = false;
+    noButton.disabled = false;
   }
 };
 
@@ -3030,6 +3073,12 @@ byId("accept-invite-form").addEventListener("submit", acceptInvitation);
 byId("sign-out-button").addEventListener("click", signOut);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
+byId("hosted-feedback-yes").addEventListener("click", () => {
+  saveHostedPlanFeedback(true);
+});
+byId("hosted-feedback-no").addEventListener("click", () => {
+  saveHostedPlanFeedback(false);
+});
 byId("hosted-edit-home-button").addEventListener("click", () => {
   updateHostedAccountForm(hostedProfile, hostedObservatory);
   showHostedAccountSetup();

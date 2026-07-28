@@ -26,16 +26,15 @@ def get_planning_context(
     if current_user.auth_mode == "local":
         return LOCAL_OBSERVATORY_CONTEXT
 
-    observatories = list_observatories(
+    observatory = get_primary_observatory(
         db,
         user_id=current_user.user_id,
     )
-    if not observatories:
+    if observatory is None:
         raise MissingObservatoryError(
             "Add an observing home before requesting tonight's plan."
         )
 
-    observatory = observatories[0]
     return ObservatoryContext(
         name=observatory.name,
         latitude=observatory.latitude,
@@ -46,6 +45,19 @@ def get_planning_context(
         coordinates_are_approximate=(
             observatory.coordinates_are_approximate
         ),
+    )
+
+
+def get_primary_observatory(
+    db: Session,
+    *,
+    user_id: UUID,
+) -> Optional[HostedObservatory]:
+    return (
+        db.query(HostedObservatory)
+        .filter(HostedObservatory.user_id == user_id)
+        .order_by(HostedObservatory.created_at, HostedObservatory.id)
+        .first()
     )
 
 

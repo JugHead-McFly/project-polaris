@@ -6,9 +6,9 @@ Times use the `America/Phoenix` time zone (MST).
 ## Current total
 
 - Opening balance on 2026-07-17: `83:00:00`
-- Recorded sessions since opening balance: `14:40:48`
-- **Total project time: `97:40:48`**
-- Timer status: **stopped**
+- Recorded sessions since opening balance: `33:36:11`
+- **Total project time: `116:36:11`**
+- Timer status: **running** (started 2026-07-28 09:53:40 MST)
 
 ## Session log
 
@@ -20,6 +20,9 @@ Times use the `America/Phoenix` time zone (MST).
 | 2026-07-23 | 18:13:45 MST | 21:51:08 MST | 3:37:23 | v1.6 Quality Scoring v2, product/alpha planning, naming workbook, and printable roadmap. Stop time corrected to eight hours before the delayed stop request. |
 | 2026-07-24 | 09:38:43 MST | 10:25:10 MST | 0:46:27 | v1.6 forecast-based DWARF mini heat guidance, operator transparency, backup verification, and release checkpoint preparation. |
 | 2026-07-24 | 11:16:35 MST | 12:31:19 MST | 1:14:44 | Hosted-alpha architecture implementation: PostgreSQL migration foundation, request-scoped sessions, Supabase authentication boundary, and tenant-isolation foundation. |
+| 2026-07-25 | 11:19:56 MST | 22:09:27 MST | 7:12:21 | Hosted-alpha authentication and observatory-profile proof. Paused 18:05:07–21:42:17 MST; pause excluded. |
+| 2026-07-26 | 14:16:42 MST | 21:43:06 MST | 7:26:24 | Hosted private-alpha deployment, account and password-recovery testing, privacy-default correction, Supabase redirect repair, security verification, and project checkpoint. |
+| 2026-07-27 | 17:30:48 MST | 21:47:26 MST | 4:16:38 | Hosted-alpha privacy hardening, production monitoring validation, Sentry alert verification, request-ID support workflow, and recovery/readiness documentation. |
 
 ## Timer convention
 

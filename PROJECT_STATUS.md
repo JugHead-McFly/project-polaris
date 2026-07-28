@@ -1,6 +1,6 @@
 # Project Polaris Status
 
-Last updated: 2026-07-24
+Last updated: 2026-07-28
 
 ## Project locations
 
@@ -24,11 +24,10 @@ Version 1.5.0 remains available as the earlier tagged release at commit
 
 ## Operational readiness
 
-The hosted-alpha foundation is being built on `develop` without changing Doug's
-local SQLite database or capture library. The accepted architecture keeps the
-FastAPI modular monolith, adds PostgreSQL migrations and request-scoped
-database sessions, and uses Supabase Auth as the future hosted identity
-provider.
+The v1.7 hosted-alpha foundation is complete on `develop` without changing
+Doug's local SQLite database or capture library. The accepted architecture
+keeps the FastAPI modular monolith, uses PostgreSQL migrations and
+request-scoped database sessions, and uses Supabase Auth for hosted identity.
 
 The authentication boundary now has explicit local and Supabase modes. Local
 mode supplies one stable operator identity and leaves the current workflow
@@ -38,15 +37,21 @@ against Supabase's public signing keys for signature, issuer, audience,
 expiration, issued-at time, authenticated role, and UUID subject. All
 data-bearing APIs and capture previews require this dependency; the operator
 HTML and static assets remain public so a future sign-in flow can load.
-Authentication does not yet imply tenant isolation. No external alpha user may
-be invited until the PostgreSQL staging exercise is complete. The hosted tables
-now have non-null UUID ownership, composite owner-preserving foreign keys,
-forced Row Level Security policies, transaction-local user context, and
-owner-filtered profile/observatory APIs. Local two-user tests prevent Alice/Bob
-crossover for list, direct read, forged-owner create, update, and delete.
-PostgreSQL policy SQL compiles successfully, but this Mac has no PostgreSQL
-runtime; the policies and restricted runtime role must still be exercised
-against the real staging service before they are treated as verified.
+The hosted tables have non-null UUID ownership, composite owner-preserving
+foreign keys, forced Row Level Security policies, transaction-local user
+context, and owner-filtered APIs. Two real hosted accounts and automated
+Alice/Bob tests prevent cross-user access. The restricted runtime role and Row
+Level Security policies have been exercised against Supabase. The Render
+deployment, Sentry error-monitoring and privacy-scrubbing checks, hosted backup,
+restore into an independent Supabase project, recreated Auth mapping, and
+post-restore tenant-isolation test have all passed.
+
+The active v1.8 slice saves each hosted nightly recommendation for its signed-in
+owner with privacy-safe planning provenance. A compact Yes/No usefulness
+response updates only that owner's recommendation. The local single-user
+dashboard remains unchanged. Automated persistence, feedback, and cross-user
+isolation checks pass; the hosted browser acceptance test remains pending until
+this slice is deployed.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
@@ -235,8 +240,8 @@ is covered for its required legacy target fields, embedded V3 schedule, and
 missing-recommendation weather path.
 
 The Python 3.9-compatible development environment pins pytest 8.4.2 in
-`requirements-dev.txt`. The complete suite currently has 110 passing tests and is
-run with `.venv/bin/python -m pytest`.
+`requirements-dev.txt`. The complete suite currently has 148 passing tests and
+is run with `.venv/bin/python -m pytest`.
 
 The root response, OpenAPI metadata, `GET /system`, and dashboard API all
 report version `1.5.1` from the shared application setting. The dashboard HTML,
@@ -306,14 +311,14 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Provision a user-owned Supabase development/staging project and run the
-   documented PostgreSQL tenant-isolation exercise with the exact restricted
-   runtime role. This is the next security gate and requires Doug to create the
-   account/project; no recurring purchase has been authorized.
-2. After that gate passes, build the invitation-only browser sign-in and
-   session flow. Then add liveness/readiness, deployment
-   configuration, monitoring, backup/restore verification, and a staging
-   security rehearsal before inviting an external alpha user.
+1. Deploy the v1.8 saved-recommendation and Yes/No usefulness slice to the
+   private hosted service. Run one signed-in browser acceptance check: refresh
+   tonight's plan, confirm the feedback prompt appears, save each response, and
+   confirm a second account cannot read or modify the first account's run.
+2. Invite the first trusted tester only after that acceptance check. Observe
+   whether onboarding, the recommendation, its explanation, and the usefulness
+   question are understandable without coaching. Record friction before adding
+   more hosted features.
 3. Complete v1.6 Locations Planning: the first foundation adds an opt-in
    interactive world map, 25/50/100-mile straight-line rings from the selected
    observatory, and manually saved candidate sites with notes, optional

@@ -1,6 +1,6 @@
 # Polaris Launch Readiness
 
-Last updated: 2026-07-26
+Last updated: 2026-07-27
 
 This is a living business and product checklist. It is not legal or tax advice.
 Items with legal, tax, or regulatory consequences require qualified professional
@@ -14,8 +14,10 @@ review before Doug relies on them.
 - [ ] Onboarding gets a new user to a credible nightly recommendation.
 - [ ] The recommendation explains the important reasons without exposing internal scoring recipes.
 - [x] Tenant export and a disposable restore rehearsal have passed.
-- [ ] A dated hosted export is retained on encrypted off-device media.
-- [ ] A full restore into a separate Supabase project has passed.
+- [x] A dated hosted export is retained on encrypted off-device media.
+- [x] A full restore into a separate Supabase project has passed.
+- [x] Production error-monitoring privacy has been tested with a controlled synthetic event.
+- [x] A production error alert and request-ID lookup workflow have been tested.
 - [ ] Feedback, support contact, and error monitoring are tested.
 - [ ] A narrow alpha invitation and an acceptance/support process are ready.
 

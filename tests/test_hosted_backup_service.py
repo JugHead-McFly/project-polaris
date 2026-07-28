@@ -24,6 +24,8 @@ BOB_ID = UUID("697d7fc2-a433-4cf7-a92f-5f917f93b899")
 
 def database_session():
     engine = create_engine("sqlite://")
+    with engine.connect() as connection:
+        connection.exec_driver_sql("PRAGMA foreign_keys=ON")
     Base.metadata.create_all(engine)
     return engine, sessionmaker(bind=engine)()
 
@@ -34,6 +36,8 @@ def seed_tenant(database, user_id, name):
         display_name=name,
         onboarding_state="complete",
     )
+    database.add(profile)
+    database.flush()
     observatory = HostedObservatory(
         id=uuid4(),
         user_id=user_id,
@@ -45,6 +49,8 @@ def seed_tenant(database, user_id, name):
         timezone_name="America/Phoenix",
         bortle_class=6,
     )
+    database.add(observatory)
+    database.flush()
     run = RecommendationRun(
         id=uuid4(),
         user_id=user_id,
@@ -57,6 +63,8 @@ def seed_tenant(database, user_id, name):
         input_provenance={"weather": "test"},
         planner_version="test",
     )
+    database.add(run)
+    database.flush()
     feedback = RecommendationFeedback(
         id=uuid4(),
         user_id=user_id,
@@ -65,7 +73,7 @@ def seed_tenant(database, user_id, name):
         useful=True,
         reason="Accurate",
     )
-    database.add_all([profile, observatory, run, feedback])
+    database.add(feedback)
     database.commit()
     return observatory, run
 
@@ -130,6 +138,47 @@ def test_tampered_export_is_rejected_before_restore():
         with pytest.raises(HostedBackupError):
             restore_hosted_tenant(target, document=document)
         assert target.query(Profile).count() == 0
+    finally:
+        source.close()
+        target.close()
+        source_engine.dispose()
+        target_engine.dispose()
+
+
+def test_restore_can_remap_records_to_a_recreated_auth_user():
+    source_engine, source = database_session()
+    target_engine, target = database_session()
+    recreated_user_id = UUID(
+        "32406621-6b53-4901-92c7-3415f89f7207"
+    )
+    try:
+        source_observatory, source_run = seed_tenant(
+            source,
+            ALICE_ID,
+            "Alice",
+        )
+        document = export_hosted_tenant(source, user_id=ALICE_ID)
+
+        report = restore_hosted_tenant(
+            target,
+            document=document,
+            target_user_id=recreated_user_id,
+        )
+
+        profile = target.query(Profile).one()
+        observatory = target.query(HostedObservatory).one()
+        run = target.query(RecommendationRun).one()
+        feedback = target.query(RecommendationFeedback).one()
+
+        assert report["source_user_id"] == str(ALICE_ID)
+        assert report["target_user_id"] == str(recreated_user_id)
+        assert report["user_id_remapped"]
+        assert profile.user_id == recreated_user_id
+        assert observatory.user_id == recreated_user_id
+        assert observatory.id == source_observatory.id
+        assert run.user_id == recreated_user_id
+        assert run.id == source_run.id
+        assert feedback.user_id == recreated_user_id
     finally:
         source.close()
         target.close()

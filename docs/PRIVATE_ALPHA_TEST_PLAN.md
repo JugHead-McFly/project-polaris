@@ -26,16 +26,16 @@ Do not invite an external tester until all of these are true:
 - Doug knows how to disable an account and remove its stored data.
 
 The account, password-recovery, observatory-setup, data-isolation, tenant-export,
-and disposable-restore gates passed on July 25–26, 2026. A retained encrypted
-recovery point, separate-project restore, and basic error monitoring remain
-open.
+disposable-restore, retained encrypted recovery point, separate-project restore,
+and production-host monitoring privacy gates passed on July 25–27, 2026.
 
-The code-side monitoring boundary is implemented. The first live test exposed
-Sentry's default IP-derived location and device-hostname collection. Polaris
-now sends a minimal allowlisted event, excludes host and request data, and
-refuses all monitoring transmission from local and staging environments.
-Monitoring remains off until a production-host test confirms that no observer
-or developer location reaches Sentry.
+The first monitoring tests exposed Sentry's default IP-derived location and
+device-hostname collection. Polaris now sends a minimal allowlisted event,
+excludes host and request data, prevents geography derivation with an explicit
+non-identifying IP placeholder, and refuses all monitoring transmission from
+local and staging environments. The final production-host test on July 27
+showed a null user IP and no city, coordinates, observatory name, URL, request
+contents, or arbitrary text. Privacy-safe production monitoring is enabled.
 
 ## Hosted smoke-test record
 
@@ -50,12 +50,21 @@ Render-hosted private alpha:
 - the privacy-first approximate-location default was corrected, tested, and
   deployed.
 
-The second human-account isolation walkthrough remains open. Supabase rejected
-the test invitation because the password-recovery checks had temporarily
-exhausted the project's email rate limit. The existing authenticated hosted API
-isolation proof still passes; resend the second-account invitation after the
-email limit clears and complete the browser walkthrough before inviting an
-external tester.
+On July 27, 2026, Doug completed the second human-account isolation walkthrough
+in a fresh Chrome Incognito session. A separately created test account saw an
+empty observing-home setup screen, then saved its own approximate-location home
+and received a new plan with no inherited capture progress, portfolio, or
+history from Doug's account. The browser-level isolation check passed.
+
+Later on July 27, Doug completed the final controlled production-monitoring
+privacy test. The expected synthetic error reached Sentry without observer,
+observatory, request, or derived geographic information. The test switch and
+synthetic issue were removed after verification.
+
+Doug then configured a production Sentry alert, sent a test notification, and
+confirmed with a second controlled synthetic issue that the saved alert
+triggered. The temporary trigger and issue were removed, and the request-ID
+lookup procedure was documented for tester support.
 
 ## Suggested first cohort
 

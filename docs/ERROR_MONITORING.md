@@ -1,11 +1,12 @@
 # Hosted-alpha error monitoring
 
-Status: the privacy-safe Sentry integration is implemented and locked off by
-default. A Sentry project was created and tested on July 26, 2026, but Polaris
-removed its staging DSN after Sentry displayed an IP-derived approximate city
-despite its IP-scrubbing option being enabled. Polaris now refuses to transmit
-from local and staging environments. A repeat test from the eventual production
-host remains required before external alpha access.
+Status: the privacy-safe Sentry integration is implemented and enabled only on
+the production host. The final controlled Render test passed on July 27, 2026.
+Sentry received the redacted synthetic error with the expected release,
+environment, request ID, and `STARTUP` method while showing a null user IP and
+no city, coordinates, observatory name, URL, request contents, or arbitrary
+text. Polaris still refuses all monitoring transmission from local and staging
+environments.
 
 Official references:
 
@@ -63,6 +64,9 @@ With an approved production configuration, Polaris initializes Sentry with:
 - source code excerpts and local variables excluded;
 - no browser request, user context, breadcrumbs, hostname, arbitrary extras,
   or automatic contexts retained;
+- an explicit non-identifying IP placeholder before transport so Sentry cannot
+  derive geography from the production host's outbound network address (the
+  server-side scrubber then removes the placeholder);
 - only the Polaris request ID and HTTP method retained as request context; and
 - exception values redacted while retaining a minimal error type, relative code
   location, function, line number, and stack shape.
@@ -70,17 +74,45 @@ With an approved production configuration, Polaris initializes Sentry with:
 The Sentry DSN belongs only in ignored local environment configuration or the
 future host's protected environment-variable store. Do not commit it.
 
-## Remaining monitoring gate
+## Monitoring verification
 
-Before an external tester is invited:
+The production-host privacy test passed on July 27, 2026:
 
-1. deploy the production FastAPI service without enabling Sentry;
-2. add the DSN and explicit transmission approval only to the production host;
-3. repeat the fake-sensitive-value test from that host;
-4. confirm the event has no observer or developer hostname, IP address, city,
-   coordinates, request contents, or arbitrary text (a hosting-region label is
-   acceptable because it identifies infrastructure, not a person);
-5. configure and receive an alert; and
-6. document how Doug finds the event using the user's request ID.
+1. Render deployed commit `e9f7c07`.
+2. A one-time startup smoke identifier produced one synthetic Sentry issue.
+3. The event retained only the expected operational identifiers and redacted
+   error shape.
+4. User IP was null and no derived geography or other personal/observatory
+   context appeared.
+5. The one-time smoke identifier was removed and the synthetic issue deleted.
+6. Privacy-safe production transmission remains enabled.
 
-Until those steps pass, monitoring is implemented but not operational.
+The production alert workflow also passed on July 27, 2026:
+
+1. Sentry accepted a direct test notification.
+2. A production-only alert was created for the `python-fastapi` project.
+3. The alert notifies Doug when a new production issue is created or an issue
+   changes state.
+4. A second one-time synthetic issue triggered the saved alert.
+5. The one-time smoke identifier and synthetic issue were removed, and Render
+   returned to the normal production configuration.
+
+## Finding a failure from a user's request ID
+
+If a tester sees `Internal server error.`, ask only for the short request ID
+shown by Polaris and the approximate time the problem happened. Do not ask for
+the tester's password, token, exact address, or other private account details.
+
+To find the matching Sentry event:
+
+1. Open Sentry and choose **Issues**.
+2. Search for `polaris.request_id:<request-id>`, replacing `<request-id>` with
+   the exact value the tester supplied.
+3. Open the matching issue and confirm that its environment is `production`.
+4. Use the release, time, HTTP method, and redacted stack location to investigate
+   the failure. The error value and user details are intentionally unavailable.
+
+If Sentry has no matching event, open the Render service logs and search for the
+exact request ID. Polaris writes the ID to its protected server log even when an
+event could not be delivered to Sentry. Record the request ID in the support
+note so the investigation stays tied to the tester's report.

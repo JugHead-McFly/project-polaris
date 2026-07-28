@@ -1,9 +1,10 @@
 # Hosted-alpha backup and recovery
 
-Status: the tenant export, integrity check, and disposable restore rehearsal
-passed on July 26, 2026. A retained encrypted off-device recovery point and a
-full restore into a separate Supabase project remain required before external
-alpha access.
+Status: the tenant export, integrity check, disposable rehearsal, retained
+encrypted off-device recovery point, and full restore into a separate Supabase
+project passed by July 27, 2026. The remaining business decision is whether
+manual exports provide an acceptable recovery point objective for the external
+alpha.
 
 ## Current Supabase plan boundary
 
@@ -108,18 +109,66 @@ The zero recommendation counts are expected because hosted recommendation
 history has not been enabled yet. The temporary export was removed after the
 rehearsal.
 
+## July 27 retained recovery point
+
+Doug created and retained an encrypted off-device export of the real hosted
+account on the Polaris Backup drive. The export and its disposable restore
+rehearsal passed with one profile, one observatory, and no recommendation runs
+or feedback records. The export payload checksum was
+`d3b6cd1e2f4da2b3d8b3ba7ca0c6ca26a551b796cabf66701adb93dd93cb63c1`.
+The code baseline was commit `c8c8e0f` (`Clarify exposure planning
+requirements`).
+
+## July 27 separate-project recovery drill
+
+The retained encrypted export was restored into a newly created, otherwise
+empty Supabase project rather than into the live source project. The recovery
+command refused the live project reference, applied the complete Alembic
+schema, and remapped all restored ownership to a newly recreated Supabase Auth
+user.
+
+The real PostgreSQL restore passed with:
+
+- the expected payload checksum;
+- one profile and one observatory;
+- zero recommendation runs and zero recommendation-feedback records;
+- all restored rows owned by the recreated Auth user; and
+- a second unrelated user identity seeing zero restored rows through Row Level
+  Security.
+
+The recovered application then started through the restricted `polaris_app`
+database role. The recreated user signed in successfully, skipped onboarding,
+saw the restored `Home` observatory, and received a normal live nightly
+recommendation. The live source project and its account were not changed.
+
+After verification, the disposable `Polaris Recovery Drill` Supabase project
+was permanently deleted. The encrypted export and reusable recovery scripts
+were retained; future drills should create a new empty recovery project so the
+test also proves recovery does not depend on leftover infrastructure.
+
+The observed first full drill took approximately 90 minutes from separate
+project setup through application verification. That includes creation of the
+reusable recovery tooling and diagnosis of one safely rolled-back insertion
+ordering failure. A future repeat drill should be timed separately to establish
+the steady-state recovery time.
+
+Reusable commands:
+
+- `scripts/restore_hosted_tenant_to_postgres.py` migrates and restores a
+  verified export into a separate Supabase project.
+- `scripts/run_recovery_drill_app.py` starts a local recovery viewer against
+  that project through the restricted application role without saving
+  credentials to a file.
+
 ## Remaining recovery gates
 
 Before an external tester is invited:
 
-1. retain a dated export on encrypted off-device media;
-2. record the export checksum and source commit;
-3. decide the acceptable recovery point objective;
-4. upgrade to a plan with daily backups or formally accept and document the
-   manual-export risk;
-5. restore into a separate Supabase test project and verify account
-   re-invitation, schema, Row Level Security, and application behavior; and
-6. document the observed recovery time.
+1. decide the acceptable recovery point objective;
+2. upgrade to a plan with daily backups or formally accept and document the
+   manual-export risk; and
+3. retain a written export cadence and owner if the manual-export approach is
+   accepted.
 
 Storage objects need their own backup design before user uploads are enabled.
 Supabase database backups do not restore deleted Storage objects.

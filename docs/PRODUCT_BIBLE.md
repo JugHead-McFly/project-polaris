@@ -183,6 +183,13 @@ Until discovery or alpha evidence changes the decision, defer:
 - Advanced processing workflow.
 - Complex equipment-management breadth.
 - Extensive visual customization.
+- Portfolio project-progress summaries that show cumulative integration,
+  capture count, best/latest session quality, and an honest quality trend
+  without pretending individual capture scores form a combined-image score.
+- Finished-image workflow: let an imager attach a final stacked/processed
+  result to its portfolio target, make it the portfolio hero image, retain its
+  source-session links and processing notes, and analyze that completed image
+  separately from its raw-session quality.
 - Broad integrations with every astronomy platform.
 - Feature requests unrelated to deciding what to image tonight.
 

@@ -10,13 +10,19 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.api.tonight import tonight
+from app.api.tonight import create_tonight_recommendation
 from app.core.auth import CurrentUser
 from app.data.targets import TARGETS
 from app.database.database import Base
 from app.models import HostedObservatory
 from app.models import Profile
+from app.models import RecommendationFeedback
+from app.models import RecommendationRun
 from app.services.advisor_service import get_catalog_exposure_advice
 from app.services.hosted_account_service import get_planning_context
+from app.services.hosted_recommendation_service import (
+    save_recommendation_feedback,
+)
 from app.services.planner_service import build_target_plan
 
 
@@ -162,6 +168,121 @@ def test_hosted_plan_requires_an_observing_home():
         engine.dispose()
 
     assert raised.value.status_code == 409
+
+
+def test_hosted_recommendation_is_saved_for_its_owner():
+    engine, db = _database()
+    try:
+        db.add(Profile(user_id=ALICE_ID))
+        db.add(
+            HostedObservatory(
+                user_id=ALICE_ID,
+                name="Alice Arizona",
+                latitude=33.45,
+                longitude=-112.07,
+                timezone_name="America/Phoenix",
+            )
+        )
+        db.commit()
+
+        planner = _planner_response()
+        planner["weather"]["observed_at"] = (
+            "2026-07-26T19:15:00-07:00"
+        )
+        with (
+            patch(
+                "app.api.tonight.get_tonight_plan",
+                return_value=planner,
+            ),
+            patch(
+                "app.api.tonight.build_tonight_schedule",
+                side_effect=lambda plan, timezone_name: _schedule_response(
+                    plan,
+                    "2026-07-26",
+                ),
+            ),
+        ):
+            payload = create_tonight_recommendation(
+                current_user=_user(ALICE_ID),
+                db=db,
+            )
+
+        saved = db.query(RecommendationRun).one()
+        assert payload["recommendation_run_id"] == saved.id
+        assert saved.user_id == ALICE_ID
+        assert saved.outcome == "Do Not Image"
+        assert saved.primary_target is None
+        assert saved.observatory_id is not None
+        assert saved.input_provenance[
+            "coordinates_are_approximate"
+        ] is True
+        assert "latitude" not in saved.input_provenance
+        assert saved.forecast_observed_at.isoformat().startswith(
+            "2026-07-27T02:15:00"
+        )
+    finally:
+        db.close()
+        engine.dispose()
+
+
+def test_feedback_updates_without_crossing_user_boundary():
+    engine, db = _database()
+    try:
+        alice_observatory = HostedObservatory(
+            user_id=ALICE_ID,
+            name="Alice Arizona",
+            latitude=33.45,
+            longitude=-112.07,
+            timezone_name="America/Phoenix",
+        )
+        db.add_all(
+            [
+                Profile(user_id=ALICE_ID),
+                Profile(user_id=BOB_ID),
+                alice_observatory,
+            ]
+        )
+        db.commit()
+        run = RecommendationRun(
+            user_id=ALICE_ID,
+            observatory_id=alice_observatory.id,
+            planned_for=datetime.now(ZoneInfo("UTC")),
+            outcome="Proceed",
+            primary_target="M57",
+            explanation={},
+            input_provenance={},
+            planner_version="Planner V3",
+        )
+        db.add(run)
+        db.commit()
+
+        alice_feedback = save_recommendation_feedback(
+            db,
+            user_id=ALICE_ID,
+            recommendation_run_id=run.id,
+            useful=True,
+        )
+        blocked_feedback = save_recommendation_feedback(
+            db,
+            user_id=BOB_ID,
+            recommendation_run_id=run.id,
+            useful=False,
+        )
+        updated_feedback = save_recommendation_feedback(
+            db,
+            user_id=ALICE_ID,
+            recommendation_run_id=run.id,
+            useful=False,
+        )
+
+        assert alice_feedback is not None
+        assert blocked_feedback is None
+        assert updated_feedback.id == alice_feedback.id
+        assert updated_feedback.useful is False
+        assert db.query(RecommendationFeedback).count() == 1
+    finally:
+        db.close()
+        engine.dispose()
 
 
 def test_local_planning_context_remains_dougs_observatory():

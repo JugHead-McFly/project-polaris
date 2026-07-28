@@ -1,12 +1,14 @@
 # Polaris Roadmap to Private Alpha and Beta
 
-Last updated: 2026-07-26
+Last updated: 2026-07-28
 
 ## How to read this plan
 
-Polaris is currently **v1.6.0 in development**: a working local, single-
-observatory advisory product. A version number records product milestones; it
-does not by itself mean the product is ready for a public market.
+Polaris has a working **v1.6.0 local product checkpoint** and is now building
+the **v1.8 hosted nightly loop**. The v1.7 hosted foundation has passed its
+account-isolation, deployment, monitoring, backup, and recovery gates. A
+version number records product milestones; it does not by itself mean the
+product is ready for a public market.
 
 Doug's expected development cadence is about **10–14 focused hours per week**.
 The dates below are planning ranges, not promises. The roadmap protects the
@@ -19,8 +21,8 @@ what to do and more time under the sky.
 | --- | --- | --- | --- |
 | **v1.6 — Local product closeout** | Now–early August | Finish and document the local single-user workflow; validate with real captures | Doug can reliably plan, capture, ingest, review, and improve a session without manual database work |
 | **Discovery + alpha architecture** | Late July–early August (2 weeks, parallel) | Real user evidence and an intentional hosted-product design | Discovery findings are logged; one small alpha architecture is chosen in writing |
-| **v1.7 — Alpha foundation** | Mid–late August (2–3 weeks) | Accounts, tenant boundaries, secure configuration, and a deployable baseline | Two users cannot see or affect each other's data; backups and error monitoring are exercised |
-| **v1.8 — First hosted nightly loop** | Late August–mid September (3 weeks) | Phone-friendly onboarding plus tonight's recommendation, window, and explanation | A new user can onboard and reach a credible recommendation without Doug's help |
+| **v1.7 — Alpha foundation** | Completed ahead of the original mid–late August window | Accounts, tenant boundaries, secure configuration, and a deployable baseline | Passed: two-user isolation, hosted deployment, monitoring, backup, and full recovery drill |
+| **v1.8 — First hosted nightly loop** | Active; originally planned for late August–mid September | Phone-friendly onboarding plus tonight's recommendation, window, explanation, and usefulness response | A new user can onboard, receive a saved recommendation, and rate it without Doug's help |
 | **v1.9 — Alpha reliability** | Mid–late September (2 weeks) | Feedback capture, support path, privacy basics, and repaired onboarding/recommendation failures | Doug and 2–3 trusted testers complete the core flow repeatedly without a critical issue |
 | **v1.10 — Private alpha** | October–November (4–6 weeks) | 10–20 invited users using Polaris in real observing decisions | Returning use, understandable recommendations, and users who would miss Polaris if it went away |
 | **v2.0 — Closed beta** | December 2026–February 2027 (6–10 weeks) | Carefully expand toward 100 users; measure retention and support load | Stable service, no unresolved privacy/security blocker, and repeatable evidence of value |
@@ -98,14 +100,22 @@ The hosted alpha must do only a few things well:
    exposure that can use the window within the 999-frame limit or split the work
    into multiple clearly labeled capture blocks.
 
-The first v1.8 foundation and browser slices are complete: protected planning
-routes resolve the signed-in user's observing home and use its coordinates and
-timezone through weather, darkness, Moon, target-visibility, moving-object, and
-schedule calculations. Hosted planning uses catalog defaults rather than
-Doug's local capture history. After onboarding, the signed-in browser now
-presents a phone-friendly recommendation, target settings, conditions, and
-advisory timeline. The remaining work is to verify the complete hosted flow
-with a real account, persist recommendation runs, and collect feedback.
+The v1.7 foundation is complete: two real accounts were isolated successfully,
+the hosted application was deployed, Sentry monitoring and privacy scrubbing
+were exercised, and a backup was restored into a separate Supabase project.
+The restored account, observatory, Row Level Security boundary, and planning
+flow all passed the recovery drill.
+
+The active v1.8 browser slice resolves the signed-in user's observing home and
+uses its coordinates and timezone through weather, darkness, Moon,
+target-visibility, moving-object, and schedule calculations. Hosted planning
+uses catalog defaults rather than Doug's local capture history. The signed-in
+browser presents a phone-friendly recommendation, target settings, conditions,
+and advisory timeline. Recommendation runs are now saved with tenant ownership
+and privacy-safe planning provenance, and the user can record a simple Yes/No
+usefulness response. Automated checks cover persistence and cross-user
+isolation. The remaining exit work is a hosted manual acceptance test after
+deployment, followed by first-tester onboarding and comprehension feedback.
 
 Advanced portfolio, quality, locations, image-processing, native mobile,
 subscriptions, and a broad device matrix remain optional until user evidence

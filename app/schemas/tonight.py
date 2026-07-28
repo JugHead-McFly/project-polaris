@@ -1,4 +1,5 @@
 from typing import List, Optional
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -29,6 +30,7 @@ class NightPlan(BaseModel):
 
 
 class TonightResponse(BaseModel):
+    recommendation_run_id: Optional[UUID] = None
     date: str
     observatory: ObservatorySummary
     recommended_target: Optional[TargetSummary] = None

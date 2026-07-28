@@ -11,7 +11,11 @@ from app.services.night_rating_service import calculate_night_rating
 from app.services.planner_service import get_tonight_plan
 from app.services.scheduler_service import build_tonight_schedule
 from app.services.hosted_account_service import get_planning_context
+from app.services.hosted_account_service import get_primary_observatory
 from app.services.hosted_account_service import MissingObservatoryError
+from app.services.hosted_recommendation_service import (
+    create_recommendation_run,
+)
 from app.services.target_service import build_catalog_target_response
 from app.services.target_service import build_target_response
 
@@ -146,10 +150,9 @@ def _build_legacy_night_plan(
     }
 
 
-@router.get("", response_model=TonightResponse)
-def tonight(
-    current_user: CurrentUser = Depends(get_current_user),
-    db: Session = Depends(get_tenant_db),
+def _build_tonight_payload(
+    current_user: CurrentUser,
+    db: Session,
 ):
     try:
         observatory = get_planning_context(
@@ -210,3 +213,41 @@ def tonight(
         "darkness": planner["darkness"],
         "schedule": schedule,
     }
+
+
+@router.get("", response_model=TonightResponse)
+def tonight(
+    current_user: CurrentUser = Depends(get_current_user),
+    db: Session = Depends(get_tenant_db),
+):
+    return _build_tonight_payload(current_user, db)
+
+
+@router.post("", response_model=TonightResponse)
+def create_tonight_recommendation(
+    current_user: CurrentUser = Depends(get_current_user),
+    db: Session = Depends(get_tenant_db),
+):
+    payload = _build_tonight_payload(current_user, db)
+    if current_user.auth_mode == "local":
+        return payload
+
+    observatory = get_primary_observatory(
+        db,
+        user_id=current_user.user_id,
+    )
+    if observatory is None:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Add an observing home before requesting tonight's plan."
+            ),
+        )
+    run = create_recommendation_run(
+        db,
+        user_id=current_user.user_id,
+        observatory=observatory,
+        payload=payload,
+    )
+    payload["recommendation_run_id"] = run.id
+    return payload
