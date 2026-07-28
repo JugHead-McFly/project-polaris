@@ -1656,6 +1656,8 @@ const renderNotes = (notes, decision) => {
 
 const renderAdvisoryNotes = (list, notes) => {
   const itemsByCategory = new Map();
+  const capitalizeBullet = (value) =>
+    value ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : value;
 
   notes.forEach((note) => {
     const guidanceMatch = note.match(/^(.+?) guidance:\s*(.+)$/i);
@@ -1673,7 +1675,9 @@ const renderAdvisoryNotes = (list, notes) => {
         .split(";")
         .map((action) => action.trim())
         .filter(Boolean)
-        .forEach((action) => appendTextElement(guidance, "li", "", action));
+        .forEach((action) =>
+          appendTextElement(guidance, "li", "", capitalizeBullet(action)),
+        );
       parent.appendChild(guidance);
       return;
     }
@@ -1684,10 +1688,10 @@ const renderAdvisoryNotes = (list, notes) => {
       const category = categoryMatch[1].trim();
       const label = appendTextElement(item, "strong", "advisory-note-label", `${category}: `);
       label.setAttribute("aria-label", `${category} advisory`);
-      item.appendChild(document.createTextNode(categoryMatch[2]));
+      item.appendChild(document.createTextNode(capitalizeBullet(categoryMatch[2])));
       itemsByCategory.set(category.toLowerCase(), item);
     } else {
-      item.textContent = note;
+      item.textContent = capitalizeBullet(note);
     }
     list.appendChild(item);
   });

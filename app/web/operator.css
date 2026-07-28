@@ -647,6 +647,8 @@ footer {
 
 .sky-quality-stars {
   color: var(--amber);
+  font-size: 20px;
+  line-height: 1;
   letter-spacing: 0.08em;
 }
 

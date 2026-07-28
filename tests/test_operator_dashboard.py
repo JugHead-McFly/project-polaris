@@ -238,6 +238,7 @@ def test_operator_dashboard_sets_restrictive_content_policy():
     assert "default-src 'self'" in policy
     assert "object-src 'none'" in policy
     assert "frame-ancestors 'none'" in policy
+    assert "https://cdn.esahubble.org" in policy
     assert "https://cdn.jsdelivr.net" not in policy
     nonce = response.text.split('nonce="', 1)[1].split('"', 1)[0]
     assert f"'nonce-{nonce}'" in policy
