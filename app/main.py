@@ -27,6 +27,7 @@ from app.api.tonight import router as tonight_router
 from app.core.auth import get_current_user
 from app.core.config import settings
 from app.core.monitoring import capture_request_exception
+from app.core.monitoring import capture_monitoring_smoke_test
 from app.core.monitoring import configure_monitoring
 from app.core.runtime_logging import configure_logging
 from app.core.startup_preflight import format_preflight_failure
@@ -46,6 +47,8 @@ from app.api.schedule import router as schedule_router
 
 monitoring_enabled = configure_monitoring()
 logger = configure_logging()
+if settings.SENTRY_SMOKE_TEST_ID:
+    capture_monitoring_smoke_test(settings.SENTRY_SMOKE_TEST_ID)
 
 
 def apply_browser_security_headers(response):

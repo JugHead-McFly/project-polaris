@@ -13,6 +13,16 @@ def test_local_settings_preserve_existing_database_default(tmp_path: Path):
     assert configured.DATABASE_FILE == tmp_path / "polaris.db"
     assert configured.DATABASE_URL == f"sqlite:///{tmp_path / 'polaris.db'}"
     assert configured.REQUIRE_LOCAL_CAPTURE_LIBRARY
+    assert configured.SENTRY_SMOKE_TEST_ID is None
+
+
+def test_sentry_smoke_test_id_is_trimmed(tmp_path: Path):
+    configured = Settings(
+        base_dir=tmp_path,
+        sentry_smoke_test_id="  private-alpha-smoke  ",
+    )
+
+    assert configured.SENTRY_SMOKE_TEST_ID == "private-alpha-smoke"
 
 
 @pytest.mark.parametrize(

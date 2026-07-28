@@ -36,6 +36,7 @@ class Settings:
         local_user_id: Optional[str] = None,
         sentry_dsn: Optional[str] = None,
         sentry_allow_transmission: Optional[bool] = None,
+        sentry_smoke_test_id: Optional[str] = None,
     ):
         self.ENVIRONMENT = (
             environment
@@ -133,6 +134,16 @@ class Settings:
                 "POLARIS_SENTRY_ALLOW_TRANSMISSION",
                 default=False,
             )
+        )
+        configured_sentry_smoke_test_id = (
+            sentry_smoke_test_id
+            if sentry_smoke_test_id is not None
+            else os.getenv("POLARIS_SENTRY_SMOKE_TEST_ID")
+        )
+        self.SENTRY_SMOKE_TEST_ID = (
+            configured_sentry_smoke_test_id.strip()
+            if configured_sentry_smoke_test_id
+            else None
         )
 
         self.SUPABASE_ISSUER = (

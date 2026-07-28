@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from app.core.config import Settings
 from app.core.monitoring import REDACTED_EXCEPTION
+from app.core.monitoring import capture_monitoring_smoke_test
 from app.core.monitoring import configure_monitoring
 from app.core.monitoring import scrub_monitoring_event
 
@@ -181,3 +182,45 @@ def test_monitoring_requires_explicit_transmission_approval(tmp_path):
 
     assert not enabled
     initialize.assert_not_called()
+
+
+def test_monitoring_smoke_test_uses_only_safe_context(tmp_path):
+    config = Settings(
+        base_dir=tmp_path,
+        environment="production",
+        database_url="postgresql://user:pass@db.example/polaris",
+        auth_mode="supabase",
+        supabase_url="https://example.supabase.co",
+        supabase_publishable_key="sb_publishable_test",
+        sentry_dsn="https://public@example.ingest.sentry.io/1",
+        sentry_allow_transmission=True,
+    )
+
+    with (
+        patch("app.core.monitoring.sentry_sdk.init"),
+        patch(
+            "app.core.monitoring.sentry_sdk.isolation_scope"
+        ) as isolation_scope,
+        patch(
+            "app.core.monitoring.sentry_sdk.capture_exception"
+        ) as capture_exception,
+        patch("app.core.monitoring.sentry_sdk.flush") as flush,
+    ):
+        configure_monitoring(config)
+        capture_monitoring_smoke_test("private-alpha-smoke")
+
+    scope = isolation_scope.return_value.__enter__.return_value
+    scope.set_tag.assert_any_call(
+        "polaris.request_id",
+        "private-alpha-smoke",
+    )
+    scope.set_tag.assert_any_call("http.request.method", "STARTUP")
+    scope.set_context.assert_called_once_with(
+        "polaris_request",
+        {
+            "request_id": "private-alpha-smoke",
+            "method": "STARTUP",
+        },
+    )
+    capture_exception.assert_called_once()
+    flush.assert_called_once_with(timeout=5.0)

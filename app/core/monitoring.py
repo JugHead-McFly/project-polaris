@@ -163,3 +163,24 @@ def capture_request_exception(
             },
         )
         sentry_sdk.capture_exception(error)
+
+
+def capture_monitoring_smoke_test(test_id: str) -> None:
+    """Send one synthetic production check through the privacy scrubber."""
+    if not _monitoring_enabled:
+        return
+
+    with sentry_sdk.isolation_scope() as scope:
+        scope.set_tag("polaris.request_id", test_id)
+        scope.set_tag("http.request.method", "STARTUP")
+        scope.set_context(
+            "polaris_request",
+            {
+                "request_id": test_id,
+                "method": "STARTUP",
+            },
+        )
+        sentry_sdk.capture_exception(
+            RuntimeError("Polaris synthetic monitoring check.")
+        )
+    sentry_sdk.flush(timeout=5.0)
