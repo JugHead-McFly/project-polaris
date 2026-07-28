@@ -4,6 +4,7 @@ from typing import Dict, Optional, Tuple
 from sqlalchemy.orm import Session
 
 from app.data.targets import get_target_common_name
+from app.data.targets import get_target_reference_image
 from app.models import Capture
 from app.models import CaptureAnalysis
 from app.services.portfolio_service import build_portfolio_target
@@ -349,6 +350,7 @@ def build_target_response(
     return {
         "object": normalized_name,
         "common_name": get_target_common_name(normalized_name),
+        "reference_image": get_target_reference_image(normalized_name),
         "capture_count": summary["captures"],
         "session_count": summary["sessions"],
         "total_integration_seconds": total_seconds,
@@ -406,6 +408,7 @@ def build_catalog_target_response(
     return {
         "object": normalized_name,
         "common_name": get_target_common_name(normalized_name),
+        "reference_image": get_target_reference_image(normalized_name),
         "capture_count": 0,
         "session_count": 0,
         "total_integration_seconds": 0,

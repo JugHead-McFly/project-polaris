@@ -24,6 +24,13 @@ class RecommendedSettings(BaseModel):
     filter_name: Optional[str] = None
 
 
+class TargetReferenceImage(BaseModel):
+    thumbnail_url: str
+    source_url: str
+    source_label: str
+    alt: str
+
+
 class TargetCaptureSummary(BaseModel):
     polaris_id: str
     filename: str
@@ -43,6 +50,7 @@ class TargetCaptureSummary(BaseModel):
 class TargetSummary(BaseModel):
     object: str
     common_name: Optional[str] = None
+    reference_image: Optional[TargetReferenceImage] = None
 
     capture_count: int
     session_count: int

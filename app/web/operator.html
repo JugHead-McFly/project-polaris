@@ -136,9 +136,24 @@
             <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
           </div>
           <div class="hosted-target">
-            <p class="eyebrow" id="hosted-target-label">Primary target</p>
-            <strong id="hosted-target-name">—</strong>
-            <span id="hosted-target-common-name"></span>
+            <div class="hosted-target-heading">
+              <div>
+                <p class="eyebrow" id="hosted-target-label">Primary target</p>
+                <strong id="hosted-target-name">—</strong>
+                <span id="hosted-target-common-name"></span>
+              </div>
+              <a
+                class="hosted-reference-image"
+                id="hosted-reference-image"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                hidden
+              >
+                <img id="hosted-reference-image-thumbnail" alt="" />
+                <span id="hosted-reference-image-label">Reference image</span>
+              </a>
+            </div>
             <p id="hosted-target-reason">Waiting for tonight's target.</p>
             <dl class="hosted-target-facts">
               <div>
@@ -165,12 +180,11 @@
           <article class="panel hosted-summary-card">
             <p class="eyebrow">Astronomical darkness</p>
             <strong id="hosted-darkness-window">—</strong>
-            <span id="hosted-night-rating">Rating unavailable</span>
-            <span id="hosted-night-rating-reason"></span>
           </article>
           <article class="panel hosted-summary-card">
-            <p class="eyebrow">Weather at planned start</p>
+            <p class="eyebrow">Conditions at planned start</p>
             <strong id="hosted-weather-summary">—</strong>
+            <span class="hosted-sky-quality" id="hosted-sky-quality">Sky quality unavailable</span>
             <span id="hosted-weather-updated">Weather time unavailable</span>
           </article>
           <article class="panel hosted-summary-card">

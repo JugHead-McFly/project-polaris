@@ -539,23 +539,53 @@ footer {
   border-left: 1px solid var(--line);
 }
 
-.hosted-target > strong,
-.hosted-target > span {
+.hosted-target-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.hosted-target-heading > div > strong,
+.hosted-target-heading > div > span {
   display: block;
 }
 
-.hosted-target > strong {
+.hosted-target-heading > div > strong {
   font-size: clamp(34px, 5vw, 50px);
   letter-spacing: -0.045em;
   line-height: 1;
 }
 
-.hosted-target > span {
+.hosted-target-heading > div > span {
   min-height: 24px;
   margin-top: 5px;
   color: var(--cyan);
   font-size: 17px;
   font-weight: 700;
+}
+
+.hosted-reference-image {
+  display: grid;
+  gap: 5px;
+  flex: 0 0 88px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+}
+
+.hosted-reference-image img {
+  width: 88px;
+  height: 66px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.hosted-reference-image:hover img {
+  border-color: var(--cyan);
 }
 
 .hosted-target > p:not(.eyebrow) {
@@ -606,6 +636,18 @@ footer {
 
 .hosted-summary-card .eyebrow {
   margin-bottom: 2px;
+}
+
+.hosted-sky-quality {
+  display: inline-flex;
+  align-items: center;
+  color: #c4d5d8;
+  font-weight: 700;
+}
+
+.sky-quality-stars {
+  color: var(--amber);
+  letter-spacing: 0.08em;
 }
 
 .hosted-summary-card strong {

@@ -87,6 +87,24 @@ TARGETS = {
 }
 
 
+# These are educational reference images only.  They are deliberately kept
+# separate from a user's own captures so the operator page never suggests an
+# agency image belongs to the user's portfolio.
+TARGET_REFERENCE_IMAGES = {
+    "C 20": {
+        "thumbnail_url": "https://cdn.esahubble.org/archives/images/thumb300y/heic0510a.jpg",
+        "source_url": "https://esahubble.org/images/heic0510a/",
+        "source_label": "ESA/Hubble",
+        "alt": "North America Nebula reference image from ESA/Hubble",
+    },
+}
+
+
+def get_target_reference_image(target_name: str):
+    """Return the official educational reference image for a target, if set."""
+    return TARGET_REFERENCE_IMAGES.get(target_name.strip().upper())
+
+
 TARGET_PROFILES = {
     "C 20": {
         "object_type": "Emission nebula",

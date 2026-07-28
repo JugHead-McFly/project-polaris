@@ -110,12 +110,77 @@ const setHostedPlanLoading = () => {
   setText("hosted-target-name", "—");
   setText("hosted-target-common-name", "");
   setText("hosted-target-reason", "Waiting for tonight's target.");
+  renderHostedReferenceImage(null);
   setText("hosted-plan-message", "Refreshing tonight's recommendation…");
   hostedRecommendationRunId = null;
   byId("hosted-feedback-panel").hidden = true;
   byId("hosted-feedback-yes").classList.remove("selected");
   byId("hosted-feedback-no").classList.remove("selected");
   setText("hosted-feedback-message", "");
+};
+
+const renderHostedReferenceImage = (target) => {
+  const link = byId("hosted-reference-image");
+  const image = byId("hosted-reference-image-thumbnail");
+  const label = byId("hosted-reference-image-label");
+  const reference = target?.reference_image;
+
+  if (!reference?.thumbnail_url || !reference?.source_url) {
+    link.hidden = true;
+    image.removeAttribute("src");
+    return;
+  }
+
+  link.href = reference.source_url;
+  image.src = reference.thumbnail_url;
+  image.alt = reference.alt || "Official target reference image";
+  label.textContent = `Reference image · ${reference.source_label || "source"}`;
+  image.onerror = () => {
+    link.hidden = true;
+  };
+  link.hidden = false;
+};
+
+const skyQualityStars = (score) => {
+  if (score === null || score === undefined) return 0;
+  if (score >= 90) return 5;
+  if (score >= 75) return 4;
+  if (score >= 60) return 3;
+  if (score >= 40) return 2;
+  return 1;
+};
+
+const renderSkyQuality = (rating) => {
+  const container = byId("hosted-sky-quality");
+  container.replaceChildren();
+  if (!rating || rating.quality === "Unavailable") {
+    container.textContent = "Sky quality unavailable";
+    return;
+  }
+
+  const stars = skyQualityStars(rating.score);
+  const text = appendTextElement(
+    container,
+    "span",
+    "sky-quality-stars",
+    "★".repeat(stars) + "☆".repeat(5 - stars),
+  );
+  text.setAttribute("aria-label", `${stars} of 5 stars`);
+  appendTextElement(container, "span", "", ` ${rating.quality}`);
+  const button = appendTextElement(container, "button", "quality-info-button", "i");
+  button.type = "button";
+  button.setAttribute("aria-label", "About this sky-quality rating");
+  button.addEventListener("click", () => {
+    const details = (rating.deductions || [])
+      .map((deduction) => `${deduction.label}: −${displayMeasuredNumber(deduction.points)} points`)
+      .join(" · ");
+    openInfoDialog(
+      "Sky quality",
+      `${rating.quality} — ${stars} of 5 stars`,
+      "A planning estimate based on cloud cover, humidity, wind, Moon brightness, and the Moon's distance from the selected target. It is not a score of your photographs.",
+      `Current details: ${rating.score}/100${details ? ` · ${details}` : ""}`,
+    );
+  });
 };
 
 const renderHostedSchedule = (schedule) => {
@@ -205,6 +270,7 @@ const renderHostedTonight = (data) => {
     );
     setText("hosted-target-gain", displayNumber(settings.gain));
     renderFilterValue("hosted-target-filter", settings.filter_name);
+    renderHostedReferenceImage(target);
   } else {
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
@@ -213,6 +279,7 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);
+    renderHostedReferenceImage(null);
   }
 
   const darkness = data.darkness || {};
@@ -224,26 +291,7 @@ const renderHostedTonight = (data) => {
       darkness.astronomical_darkness_end,
     )}`,
   );
-  setText(
-    "hosted-night-rating",
-    data.night_rating
-      ? `Sky quality: ${data.night_rating.quality} (${data.night_rating.score}/100)`
-      : "Sky quality unavailable",
-  );
-  const ratingDeductions = data.night_rating?.deductions || [];
-  setText(
-    "hosted-night-rating-reason",
-    ratingDeductions.length
-      ? ratingDeductions
-          .map(
-            (deduction) =>
-              `${deduction.label}: −${displayMeasuredNumber(deduction.points)} points`,
-          )
-          .join(" · ")
-      : data.night_rating?.quality === "Unavailable"
-        ? "Weather measurements unavailable"
-        : "No sky-quality deductions",
-  );
+  renderSkyQuality(data.night_rating);
   setText(
     "hosted-weather-summary",
     `${displayNumber(weather.cloud_cover_percent, "% clouds")} · ${displayNumber(
