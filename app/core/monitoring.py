@@ -8,6 +8,7 @@ from app.core.config import settings
 
 
 REDACTED_EXCEPTION = "Internal exception details redacted."
+NON_IDENTIFYING_IP_ADDRESS = "0.0.0.0"
 SAFE_EVENT_FIELDS = {
     "event_id",
     "environment",
@@ -77,6 +78,13 @@ def scrub_monitoring_event(event: Dict, hint: Dict) -> Dict:
         key: event[key]
         for key in SAFE_EVENT_FIELDS
         if key in event
+    }
+    # Sentry can otherwise derive a city from the monitoring server's
+    # outbound network address even when IP storage is disabled. An explicit
+    # non-routable placeholder prevents that derived geography while the
+    # server-side scrubber removes the placeholder itself.
+    sanitized["user"] = {
+        "ip_address": NON_IDENTIFYING_IP_ADDRESS,
     }
 
     exception = event.get("exception")

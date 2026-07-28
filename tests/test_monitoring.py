@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from app.core.config import Settings
 from app.core.monitoring import REDACTED_EXCEPTION
+from app.core.monitoring import NON_IDENTIFYING_IP_ADDRESS
 from app.core.monitoring import capture_monitoring_smoke_test
 from app.core.monitoring import configure_monitoring
 from app.core.monitoring import scrub_monitoring_event
@@ -81,7 +82,9 @@ def test_monitoring_event_removes_personal_and_credential_data():
 
     sanitized = scrub_monitoring_event(event, {})
 
-    assert "user" not in sanitized
+    assert sanitized["user"] == {
+        "ip_address": NON_IDENTIFYING_IP_ADDRESS,
+    }
     assert "breadcrumbs" not in sanitized
     assert "server_name" not in sanitized
     assert sanitized["contexts"] == {
