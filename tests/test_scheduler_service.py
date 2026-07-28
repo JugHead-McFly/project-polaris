@@ -115,6 +115,7 @@ def test_schedule_includes_settings_setup_time_and_subframes():
     assert block["setup_minutes"] == 5
     assert block["imaging_minutes"] == 115
     assert block["planned_subframes"] == 460
+    assert block["subframe_runs"] == [460]
     assert block["common_name"] == "Ring Nebula"
     assert block["recommended_filter"] == "Duo-Band"
     assert "Select Duo-Band filter" in block["setup_changes"]
@@ -151,6 +152,7 @@ def test_schedule_moves_to_an_alternative_after_goal_is_met():
         ("M27", 110),
     ]
     assert blocks[0]["planned_subframes"] == 497
+    assert blocks[0]["subframe_runs"] == [497]
     assert blocks[1]["setup_changes"] == ["Slew to and center M27"]
 
 
@@ -161,6 +163,26 @@ def test_darkness_duration_is_reported_in_minutes():
             "astronomical_darkness_end": "2026-07-18 03:51 AM",
         }
     ) == 397
+
+
+def test_schedule_splits_more_than_999_subframes_into_dwarf_runs():
+    blocks = build_schedule_blocks(
+        [
+            candidate(
+                "C20",
+                120,
+                "2026-07-17 09:00 PM",
+                "2026-07-18 04:00 AM",
+                exposure=15,
+                gain=60,
+                filter_name="Duo-Band",
+            )
+        ]
+    )
+
+    block = blocks[0]
+    assert block["planned_subframes"] == 1660
+    assert block["subframe_runs"] == [999, 661]
 
 
 def test_do_not_image_returns_no_blocks_and_full_unscheduled_darkness():

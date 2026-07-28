@@ -17,6 +17,7 @@ MINIMUM_BLOCK_MINUTES = 30
 MAXIMUM_BLOCKS = 4
 SETUP_BUFFER_MINUTES = 5
 EQUIPMENT_CHANGE_SCORE_MARGIN = 12.0
+DWARF_MAXIMUM_SUBFRAMES_PER_RUN = 999
 
 
 def _parse_schedule_time(
@@ -188,6 +189,23 @@ def _planned_subframes(
         return min(capacity, additional_needed)
 
     return capacity
+
+
+def _subframe_runs(
+    planned_subframes: Optional[int],
+) -> List[int]:
+    """Split a scheduled DWARF run into its 999-subframe app limit."""
+    if planned_subframes is None or planned_subframes <= 0:
+        return []
+
+    full_runs, remainder = divmod(
+        planned_subframes,
+        DWARF_MAXIMUM_SUBFRAMES_PER_RUN,
+    )
+    runs = [DWARF_MAXIMUM_SUBFRAMES_PER_RUN] * full_runs
+    if remainder:
+        runs.append(remainder)
+    return runs
 
 
 def _remaining_imaging_minutes(candidate: Dict) -> Optional[int]:
@@ -375,6 +393,11 @@ def build_schedule_blocks(
         setup_minutes = block["setup_minutes"]
         imaging_minutes = block["imaging_minutes"]
 
+        planned_subframes = _planned_subframes(
+            settings=settings,
+            imaging_minutes=imaging_minutes,
+        )
+
         scheduled_blocks.append(
             {
                 "object": block["object"],
@@ -392,10 +415,8 @@ def build_schedule_blocks(
                 "recommended_gain": settings["gain"],
                 "recommended_filter": settings["filter"],
                 "recommendation_source": settings["source"],
-                "planned_subframes": _planned_subframes(
-                    settings=settings,
-                    imaging_minutes=imaging_minutes,
-                ),
+                "planned_subframes": planned_subframes,
+                "subframe_runs": _subframe_runs(planned_subframes),
                 "setup_changes": _setup_changes(
                     previous=previous_candidate,
                     selected=block["candidate"],

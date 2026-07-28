@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.schemas.darkness import DarknessSummary
 from app.schemas.moon import MoonSummary
@@ -22,6 +22,7 @@ class ScheduledImagingBlock(BaseModel):
     recommended_filter: Optional[str] = None
     recommendation_source: str
     planned_subframes: Optional[int] = None
+    subframe_runs: List[int] = Field(default_factory=list)
     setup_changes: List[str]
 
 

@@ -154,6 +154,7 @@ const renderHostedSchedule = (schedule) => {
     const settings = appendTextElement(body, "div", "hosted-schedule-settings", "");
     equipmentChips(block).forEach((chip) => {
       const element = appendTextElement(settings, "span", "", chip.label);
+      if (chip.title) element.title = chip.title;
       if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
     });
   });
@@ -1438,7 +1439,15 @@ const equipmentChips = (block) => {
     });
   }
   if (block.planned_subframes !== null) {
-    chips.push({ label: `${block.planned_subframes} frames` });
+    const subframeRuns = block.subframe_runs || [];
+    if (subframeRuns.length > 1) {
+      chips.push({
+        label: `${block.planned_subframes} frames: ${subframeRuns.join(" + ")}`,
+        title: `DWARF accepts up to 999 frames per run: ${subframeRuns.join(" + ")}.`,
+      });
+    } else {
+      chips.push({ label: `${block.planned_subframes} frames` });
+    }
   }
   chips.push({ label: `${block.imaging_minutes} min imaging` });
   if (block.setup_minutes) chips.push({ label: `${block.setup_minutes} min setup` });
@@ -1481,6 +1490,7 @@ const renderSchedule = (schedule) => {
     const chips = appendTextElement(card, "div", "equipment-row", "");
     equipmentChips(block).forEach((chip) => {
       const element = appendTextElement(chips, "span", "equipment-chip", chip.label);
+      if (chip.title) element.title = chip.title;
       if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
     });
 
