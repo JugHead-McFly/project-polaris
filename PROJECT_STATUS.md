@@ -178,8 +178,10 @@ has been removed.
 
 Each block includes proven exposure, gain, and filter settings from capture
 history, a five-minute setup allowance, planned imaging minutes, and the number
-of subframes needed. The scheduler avoids marginal equipment changes and moves
-to an alternative target when the current target reaches its integration goal.
+of subframes needed. For DWARF plans exceeding its 999-frame single-run limit,
+the dashboard now separates the work into clearly labeled capped runs. The
+scheduler avoids marginal equipment changes and moves to an alternative target
+when the current target reaches its integration goal.
 
 Safety behavior:
 
