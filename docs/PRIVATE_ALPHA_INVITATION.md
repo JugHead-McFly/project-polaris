@@ -5,8 +5,8 @@ Audience: one trusted smart-telescope user at a time
 
 ## Before you send it
 
-1. Replace `<SUPPORT EMAIL>` with the email address Doug wants to use for
-   tester support.
+1. Tester support for this first trusted cohort goes to
+   `drogers08121@gmail.com`.
 2. Create the tester's invitation in Supabase. Do not share an account,
    password, or invitation link with more than one person.
 3. Send the message below privately. Do not post it to a Facebook group.
@@ -37,7 +37,7 @@ Audience: one trusted smart-telescope user at a time
 > protecting equipment or deciding whether it is safe to open an observatory.
 >
 > If you'd like to take part, reply here. For a problem or question during the
-> test, contact me at <SUPPORT EMAIL> and include a screenshot or the small
+> test, contact me at drogers08121@gmail.com and include a screenshot or the small
 > request ID shown in an error message if there is one.
 >
 > Thanks—Doug

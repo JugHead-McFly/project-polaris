@@ -19,8 +19,8 @@ review before Doug relies on them.
 - [x] Production error-monitoring privacy has been tested with a controlled synthetic event.
 - [x] A production error alert and request-ID lookup workflow have been tested.
 - [x] In-product usefulness feedback and error monitoring are tested.
-- [x] A narrow alpha invitation and tester worksheet are prepared; choose the
-  support email before the first invitation is sent.
+- [x] A narrow alpha invitation, tester worksheet, and first-cohort support
+  contact are prepared.
 
 ### Brand and communication
 

@@ -86,11 +86,10 @@ Avoid a broad Facebook invitation at this stage.
 ## Invitation and support materials
 
 Use the ready-to-send wording and the short tester worksheet in
-[`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md). Before sending
-the first invitation, replace the support-email placeholder in that document
-with the address Doug wants testers to use. Keep all invitation and support
-communication one-to-one during this tiny cohort; do not post an access link
-publicly.
+[`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md). The first trusted
+cohort uses `drogers08121@gmail.com` for support. Keep all invitation and
+support communication one-to-one during this tiny cohort; do not post an access
+link publicly.
 
 ## Tester journey
 
