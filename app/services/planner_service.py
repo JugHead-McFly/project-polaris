@@ -736,11 +736,14 @@ def get_tonight_plan(
             and HEAT_CAUTION_F <= temperature_f < HEAT_STOP_F
         ):
             notes.append(
-                f"Forecast temperature near the planned start is "
+                f"Heat: Forecast temperature near the planned start is "
                 f"{temperature_f:g}°F. This is a hot operating condition for "
-                "the DWARF mini and may add thermal noise to the image. Avoid "
-                "charging, keep it out of stored heat, use temperature-matched "
-                "dark frames when prompted, and monitor it throughout the session."
+                "the DWARF mini and may add thermal noise to the image."
+            )
+            notes.append(
+                "Heat guidance: Avoid charging; keep it out of stored heat; "
+                "use temperature-matched dark frames when prompted; monitor it "
+                "throughout the session."
             )
 
         if best_theoretical_target is not None:

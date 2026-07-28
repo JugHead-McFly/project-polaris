@@ -285,9 +285,7 @@ const renderHostedTonight = (data) => {
       note !== "Review live conditions before starting any scheduled block.",
   );
   notes.hidden = decision === "Proceed" || visibleNotes.length === 0;
-  if (!notes.hidden) {
-    visibleNotes.forEach((note) => appendTextElement(notes, "li", "", note));
-  }
+  renderAdvisoryNotes(notes, visibleNotes);
   renderHostedSchedule(schedule);
   hostedRecommendationRunId = data.recommendation_run_id || null;
   byId("hosted-feedback-panel").hidden = !hostedRecommendationRunId;
@@ -1605,7 +1603,46 @@ const renderNotes = (notes, decision) => {
 
   if (list.hidden) return;
 
-  visibleNotes.forEach((note) => appendTextElement(list, "li", "", note));
+  renderAdvisoryNotes(list, visibleNotes);
+};
+
+const renderAdvisoryNotes = (list, notes) => {
+  const itemsByCategory = new Map();
+
+  notes.forEach((note) => {
+    const guidanceMatch = note.match(/^(.+?) guidance:\s*(.+)$/i);
+    if (guidanceMatch) {
+      const category = guidanceMatch[1].trim().toLowerCase();
+      const parent = itemsByCategory.get(category);
+      if (!parent) {
+        appendTextElement(list, "li", "", note);
+        return;
+      }
+
+      const guidance = document.createElement("ul");
+      guidance.className = "advisory-note-guidance";
+      guidanceMatch[2]
+        .split(";")
+        .map((action) => action.trim())
+        .filter(Boolean)
+        .forEach((action) => appendTextElement(guidance, "li", "", action));
+      parent.appendChild(guidance);
+      return;
+    }
+
+    const categoryMatch = note.match(/^(.+?):\s*(.+)$/);
+    const item = document.createElement("li");
+    if (categoryMatch) {
+      const category = categoryMatch[1].trim();
+      const label = appendTextElement(item, "strong", "advisory-note-label", `${category}: `);
+      label.setAttribute("aria-label", `${category} advisory`);
+      item.appendChild(document.createTextNode(categoryMatch[2]));
+      itemsByCategory.set(category.toLowerCase(), item);
+    } else {
+      item.textContent = note;
+    }
+    list.appendChild(item);
+  });
 };
 
 const renderSystem = (data) => {

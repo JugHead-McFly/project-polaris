@@ -2825,6 +2825,20 @@ dd {
   margin-top: 9px;
 }
 
+.advisory-note-label {
+  color: var(--text);
+}
+
+.advisory-note-guidance {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.advisory-note-guidance li + li {
+  margin-top: 3px;
+}
+
 .library-status {
   margin: 18px 0 0;
   padding-top: 15px;
