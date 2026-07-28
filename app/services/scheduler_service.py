@@ -33,7 +33,18 @@ def _parse_schedule_time(
     ).replace(tzinfo=ZoneInfo(timezone_name))
 
 
-def _format_schedule_time(value: datetime) -> str:
+def _format_schedule_time(
+    value: datetime,
+    round_up_to_minute: bool = False,
+) -> str:
+    if round_up_to_minute and (
+        value.second
+        or value.microsecond
+    ):
+        value = value.replace(
+            second=0,
+            microsecond=0,
+        ) + timedelta(minutes=1)
     return value.strftime(SCHEDULE_TIME_FORMAT)
 
 
@@ -208,6 +219,114 @@ def _subframe_runs(
     return runs
 
 
+def _dwarf_run_blocks(
+    block: Dict,
+    settings: Dict,
+    planned_subframes: Optional[int],
+    setup_changes: List[str],
+) -> List[Dict]:
+    """Turn an oversized DWARF block into individually startable runs."""
+    subframe_runs = _subframe_runs(planned_subframes)
+    exposure_seconds = settings["sub_exposure_seconds"]
+
+    base_block = {
+        "object": block["object"],
+        "common_name": get_target_common_name(block["object"]),
+        "planner_score": block["planner_score"],
+        "recommended_sub_exposure_seconds": exposure_seconds,
+        "recommended_gain": settings["gain"],
+        "recommended_filter": settings["filter"],
+        "recommendation_source": settings["source"],
+        "total_planned_subframes": planned_subframes,
+    }
+
+    if len(subframe_runs) <= 1 or not exposure_seconds:
+        return [
+            {
+                **base_block,
+                "start": _format_schedule_time(
+                    block["start_datetime"],
+                ),
+                "end": _format_schedule_time(
+                    block["end_datetime"],
+                ),
+                "duration_minutes": int(
+                    (
+                        block["end_datetime"]
+                        - block["start_datetime"]
+                    ).total_seconds()
+                    / 60
+                ),
+                "setup_minutes": block["setup_minutes"],
+                "imaging_minutes": block["imaging_minutes"],
+                "reason": block["reason"],
+                "planned_subframes": planned_subframes,
+                "subframe_runs": subframe_runs,
+                "run_number": 1,
+                "total_runs": 1,
+                "setup_changes": setup_changes,
+            }
+        ]
+
+    run_blocks = []
+    imaging_start = block["start_datetime"] + timedelta(
+        minutes=block["setup_minutes"],
+    )
+
+    for index, run_subframes in enumerate(subframe_runs, start=1):
+        run_start = (
+            block["start_datetime"]
+            if index == 1
+            else imaging_start
+        )
+        run_end = imaging_start + timedelta(
+            seconds=run_subframes * exposure_seconds,
+        )
+        imaging_minutes = round(
+            run_subframes * exposure_seconds / 60,
+        )
+        setup_minutes = block["setup_minutes"] if index == 1 else 0
+
+        run_blocks.append(
+            {
+                **base_block,
+                "start": _format_schedule_time(
+                    run_start,
+                    round_up_to_minute=index > 1,
+                ),
+                "end": _format_schedule_time(
+                    run_end,
+                    round_up_to_minute=True,
+                ),
+                "duration_minutes": setup_minutes + imaging_minutes,
+                "setup_minutes": setup_minutes,
+                "imaging_minutes": imaging_minutes,
+                "reason": (
+                    block["reason"]
+                    if index == 1
+                    else (
+                        "Continue after the DWARF 999-frame run limit."
+                    )
+                ),
+                "planned_subframes": run_subframes,
+                "subframe_runs": [run_subframes],
+                "run_number": index,
+                "total_runs": len(subframe_runs),
+                "setup_changes": (
+                    setup_changes
+                    if index == 1
+                    else [
+                        "When the previous run completes, start "
+                        f"run {index} with {run_subframes} frames."
+                    ]
+                ),
+            }
+        )
+        imaging_start = run_end
+
+    return run_blocks
+
+
 def _remaining_imaging_minutes(candidate: Dict) -> Optional[int]:
     advisor = candidate.get("advisor", {})
     remaining_seconds = advisor.get("remaining_seconds")
@@ -380,7 +499,10 @@ def build_schedule_blocks(
 
     scheduled_blocks = []
     previous_candidate = None
-    for block in blocks:
+    # Limit target selections before expanding a long target into DWARF runs.
+    # A split run is still part of the same selected target and must not cause
+    # later portions of that target to disappear from the schedule.
+    for block in blocks[:MAXIMUM_BLOCKS]:
         duration_minutes = int(
             (block["end_datetime"] - block["start_datetime"])
             .total_seconds()
@@ -398,34 +520,20 @@ def build_schedule_blocks(
             imaging_minutes=imaging_minutes,
         )
 
-        scheduled_blocks.append(
-            {
-                "object": block["object"],
-                "common_name": get_target_common_name(block["object"]),
-                "start": _format_schedule_time(block["start_datetime"]),
-                "end": _format_schedule_time(block["end_datetime"]),
-                "duration_minutes": duration_minutes,
-                "setup_minutes": setup_minutes,
-                "imaging_minutes": imaging_minutes,
-                "planner_score": block["planner_score"],
-                "reason": block["reason"],
-                "recommended_sub_exposure_seconds": settings[
-                    "sub_exposure_seconds"
-                ],
-                "recommended_gain": settings["gain"],
-                "recommended_filter": settings["filter"],
-                "recommendation_source": settings["source"],
-                "planned_subframes": planned_subframes,
-                "subframe_runs": _subframe_runs(planned_subframes),
-                "setup_changes": _setup_changes(
+        scheduled_blocks.extend(
+            _dwarf_run_blocks(
+                block=block,
+                settings=settings,
+                planned_subframes=planned_subframes,
+                setup_changes=_setup_changes(
                     previous=previous_candidate,
                     selected=block["candidate"],
                 ),
-            }
+            )
         )
         previous_candidate = block["candidate"]
 
-    return scheduled_blocks[:MAXIMUM_BLOCKS]
+    return scheduled_blocks
 
 
 def build_tonight_schedule(

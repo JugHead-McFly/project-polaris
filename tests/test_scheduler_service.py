@@ -165,7 +165,7 @@ def test_darkness_duration_is_reported_in_minutes():
     ) == 397
 
 
-def test_schedule_splits_more_than_999_subframes_into_dwarf_runs():
+def test_schedule_splits_more_than_999_subframes_into_timed_dwarf_runs():
     blocks = build_schedule_blocks(
         [
             candidate(
@@ -180,9 +180,20 @@ def test_schedule_splits_more_than_999_subframes_into_dwarf_runs():
         ]
     )
 
-    block = blocks[0]
-    assert block["planned_subframes"] == 1660
-    assert block["subframe_runs"] == [999, 661]
+    assert [(block["start"], block["end"]) for block in blocks] == [
+        ("2026-07-17 09:00 PM", "2026-07-18 01:15 AM"),
+        ("2026-07-18 01:15 AM", "2026-07-18 04:00 AM"),
+    ]
+    assert [block["planned_subframes"] for block in blocks] == [999, 661]
+    assert [block["total_planned_subframes"] for block in blocks] == [1660, 1660]
+    assert [(block["run_number"], block["total_runs"]) for block in blocks] == [
+        (1, 2),
+        (2, 2),
+    ]
+    assert blocks[1]["setup_minutes"] == 0
+    assert blocks[1]["setup_changes"] == [
+        "When the previous run completes, start run 2 with 661 frames."
+    ]
 
 
 def test_do_not_image_returns_no_blocks_and_full_unscheduled_darkness():

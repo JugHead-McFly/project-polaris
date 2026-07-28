@@ -22,7 +22,10 @@ class ScheduledImagingBlock(BaseModel):
     recommended_filter: Optional[str] = None
     recommendation_source: str
     planned_subframes: Optional[int] = None
+    total_planned_subframes: Optional[int] = None
     subframe_runs: List[int] = Field(default_factory=list)
+    run_number: int = 1
+    total_runs: int = 1
     setup_changes: List[str]
 
 

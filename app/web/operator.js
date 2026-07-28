@@ -147,7 +147,15 @@ const renderHostedSchedule = (schedule) => {
 
     const body = appendTextElement(card, "div", "hosted-schedule-body", "");
     const identity = appendTextElement(body, "div", "hosted-schedule-identity", "");
-    appendTextElement(identity, "strong", "", block.object || "Unknown target");
+    const runLabel = block.total_runs > 1
+      ? ` · Run ${block.run_number} of ${block.total_runs}`
+      : "";
+    appendTextElement(
+      identity,
+      "strong",
+      "",
+      `${block.object || "Unknown target"}${runLabel}`,
+    );
     appendTextElement(identity, "span", "", block.common_name || "");
     if (block.reason) appendTextElement(body, "p", "", block.reason);
 
@@ -1480,7 +1488,13 @@ const renderSchedule = (schedule) => {
 
     const card = appendTextElement(row, "div", "schedule-card", "");
     const heading = appendTextElement(card, "div", "block-heading", "");
-    appendTargetIdentity(heading, block.object, block.common_name);
+    appendTargetIdentity(
+      heading,
+      block.total_runs > 1
+        ? `${block.object} · Run ${block.run_number} of ${block.total_runs}`
+        : block.object,
+      block.common_name,
+    );
     appendTextElement(heading, "span", "", durationLabel(block.duration_minutes));
 
     if (block.reason) {
