@@ -29,6 +29,11 @@ The account, password-recovery, observatory-setup, data-isolation, tenant-export
 disposable-restore, retained encrypted recovery point, separate-project restore,
 and production-host monitoring privacy gates passed on July 25–27, 2026.
 
+On July 28, 2026, the first hosted nightly-loop update was deployed to the
+private Render service. Doug refreshed a real hosted plan and recorded a
+successful **Yes** usefulness response. The saved response proved the hosted
+recommendation and feedback loop works without changing the local dashboard.
+
 The first monitoring tests exposed Sentry's default IP-derived location and
 device-hostname collection. Polaris now sends a minimal allowlisted event,
 excludes host and request data, prevents geography derivation with an explicit
@@ -77,6 +82,15 @@ Start with two or three people who:
 - are not relying on Polaris for equipment safety.
 
 Avoid a broad Facebook invitation at this stage.
+
+## Invitation and support materials
+
+Use the ready-to-send wording and the short tester worksheet in
+[`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md). Before sending
+the first invitation, replace the support-email placeholder in that document
+with the address Doug wants testers to use. Keep all invitation and support
+communication one-to-one during this tiny cohort; do not post an access link
+publicly.
 
 ## Tester journey
 

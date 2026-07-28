@@ -18,8 +18,9 @@ review before Doug relies on them.
 - [x] A full restore into a separate Supabase project has passed.
 - [x] Production error-monitoring privacy has been tested with a controlled synthetic event.
 - [x] A production error alert and request-ID lookup workflow have been tested.
-- [ ] Feedback, support contact, and error monitoring are tested.
-- [ ] A narrow alpha invitation and an acceptance/support process are ready.
+- [x] In-product usefulness feedback and error monitoring are tested.
+- [x] A narrow alpha invitation and tester worksheet are prepared; choose the
+  support email before the first invitation is sent.
 
 ### Brand and communication
 

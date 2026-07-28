@@ -50,8 +50,10 @@ The active v1.8 slice saves each hosted nightly recommendation for its signed-in
 owner with privacy-safe planning provenance. A compact Yes/No usefulness
 response updates only that owner's recommendation. The local single-user
 dashboard remains unchanged. Automated persistence, feedback, and cross-user
-isolation checks pass; the hosted browser acceptance test remains pending until
-this slice is deployed.
+isolation checks pass. On July 28, 2026, the private Render deployment passed
+its hosted browser acceptance test: Doug refreshed a hosted plan and recorded a
+saved Yes response. First-tester invitation and comprehension feedback are the
+remaining v1.8 exit work.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
