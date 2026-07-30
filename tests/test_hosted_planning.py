@@ -273,12 +273,14 @@ def test_feedback_updates_without_crossing_user_boundary():
             user_id=ALICE_ID,
             recommendation_run_id=run.id,
             useful=False,
+            reason="The setup steps were unclear.",
         )
 
         assert alice_feedback is not None
         assert blocked_feedback is None
         assert updated_feedback.id == alice_feedback.id
         assert updated_feedback.useful is False
+        assert updated_feedback.reason == "The setup steps were unclear."
         assert db.query(RecommendationFeedback).count() == 1
     finally:
         db.close()

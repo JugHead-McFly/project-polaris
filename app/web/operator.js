@@ -18,6 +18,18 @@ let isPasswordRecoveryFlow = (
   invitationHash.get("type") === "recovery" || invitationQuery.get("type") === "recovery"
 );
 
+// Keep the Tonight view useful when a catalog response is temporarily missing
+// its optional reference-image metadata. The server remains the source of
+// truth; this simply gives known targets a safe, official display fallback.
+const TARGET_REFERENCE_IMAGE_FALLBACKS = {
+  C20: {
+    thumbnail_url: "https://cdn.esahubble.org/archives/images/thumb300y/heic0510a.jpg",
+    source_url: "https://esahubble.org/images/heic0510a/",
+    source_label: "ESA/Hubble",
+    alt: "North America Nebula reference image from ESA/Hubble",
+  },
+};
+
 const apiFetch = async (input, options = {}) => {
   const headers = new Headers(options.headers || {});
   if (hostedSession?.access_token) {
@@ -116,6 +128,8 @@ const setHostedPlanLoading = () => {
   byId("hosted-feedback-panel").hidden = true;
   byId("hosted-feedback-yes").classList.remove("selected");
   byId("hosted-feedback-no").classList.remove("selected");
+  byId("hosted-feedback-detail").hidden = true;
+  byId("hosted-feedback-reason").value = "";
   setText("hosted-feedback-message", "");
 };
 
@@ -123,7 +137,35 @@ const renderHostedReferenceImage = (target) => {
   const link = byId("hosted-reference-image");
   const image = byId("hosted-reference-image-thumbnail");
   const label = byId("hosted-reference-image-label");
-  const reference = target?.reference_image;
+  const targetKey = String(target?.object || "")
+    .replaceAll(/\s/g, "")
+    .toUpperCase();
+  const reference = target?.reference_image || TARGET_REFERENCE_IMAGE_FALLBACKS[targetKey];
+
+  if (!reference?.thumbnail_url || !reference?.source_url) {
+    link.hidden = true;
+    image.removeAttribute("src");
+    return;
+  }
+
+  link.href = reference.source_url;
+  image.src = reference.thumbnail_url;
+  image.alt = reference.alt || "Official target reference image";
+  label.textContent = `Reference image · ${reference.source_label || "source"}`;
+  image.onerror = () => {
+    link.hidden = true;
+  };
+  link.hidden = false;
+};
+
+const renderLegacyReferenceImage = (target) => {
+  const link = byId("target-reference-image");
+  const image = byId("target-reference-image-thumbnail");
+  const label = byId("target-reference-image-label");
+  const targetKey = String(target?.object || "")
+    .replaceAll(/\s/g, "")
+    .toUpperCase();
+  const reference = target?.reference_image || TARGET_REFERENCE_IMAGE_FALLBACKS[targetKey];
 
   if (!reference?.thumbnail_url || !reference?.source_url) {
     link.hidden = true;
@@ -374,13 +416,15 @@ const loadHostedTonight = async () => {
   }
 };
 
-const saveHostedPlanFeedback = async (useful) => {
+const saveHostedPlanFeedback = async (useful, reason = null) => {
   if (!hostedRecommendationRunId) return;
 
   const yesButton = byId("hosted-feedback-yes");
   const noButton = byId("hosted-feedback-no");
+  const saveNoteButton = byId("hosted-feedback-save-note");
   yesButton.disabled = true;
   noButton.disabled = true;
+  saveNoteButton.disabled = true;
   setText("hosted-feedback-message", "Saving your response…");
 
   try {
@@ -389,7 +433,7 @@ const saveHostedPlanFeedback = async (useful) => {
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ useful }),
+        body: JSON.stringify({ useful, reason }),
       },
     );
     if (!response.ok) {
@@ -397,12 +441,16 @@ const saveHostedPlanFeedback = async (useful) => {
     }
     yesButton.classList.toggle("selected", useful);
     noButton.classList.toggle("selected", !useful);
-    setText("hosted-feedback-message", "Thank you—your response was saved.");
+    setText(
+      "hosted-feedback-message",
+      reason ? "Thank you—your note was saved." : "Thank you—your response was saved.",
+    );
   } catch (error) {
     setText("hosted-feedback-message", error.message);
   } finally {
     yesButton.disabled = false;
     noButton.disabled = false;
+    saveNoteButton.disabled = false;
   }
 };
 
@@ -1445,6 +1493,7 @@ const renderDecision = (data) => {
     setText("target-exposure", null);
     setText("target-gain", null);
     setText("target-filter", null);
+    renderLegacyReferenceImage(null);
     targetForecast.hidden = true;
     return;
   }
@@ -1452,6 +1501,7 @@ const renderDecision = (data) => {
   setText("target-name", target.object);
   setText("target-common-name", target.common_name, "");
   setText("target-reason", target.reason, "Planner recommendation available.");
+  renderLegacyReferenceImage(target);
   if (plannedTemperature === null || plannedTemperature === undefined) {
     targetForecast.hidden = true;
   } else {
@@ -3187,10 +3237,21 @@ byId("sign-out-button").addEventListener("click", signOut);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
 byId("hosted-feedback-yes").addEventListener("click", () => {
+  byId("hosted-feedback-detail").hidden = true;
+  byId("hosted-feedback-reason").value = "";
   saveHostedPlanFeedback(true);
 });
 byId("hosted-feedback-no").addEventListener("click", () => {
   saveHostedPlanFeedback(false);
+  byId("hosted-feedback-detail").hidden = false;
+});
+byId("hosted-feedback-save-note").addEventListener("click", () => {
+  const reason = byId("hosted-feedback-reason").value.trim();
+  if (!reason) {
+    setText("hosted-feedback-message", "Add a short note first, or leave this optional field blank.");
+    return;
+  }
+  saveHostedPlanFeedback(false, reason);
 });
 byId("hosted-edit-home-button").addEventListener("click", () => {
   updateHostedAccountForm(hostedProfile, hostedObservatory);

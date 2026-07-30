@@ -6,9 +6,9 @@ Times use the `America/Phoenix` time zone (MST).
 ## Current total
 
 - Opening balance on 2026-07-17: `83:00:00`
-- Recorded sessions since opening balance: `33:36:11`
-- **Total project time: `116:36:11`**
-- Timer status: **running** (started 2026-07-28 09:53:40 MST)
+- Recorded sessions since opening balance: `36:32:47`
+- **Total project time: `119:32:47`**
+- Timer status: **running** (started 2026-07-29 15:52:00 MST)
 
 ## Session log
 
@@ -23,6 +23,7 @@ Times use the `America/Phoenix` time zone (MST).
 | 2026-07-25 | 11:19:56 MST | 22:09:27 MST | 7:12:21 | Hosted-alpha authentication and observatory-profile proof. Paused 18:05:07–21:42:17 MST; pause excluded. |
 | 2026-07-26 | 14:16:42 MST | 21:43:06 MST | 7:26:24 | Hosted private-alpha deployment, account and password-recovery testing, privacy-default correction, Supabase redirect repair, security verification, and project checkpoint. |
 | 2026-07-27 | 17:30:48 MST | 21:47:26 MST | 4:16:38 | Hosted-alpha privacy hardening, production monitoring validation, Sentry alert verification, request-ID support workflow, and recovery/readiness documentation. |
+| 2026-07-28 | 09:53:40 MST | 12:50:16 MST | 2:56:36 | v1.8 private-alpha refinements, DWARF 999-frame run split, tester invitations, recommendation feedback, and Tonight-page usability work. |
 
 ## Timer convention
 

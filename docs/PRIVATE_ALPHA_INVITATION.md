@@ -56,6 +56,33 @@ the answer before they respond.
 6. Please return on a different night and repeat the process. Did anything feel
    easier or harder the second time?
 
+## Ready-to-send first-use check-in
+
+Send this after a tester has had a chance to open Polaris and look at a real
+Tonight recommendation. Do not send it immediately after the invitation; give
+them room to explore without coaching.
+
+> Hi <FIRST NAME> — thanks again for trying Polaris. When you have a minute,
+> could you answer these in your own words? Short answers are perfect, and
+> blunt honesty helps me much more than being polite.
+>
+> 1. What did Polaris tell you to do tonight?
+> 2. What do you think was the main reason it gave that advice?
+> 3. Was anything unclear, missing, or more complicated than it needed to be?
+> 4. Would you use Polaris again before a real observing session? Why or why
+>    not?
+>
+> If you hit a problem, a screenshot is very helpful. Please do not send a
+> password or your exact home address. Thank you — Doug
+
+### When to use the answer
+
+- Record their answer in `ALPHA_TESTER_FLIGHT_LOG.md` using a tester alias.
+- A wrong explanation of the recommendation is a comprehension issue, even if
+  the page technically worked.
+- A feature request becomes a roadmap candidate only when it supports the
+  nightly decision or repeats across testers.
+
 ## What Doug records
 
 - Tester alias or first name only.

@@ -225,6 +225,21 @@
               Not really
             </button>
           </div>
+          <div class="hosted-feedback-detail" id="hosted-feedback-detail" hidden>
+            <label for="hosted-feedback-reason">
+              What would have made this plan more useful? <span>Optional</span>
+            </label>
+            <textarea
+              id="hosted-feedback-reason"
+              maxlength="500"
+              rows="3"
+              placeholder="For example: the target choice, timing, weather explanation, or setup steps were unclear."
+            ></textarea>
+            <p>Do not include passwords, sign-in links, or your exact observing address.</p>
+            <button class="account-button" id="hosted-feedback-save-note" type="button">
+              Save note
+            </button>
+          </div>
           <p
             class="auth-message hosted-feedback-message"
             id="hosted-feedback-message"
@@ -326,9 +341,24 @@
         </div>
 
         <div class="target-focus">
-          <p class="eyebrow" id="target-label">Primary target</p>
-          <div class="target-name" id="target-name">—</div>
-          <div class="target-common-name" id="target-common-name"></div>
+          <div class="target-heading">
+            <div>
+              <p class="eyebrow" id="target-label">Primary target</p>
+              <div class="target-name" id="target-name">—</div>
+              <div class="target-common-name" id="target-common-name"></div>
+            </div>
+            <a
+              class="target-reference-image"
+              id="target-reference-image"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden
+            >
+              <img id="target-reference-image-thumbnail" alt="" />
+              <span id="target-reference-image-label">Reference image</span>
+            </a>
+          </div>
           <p id="target-reason">Waiting for tonight's recommendation.</p>
           <p class="target-forecast" id="target-forecast" hidden></p>
           <dl class="target-facts">
