@@ -429,6 +429,13 @@ footer {
   font-weight: 500;
 }
 
+.tracking-profile-help {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .hosted-account-form .approximate-location {
   display: flex;
   align-items: flex-start;

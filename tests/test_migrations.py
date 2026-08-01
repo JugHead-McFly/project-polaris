@@ -67,7 +67,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "recommendation_runs",
         "sessions",
     }
-    assert revision == "20260725_0004"
+    assert revision == "20260801_0005"
 
 
 def test_postgresql_migration_enables_forced_tenant_rls():

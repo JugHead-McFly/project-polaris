@@ -313,7 +313,31 @@
                 <option value="9">Bortle 9</option>
               </select>
             </label>
+            <label>
+              <span>Telescope <small>optional</small></span>
+              <select id="hosted-telescope-model" name="telescope-model">
+                <option value="">Not specified</option>
+                <option value="DWARF mini">DWARF mini</option>
+                <option value="DWARF 3">DWARF 3</option>
+                <option value="Seestar">Seestar</option>
+                <option value="Vespera">Vespera</option>
+                <option value="Other smart telescope">Other smart telescope</option>
+              </select>
+            </label>
+            <label>
+              <span>Usual tracking style</span>
+              <select id="hosted-tracking-preference" name="tracking-preference">
+                <option value="not_sure">Not sure yet</option>
+                <option value="alt_az">Alt-az only</option>
+                <option value="equatorial">Equatorial (EQ) when possible</option>
+                <option value="both">I use both</option>
+              </select>
+            </label>
           </div>
+          <p class="tracking-profile-help">
+            This helps Polaris suggest sensible settings. You will still confirm
+            that EQ is aligned on each night you use it.
+          </p>
           <label class="approximate-location">
             <input id="hosted-coordinates-approximate" type="checkbox" checked>
             <span>Use an approximate location to protect my exact observing address.</span>

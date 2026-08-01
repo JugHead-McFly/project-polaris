@@ -66,6 +66,11 @@ class HostedObservatory(Base):
             "(bortle_class >= 1 AND bortle_class <= 9)",
             name="ck_observatories_bortle_class",
         ),
+        CheckConstraint(
+            "tracking_preference IN "
+            "('not_sure', 'alt_az', 'equatorial', 'both')",
+            name="ck_observatories_tracking_preference",
+        ),
     )
 
     id = Column(Uuid, primary_key=True, default=uuid4)
@@ -86,6 +91,12 @@ class HostedObservatory(Base):
     elevation_m = Column(Float, nullable=True)
     timezone_name = Column(String(64), nullable=False)
     bortle_class = Column(Integer, nullable=True)
+    telescope_model = Column(String(100), nullable=True)
+    tracking_preference = Column(
+        String(20),
+        nullable=False,
+        default="not_sure",
+    )
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,

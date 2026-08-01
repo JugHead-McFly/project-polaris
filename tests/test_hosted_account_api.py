@@ -63,6 +63,21 @@ def test_new_observatories_default_to_approximate_coordinates():
     )
 
     assert observatory.coordinates_are_approximate is True
+    assert observatory.tracking_preference == "not_sure"
+
+
+def test_observatory_accepts_telescope_and_tracking_preferences():
+    observatory = ObservatoryCreate(
+        name="EQ-ready Observatory",
+        latitude=33.25,
+        longitude=-111.75,
+        timezone_name="America/Phoenix",
+        telescope_model="DWARF mini",
+        tracking_preference="equatorial",
+    )
+
+    assert observatory.telescope_model == "DWARF mini"
+    assert observatory.tracking_preference == "equatorial"
 
 
 def test_alice_and_bob_cannot_cross_observatory_boundary():
@@ -152,6 +167,7 @@ def test_alice_and_bob_cannot_cross_observatory_boundary():
     assert bob_profile.status_code == 200
     assert bob_profile.json()["user_id"] == str(BOB_ID)
     assert created.status_code == 201
+    assert created.json()["tracking_preference"] == "not_sure"
     assert alice_list.status_code == 200
     assert [item["id"] for item in alice_list.json()] == [
         observatory_id

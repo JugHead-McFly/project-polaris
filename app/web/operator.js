@@ -109,6 +109,8 @@ const updateHostedAccountForm = (profile, observatory) => {
   byId("hosted-longitude").value = observatory?.longitude ?? "";
   byId("hosted-timezone").value = observatory?.timezone_name || "";
   byId("hosted-bortle").value = observatory?.bortle_class ?? "";
+  byId("hosted-telescope-model").value = observatory?.telescope_model || "";
+  byId("hosted-tracking-preference").value = observatory?.tracking_preference || "not_sure";
   byId("hosted-coordinates-approximate").checked = observatory
     ? Boolean(observatory.coordinates_are_approximate)
     : true;
@@ -580,6 +582,8 @@ const saveHostedAccount = async (event) => {
         ? Number(byId("hosted-bortle").value)
         : null,
       coordinates_are_approximate: byId("hosted-coordinates-approximate").checked,
+      telescope_model: byId("hosted-telescope-model").value || null,
+      tracking_preference: byId("hosted-tracking-preference").value,
     };
     const observatoryResponse = await apiFetch(
       hostedObservatory ? `/observatories/${hostedObservatory.id}` : "/observatories",

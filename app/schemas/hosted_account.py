@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from typing import Optional
 from uuid import UUID
 from zoneinfo import ZoneInfo
@@ -8,6 +9,14 @@ from pydantic import BaseModel
 from pydantic import ConfigDict
 from pydantic import Field
 from pydantic import field_validator
+
+
+TrackingPreference = Literal[
+    "not_sure",
+    "alt_az",
+    "equatorial",
+    "both",
+]
 
 
 class ProfileUpdate(BaseModel):
@@ -48,6 +57,8 @@ class ObservatoryFields(BaseModel):
     )
     timezone_name: str = Field(min_length=1, max_length=64)
     bortle_class: Optional[int] = Field(default=None, ge=1, le=9)
+    telescope_model: Optional[str] = Field(default=None, max_length=100)
+    tracking_preference: TrackingPreference = "not_sure"
 
     @field_validator("timezone_name")
     @classmethod
@@ -87,6 +98,8 @@ class ObservatoryUpdate(BaseModel):
         max_length=64,
     )
     bortle_class: Optional[int] = Field(default=None, ge=1, le=9)
+    telescope_model: Optional[str] = Field(default=None, max_length=100)
+    tracking_preference: Optional[TrackingPreference] = None
 
     @field_validator("timezone_name")
     @classmethod
