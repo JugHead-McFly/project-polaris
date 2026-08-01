@@ -57,8 +57,11 @@ def apply_browser_security_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
+    # Polaris only requests a location after the person explicitly clicks the
+    # setup shortcut.  Keep camera and microphone disabled, but permit that
+    # one browser feature for this same hosted site.
     response.headers["Permissions-Policy"] = (
-        "camera=(), geolocation=(), microphone=()"
+        "camera=(), geolocation=(self), microphone=()"
     )
     if settings.ENVIRONMENT == "production":
         response.headers["Strict-Transport-Security"] = (

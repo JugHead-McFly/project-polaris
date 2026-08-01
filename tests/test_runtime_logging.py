@@ -47,5 +47,5 @@ def test_successful_response_receives_browser_security_headers():
     assert response.headers["x-frame-options"] == "DENY"
     assert response.headers["referrer-policy"] == "no-referrer"
     assert response.headers["permissions-policy"] == (
-        "camera=(), geolocation=(), microphone=()"
+        "camera=(), geolocation=(self), microphone=()"
     )
