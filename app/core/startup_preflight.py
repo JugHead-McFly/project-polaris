@@ -28,6 +28,8 @@ HOSTED_REQUIRED_DATABASE_TABLES = {
     "recommendation_runs",
 }
 REQUIRED_WEB_ASSETS = {
+    "landing.css",
+    "landing.html",
     "operator.css",
     "operator.html",
     "operator.js",

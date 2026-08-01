@@ -24,7 +24,7 @@ def fake_response(path: str, expected_version: str):
     response = MagicMock()
     response.status = 200
     response.headers.get_content_type.return_value = (
-        "text/html" if path == "/operator" else "application/json"
+        "text/html" if path in {"/", "/operator"} else "application/json"
     )
     payload = {}
     if path in {"/", "/system"}:
@@ -87,7 +87,6 @@ def test_live_smoke_rejects_version_drift():
         if not endpoint["passed"]
     ]
     assert {endpoint["path"] for endpoint in failed} == {
-        "/",
         "/system",
         "/dashboard",
     }

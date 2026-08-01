@@ -12,7 +12,7 @@ from app.services.backup_verification_service import verify_backup_pair
 
 
 SMOKE_ENDPOINTS = {
-    "/": "version",
+    "/": None,
     "/operator": None,
     "/system": "version",
     "/tonight": None,

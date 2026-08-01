@@ -15,7 +15,13 @@ def create_runtime_layout(tmp_path: Path):
     base_dir = tmp_path / "dougs-observatory"
     web_directory = base_dir / "app" / "web"
     web_directory.mkdir(parents=True)
-    for filename in ("operator.css", "operator.html", "operator.js"):
+    for filename in (
+        "landing.css",
+        "landing.html",
+        "operator.css",
+        "operator.html",
+        "operator.js",
+    ):
         (web_directory / filename).write_text(filename)
 
     database_file = base_dir / "polaris.db"

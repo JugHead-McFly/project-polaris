@@ -17,6 +17,7 @@ from app.api.captures import router as capture_router
 from app.api.candidate_sites import router as candidate_sites_router
 from app.api.dashboard import router as dashboard_router
 from app.api.hosted_account import router as hosted_account_router
+from app.api.landing import router as landing_router
 from app.api.mission import router as mission_router
 from app.api.objects import router as objects_router
 from app.api.operator import router as operator_router
@@ -218,15 +219,7 @@ app.include_router(
     hosted_account_router,
     dependencies=protected_api_dependencies,
 )
-
-
-@app.get("/")
-def root():
-    return {
-        "status": "Project Polaris API is running",
-        "version": settings.VERSION,
-        "operator_dashboard": "/operator",
-    }
+app.include_router(landing_router)
 
 
 @app.get("/health/live", include_in_schema=False)
