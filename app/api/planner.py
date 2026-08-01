@@ -23,6 +23,7 @@ router = APIRouter(
     response_model=TonightPlannerResponse,
 )
 def get_planner_for_tonight(
+    equatorial_mode_enabled: bool = False,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_tenant_db),
 ):
@@ -40,4 +41,5 @@ def get_planner_for_tonight(
         db=db,
         observatory=observatory,
         use_capture_history=current_user.auth_mode == "local",
+        equatorial_mode_enabled=equatorial_mode_enabled,
     )

@@ -67,7 +67,12 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert script.status_code == 200
     assert leaflet_stylesheet.status_code == 200
     assert leaflet_script.status_code == 200
-    assert 'apiFetch("/tonight"' in script.text
+    assert "equatorial_mode_enabled=${eqEnabled}" in script.text
+    assert 'const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";' in script.text
+    assert "window.localStorage.getItem(EQ_MODE_PREFERENCE_KEY)" in script.text
+    assert "window.localStorage.setItem(EQ_MODE_PREFERENCE_KEY, String(enabled))" in script.text
+    assert 'byId("eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
+    assert 'byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'apiFetch("/system"' in script.text
     assert 'apiFetch(`/dashboard?include_all_history=${historyExpanded}`' in script.text
     assert "capture.polaris_id" not in script.text
@@ -217,6 +222,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderHostedSchedule" in script
+    assert "displayedTargetSettings" in script
+    assert "firstScheduledBlock.recommended_sub_exposure_seconds" in script
     assert "renderSkyQuality" in script
     assert "Sky quality" in script
     assert "Above horizon now · sets" in script
@@ -224,7 +231,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'startsWith("use caution:")' in script
     assert "<p class=\"eyebrow\">Sky quality</p>" in html
     assert "No sky-quality deductions" in script
-    assert 'apiFetch("/tonight"' in script
+    assert "equatorial_mode_enabled=${eqEnabled}" in script
     assert '`${value}T12:00:00`' in script
     assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script
 

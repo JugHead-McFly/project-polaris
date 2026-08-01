@@ -19,9 +19,11 @@ from app.services.astronomy_service import (
     get_moon_warning_at,
     get_transit_time,
 )
+from app.services.imaging_settings_service import apply_tonight_settings
 from app.services.portfolio_service import TARGET_PRIORITY
 from app.services.weather_service import HEAT_CAUTION_F
 from app.services.weather_service import HEAT_STOP_F
+from app.services.weather_service import calculate_observing_rating
 from app.services.weather_service import get_weather_summary
 from app.core.planner_config import (
     ALTITUDE_SCORES,
@@ -576,21 +578,34 @@ def _forecast_temperature_for_start(
     except ValueError:
         return None
 
+    detailed_forecast = weather.get("hourly_forecast") or {}
     forecast = weather.get("hourly_temperature_f") or {}
     candidates = []
-    for time_text, temperature_f in forecast.items():
+    forecast_times = set(forecast) | set(detailed_forecast)
+    for time_text in forecast_times:
         try:
             forecast_time = datetime.fromisoformat(time_text)
         except (TypeError, ValueError):
             continue
-        candidates.append((abs(forecast_time - planned_start), forecast_time, temperature_f))
+        conditions = dict(detailed_forecast.get(time_text) or {})
+        conditions.setdefault("temperature_f", forecast.get(time_text))
+        candidates.append(
+            (
+                abs(forecast_time - planned_start),
+                forecast_time,
+                conditions,
+            )
+        )
 
     if not candidates:
         return None
 
-    _difference, forecast_time, temperature_f = min(candidates, key=lambda item: item[0])
+    _difference, forecast_time, conditions = min(
+        candidates,
+        key=lambda item: item[0],
+    )
     return {
-        "temperature_f": temperature_f,
+        **conditions,
         "forecast_time": forecast_time.strftime("%Y-%m-%d %I:%M %p"),
     }
 
@@ -604,12 +619,40 @@ def _apply_planned_heat_safeguard(
     if forecast is None:
         return
 
-    temperature_f = forecast["temperature_f"]
+    temperature_f = forecast.get("temperature_f")
     weather["planned_temperature_f"] = temperature_f
     weather["planned_temperature_at"] = forecast["forecast_time"]
+    for field in (
+        "cloud_cover_percent",
+        "humidity_percent",
+        "dew_point_f",
+        "wind_speed_mph",
+    ):
+        value = forecast.get(field)
+        if value is not None:
+            weather[f"planned_{field}"] = value
 
     rating = weather.get("observing_rating")
-    if rating is None or temperature_f is None:
+    if rating is None:
+        return
+
+    planned_weather_available = any(
+        weather.get(f"planned_{field}") is not None
+        for field in (
+            "cloud_cover_percent",
+            "humidity_percent",
+            "wind_speed_mph",
+        )
+    )
+    if planned_weather_available:
+        rating = calculate_observing_rating(
+            weather.get("planned_cloud_cover_percent"),
+            weather.get("planned_humidity_percent"),
+            weather.get("planned_wind_speed_mph"),
+        )
+        weather["observing_rating"] = rating
+
+    if temperature_f is None:
         return
 
     if temperature_f >= HEAT_STOP_F:
@@ -624,6 +667,7 @@ def get_tonight_plan(
     *,
     target_names: Optional[Iterable[str]] = None,
     use_capture_history: bool = True,
+    equatorial_mode_enabled: bool = False,
 ) -> Dict:
     context = use_observatory_context(observatory)
     weather = get_weather_summary(
@@ -692,6 +736,19 @@ def get_tonight_plan(
         else None,
     )
 
+    for plan in plans:
+        plan["advisor"] = apply_tonight_settings(
+            advisor=plan["advisor"],
+            weather=weather,
+            moon=moon,
+            moon_warning=plan.get("moon_warning"),
+            moon_separation_degrees=plan.get(
+                "moon_separation_degrees"
+            ),
+            bortle_class=context.bortle_class,
+            equatorial_mode_enabled=equatorial_mode_enabled,
+        )
+
     decision = get_weather_decision(weather)
     recommended_target = None
 
@@ -723,11 +780,41 @@ def get_tonight_plan(
             "before opening the observatory."
         )
 
-        cloud_cover = weather.get("cloud_cover_percent")
-        if cloud_cover is not None and cloud_cover >= 50:
+        cloud_cover = weather.get(
+            "planned_cloud_cover_percent",
+            weather.get("cloud_cover_percent"),
+        )
+        if cloud_cover is not None and cloud_cover >= 25:
+            if cloud_cover >= 75:
+                cloud_deduction = 3
+            elif cloud_cover >= 50:
+                cloud_deduction = 2
+            else:
+                cloud_deduction = 1
             notes.append(
                 f"Cloud cover is {cloud_cover}%, which reduced the weather "
-                "rating by 2 points."
+                f"rating by {cloud_deduction} "
+                f"point{'s' if cloud_deduction != 1 else ''}."
+            )
+
+        humidity = weather.get(
+            "planned_humidity_percent",
+            weather.get("humidity_percent"),
+        )
+        if humidity is not None and humidity >= 80:
+            notes.append(
+                f"Humidity near the planned start is {humidity}%, which may "
+                "increase dew risk and reduced the weather rating."
+            )
+
+        planned_wind = weather.get(
+            "planned_wind_speed_mph",
+            weather.get("wind_speed_mph"),
+        )
+        if planned_wind is not None and planned_wind >= 15:
+            notes.append(
+                f"Wind near the planned start is {planned_wind:g} mph, which "
+                "may disturb tracking and reduced the weather rating."
             )
 
         temperature_f = weather.get("planned_temperature_f")

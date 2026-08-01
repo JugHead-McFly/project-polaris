@@ -24,6 +24,11 @@ class ExposureAdvisorResponse(BaseModel):
     recommended_sub_exposure_seconds: Optional[int] = None
     recommended_gain: Optional[float] = None
     recommended_filter: Optional[str] = None
+    settings_confidence: Optional[str] = None
+    settings_reasons: List[str] = Field(default_factory=list)
+    settings_setup_guidance: List[str] = Field(default_factory=list)
+    settings_adjustments: List[str] = Field(default_factory=list)
+    target_type: Optional[str] = None
 
     additional_subframes_needed: Optional[int] = None
 

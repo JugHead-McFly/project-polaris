@@ -4,6 +4,7 @@ const byId = (id) => document.getElementById(id);
 
 const authConfig = window.POLARIS_AUTH_CONFIG || { mode: "local" };
 const usesHostedAuth = authConfig.mode === "supabase";
+const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";
 let supabaseClient = null;
 let hostedSession = null;
 let hostedObservatory = null;
@@ -17,6 +18,33 @@ let isInvitationFlow = (
 let isPasswordRecoveryFlow = (
   invitationHash.get("type") === "recovery" || invitationQuery.get("type") === "recovery"
 );
+
+const readEqModePreference = () => {
+  try {
+    return window.localStorage.getItem(EQ_MODE_PREFERENCE_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+
+const saveEqModePreference = (enabled) => {
+  try {
+    window.localStorage.setItem(EQ_MODE_PREFERENCE_KEY, String(enabled));
+  } catch {
+    // The dashboard still works when browser storage is unavailable.
+  }
+};
+
+const applyEqModePreference = (enabled) => {
+  byId("eq-mode-checkbox").checked = enabled;
+  byId("hosted-eq-mode-checkbox").checked = enabled;
+};
+
+const rememberEqModePreference = (event) => {
+  const enabled = event.target.checked;
+  saveEqModePreference(enabled);
+  applyEqModePreference(enabled);
+};
 
 // Keep the Tonight view useful when a catalog response is temporarily missing
 // its optional reference-image metadata. The server remains the source of
@@ -50,6 +78,7 @@ const setHostedShell = (signedIn) => {
   byId("simulation-banner").hidden = true;
   byId("account-control").hidden = !signedIn;
   byId("refresh-button").closest(".refresh-control").hidden = signedIn;
+  byId("eq-mode-checkbox").closest(".tracking-mode-control").hidden = signedIn;
   document.querySelector(".readonly-badge").hidden = signedIn;
 };
 
@@ -272,7 +301,26 @@ const renderHostedSchedule = (schedule) => {
       if (chip.title) element.title = chip.title;
       if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
     });
+    appendSettingsInfoButton(settings, block);
   });
+};
+
+const displayedTargetSettings = (target, schedule) => {
+  const settings = { ...(target?.recommended_settings || {}) };
+  const firstScheduledBlock = (schedule?.blocks || []).find(
+    (block) => block.object === target?.object,
+  );
+  if (!firstScheduledBlock) return settings;
+
+  return {
+    ...settings,
+    exposure_seconds:
+      firstScheduledBlock.recommended_sub_exposure_seconds
+      ?? settings.exposure_seconds,
+    gain: firstScheduledBlock.recommended_gain ?? settings.gain,
+    filter_name:
+      firstScheduledBlock.recommended_filter ?? settings.filter_name,
+  };
 };
 
 const renderHostedTonight = (data) => {
@@ -298,7 +346,7 @@ const renderHostedTonight = (data) => {
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
   );
   if (target) {
-    const settings = target.recommended_settings || {};
+    const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");
     setText("hosted-target-common-name", target.common_name, "");
     setText("hosted-target-reason", target.reason, "Planner recommendation available.");
@@ -336,14 +384,19 @@ const renderHostedTonight = (data) => {
   renderSkyQuality(data.night_rating);
   setText(
     "hosted-weather-summary",
-    `${displayNumber(weather.cloud_cover_percent, "% clouds")} · ${displayNumber(
-      weather.wind_speed_mph,
+    `${displayNumber(
+      weather.planned_cloud_cover_percent ?? weather.cloud_cover_percent,
+      "% clouds",
+    )} · ${displayNumber(
+      weather.planned_wind_speed_mph ?? weather.wind_speed_mph,
       " mph wind",
     )}`,
   );
   setText(
     "hosted-weather-updated",
-    weather.observed_at
+    weather.planned_temperature_at
+      ? `Forecast for ${displayDateTime(weather.planned_temperature_at)}`
+      : weather.observed_at
       ? `Observed ${displayDateTime(weather.observed_at)}`
       : "Weather time unavailable",
   );
@@ -393,10 +446,14 @@ const loadHostedTonight = async () => {
   showHostedTonight();
 
   try {
-    const response = await apiFetch("/tonight", {
-      method: "POST",
-      cache: "no-store",
-    });
+    const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
+    const response = await apiFetch(
+      `/tonight?equatorial_mode_enabled=${eqEnabled}`,
+      {
+        method: "POST",
+        cache: "no-store",
+      },
+    );
     if (response.status === 409) {
       showHostedAccountSetup("Add an observing home before building tonight's plan.");
       return;
@@ -840,6 +897,33 @@ const appendFilterInfoButton = (parent, value) => {
   button.addEventListener("click", () => openFilterInfo(value));
 };
 
+const appendSettingsInfoButton = (parent, block) => {
+  const reasons = block.settings_reasons || [];
+  if (!reasons.length) return;
+
+  const button = appendTextElement(
+    parent,
+    "button",
+    "settings-rationale-button",
+    "Why these settings?",
+  );
+  button.type = "button";
+  button.setAttribute(
+    "aria-label",
+    `Why these settings were recommended for ${block.object}`,
+  );
+  button.addEventListener("click", () => {
+    const confidence = block.settings_confidence
+      || "Beginner-safe starting point";
+    openInfoDialog(
+      "Tonight's imaging recipe",
+      `${block.object}: ${confidence}`,
+      reasons.join(" "),
+      "Polaris keeps a setting from your capture history unless the target, Moon, light pollution, or planned weather creates a clear reason to change it.",
+    );
+  });
+};
+
 const renderFilterValue = (id, value) => {
   const container = byId(id);
   container.replaceChildren();
@@ -1053,6 +1137,24 @@ const applyImmaculateDemo = (data, dashboard) => {
       setupChanges.push(`Change to ${candidateSettings.filter_name} filter`);
     }
 
+    const filterName = candidateSettings.filter_name || "the selected filter";
+    const targetName = candidate.common_name || candidate.object;
+    const filterReason = filterName === "Duo-Band"
+      ? (
+        `Use Duo-Band for ${targetName}. It keeps the red hydrogen and `
+        + "blue-green oxygen light found in glowing nebulae while blocking "
+        + "much of the Moon and nearby light."
+      )
+      : filterName === "Astro"
+        ? (
+          `Use the Astro filter for ${targetName}. It collects a wider range `
+          + "of light and keeps more natural star color."
+        )
+        : (
+          `Use ${filterName} because it is the filter currently saved for `
+          + `${targetName}.`
+        );
+
     return {
       object: candidate.object,
       common_name: candidate.common_name,
@@ -1069,6 +1171,20 @@ const applyImmaculateDemo = (data, dashboard) => {
       recommended_gain: candidateSettings.gain ?? null,
       recommended_filter: candidateSettings.filter_name ?? null,
       recommendation_source: candidateSettings.source || "simulation",
+      settings_confidence: "Simulation preview",
+      settings_reasons: [
+        filterReason,
+        `Use ${exposureSeconds}-second exposures because the preview has clear skies and gentle wind.`,
+        (
+          "Gain does not collect more light; it controls how strongly the camera "
+          + "turns the captured signal into pixel brightness. Raising gain makes "
+          + "faint detail show more strongly, but bright stars reach pure white "
+          + "sooner—losing detail—and noise becomes more visible. Lowering gain "
+          + "preserves more detail in bright stars, but faint detail looks weaker "
+          + `in each frame. Keep gain at ${candidateSettings.gain ?? "the saved value"} for this target.`
+        ),
+      ],
+      settings_adjustments: [],
       planned_subframes: Math.floor(imagingMinutes * 60 / exposureSeconds),
       setup_changes: setupChanges,
     };
@@ -1085,6 +1201,9 @@ const applyImmaculateDemo = (data, dashboard) => {
     cloud_cover_percent: 0,
     humidity_percent: 20,
     wind_speed_mph: 1,
+    planned_cloud_cover_percent: 0,
+    planned_humidity_percent: 20,
+    planned_wind_speed_mph: 1,
     observed_at: now,
     fetched_at: now,
   };
@@ -1522,7 +1641,7 @@ const renderDecision = (data) => {
     targetWindowLabel(target.recommended_start, target.recommended_end),
   );
 
-  const settings = target.recommended_settings || {};
+  const settings = displayedTargetSettings(target, schedule);
   setText("target-exposure", displayNumber(settings.exposure_seconds, " sec"));
   setText("target-gain", displayNumber(settings.gain));
   renderFilterValue("target-filter", settings.filter_name);
@@ -1603,6 +1722,7 @@ const renderSchedule = (schedule) => {
       if (chip.title) element.title = chip.title;
       if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
     });
+    appendSettingsInfoButton(chips, block);
 
     if (block.setup_changes && block.setup_changes.length) {
       const setup = appendTextElement(card, "ul", "setup-list", "");
@@ -3036,8 +3156,9 @@ const loadDashboard = async () => {
   refresh.textContent = "Refreshing…";
   byId("load-error").hidden = true;
 
+  const eqEnabled = byId("eq-mode-checkbox").checked;
   const [planResult, systemResult, dashboardResult] = await Promise.allSettled([
-    apiFetch("/tonight", { cache: "no-store" }).then((response) => {
+    apiFetch(`/tonight?equatorial_mode_enabled=${eqEnabled}`, { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`Tonight endpoint returned ${response.status}.`);
       return response.json();
     }),
@@ -3197,6 +3318,9 @@ imageDialog.addEventListener("close", () => {
 });
 
 activateCurrentView();
+applyEqModePreference(readEqModePreference());
+byId("eq-mode-checkbox").addEventListener("change", rememberEqModePreference);
+byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference);
 byId("refresh-button").addEventListener("click", runDashboardLoad);
 byId("history-toggle").addEventListener("click", () => {
   toggleHistory();

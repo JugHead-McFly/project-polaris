@@ -99,6 +99,11 @@ The hosted alpha must do only a few things well:
    window, and selected telescope's limits. For DWARF devices, prefer a safe
    exposure that can use the window within the 999-frame limit or split the work
    into multiple clearly labeled capture blocks.
+6. Do not lengthen a DWARF exposure past 15 seconds merely to avoid the
+   999-frame limit unless equatorial tracking is explicitly enabled or
+   successful capture history proves the longer setting worked. Add telescope
+   model and tracking-mode selection before enabling this automatically for new
+   users.
 
 The v1.7 foundation is complete: two real accounts were isolated successfully,
 the hosted application was deployed, Sentry monitoring and privacy scrubbing

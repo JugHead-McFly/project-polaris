@@ -19,6 +19,31 @@ HEAT_CAUTION_F = 95
 HEAT_STOP_F = 105
 
 
+def calculate_observing_rating(
+    cloud_cover: Optional[float],
+    humidity: Optional[float],
+    wind_speed: Optional[float],
+) -> int:
+    """Score weather using the same thresholds for live and forecast data."""
+    rating = 5
+
+    if cloud_cover is not None:
+        if cloud_cover >= 75:
+            rating -= 3
+        elif cloud_cover >= 50:
+            rating -= 2
+        elif cloud_cover >= 25:
+            rating -= 1
+
+    if humidity is not None and humidity >= 80:
+        rating -= 1
+
+    if wind_speed is not None and wind_speed >= 15:
+        rating -= 1
+
+    return max(1, rating)
+
+
 def get_weather_summary(
     postal_code: str,
     observatory: Optional[ObservatoryContext] = None,
@@ -35,7 +60,13 @@ def get_weather_summary(
             "cloud_cover,"
             "wind_speed_10m"
         ),
-        "hourly": "temperature_2m",
+        "hourly": (
+            "temperature_2m,"
+            "relative_humidity_2m,"
+            "dew_point_2m,"
+            "cloud_cover,"
+            "wind_speed_10m"
+        ),
         "temperature_unit": "fahrenheit",
         "wind_speed_unit": "mph",
         "timezone": "auto",
@@ -55,34 +86,55 @@ def get_weather_summary(
         humidity = current.get("relative_humidity_2m")
         wind_speed = current.get("wind_speed_10m")
 
-        rating = 5
-
-        if cloud_cover is not None:
-            if cloud_cover >= 75:
-                rating -= 3
-            elif cloud_cover >= 50:
-                rating -= 2
-            elif cloud_cover >= 25:
-                rating -= 1
-
-        if humidity is not None and humidity >= 80:
-            rating -= 1
-
-        if wind_speed is not None and wind_speed >= 15:
-            rating -= 1
+        rating = calculate_observing_rating(
+            cloud_cover,
+            humidity,
+            wind_speed,
+        )
 
         temperature_f = current.get("temperature_2m")
 
         hourly = data.get("hourly", {})
         hourly_times = hourly.get("time") or []
         hourly_temperatures = hourly.get("temperature_2m") or []
+        hourly_humidity = hourly.get("relative_humidity_2m") or []
+        hourly_dew_points = hourly.get("dew_point_2m") or []
+        hourly_cloud_cover = hourly.get("cloud_cover") or []
+        hourly_wind_speed = hourly.get("wind_speed_10m") or []
         hourly_temperature_f = {
             time: temperature
             for time, temperature in zip(hourly_times, hourly_temperatures)
             if temperature is not None
         }
-
-        rating = max(1, rating)
+        hourly_forecast = {}
+        for index, time in enumerate(hourly_times):
+            hourly_forecast[time] = {
+                "temperature_f": (
+                    hourly_temperatures[index]
+                    if index < len(hourly_temperatures)
+                    else None
+                ),
+                "humidity_percent": (
+                    hourly_humidity[index]
+                    if index < len(hourly_humidity)
+                    else None
+                ),
+                "dew_point_f": (
+                    hourly_dew_points[index]
+                    if index < len(hourly_dew_points)
+                    else None
+                ),
+                "cloud_cover_percent": (
+                    hourly_cloud_cover[index]
+                    if index < len(hourly_cloud_cover)
+                    else None
+                ),
+                "wind_speed_mph": (
+                    hourly_wind_speed[index]
+                    if index < len(hourly_wind_speed)
+                    else None
+                ),
+            }
 
         record_service_success(
             "weather",
@@ -102,6 +154,7 @@ def get_weather_summary(
             # This is intentionally kept separate from the live reading.
             # The planner selects the relevant value for the scheduled start.
             "hourly_temperature_f": hourly_temperature_f,
+            "hourly_forecast": hourly_forecast,
             "seeing": None,
             "transparency": None,
             "observing_rating": rating,
@@ -124,6 +177,7 @@ def get_weather_summary(
             "dew_point_f": None,
             "wind_speed_mph": None,
             "hourly_temperature_f": {},
+            "hourly_forecast": {},
             "seeing": None,
             "transparency": None,
             # A missing live forecast must never be interpreted as safe

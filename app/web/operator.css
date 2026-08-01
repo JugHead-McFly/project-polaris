@@ -451,6 +451,37 @@ footer {
   gap: 10px;
 }
 
+.tracking-mode-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tracking-mode-control[hidden] {
+  display: none;
+}
+
+.tracking-mode-control input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--cyan);
+}
+
+.tracking-mode-control:has(input:checked) {
+  border-color: var(--cyan);
+  color: var(--text);
+  background: rgba(67, 210, 202, 0.1);
+}
+
 .hosted-tonight {
   display: grid;
   gap: 18px;
@@ -721,6 +752,23 @@ footer {
   border: 1px solid rgba(82, 214, 199, 0.25);
   border-radius: 7px;
   font-size: 11px;
+}
+
+.settings-rationale-button {
+  padding: 5px 9px;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: transparent;
+  border: 1px solid rgba(82, 214, 199, 0.35);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.settings-rationale-button:hover {
+  color: var(--text);
+  background: var(--cyan-soft);
 }
 
 .hosted-plan-message {
@@ -3068,7 +3116,8 @@ footer {
     flex-direction: column;
   }
 
-  .hosted-tonight-actions > button {
+  .hosted-tonight-actions > button,
+  .hosted-tonight-actions > .tracking-mode-control {
     flex: 1 1 auto;
   }
 

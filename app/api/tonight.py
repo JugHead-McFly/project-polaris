@@ -153,6 +153,8 @@ def _build_legacy_night_plan(
 def _build_tonight_payload(
     current_user: CurrentUser,
     db: Session,
+    *,
+    equatorial_mode_enabled: bool = False,
 ):
     try:
         observatory = get_planning_context(
@@ -170,6 +172,7 @@ def _build_tonight_payload(
         db,
         observatory=observatory,
         use_capture_history=use_capture_history,
+        equatorial_mode_enabled=equatorial_mode_enabled,
     )
     schedule = build_tonight_schedule(
         planner,
@@ -217,18 +220,28 @@ def _build_tonight_payload(
 
 @router.get("", response_model=TonightResponse)
 def tonight(
+    equatorial_mode_enabled: bool = False,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_tenant_db),
 ):
-    return _build_tonight_payload(current_user, db)
+    return _build_tonight_payload(
+        current_user,
+        db,
+        equatorial_mode_enabled=equatorial_mode_enabled,
+    )
 
 
 @router.post("", response_model=TonightResponse)
 def create_tonight_recommendation(
+    equatorial_mode_enabled: bool = False,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_tenant_db),
 ):
-    payload = _build_tonight_payload(current_user, db)
+    payload = _build_tonight_payload(
+        current_user,
+        db,
+        equatorial_mode_enabled=equatorial_mode_enabled,
+    )
     if current_user.auth_mode == "local":
         return payload
 

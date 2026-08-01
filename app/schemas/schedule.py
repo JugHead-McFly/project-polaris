@@ -21,6 +21,9 @@ class ScheduledImagingBlock(BaseModel):
     recommended_gain: Optional[float] = None
     recommended_filter: Optional[str] = None
     recommendation_source: str
+    settings_confidence: Optional[str] = None
+    settings_reasons: List[str] = Field(default_factory=list)
+    settings_adjustments: List[str] = Field(default_factory=list)
     planned_subframes: Optional[int] = None
     total_planned_subframes: Optional[int] = None
     subframe_runs: List[int] = Field(default_factory=list)

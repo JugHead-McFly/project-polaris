@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from app.services.scheduler_service import (
     _darkness_minutes,
+    _equipment_setting_changes,
     build_schedule_blocks,
     build_tonight_schedule,
     get_tonight_schedule,
@@ -163,6 +164,33 @@ def test_darkness_duration_is_reported_in_minutes():
             "astronomical_darkness_end": "2026-07-18 03:51 AM",
         }
     ) == 397
+
+
+def test_equipment_changes_are_actions_not_apparent_ranges():
+    previous = candidate(
+        "M27",
+        100,
+        "2026-07-17 09:00 PM",
+        "2026-07-18 01:00 AM",
+        exposure=30,
+        gain=100,
+        filter_name="Duo-Band",
+    )
+    selected = candidate(
+        "M13",
+        90,
+        "2026-07-18 01:00 AM",
+        "2026-07-18 03:00 AM",
+        exposure=15,
+        gain=60,
+        filter_name="Astro",
+    )
+
+    assert _equipment_setting_changes(previous, selected) == [
+        "Change filter to Astro (from Duo-Band)",
+        "Change gain to 60 (from 100)",
+        "Change sub-exposure to 15 seconds (from 30 seconds)",
+    ]
 
 
 def test_schedule_splits_more_than_999_subframes_into_timed_dwarf_runs():

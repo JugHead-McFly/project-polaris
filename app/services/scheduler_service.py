@@ -112,6 +112,10 @@ def _advisor_settings(candidate: Dict) -> Dict:
         "additional_subframes": advisor.get(
             "additional_subframes_needed"
         ),
+        "confidence_label": advisor.get("settings_confidence"),
+        "reasons": advisor.get("settings_reasons") or [],
+        "setup_guidance": advisor.get("settings_setup_guidance") or [],
+        "adjustments": advisor.get("settings_adjustments") or [],
     }
 
 
@@ -124,9 +128,9 @@ def _equipment_setting_changes(
     changes = []
 
     comparisons = (
-        ("filter", "Filter"),
-        ("gain", "Gain"),
-        ("sub_exposure_seconds", "Sub-exposure"),
+        ("filter", "filter"),
+        ("gain", "gain"),
+        ("sub_exposure_seconds", "sub-exposure"),
     )
     for key, label in comparisons:
         old_value = previous_settings[key]
@@ -137,8 +141,17 @@ def _equipment_setting_changes(
             and new_value is not None
             and old_value != new_value
         ):
+            if key == "gain":
+                old_display = f"{float(old_value):g}"
+                new_display = f"{float(new_value):g}"
+            elif key == "sub_exposure_seconds":
+                old_display = f"{float(old_value):g} seconds"
+                new_display = f"{float(new_value):g} seconds"
+            else:
+                old_display = str(old_value)
+                new_display = str(new_value)
             changes.append(
-                f"{label}: {old_value} to {new_value}"
+                f"Change {label} to {new_display} (from {old_display})"
             )
 
     return changes
@@ -179,6 +192,8 @@ def _setup_changes(
         changes.append(
             "Verify incomplete equipment settings manually"
         )
+
+    changes.extend(settings["setup_guidance"])
 
     return changes
 
@@ -237,6 +252,9 @@ def _dwarf_run_blocks(
         "recommended_gain": settings["gain"],
         "recommended_filter": settings["filter"],
         "recommendation_source": settings["source"],
+        "settings_confidence": settings["confidence_label"],
+        "settings_reasons": settings["reasons"],
+        "settings_adjustments": settings["adjustments"],
         "total_planned_subframes": planned_subframes,
     }
 

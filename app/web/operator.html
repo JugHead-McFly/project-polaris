@@ -36,6 +36,13 @@
           </button>
         </div>
         <span class="readonly-badge">Read-only advisory</span>
+        <label
+          class="tracking-mode-control"
+          title="Check this only after the telescope is physically aligned and EQ mode is enabled for tonight."
+        >
+          <input id="eq-mode-checkbox" type="checkbox">
+          <span>EQ aligned tonight</span>
+        </label>
         <div class="refresh-control">
           <button class="refresh-button" id="refresh-button" type="button">
             Refresh conditions
@@ -114,6 +121,13 @@
             <p id="hosted-tonight-date">Building tonight's recommendation…</p>
           </div>
           <div class="hosted-tonight-actions">
+            <label
+              class="tracking-mode-control"
+              title="Check this only after the telescope is physically aligned and EQ mode is enabled for tonight."
+            >
+              <input id="hosted-eq-mode-checkbox" type="checkbox">
+              <span>EQ aligned tonight</span>
+            </label>
             <button class="account-button" id="hosted-edit-home-button" type="button">
               Edit observing home
             </button>

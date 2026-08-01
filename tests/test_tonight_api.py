@@ -171,6 +171,33 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert database.closed
 
 
+def test_tonight_passes_explicit_eq_confirmation_to_planner():
+    database = FakeDatabase()
+    planner = planner_response()
+
+    with (
+        patch("app.database.database.SessionLocal", return_value=database),
+        patch(
+            "app.api.tonight.get_tonight_plan",
+            return_value=planner,
+        ) as get_plan,
+        patch(
+            "app.api.tonight.build_tonight_schedule",
+            return_value=schedule_response(planner),
+        ),
+        patch(
+            "app.api.tonight.build_target_response",
+            side_effect=lambda db, target_name: target_response(target_name),
+        ),
+    ):
+        response = TestClient(app).get(
+            "/tonight?equatorial_mode_enabled=true"
+        )
+
+    assert response.status_code == 200
+    assert get_plan.call_args.kwargs["equatorial_mode_enabled"] is True
+
+
 def test_do_not_image_message_names_the_weather_reasons():
     message = _build_operator_message(
         {
