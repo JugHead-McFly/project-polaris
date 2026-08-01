@@ -18,8 +18,8 @@ evidence without collecting passwords, tokens, or exact observing addresses.
 
 | Tester | Invite | Account & home | First plan viewed | Explained plan correctly | Used for a real decision | Second visit | Biggest issue | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Tester A | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |  |  |
-| Tester B | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |  |  |
+| Tester A | ☒ | ☒ | ☐ | ☐ | ☐ | ☐ | None reported during setup | First-time, novice-family tester completed account and observatory setup without coaching. |
+| Tester B | ☒ | ☐ | ☐ | ☐ | ☐ | ☐ | Setup wording and location choice were unclear | Nontechnical family tester stopped before completing setup. |
 | Tester C | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |  |  |
 | Tester D | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |  |  |
 
@@ -28,6 +28,8 @@ evidence without collecting passwords, tokens, or exact observing addresses.
 | Date | Tester | What they were trying to do | Result | Evidence / quote | Severity | Follow-up |
 | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  | Low / Medium / High / Critical |  |
+| 2026-08-01 | Tester A | Create an account and set up an observing home | Completed without assistance | “It was very easy. No issues with setting it up.” | Low | Ask after a real nightly recommendation whether the decision and settings are equally clear. |
+| 2026-08-01 | Tester B | Understand the first setup screen and choose an observing location | Did not complete | “What is this and what am I supposed to select for the location?” Later: “I looked at it and it made zero sense so I didn’t finish it.” | High | Redesign onboarding in plain English: explain the one-time purpose, offer a simple city/ZIP entry first, and keep coordinates behind an optional advanced path. Retest with a nontechnical user. |
 
 ### Severity guide
 
