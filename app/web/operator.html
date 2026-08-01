@@ -267,35 +267,46 @@
       <section class="panel hosted-account-panel" id="hosted-account-panel" hidden aria-labelledby="hosted-account-title">
         <div class="panel-heading">
           <div>
-            <p class="eyebrow">Hosted alpha setup</p>
-            <h1 id="hosted-account-title">Your observing home</h1>
+            <p class="eyebrow">First-time setup</p>
+            <h1 id="hosted-account-title">Where do you observe from?</h1>
           </div>
           <span id="hosted-account-state">Checking account</span>
         </div>
         <p class="panel-intro" id="hosted-account-intro">
-          Add the one observing location Polaris should use for your upcoming
-          personalized nightly recommendations.
+          Choose the general place where you normally use your telescope. Polaris uses it to
+          tell you what is visible in your sky tonight. A neighborhood-level location is
+          enough—your street address is never needed.
         </p>
         <form class="hosted-account-form" id="hosted-account-form">
+          <section class="hosted-location-choice" aria-labelledby="hosted-location-choice-title">
+            <div>
+              <p class="eyebrow" id="hosted-location-choice-title">Fastest option</p>
+              <p>Let this device fill in your general location and time zone.</p>
+            </div>
+            <button class="account-button" id="hosted-use-device-location" type="button">
+              Use this device's location
+            </button>
+          </section>
+          <p class="auth-message" id="hosted-location-message" role="status" aria-live="polite"></p>
           <div class="hosted-form-grid">
             <label>
               <span>Your name</span>
               <input id="profile-display-name" name="display-name" maxlength="100" autocomplete="name" required>
             </label>
             <label>
-              <span>Observatory name</span>
-              <input id="hosted-observatory-name" name="observatory-name" maxlength="100" placeholder="e.g., Backyard Observatory" required>
+              <span>Name for this location</span>
+              <input id="hosted-observatory-name" name="observatory-name" maxlength="100" placeholder="e.g., Home or Backyard" required>
             </label>
             <label>
-              <span>Latitude</span>
+              <span>Latitude <small>if entering manually</small></span>
               <input id="hosted-latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="33.25" required>
             </label>
             <label>
-              <span>Longitude</span>
+              <span>Longitude <small>if entering manually</small></span>
               <input id="hosted-longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-111.75" required>
             </label>
             <label>
-              <span>Time zone</span>
+              <span>Time zone <small>filled automatically with device location</small></span>
               <input id="hosted-timezone" name="timezone" maxlength="64" placeholder="America/Phoenix" required>
             </label>
             <label>
@@ -335,12 +346,12 @@
             </label>
           </div>
           <p class="tracking-profile-help">
-            This helps Polaris suggest sensible settings. You will still confirm
-            that EQ is aligned on each night you use it.
+            The remaining fields are optional setup details. You can leave them as-is for now
+            and update them later.
           </p>
           <label class="approximate-location">
             <input id="hosted-coordinates-approximate" type="checkbox" checked>
-            <span>Use an approximate location to protect my exact observing address.</span>
+            <span>Save only an approximate location (about a neighborhood), not my exact address.</span>
           </label>
           <div class="hosted-form-actions">
             <button class="refresh-button" type="submit">Save my observing home</button>

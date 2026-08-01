@@ -425,6 +425,35 @@ footer {
   gap: 16px;
 }
 
+.hosted-location-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px;
+  border: 1px solid rgba(82, 214, 199, 0.35);
+  border-radius: 12px;
+  background: rgba(29, 89, 99, 0.16);
+}
+
+.hosted-location-choice .eyebrow {
+  margin: 0 0 4px;
+}
+
+.hosted-location-choice p:last-child {
+  margin: 0;
+  color: #b5c8cc;
+  line-height: 1.45;
+}
+
+.hosted-location-choice .account-button {
+  flex: 0 0 auto;
+}
+
+#hosted-location-message {
+  margin-top: -8px;
+}
+
 .hosted-account-form label span small {
   font-weight: 500;
 }
@@ -456,6 +485,13 @@ footer {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+@media (max-width: 620px) {
+  .hosted-location-choice {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 
 .tracking-mode-control {

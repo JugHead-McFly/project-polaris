@@ -16,7 +16,7 @@ def test_render_blueprint_keeps_the_private_alpha_free_and_deliberate():
     assert service["runtime"] == "python"
     assert service["plan"] == "free"
     assert service["branch"] == "develop"
-    assert service["autoDeployTrigger"] == "off"
+    assert service["autoDeployTrigger"] == "commit"
     assert service["healthCheckPath"] == "/health/ready"
     assert "$PORT" in service["startCommand"]
     assert "preDeployCommand" not in service

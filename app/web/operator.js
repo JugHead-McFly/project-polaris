@@ -104,16 +104,56 @@ const showSignIn = () => {
 
 const updateHostedAccountForm = (profile, observatory) => {
   byId("profile-display-name").value = profile?.display_name || "";
-  byId("hosted-observatory-name").value = observatory?.name || "";
+  byId("hosted-observatory-name").value = observatory?.name || "Home";
   byId("hosted-latitude").value = observatory?.latitude ?? "";
   byId("hosted-longitude").value = observatory?.longitude ?? "";
-  byId("hosted-timezone").value = observatory?.timezone_name || "";
+  byId("hosted-timezone").value = observatory?.timezone_name
+    || Intl.DateTimeFormat().resolvedOptions().timeZone
+    || "";
   byId("hosted-bortle").value = observatory?.bortle_class ?? "";
   byId("hosted-telescope-model").value = observatory?.telescope_model || "";
   byId("hosted-tracking-preference").value = observatory?.tracking_preference || "not_sure";
   byId("hosted-coordinates-approximate").checked = observatory
     ? Boolean(observatory.coordinates_are_approximate)
     : true;
+};
+
+const roundedApproximateCoordinate = (value) => Number(Number(value).toFixed(2));
+
+const useDeviceLocation = () => {
+  const button = byId("hosted-use-device-location");
+  if (!navigator.geolocation) {
+    setAuthMessage(
+      "This browser cannot provide a location. Enter latitude and longitude manually below.",
+      "hosted-location-message",
+    );
+    return;
+  }
+
+  button.disabled = true;
+  setAuthMessage("Asking your browser for a general location…", "hosted-location-message");
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      byId("hosted-latitude").value = roundedApproximateCoordinate(position.coords.latitude);
+      byId("hosted-longitude").value = roundedApproximateCoordinate(position.coords.longitude);
+      byId("hosted-coordinates-approximate").checked = true;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (timezone) byId("hosted-timezone").value = timezone;
+      setAuthMessage(
+        "Location added. Polaris will save only an approximate neighborhood-level location.",
+        "hosted-location-message",
+      );
+      button.disabled = false;
+    },
+    (error) => {
+      const message = error.code === error.PERMISSION_DENIED
+        ? "Location permission was not allowed. Enter latitude and longitude manually below."
+        : "Polaris could not get your location. Enter latitude and longitude manually below.";
+      setAuthMessage(message, "hosted-location-message");
+      button.disabled = false;
+    },
+    { enableHighAccuracy: false, maximumAge: 300000, timeout: 10000 },
+  );
 };
 
 const showHostedAccountLoading = (message = "") => {
@@ -573,15 +613,18 @@ const saveHostedAccount = async (event) => {
       throw new Error("Polaris could not save your profile. Please try again.");
     }
 
+    const useApproximateLocation = byId("hosted-coordinates-approximate").checked;
+    const latitude = Number(byId("hosted-latitude").value);
+    const longitude = Number(byId("hosted-longitude").value);
     const observatoryPayload = {
       name: byId("hosted-observatory-name").value.trim(),
-      latitude: Number(byId("hosted-latitude").value),
-      longitude: Number(byId("hosted-longitude").value),
+      latitude: useApproximateLocation ? roundedApproximateCoordinate(latitude) : latitude,
+      longitude: useApproximateLocation ? roundedApproximateCoordinate(longitude) : longitude,
       timezone_name: byId("hosted-timezone").value.trim(),
       bortle_class: byId("hosted-bortle").value
         ? Number(byId("hosted-bortle").value)
         : null,
-      coordinates_are_approximate: byId("hosted-coordinates-approximate").checked,
+      coordinates_are_approximate: useApproximateLocation,
       telescope_model: byId("hosted-telescope-model").value || null,
       tracking_preference: byId("hosted-tracking-preference").value,
     };
@@ -3363,6 +3406,7 @@ byId("forgot-password-button").addEventListener("click", requestPasswordReset);
 byId("accept-invite-form").addEventListener("submit", acceptInvitation);
 byId("sign-out-button").addEventListener("click", signOut);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
+byId("hosted-use-device-location").addEventListener("click", useDeviceLocation);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
 byId("hosted-feedback-yes").addEventListener("click", () => {
   byId("hosted-feedback-detail").hidden = true;
