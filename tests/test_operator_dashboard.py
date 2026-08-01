@@ -209,6 +209,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Set password and continue" in html
     assert "Forgot password?" in html
     assert "Where do you observe from?" in html
+    assert "What Polaris does" in html
+    assert "plain-English plan for your night" in html
     assert "Use this device's location" in html
     assert "Loading your observatory" in html
     assert "Your imaging plan" in html

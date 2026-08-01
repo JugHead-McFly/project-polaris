@@ -419,6 +419,24 @@ footer {
   padding: 30px;
 }
 
+.hosted-purpose {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--cyan);
+  border-radius: 0 10px 10px 0;
+  background: rgba(29, 89, 99, 0.16);
+}
+
+.hosted-purpose .eyebrow {
+  margin: 0 0 5px;
+}
+
+.hosted-purpose p:last-child {
+  margin: 0;
+  color: #c5d4d6;
+  line-height: 1.45;
+}
+
 .hosted-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
