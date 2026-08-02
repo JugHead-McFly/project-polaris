@@ -109,6 +109,11 @@ def test_alpha_metrics_are_aggregate_and_track_repeat_planning():
         "with_saved_plan": 2,
         "returning_for_two_or_more_nights": 1,
     }
+    assert report["activation"] == {
+        "observing_home_rate_percent": 100.0,
+        "first_plan_rate_percent": 100.0,
+        "returning_planner_rate_percent": 50.0,
+    }
     assert report["recommendations"]["saved"] == 3
     assert report["recommendations"]["by_outcome"] == {
         "Do Not Image": 1,
@@ -120,6 +125,10 @@ def test_alpha_metrics_are_aggregate_and_track_repeat_planning():
         "useful": 1,
         "not_useful": 0,
         "response_rate_percent": 33.3,
+    }
+    assert report["review_focus"] == {
+        "priority": "Careful expansion",
+        "reason": "The core funnel has activity, feedback, and at least one returning planner.",
     }
     rendered = str(report)
     assert "Alice" not in rendered
@@ -143,4 +152,43 @@ def test_alpha_metrics_handles_an_empty_alpha():
         "first_saved_at": None,
         "last_saved_at": None,
     }
+    assert report["activation"] == {
+        "observing_home_rate_percent": None,
+        "first_plan_rate_percent": None,
+        "returning_planner_rate_percent": None,
+    }
     assert report["feedback"]["response_rate_percent"] is None
+    assert report["review_focus"]["priority"] == "Invite the next tester"
+
+
+def test_alpha_metrics_points_to_first_plan_reliability_gap():
+    engine, database = _database()
+    try:
+        database.add(
+            Profile(user_id=ALICE_ID, display_name="Alice"),
+        )
+        database.add(
+            HostedObservatory(
+                user_id=ALICE_ID,
+                name="Private Alice Home",
+                latitude=33.45,
+                longitude=-112.07,
+                timezone_name="America/Phoenix",
+            )
+        )
+        database.commit()
+
+        report = build_alpha_metrics_report(database)
+    finally:
+        database.close()
+        engine.dispose()
+
+    assert report["activation"] == {
+        "observing_home_rate_percent": 100.0,
+        "first_plan_rate_percent": 0.0,
+        "returning_planner_rate_percent": None,
+    }
+    assert report["review_focus"] == {
+        "priority": "First-plan reliability",
+        "reason": "At least one account has an observing home but no saved Tonight plan.",
+    }

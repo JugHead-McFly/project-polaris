@@ -17,6 +17,57 @@ def _isoformat(value: Optional[datetime]) -> Optional[str]:
     return value.isoformat() if value is not None else None
 
 
+def _percent(numerator: int, denominator: int) -> Optional[float]:
+    if denominator == 0:
+        return None
+    return round(numerator / denominator * 100, 1)
+
+
+def _review_focus(
+    *,
+    profile_count: int,
+    observatory_user_count: int,
+    saved_plan_user_count: int,
+    returning_planner_count: int,
+    feedback_count: int,
+    not_useful_count: int,
+) -> dict[str, str]:
+    if profile_count == 0:
+        return {
+            "priority": "Invite the next tester",
+            "reason": "No alpha accounts have reached the measurable funnel yet.",
+        }
+    if observatory_user_count < profile_count:
+        return {
+            "priority": "Onboarding completion",
+            "reason": "At least one account exists without an observing home.",
+        }
+    if saved_plan_user_count < observatory_user_count:
+        return {
+            "priority": "First-plan reliability",
+            "reason": "At least one account has an observing home but no saved Tonight plan.",
+        }
+    if feedback_count == 0:
+        return {
+            "priority": "Usefulness feedback",
+            "reason": "Saved plans exist, but no Yes/No usefulness responses are recorded.",
+        }
+    if not_useful_count > 0:
+        return {
+            "priority": "Recommendation trust",
+            "reason": "At least one usefulness response says the plan was not useful.",
+        }
+    if returning_planner_count == 0:
+        return {
+            "priority": "Second-night return",
+            "reason": "Users have reached a first plan, but no account has returned on a second planned night.",
+        }
+    return {
+        "priority": "Careful expansion",
+        "reason": "The core funnel has activity, feedback, and at least one returning planner.",
+    }
+
+
 def build_alpha_metrics_report(db: Session) -> dict[str, Any]:
     """Return aggregate alpha metrics without personal observatory data.
 
@@ -73,6 +124,20 @@ def build_alpha_metrics_report(db: Session) -> dict[str, Any]:
             "with_saved_plan": len(planned_dates_by_user),
             "returning_for_two_or_more_nights": returning_planner_count,
         },
+        "activation": {
+            "observing_home_rate_percent": _percent(
+                observatory_user_count,
+                profile_count,
+            ),
+            "first_plan_rate_percent": _percent(
+                len(planned_dates_by_user),
+                observatory_user_count,
+            ),
+            "returning_planner_rate_percent": _percent(
+                returning_planner_count,
+                len(planned_dates_by_user),
+            ),
+        },
         "recommendations": {
             "saved": len(runs),
             "by_outcome": dict(sorted(outcomes.items())),
@@ -89,4 +154,12 @@ def build_alpha_metrics_report(db: Session) -> dict[str, Any]:
             if runs
             else None,
         },
+        "review_focus": _review_focus(
+            profile_count=profile_count,
+            observatory_user_count=observatory_user_count,
+            saved_plan_user_count=len(planned_dates_by_user),
+            returning_planner_count=returning_planner_count,
+            feedback_count=feedback_count,
+            not_useful_count=not_useful_count,
+        ),
     }
