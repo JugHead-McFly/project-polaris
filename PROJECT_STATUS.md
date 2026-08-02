@@ -52,8 +52,12 @@ response updates only that owner's recommendation. The local single-user
 dashboard remains unchanged. Automated persistence, feedback, and cross-user
 isolation checks pass. On July 28, 2026, the private Render deployment passed
 its hosted browser acceptance test: Doug refreshed a hosted plan and recorded a
-saved Yes response. First-tester invitation and comprehension feedback are the
-remaining v1.8 exit work.
+saved Yes response. On August 2, 2026, v1.8 gained inline term help for novice
+comprehension, recommendation-trust feedback wording, a privacy-safe aggregate
+alpha metrics report, activation and second-night return rates, a plain-English
+review focus, and a documented weekly alpha review rhythm. The next v1.8 exit
+work is live tester evidence: whether invited users understand the plan, trust
+the reason, save feedback, and return for a second real observing decision.
 
 On August 2, 2026, the first-time hosted onboarding flow was tightened and
 retested with a clean separate account. The setup screen now gives a three-step
@@ -64,9 +68,10 @@ saw setup first, saved its own observing home, reached Tonight, and saw no Doug
 data. A follow-up weather-explanation fix now makes the visible night rating
 use planned-start cloud, humidity, and wind values so a cloud-driven `Do Not
 Image` result does not appear to blame only the Moon. The latest pushed
-`develop` checkpoint is `556a794` (`Record hosted onboarding retest pass`).
-The next product gate is Doug's milestone decision on whether V1.6 private
-alpha onboarding is complete enough for the next invited tester.
+`develop` checkpoint is `c150da3` (`Tune hosted feedback trust prompt`).
+The next product gate is inviting the next carefully selected alpha tester and
+using the metrics report plus flight log to decide whether to hold, fix, or
+expand.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
