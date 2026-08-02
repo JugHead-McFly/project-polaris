@@ -42,6 +42,34 @@ local and staging environments. The final production-host test on July 27
 showed a null user IP and no city, coordinates, observatory name, URL, request
 contents, or arbitrary text. Privacy-safe production monitoring is enabled.
 
+## Hosted retest go/no-go checklist
+
+Run this before a nontechnical onboarding retest after an alpha-facing code or
+copy change.
+
+1. Confirm the intended `develop` commit is pushed to GitHub.
+2. Confirm the hosted Render service has deployed that commit intentionally;
+   automatic deploys remain disabled.
+3. Open the hosted `/health/live` and `/health/ready` endpoints.
+4. Sign in as Doug and confirm the existing observing home still loads.
+5. Refresh Tonight and confirm a recommendation or safe `Do Not Image` result
+   appears without exposing local Portfolio, Quality, History, Locations, or
+   Data Status views.
+6. Record one Yes/No usefulness response and confirm the page reports that it
+   was saved.
+7. Use a separate tester or browser profile with no observatory and confirm the
+   first screen is setup, not Doug's plan.
+8. Confirm the setup screen shows **Fill this in for me**, the approximate
+   coordinate fallback, and the **You're ready for tonight** handoff.
+9. Confirm no tester sees another user's observatory, recommendation history,
+   or feedback.
+10. Only then run the human onboarding retest script in
+    [`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md).
+
+Stop before inviting the tester if sign-in, readiness, isolation, Tonight,
+feedback saving, or the setup screen fails. Preserve only the safe request ID
+and do not collect passwords, access tokens, or exact observing addresses.
+
 ## Hosted smoke-test record
 
 On July 26, 2026, Doug completed the first real-browser smoke test against the
