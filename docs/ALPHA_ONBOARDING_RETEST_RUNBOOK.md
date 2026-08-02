@@ -27,9 +27,13 @@ It combines the hosted go/no-go gate, human retest script, and evidence record.
 4. Refresh Tonight and confirm Polaris shows either a recommendation or a safe
    `Do Not Image` result.
 5. Save one Yes/No usefulness response and confirm the page says it saved.
-6. Use a separate tester account or browser profile with no observatory and
+6. Run the aggregate alpha metrics report and note its Review focus:
+
+       .venv/bin/python scripts/alpha_metrics_report.py --env-file .env.staging
+
+7. Use a separate tester account or browser profile with no observatory and
    confirm setup appears first.
-7. Confirm setup shows:
+8. Confirm setup shows:
 
    - **Fill this in for me**;
    - approximate latitude/longitude fallback wording; and

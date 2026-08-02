@@ -197,6 +197,25 @@ For each tester, record:
 Do not record the tester's password, access token, exact street address, or
 unnecessary personal information.
 
+## Weekly alpha review
+
+Run the aggregate metrics report before deciding whether to invite another
+tester:
+
+```bash
+python scripts/alpha_metrics_report.py --env-file .env.staging
+```
+
+Use the report's **Review focus** as the first question for the weekly review,
+then compare it with the qualitative notes in
+[`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md). The report is
+read-only and intentionally excludes names, emails, user IDs, observatory
+names, coordinates, target names, and written feedback comments.
+
+Do not expand the cohort just because the counts look healthy. The metrics
+answer what happened; the flight log explains whether people understood and
+trusted it.
+
 ## Stop conditions
 
 Pause invitations immediately if:

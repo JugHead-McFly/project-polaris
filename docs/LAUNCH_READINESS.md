@@ -21,6 +21,8 @@ review before Doug relies on them.
 - [x] Production error-monitoring privacy has been tested with a controlled synthetic event.
 - [x] A production error alert and request-ID lookup workflow have been tested.
 - [x] In-product usefulness feedback and error monitoring are tested.
+- [x] Basic activation, feedback, and repeat-use metrics are defined and can be
+  reviewed as an aggregate private-alpha report.
 - [x] A narrow alpha invitation, tester worksheet, and first-cohort support
   contact are prepared.
 
@@ -41,7 +43,8 @@ review before Doug relies on them.
 
 - [ ] Alpha evidence shows users return to Polaris for real observing decisions.
 - [ ] The highest-severity onboarding, privacy, reliability, and comprehension issues are resolved.
-- [ ] Basic activation, repeat-use, and support metrics are defined and observed.
+- [ ] Basic activation, repeat-use, and support metrics are observed across
+  enough testers to support a beta decision.
 - [ ] Cost alerts and a monthly operating-cost review are in place.
 - [ ] The beta scope, feedback cadence, and stop/continue criteria are written down.
 
