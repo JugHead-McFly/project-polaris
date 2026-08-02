@@ -56,6 +56,36 @@ the answer before they respond.
 6. Please return on a different night and repeat the process. Did anything feel
    easier or harder the second time?
 
+## Onboarding retest script
+
+Use this only for a targeted retest after an onboarding change. The goal is to
+observe confusion, not to teach the screen.
+
+Before they open the link:
+
+> I’m going to watch where Polaris is clear or confusing. Please say out loud
+> what you think each screen wants you to do. I won’t explain anything unless
+> you get completely stuck.
+
+While they are on setup, record:
+
+- Did they understand what an observing home is?
+- Did they choose **Fill this in for me** without prompting?
+- If they saw latitude/longitude, did those fields confuse or stop them?
+- Did they understand that Polaris does not need a street address?
+- After saving, did **You're ready for tonight** make the next step clear?
+
+After they click **Show tonight's plan**, ask:
+
+> In your own words, what did Polaris just save, and what is it using that
+> information for?
+
+Passing result: the tester reaches the first Tonight plan without live help and
+understands that Polaris saved an approximate observing location for planning.
+If they still get stuck on coordinates, use
+[`ONBOARDING_LOCATION_ENTRY.md`](ONBOARDING_LOCATION_ENTRY.md) as the next
+implementation path.
+
 ## Ready-to-send first-use check-in
 
 Send this after a tester has had a chance to open Polaris and look at a real

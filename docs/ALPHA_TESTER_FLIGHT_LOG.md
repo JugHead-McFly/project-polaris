@@ -63,5 +63,16 @@ When a tester reports a problem, ask for only what is needed:
 5. A screenshot is helpful; ask them to avoid sharing passwords or exact home
    coordinates.
 
+## Onboarding retest fields
+
+When running the first-time onboarding retest, add these details to the
+observation log:
+
+- whether the tester understood “observing home”;
+- whether they chose **Fill this in for me** without prompting;
+- whether latitude/longitude caused hesitation;
+- whether the ready-for-tonight handoff made the next step clear; and
+- whether city/ZIP entry is now justified by the evidence.
+
 See [PRIVATE_ALPHA_TEST_PLAN.md](PRIVATE_ALPHA_TEST_PLAN.md) for the scope,
 tester journey, and pause conditions.
