@@ -99,14 +99,16 @@ confirmed with a second controlled synthetic issue that the saved alert
 triggered. The temporary trigger and issue were removed, and the request-ID
 lookup procedure was documented for tester support.
 
-On August 2, 2026, the unauthenticated hosted smoke checks passed after the
-onboarding copy update reached GitHub `develop`. The hosted `/health/live` and
-`/health/ready` endpoints returned HTTP 200 with version `1.6.0`, the landing
-page loaded, and the hosted `/operator` shell served the updated setup wording:
-**Fill this in for me**, approximate coordinate fallback labels, and the
-**You're ready for tonight** handoff. The signed-in Doug flow, feedback save,
-separate no-observatory tester account, and browser-level isolation checks
-remain required before the next human onboarding retest.
+On August 2, 2026, the hosted onboarding retest passed with a separate clean
+test account after the onboarding copy update reached GitHub `develop`. The
+hosted `/health/live` and `/health/ready` endpoints returned HTTP 200 with
+version `1.6.0`, the landing page loaded, and the hosted `/operator` shell
+served the updated setup wording: **Fill this in for me**, approximate
+coordinate fallback labels, and the **You're ready for tonight** handoff.
+The separate no-observatory tester account saw first-time setup instead of
+Doug's plan, saved its own observing home, reached Tonight, saw no Doug data,
+and confirmed the cloud-cover explanation fix for a safe `Do Not Image`
+recommendation.
 
 ## Suggested first cohort
 

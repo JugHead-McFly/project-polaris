@@ -55,17 +55,18 @@ its hosted browser acceptance test: Doug refreshed a hosted plan and recorded a
 saved Yes response. First-tester invitation and comprehension feedback are the
 remaining v1.8 exit work.
 
-On August 2, 2026, the first-time hosted onboarding flow was tightened for a
-nontechnical retest. The setup screen now gives a three-step plain-English
-guide, uses **Fill this in for me** as the browser-location action, labels
-manual coordinates as approximate, and preserves the one-time **You're ready
-for tonight** handoff before showing Tonight. The alpha docs now include a
-hosted go/no-go checklist, a one-page onboarding retest runbook, evidence fields
-for the flight log, and a bounded city/ZIP implementation plan if latitude and
-longitude still block completion. The latest pushed `develop` checkpoint is
-`5148821` (`Reference onboarding retest materials`). The next product gate is
-to deploy that reviewed commit intentionally, run the hosted go/no-go checklist,
-and retest with one nontechnical user before inviting more testers.
+On August 2, 2026, the first-time hosted onboarding flow was tightened and
+retested with a clean separate account. The setup screen now gives a three-step
+plain-English guide, uses **Fill this in for me** as the browser-location
+action, labels manual coordinates as approximate, and preserves the one-time
+**You're ready for tonight** handoff before showing Tonight. The clean account
+saw setup first, saved its own observing home, reached Tonight, and saw no Doug
+data. A follow-up weather-explanation fix now makes the visible night rating
+use planned-start cloud, humidity, and wind values so a cloud-driven `Do Not
+Image` result does not appear to blame only the Moon. The latest pushed
+`develop` checkpoint is `c65c88c` (`Use planned weather in night rating`).
+The next product gate is Doug's milestone decision on whether V1.6 private
+alpha onboarding is complete enough for the next invited tester.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
