@@ -212,6 +212,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "What Polaris does" in html
     assert "plain-English plan for your night" in html
     assert "Use this device's location" in html
+    assert "You're ready for tonight." in html
+    assert "Show tonight's plan" in html
+    assert "Review setup" in html
     assert "Loading your observatory" in html
     assert "Your imaging plan" in html
     assert "Refresh tonight" in html
@@ -226,6 +229,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedTonight" in script
     assert "renderHostedSchedule" in script
     assert "displayedTargetSettings" in script
+    assert "showHostedReadyHandoff" in script
+    assert "const isFirstObservingHome = !hostedObservatory" in script
+    assert 'byId("hosted-ready-continue").addEventListener("click", loadHostedTonight)' in script
     assert "firstScheduledBlock.recommended_sub_exposure_seconds" in script
     assert "renderSkyQuality" in script
     assert "Sky quality" in script

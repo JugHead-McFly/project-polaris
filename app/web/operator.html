@@ -366,6 +366,29 @@
           <p class="auth-message" id="hosted-account-message" role="status" aria-live="polite"></p>
         </form>
       </section>
+
+      <section
+        class="panel hosted-ready-panel"
+        id="hosted-ready-panel"
+        hidden
+        aria-labelledby="hosted-ready-title"
+      >
+        <p class="eyebrow">First-time setup complete</p>
+        <h1 id="hosted-ready-title">You're ready for tonight.</h1>
+        <p>
+          Polaris saved your observing home. Next it will check tonight's sky,
+          weather, Moon, and target visibility, then show one plain-English
+          recommendation.
+        </p>
+        <div class="hosted-ready-actions">
+          <button class="refresh-button" id="hosted-ready-continue" type="button">
+            Show tonight's plan
+          </button>
+          <button class="account-button" id="hosted-ready-edit-home" type="button">
+            Review setup
+          </button>
+        </div>
+      </section>
     </main>
 
     <aside class="simulation-banner" id="simulation-banner" role="status" hidden>

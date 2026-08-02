@@ -30,6 +30,7 @@ evidence without collecting passwords, tokens, or exact observing addresses.
 |  |  |  |  |  | Low / Medium / High / Critical |  |
 | 2026-08-01 | Tester A | Create an account and set up an observing home | Completed without assistance | “It was very easy. No issues with setting it up.” | Low | Ask after a real nightly recommendation whether the decision and settings are equally clear. |
 | 2026-08-01 | Tester B | Understand the first setup screen and choose an observing location | Did not complete | “What is this and what am I supposed to select for the location?” Later: “I looked at it and it made zero sense so I didn’t finish it.” | High | Redesign onboarding in plain English: explain the one-time purpose, offer a simple city/ZIP entry first, and keep coordinates behind an optional advanced path. Retest with a nontechnical user. |
+| 2026-08-01 | Tester B follow-up | Reduce uncertainty after first observing-home setup | Local fix ready for retest | Added a one-time “You're ready for tonight” handoff after setup, with clear next steps before showing the plan. | Medium | Retest the full invitation-to-first-plan flow with a nontechnical user; city/ZIP entry remains a separate follow-up if coordinates still block completion. |
 
 ### Severity guide
 

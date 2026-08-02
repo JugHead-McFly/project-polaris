@@ -159,6 +159,7 @@ const useDeviceLocation = () => {
 const showHostedAccountLoading = (message = "") => {
   byId("hosted-account-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
+  byId("hosted-ready-panel").hidden = true;
   byId("hosted-account-loading").hidden = false;
   setText(
     "hosted-account-loading-message",
@@ -170,14 +171,24 @@ const showHostedAccountLoading = (message = "") => {
 const showHostedAccountSetup = (message = "") => {
   byId("hosted-account-loading").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
+  byId("hosted-ready-panel").hidden = true;
   byId("hosted-account-panel").hidden = false;
   byId("hosted-account-cancel").hidden = !hostedObservatory;
   if (message) setAuthMessage(message, "hosted-account-message");
 };
 
+const showHostedReadyHandoff = () => {
+  byId("hosted-account-loading").hidden = true;
+  byId("hosted-account-panel").hidden = true;
+  byId("hosted-tonight-panel").hidden = true;
+  byId("hosted-ready-panel").hidden = false;
+  setAuthMessage("", "hosted-account-message");
+};
+
 const showHostedTonight = () => {
   byId("hosted-account-loading").hidden = true;
   byId("hosted-account-panel").hidden = true;
+  byId("hosted-ready-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = false;
   setAuthMessage("", "hosted-account-message");
 };
@@ -601,6 +612,7 @@ const saveHostedAccount = async (event) => {
   setAuthMessage("Saving your observing home…", "hosted-account-message");
 
   try {
+    const isFirstObservingHome = !hostedObservatory;
     const profileResponse = await apiFetch("/profile", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -646,8 +658,12 @@ const saveHostedAccount = async (event) => {
       "hosted-account-intro",
       "Update the location Polaris uses for your nightly recommendations.",
     );
-    setAuthMessage("Saved. Building tonight's plan…", "hosted-account-message");
-    await loadHostedTonight();
+    if (isFirstObservingHome) {
+      showHostedReadyHandoff();
+    } else {
+      setAuthMessage("Saved. Building tonight's plan…", "hosted-account-message");
+      await loadHostedTonight();
+    }
   } catch (error) {
     setAuthMessage(error.message, "hosted-account-message");
   } finally {
@@ -3430,6 +3446,11 @@ byId("hosted-edit-home-button").addEventListener("click", () => {
   showHostedAccountSetup();
 });
 byId("hosted-account-cancel").addEventListener("click", showHostedTonight);
+byId("hosted-ready-continue").addEventListener("click", loadHostedTonight);
+byId("hosted-ready-edit-home").addEventListener("click", () => {
+  updateHostedAccountForm(hostedProfile, hostedObservatory);
+  showHostedAccountSetup();
+});
 
 const bootApplication = async () => {
   if (usesHostedAuth) {
