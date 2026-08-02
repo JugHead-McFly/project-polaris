@@ -1,6 +1,6 @@
 # Project Polaris Status
 
-Last updated: 2026-07-28
+Last updated: 2026-08-02
 
 ## Project locations
 
@@ -54,6 +54,18 @@ isolation checks pass. On July 28, 2026, the private Render deployment passed
 its hosted browser acceptance test: Doug refreshed a hosted plan and recorded a
 saved Yes response. First-tester invitation and comprehension feedback are the
 remaining v1.8 exit work.
+
+On August 2, 2026, the first-time hosted onboarding flow was tightened for a
+nontechnical retest. The setup screen now gives a three-step plain-English
+guide, uses **Fill this in for me** as the browser-location action, labels
+manual coordinates as approximate, and preserves the one-time **You're ready
+for tonight** handoff before showing Tonight. The alpha docs now include a
+hosted go/no-go checklist, a one-page onboarding retest runbook, evidence fields
+for the flight log, and a bounded city/ZIP implementation plan if latitude and
+longitude still block completion. The latest pushed `develop` checkpoint is
+`5148821` (`Reference onboarding retest materials`). The next product gate is
+to deploy that reviewed commit intentionally, run the hosted go/no-go checklist,
+and retest with one nontechnical user before inviting more testers.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
