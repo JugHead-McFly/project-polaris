@@ -8,7 +8,7 @@ Times use the `America/Phoenix` time zone (MST).
 - Opening balance on 2026-07-17: `83:00:00`
 - Recorded sessions since opening balance: `52:16:03`
 - **Total project time: `135:16:03`**
-- Timer status: **stopped**
+- Timer status: **running** (started 2026-08-02 16:33:14 MST)
 
 ## Session log
 

@@ -945,6 +945,45 @@ const openInfoDialog = (eyebrow, title, body, range = "") => {
   else dialog.setAttribute("open", "");
 };
 
+const termDetails = {
+  "astronomical-darkness": {
+    eyebrow: "Tonight term",
+    title: "Astronomical darkness",
+    body:
+      "The part of the night when the Sun is far enough below the horizon that the sky is as dark as it gets naturally. Polaris uses this window for deep-sky imaging plans.",
+  },
+  "sub-exposure": {
+    eyebrow: "Tonight setting",
+    title: "Sub-exposure",
+    body:
+      "How long each individual camera frame should collect light. Polaris keeps this conservative for smart telescopes unless the target, tracking mode, and prior results support a longer frame.",
+  },
+  gain: {
+    eyebrow: "Tonight setting",
+    title: "Gain",
+    body:
+      "A camera sensitivity setting. Higher gain makes the signal brighter faster, but bright areas can clip sooner and noise can become more visible.",
+  },
+  filter: {
+    eyebrow: "Tonight setting",
+    title: "Filter",
+    body:
+      "The optical filter Polaris recommends for the target and sky. Filters can help isolate nebula light, reduce some skyglow, or keep a natural-color view depending on the target.",
+  },
+  bortle: {
+    eyebrow: "Setup term",
+    title: "Bortle class",
+    body:
+      "A 1 to 9 estimate of sky brightness at your observing location. Lower numbers are darker skies. If you do not know it, leave it as Not known yet.",
+  },
+};
+
+const openTermInfo = (termKey) => {
+  const term = termDetails[termKey];
+  if (!term) return;
+  openInfoDialog(term.eyebrow, term.title, term.body);
+};
+
 const openFilterInfo = (value) => {
   const filter = filterDetails(value);
   if (!filter.description) return;
@@ -3373,6 +3412,9 @@ const qualityInfoDialog = byId("quality-info-dialog");
 byId("quality-info-close").addEventListener("click", () => {
   if (typeof qualityInfoDialog.close === "function") qualityInfoDialog.close();
   else qualityInfoDialog.removeAttribute("open");
+});
+document.querySelectorAll("[data-term-info]").forEach((button) => {
+  button.addEventListener("click", () => openTermInfo(button.dataset.termInfo));
 });
 imageDialog.addEventListener("close", () => {
   imageDialogImage.removeAttribute("src");

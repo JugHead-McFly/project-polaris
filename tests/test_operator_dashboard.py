@@ -56,6 +56,15 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Usable target window" in response.text
     assert 'id="target-forecast"' in response.text
     assert "Sub-exposure" in response.text
+    assert 'data-term-info="sub-exposure"' in response.text
+    assert 'data-term-info="gain"' in response.text
+    assert 'data-term-info="filter"' in response.text
+    assert 'data-term-info="astronomical-darkness"' in response.text
+    assert 'data-term-info="bortle"' in response.text
+    assert "termDetails" in script.text
+    assert "The part of the night when the Sun is far enough below the horizon" in script.text
+    assert "A 1 to 9 estimate of sky brightness" in script.text
+    assert "How long each individual camera frame should collect light" in script.text
     assert "Capture library" in response.text
     assert "Capture files linked" in response.text
     assert 'id="moon-visual"' in response.text

@@ -1,6 +1,6 @@
 # Polaris Product Bible
 
-Last updated: 2026-07-23
+Last updated: 2026-08-02
 
 ## Purpose
 
@@ -47,6 +47,8 @@ guarantee yet.
 - Explain every recommendation.
 - Show the constraints behind each shortlist, especially when trust is at risk.
 - Do not require astronomy knowledge for the main decision.
+- Explain expert terms at the moment of use instead of turning the core flow
+  into a general astronomy course.
 - Save users time every night.
 - Separate image quality from integration progress.
 - Use the user's own capture record when it improves the recommendation.
@@ -193,6 +195,12 @@ Until discovery or alpha evidence changes the decision, defer:
   separately from its raw-session quality.
 - Broad integrations with every astronomy platform.
 - Feature requests unrelated to deciding what to image tonight.
+- Broad beginner astronomy education, including how to track stars manually.
+- A target directory/calendar for “when can I see this specific object?” until
+  alpha proves whether search supports the nightly decision rather than
+  distracting from it.
+- Multiple-target-per-night exploration beyond a short explainable shortlist,
+  unless alpha testers misunderstand or distrust a single best recommendation.
 
 Do not promise artificial intelligence, a paid plan, an App Store date, or an
 official relationship with DwarfLab during early customer research.
@@ -231,6 +239,7 @@ evidence shows the core recommendation cannot earn trust without it.
 | 2026-07-23 | Do not ask communities to select names, logos, or colors during discovery | Prevent leading questions and preserve focus on real pain |
 | 2026-07-23 | Pursue a web-first alpha before native mobile distribution | Validate the core decision workflow with faster iteration and less platform overhead |
 | 2026-08-02 | Position Polaris around explainable recommendation trust rather than generic target listing | Day 8 Facebook feedback named many existing tools and surfaced trust, local weather, horizon, and repeat-use risks |
+| 2026-08-02 | Treat Brynlee's novice walkthrough as reliability and comprehension evidence, not target-market demand proof | One non-astrophotographer reached a plan only after slow loading, auth confusion, temporary unavailable data, and `Plan unavailable / Load failed`; she also asked what core terms meant and requested beginner/search features |
 
 ## Weekly product review
 

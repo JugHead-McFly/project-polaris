@@ -110,6 +110,17 @@ Doug's plan, saved its own observing home, reached Tonight, saw no Doug data,
 and confirmed the cloud-cover explanation fix for a safe `Do Not Image`
 recommendation.
 
+Later on August 2, Brynlee, a 14-year-old non-astrophotographer family tester,
+ran a mobile novice walkthrough. This was outside the core smart-telescope
+persona, but it exposed alpha-exit risks: slow first load, an account flow that
+appeared to treat her as an existing user and required password reset, temporary
+Moon/sky-quality unavailability, and a visible `Plan unavailable / Load failed`
+state before the plan eventually loaded. She also could not interpret several
+terms, asking, “What is a bortle?” and “what do half of these words mean.” Treat
+this as one novice usability signal, not broad market demand. If a second tester
+hits the auth confusion or repeated plan-load failure, pause broader invitations
+until first-run reliability is checked.
+
 ## Suggested first cohort
 
 Start with two or three people who:
@@ -158,6 +169,9 @@ not explain the screen before the tester acts.
    click **Show tonight's plan**.
 5. Record whether they reached the first Tonight plan, whether they could
    explain it, and the first point where they hesitated.
+6. Ask the tester to explain any terms they noticed, especially Bortle,
+   astronomical darkness, sub-exposure, gain, filter, frames, integration hours,
+   Moon impact, and sky quality.
 
 Passing this retest means the person reaches the first Tonight plan without
 live help and understands that Polaris saved only an observing location for
