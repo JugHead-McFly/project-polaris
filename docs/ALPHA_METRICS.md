@@ -12,7 +12,7 @@ turning our support process into surveillance.
 - accounts that returned to plan two or more different nights;
 - activation rates for observing-home setup, first saved plan, and second-night
   return;
-- total saved plans, grouped only by recommendation outcome; and
+- total saved plans, grouped only by recommendation outcome;
 - total Yes/No feedback and response rate; and
 - one aggregate review focus, such as onboarding completion, first-plan
   reliability, recommendation trust, second-night return, or careful expansion.
