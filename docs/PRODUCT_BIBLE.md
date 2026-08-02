@@ -45,6 +45,7 @@ guarantee yet.
 - One tap beats five taps.
 - Beginners succeed first.
 - Explain every recommendation.
+- Show the constraints behind each shortlist, especially when trust is at risk.
 - Do not require astronomy knowledge for the main decision.
 - Save users time every night.
 - Separate image quality from integration progress.
@@ -196,6 +197,30 @@ Until discovery or alpha evidence changes the decision, defer:
 Do not promise artificial intelligence, a paid plan, an App Store date, or an
 official relationship with DwarfLab during early customer research.
 
+## Recommendation trust requirements
+
+Polaris should not compete as another generic target directory. Customer
+research on 2026-08-02 showed that users can already name many planning tools,
+but still question whether recommendations are locally accurate, complete, and
+trustworthy.
+
+Each recommended target should explain, as data becomes available:
+
+- visibility window and best start time;
+- Moon impact;
+- weather/cloud confidence and uncertainty;
+- framing/FoV fit for the user's equipment;
+- target altitude and local horizon constraints when known;
+- filter suitability, especially moonlight and narrowband cases;
+- why the target made the shortlist; and
+- caveats that could make the recommendation wrong.
+
+Use "best candidates based on current inputs" language rather than guaranteed
+success language. Advanced exposure/sub-length guidance based on Bortle, sensor
+characteristics, target, filter, Moon, FoV/focal length, or ADU/FITS analysis is
+a serious roadmap hypothesis, not a private-alpha requirement unless alpha
+evidence shows the core recommendation cannot earn trust without it.
+
 ## Decision log
 
 | Date | Decision | Why |
@@ -205,6 +230,7 @@ official relationship with DwarfLab during early customer research.
 | 2026-07-23 | Keep Polaris advisory and user-controlled | Safety, trust, and current product boundary |
 | 2026-07-23 | Do not ask communities to select names, logos, or colors during discovery | Prevent leading questions and preserve focus on real pain |
 | 2026-07-23 | Pursue a web-first alpha before native mobile distribution | Validate the core decision workflow with faster iteration and less platform overhead |
+| 2026-08-02 | Position Polaris around explainable recommendation trust rather than generic target listing | Day 8 Facebook feedback named many existing tools and surfaced trust, local weather, horizon, and repeat-use risks |
 
 ## Weekly product review
 

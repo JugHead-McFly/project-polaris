@@ -32,6 +32,7 @@ evidence without collecting passwords, tokens, or exact observing addresses.
 | 2026-08-01 | Tester B | Understand the first setup screen and choose an observing location | Did not complete | “What is this and what am I supposed to select for the location?” Later: “I looked at it and it made zero sense so I didn’t finish it.” | High | Redesign onboarding in plain English: explain the one-time purpose, offer a simple city/ZIP entry first, and keep coordinates behind an optional advanced path. Retest with a nontechnical user. |
 | 2026-08-01 | Tester B follow-up | Reduce uncertainty after first observing-home setup | Local fix ready for retest | Added a one-time “You're ready for tonight” handoff after setup, with clear next steps before showing the plan. | Medium | Retest the full invitation-to-first-plan flow with a nontechnical user; city/ZIP entry remains a separate follow-up if coordinates still block completion. |
 | 2026-08-02 | Clean test account | Retest hosted setup and account isolation steps 7-10 | Passed | Separate no-observatory account saw setup first, saved its own observing home, reached Tonight, saw no Doug data, and the `Do Not Image` recommendation now named 98% cloud cover with a Very Poor sky rating. | Low | Treat V1.6 onboarding as ready for the next invited alpha tester, pending Doug's milestone decision. |
+| 2026-08-02 | Day 8 Facebook group scour | Interpret outside feedback before expanding alpha scope | Added to Voice of Customer | Users showed lightweight interest in a nightly shortlist, but many named existing tools. Most important risks: recommendation trust, local weather reliability, local horizon/obstructions, and repeat use for experienced planners who already maintain target lists. | Medium | In alpha, ask whether testers trusted the recommendation, understood why each target was suggested or deferred, and whether they would use Polaris again for a second real decision. |
 
 ### Severity guide
 
@@ -74,6 +75,26 @@ observation log:
 - whether latitude/longitude caused hesitation;
 - whether the ready-for-tonight handoff made the next step clear; and
 - whether city/ZIP entry is now justified by the evidence.
+
+## Recommendation trust retest fields
+
+When a tester reviews a nightly recommendation, capture:
+
+- whether they understood why each target was recommended;
+- whether they understood why any obvious target was excluded or deferred;
+- whether the weather guidance matched their local reality;
+- whether Moon, darkness, target altitude, and framing/FoV felt credible;
+- whether they needed more detail before trusting the recommendation;
+- whether they used Polaris for a planned session, a backup target, or a
+  spur-of-the-moment "grab and go" decision; and
+- whether they returned for a second real observing decision.
+
+Suggested tester prompt:
+
+> Before looking at your usual planning tools, ask Polaris for tonight's top
+> three targets. Afterward, compare against your normal workflow and record:
+> what you trusted, what you doubted, what was missing, and whether you would
+> actually use it again tomorrow.
 
 See [PRIVATE_ALPHA_TEST_PLAN.md](PRIVATE_ALPHA_TEST_PLAN.md) for the scope,
 tester journey, and pause conditions.
