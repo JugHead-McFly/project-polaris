@@ -28,6 +28,12 @@ From the Polaris project folder:
 python scripts/alpha_metrics_report.py
 ```
 
+That prints a plain-English review summary. For the raw aggregate JSON, use:
+
+```bash
+python scripts/alpha_metrics_report.py --json
+```
+
 When deliberately reading the production database, use the explicit guard:
 
 ```bash
