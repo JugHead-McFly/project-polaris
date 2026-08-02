@@ -38,6 +38,10 @@ See [docs/LAUNCH_READINESS.md](docs/LAUNCH_READINESS.md) for the parallel
 product, branding, and professional-review gates before external alpha, beta,
 and public launch.
 
+See [docs/ALPHA_ONBOARDING_RETEST_RUNBOOK.md](docs/ALPHA_ONBOARDING_RETEST_RUNBOOK.md)
+for the one-page hosted onboarding retest checklist before inviting another
+nontechnical private-alpha tester.
+
 Current Version: v1.6.0 (in development)
 
 ## Features
