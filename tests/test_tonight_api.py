@@ -217,6 +217,25 @@ def test_do_not_image_message_names_the_weather_reasons():
     )
 
 
+def test_do_not_image_message_uses_planned_start_weather():
+    message = _build_operator_message(
+        {
+            "decision": "Do Not Image",
+            "weather": {
+                "observing_rating": 2,
+                "cloud_cover_percent": 0,
+                "humidity_percent": 30,
+                "wind_speed_mph": 3,
+                "planned_cloud_cover_percent": 98,
+                "planned_humidity_percent": 30,
+                "planned_wind_speed_mph": 6,
+            },
+        }
+    )
+
+    assert message == "Do not image: cloud cover is 98%."
+
+
 def test_do_not_image_message_names_excessive_heat():
     message = _build_operator_message(
         {
@@ -305,4 +324,28 @@ def test_night_rating_explains_bright_moon_deduction():
         "score": 80,
         "quality": "Good",
         "deductions": [{"label": "Bright Moon", "points": 20}],
+    }
+
+
+def test_night_rating_uses_planned_start_weather_when_available():
+    rating = calculate_night_rating(
+        weather={
+            "cloud_cover_percent": 0,
+            "humidity_percent": 44,
+            "wind_speed_mph": 5.6,
+            "planned_cloud_cover_percent": 98,
+            "planned_humidity_percent": 44,
+            "planned_wind_speed_mph": 6,
+        },
+        moon={"illumination_percent": 82.7},
+        target={"moon_separation_degrees": 55.7},
+    )
+
+    assert rating == {
+        "score": 31,
+        "quality": "Very Poor",
+        "deductions": [
+            {"label": "Cloud cover", "points": 49.0},
+            {"label": "Bright Moon", "points": 20},
+        ],
     }

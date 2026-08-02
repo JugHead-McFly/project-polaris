@@ -41,9 +41,18 @@ def _build_operator_message(schedule: Dict) -> str:
         )
 
     reasons = []
-    cloud_cover = weather.get("cloud_cover_percent")
-    humidity = weather.get("humidity_percent")
-    wind_speed = weather.get("wind_speed_mph")
+    cloud_cover = weather.get(
+        "planned_cloud_cover_percent",
+        weather.get("cloud_cover_percent"),
+    )
+    humidity = weather.get(
+        "planned_humidity_percent",
+        weather.get("humidity_percent"),
+    )
+    wind_speed = weather.get(
+        "planned_wind_speed_mph",
+        weather.get("wind_speed_mph"),
+    )
     temperature_f = weather.get("planned_temperature_f")
 
     if rating == 0:

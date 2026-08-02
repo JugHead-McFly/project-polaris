@@ -2,8 +2,11 @@ def calculate_night_rating(weather, moon, target):
     target = target or {}
     deductions = []
 
+    def planned_or_current(field):
+        return weather.get(f"planned_{field}", weather.get(field))
+
     if all(
-        weather.get(field) is None
+        planned_or_current(field) is None
         for field in (
             "cloud_cover_percent",
             "humidity_percent",
@@ -18,19 +21,19 @@ def calculate_night_rating(weather, moon, target):
 
     score = 100
 
-    cloud_cover = weather.get("cloud_cover_percent")
+    cloud_cover = planned_or_current("cloud_cover_percent")
     if cloud_cover is not None:
         cloud_penalty = cloud_cover * 0.5
         score -= cloud_penalty
         if cloud_penalty > 0:
             deductions.append({"label": "Cloud cover", "points": cloud_penalty})
 
-    humidity = weather.get("humidity_percent")
+    humidity = planned_or_current("humidity_percent")
     if humidity is not None and humidity > 75:
         score -= 10
         deductions.append({"label": "High humidity", "points": 10})
 
-    wind_speed = weather.get("wind_speed_mph")
+    wind_speed = planned_or_current("wind_speed_mph")
     if wind_speed is not None and wind_speed > 15:
         score -= 10
         deductions.append({"label": "Strong wind", "points": 10})
