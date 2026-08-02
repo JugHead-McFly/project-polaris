@@ -281,14 +281,22 @@
           <p class="eyebrow">What Polaris does</p>
           <p>Polaris checks tonight's sky, weather, Moon, and your telescope details—then gives you a plain-English plan for your night.</p>
         </section>
+        <section class="hosted-setup-steps" aria-label="Setup steps">
+          <p class="eyebrow">What to do here</p>
+          <ol>
+            <li>Use this device's location, or enter your approximate latitude and longitude.</li>
+            <li>Name the place something simple, like Home or Backyard.</li>
+            <li>Save it once. Polaris will use it to build tonight's plan.</li>
+          </ol>
+        </section>
         <form class="hosted-account-form" id="hosted-account-form">
           <section class="hosted-location-choice" aria-labelledby="hosted-location-choice-title">
             <div>
               <p class="eyebrow" id="hosted-location-choice-title">Fastest option</p>
-              <p>Let this device fill in your general location and time zone.</p>
+              <p>Let this device fill in your approximate sky location and time zone. Polaris does not need your street address.</p>
             </div>
             <button class="account-button" id="hosted-use-device-location" type="button">
-              Use this device's location
+              Fill this in for me
             </button>
           </section>
           <p class="auth-message" id="hosted-location-message" role="status" aria-live="polite"></p>
@@ -302,11 +310,11 @@
               <input id="hosted-observatory-name" name="observatory-name" maxlength="100" placeholder="e.g., Home or Backyard" required>
             </label>
             <label>
-              <span>Latitude <small>if entering manually</small></span>
+              <span>Approximate latitude <small>only if entering manually</small></span>
               <input id="hosted-latitude" name="latitude" type="number" min="-90" max="90" step="any" placeholder="33.25" required>
             </label>
             <label>
-              <span>Longitude <small>if entering manually</small></span>
+              <span>Approximate longitude <small>only if entering manually</small></span>
               <input id="hosted-longitude" name="longitude" type="number" min="-180" max="180" step="any" placeholder="-111.75" required>
             </label>
             <label>

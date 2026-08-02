@@ -103,6 +103,28 @@ Each tester should:
 6. Return on another night and repeat the decision.
 7. Report anything confusing, missing, incorrect, or untrustworthy.
 
+## First-time onboarding retest
+
+Use this after an onboarding wording change, before inviting additional
+testers. Do not explain the screen before the tester acts.
+
+1. Send one private invitation link.
+2. Ask the tester to share their screen or narrate what they think each step is
+   asking for.
+3. Watch whether they choose **Fill this in for me** without coaching, or
+   whether latitude/longitude still stops them.
+4. After they save setup, ask what they expect Polaris to do next before they
+   click **Show tonight's plan**.
+5. Record whether they reached the first Tonight plan, whether they could
+   explain it, and the first point where they hesitated.
+
+Passing this retest means the person reaches the first Tonight plan without
+live help and understands that Polaris saved only an observing location for
+planning. If manual coordinates still block completion, make city/ZIP entry
+the next onboarding fix instead of adding more explanatory text. The bounded
+implementation plan is in
+[`ONBOARDING_LOCATION_ENTRY.md`](ONBOARDING_LOCATION_ENTRY.md).
+
 ## What Doug records
 
 For each tester, record:

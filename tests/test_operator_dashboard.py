@@ -210,8 +210,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Forgot password?" in html
     assert "Where do you observe from?" in html
     assert "What Polaris does" in html
+    assert "What to do here" in html
     assert "plain-English plan for your night" in html
-    assert "Use this device's location" in html
+    assert "Fill this in for me" in html
+    assert "Approximate latitude" in html
+    assert "Approximate longitude" in html
     assert "You're ready for tonight." in html
     assert "Show tonight's plan" in html
     assert "Review setup" in html
