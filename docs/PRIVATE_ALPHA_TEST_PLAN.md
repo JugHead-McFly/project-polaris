@@ -134,7 +134,9 @@ Each tester should:
 ## First-time onboarding retest
 
 Use this after an onboarding wording change, before inviting additional
-testers. Do not explain the screen before the tester acts.
+testers. The one-page runbook is
+[`ALPHA_ONBOARDING_RETEST_RUNBOOK.md`](ALPHA_ONBOARDING_RETEST_RUNBOOK.md). Do
+not explain the screen before the tester acts.
 
 1. Send one private invitation link.
 2. Ask the tester to share their screen or narrate what they think each step is
