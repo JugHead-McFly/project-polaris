@@ -64,7 +64,7 @@ saw setup first, saved its own observing home, reached Tonight, and saw no Doug
 data. A follow-up weather-explanation fix now makes the visible night rating
 use planned-start cloud, humidity, and wind values so a cloud-driven `Do Not
 Image` result does not appear to blame only the Moon. The latest pushed
-`develop` checkpoint is `c65c88c` (`Use planned weather in night rating`).
+`develop` checkpoint is `556a794` (`Record hosted onboarding retest pass`).
 The next product gate is Doug's milestone decision on whether V1.6 private
 alpha onboarding is complete enough for the next invited tester.
 

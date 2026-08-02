@@ -6,9 +6,9 @@ Times use the `America/Phoenix` time zone (MST).
 ## Current total
 
 - Opening balance on 2026-07-17: `83:00:00`
-- Recorded sessions since opening balance: `40:42:58`
-- **Total project time: `123:42:58`**
-- Timer status: **running** (started 2026-08-01 10:47:08 MST)
+- Recorded sessions since opening balance: `52:16:03`
+- **Total project time: `135:16:03`**
+- Timer status: **stopped**
 
 ## Session log
 
@@ -25,6 +25,8 @@ Times use the `America/Phoenix` time zone (MST).
 | 2026-07-27 | 17:30:48 MST | 21:47:26 MST | 4:16:38 | Hosted-alpha privacy hardening, production monitoring validation, Sentry alert verification, request-ID support workflow, and recovery/readiness documentation. |
 | 2026-07-28 | 09:53:40 MST | 12:50:16 MST | 2:56:36 | v1.8 private-alpha refinements, DWARF 999-frame run split, tester invitations, recommendation feedback, and Tonight-page usability work. |
 | 2026-07-29 | 15:52:00 MST | 20:02:11 MST | 4:10:11 | v1.9 imaging-settings research and recommendation logic, EQ-aware exposure guidance, Tonight-page setting explanations, UI consistency fixes, and remembered EQ preference. |
+| 2026-08-01 | 10:47:08 MST | 21:12:38 MST | 10:25:30 | Private-alpha onboarding handoff, documentation review, verified matched-pair backup, full test suite, and GitHub checkpoint. |
+| 2026-08-02 | 13:36:05 MST | 14:43:40 MST | 1:07:35 | V1.6 private-alpha onboarding retest, cloud-cover explanation fix, hosted clean-account isolation check, documentation updates, and GitHub checkpoint. |
 
 ## Timer convention
 

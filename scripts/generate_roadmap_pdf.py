@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the desk-reference Polaris roadmap PDF."""
+"""Generate the executive Project Polaris roadmap PDF."""
 
 from pathlib import Path
 
@@ -22,7 +22,7 @@ from reportlab.platypus import SimpleDocTemplate
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "output" / "pdf" / "Project_Polaris_Roadmap_v1.pdf"
+OUTPUT = ROOT / "output" / "pdf" / "Project_Polaris_Executive_Roadmap_2026-08-02.pdf"
 
 INK = colors.HexColor("#08202A")
 DEEP = colors.HexColor("#0D2B36")
@@ -110,7 +110,7 @@ def footer(canv, doc):
     canv.line(doc.leftMargin, 0.48 * inch, letter[0] - doc.rightMargin, 0.48 * inch)
     canv.setFont("Helvetica", 8)
     canv.setFillColor(MUTED)
-    canv.drawString(doc.leftMargin, 0.28 * inch, "Project Polaris Roadmap - v1 - Internal planning")
+    canv.drawString(doc.leftMargin, 0.28 * inch, "Project Polaris Executive Roadmap - 2026-08-02 - Internal planning")
     canv.drawRightString(letter[0] - doc.rightMargin, 0.28 * inch, f"Page {doc.page}")
     canv.restoreState()
 
@@ -155,7 +155,7 @@ def make_pdf():
         str(OUTPUT), pagesize=letter,
         leftMargin=0.72 * inch, rightMargin=0.72 * inch,
         topMargin=0.65 * inch, bottomMargin=0.72 * inch,
-        title="Project Polaris Roadmap v1", author="Doug and Project Polaris",
+        title="Project Polaris Executive Roadmap", author="Doug and Project Polaris",
     )
     story = []
 
@@ -163,15 +163,15 @@ def make_pdf():
     cover_content = [
         [p("PROJECT POLARIS", s["cover_kicker"])],
         [Spacer(1, 0.25 * inch)],
-        [p("Roadmap to a\ntrusted private alpha", s["title"])],
+        [p("Executive roadmap to\na trusted private alpha", s["title"])],
         [Spacer(1, 0.12 * inch)],
-        [p("A practical desk reference for turning a local astrophotography advisor into a small, evidence-led product.", s["cover_text"])],
+        [p("A practical desk reference for moving from a validated hosted onboarding flow to a measured private-alpha learning loop.", s["cover_text"])],
         [Spacer(1, 1.15 * inch)],
         [p("NORTH STAR", s["cover_kicker"])],
         [Spacer(1, 0.08 * inch)],
-        [p("Make astrophotography simpler without taking away the wonder of discovering the universe.", s["cover_text"])],
+        [p("Help smart-telescope users decide what to do tonight, understand why, and spend more of their limited clear time capturing.", s["cover_text"])],
         [Spacer(1, 0.45 * inch)],
-        [p("Version 1 | July 2026 | Internal planning document", s["small"])],
+        [p("Executive update | August 2, 2026 | Internal planning document", s["small"])],
     ]
     cover = Table(cover_content, colWidths=[6.95 * inch], rowHeights=[None] * len(cover_content))
     cover.setStyle(TableStyle([
@@ -187,24 +187,24 @@ def make_pdf():
     story.extend([
         p("EXECUTIVE ROADMAP", s["kicker"]),
         p("The shortest credible path", s["h1"]),
-        p("Polaris has already learned much of the sky, how to make suggestions, how to plan a night, and how to show the result in Mission Control. The next step is not to add every good idea. It is to prove one repeatable habit: a smart-telescope user opens Polaris before imaging, understands the recommendation, and comes back because it made the night easier.", s["body"]),
+        p("Polaris has passed the private-alpha onboarding checkpoint: a clean test account reached Tonight, saw its own observing home, saw no Doug data, and received a cloud-driven Do Not Image recommendation that explained the actual reason. The next step is not more broad feature work. It is to prove one repeatable habit: a smart-telescope user opens Polaris before imaging, understands the recommendation, rates whether it helped, and comes back.", s["body"]),
         Spacer(1, 0.07 * inch),
     ])
     metrics = Table([[
-        metric_box("Current state", "v1.6 local", "Working single-observatory product", s),
+        metric_box("Current state", "V1.6 pass", "Hosted onboarding retest complete", s),
         metric_box("Work cadence", "10-14 hr/wk", "Focused sessions, not a full-time team", s),
-        metric_box("Private alpha target", "Oct-Nov 2026", "10-20 invited users", s),
+        metric_box("Next sprint", "V1.8", "Feedback + alpha scoring loop", s),
     ]], colWidths=[2.12 * inch] * 3, hAlign="LEFT")
     metrics.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0)]))
     story.extend([metrics, Spacer(1, 0.22 * inch)])
 
     story.append(p("TIMELINE", s["kicker"]))
     timeline = [
-        ("NOW", "Finish Mission Control (v1.6)", "Validate the real local capture-to-learning loop.", TEAL),
-        ("LATE JULY - EARLY AUG", "Listen to future explorers", "Learn the real pain; choose the smallest safe hosted design.", GOLD),
-        ("AUGUST - SEPTEMBER", "Prepare the online observatory", "Onboard, recommend, explain, and collect useful feedback.", colors.HexColor("#5796C5")),
-        ("OCTOBER - NOVEMBER", "Invite the First Explorers", "Invite 10-20 users only after the core flow is reliable.", GREEN),
-        ("DECEMBER - FEBRUARY", "Closed beta decision", "Expand carefully if evidence shows repeat use and trust.", colors.HexColor("#8267AF")),
+        ("AUGUST 2", "V1.6 onboarding checkpoint", "Clean account reached Tonight and saw no cross-user data.", TEAL),
+        ("EARLY AUGUST", "V1.8 feedback + scoring", "Turn Yes/No responses and tester notes into a compact alpha review loop.", GOLD),
+        ("MID-LATE AUGUST", "V1.9 exposure + reliability", "Tighten weather, Moon, tracking, heat, and 999-frame explanations.", colors.HexColor("#5796C5")),
+        ("LATE AUGUST-SEPTEMBER", "First private-alpha cohort", "Invite 2-5 users first; expand only after repeat-use evidence.", GREEN),
+        ("AFTER ALPHA EVIDENCE", "Closed beta decision", "Expand, narrow, extend alpha, or pause based on behavior.", colors.HexColor("#8267AF")),
     ]
     timeline_rows = []
     for when, title, desc, color in timeline:
@@ -237,7 +237,7 @@ def make_pdf():
     story.extend([
         p("VERSION PLAN", s["kicker"]),
         p("What Polaris is learning next", s["h1"]),
-        p("Dates are planning ranges. Each version exits only when its user-facing result is credible, not merely when its code compiles.", s["body"]),
+        p("Dates are planning ranges. Each version exits only when the user-facing result is credible, not merely when its code compiles.", s["body"]),
     ])
     header = Table([[p("PLAIN-ENGLISH STEP", s["table_head"]), p("OUTCOME", s["table_head"]), p("EXIT TEST", s["table_head"])]], colWidths=[1.35 * inch, 2.72 * inch, 2.85 * inch])
     header.setStyle(TableStyle([
@@ -250,13 +250,12 @@ def make_pdf():
     ]))
     story.append(header)
     phases = [
-        ("Finish Mission Control<br/>v1.6 / now", "Close the local single-user loop: plan, capture, ingest, review, and learn.", "Doug can complete that loop without manual database work.", True),
-        ("Listen and choose<br/>2 weeks", "Log user pain and select one minimal hosted-product architecture.", "A written decision covers tenancy, security, deployment, data, backups, and monitoring.", False),
-        ("Prepare the online observatory<br/>v1.7", "Add accounts, data isolation, secure configuration, and a deployable baseline.", "Two users cannot access or alter each other's observatory data.", False),
-        ("Give a simple night plan<br/>v1.8", "Build mobile-friendly onboarding and the hosted tonight recommendation loop.", "A new user reaches a credible recommendation without Doug's help.", False),
-        ("Make first visits trustworthy<br/>v1.9", "Make feedback, support, privacy basics, and reliability part of the product.", "Doug and 2-3 trusted testers use the core loop repeatedly without a critical failure.", False),
-        ("Invite First Explorers<br/>v1.10", "Run private alpha with 10-20 invited smart-telescope users.", "Users return, understand the advice, and say they would miss Polaris.", False),
-        ("Closed beta<br/>v2.0", "Run a controlled closed beta, expanding only on evidence.", "Service is stable and evidence supports continued investment or a change in direction.", False),
+        ("V1.6<br/>complete", "Private-alpha onboarding is clear enough for the next invited tester.", "Clean account saw setup first, reached Tonight, saw no Doug data, and understood cloud-driven Do Not Image.", False),
+        ("V1.7<br/>complete", "Hosted foundation: accounts, tenant boundaries, deployment, monitoring, backup, and recovery.", "Two-user isolation, privacy-safe monitoring, tenant export, and recovery drill passed.", False),
+        ("V1.8<br/>next", "Feedback + scoring loop: turn tester responses into product decisions.", "Doug can review recent recommendations, usefulness, comprehension notes, and the top next fix.", True),
+        ("V1.9<br/>next", "Exposure and reliability logic: make conservative settings easier to trust.", "Weather, Moon, tracking, heat, and 999-frame limits produce clear, conservative explanations.", False),
+        ("V1.10<br/>alpha", "Invite the first small cohort before any broader private alpha.", "2-5 users make real observing decisions and return without critical privacy or comprehension issues.", False),
+        ("V2.0<br/>decision", "Choose whether to expand to closed beta, narrow scope, extend alpha, or pause.", "Decision uses retention, trust, support burden, and willingness-to-pay evidence.", False),
     ]
     for version, outcome, gate, active in phases:
         story.append(phase_row(version, "", outcome, gate, s, active=active))
@@ -291,10 +290,10 @@ def make_pdf():
     story.append(p("Completed foundation", s["h2"]))
     completed = [
         "Planner V3 produces chronological, equipment-aware advisory schedules.",
-        "The operator dashboard separates tonight, portfolio, quality, history, data status, and location planning.",
-        "Real capture ingestion now updates integration, history, and quality without changing the scientific source data.",
+        "The hosted foundation has passed account isolation, deployment, monitoring, backup, and recovery drills.",
+        "A clean hosted test account completed setup, reached Tonight, and saw no Doug data.",
+        "Cloud-driven Do Not Image decisions now name cloud cover and align the visible rating with planned-start weather.",
         "Backup checks, startup preflight, release gates, and a running project-time log protect the local product.",
-        "Quality Scoring v2 and the goal engine are active v1.6 work, while product discovery and naming are documented separately.",
     ]
     done_rows = [[p("DONE", s["metric_label"]), p(item, s["body"])] for item in completed]
     done_table = Table(done_rows, colWidths=[0.62 * inch, 6.0 * inch])
