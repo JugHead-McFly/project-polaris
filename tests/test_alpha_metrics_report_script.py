@@ -1,3 +1,4 @@
+from scripts.alpha_metrics_report import load_env_file
 from scripts.alpha_metrics_report import render_text_report
 
 
@@ -40,3 +41,25 @@ def test_text_alpha_metrics_report_summarizes_without_private_details():
     assert "Privacy: aggregate counts only" in rendered
     assert "2026-08-02T20:00:00+00:00" not in rendered
     assert "Alice" not in rendered
+
+
+def test_load_env_file_adds_values_without_overwriting_existing_env(tmp_path):
+    environ = {"POLARIS_ENVIRONMENT": "already-set"}
+    env_file = tmp_path / ".env.staging"
+    env_file.write_text(
+        "\n".join(
+            [
+                "# comment",
+                "POLARIS_ENVIRONMENT=staging",
+                "POLARIS_AUTH_MODE=supabase",
+                "POLARIS_DATABASE_URL='postgresql://example'",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    load_env_file(env_file, environ)
+
+    assert environ["POLARIS_ENVIRONMENT"] == "already-set"
+    assert environ["POLARIS_AUTH_MODE"] == "supabase"
+    assert environ["POLARIS_DATABASE_URL"] == "postgresql://example"

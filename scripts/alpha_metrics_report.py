@@ -3,10 +3,9 @@
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
-
-from sqlalchemy import inspect
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -14,9 +13,17 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
-from app.core.config import settings
-from app.database.database import SessionLocal
-from app.services.alpha_metrics_service import build_alpha_metrics_report
+def load_env_file(path: Path, environ=os.environ) -> None:
+    """Load simple KEY=VALUE lines before app settings are imported."""
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in environ:
+            environ[key] = value
 
 
 def _format_rate(value) -> str:
@@ -100,11 +107,29 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--env-file",
+        type=Path,
+        help=(
+            "Load Polaris environment settings before connecting, for example "
+            ".env.staging. Values are never printed."
+        ),
+    )
+    parser.add_argument(
         "--json",
         action="store_true",
         help="Print the raw aggregate JSON instead of the plain-English review.",
     )
     arguments = parser.parse_args()
+
+    if arguments.env_file:
+        load_env_file(arguments.env_file)
+
+    from sqlalchemy import inspect
+    from sqlalchemy.exc import SQLAlchemyError
+
+    from app.core.config import settings
+    from app.database.database import SessionLocal
+    from app.services.alpha_metrics_service import build_alpha_metrics_report
 
     if (
         settings.ENVIRONMENT == "production"
@@ -123,9 +148,16 @@ def main() -> None:
             "recommendation_runs",
             "recommendation_feedback",
         }
-        available_tables = set(
-            inspect(database.get_bind()).get_table_names()
-        )
+        try:
+            available_tables = set(
+                inspect(database.get_bind()).get_table_names()
+            )
+        except SQLAlchemyError as error:
+            raise SystemExit(
+                "Could not connect to the configured alpha database. "
+                "Check network access and the selected env file; no metrics "
+                "were read."
+            ) from error
         missing_tables = required_tables - available_tables
         if missing_tables:
             missing_text = ", ".join(sorted(missing_tables))

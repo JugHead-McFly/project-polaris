@@ -25,19 +25,19 @@ coordinates, target names, or written feedback.
 From the Polaris project folder:
 
 ```bash
-python scripts/alpha_metrics_report.py
+python scripts/alpha_metrics_report.py --env-file .env.staging
 ```
 
 That prints a plain-English review summary. For the raw aggregate JSON, use:
 
 ```bash
-python scripts/alpha_metrics_report.py --json
+python scripts/alpha_metrics_report.py --env-file .env.staging --json
 ```
 
 When deliberately reading the production database, use the explicit guard:
 
 ```bash
-python scripts/alpha_metrics_report.py --confirm-production-read
+python scripts/alpha_metrics_report.py --env-file .env.production --confirm-production-read
 ```
 
 The report is read-only. It does not alter accounts, recommendations, or
