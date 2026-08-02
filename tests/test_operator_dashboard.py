@@ -172,6 +172,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Sharpness (FWHM)" in script.text
     assert "diagnostic only" in script.text
     assert "quality-info-dialog" in response.text
+    assert "clear and trustworthy" in response.text
+    assert "unclear, untrustworthy, or less useful" in response.text
+    assert "target choice, timing, weather, Moon, local sky" in response.text
     assert "Individual image analysis" in response.text
     assert "renderMoonVisual" in script.text
     assert 'setText("observatory-name", data.observatory?.name' in script.text
