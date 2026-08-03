@@ -14,6 +14,13 @@ evidence without collecting passwords, tokens, or exact observing addresses.
 4. Escalate immediately if a tester cannot sign in, sees another person's data,
    cannot understand the recommendation, or reports a safety concern.
 
+## Watched risks
+
+- **Render cold start / slow first load:** expected on the current free private
+  alpha host. Do not upgrade hosting for one family/novice report alone. Upgrade
+  or pause invitations if a real smart-telescope tester abandons setup, distrusts
+  Polaris, or if slow first load repeats across two testers.
+
 ## Cohort progress
 
 | Tester | Invite | Account & home | First plan viewed | Explained plan correctly | Used for a real decision | Second visit | Biggest issue | Notes |

@@ -222,6 +222,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Forgot password?" in html
     assert "First time here? Open the private invitation link from Doug first." in html
     assert "Use password reset only after you have already chosen a Polaris" in html
+    assert "The first private-alpha load may take a moment." in html
     assert "Where do you observe from?" in html
     assert "What Polaris does" in html
     assert "What to do here" in html

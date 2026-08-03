@@ -76,6 +76,9 @@ preserves the saved-observatory reassurance, and asks for the safe request ID
 if it repeats; the sign-in screen now tells first-time invitees to use Doug's
 private invitation link and reserves password reset for accounts that already
 chose a password.
+Slow first load remains a watched risk because the private alpha is still on a
+free Render service; the current decision is to set expectations and wait for
+one more real smart-telescope tester before upgrading hosting.
 The next product gate is inviting the next carefully selected alpha tester and
 using the metrics report plus flight log to decide whether to hold, fix, or
 expand.
