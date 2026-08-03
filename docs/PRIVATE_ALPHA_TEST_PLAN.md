@@ -23,7 +23,8 @@ Do not invite an external tester until all of these are true:
 - backup restoration and basic error monitoring have been rehearsed;
 - the user has a clear way to report a problem;
 - the invitation explains that this is an unfinished private alpha; and
-- Doug knows how to disable an account and remove its stored data.
+- Doug knows how to disable an account and remove its stored data using
+  [`HOSTED_ACCOUNT_REMOVAL.md`](HOSTED_ACCOUNT_REMOVAL.md).
 
 The account, password-recovery, observatory-setup, data-isolation, tenant-export,
 disposable-restore, retained encrypted recovery point, separate-project restore,
@@ -196,6 +197,9 @@ For each tester, record:
 
 Do not record the tester's password, access token, exact street address, or
 unnecessary personal information.
+
+For account removal or cleanup of throwaway accounts, follow
+[`HOSTED_ACCOUNT_REMOVAL.md`](HOSTED_ACCOUNT_REMOVAL.md).
 
 ## Weekly alpha review
 

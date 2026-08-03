@@ -36,7 +36,7 @@ review before Doug relies on them.
 ### Legal and privacy review
 
 - [ ] A qualified attorney has reviewed the intended privacy, terms, user-data, and branding/trademark approach as appropriate for the release.
-- [ ] Data collection, retention, deletion, and support-access practices are documented.
+- [x] Data collection, retention, deletion, and support-access practices are documented for the manual private-alpha stage.
 - [ ] Source code remains in a private repository with controlled access and verified backups.
 
 ## Before a larger closed beta

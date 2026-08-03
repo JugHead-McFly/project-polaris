@@ -86,6 +86,10 @@ invite individual testers. Supabase documents that disabling new sign-ups still
 allows existing invited users to sign in, and its browser client is intended to
 use the project URL plus a publishable key.
 
+Account disablement and hosted-data removal are manual private-alpha operator
+tasks. Use [`HOSTED_ACCOUNT_REMOVAL.md`](HOSTED_ACCOUNT_REMOVAL.md) before
+removing a tester or cleaning up a throwaway account.
+
 Supabase Authentication URL Configuration must use the public hosted
 `/operator` URL as its Site URL. Add that same hosted URL to the redirect allow
 list, along with the explicit local `/operator` URLs used for development.
