@@ -79,6 +79,11 @@ chose a password.
 Slow first load remains a watched risk because the private alpha is still on a
 free Render service; the current decision is to set expectations and wait for
 one more real smart-telescope tester before upgrading hosting.
+Doug also caught and retested a hosted refresh privacy issue before the next
+external tester: stale Tonight details could remain visible while a newly
+signed-in account was refreshing. The hosted loading state now clears prior
+target, settings, weather, Moon, schedule, notes, image, and feedback details
+before fetching the next plan, and the fix is deployed on Render.
 The next product gate is inviting the next carefully selected alpha tester and
 using the metrics report plus flight log to decide whether to hold, fix, or
 expand.
