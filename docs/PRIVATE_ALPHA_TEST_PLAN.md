@@ -142,6 +142,11 @@ cohort uses `drogers08121@gmail.com` for support. Keep all invitation and
 support communication one-to-one during this tiny cohort; do not post an access
 link publicly.
 
+When a tester says yes, follow
+[`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md) for the private
+invite, first-use questions, second-night follow-up, and sanitized Codex
+handoff format.
+
 For a live or near-live tester conversation, use
 [`ALPHA_FEEDBACK_CAPTURE_SHEET.md`](ALPHA_FEEDBACK_CAPTURE_SHEET.md) as the
 temporary note-taking sheet, then transfer only the alias-level evidence into

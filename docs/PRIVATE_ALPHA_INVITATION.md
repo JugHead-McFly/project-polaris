@@ -13,6 +13,9 @@ Audience: one trusted smart-telescope user at a time
 4. Record the invitation date in the private-alpha test plan or Doug's own
    tracker. Do not record passwords, tokens, or street addresses.
 
+For the full operator checklist after a tester says yes, use
+[`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md).
+
 ## Ready-to-send message
 
 > Hi <FIRST NAME>,
