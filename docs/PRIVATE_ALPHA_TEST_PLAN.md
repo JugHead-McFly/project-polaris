@@ -142,6 +142,11 @@ cohort uses `drogers08121@gmail.com` for support. Keep all invitation and
 support communication one-to-one during this tiny cohort; do not post an access
 link publicly.
 
+For a live or near-live tester conversation, use
+[`ALPHA_FEEDBACK_CAPTURE_SHEET.md`](ALPHA_FEEDBACK_CAPTURE_SHEET.md) as the
+temporary note-taking sheet, then transfer only the alias-level evidence into
+[`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md).
+
 ## Tester journey
 
 Each tester should:

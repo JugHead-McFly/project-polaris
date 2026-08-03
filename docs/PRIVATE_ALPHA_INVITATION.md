@@ -108,6 +108,8 @@ them room to explore without coaching.
 ### When to use the answer
 
 - Record their answer in `ALPHA_TESTER_FLIGHT_LOG.md` using a tester alias.
+- Use `ALPHA_FEEDBACK_CAPTURE_SHEET.md` if you are taking notes during a live
+  or near-live tester conversation.
 - A wrong explanation of the recommendation is a comprehension issue, even if
   the page technically worked.
 - A feature request becomes a roadmap candidate only when it supports the
