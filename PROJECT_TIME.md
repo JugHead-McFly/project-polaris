@@ -6,9 +6,9 @@ Times use the `America/Phoenix` time zone (MST).
 ## Current total
 
 - Opening balance on 2026-07-17: `83:00:00`
-- Recorded sessions since opening balance: `52:16:03`
-- **Total project time: `135:16:03`**
-- Timer status: **running** (started 2026-08-02 16:33:14 MST)
+- Recorded sessions since opening balance: `53:51:39`
+- **Total project time: `136:51:39`**
+- Timer status: **stopped**
 
 ## Session log
 
@@ -27,6 +27,7 @@ Times use the `America/Phoenix` time zone (MST).
 | 2026-07-29 | 15:52:00 MST | 20:02:11 MST | 4:10:11 | v1.9 imaging-settings research and recommendation logic, EQ-aware exposure guidance, Tonight-page setting explanations, UI consistency fixes, and remembered EQ preference. |
 | 2026-08-01 | 10:47:08 MST | 21:12:38 MST | 10:25:30 | Private-alpha onboarding handoff, documentation review, verified matched-pair backup, full test suite, and GitHub checkpoint. |
 | 2026-08-02 | 13:36:05 MST | 14:43:40 MST | 1:07:35 | V1.6 private-alpha onboarding retest, cloud-cover explanation fix, hosted clean-account isolation check, documentation updates, and GitHub checkpoint. |
+| 2026-08-02 | 16:33:14 MST | 18:08:50 MST | 1:35:36 | V1.8 private-alpha readiness: tester support flow, hosted reliability polish, docs index, Render verification, metrics/performance baselines, and Nancy walkthrough preparation. |
 
 ## Timer convention
 
