@@ -10,6 +10,9 @@ tester at a time; do not use it for a public group invitation.
 
 - Assign a tester alias, such as `Tester D`.
 - Keep their real name, email, and private messages outside Git.
+- Confirm the latest intended `develop` commit is pushed to GitHub and deployed
+  on Render before the tester opens Polaris.
+- Open the hosted `/health/live` and `/health/ready` endpoints after deployment.
 - Confirm they understand this is unfinished private-alpha software.
 - Confirm they will use an approximate observing location if they prefer.
 - Do not ask for a password, exact address, access token, or invite-link
@@ -113,4 +116,3 @@ After each tester, choose one:
 
 Do not expand the cohort until at least one real smart-telescope tester
 understands the recommendation and returns for a second observing decision.
-
