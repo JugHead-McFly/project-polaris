@@ -161,6 +161,7 @@ const showHostedAccountLoading = (message = "") => {
   byId("hosted-tonight-panel").hidden = true;
   byId("hosted-ready-panel").hidden = true;
   byId("hosted-account-loading").hidden = false;
+  byId("hosted-account-retry").hidden = !message;
   setText(
     "hosted-account-loading-message",
     message,
@@ -170,6 +171,7 @@ const showHostedAccountLoading = (message = "") => {
 
 const showHostedAccountSetup = (message = "") => {
   byId("hosted-account-loading").hidden = true;
+  byId("hosted-account-retry").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
   byId("hosted-ready-panel").hidden = true;
   byId("hosted-account-panel").hidden = false;
@@ -179,6 +181,7 @@ const showHostedAccountSetup = (message = "") => {
 
 const showHostedReadyHandoff = () => {
   byId("hosted-account-loading").hidden = true;
+  byId("hosted-account-retry").hidden = true;
   byId("hosted-account-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
   byId("hosted-ready-panel").hidden = false;
@@ -187,6 +190,7 @@ const showHostedReadyHandoff = () => {
 
 const showHostedTonight = () => {
   byId("hosted-account-loading").hidden = true;
+  byId("hosted-account-retry").hidden = true;
   byId("hosted-account-panel").hidden = true;
   byId("hosted-ready-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = false;
@@ -698,6 +702,16 @@ const handleHostedSession = async (session) => {
   setHostedShell(true);
   showHostedAccountLoading();
   setText("account-email", session.user?.email || "Signed in");
+  try {
+    await loadHostedAccount();
+  } catch (error) {
+    showHostedAccountLoading(error.message);
+  }
+};
+
+const retryHostedAccountLoad = async () => {
+  if (!hostedSession) return;
+  showHostedAccountLoading();
   try {
     await loadHostedAccount();
   } catch (error) {
@@ -3475,6 +3489,7 @@ byId("sign-in-form").addEventListener("submit", signIn);
 byId("forgot-password-button").addEventListener("click", requestPasswordReset);
 byId("accept-invite-form").addEventListener("submit", acceptInvitation);
 byId("sign-out-button").addEventListener("click", signOut);
+byId("hosted-account-retry").addEventListener("click", retryHostedAccountLoad);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-use-device-location").addEventListener("click", useDeviceLocation);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);

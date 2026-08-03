@@ -420,6 +420,10 @@ footer {
   color: #b5c8cc;
 }
 
+.hosted-account-loading .account-button {
+  margin-top: 20px;
+}
+
 .hosted-account-panel {
   max-width: 760px;
   margin-inline: auto;

@@ -233,6 +233,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Show tonight's plan" in html
     assert "Review setup" in html
     assert "Loading your observatory" in html
+    assert 'id="hosted-account-retry"' in html
     assert "Your imaging plan" in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
@@ -247,6 +248,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedSchedule" in script
     assert "displayedTargetSettings" in script
     assert "showHostedReadyHandoff" in script
+    assert "retryHostedAccountLoad" in script
+    assert 'byId("hosted-account-retry").addEventListener("click", retryHostedAccountLoad)' in script
     assert "This private invitation lets you create your Polaris password for the first time." in script
     assert "If this is your first visit, use Doug's original invitation link instead." in script
     assert "const isFirstObservingHome = !hostedObservatory" in script
