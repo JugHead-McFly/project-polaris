@@ -220,6 +220,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Private alpha access" in html
     assert "Set password and continue" in html
     assert "Forgot password?" in html
+    assert "First time here? Open the private invitation link from Doug first." in html
+    assert "Use password reset only after you have already chosen a Polaris" in html
     assert "Where do you observe from?" in html
     assert "What Polaris does" in html
     assert "What to do here" in html
@@ -245,6 +247,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedSchedule" in script
     assert "displayedTargetSettings" in script
     assert "showHostedReadyHandoff" in script
+    assert "This private invitation lets you create your Polaris password for the first time." in script
+    assert "If this is your first visit, use Doug's original invitation link instead." in script
     assert "const isFirstObservingHome = !hostedObservatory" in script
     assert 'byId("hosted-ready-continue").addEventListener("click", loadHostedTonight)' in script
     assert "firstScheduledBlock.recommended_sub_exposure_seconds" in script

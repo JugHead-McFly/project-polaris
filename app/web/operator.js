@@ -87,11 +87,11 @@ const showPasswordSetup = () => {
   byId("sign-in-form").hidden = true;
   byId("accept-invite-form").hidden = false;
   const isRecovery = isPasswordRecoveryFlow;
-  setText("auth-gate-title", isRecovery ? "Reset your Polaris password" : "Choose your Polaris password");
+  setText("auth-gate-title", isRecovery ? "Choose a new Polaris password" : "Choose your Polaris password");
   setAuthMessage(
     isRecovery
-      ? "Choose a new password to regain access to your private Polaris account."
-      : "You have been invited to the private Polaris alpha. Choose a password to finish setting up your account.",
+      ? "Use this only if you already created a Polaris password and asked to reset it."
+      : "This private invitation lets you create your Polaris password for the first time.",
     "invite-message",
   );
 };
@@ -782,7 +782,7 @@ const requestPasswordReset = async () => {
     if (error) {
       throw new Error(error.message || "Polaris could not send a reset link. Please try again later.");
     }
-    setAuthMessage("Check your email for the reset link. Open it in this same browser.");
+    setAuthMessage("Check your email for the reset link. If this is your first visit, use Doug's original invitation link instead.");
   } catch (error) {
     setAuthMessage(error.message);
   } finally {
