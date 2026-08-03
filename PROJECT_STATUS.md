@@ -70,6 +70,12 @@ use planned-start cloud, humidity, and wind values so a cloud-driven `Do Not
 Image` result does not appear to blame only the Moon. The latest pushed
 `develop` checkpoints also added hosted alpha metrics, a weekly review rhythm,
 an account-removal runbook, and one-to-one alpha tester support replies.
+Two tester-reliability risks from the novice mobile walkthrough were also
+tightened: a temporary hosted Tonight load failure now gives retry guidance,
+preserves the saved-observatory reassurance, and asks for the safe request ID
+if it repeats; the sign-in screen now tells first-time invitees to use Doug's
+private invitation link and reserves password reset for accounts that already
+chose a password.
 The next product gate is inviting the next carefully selected alpha tester and
 using the metrics report plus flight log to decide whether to hold, fix, or
 expand.
