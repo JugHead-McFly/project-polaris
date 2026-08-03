@@ -113,6 +113,55 @@ them room to explore without coaching.
 - A feature request becomes a roadmap candidate only when it supports the
   nightly decision or repeats across testers.
 
+## Quick response templates
+
+Use these as private one-to-one replies. Keep the tone personal; do not paste
+account links into a public thread.
+
+### If they say yes
+
+> Thank you — I really appreciate it. I’ll send a private account invitation.
+> Please use an approximate observing location if you prefer, and do not send me
+> a password or exact address. The most helpful feedback is whether the
+> recommendation made sense, whether you trusted the reason, and what felt
+> wrong or missing.
+
+After sending the Supabase invitation, add:
+
+> The invite should let you choose your own password. After setup, Polaris will
+> show one Tonight recommendation. It may say **Do Not Image** if conditions are
+> poor; that is still a useful test if the reason is clear.
+
+### If they ask what it does
+
+> Polaris is a small planning helper for smart-telescope users. It looks at your
+> approximate observing location, weather, darkness, Moon, and target visibility
+> and gives a plain-English recommendation for tonight. It does not control your
+> telescope and it is not a safety system. I’m testing whether the
+> recommendation is clear and trustworthy enough to be useful before an imaging
+> session.
+
+### If they are busy
+
+> No problem at all. I’m keeping this intentionally small, so there is no rush.
+> If you have time later, I’d still value your honest take. If not, I appreciate
+> you considering it.
+
+### If they report a bug or failed load
+
+> Thank you — that is exactly the kind of thing I need to catch. What page were
+> you on, what were you trying to do, and what happened instead? If Polaris
+> showed a request ID, please send just that ID and a screenshot if convenient.
+> Please do not send a password, sign-in link, access token, or exact observing
+> address.
+
+### If the recommendation seems wrong
+
+> That is very useful feedback. Before I explain anything, could you tell me
+> what felt wrong: the target choice, timing, weather, Moon, local horizon/trees,
+> telescope settings, or something else? I’m trying to learn whether Polaris is
+> missing information or whether the explanation is not earning trust.
+
 ## What Doug records
 
 - Tester alias or first name only.
