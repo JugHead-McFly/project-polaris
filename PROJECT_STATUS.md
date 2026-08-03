@@ -68,7 +68,8 @@ saw setup first, saved its own observing home, reached Tonight, and saw no Doug
 data. A follow-up weather-explanation fix now makes the visible night rating
 use planned-start cloud, humidity, and wind values so a cloud-driven `Do Not
 Image` result does not appear to blame only the Moon. The latest pushed
-`develop` checkpoint is `c150da3` (`Tune hosted feedback trust prompt`).
+`develop` checkpoints also added hosted alpha metrics, a weekly review rhythm,
+an account-removal runbook, and one-to-one alpha tester support replies.
 The next product gate is inviting the next carefully selected alpha tester and
 using the metrics report plus flight log to decide whether to hold, fix, or
 expand.
@@ -333,15 +334,21 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Deploy the v1.8 saved-recommendation and Yes/No usefulness slice to the
-   private hosted service. Run one signed-in browser acceptance check: refresh
-   tonight's plan, confirm the feedback prompt appears, save each response, and
-   confirm a second account cannot read or modify the first account's run.
-2. Invite the first trusted tester only after that acceptance check. Observe
-   whether onboarding, the recommendation, its explanation, and the usefulness
-   question are understandable without coaching. Record friction before adding
-   more hosted features.
-3. Complete v1.6 Locations Planning: the first foundation adds an opt-in
+1. Invite one carefully selected smart-telescope alpha tester, using
+   [`PRIVATE_ALPHA_INVITATION.md`](docs/PRIVATE_ALPHA_INVITATION.md) for the
+   one-to-one invitation, support replies, and first-use check-in. Record only
+   alias-level evidence in
+   [`ALPHA_TESTER_FLIGHT_LOG.md`](docs/ALPHA_TESTER_FLIGHT_LOG.md).
+2. Run the aggregate alpha metrics report before inviting another tester:
+
+       .venv/bin/python scripts/alpha_metrics_report.py --env-file .env.staging
+
+   Compare its Review focus with the flight log. Hold, fix, or expand based on
+   comprehension, trust, feedback saved, and second-night return behavior.
+3. If another tester hits slow first load, sign-in confusion, repeated
+   `Plan unavailable`, or unexplained core terms, pause additional invitations
+   and investigate first-run reliability before adding new product features.
+4. Complete v1.6 Locations Planning: the first foundation adds an opt-in
    interactive world map, 25/50/100-mile straight-line rings from the selected
    observatory, and manually saved candidate sites with notes, optional
    Bortle/reference information, access details, and readiness checks. Sites
@@ -355,13 +362,13 @@ endpoint checks also passed.
    access, and clear commercial reuse terms. Do not collect or expose an exact
    home address by default; automated source adapters, road distance, and routing
    remain later, separately sourced capabilities.
-4. Continue the Goal Engine after its first foundation: target-class and
+5. Continue the Goal Engine after its first foundation: target-class and
    reviewed object-specific rules now replace the generic four-hour fallback,
    and the Portfolio view explains Quick, Detailed, and Showcase aims while
    keeping integration separate from image quality. Persistent aim selection,
    user overrides, and adjustments from saved equipment, sky profile, and
    capture-quality history remain later work.
-5. Continue Quality Scoring v2 after its deep-sky foundation: the versioned
+6. Continue Quality Scoring v2 after its deep-sky foundation: the versioned
    engine now scores sharpness, star roundness, star signal, background
    uniformity, and clipping while keeping raw star count diagnostic-only.
    Existing v1 scores are preserved during reanalysis. Add user-calibrated

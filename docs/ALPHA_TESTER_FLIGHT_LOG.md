@@ -20,7 +20,7 @@ evidence without collecting passwords, tokens, or exact observing addresses.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Tester A | ☒ | ☒ | ☐ | ☐ | ☐ | ☐ | None reported during setup | First-time, novice-family tester completed account and observatory setup without coaching. |
 | Tester B | ☒ | ☐ | ☐ | ☐ | ☐ | ☐ | Setup wording and location choice were unclear | Nontechnical family tester stopped before completing setup. |
-| Tester C | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |  |  |
+| Tester C | ☒ | ☒ | ☒ | ☐ | ☐ | ☐ | Slow first load, auth confusion, and unexplained terms | Novice-family mobile walkthrough outside the core persona; useful reliability and comprehension signal. |
 | Tester D | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |  |  |
 
 ## Observation log
