@@ -230,6 +230,41 @@ Do not expand the cohort just because the counts look healthy. The metrics
 answer what happened; the flight log explains whether people understood and
 trusted it.
 
+## V1.8 exit criteria
+
+V1.8 is not complete because the feedback tools exist. It exits only when the
+first real smart-telescope evidence shows that the loop can teach Polaris what
+to improve next.
+
+Minimum exit evidence:
+
+- at least one real smart-telescope tester accepts an invite and completes
+  first-time setup without Doug coaching the screen;
+- the tester views a real Tonight recommendation or safe `Do Not Image` result;
+- the tester can explain, in their own words, what Polaris recommended and the
+  main reason it gave that advice;
+- the tester records or gives a clear usefulness response;
+- at least one tester returns for a second real or plausible observing decision;
+  and
+- no unresolved privacy, account-access, data-loss, or misleading-safety issue
+  remains.
+
+Use these decision rules after each tester:
+
+- **Onboarding confusion:** fix only if the tester cannot reach Tonight or
+  misunderstands what observing-location data Polaris saved.
+- **Recommendation confusion:** fix the explanation before adding new target,
+  search, calendar, or opportunity-mode features.
+- **Weather distrust:** compare Polaris's stated weather reason with the
+  tester's local reality before changing scoring.
+- **Slow first load:** keep the free Render host for one-at-a-time testing
+  unless a target tester abandons, distrusts Polaris, or the problem repeats.
+- **Feature request:** park it unless it directly affects the nightly decision
+  or repeats across testers.
+- **Compliment without return use:** record it as encouragement, not validation.
+- **Second-night return:** treat this as stronger evidence than a positive
+  first impression.
+
 ## Stop conditions
 
 Pause invitations immediately if:

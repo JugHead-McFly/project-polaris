@@ -22,7 +22,7 @@ project-manager notes, not public user documentation.
 ## Private-alpha operator workflow
 
 - [`PRIVATE_ALPHA_TEST_PLAN.md`](PRIVATE_ALPHA_TEST_PLAN.md) — main private
-  alpha test plan, gates, journey, and stop conditions.
+  alpha test plan, gates, journey, V1.8 exit criteria, and stop conditions.
 - [`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md) — what Doug does
   when the next tester says yes.
 - [`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md) — invitation,
@@ -95,4 +95,3 @@ For active V1.8 work, use only these first unless a problem points elsewhere:
 3. [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md)
 4. [`ALPHA_METRICS.md`](ALPHA_METRICS.md)
 5. [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md)
-
