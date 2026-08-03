@@ -247,6 +247,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderHostedSchedule" in script
+    assert "resetHostedPlanDetails" in script
+    assert 'setText("hosted-target-exposure", "—")' in script
+    assert 'setText("hosted-weather-summary", "—")' in script
+    assert 'notes.replaceChildren()' in script
+    assert "Building tonight's schedule…" in script
     assert "displayedTargetSettings" in script
     assert "showHostedReadyHandoff" in script
     assert "retryHostedAccountLoad" in script

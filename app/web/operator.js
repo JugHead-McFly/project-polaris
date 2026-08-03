@@ -197,6 +197,37 @@ const showHostedTonight = () => {
   setAuthMessage("", "hosted-account-message");
 };
 
+const resetHostedPlanDetails = () => {
+  setText("hosted-tonight-date", "Building tonight's recommendation…");
+  setText("hosted-target-label", "Primary target");
+  setText("hosted-target-name", "—");
+  setText("hosted-target-common-name", "");
+  setText("hosted-target-reason", "Waiting for tonight's target.");
+  setText("hosted-target-window", "—");
+  setText("hosted-target-exposure", "—");
+  setText("hosted-target-gain", "—");
+  setText("hosted-target-filter", "—");
+  setText("hosted-darkness-window", "—");
+  setText("hosted-weather-summary", "—");
+  renderSkyQuality(null);
+  setText("hosted-weather-updated", "Weather time unavailable");
+  setText("hosted-moon-summary", "—");
+  setText("hosted-moon-context", "Moon position unavailable");
+  const notes = byId("hosted-plan-notes");
+  notes.replaceChildren();
+  notes.hidden = true;
+  const scheduleList = byId("hosted-schedule-list");
+  scheduleList.replaceChildren();
+  appendTextElement(
+    scheduleList,
+    "div",
+    "empty-state",
+    "Building tonight's schedule…",
+  );
+  setText("hosted-schedule-count", "0 blocks");
+  renderHostedReferenceImage(null);
+};
+
 const setHostedPlanLoading = () => {
   const card = byId("hosted-recommendation");
   card.className = "hosted-recommendation status-loading";
@@ -205,10 +236,7 @@ const setHostedPlanLoading = () => {
     "hosted-decision-message",
     "Comparing weather, darkness, Moon conditions, and target visibility.",
   );
-  setText("hosted-target-name", "—");
-  setText("hosted-target-common-name", "");
-  setText("hosted-target-reason", "Waiting for tonight's target.");
-  renderHostedReferenceImage(null);
+  resetHostedPlanDetails();
   setText("hosted-plan-message", "Refreshing tonight's recommendation…");
   hostedRecommendationRunId = null;
   byId("hosted-feedback-panel").hidden = true;
