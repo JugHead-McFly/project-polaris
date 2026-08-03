@@ -8,6 +8,9 @@ safety rules, and next planned work.
 See [PROJECT_TIME.md](PROJECT_TIME.md) for the cumulative development-time log
 and coding-timer state.
 
+See [docs/README.md](docs/README.md) for the full documentation map. Start
+there when looking for alpha, hosted, product, operations, or roadmap notes.
+
 See [docs/PRODUCT_OPERATING_CONTEXT.md](docs/PRODUCT_OPERATING_CONTEXT.md) for
 the durable product, customer-research, branding, launch-planning, and
 professional-review operating brief.
