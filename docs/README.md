@@ -35,6 +35,8 @@ project-manager notes, not public user documentation.
   hosted onboarding retest checklist.
 - [`ALPHA_METRICS.md`](ALPHA_METRICS.md) — aggregate private-alpha health report
   and review command.
+- [`ALPHA_PERFORMANCE_BASELINE.md`](ALPHA_PERFORMANCE_BASELINE.md) — internal
+  public-endpoint timing baseline; not tester homework.
 - [`HOSTED_ACCOUNT_REMOVAL.md`](HOSTED_ACCOUNT_REMOVAL.md) — manual hosted
   account/data cleanup runbook.
 
