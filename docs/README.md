@@ -49,7 +49,7 @@ project-manager notes, not public user documentation.
 - [`HOSTED_BACKUP_RECOVERY.md`](HOSTED_BACKUP_RECOVERY.md) — hosted tenant
   export, verification, and restore rehearsal.
 - [`RENDER_DEPLOYMENT.md`](RENDER_DEPLOYMENT.md) — private Render deployment
-  boundary and manual deploy gate.
+  boundary and hosted verification gate.
 - [`ERROR_MONITORING.md`](ERROR_MONITORING.md) — Sentry privacy boundary,
   request-ID support workflow, and alerting.
 

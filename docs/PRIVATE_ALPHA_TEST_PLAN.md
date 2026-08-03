@@ -49,8 +49,9 @@ Run this before a nontechnical onboarding retest after an alpha-facing code or
 copy change.
 
 1. Confirm the intended `develop` commit is pushed to GitHub.
-2. Confirm the hosted Render service has deployed that commit intentionally;
-   automatic deploys remain disabled.
+2. Confirm the hosted Render service has deployed that commit. Render currently
+   deploys pushed `develop` commits automatically, but testers should not open
+   Polaris until the hosted health checks and UI check pass.
 3. Open the hosted `/health/live` and `/health/ready` endpoints.
 4. Sign in as Doug and confirm the existing observing home still loads.
 5. Refresh Tonight and confirm a recommendation or safe `Do Not Image` result

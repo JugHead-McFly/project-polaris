@@ -15,8 +15,9 @@ The checked-in `render.yaml` deliberately:
 
 - selects the free web-service instance;
 - pins the service to the `develop` branch;
-- disables automatic deployments so a source-code push cannot silently change
-  the hosted alpha;
+- deploys pushed `develop` commits automatically, so every tester-facing code
+  change must be reviewed, tested, pushed intentionally, and verified on the
+  hosted service before a tester opens Polaris;
 - starts one Uvicorn process;
 - uses `/health/ready` to verify database access before Render routes traffic;
 - keeps all database and Supabase values out of source control; and
@@ -43,7 +44,7 @@ private-alpha deployment therefore has an explicit gate:
 2. run `python -m alembic upgrade head` separately with the migration-owner
    credential;
 3. verify the database revision and tenant-isolation checks;
-4. deploy the reviewed source revision manually; and
+4. push the reviewed source revision to `develop` and let Render deploy it; and
 5. verify `/health/live`, `/health/ready`, sign-in, observatory setup, and
    Tonight over HTTPS.
 

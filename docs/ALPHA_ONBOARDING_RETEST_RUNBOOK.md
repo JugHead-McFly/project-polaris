@@ -17,7 +17,9 @@ It combines the hosted go/no-go gate, human retest script, and evidence record.
 
 ## Hosted go/no-go
 
-1. Deploy the intended GitHub `develop` commit intentionally in Render.
+1. Confirm Render has deployed the intended GitHub `develop` commit. Render
+   currently deploys pushed `develop` commits automatically, but this still
+   needs an explicit hosted verification before a tester opens Polaris.
 2. Open:
 
        https://project-polaris-private-alpha.onrender.com/health/live
