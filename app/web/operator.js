@@ -215,6 +215,13 @@ const setHostedPlanLoading = () => {
   setText("hosted-feedback-message", "");
 };
 
+const hostedPlanFailureMessage = (requestId = "") => {
+  const requestNote = requestId
+    ? ` If this keeps happening, send Doug request ID ${requestId}.`
+    : "";
+  return `Polaris could not build tonight's plan. Try Refresh tonight once more.${requestNote}`;
+};
+
 const renderHostedReferenceImage = (target) => {
   const link = byId("hosted-reference-image");
   const image = byId("hosted-reference-image-thumbnail");
@@ -317,13 +324,16 @@ const renderHostedSchedule = (schedule) => {
   );
 
   if (!blocks.length) {
+    const emptyScheduleMessage = schedule?.decision === "Do Not Image"
+      ? "No imaging is scheduled while conditions are unsuitable."
+      : schedule?.decision === "Plan unavailable"
+        ? "Tonight's schedule could not be refreshed yet. Try again in a moment."
+        : "No target met the visibility and minimum-time requirements.";
     appendTextElement(
       container,
       "div",
       "empty-state",
-      schedule?.decision === "Do Not Image"
-        ? "No imaging is scheduled while conditions are unsuitable."
-        : "No target met the visibility and minimum-time requirements.",
+      emptyScheduleMessage,
     );
     return;
   }
@@ -512,14 +522,16 @@ const loadHostedTonight = async () => {
       return;
     }
     if (!response.ok) {
-      throw new Error("Polaris could not build tonight's recommendation. Please try again.");
+      throw new Error(hostedPlanFailureMessage(response.headers.get("X-Request-ID") || ""));
     }
     renderHostedTonight(await response.json());
   } catch (error) {
     byId("hosted-recommendation").className = "hosted-recommendation status-error";
     setText("hosted-decision", "Plan unavailable");
     setText("hosted-decision-message", error.message);
-    setText("hosted-plan-message", "Your observing home is still saved.");
+    setText("hosted-target-reason", "Your observing home is still saved. This is a planning refresh problem, not a telescope-control action.");
+    renderHostedSchedule({ decision: "Plan unavailable", blocks: [] });
+    setText("hosted-plan-message", "Try Refresh tonight again. If it fails twice, send Doug the request ID and a screenshot.");
   } finally {
     refresh.disabled = false;
     refresh.textContent = "Refresh tonight";

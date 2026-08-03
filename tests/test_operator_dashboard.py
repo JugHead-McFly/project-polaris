@@ -251,6 +251,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderSkyQuality" in script
     assert "Sky quality" in script
     assert "Above horizon now · sets" in script
+    assert "hostedPlanFailureMessage" in script
+    assert "send Doug request ID" in script
+    assert "This is a planning refresh problem, not a telescope-control action." in script
+    assert "Tonight's schedule could not be refreshed yet. Try again in a moment." in script
     assert "Conditions are usable, but one or more factors need attention" in script
     assert 'startsWith("use caution:")' in script
     assert "<p class=\"eyebrow\">Sky quality</p>" in html
