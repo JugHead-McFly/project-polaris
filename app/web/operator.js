@@ -2783,6 +2783,10 @@ const candidateReadinessClass = (site) => {
   return "candidate-site-needs-research";
 };
 
+const missingCandidateReadinessLabels = (site) => CANDIDATE_READINESS_CHECKS
+  .filter(({ key }) => !site[key])
+  .map(({ label }) => label);
+
 const candidateDirectionsUrl = (site) => (
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${site.latitude},${site.longitude}`)}`
 );
@@ -3007,6 +3011,15 @@ const renderCandidateSiteList = ({
       "candidate-site-readiness-summary",
       `Site readiness: ${candidateReadinessLabel(site)} · ${candidateReadinessCount(site)} / ${candidateReadinessTotal(site)} confirmed`,
     );
+    const missingReadiness = missingCandidateReadinessLabels(site);
+    if (missingReadiness.length) {
+      appendTextElement(
+        card,
+        "p",
+        "candidate-site-readiness-next",
+        `Still check: ${missingReadiness.join(", ")}`,
+      );
+    }
     if (site.notes) appendTextElement(card, "p", "candidate-site-notes", site.notes);
     const actions = appendTextElement(card, "div", "candidate-site-actions", "");
     if (site.source_url) {

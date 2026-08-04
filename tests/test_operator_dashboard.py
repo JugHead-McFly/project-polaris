@@ -148,6 +148,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Ready to visit" in script.text
     assert "candidateReadinessClass" in script.text
     assert "candidate-site-ready" in stylesheet.text
+    assert "missingCandidateReadinessLabels" in script.text
+    assert "Still check:" in script.text
     assert "applyImmaculateDemo" in script.text
     assert 'demoMode === "immaculate"' in script.text
     assert 'demoMode === "map-overlap"' in script.text
