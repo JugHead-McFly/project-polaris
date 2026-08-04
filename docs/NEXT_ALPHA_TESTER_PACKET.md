@@ -22,7 +22,25 @@ two testers at the same time during V1.8.
 - Do not ask for a password, exact address, access token, or invite-link
   screenshot.
 
-## 2. Send the private account invite
+## 2. Day-of tester checklist
+
+Use this when a real tester says yes so the first visit does not become
+improvised support.
+
+1. Confirm only one tester is active in V1.8 right now.
+2. Confirm the hosted app is on the latest intended commit.
+3. Open the hosted health endpoints and confirm they respond.
+4. Create one private invite for that tester.
+5. Send the invite and the short private message.
+6. Wait for the tester to act before explaining the screens.
+7. Capture notes in
+   [`ALPHA_FEEDBACK_CAPTURE_SHEET.md`](ALPHA_FEEDBACK_CAPTURE_SHEET.md).
+8. Bring only the sanitized summary back to Codex using the template below.
+9. Update
+   [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md) after the visit.
+10. Decide whether to hold, fix, or invite the next person.
+
+## 3. Send the private account invite
 
 1. Create the tester invitation in Supabase.
 2. Send the short private reply from
@@ -31,7 +49,7 @@ two testers at the same time during V1.8.
 4. Ask them to open Polaris when they have a real or plausible observing
    decision to make.
 
-## 3. Let the tester act before coaching
+## 4. Let the tester act before coaching
 
 The first signal is whether Polaris makes sense without Doug explaining it.
 Only step in if they are completely blocked.
@@ -47,7 +65,7 @@ Watch for whether they:
 - understand the recommendation or `Do Not Image` reason; and
 - save a Yes/No usefulness response.
 
-## 4. Ask the first-use questions
+## 5. Ask the first-use questions
 
 After they have seen Tonight, ask:
 
@@ -67,7 +85,7 @@ Use [`ALPHA_FEEDBACK_CAPTURE_SHEET.md`](ALPHA_FEEDBACK_CAPTURE_SHEET.md) for
 live notes. Paste the sanitized answers into the main Codex project task so the
 evidence can be summarized into the flight log.
 
-## 5. Send the second-night follow-up
+## 6. Send the second-night follow-up
 
 Send this only after the tester has completed the first visit.
 
@@ -85,7 +103,7 @@ Send this only after the tester has completed the first visit.
 > Short, blunt answers are perfect. Please avoid sending passwords, exact home
 > addresses, or invite links.
 
-## 6. What to paste into Codex
+## 7. What to paste into Codex
 
 Use this format when bringing tester feedback back to the main project task:
 
@@ -108,7 +126,7 @@ Screenshot received: yes/no
 Doug's read:
 ```
 
-## 7. Decide what happens next
+## 8. Decide what happens next
 
 After each tester, choose one:
 
