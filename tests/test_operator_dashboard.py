@@ -122,9 +122,11 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'id="capture-location-map"' in response.text
     assert 'id="candidate-site-map-key"' in response.text
     assert 'id="candidate-site-sort"' in response.text
+    assert "Most ready" in response.text
     assert "Darkest sky, then closest" in response.text
     assert "renderCandidateSiteMapKey" in script.text
     assert "sortedCandidateSites" in script.text
+    assert "candidateReadinessSortScore" in script.text
     assert 'id="candidate-site-comparison"' in response.text
     assert "Compare sites" in response.text
     assert "toggleCandidateSiteComparison" in script.text

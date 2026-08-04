@@ -2757,6 +2757,12 @@ const candidateReadinessCount = (site) => CANDIDATE_READINESS_CHECKS.filter(
   ({ key }) => site[key],
 ).length;
 
+const candidateReadinessSortScore = (site) => (
+  Number.isFinite(site.readiness_percent)
+    ? site.readiness_percent
+    : candidateReadinessCount(site) / CANDIDATE_READINESS_CHECKS.length * 100
+);
+
 const candidateReadinessTotal = (site) => (
   site.readiness_total_count || CANDIDATE_READINESS_CHECKS.length
 );
@@ -2803,6 +2809,12 @@ const candidateSiteDistanceMiles = (site) => {
 };
 
 const sortedCandidateSites = () => [...savedCandidateSites].sort((left, right) => {
+  if (candidateSiteSort === "readiness") {
+    const readinessDifference = (
+      candidateReadinessSortScore(right) - candidateReadinessSortScore(left)
+    );
+    return readinessDifference || candidateSiteDistanceMiles(left) - candidateSiteDistanceMiles(right);
+  }
   if (candidateSiteSort === "distance") {
     return candidateSiteDistanceMiles(left) - candidateSiteDistanceMiles(right);
   }
