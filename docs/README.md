@@ -76,6 +76,9 @@ project-manager notes, not public user documentation.
   for productive poor-night alternatives.
 - [`C20_EXPOSURE_VALIDATION_PLAN.md`](C20_EXPOSURE_VALIDATION_PLAN.md) —
   controlled validation plan for C20 15-second versus 30-second sub-exposures.
+- [`TARGET_OPPORTUNITY_SCORING.md`](TARGET_OPPORTUNITY_SCORING.md) —
+  experimental target-scoring foundation based on altitude, usable window,
+  Moon, sky brightness, field fit, and exposure confidence.
 - [`GOAL_ENGINE.md`](GOAL_ENGINE.md) — imaging goal and integration-target
   rules.
 - [`QUALITY_SCORING_V2.md`](QUALITY_SCORING_V2.md) — capture-quality scoring
