@@ -370,10 +370,12 @@ endpoint checks also passed.
    observatory, and manually saved candidate sites with notes, optional
    Bortle/reference information, access details, and readiness checks. Sites
    move between Candidate and Visited lists, and visited sites support personal
-   1–5-star ratings with rating-based sorting. Trusted-research links now open
-   DarkSky International's certified-place directory and a light-pollution map
-   only when the user requests them; the light-pollution link rounds the
-   planning origin to one decimal place.
+   1–5-star ratings with rating-based sorting. Candidate sites now expose a
+   readiness summary (`Needs research`, `Partly checked`, or `Ready to visit`)
+   and can be sorted by most-ready first. Trusted-research links now open DarkSky
+   International's certified-place directory and a light-pollution map only when
+   the user requests them; the light-pollution link rounds the planning origin to
+   one decimal place.
    Polaris does not automatically import or endorse sites because no dependable
    global source currently combines community recommendations, public nighttime
    access, and clear commercial reuse terms. Do not collect or expose an exact

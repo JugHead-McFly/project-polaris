@@ -61,10 +61,12 @@ Current Version: v1.6.0 (in development)
 - Locations planning (v1.6 in development): an opt-in interactive map for
   potential observing sites, straight-line distance rings, site notes, and
   saved candidate locations, with visit status and field notes so a researched
-  site can become a proven observing location. Visited sites support a personal
-  1–5-star rating and rating-based sorting; trusted-research links open only on
-  user request and use an approximate planning origin where coordinates are
-  needed.
+  site can become a proven observing location. Candidate sites show a practical
+  readiness label based on confirmed parking/setup, horizon, access, and
+  amenities checks, and can be sorted by readiness. Visited sites support a
+  personal 1–5-star rating and rating-based sorting; trusted-research links
+  open only on user request and use an approximate planning origin where
+  coordinates are needed.
 - Goal Engine foundation: target-class and reviewed object-specific starter
   goals replace the generic four-hour fallback. Quick, Detailed, and Showcase
   aims are shown separately from image quality; equipment/sky adjustments and
