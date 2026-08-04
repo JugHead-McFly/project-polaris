@@ -38,3 +38,34 @@ class CandidateSite(Base):
         onupdate=datetime.utcnow,
         nullable=False,
     )
+
+    @property
+    def readiness_confirmed_count(self):
+        return sum(
+            1
+            for confirmed in (
+                self.parking_setup_confirmed,
+                self.horizon_confirmed,
+                self.access_confirmed,
+                self.amenities_confirmed,
+            )
+            if confirmed
+        )
+
+    @property
+    def readiness_total_count(self):
+        return 4
+
+    @property
+    def readiness_percent(self):
+        return round(
+            self.readiness_confirmed_count / self.readiness_total_count * 100
+        )
+
+    @property
+    def readiness_label(self):
+        if self.readiness_confirmed_count == self.readiness_total_count:
+            return "Ready to visit"
+        if self.readiness_confirmed_count:
+            return "Partly checked"
+        return "Needs research"

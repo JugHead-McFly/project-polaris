@@ -2757,6 +2757,19 @@ const candidateReadinessCount = (site) => CANDIDATE_READINESS_CHECKS.filter(
   ({ key }) => site[key],
 ).length;
 
+const candidateReadinessTotal = (site) => (
+  site.readiness_total_count || CANDIDATE_READINESS_CHECKS.length
+);
+
+const candidateReadinessLabel = (site) => {
+  if (site.readiness_label) return site.readiness_label;
+  const count = candidateReadinessCount(site);
+  const total = candidateReadinessTotal(site);
+  if (count === total) return "Ready to visit";
+  if (count) return "Partly checked";
+  return "Needs research";
+};
+
 const candidateDirectionsUrl = (site) => (
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${site.latitude},${site.longitude}`)}`
 );
@@ -2877,7 +2890,7 @@ const renderCandidateSiteComparison = (candidateSites) => {
     appendCandidateSiteDetail(
       details,
       "Readiness",
-      `${candidateReadinessCount(site)} / ${CANDIDATE_READINESS_CHECKS.length} confirmed`,
+      `${candidateReadinessCount(site)} / ${candidateReadinessTotal(site)} confirmed`,
     );
   });
 };
@@ -2969,7 +2982,7 @@ const renderCandidateSiteList = ({
         card,
         "p",
         "candidate-site-readiness-summary",
-        `Site readiness: ${readinessCount} / ${CANDIDATE_READINESS_CHECKS.length} confirmed`,
+        `Site readiness: ${candidateReadinessLabel(site)} · ${readinessCount} / ${candidateReadinessTotal(site)} confirmed`,
       );
     }
     if (site.notes) appendTextElement(card, "p", "candidate-site-notes", site.notes);

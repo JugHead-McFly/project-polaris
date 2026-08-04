@@ -60,6 +60,10 @@ def test_candidate_sites_can_be_saved_listed_and_removed():
     assert listed.json()[0]["property_access"] == "public_property"
     assert listed.json()[0]["parking_setup_confirmed"] is True
     assert listed.json()[0]["horizon_confirmed"] is True
+    assert listed.json()[0]["readiness_confirmed_count"] == 2
+    assert listed.json()[0]["readiness_total_count"] == 4
+    assert listed.json()[0]["readiness_percent"] == 50
+    assert listed.json()[0]["readiness_label"] == "Partly checked"
     assert updated.status_code == 200
     assert updated.json()["visited_at"] is not None
     assert updated.json()["star_rating"] == 4
@@ -68,8 +72,34 @@ def test_candidate_sites_can_be_saved_listed_and_removed():
     assert updated.json()["property_access"] == "private_permission"
     assert updated.json()["access_confirmed"] is True
     assert updated.json()["amenities_confirmed"] is True
+    assert updated.json()["readiness_confirmed_count"] == 4
+    assert updated.json()["readiness_percent"] == 100
+    assert updated.json()["readiness_label"] == "Ready to visit"
     assert updated.json()["notes"] == "Wide western horizon."
     assert removed.status_code == 204
+
+
+def test_candidate_site_without_checks_needs_research():
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(engine)
+    database = sessionmaker(bind=engine)()
+    client = TestClient(app)
+
+    with patch("app.database.database.SessionLocal", return_value=database):
+        created = client.post(
+            "/candidate-sites",
+            json={"name": "Unresearched site", "latitude": 34.54, "longitude": -112.46},
+        )
+
+    assert created.status_code == 201
+    assert created.json()["readiness_confirmed_count"] == 0
+    assert created.json()["readiness_total_count"] == 4
+    assert created.json()["readiness_percent"] == 0
+    assert created.json()["readiness_label"] == "Needs research"
 
 
 def test_candidate_site_coordinates_are_validated():

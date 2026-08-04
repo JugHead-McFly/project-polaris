@@ -26,6 +26,10 @@ class CandidateSiteResponse(CandidateSiteCreate):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    readiness_confirmed_count: int
+    readiness_total_count: int
+    readiness_percent: int
+    readiness_label: str
     created_at: datetime
     updated_at: datetime
     visited_at: Optional[datetime] = None
