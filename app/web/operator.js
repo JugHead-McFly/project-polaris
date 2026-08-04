@@ -2776,6 +2776,13 @@ const candidateReadinessLabel = (site) => {
   return "Needs research";
 };
 
+const candidateReadinessClass = (site) => {
+  const label = candidateReadinessLabel(site);
+  if (label === "Ready to visit") return "candidate-site-ready";
+  if (label === "Partly checked") return "candidate-site-partly-ready";
+  return "candidate-site-needs-research";
+};
+
 const candidateDirectionsUrl = (site) => (
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${site.latitude},${site.longitude}`)}`
 );
@@ -2965,6 +2972,12 @@ const renderCandidateSiteList = ({
       site.bortle_class === null || site.bortle_class === undefined
         ? "Bortle not recorded"
         : `Bortle ${site.bortle_class}`,
+    );
+    appendTextElement(
+      badges,
+      "span",
+      candidateReadinessClass(site),
+      candidateReadinessLabel(site),
     );
     appendTextElement(card, "p", "", candidateSiteDistanceLabel(site));
     appendTextElement(
