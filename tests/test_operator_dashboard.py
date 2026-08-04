@@ -143,6 +143,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Public property" in script.text
     assert "Site readiness" in response.text
     assert "Site readiness:" in script.text
+    assert "Needs research" in script.text
+    assert "Partly checked" in script.text
+    assert "Ready to visit" in script.text
     assert "applyImmaculateDemo" in script.text
     assert 'demoMode === "immaculate"' in script.text
     assert 'demoMode === "map-overlap"' in script.text

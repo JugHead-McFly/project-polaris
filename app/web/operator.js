@@ -2902,7 +2902,7 @@ const renderCandidateSiteComparison = (candidateSites) => {
     appendCandidateSiteDetail(
       details,
       "Readiness",
-      `${candidateReadinessCount(site)} / ${candidateReadinessTotal(site)} confirmed`,
+      `${candidateReadinessLabel(site)} · ${candidateReadinessCount(site)} / ${candidateReadinessTotal(site)} confirmed`,
     );
   });
 };
@@ -2988,15 +2988,12 @@ const renderCandidateSiteList = ({
         candidatePropertyAccessLabel(site.property_access),
       );
     }
-    const readinessCount = candidateReadinessCount(site);
-    if (readinessCount) {
-      appendTextElement(
-        card,
-        "p",
-        "candidate-site-readiness-summary",
-        `Site readiness: ${candidateReadinessLabel(site)} · ${readinessCount} / ${candidateReadinessTotal(site)} confirmed`,
-      );
-    }
+    appendTextElement(
+      card,
+      "p",
+      "candidate-site-readiness-summary",
+      `Site readiness: ${candidateReadinessLabel(site)} · ${candidateReadinessCount(site)} / ${candidateReadinessTotal(site)} confirmed`,
+    );
     if (site.notes) appendTextElement(card, "p", "candidate-site-notes", site.notes);
     const actions = appendTextElement(card, "div", "candidate-site-actions", "");
     if (site.source_url) {
