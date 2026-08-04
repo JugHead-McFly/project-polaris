@@ -7,6 +7,9 @@ Use this during or immediately after a private-alpha tester session. Keep names,
 emails, passwords, access tokens, exact addresses, and private account details
 out of this file. Transfer only the useful summary into
 [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md).
+Use the sanitized paste-back format in
+[`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md) when bringing
+feedback into the main Codex project task.
 
 ## Tester and session
 
@@ -75,3 +78,14 @@ Choose one after the session.
 
 One-sentence rationale:
 
+## After the session
+
+1. Paste the sanitized summary into the main Codex project task.
+2. Update [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md).
+3. Run the aggregate metrics report before deciding whether to invite another
+   tester:
+
+       .venv/bin/python scripts/alpha_metrics_report.py --env-file .env.staging
+
+4. Compare the metrics review focus with the flight log, then decide whether to
+   keep going, hold for a fix, or park a request.

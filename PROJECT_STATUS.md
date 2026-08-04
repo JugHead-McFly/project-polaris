@@ -353,6 +353,9 @@ endpoint checks also passed.
    one-to-one invitation, support replies, and first-use check-in. Record only
    alias-level evidence in
    [`ALPHA_TESTER_FLIGHT_LOG.md`](docs/ALPHA_TESTER_FLIGHT_LOG.md).
+   If the first invite remains quiet, use the one-backup-candidate guidance in
+   [`NEXT_ALPHA_TESTER_PACKET.md`](docs/NEXT_ALPHA_TESTER_PACKET.md) and keep
+   V1.8 to one active tester at a time.
 2. Run the aggregate alpha metrics report before inviting another tester:
 
        .venv/bin/python scripts/alpha_metrics_report.py --env-file .env.staging
