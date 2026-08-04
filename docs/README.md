@@ -79,6 +79,8 @@ project-manager notes, not public user documentation.
 - [`TARGET_OPPORTUNITY_SCORING.md`](TARGET_OPPORTUNITY_SCORING.md) —
   experimental target-scoring foundation based on altitude, usable window,
   Moon, sky brightness, field fit, and exposure confidence.
+- [`RIG_PROFILES.md`](RIG_PROFILES.md) — starter smart-telescope rig catalog
+  and source/confidence policy for equipment-specific scoring.
 - [`GOAL_ENGINE.md`](GOAL_ENGINE.md) — imaging goal and integration-target
   rules.
 - [`QUALITY_SCORING_V2.md`](QUALITY_SCORING_V2.md) — capture-quality scoring
