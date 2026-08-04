@@ -135,6 +135,12 @@ Start with two or three people who:
 
 Avoid a broad Facebook invitation at this stage.
 
+If the first preferred tester does not respond, identify only one backup
+candidate at a time. Wait 48-72 hours before following up or moving to that
+backup. Do not treat silence as rejection, but do not let the alpha stall
+indefinitely. If two people say yes at once, stagger onboarding so feedback
+from the first live tester can be understood before the next person starts.
+
 ## Invitation and support materials
 
 Use the ready-to-send wording and the short tester worksheet in

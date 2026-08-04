@@ -45,6 +45,45 @@ For the full operator checklist after a tester says yes, use
 >
 > Thanks—Doug
 
+## Softer backup-candidate message
+
+Use this for one backup candidate if the first invitation is quiet. Keep it
+private and low pressure. Do not mention another tester by name.
+
+> Hi <FIRST NAME>,
+>
+> I’m doing a very small private test of Project Polaris, a planning helper for
+> smart-telescope users. It gives a plain-English answer to “what should I do
+> tonight?” by looking at weather, darkness, Moon conditions, and target
+> visibility.
+>
+> I’m not looking for praise or a polished demo reaction. I’m trying to learn
+> whether the recommendation feels clear, trustworthy, and useful before an
+> imaging session. If you are open to it, I can send a private invite. The test
+> is just: set one approximate observing location, read the Tonight
+> recommendation, and tell me what made sense or did not.
+>
+> No pressure at all if now is not a good time. I’m keeping this intentionally
+> tiny and one-to-one.
+>
+> Thanks—Doug
+
+## Nancy and backup timing
+
+- Do not send a same-day follow-up if the first invitation is quiet.
+- After 48-72 hours, Doug may either send one gentle follow-up or invite one
+  backup candidate. Do not do both on the same day unless there is a specific
+  reason.
+- A gentle follow-up should be short:
+
+  > No rush at all — I know this is an odd little software request. If it is
+  > not a good time, no problem. I appreciate you considering it.
+
+- If a backup candidate says yes before Nancy replies, continue with only that
+  one tester until they finish the first visit or decline.
+- If Nancy and a backup candidate both say yes, stagger access. Do not onboard
+  both at the same time during V1.8.
+
 ## Tester worksheet
 
 Ask these questions after the tester completes the first visit. Do not coach

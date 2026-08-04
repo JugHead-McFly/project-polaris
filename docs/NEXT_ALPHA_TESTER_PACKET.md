@@ -6,6 +6,10 @@ Audience: Doug
 Use this when the next carefully chosen tester says yes. It is written for one
 tester at a time; do not use it for a public group invitation.
 
+If the first preferred tester is quiet, use the backup-candidate guidance in
+[`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md). Do not onboard
+two testers at the same time during V1.8.
+
 ## 1. Before sending the account invite
 
 - Assign a tester alias, such as `Tester D`.
