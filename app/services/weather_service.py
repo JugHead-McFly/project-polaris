@@ -4,6 +4,7 @@ from copy import deepcopy
 from threading import RLock
 from time import sleep
 from typing import Optional
+from urllib.error import HTTPError
 from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -231,9 +232,15 @@ def _fetch_weather_data(url: str):
                 return json.load(response)
         except (URLError, TimeoutError, ValueError) as error:
             last_error = error
+            if _is_rate_limited(error):
+                break
             if attempt < WEATHER_REQUEST_ATTEMPTS - 1:
                 sleep(WEATHER_RETRY_DELAY_SECONDS)
     raise last_error
+
+
+def _is_rate_limited(error) -> bool:
+    return isinstance(error, HTTPError) and error.code == 429
 
 
 def _weather_cache_key(context: ObservatoryContext):

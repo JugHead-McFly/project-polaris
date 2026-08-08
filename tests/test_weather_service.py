@@ -87,13 +87,34 @@ def test_weather_rate_limit_can_use_recent_cached_weather():
         first = get_weather_summary("85297")
         reset = get_weather_summary("85297")
 
-    assert opened.call_count == 3
+    assert opened.call_count == 2
     assert first["status"] == "Live weather connected."
     assert reset["observing_rating"] == 5
     assert reset["cache_status"] == "stale"
     assert reset["status"].startswith(
         "Using recent cached weather because live weather is unavailable:"
     )
+
+
+def test_weather_rate_limit_is_not_retried_without_cache():
+    rate_limit = HTTPError(
+        "https://api.open-meteo.com/v1/forecast",
+        429,
+        "Too Many Requests",
+        {},
+        None,
+    )
+
+    with (
+        patch("app.services.weather_service.urlopen", side_effect=rate_limit) as opened,
+        patch("app.services.weather_service.sleep") as delayed,
+    ):
+        weather = get_weather_summary("85297")
+
+    assert opened.call_count == 1
+    delayed.assert_not_called()
+    assert weather["observing_rating"] == 0
+    assert "HTTP Error 429" in weather["status"]
 
 
 def _weather_response(temperature_f):
