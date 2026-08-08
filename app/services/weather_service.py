@@ -1,4 +1,5 @@
 import json
+from time import sleep
 from datetime import datetime, timezone
 from typing import Optional
 from urllib.error import URLError
@@ -17,6 +18,9 @@ from app.core.planning_context import use_observatory_context
 # internal sensor reading.
 HEAT_CAUTION_F = 95
 HEAT_STOP_F = 105
+WEATHER_REQUEST_TIMEOUT_SECONDS = 10
+WEATHER_REQUEST_ATTEMPTS = 2
+WEATHER_RETRY_DELAY_SECONDS = 0.5
 
 
 def calculate_observing_rating(
@@ -78,8 +82,7 @@ def get_weather_summary(
     )
 
     try:
-        with urlopen(url, timeout=10) as response:
-            data = json.load(response)
+        data = _fetch_weather_data(url)
 
         current = data.get("current", {})
         cloud_cover = current.get("cloud_cover")
@@ -187,3 +190,16 @@ def get_weather_summary(
             "observed_at": None,
             "fetched_at": checked_at.isoformat(),
         }
+
+
+def _fetch_weather_data(url: str):
+    last_error = None
+    for attempt in range(WEATHER_REQUEST_ATTEMPTS):
+        try:
+            with urlopen(url, timeout=WEATHER_REQUEST_TIMEOUT_SECONDS) as response:
+                return json.load(response)
+        except (URLError, TimeoutError, ValueError) as error:
+            last_error = error
+            if attempt < WEATHER_REQUEST_ATTEMPTS - 1:
+                sleep(WEATHER_RETRY_DELAY_SECONDS)
+    raise last_error

@@ -11,12 +11,31 @@ def test_unavailable_weather_fails_closed():
     with patch(
         "app.services.weather_service.urlopen",
         side_effect=URLError("unavailable"),
-    ):
+    ), patch("app.services.weather_service.sleep"):
         weather = get_weather_summary("85297")
 
     assert weather["observing_rating"] == 0
     assert weather["cloud_cover_percent"] is None
     assert weather["status"].startswith("Weather unavailable:")
+
+
+def test_weather_request_retries_once_after_transient_failure():
+    response, response_data = _weather_response(72)
+
+    with (
+        patch(
+            "app.services.weather_service.urlopen",
+            side_effect=[URLError("temporary DNS failure"), response],
+        ) as opened,
+        patch("app.services.weather_service.sleep") as delayed,
+        patch("app.services.weather_service.json.load", return_value=response_data),
+    ):
+        weather = get_weather_summary("85297")
+
+    assert opened.call_count == 2
+    delayed.assert_called_once()
+    assert weather["observing_rating"] == 5
+    assert weather["status"] == "Live weather connected."
 
 
 def _weather_response(temperature_f):
