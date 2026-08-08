@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime, timezone
 from copy import deepcopy
 from threading import RLock
@@ -26,6 +27,7 @@ WEATHER_REQUEST_ATTEMPTS = 2
 WEATHER_RETRY_DELAY_SECONDS = 0.5
 WEATHER_CACHE_TTL_SECONDS = 20 * 60
 WEATHER_STALE_FALLBACK_SECONDS = 6 * 60 * 60
+WEATHERAPI_FORECAST_DAYS = 3
 
 _weather_cache = {}
 _weather_cache_lock = RLock()
@@ -199,6 +201,20 @@ def get_weather_summary(
             )
             return stale_weather
 
+        fallback_weather = _get_weatherapi_summary(
+            postal_code,
+            context,
+            checked_at,
+        )
+        if fallback_weather is not None:
+            record_service_success(
+                "weather",
+                "Fallback weather data received successfully.",
+                checked_at=checked_at,
+            )
+            _store_cached_weather(cache_key, fallback_weather, checked_at)
+            return fallback_weather
+
         record_service_failure(
             "weather",
             f"Live weather unavailable: {error}",
@@ -241,6 +257,77 @@ def _fetch_weather_data(url: str):
 
 def _is_rate_limited(error) -> bool:
     return isinstance(error, HTTPError) and error.code == 429
+
+
+def _get_weatherapi_summary(
+    postal_code: str,
+    context: ObservatoryContext,
+    checked_at: datetime,
+):
+    api_key = os.getenv("POLARIS_WEATHERAPI_KEY", "").strip()
+    if not api_key:
+        return None
+
+    params = {
+        "key": api_key,
+        "q": f"{context.latitude},{context.longitude}",
+        "days": WEATHERAPI_FORECAST_DAYS,
+        "aqi": "no",
+        "alerts": "no",
+    }
+    url = "https://api.weatherapi.com/v1/forecast.json?" + urlencode(params)
+
+    try:
+        data = _fetch_weather_data(url)
+    except (URLError, TimeoutError, ValueError):
+        return None
+
+    current = data.get("current", {})
+    cloud_cover = current.get("cloud")
+    humidity = current.get("humidity")
+    wind_speed = current.get("wind_mph")
+    rating = calculate_observing_rating(
+        cloud_cover,
+        humidity,
+        wind_speed,
+    )
+    hourly_forecast = {}
+    for forecast_day in data.get("forecast", {}).get("forecastday", []):
+        for hour in forecast_day.get("hour", []):
+            forecast_time = hour.get("time")
+            if not forecast_time:
+                continue
+            hourly_forecast[forecast_time.replace(" ", "T")] = {
+                "temperature_f": hour.get("temp_f"),
+                "humidity_percent": hour.get("humidity"),
+                "dew_point_f": hour.get("dewpoint_f"),
+                "cloud_cover_percent": hour.get("cloud"),
+                "wind_speed_mph": hour.get("wind_mph"),
+            }
+
+    hourly_temperature_f = {
+        time: forecast["temperature_f"]
+        for time, forecast in hourly_forecast.items()
+        if forecast.get("temperature_f") is not None
+    }
+
+    return {
+        "postal_code": postal_code,
+        "temperature_f": current.get("temp_f"),
+        "cloud_cover_percent": cloud_cover,
+        "humidity_percent": humidity,
+        "dew_point_f": current.get("dewpoint_f"),
+        "wind_speed_mph": wind_speed,
+        "hourly_temperature_f": hourly_temperature_f,
+        "hourly_forecast": hourly_forecast,
+        "seeing": None,
+        "transparency": None,
+        "observing_rating": rating,
+        "status": "Fallback weather connected via WeatherAPI.com.",
+        "observed_at": current.get("last_updated"),
+        "fetched_at": checked_at.isoformat(),
+        "provider": "weatherapi",
+    }
 
 
 def _weather_cache_key(context: ObservatoryContext):

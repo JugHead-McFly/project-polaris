@@ -117,6 +117,75 @@ def test_weather_rate_limit_is_not_retried_without_cache():
     assert "HTTP Error 429" in weather["status"]
 
 
+def test_weatherapi_fallback_is_used_when_configured():
+    rate_limit = HTTPError(
+        "https://api.open-meteo.com/v1/forecast",
+        429,
+        "Too Many Requests",
+        {},
+        None,
+    )
+    fallback_response = MagicMock()
+    fallback_response.__enter__.return_value = fallback_response
+    fallback_response.__exit__.return_value = None
+    fallback_data = {
+        "current": {
+            "temp_f": 76.2,
+            "cloud": 10,
+            "humidity": 40,
+            "dewpoint_f": 50.1,
+            "wind_mph": 3.2,
+            "last_updated": "2026-07-24 20:00",
+        },
+        "forecast": {
+            "forecastday": [
+                {
+                    "hour": [
+                        {
+                            "time": "2026-07-24 21:00",
+                            "temp_f": 72.4,
+                            "humidity": 42,
+                            "dewpoint_f": 52.0,
+                            "cloud": 12,
+                            "wind_mph": 4.1,
+                        }
+                    ]
+                }
+            ]
+        },
+    }
+
+    with (
+        patch(
+            "app.services.weather_service.urlopen",
+            side_effect=[rate_limit, fallback_response],
+        ) as opened,
+        patch("app.services.weather_service.json.load", return_value=fallback_data),
+        patch("app.services.weather_service.sleep"),
+        patch.dict(
+            "app.services.weather_service.os.environ",
+            {"POLARIS_WEATHERAPI_KEY": "test-key"},
+        ),
+    ):
+        weather = get_weather_summary("85297")
+
+    assert opened.call_count == 2
+    fallback_url = opened.call_args.args[0]
+    assert "api.weatherapi.com" in fallback_url
+    assert "key=test-key" in fallback_url
+    assert weather["provider"] == "weatherapi"
+    assert weather["status"] == "Fallback weather connected via WeatherAPI.com."
+    assert weather["observing_rating"] == 5
+    assert weather["cloud_cover_percent"] == 10
+    assert weather["hourly_forecast"]["2026-07-24T21:00"] == {
+        "temperature_f": 72.4,
+        "humidity_percent": 42,
+        "dew_point_f": 52.0,
+        "cloud_cover_percent": 12,
+        "wind_speed_mph": 4.1,
+    }
+
+
 def _weather_response(temperature_f):
     response = MagicMock()
     response.__enter__.return_value = response
