@@ -1,10 +1,21 @@
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from urllib.error import HTTPError
 from urllib.error import URLError
+
+import pytest
 
 from app.core.planning_context import ObservatoryContext
 from app.services.planner_service import _apply_planned_heat_safeguard
 from app.services.weather_service import get_weather_summary
+from app.services.weather_service import reset_weather_cache
+
+
+@pytest.fixture(autouse=True)
+def clear_weather_cache():
+    reset_weather_cache()
+    yield
+    reset_weather_cache()
 
 
 def test_unavailable_weather_fails_closed():
@@ -36,6 +47,53 @@ def test_weather_request_retries_once_after_transient_failure():
     delayed.assert_called_once()
     assert weather["observing_rating"] == 5
     assert weather["status"] == "Live weather connected."
+
+
+def test_weather_uses_short_lived_cache_for_repeated_requests():
+    response, response_data = _weather_response(72)
+
+    with (
+        patch("app.services.weather_service.urlopen", return_value=response) as opened,
+        patch("app.services.weather_service.json.load", return_value=response_data),
+    ):
+        first = get_weather_summary("85297")
+        second = get_weather_summary("85297")
+
+    assert opened.call_count == 1
+    assert first["status"] == "Live weather connected."
+    assert second["status"] == "Live weather connected."
+    assert second["cache_status"] == "fresh"
+
+
+def test_weather_rate_limit_can_use_recent_cached_weather():
+    response, response_data = _weather_response(72)
+    rate_limit = HTTPError(
+        "https://api.open-meteo.com/v1/forecast",
+        429,
+        "Too Many Requests",
+        {},
+        None,
+    )
+
+    with (
+        patch(
+            "app.services.weather_service.urlopen",
+            side_effect=[response, rate_limit, rate_limit],
+        ) as opened,
+        patch("app.services.weather_service.json.load", return_value=response_data),
+        patch("app.services.weather_service.sleep"),
+        patch("app.services.weather_service.WEATHER_CACHE_TTL_SECONDS", -1),
+    ):
+        first = get_weather_summary("85297")
+        reset = get_weather_summary("85297")
+
+    assert opened.call_count == 3
+    assert first["status"] == "Live weather connected."
+    assert reset["observing_rating"] == 5
+    assert reset["cache_status"] == "stale"
+    assert reset["status"].startswith(
+        "Using recent cached weather because live weather is unavailable:"
+    )
 
 
 def _weather_response(temperature_f):

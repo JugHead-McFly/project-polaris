@@ -1,6 +1,8 @@
 import json
-from time import sleep
 from datetime import datetime, timezone
+from copy import deepcopy
+from threading import RLock
+from time import sleep
 from typing import Optional
 from urllib.error import URLError
 from urllib.parse import urlencode
@@ -21,6 +23,11 @@ HEAT_STOP_F = 105
 WEATHER_REQUEST_TIMEOUT_SECONDS = 10
 WEATHER_REQUEST_ATTEMPTS = 2
 WEATHER_RETRY_DELAY_SECONDS = 0.5
+WEATHER_CACHE_TTL_SECONDS = 20 * 60
+WEATHER_STALE_FALLBACK_SECONDS = 6 * 60 * 60
+
+_weather_cache = {}
+_weather_cache_lock = RLock()
 
 
 def calculate_observing_rating(
@@ -54,6 +61,11 @@ def get_weather_summary(
 ):
     context = use_observatory_context(observatory)
     checked_at = datetime.now(timezone.utc)
+    cache_key = _weather_cache_key(context)
+    cached_weather = _get_cached_weather(cache_key, checked_at)
+    if cached_weather is not None:
+        return cached_weather
+
     params = {
         "latitude": context.latitude,
         "longitude": context.longitude,
@@ -145,7 +157,7 @@ def get_weather_summary(
             checked_at=checked_at,
         )
 
-        return {
+        weather = {
             "postal_code": postal_code,
             "temperature_f": temperature_f,
             "cloud_cover_percent": current.get("cloud_cover"),
@@ -165,8 +177,27 @@ def get_weather_summary(
             "observed_at": current.get("time"),
             "fetched_at": checked_at.isoformat(),
         }
+        _store_cached_weather(cache_key, weather, checked_at)
+        return weather
 
     except (URLError, TimeoutError, ValueError) as error:
+        stale_weather = _get_cached_weather(
+            cache_key,
+            checked_at,
+            allow_stale=True,
+        )
+        if stale_weather is not None:
+            stale_weather["status"] = (
+                f"Using recent cached weather because live weather "
+                f"is unavailable: {error}"
+            )
+            record_service_failure(
+                "weather",
+                stale_weather["status"],
+                checked_at=checked_at,
+            )
+            return stale_weather
+
         record_service_failure(
             "weather",
             f"Live weather unavailable: {error}",
@@ -203,3 +234,56 @@ def _fetch_weather_data(url: str):
             if attempt < WEATHER_REQUEST_ATTEMPTS - 1:
                 sleep(WEATHER_RETRY_DELAY_SECONDS)
     raise last_error
+
+
+def _weather_cache_key(context: ObservatoryContext):
+    return (
+        round(context.latitude, 2),
+        round(context.longitude, 2),
+    )
+
+
+def _get_cached_weather(
+    cache_key,
+    checked_at: datetime,
+    *,
+    allow_stale: bool = False,
+):
+    max_age_seconds = (
+        WEATHER_STALE_FALLBACK_SECONDS
+        if allow_stale
+        else WEATHER_CACHE_TTL_SECONDS
+    )
+    with _weather_cache_lock:
+        cached = _weather_cache.get(cache_key)
+        if cached is None:
+            return None
+        age_seconds = (
+            checked_at - cached["cached_at"]
+        ).total_seconds()
+        if age_seconds > max_age_seconds:
+            return None
+        weather = deepcopy(cached["weather"])
+
+    if allow_stale:
+        weather["cache_status"] = "stale"
+    else:
+        weather["cache_status"] = "fresh"
+    return weather
+
+
+def _store_cached_weather(
+    cache_key,
+    weather,
+    checked_at: datetime,
+) -> None:
+    with _weather_cache_lock:
+        _weather_cache[cache_key] = {
+            "cached_at": checked_at,
+            "weather": deepcopy(weather),
+        }
+
+
+def reset_weather_cache() -> None:
+    with _weather_cache_lock:
+        _weather_cache.clear()
