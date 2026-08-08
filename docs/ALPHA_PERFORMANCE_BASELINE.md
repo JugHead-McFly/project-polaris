@@ -41,6 +41,20 @@ If a tester mentions slowness, record only:
 - whether they saw **Try again**, `Plan unavailable`, or a request ID; and
 - whether the delay made them distrust Polaris.
 
+## Current alpha reliability notes
+
+- The hosted alpha is still running on a free Render service. A slow first load
+  is expected after the service has slept, but repeated `Plan unavailable`
+  states are a product/reliability issue, not tester homework.
+- Open-Meteo remains the primary weather source. Polaris caches recent weather
+  to reduce repeat calls and avoids retrying an HTTP 429 rate-limit response.
+- `POLARIS_WEATHERAPI_KEY` enables WeatherAPI.com as an optional global fallback
+  provider. This is especially relevant for non-US testers because NWS-style
+  fallback coverage would not help them.
+- Do not ask alpha testers to diagnose weather-provider behavior. Ask only
+  whether the weather shown by Polaris matched their local expectation and
+  whether the recommendation felt trustworthy.
+
 ## Before-Nancy baseline
 
 Captured on August 2, 2026 after the hosted service was already awake:

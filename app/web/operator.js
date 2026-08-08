@@ -541,6 +541,14 @@ const renderHostedTonight = (data) => {
     "hosted-plan-message",
     `Plan refreshed ${new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.`,
   );
+  const weatherTimestamp =
+    weather.planned_temperature_at || weather.observed_at || weather.fetched_at;
+  setText(
+    "data-updated",
+    weatherTimestamp
+      ? `Weather data ${displayDateTime(weatherTimestamp)}`
+      : "Weather data time unavailable",
+  );
 };
 
 const loadHostedTonight = async () => {
