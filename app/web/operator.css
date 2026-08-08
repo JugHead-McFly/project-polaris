@@ -785,6 +785,11 @@ footer {
   font-weight: 700;
 }
 
+.hosted-weather-diagnostic {
+  color: var(--amber);
+  line-height: 1.35;
+}
+
 .term-info-button {
   margin-left: 4px;
   vertical-align: middle;

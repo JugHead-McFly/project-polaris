@@ -238,6 +238,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Your imaging plan" in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
+    assert 'id="hosted-weather-diagnostic"' in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
     assert 'nonce="safe-test-nonce"' in html
@@ -262,6 +263,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'byId("hosted-ready-continue").addEventListener("click", loadHostedTonight)' in script
     assert "firstScheduledBlock.recommended_sub_exposure_seconds" in script
     assert "renderSkyQuality" in script
+    assert "hosted-weather-diagnostic" in script
+    assert 'includes("unavailable")' in script
     assert "Sky quality" in script
     assert "Above horizon now · sets" in script
     assert "hostedPlanFailureMessage" in script

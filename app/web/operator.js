@@ -211,6 +211,9 @@ const resetHostedPlanDetails = () => {
   setText("hosted-weather-summary", "—");
   renderSkyQuality(null);
   setText("hosted-weather-updated", "Weather time unavailable");
+  const weatherDiagnostic = byId("hosted-weather-diagnostic");
+  weatherDiagnostic.hidden = true;
+  weatherDiagnostic.textContent = "";
   setText("hosted-moon-summary", "—");
   setText("hosted-moon-context", "Moon position unavailable");
   const notes = byId("hosted-plan-notes");
@@ -495,6 +498,13 @@ const renderHostedTonight = (data) => {
       ? `Observed ${displayDateTime(weather.observed_at)}`
       : "Weather time unavailable",
   );
+  const weatherDiagnostic = byId("hosted-weather-diagnostic");
+  const weatherUnavailable =
+    weather.status && weather.status.toLowerCase().includes("unavailable");
+  weatherDiagnostic.hidden = !weatherUnavailable;
+  weatherDiagnostic.textContent = weatherUnavailable
+    ? weather.status
+    : "";
   setText(
     "hosted-moon-summary",
     `${moon.phase_name || "Moon"} · ${displayNumber(
