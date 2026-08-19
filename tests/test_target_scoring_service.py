@@ -1,5 +1,6 @@
 from app.data.rig_profiles import get_rig_profile
 from app.services.target_scoring_service import TargetScoringInputs
+from app.services.target_scoring_service import compare_target_opportunity_by_rig
 from app.services.target_scoring_service import score_target_opportunity_for_rig
 from app.services.target_scoring_service import score_target_opportunity
 
@@ -147,4 +148,50 @@ def test_rig_aware_scoring_penalizes_targets_too_large_for_the_rig():
     assert any(
         component.label == "Field of view" and component.points == -30
         for component in result.components
+    )
+
+
+def test_rig_comparison_ranks_wider_field_rig_for_large_targets():
+    results = compare_target_opportunity_by_rig(
+        rigs=[
+            get_rig_profile("DWARF 3"),
+            get_rig_profile("Seestar S50"),
+            get_rig_profile("Vespera II"),
+        ],
+        target_width_degrees=2.0,
+        target_height_degrees=1.0,
+        maximum_altitude_degrees=58,
+        usable_dark_minutes=210,
+        moon_illumination_percent=22,
+        moon_separation_degrees=95,
+        bortle_class=4,
+        exposure_confidence=0.75,
+    )
+
+    assert [result.rig_key for result in results] == [
+        "dwarf-3",
+        "vespera-ii",
+        "seestar-s50",
+    ]
+    assert results[0].field_of_view_label == "Comfortable fit"
+    assert results[-1].field_of_view_label == "Too large"
+
+
+def test_rig_comparison_keeps_unknown_fit_visible():
+    results = compare_target_opportunity_by_rig(
+        rigs=[get_rig_profile("DWARF 3")],
+        target_width_degrees=None,
+        target_height_degrees=1.0,
+        maximum_altitude_degrees=58,
+        usable_dark_minutes=210,
+        moon_illumination_percent=22,
+        moon_separation_degrees=95,
+        bortle_class=4,
+        exposure_confidence=0.75,
+    )
+
+    assert results[0].field_of_view_label == "Unknown fit"
+    assert any(
+        component.label == "Field of view" and component.points == 0
+        for component in results[0].result.components
     )

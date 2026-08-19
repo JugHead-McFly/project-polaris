@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
 from app.data.rig_profiles import RigProfile
 
@@ -35,6 +35,16 @@ class TargetScoringResult:
     score: int
     quality: str
     components: List[TargetScoringComponent]
+
+
+@dataclass(frozen=True)
+class RigTargetScoringResult:
+    rig_key: str
+    rig_label: str
+    score: int
+    quality: str
+    field_of_view_label: str
+    result: TargetScoringResult
 
 
 def _clamp_score(score: int) -> int:
@@ -205,4 +215,55 @@ def score_target_opportunity_for_rig(
             field_of_view_fit_label=fit.label,
             exposure_confidence=exposure_confidence,
         )
+    )
+
+
+def compare_target_opportunity_by_rig(
+    *,
+    rigs: Iterable[RigProfile],
+    target_width_degrees: Optional[float],
+    target_height_degrees: Optional[float],
+    maximum_altitude_degrees: Optional[float],
+    usable_dark_minutes: int,
+    moon_illumination_percent: Optional[float],
+    moon_separation_degrees: Optional[float],
+    bortle_class: Optional[int],
+    exposure_confidence: Optional[float] = None,
+) -> List[RigTargetScoringResult]:
+    """Rank the same target opportunity across multiple rig profiles."""
+
+    scored: List[RigTargetScoringResult] = []
+    for rig in rigs:
+        fit = rig.assess_target_fit(target_width_degrees, target_height_degrees)
+        result = score_target_opportunity(
+            TargetScoringInputs(
+                maximum_altitude_degrees=maximum_altitude_degrees,
+                usable_dark_minutes=usable_dark_minutes,
+                moon_illumination_percent=moon_illumination_percent,
+                moon_separation_degrees=moon_separation_degrees,
+                bortle_class=bortle_class,
+                target_fits_field_of_view=fit.fits,
+                field_of_view_fit_label=fit.label,
+                exposure_confidence=exposure_confidence,
+            )
+        )
+        scored.append(
+            RigTargetScoringResult(
+                rig_key=rig.key,
+                rig_label=f"{rig.manufacturer} {rig.model}",
+                score=result.score,
+                quality=result.quality,
+                field_of_view_label=fit.label,
+                result=result,
+            )
+        )
+
+    return sorted(
+        scored,
+        key=lambda entry: (
+            entry.score,
+            entry.field_of_view_label == "Comfortable fit",
+            entry.field_of_view_label == "Tight fit",
+        ),
+        reverse=True,
     )

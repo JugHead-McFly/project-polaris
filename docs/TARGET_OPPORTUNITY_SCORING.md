@@ -34,6 +34,11 @@ the scorer. This lets Polaris distinguish a comfortable framing opportunity
 from a target that technically fits but will appear very small, or a target that
 is too large for the selected smart telescope.
 
+The rig comparison helper scores the same target opportunity across several
+known rigs and returns the ranked results with each rig's field-of-view label.
+This is the local foundation for future product questions like, "Is this a good
+DWARF Mini target, or would it be better suited to a wider/narrower rig?"
+
 ## Product rule
 
 Do not expose the formula as a promise. Polaris should explain the major
