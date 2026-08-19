@@ -23,6 +23,9 @@ def test_dwarf_profile_keeps_conservative_planning_limits():
     assert profile.sensor_name == "Sony IMX678 STARVIS 2"
     assert profile.default_gain == 60
     assert profile.frame_limit == 999
+    assert profile.storage_gb == 128
+    assert profile.battery_life_hours == 5.5
+    assert profile.operating_temperature_c == (-20, 45)
     assert 15 in profile.supported_exposures_seconds
     assert profile.read_noise_electrons == 0.6
     assert profile.confidence == "manufacturer_and_help_center"
@@ -36,7 +39,18 @@ def test_rig_profiles_keep_sources_and_uncertainty_visible():
     seestar = get_rig_profile("Seestar S50")
     assert seestar.read_noise_electrons is None
     assert seestar.full_well_electrons is None
-    assert "sensor noise curve is not included" in seestar.notes
+    assert seestar.battery_life_hours == 6
+    assert seestar.storage_gb == 64
+    assert seestar.operating_temperature_c == (-10, 40)
+    assert "single-run frame limit" in seestar.notes
+
+
+def test_vaonis_profile_records_dew_heater_battery_limit():
+    vespera = get_rig_profile("Vespera II")
+
+    assert vespera.storage_gb == 25
+    assert vespera.battery_life_hours == 4
+    assert vespera.dew_heater_battery_life_hours == 2.5
 
 
 def test_field_dimensions_are_ordered_for_matching_targets():

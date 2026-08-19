@@ -39,8 +39,24 @@ Rig data affects:
 - which sub-exposures are allowed;
 - whether tracking can support longer sub-exposures;
 - whether a planned run exceeds a device frame limit;
+- whether the user's planned session is likely to press battery, storage, or
+  temperature limits;
 - expected sky-limited exposure behavior;
 - confidence in target and exposure recommendations.
+
+## Official operating-limit fields
+
+Profiles now reserve fields for:
+
+- storage capacity in GB;
+- normal battery life in hours;
+- battery life with dew heating active, when the manufacturer publishes it;
+- operating temperature range in Celsius;
+- recorded single-run frame limit, when documented.
+
+Unknown values remain `None`. This is intentional. Polaris should warn from
+known constraints, but it should not invent battery, storage, thermal, or frame
+limits when an official source does not publish them.
 
 ## First planning helper
 

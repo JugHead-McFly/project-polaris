@@ -40,6 +40,10 @@ class RigProfile:
     mount_type: Optional[str]
     tracking_modes: Tuple[str, ...]
     frame_limit: Optional[int]
+    storage_gb: Optional[float]
+    battery_life_hours: Optional[float]
+    dew_heater_battery_life_hours: Optional[float]
+    operating_temperature_c: Optional[Tuple[float, float]]
     source_urls: Tuple[str, ...]
     confidence: str
     notes: str = ""
@@ -183,15 +187,21 @@ RIG_PROFILES: Dict[str, RigProfile] = {
         mount_type="Alt-azimuth; EQ mode supported",
         tracking_modes=("alt_az", "equatorial"),
         frame_limit=999,
+        storage_gb=128,
+        battery_life_hours=5.5,
+        dew_heater_battery_life_hours=None,
+        operating_temperature_c=(-20, 45),
         source_urls=(
             "https://www.dwarflab.com/us/products/dwarf-3-smart-telescope",
             "https://help.dwarflab.com/en/docs/DWARF-3-Unboxing-and-Quick-Setup",
+            "https://help.dwarflab.com/en/docs/DWARF-3-Smart-Telescope-User-Manual-Part1-App-Interface-Introduction?product=dwarf-3",
         ),
         confidence="manufacturer_and_help_center",
         notes=(
-            "DWARF 3 exposure behavior has changed through firmware; Polaris "
-            "keeps 15 seconds conservative unless EQ mode or capture history "
-            "supports longer sub-exposures."
+            "Official specs list 60s tele exposure in EQ mode; the help manual "
+            "recommends 15-60s and gain 60-80 for advanced deep-sky sessions. "
+            "The 999-frame limit is from DWARF's documented default/max frame "
+            "count behavior, not an equipment-control promise."
         ),
     ),
     "seestar-s50": RigProfile(
@@ -214,14 +224,19 @@ RIG_PROFILES: Dict[str, RigProfile] = {
         mount_type="Alt-azimuth",
         tracking_modes=("alt_az",),
         frame_limit=None,
+        storage_gb=64,
+        battery_life_hours=6,
+        dew_heater_battery_life_hours=None,
+        operating_temperature_c=(-10, 40),
         source_urls=(
             "https://www.seestar.com/products/seestar-s50",
             "https://us.seestar.com/blogs/faq/s50",
         ),
         confidence="manufacturer_and_official_faq",
         notes=(
-            "Pixel size is from an official Seestar review/FAQ source rather "
-            "than the main product table; sensor noise curve is not included."
+            "Official FAQ records a 10s single-frame limit caused by the "
+            "Alt/Az field-rotation strategy, no EQ conversion, and no guiding. "
+            "Sensor noise curve and single-run frame limit are not included."
         ),
     ),
     "seestar-s30": RigProfile(
@@ -244,9 +259,17 @@ RIG_PROFILES: Dict[str, RigProfile] = {
         mount_type="Alt-azimuth",
         tracking_modes=("alt_az",),
         frame_limit=None,
+        storage_gb=64,
+        battery_life_hours=None,
+        dew_heater_battery_life_hours=None,
+        operating_temperature_c=(-10, 40),
         source_urls=("https://www.seestar.com/blogs/faq/s30",),
         confidence="official_faq_partial",
-        notes="Official FAQ gives sensor, aperture, focal ratio, focal length, and tele FOV.",
+        notes=(
+            "Official FAQ gives sensor, aperture, focal ratio, focal length, "
+            "tele FOV, filters, storage, and temperature range. Battery life "
+            "and single-run frame limit are not included."
+        ),
     ),
     "vespera-ii": RigProfile(
         key="vespera-ii",
@@ -268,9 +291,17 @@ RIG_PROFILES: Dict[str, RigProfile] = {
         mount_type="Alt-azimuth",
         tracking_modes=("alt_az",),
         frame_limit=None,
+        storage_gb=25,
+        battery_life_hours=4,
+        dew_heater_battery_life_hours=2.5,
+        operating_temperature_c=None,
         source_urls=("https://vaonis.com/pages/product/vespera-ii",),
         confidence="manufacturer",
-        notes="Vaonis specs list FITS 16-bit unit images and native field of view.",
+        notes=(
+            "Vaonis specs list FITS 16-bit unit images, native field of view, "
+            "and 4h battery life. Vaonis support lists 2.5h battery life with "
+            "dew heating active."
+        ),
     ),
     "vespera-3": RigProfile(
         key="vespera-3",
@@ -292,6 +323,10 @@ RIG_PROFILES: Dict[str, RigProfile] = {
         mount_type="Alt-azimuth",
         tracking_modes=("alt_az",),
         frame_limit=None,
+        storage_gb=None,
+        battery_life_hours=None,
+        dew_heater_battery_life_hours=None,
+        operating_temperature_c=None,
         source_urls=("https://vaonis.com/pages/vespera-new-generation",),
         confidence="manufacturer",
         notes="New-generation Vaonis specs list Vespera 3 and Vespera Pro 2 together.",
