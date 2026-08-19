@@ -49,11 +49,14 @@ The local V1.9 foundation exposes a protected read-only catalog endpoint:
 
     GET /rig-profiles
     GET /rig-profiles/{rig_key}
+    GET /rig-profiles/{rig_key}/fit-check
 
 The catalog route returns the catalog summary plus plain-language-ready profile
 summaries. The detail route returns the source-backed profile fields for one
-selected rig. Neither route creates, edits, or deletes profiles, and neither is
-yet wired into the hosted alpha UI.
+selected rig. The fit-check route accepts target width and height in degrees
+and returns the rig's framing label, margin, and reason. These routes do not
+create, edit, or delete profiles, and they are not yet wired into the hosted
+alpha UI.
 
 ## Data policy
 

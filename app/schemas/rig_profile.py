@@ -51,3 +51,13 @@ class RigProfileDetailResponse(BaseModel):
     source_urls: Tuple[str, ...]
     confidence: str
     notes: str
+
+
+class RigTargetFitResponse(BaseModel):
+    rig_key: str
+    target_width_degrees: Optional[float]
+    target_height_degrees: Optional[float]
+    fits: Optional[bool]
+    label: str
+    margin_degrees: Optional[float]
+    reason: str
