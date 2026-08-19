@@ -33,6 +33,16 @@ This is not a claim that Polaris knows every discontinued, regional, prototype,
 or crowdfunded smart telescope. Additions should be made only from official
 manufacturer or support documentation, with unknown values left blank.
 
+Current catalog summary:
+
+- 17 total profiles.
+- 5 manufacturers: Celestron, DWARFLAB, Unistellar, Vaonis, and ZWO.
+- 14 profiles with rectangular field-of-view data usable for framing checks.
+- 14 profiles with a published normal battery-life value.
+- 13 profiles with a published storage-capacity value.
+- 5 profiles with a published operating-temperature range.
+- 1 profile with a documented single-run frame limit.
+
 ## Data policy
 
 Each profile records source URLs and a confidence label. Unknown values stay
