@@ -43,6 +43,16 @@ Current catalog summary:
 - 5 profiles with a published operating-temperature range.
 - 1 profile with a documented single-run frame limit.
 
+## Read-only catalog API
+
+The local V1.9 foundation exposes a protected read-only catalog endpoint:
+
+    GET /rig-profiles
+
+It returns the catalog summary plus plain-language-ready profile summaries. It
+does not create, edit, or delete profiles, and it is not yet wired into the
+hosted alpha UI.
+
 ## Data policy
 
 Each profile records source URLs and a confidence label. Unknown values stay

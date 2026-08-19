@@ -23,6 +23,7 @@ from app.api.objects import router as objects_router
 from app.api.operator import router as operator_router
 from app.api.portfolio import router as portfolio_router
 from app.api.recommendations import router as recommendations_router
+from app.api.rig_profiles import router as rig_profiles_router
 from app.api.sessions import router as sessions_router
 from app.api.system import router as system_router
 from app.api.tonight import router as tonight_router
@@ -195,6 +196,10 @@ app.include_router(
 )
 app.include_router(
     recommendations_router,
+    dependencies=protected_api_dependencies,
+)
+app.include_router(
+    rig_profiles_router,
     dependencies=protected_api_dependencies,
 )
 app.include_router(
