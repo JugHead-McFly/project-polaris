@@ -34,8 +34,9 @@ this file.
 | Candidate alias | Region | Likely rig/persona | Status | Why useful | Next action |
 | --- | --- | --- | --- | --- | --- |
 | Michael G. | UK | Experienced DWARF Mini astrophotographer | Stalled | Strong expert trust check; non-US timezone and global-weather validation | Optional low-pressure close-the-loop note; do not block alpha on him |
-| James K. | Philippines | Smart-telescope/lunar imager | Invited | Global weather, timezone, and lunar-planning validation | Wait for response; if interested, collect setup details |
-| Backup 1 | TBD | TBD | Researching | Keep alpha moving if James is quiet | Identify from group contributors with thoughtful, practical posts |
+| James K. | Philippines | Smart-telescope/lunar imager | Closed | Global weather, timezone, and lunar-planning validation; closed after platform confusion and Android-only fit issue | Do not pursue unless he reopens interest; preserve the browser-app wording lesson |
+| Luigi G. | Italy | Thoughtful deep-sky imager comparing Rome light pollution with Sicily Bortle 5 skies | Invited | Excellent fit for light-pollution, darker-site, non-US timezone/weather, and recommendation-trust validation | Wait for response; if interested, collect setup email, approximate observing region, rig, and tracking style |
+| Backup 1 | TBD | TBD | Researching | Keep alpha moving if Luigi is quiet | Identify from group contributors with thoughtful, practical posts |
 | Backup 2 | TBD | TBD | Researching | Avoid single-candidate dependency | Identify a less-expert but real smart-telescope user |
 
 ## Setup details to collect after a yes
