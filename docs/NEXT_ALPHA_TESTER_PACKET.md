@@ -19,6 +19,10 @@ two testers at the same time during V1.8.
   on Render before the tester opens Polaris.
 - Open the hosted `/health/live` and `/health/ready` endpoints after deployment.
 - Confirm they understand this is unfinished private-alpha software.
+- Confirm they understand Polaris is a private browser-based web app, not an
+  iOS-only app, Android app, or installed Windows app. For this alpha, ask them
+  to use a desktop/laptop browser; Windows with Chrome or Edge is ideal, and
+  Mac with Chrome or Safari should also work.
 - Confirm they will use an approximate observing location if they prefer.
 - For non-US testers, confirm their country/region, local time zone, and
   whether Polaris's weather source should be judged against their normal local
@@ -71,7 +75,8 @@ After the first Tonight view, ask specifically:
 2. Send the short private reply from
    [`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md).
 3. Tell them the invite lets them choose their own password.
-4. Ask them to open Polaris when they have a real or plausible observing
+4. Ask them to open Polaris from a desktop/laptop browser when they have a real
+   or plausible observing
    decision to make.
 
 ## 4. Let the tester act before coaching

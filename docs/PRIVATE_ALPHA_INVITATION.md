@@ -21,10 +21,13 @@ For the full operator checklist after a tester says yes, use
 > Hi <FIRST NAME>,
 >
 > I'm testing an early private version of Project Polaris, a planning helper
-> for smart-telescope users. It looks at your observing location, weather,
-> darkness, Moon conditions, and target visibility, then gives a plain-English
-> suggestion for tonight. It does **not** control your telescope and it is not
-> an equipment-safety system.
+> for smart-telescope users. It is a private browser-based web app, not an
+> iOS-only app or phone app. For this alpha, it is best tested on a
+> desktop/laptop browser, such as Chrome or Edge on Windows, or Chrome/Safari
+> on Mac. It looks at your observing location, weather, darkness, Moon
+> conditions, and target visibility, then gives a plain-English suggestion for
+> tonight. It does **not** control your telescope and it is not an
+> equipment-safety system.
 >
 > I’m inviting only a few people who are comfortable trying unfinished
 > software. If you are interested, I’ll send a private account invitation.
@@ -56,6 +59,10 @@ private and low pressure. Do not mention another tester by name.
 > smart-telescope users. It gives a plain-English answer to “what should I do
 > tonight?” by looking at weather, darkness, Moon conditions, and target
 > visibility.
+>
+> Quick clarification: this is a private browser-based web app, not an iOS-only
+> or Android app. For this alpha, a desktop/laptop browser is best—Windows with
+> Chrome or Edge is ideal, and Mac with Chrome or Safari should also work.
 >
 > I’m not looking for praise or a polished demo reaction. I’m trying to learn
 > whether the recommendation feels clear, trustworthy, and useful before an
