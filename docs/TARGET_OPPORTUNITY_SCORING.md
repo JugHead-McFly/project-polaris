@@ -19,14 +19,20 @@ The first local model scores a target opportunity from 0-100 using:
 - usable dark minutes;
 - Moon illumination and Moon separation;
 - Bortle class;
-- whether the target fits the saved field of view; and
+- whether the target fits the saved field of view, including whether it is
+  comfortable, tight, oversized, or very small for the selected rig; and
 - exposure-confidence signal.
 
 It returns a plain-English quality label and a component breakdown. It does not
-yet read raw FITS ADU values, sensor read noise, dark current, focal length, or
-filter transmission. Those belong in a later calibrated exposure/SNR layer
-after we confirm what data Polaris can measure reliably from Doug's captures
-and from smart-telescope metadata.
+yet read raw FITS ADU values, sensor read noise, dark current, or filter
+transmission. Those belong in a later calibrated exposure/SNR layer after we
+confirm what data Polaris can measure reliably from Doug's captures and from
+smart-telescope metadata.
+
+The first rig-aware helper uses the selected rig's native field of view to feed
+the scorer. This lets Polaris distinguish a comfortable framing opportunity
+from a target that technically fits but will appear very small, or a target that
+is too large for the selected smart telescope.
 
 ## Product rule
 

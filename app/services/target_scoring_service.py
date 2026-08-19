@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
+from app.data.rig_profiles import RigProfile
+
 
 @dataclass(frozen=True)
 class TargetScoringInputs:
@@ -17,6 +19,7 @@ class TargetScoringInputs:
     moon_separation_degrees: Optional[float]
     bortle_class: Optional[int]
     target_fits_field_of_view: Optional[bool] = None
+    field_of_view_fit_label: Optional[str] = None
     exposure_confidence: Optional[float] = None
 
 
@@ -93,11 +96,29 @@ def _sky_brightness_component(bortle_class: Optional[int]) -> TargetScoringCompo
     return TargetScoringComponent("Sky brightness", -15, "The site is very light polluted.")
 
 
-def _field_of_view_component(fits: Optional[bool]) -> TargetScoringComponent:
+def _field_of_view_component(
+    fits: Optional[bool],
+    fit_label: Optional[str],
+) -> TargetScoringComponent:
     if fits is None:
         return TargetScoringComponent("Field of view", 0, "Field-of-view fit is not checked.")
-    if fits:
+    normalized_label = fit_label.strip().lower() if fit_label else ""
+    if normalized_label == "very small":
+        return TargetScoringComponent(
+            "Field of view",
+            2,
+            "The target fits, but it will appear small in this rig.",
+        )
+    if normalized_label == "tight fit":
+        return TargetScoringComponent(
+            "Field of view",
+            6,
+            "The target fits, but framing tolerance is narrow.",
+        )
+    if normalized_label == "comfortable fit":
         return TargetScoringComponent("Field of view", 10, "The target fits the saved framing.")
+    if fits:
+        return TargetScoringComponent("Field of view", 8, "The target fits the saved framing.")
     return TargetScoringComponent("Field of view", -30, "The target does not fit the saved framing.")
 
 
@@ -144,7 +165,10 @@ def score_target_opportunity(inputs: TargetScoringInputs) -> TargetScoringResult
             inputs.moon_separation_degrees,
         ),
         _sky_brightness_component(inputs.bortle_class),
-        _field_of_view_component(inputs.target_fits_field_of_view),
+        _field_of_view_component(
+            inputs.target_fits_field_of_view,
+            inputs.field_of_view_fit_label,
+        ),
         _exposure_confidence_component(inputs.exposure_confidence),
     ]
     score = _clamp_score(50 + sum(component.points for component in components))
@@ -152,4 +176,33 @@ def score_target_opportunity(inputs: TargetScoringInputs) -> TargetScoringResult
         score=score,
         quality=_quality_label(score),
         components=components,
+    )
+
+
+def score_target_opportunity_for_rig(
+    *,
+    rig: RigProfile,
+    target_width_degrees: Optional[float],
+    target_height_degrees: Optional[float],
+    maximum_altitude_degrees: Optional[float],
+    usable_dark_minutes: int,
+    moon_illumination_percent: Optional[float],
+    moon_separation_degrees: Optional[float],
+    bortle_class: Optional[int],
+    exposure_confidence: Optional[float] = None,
+) -> TargetScoringResult:
+    """Score a target opportunity using a saved rig profile's field of view."""
+
+    fit = rig.assess_target_fit(target_width_degrees, target_height_degrees)
+    return score_target_opportunity(
+        TargetScoringInputs(
+            maximum_altitude_degrees=maximum_altitude_degrees,
+            usable_dark_minutes=usable_dark_minutes,
+            moon_illumination_percent=moon_illumination_percent,
+            moon_separation_degrees=moon_separation_degrees,
+            bortle_class=bortle_class,
+            target_fits_field_of_view=fit.fits,
+            field_of_view_fit_label=fit.label,
+            exposure_confidence=exposure_confidence,
+        )
     )
