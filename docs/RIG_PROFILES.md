@@ -48,10 +48,12 @@ Current catalog summary:
 The local V1.9 foundation exposes a protected read-only catalog endpoint:
 
     GET /rig-profiles
+    GET /rig-profiles/{rig_key}
 
-It returns the catalog summary plus plain-language-ready profile summaries. It
-does not create, edit, or delete profiles, and it is not yet wired into the
-hosted alpha UI.
+The catalog route returns the catalog summary plus plain-language-ready profile
+summaries. The detail route returns the source-backed profile fields for one
+selected rig. Neither route creates, edits, or deletes profiles, and neither is
+yet wired into the hosted alpha UI.
 
 ## Data policy
 

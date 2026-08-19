@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Tuple
 
 from pydantic import BaseModel
 
@@ -24,3 +24,30 @@ class RigProfileCatalogResponse(BaseModel):
     profiles_with_temperature_limit: int
     profiles_with_frame_limit: int
     profiles: List[RigProfileSummaryResponse]
+
+
+class RigProfileDetailResponse(BaseModel):
+    key: str
+    manufacturer: str
+    model: str
+    aperture_mm: Optional[float]
+    focal_length_mm: Optional[float]
+    focal_ratio: Optional[float]
+    sensor_name: Optional[str]
+    resolution: Optional[Tuple[int, int]]
+    pixel_size_um: Optional[float]
+    sensor_size_mm: Optional[Tuple[float, float]]
+    native_fov_degrees: Optional[Tuple[float, float]]
+    supported_exposures_seconds: Tuple[int, ...]
+    default_gain: Optional[float]
+    filters: Tuple[str, ...]
+    mount_type: Optional[str]
+    tracking_modes: Tuple[str, ...]
+    frame_limit: Optional[int]
+    storage_gb: Optional[float]
+    battery_life_hours: Optional[float]
+    dew_heater_battery_life_hours: Optional[float]
+    operating_temperature_c: Optional[Tuple[float, float]]
+    source_urls: Tuple[str, ...]
+    confidence: str
+    notes: str
