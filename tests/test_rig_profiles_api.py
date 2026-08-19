@@ -187,6 +187,88 @@ def test_rig_profile_run_plan_endpoint_returns_404_for_unknown_rig():
     assert response.status_code == 404
 
 
+def test_rig_profile_target_score_endpoint_returns_explainable_score():
+    response = TestClient(app).get(
+        "/rig-profiles/dwarf-3/target-score",
+        params={
+            "target_width_degrees": 2.0,
+            "target_height_degrees": 1.0,
+            "maximum_altitude_degrees": 58,
+            "usable_dark_minutes": 210,
+            "moon_illumination_percent": 22,
+            "moon_separation_degrees": 95,
+            "bortle_class": 4,
+            "exposure_confidence": 0.75,
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["rig_key"] == "dwarf-3"
+    assert payload["score"] == 100
+    assert payload["quality"] == "Excellent opportunity"
+    assert payload["field_of_view_label"] == "Comfortable fit"
+    assert [component["label"] for component in payload["components"]] == [
+        "Altitude",
+        "Usable window",
+        "Moon",
+        "Sky brightness",
+        "Field of view",
+        "Exposure confidence",
+    ]
+
+
+def test_rig_profile_target_score_endpoint_penalizes_oversized_target():
+    response = TestClient(app).get(
+        "/rig-profiles/Seestar S50/target-score",
+        params={
+            "target_width_degrees": 2.0,
+            "target_height_degrees": 1.0,
+            "maximum_altitude_degrees": 58,
+            "usable_dark_minutes": 210,
+            "moon_illumination_percent": 22,
+            "moon_separation_degrees": 95,
+            "bortle_class": 4,
+            "exposure_confidence": 0.75,
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["field_of_view_label"] == "Too large"
+    assert any(
+        component["label"] == "Field of view" and component["points"] == -30
+        for component in payload["components"]
+    )
+
+
+def test_rig_profile_target_score_endpoint_validates_ranges():
+    response = TestClient(app).get(
+        "/rig-profiles/dwarf-3/target-score",
+        params={
+            "target_width_degrees": 2.0,
+            "target_height_degrees": 1.0,
+            "usable_dark_minutes": 210,
+            "bortle_class": 10,
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_rig_profile_target_score_endpoint_returns_404_for_unknown_rig():
+    response = TestClient(app).get(
+        "/rig-profiles/not-a-real-rig/target-score",
+        params={
+            "target_width_degrees": 2.0,
+            "target_height_degrees": 1.0,
+            "usable_dark_minutes": 210,
+        },
+    )
+
+    assert response.status_code == 404
+
+
 def test_rig_profiles_endpoint_has_no_write_route():
     paths = {
         (method, route.path)

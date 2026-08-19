@@ -72,3 +72,25 @@ class RigRunPlanResponse(BaseModel):
     frames_per_run: Optional[int]
     label: str
     reason: str
+
+
+class RigTargetScoreComponentResponse(BaseModel):
+    label: str
+    points: int
+    reason: str
+
+
+class RigTargetScoreResponse(BaseModel):
+    rig_key: str
+    target_width_degrees: float
+    target_height_degrees: float
+    maximum_altitude_degrees: Optional[float]
+    usable_dark_minutes: int
+    moon_illumination_percent: Optional[float]
+    moon_separation_degrees: Optional[float]
+    bortle_class: Optional[int]
+    exposure_confidence: Optional[float]
+    score: int
+    quality: str
+    field_of_view_label: str
+    components: List[RigTargetScoreComponentResponse]
