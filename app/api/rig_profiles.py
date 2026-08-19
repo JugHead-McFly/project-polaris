@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Path, Query
 
 from app.schemas.rig_profile import RigProfileCatalogResponse
 from app.schemas.rig_profile import RigProfileDetailResponse
+from app.schemas.rig_profile import RigRunPlanResponse
 from app.schemas.rig_profile import RigTargetFitResponse
 from app.data.rig_profiles import get_rig_profile
 from app.services.rig_profile_service import list_rig_profile_summaries
@@ -89,4 +90,51 @@ def check_target_fit_for_rig(
         "label": fit.label,
         "margin_degrees": fit.margin_degrees,
         "reason": fit.reason,
+    }
+
+
+@router.get(
+    "/{rig_key}/run-plan",
+    response_model=RigRunPlanResponse,
+    responses={404: {"description": "Rig profile not found"}},
+)
+def estimate_run_plan_for_rig(
+    rig_key: str = Path(
+        ...,
+        title="Rig key or model",
+        description="Rig profile key or model name, for example dwarf-3 or Seestar S50.",
+        examples=["dwarf-3"],
+    ),
+    imaging_minutes: int = Query(
+        ...,
+        gt=0,
+        description="Planned imaging time in minutes.",
+        examples=[240],
+    ),
+    sub_exposure_seconds: int = Query(
+        ...,
+        gt=0,
+        description="Sub-exposure length in seconds.",
+        examples=[30],
+    ),
+):
+    profile = get_rig_profile(rig_key)
+    if profile is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Rig profile '{rig_key}' was not found.",
+        )
+    plan = profile.estimate_run_plan(
+        imaging_minutes=imaging_minutes,
+        sub_exposure_seconds=sub_exposure_seconds,
+    )
+    return {
+        "rig_key": profile.key,
+        "imaging_minutes": imaging_minutes,
+        "sub_exposure_seconds": sub_exposure_seconds,
+        "total_frames": plan.total_frames,
+        "run_count": plan.run_count,
+        "frames_per_run": plan.frames_per_run,
+        "label": plan.label,
+        "reason": plan.reason,
     }

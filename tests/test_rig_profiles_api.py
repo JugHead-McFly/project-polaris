@@ -125,6 +125,68 @@ def test_rig_profile_fit_check_endpoint_returns_404_for_unknown_rig():
     assert response.status_code == 404
 
 
+def test_rig_profile_run_plan_endpoint_returns_single_run():
+    response = TestClient(app).get(
+        "/rig-profiles/dwarf-3/run-plan",
+        params={"imaging_minutes": 240, "sub_exposure_seconds": 30},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["rig_key"] == "dwarf-3"
+    assert payload["total_frames"] == 480
+    assert payload["run_count"] == 1
+    assert payload["frames_per_run"] == 480
+    assert payload["label"] == "Single run"
+
+
+def test_rig_profile_run_plan_endpoint_returns_split_run():
+    response = TestClient(app).get(
+        "/rig-profiles/dwarf-3/run-plan",
+        params={"imaging_minutes": 600, "sub_exposure_seconds": 30},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["total_frames"] == 1200
+    assert payload["run_count"] == 2
+    assert payload["frames_per_run"] == 999
+    assert payload["label"] == "Split run"
+
+
+def test_rig_profile_run_plan_endpoint_keeps_unknown_frame_limit_visible():
+    response = TestClient(app).get(
+        "/rig-profiles/Seestar S50/run-plan",
+        params={"imaging_minutes": 240, "sub_exposure_seconds": 10},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["rig_key"] == "seestar-s50"
+    assert payload["total_frames"] == 1440
+    assert payload["run_count"] is None
+    assert payload["frames_per_run"] is None
+    assert payload["label"] == "Frame limit unknown"
+
+
+def test_rig_profile_run_plan_endpoint_validates_positive_inputs():
+    response = TestClient(app).get(
+        "/rig-profiles/dwarf-3/run-plan",
+        params={"imaging_minutes": 0, "sub_exposure_seconds": 30},
+    )
+
+    assert response.status_code == 422
+
+
+def test_rig_profile_run_plan_endpoint_returns_404_for_unknown_rig():
+    response = TestClient(app).get(
+        "/rig-profiles/not-a-real-rig/run-plan",
+        params={"imaging_minutes": 240, "sub_exposure_seconds": 30},
+    )
+
+    assert response.status_code == 404
+
+
 def test_rig_profiles_endpoint_has_no_write_route():
     paths = {
         (method, route.path)

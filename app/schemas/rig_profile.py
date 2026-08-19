@@ -61,3 +61,14 @@ class RigTargetFitResponse(BaseModel):
     label: str
     margin_degrees: Optional[float]
     reason: str
+
+
+class RigRunPlanResponse(BaseModel):
+    rig_key: str
+    imaging_minutes: int
+    sub_exposure_seconds: int
+    total_frames: int
+    run_count: Optional[int]
+    frames_per_run: Optional[int]
+    label: str
+    reason: str

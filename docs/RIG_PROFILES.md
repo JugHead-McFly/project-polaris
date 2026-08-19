@@ -50,11 +50,14 @@ The local V1.9 foundation exposes a protected read-only catalog endpoint:
     GET /rig-profiles
     GET /rig-profiles/{rig_key}
     GET /rig-profiles/{rig_key}/fit-check
+    GET /rig-profiles/{rig_key}/run-plan
 
 The catalog route returns the catalog summary plus plain-language-ready profile
 summaries. The detail route returns the source-backed profile fields for one
 selected rig. The fit-check route accepts target width and height in degrees
-and returns the rig's framing label, margin, and reason. These routes do not
+and returns the rig's framing label, margin, and reason. The run-plan route
+accepts imaging minutes and sub-exposure seconds and returns estimated frame
+count plus single-run, split-run, or unknown-limit status. These routes do not
 create, edit, or delete profiles, and they are not yet wired into the hosted
 alpha UI.
 
