@@ -11,6 +11,15 @@ class RigTargetFit:
 
 
 @dataclass(frozen=True)
+class RigRunPlan:
+    total_frames: int
+    run_count: Optional[int]
+    frames_per_run: Optional[int]
+    label: str
+    reason: str
+
+
+@dataclass(frozen=True)
 class RigProfile:
     key: str
     manufacturer: str
@@ -101,6 +110,55 @@ class RigProfile:
             label="Comfortable fit",
             margin_degrees=margin,
             reason="The target fits comfortably in this rig's field of view.",
+        )
+
+    def estimate_run_plan(
+        self,
+        *,
+        imaging_minutes: int,
+        sub_exposure_seconds: int,
+    ) -> RigRunPlan:
+        if imaging_minutes <= 0 or sub_exposure_seconds <= 0:
+            return RigRunPlan(
+                total_frames=0,
+                run_count=0,
+                frames_per_run=None,
+                label="No frames",
+                reason="The plan has no positive imaging time or sub-exposure length.",
+            )
+
+        total_seconds = imaging_minutes * 60
+        total_frames = total_seconds // sub_exposure_seconds
+        if total_seconds % sub_exposure_seconds:
+            total_frames += 1
+
+        if self.frame_limit is None:
+            return RigRunPlan(
+                total_frames=total_frames,
+                run_count=None,
+                frames_per_run=None,
+                label="Frame limit unknown",
+                reason="This rig profile does not record a single-run frame limit.",
+            )
+
+        if total_frames <= self.frame_limit:
+            return RigRunPlan(
+                total_frames=total_frames,
+                run_count=1,
+                frames_per_run=total_frames,
+                label="Single run",
+                reason="The plan fits inside this rig's recorded frame limit.",
+            )
+
+        run_count = total_frames // self.frame_limit
+        if total_frames % self.frame_limit:
+            run_count += 1
+        return RigRunPlan(
+            total_frames=total_frames,
+            run_count=run_count,
+            frames_per_run=self.frame_limit,
+            label="Split run",
+            reason="The plan exceeds this rig's recorded single-run frame limit.",
         )
 
 

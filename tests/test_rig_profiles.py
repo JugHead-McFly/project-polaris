@@ -82,3 +82,46 @@ def test_rig_profile_keeps_unknown_target_fit_explicit():
 
     assert fit.fits is None
     assert fit.label == "Unknown fit"
+
+
+def test_rig_profile_estimates_single_run_inside_frame_limit():
+    profile = get_rig_profile("DWARF 3")
+
+    plan = profile.estimate_run_plan(imaging_minutes=240, sub_exposure_seconds=30)
+
+    assert plan.total_frames == 480
+    assert plan.run_count == 1
+    assert plan.frames_per_run == 480
+    assert plan.label == "Single run"
+
+
+def test_rig_profile_estimates_split_runs_when_frame_limit_is_exceeded():
+    profile = get_rig_profile("DWARF 3")
+
+    plan = profile.estimate_run_plan(imaging_minutes=600, sub_exposure_seconds=30)
+
+    assert plan.total_frames == 1200
+    assert plan.run_count == 2
+    assert plan.frames_per_run == 999
+    assert plan.label == "Split run"
+
+
+def test_rig_profile_keeps_unknown_frame_limits_explicit():
+    profile = get_rig_profile("Seestar S50")
+
+    plan = profile.estimate_run_plan(imaging_minutes=240, sub_exposure_seconds=10)
+
+    assert plan.total_frames == 1440
+    assert plan.run_count is None
+    assert plan.frames_per_run is None
+    assert plan.label == "Frame limit unknown"
+
+
+def test_rig_profile_rejects_non_positive_run_inputs_without_guessing():
+    profile = get_rig_profile("DWARF 3")
+
+    plan = profile.estimate_run_plan(imaging_minutes=0, sub_exposure_seconds=30)
+
+    assert plan.total_frames == 0
+    assert plan.run_count == 0
+    assert plan.label == "No frames"

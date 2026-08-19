@@ -57,6 +57,17 @@ This is intentionally a simple framing check. It does not account for mosaics,
 cropping preference, rotation constraints, reducer/barlow optics, or post-crop
 composition.
 
+`RigProfile.estimate_run_plan()` compares planned imaging time and
+sub-exposure length against a rig's recorded single-run frame limit. It returns:
+
+- `No frames` for non-positive imaging plans.
+- `Frame limit unknown` when Polaris has no dependable limit for that rig.
+- `Single run` when the plan fits the recorded limit.
+- `Split run` when the plan should be broken into multiple runs.
+
+For now this is only a planning estimate. It does not control the device,
+create runs, or assume that undocumented app limits are safe.
+
 ## Future use
 
 The first safe uses are target fit, supported exposure choices, and device
