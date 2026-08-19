@@ -31,6 +31,8 @@ project-manager notes, not public user documentation.
   note-taking sheet for tester conversations.
 - [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md) — sanitized
   tester evidence log.
+- [`ALPHA_TESTER_PIPELINE.md`](ALPHA_TESTER_PIPELINE.md) — one-active-tester
+  pipeline and backup-candidate tracker.
 - [`ALPHA_ONBOARDING_RETEST_RUNBOOK.md`](ALPHA_ONBOARDING_RETEST_RUNBOOK.md) —
   hosted onboarding retest checklist.
 - [`ALPHA_METRICS.md`](ALPHA_METRICS.md) — aggregate private-alpha health report
