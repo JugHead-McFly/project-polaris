@@ -3,15 +3,34 @@ from app.data.rig_profiles import get_rig_profile
 
 
 def test_starter_rig_profiles_include_core_alpha_devices():
-    assert {"dwarf-3", "seestar-s50", "seestar-s30", "vespera-ii"}.issubset(
-        RIG_PROFILES
-    )
+    assert {
+        "dwarf-2",
+        "dwarf-3",
+        "dwarf-mini",
+        "seestar-s50",
+        "seestar-s30",
+        "stellina",
+        "vespera-ii",
+        "vespera-pro",
+        "vespera-3",
+        "vespera-pro-2",
+        "hestia",
+        "celestron-origin",
+        "celestron-origin-mark-ii",
+        "unistellar-odyssey",
+        "unistellar-odyssey-pro",
+        "unistellar-equinox-2",
+        "unistellar-evscope-2",
+    }.issubset(RIG_PROFILES)
 
 
 def test_rig_profile_lookup_accepts_key_or_model_name():
     assert get_rig_profile("dwarf-3").model == "DWARF 3"
     assert get_rig_profile("DWARF 3").key == "dwarf-3"
     assert get_rig_profile("Seestar S50").key == "seestar-s50"
+    assert get_rig_profile("Origin Mark II Intelligent Home Observatory").key == (
+        "celestron-origin-mark-ii"
+    )
     assert get_rig_profile("unknown") is None
 
 
@@ -51,6 +70,30 @@ def test_vaonis_profile_records_dew_heater_battery_limit():
     assert vespera.storage_gb == 25
     assert vespera.battery_life_hours == 4
     assert vespera.dew_heater_battery_life_hours == 2.5
+
+
+def test_expanded_smart_telescope_profiles_keep_official_unknowns_unknown():
+    dwarf_mini = get_rig_profile("DWARF mini")
+    dwarf_2 = get_rig_profile("DWARF II")
+    hestia = get_rig_profile("Hestia")
+
+    assert dwarf_mini.native_fov_degrees is None
+    assert dwarf_2.native_fov_degrees is None
+    assert hestia.battery_life_hours is None
+    assert hestia.tracking_modes == ()
+
+
+def test_expanded_smart_telescope_profiles_include_major_operating_specs():
+    origin = get_rig_profile("celestron-origin-mark-ii")
+    odyssey = get_rig_profile("Odyssey Pro")
+    evscope = get_rig_profile("eVscope 2")
+
+    assert origin.aperture_mm == 152
+    assert origin.native_fov_degrees == (1.32, 0.75)
+    assert origin.battery_life_hours == 6
+    assert odyssey.storage_gb == 64
+    assert odyssey.battery_life_hours == 5
+    assert evscope.sensor_name == "Sony IMX347"
 
 
 def test_field_dimensions_are_ordered_for_matching_targets():

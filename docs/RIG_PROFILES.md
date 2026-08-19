@@ -6,13 +6,32 @@ Polaris needs rig-specific data before it can make trustworthy SNR-style
 target and exposure decisions. The first catalog lives in
 `app/data/rig_profiles.py` and intentionally starts small.
 
-## Starter devices
+## Current device coverage
 
-- DWARF 3
-- Seestar S50
-- Seestar S30
-- Vespera II
-- Vespera 3
+The current database covers the major manufacturer-backed smart-telescope
+families Polaris has official specs for:
+
+- DWARFLAB DWARF II
+- DWARFLAB DWARF 3
+- DWARFLAB DWARF mini
+- ZWO Seestar S50
+- ZWO Seestar S30
+- Vaonis Stellina
+- Vaonis Vespera II
+- Vaonis Vespera Pro
+- Vaonis Vespera 3
+- Vaonis Vespera Pro 2
+- Vaonis Hestia
+- Celestron Origin Intelligent Home Observatory
+- Celestron Origin Mark II Intelligent Home Observatory
+- Unistellar Odyssey
+- Unistellar Odyssey Pro
+- Unistellar eQuinox 2
+- Unistellar eVscope 2
+
+This is not a claim that Polaris knows every discontinued, regional, prototype,
+or crowdfunded smart telescope. Additions should be made only from official
+manufacturer or support documentation, with unknown values left blank.
 
 ## Data policy
 
