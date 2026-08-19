@@ -3,6 +3,14 @@ from typing import Dict, Optional, Tuple
 
 
 @dataclass(frozen=True)
+class RigTargetFit:
+    fits: Optional[bool]
+    label: str
+    margin_degrees: Optional[float]
+    reason: str
+
+
+@dataclass(frozen=True)
 class RigProfile:
     key: str
     manufacturer: str
@@ -38,6 +46,62 @@ class RigProfile:
         if self.native_fov_degrees is None:
             return None
         return min(self.native_fov_degrees)
+
+    def assess_target_fit(
+        self,
+        target_width_degrees: Optional[float],
+        target_height_degrees: Optional[float],
+    ) -> RigTargetFit:
+        if (
+            target_width_degrees is None
+            or target_height_degrees is None
+            or self.field_width_degrees is None
+            or self.field_height_degrees is None
+        ):
+            return RigTargetFit(
+                fits=None,
+                label="Unknown fit",
+                margin_degrees=None,
+                reason="Target size or rig field of view is incomplete.",
+            )
+
+        target_width = max(target_width_degrees, target_height_degrees)
+        target_height = min(target_width_degrees, target_height_degrees)
+        width_margin = self.field_width_degrees - target_width
+        height_margin = self.field_height_degrees - target_height
+        margin = round(min(width_margin, height_margin), 2)
+
+        if margin < 0:
+            return RigTargetFit(
+                fits=False,
+                label="Too large",
+                margin_degrees=margin,
+                reason="The target is larger than the rig's native field of view.",
+            )
+
+        largest_field = max(self.field_width_degrees, self.field_height_degrees)
+        largest_target = max(target_width, target_height)
+        fill_ratio = largest_target / largest_field if largest_field else 0
+        if fill_ratio < 0.18:
+            return RigTargetFit(
+                fits=True,
+                label="Very small",
+                margin_degrees=margin,
+                reason="The target fits, but it will appear small in this rig.",
+            )
+        if margin <= 0.2:
+            return RigTargetFit(
+                fits=True,
+                label="Tight fit",
+                margin_degrees=margin,
+                reason="The target fits, but framing tolerance is narrow.",
+            )
+        return RigTargetFit(
+            fits=True,
+            label="Comfortable fit",
+            margin_degrees=margin,
+            reason="The target fits comfortably in this rig's field of view.",
+        )
 
 
 RIG_PROFILES: Dict[str, RigProfile] = {

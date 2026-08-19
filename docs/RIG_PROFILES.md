@@ -35,11 +35,27 @@ Use these confidence labels:
 Rig data affects:
 
 - whether a target fits the field of view;
+- whether a fitting target is still too small to be satisfying for that rig;
 - which sub-exposures are allowed;
 - whether tracking can support longer sub-exposures;
 - whether a planned run exceeds a device frame limit;
 - expected sky-limited exposure behavior;
 - confidence in target and exposure recommendations.
+
+## First planning helper
+
+`RigProfile.assess_target_fit()` compares a target's angular width and height
+against a rig's native field of view. It returns an explicit fit result:
+
+- `Unknown fit` when either side lacks enough data.
+- `Too large` when the object exceeds the native field.
+- `Very small` when the object fits but will occupy little of the frame.
+- `Tight fit` when the object fits with little framing margin.
+- `Comfortable fit` when the object has practical framing room.
+
+This is intentionally a simple framing check. It does not account for mosaics,
+cropping preference, rotation constraints, reducer/barlow optics, or post-crop
+composition.
 
 ## Future use
 

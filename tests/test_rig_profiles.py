@@ -44,3 +44,41 @@ def test_field_dimensions_are_ordered_for_matching_targets():
 
     assert vespera.field_width_degrees == 2.5
     assert vespera.field_height_degrees == 1.4
+
+
+def test_rig_profile_assesses_comfortable_target_fit():
+    profile = get_rig_profile("DWARF 3")
+
+    fit = profile.assess_target_fit(target_width_degrees=2.0, target_height_degrees=1.1)
+
+    assert fit.fits is True
+    assert fit.label == "Comfortable fit"
+    assert fit.margin_degrees == 0.8
+
+
+def test_rig_profile_flags_oversized_targets():
+    profile = get_rig_profile("Seestar S50")
+
+    fit = profile.assess_target_fit(target_width_degrees=2.0, target_height_degrees=1.0)
+
+    assert fit.fits is False
+    assert fit.label == "Too large"
+    assert fit.margin_degrees == -0.71
+
+
+def test_rig_profile_flags_tiny_targets_separately_from_bad_fit():
+    profile = get_rig_profile("DWARF 3")
+
+    fit = profile.assess_target_fit(target_width_degrees=0.25, target_height_degrees=0.18)
+
+    assert fit.fits is True
+    assert fit.label == "Very small"
+
+
+def test_rig_profile_keeps_unknown_target_fit_explicit():
+    profile = get_rig_profile("DWARF 3")
+
+    fit = profile.assess_target_fit(target_width_degrees=None, target_height_degrees=1.0)
+
+    assert fit.fits is None
+    assert fit.label == "Unknown fit"
