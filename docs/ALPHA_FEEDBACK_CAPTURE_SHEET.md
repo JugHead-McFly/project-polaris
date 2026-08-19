@@ -18,6 +18,8 @@ feedback into the main Codex project task.
 - Device used:
 - Telescope type:
 - Approximate observing region:
+- Country/time zone, for non-US testers:
+- Normal weather or planning source, if volunteered:
 - First visit or return visit:
 - Was Doug watching live, or was this asynchronous feedback?
 
@@ -44,6 +46,8 @@ Ask these before coaching the tester or explaining the screen.
 6. Would you use Polaris before a real observing session? Why or why not?
 7. Did the weather, Moon, darkness, and target window match what you expected
    locally?
+8. For non-US testers: did the date, time window, and weather source feel
+   correct for your region?
 
 ## Watch for alpha-stop issues
 
@@ -63,6 +67,7 @@ Pause additional invitations if any answer here is yes.
 - Most confusing moment:
 - Most valuable moment:
 - Main reason they trusted or distrusted the recommendation:
+- Local weather/timing concern, if any:
 - Any safe request ID:
 - Screenshot received: yes / no
 

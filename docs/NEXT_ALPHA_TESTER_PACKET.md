@@ -19,6 +19,9 @@ two testers at the same time during V1.8.
 - Open the hosted `/health/live` and `/health/ready` endpoints after deployment.
 - Confirm they understand this is unfinished private-alpha software.
 - Confirm they will use an approximate observing location if they prefer.
+- For non-US testers, confirm their country/region, local time zone, and
+  whether Polaris's weather source should be judged against their normal local
+  weather check.
 - Do not ask for a password, exact address, access token, or invite-link
   screenshot.
 
@@ -39,6 +42,27 @@ improvised support.
 9. Update
    [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md) after the visit.
 10. Decide whether to hold, fix, or invite the next person.
+
+## Non-US tester notes
+
+For testers outside the United States, treat the first visit as both a normal
+recommendation test and a global-coverage test. Ask for only approximate
+location details. Do not ask for a street address.
+
+Before creating the invite, collect:
+
+- email address for the private account invitation;
+- approximate observing region and country;
+- main telescope model;
+- usual tracking style, if known; and
+- their normal weather/planning reference, if they volunteer one.
+
+After the first Tonight view, ask specifically:
+
+> Did the local date, time window, Moon context, and weather look right for
+> your region?
+>
+> If the weather differed from your normal source, what did you trust more?
 
 ## 3. Send the private account invite
 
@@ -113,12 +137,14 @@ Date:
 Device:
 Telescope:
 Approximate region:
+Country/time zone:
 First visit or return visit:
 Recommendation shown:
 Tester explanation:
 What they trusted:
 What they doubted:
 What confused them:
+Local weather/timing looked right:
 Would use again:
 Usefulness response saved: yes/no/unknown
 Bug or request ID:

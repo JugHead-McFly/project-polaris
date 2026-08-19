@@ -74,10 +74,20 @@ private and low pressure. Do not mention another tester by name.
 - After 48-72 hours, Doug may either send one gentle follow-up or invite one
   backup candidate. Do not do both on the same day unless there is a specific
   reason.
+- After two weeks of silence from a candidate who initially said yes, treat
+  that tester as warm but stalled. Do not wait on them as an active dependency.
+  Send one light close-the-loop note only if it feels natural, and proceed to
+  one backup candidate at a time.
 - A gentle follow-up should be short:
 
   > No rush at all — I know this is an odd little software request. If it is
   > not a good time, no problem. I appreciate you considering it.
+
+- A two-week close-the-loop note should preserve goodwill:
+
+  > No pressure at all — I know life gets busy. I’m going to keep testing with
+  > one person at a time, so I may move on to the next tester for now. I’d still
+  > really value your expert take whenever timing is easier.
 
 - If a backup candidate says yes before Nancy replies, continue with only that
   one tester until they finish the first visit or decline.
