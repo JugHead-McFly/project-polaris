@@ -10,6 +10,8 @@ from pydantic import ConfigDict
 from pydantic import Field
 from pydantic import field_validator
 
+from app.data.rig_profiles import get_rig_profile
+
 
 TrackingPreference = Literal[
     "not_sure",
@@ -58,6 +60,7 @@ class ObservatoryFields(BaseModel):
     timezone_name: str = Field(min_length=1, max_length=64)
     bortle_class: Optional[int] = Field(default=None, ge=1, le=9)
     telescope_model: Optional[str] = Field(default=None, max_length=100)
+    rig_profile_key: Optional[str] = Field(default=None, max_length=80)
     tracking_preference: TrackingPreference = "not_sure"
 
     @field_validator("timezone_name")
@@ -70,6 +73,19 @@ class ObservatoryFields(BaseModel):
                 "timezone_name must be an IANA timezone."
             ) from error
         return value
+
+    @field_validator("rig_profile_key")
+    @classmethod
+    def rig_profile_key_must_exist(
+        cls,
+        value: Optional[str],
+    ) -> Optional[str]:
+        if value is None:
+            return value
+        profile = get_rig_profile(value)
+        if profile is None:
+            raise ValueError("rig_profile_key must match a known rig profile.")
+        return profile.key
 
 
 class ObservatoryCreate(ObservatoryFields):
@@ -99,6 +115,7 @@ class ObservatoryUpdate(BaseModel):
     )
     bortle_class: Optional[int] = Field(default=None, ge=1, le=9)
     telescope_model: Optional[str] = Field(default=None, max_length=100)
+    rig_profile_key: Optional[str] = Field(default=None, max_length=80)
     tracking_preference: Optional[TrackingPreference] = None
 
     @field_validator("timezone_name")
@@ -116,6 +133,19 @@ class ObservatoryUpdate(BaseModel):
                 "timezone_name must be an IANA timezone."
             ) from error
         return value
+
+    @field_validator("rig_profile_key")
+    @classmethod
+    def rig_profile_key_must_exist(
+        cls,
+        value: Optional[str],
+    ) -> Optional[str]:
+        if value is None:
+            return value
+        profile = get_rig_profile(value)
+        if profile is None:
+            raise ValueError("rig_profile_key must match a known rig profile.")
+        return profile.key
 
 
 class ObservatoryResponse(ObservatoryFields):

@@ -54,6 +54,10 @@ def test_migrations_build_clean_database(tmp_path: Path):
         revision = connection.execute(
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
+        observatory_columns = {
+            column["name"]
+            for column in inspect(connection).get_columns("observatories")
+        }
     engine.dispose()
 
     assert table_names == {
@@ -67,7 +71,8 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "recommendation_runs",
         "sessions",
     }
-    assert revision == "20260801_0005"
+    assert "rig_profile_key" in observatory_columns
+    assert revision == "20260819_0006"
 
 
 def test_postgresql_migration_enables_forced_tenant_rls():

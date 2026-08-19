@@ -63,6 +63,13 @@ route accepts experimental opportunity inputs and returns a 0-100 score with
 the component-by-component reasoning. These routes do not create, edit, or
 delete profiles, and they are not yet wired into the hosted alpha UI.
 
+## User rig selection foundation
+
+Hosted observatories can now store an optional `rig_profile_key`. The field is
+validated against the known rig catalog and normalized to the stable key, such
+as `dwarf-3`, even if a model name like `DWARF 3` is submitted. Existing
+observatories may leave this blank until the UI asks users to choose a rig.
+
 ## Data policy
 
 Each profile records source URLs and a confidence label. Unknown values stay

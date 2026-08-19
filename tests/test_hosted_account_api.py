@@ -73,11 +73,28 @@ def test_observatory_accepts_telescope_and_tracking_preferences():
         longitude=-111.75,
         timezone_name="America/Phoenix",
         telescope_model="DWARF mini",
+        rig_profile_key="DWARF mini",
         tracking_preference="equatorial",
     )
 
     assert observatory.telescope_model == "DWARF mini"
+    assert observatory.rig_profile_key == "dwarf-mini"
     assert observatory.tracking_preference == "equatorial"
+
+
+def test_observatory_rejects_unknown_rig_profile_key():
+    try:
+        ObservatoryCreate(
+            name="Unknown Rig Observatory",
+            latitude=33.25,
+            longitude=-111.75,
+            timezone_name="America/Phoenix",
+            rig_profile_key="not-a-real-rig",
+        )
+    except ValueError as error:
+        assert "rig_profile_key must match a known rig profile" in str(error)
+    else:
+        raise AssertionError("Expected invalid rig_profile_key to fail validation.")
 
 
 def test_alice_and_bob_cannot_cross_observatory_boundary():
@@ -121,7 +138,11 @@ def test_alice_and_bob_cannot_cross_observatory_boundary():
         created = client.post(
             "/observatories",
             headers=auth_header("alice-token"),
-            json=observatory_payload(),
+            json={
+                **observatory_payload(),
+                "telescope_model": "DWARF 3",
+                "rig_profile_key": "DWARF 3",
+            },
         )
         observatory_id = created.json()["id"]
 
@@ -168,6 +189,7 @@ def test_alice_and_bob_cannot_cross_observatory_boundary():
     assert bob_profile.json()["user_id"] == str(BOB_ID)
     assert created.status_code == 201
     assert created.json()["tracking_preference"] == "not_sure"
+    assert created.json()["rig_profile_key"] == "dwarf-3"
     assert alice_list.status_code == 200
     assert [item["id"] for item in alice_list.json()] == [
         observatory_id

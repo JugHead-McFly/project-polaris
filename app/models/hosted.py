@@ -92,6 +92,7 @@ class HostedObservatory(Base):
     timezone_name = Column(String(64), nullable=False)
     bortle_class = Column(Integer, nullable=True)
     telescope_model = Column(String(100), nullable=True)
+    rig_profile_key = Column(String(80), nullable=True)
     tracking_preference = Column(
         String(20),
         nullable=False,
