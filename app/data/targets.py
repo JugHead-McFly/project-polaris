@@ -86,6 +86,33 @@ TARGETS = {
     },
 }
 
+TARGET_ANGULAR_SIZES = {
+    "C 20": (2.0, 1.67),
+    "M8": (1.5, 0.67),
+    "M11": (0.23, 0.23),
+    "M13": (0.33, 0.33),
+    "M16": (0.58, 0.46),
+    "M17": (0.77, 0.62),
+    "M20": (0.47, 0.47),
+    "M22": (0.53, 0.53),
+    "M27": (0.13, 0.1),
+    "M31": (3.17, 1.0),
+    "M51": (0.18, 0.11),
+    "M57": (0.023, 0.017),
+    "M63": (0.21, 0.13),
+    "M64": (0.18, 0.09),
+    "M97": (0.057, 0.053),
+    "IC4665": (1.17, 1.17),
+    "NGC6633": (0.45, 0.45),
+}
+
+
+def get_target_angular_size(target_name):
+    if not target_name:
+        return None
+
+    return TARGET_ANGULAR_SIZES.get(target_name.strip().upper())
+
 
 # These are educational reference images only.  They are deliberately kept
 # separate from a user's own captures so the operator page never suggests an

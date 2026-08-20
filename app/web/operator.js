@@ -153,6 +153,7 @@ const loadRigProfiles = async () => {
 };
 
 const rigProfileLabel = (observatory) => {
+  if (observatory?.rig_profile_label) return observatory.rig_profile_label;
   if (!observatory?.rig_profile_key) {
     return observatory?.telescope_model || "Not specified";
   }
@@ -160,6 +161,13 @@ const rigProfileLabel = (observatory) => {
     candidate.key === observatory.rig_profile_key
   ));
   return profile?.label || observatory.telescope_model || observatory.rig_profile_key;
+};
+
+const targetFitLabel = (target) => {
+  const fit = target?.rig_fit;
+  if (!fit) return "Not checked";
+  if (fit.label === "Unknown fit") return "Unknown";
+  return fit.reason ? `${fit.label}: ${fit.reason}` : fit.label;
 };
 
 const roundedApproximateCoordinate = (value) => Number(Number(value).toFixed(2));
@@ -249,6 +257,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-reason", "Waiting for tonight's target.");
   setText("hosted-target-window", "—");
   setText("hosted-target-rig", "—");
+  setText("hosted-target-fit", "—");
   setText("hosted-target-exposure", "—");
   setText("hosted-target-gain", "—");
   setText("hosted-target-filter", "—");
@@ -494,6 +503,7 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-name", target.object, "Unknown target");
     setText("hosted-target-common-name", target.common_name, "");
     setText("hosted-target-reason", target.reason, "Planner recommendation available.");
+    setText("hosted-target-fit", targetFitLabel(target));
     setText(
       "hosted-target-window",
       targetWindowLabel(target.recommended_start, target.recommended_end),
@@ -510,6 +520,7 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-common-name", "");
     setText("hosted-target-reason", "No target currently meets the planner requirements.");
     setText("hosted-target-window", "No usable window");
+    setText("hosted-target-fit", "Not checked");
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);

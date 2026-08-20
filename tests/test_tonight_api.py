@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.api.tonight import _build_operator_message
+from app.core.planning_context import ObservatoryContext
 from app.services.night_rating_service import calculate_night_rating
 
 
@@ -168,6 +169,42 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
     assert payload["message"].startswith("Conditions currently support imaging")
+
+
+def test_tonight_adds_selected_rig_profile_and_target_fit():
+    database = FakeDatabase()
+    planner = planner_response()
+    context = ObservatoryContext(
+        name="Doug's Rig Test",
+        postal_code="85297",
+        timezone_name="America/Phoenix",
+        latitude=33.2,
+        longitude=-111.7,
+        rig_profile_key="seestar-s50",
+    )
+
+    with (
+        patch("app.database.database.SessionLocal", return_value=database),
+        patch("app.api.tonight.get_planning_context", return_value=context),
+        patch("app.api.tonight.get_tonight_plan", return_value=planner),
+        patch(
+            "app.api.tonight.build_tonight_schedule",
+            return_value=schedule_response(planner),
+        ),
+        patch(
+            "app.api.tonight.build_target_response",
+            side_effect=lambda db, target_name: target_response(target_name),
+        ),
+    ):
+        response = TestClient(app).get("/tonight")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["observatory"]["rig_profile_key"] == "seestar-s50"
+    assert payload["observatory"]["rig_profile_label"] == "ZWO Seestar S50"
+    assert payload["recommended_target"]["rig_fit"]["rig_key"] == "seestar-s50"
+    assert payload["recommended_target"]["rig_fit"]["label"] == "Very small"
+    assert payload["recommended_target"]["rig_fit"]["target_width_degrees"] == 0.023
     assert database.closed
 
 

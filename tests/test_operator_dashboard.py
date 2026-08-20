@@ -254,6 +254,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Edit observing home" in html
     assert 'id="hosted-target-rig"' in html
     assert "Rig profile" in html
+    assert 'id="hosted-target-fit"' in html
+    assert "Target fit" in html
     assert 'id="hosted-weather-diagnostic"' in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
@@ -267,7 +269,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script
     assert 'setText("hosted-target-rig", "—")' in script
+    assert 'setText("hosted-target-fit", "—")' in script
     assert "rigProfileLabel(data.observatory)" in script
+    assert "targetFitLabel(target)" in script
     assert "profile?.label || observatory.telescope_model || observatory.rig_profile_key" in script
     assert 'setText("hosted-weather-summary", "—")' in script
     assert 'notes.replaceChildren()' in script

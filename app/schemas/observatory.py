@@ -10,3 +10,5 @@ class ObservatorySummary(BaseModel):
     latitude: float
     longitude: float
     elevation_meters: float
+    rig_profile_key: Optional[str] = None
+    rig_profile_label: Optional[str] = None

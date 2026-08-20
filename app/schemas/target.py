@@ -31,6 +31,17 @@ class TargetReferenceImage(BaseModel):
     alt: str
 
 
+class RigTargetFitSummary(BaseModel):
+    rig_key: str
+    rig_label: str
+    target_width_degrees: Optional[float] = None
+    target_height_degrees: Optional[float] = None
+    fits: Optional[bool] = None
+    label: str
+    reason: str
+    margin_degrees: Optional[float] = None
+
+
 class TargetCaptureSummary(BaseModel):
     polaris_id: str
     filename: str
@@ -51,6 +62,7 @@ class TargetSummary(BaseModel):
     object: str
     common_name: Optional[str] = None
     reference_image: Optional[TargetReferenceImage] = None
+    rig_fit: Optional[RigTargetFitSummary] = None
 
     capture_count: int
     session_count: int

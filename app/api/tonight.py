@@ -7,6 +7,8 @@ from app.core.auth import CurrentUser
 from app.core.auth import get_current_user
 from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
+from app.data.rig_profiles import get_rig_profile
+from app.data.targets import get_target_angular_size
 from app.services.night_rating_service import calculate_night_rating
 from app.services.planner_service import get_tonight_plan
 from app.services.scheduler_service import build_tonight_schedule
@@ -80,6 +82,7 @@ def _build_legacy_target(
     planner_target: Optional[Dict],
     *,
     use_capture_history: bool = True,
+    rig_profile_key: Optional[str] = None,
 ) -> Optional[Dict]:
     if planner_target is None:
         return None
@@ -108,7 +111,38 @@ def _build_legacy_target(
             "reason": planner_target["selection_reason"],
         }
     )
+    target["rig_fit"] = _build_rig_fit_summary(
+        target["object"],
+        rig_profile_key,
+    )
     return target
+
+
+def _build_rig_fit_summary(
+    target_name: str,
+    rig_profile_key: Optional[str],
+) -> Optional[Dict]:
+    if not rig_profile_key:
+        return None
+
+    rig = get_rig_profile(rig_profile_key)
+    if rig is None:
+        return None
+
+    target_size = get_target_angular_size(target_name)
+    target_width = target_size[0] if target_size else None
+    target_height = target_size[1] if target_size else None
+    fit = rig.assess_target_fit(target_width, target_height)
+    return {
+        "rig_key": rig.key,
+        "rig_label": f"{rig.manufacturer} {rig.model}",
+        "target_width_degrees": target_width,
+        "target_height_degrees": target_height,
+        "fits": fit.fits,
+        "label": fit.label,
+        "reason": fit.reason,
+        "margin_degrees": fit.margin_degrees,
+    }
 
 
 def _select_backup_plan(planner: Dict) -> Optional[Dict]:
@@ -191,12 +225,15 @@ def _build_tonight_payload(
         db,
         planner.get("recommended_target"),
         use_capture_history=use_capture_history,
+        rig_profile_key=observatory.rig_profile_key,
     )
     backup_target = _build_legacy_target(
         db,
         _select_backup_plan(planner),
         use_capture_history=use_capture_history,
+        rig_profile_key=observatory.rig_profile_key,
     )
+    rig_profile = get_rig_profile(observatory.rig_profile_key or "")
 
     return {
         "date": schedule["date"],
@@ -207,6 +244,12 @@ def _build_tonight_payload(
             "latitude": observatory.latitude,
             "longitude": observatory.longitude,
             "elevation_meters": observatory.elevation_meters,
+            "rig_profile_key": rig_profile.key if rig_profile else None,
+            "rig_profile_label": (
+                f"{rig_profile.manufacturer} {rig_profile.model}"
+                if rig_profile
+                else None
+            ),
         },
         "recommended_target": recommended_target,
         "backup_target": backup_target,
