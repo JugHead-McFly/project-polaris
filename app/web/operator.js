@@ -10,6 +10,7 @@ let hostedSession = null;
 let hostedObservatory = null;
 let hostedProfile = null;
 let hostedRecommendationRunId = null;
+let rigProfiles = [];
 const invitationHash = new URLSearchParams(window.location.hash.slice(1));
 const invitationQuery = new URLSearchParams(window.location.search);
 let isInvitationFlow = (
@@ -111,11 +112,44 @@ const updateHostedAccountForm = (profile, observatory) => {
     || Intl.DateTimeFormat().resolvedOptions().timeZone
     || "";
   byId("hosted-bortle").value = observatory?.bortle_class ?? "";
+  byId("hosted-rig-profile").value = observatory?.rig_profile_key || "";
   byId("hosted-telescope-model").value = observatory?.telescope_model || "";
   byId("hosted-tracking-preference").value = observatory?.tracking_preference || "not_sure";
   byId("hosted-coordinates-approximate").checked = observatory
     ? Boolean(observatory.coordinates_are_approximate)
     : true;
+};
+
+const populateRigProfileSelect = (profiles) => {
+  const select = byId("hosted-rig-profile");
+  const selectedValue = select.value;
+  select.replaceChildren();
+
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Not listed / not sure";
+  select.append(defaultOption);
+
+  profiles.forEach((profile) => {
+    const option = document.createElement("option");
+    option.value = profile.key;
+    option.textContent = profile.label;
+    select.append(option);
+  });
+
+  select.value = profiles.some((profile) => profile.key === selectedValue) ? selectedValue : "";
+};
+
+const loadRigProfiles = async () => {
+  try {
+    const response = await apiFetch("/rig-profiles", { cache: "no-store" });
+    if (!response.ok) return;
+    const payload = await response.json();
+    rigProfiles = Array.isArray(payload.profiles) ? payload.profiles : [];
+    populateRigProfileSelect(rigProfiles);
+  } catch {
+    rigProfiles = [];
+  }
 };
 
 const roundedApproximateCoordinate = (value) => Number(Number(value).toFixed(2));
@@ -627,6 +661,8 @@ const saveHostedPlanFeedback = async (useful, reason = null) => {
 };
 
 const loadHostedAccount = async () => {
+  await loadRigProfiles();
+
   const profileResponse = await apiFetch("/profile", { cache: "no-store" });
   let profile = null;
   if (profileResponse.status === 404) {
@@ -699,6 +735,7 @@ const saveHostedAccount = async (event) => {
         ? Number(byId("hosted-bortle").value)
         : null,
       coordinates_are_approximate: useApproximateLocation,
+      rig_profile_key: byId("hosted-rig-profile").value || null,
       telescope_model: byId("hosted-telescope-model").value || null,
       tracking_preference: byId("hosted-tracking-preference").value,
     };

@@ -61,6 +61,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'data-term-info="filter"' in response.text
     assert 'data-term-info="astronomical-darkness"' in response.text
     assert 'data-term-info="bortle"' in response.text
+    assert 'id="hosted-rig-profile"' in response.text
+    assert "Smart telescope profile" in response.text
     assert "termDetails" in script.text
     assert "The part of the night when the Sun is far enough below the horizon" in script.text
     assert "A 1 to 9 estimate of sky brightness" in script.text
@@ -83,6 +85,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'byId("eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'apiFetch("/system"' in script.text
+    assert 'apiFetch("/rig-profiles"' in script.text
+    assert 'rig_profile_key: byId("hosted-rig-profile").value || null' in script.text
+    assert 'byId("hosted-rig-profile").value = observatory?.rig_profile_key || ""' in script.text
     assert 'apiFetch(`/dashboard?include_all_history=${historyExpanded}`' in script.text
     assert "capture.polaris_id" not in script.text
     assert "Capture quality" in script.text
