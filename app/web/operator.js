@@ -152,6 +152,16 @@ const loadRigProfiles = async () => {
   }
 };
 
+const rigProfileLabel = (observatory) => {
+  if (!observatory?.rig_profile_key) {
+    return observatory?.telescope_model || "Not specified";
+  }
+  const profile = rigProfiles.find((candidate) => (
+    candidate.key === observatory.rig_profile_key
+  ));
+  return profile?.label || observatory.telescope_model || observatory.rig_profile_key;
+};
+
 const roundedApproximateCoordinate = (value) => Number(Number(value).toFixed(2));
 
 const useDeviceLocation = () => {
@@ -238,6 +248,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-common-name", "");
   setText("hosted-target-reason", "Waiting for tonight's target.");
   setText("hosted-target-window", "—");
+  setText("hosted-target-rig", "—");
   setText("hosted-target-exposure", "—");
   setText("hosted-target-gain", "—");
   setText("hosted-target-filter", "—");
@@ -477,6 +488,7 @@ const renderHostedTonight = (data) => {
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
   );
+  setText("hosted-target-rig", rigProfileLabel(data.observatory));
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");

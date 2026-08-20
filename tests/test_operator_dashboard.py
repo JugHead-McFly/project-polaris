@@ -252,6 +252,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Your imaging plan" in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
+    assert 'id="hosted-target-rig"' in html
+    assert "Rig profile" in html
     assert 'id="hosted-weather-diagnostic"' in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
@@ -264,6 +266,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedSchedule" in script
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script
+    assert 'setText("hosted-target-rig", "—")' in script
+    assert "rigProfileLabel(data.observatory)" in script
+    assert "profile?.label || observatory.telescope_model || observatory.rig_profile_key" in script
     assert 'setText("hosted-weather-summary", "—")' in script
     assert 'notes.replaceChildren()' in script
     assert "Building tonight's schedule…" in script
