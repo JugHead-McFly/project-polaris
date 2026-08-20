@@ -20,6 +20,7 @@ class ObservatoryContext:
     elevation_meters: float = 0.0
     postal_code: Optional[str] = None
     bortle_class: Optional[int] = None
+    rig_profile_key: Optional[str] = None
     coordinates_are_approximate: bool = False
 
 

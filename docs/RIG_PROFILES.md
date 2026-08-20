@@ -69,6 +69,8 @@ Hosted observatories can now store an optional `rig_profile_key`. The field is
 validated against the known rig catalog and normalized to the stable key, such
 as `dwarf-3`, even if a model name like `DWARF 3` is submitted. Existing
 observatories may leave this blank until the UI asks users to choose a rig.
+The hosted planning context now carries this selected key internally, but the
+live Tonight recommendation does not yet change behavior from it.
 
 ## Data policy
 

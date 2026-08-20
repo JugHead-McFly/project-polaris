@@ -305,6 +305,43 @@ def test_local_planning_context_remains_dougs_observatory():
 
     assert context.name == "Doug's Observatory"
     assert context.timezone_name == "America/Phoenix"
+    assert context.rig_profile_key is None
+
+
+def test_hosted_planning_context_includes_selected_rig_profile():
+    engine, db = _database()
+    try:
+        db.add(
+            Profile(
+                user_id=ALICE_ID,
+                display_name="Alice",
+                onboarding_state="complete",
+            )
+        )
+        db.add(
+            HostedObservatory(
+                user_id=ALICE_ID,
+                name="Alice's Observatory",
+                latitude=33.25,
+                longitude=-111.75,
+                timezone_name="America/Phoenix",
+                bortle_class=6,
+                rig_profile_key="dwarf-3",
+            )
+        )
+        db.commit()
+
+        context = get_planning_context(
+            db,
+            current_user=_user(ALICE_ID),
+        )
+    finally:
+        db.close()
+        engine.dispose()
+
+    assert context.name == "Alice's Observatory"
+    assert context.bortle_class == 6
+    assert context.rig_profile_key == "dwarf-3"
 
 
 def test_hosted_target_plan_does_not_query_private_capture_history():

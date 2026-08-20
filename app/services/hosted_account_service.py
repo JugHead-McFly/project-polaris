@@ -42,6 +42,7 @@ def get_planning_context(
         timezone_name=observatory.timezone_name,
         elevation_meters=observatory.elevation_m or 0.0,
         bortle_class=observatory.bortle_class,
+        rig_profile_key=observatory.rig_profile_key,
         coordinates_are_approximate=(
             observatory.coordinates_are_approximate
         ),
