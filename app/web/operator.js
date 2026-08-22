@@ -576,7 +576,7 @@ const renderOpportunityScore = (rating, context = {}) => {
     setText("hosted-opportunity-label", "Unavailable");
     byId("hosted-opportunity-total-bar").style.width = "0%";
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
-    return;
+    return null;
   }
 
   const components = buildOpportunityComponents(rating, context);
@@ -589,6 +589,8 @@ const renderOpportunityScore = (rating, context = {}) => {
   components.forEach((component) => {
     appendOpportunityComponent(drivers, component);
   });
+
+  return opportunityScore;
 };
 
 const renderHostedSchedule = (schedule) => {
@@ -669,17 +671,20 @@ const targetDisplayName = (target) => {
   return target.object || "the selected target";
 };
 
-const actionSummaryText = (decision, target) => {
+const actionSummaryText = (decision, target, opportunityScore = null) => {
   const name = targetDisplayName(target);
+  const scoreLabel = opportunityScore === null
+    ? null
+    : opportunityScoreLabel(opportunityScore).toLowerCase();
   if (decision === "Proceed") {
-    return `Best move tonight: image ${name} during the recommended window. Conditions support a normal run.`;
+    return `Best move tonight: image ${name} during the recommended window. Opportunity looks ${scoreLabel || "favorable"}.`;
   }
   if (decision === "Use Caution") {
-    return `Best move tonight: image ${name}, but treat the plan as conditional and watch the cautions before starting.`;
+    return `Best move tonight: image ${name}, but treat the plan as conditional. Opportunity looks ${scoreLabel || "usable"} with cautions.`;
   }
   if (decision === "Do Not Image") {
     return target
-      ? `Best move tonight: wait. If conditions improve, ${name} is the best fallback opportunity.`
+      ? `Best move tonight: wait. If conditions improve, ${name} is the best fallback, but tonight's opportunity is ${scoreLabel || "limited"}.`
       : "Best move tonight: wait. Polaris did not find a usable target window with the current conditions.";
   }
   return "Best move tonight: refresh once conditions are available so Polaris can build a complete plan.";
@@ -703,11 +708,11 @@ const renderHostedTonight = (data) => {
   );
 
   const target = data.recommended_target || data.backup_target;
-  setText("hosted-action-summary", actionSummaryText(decision, target));
-  renderOpportunityScore(data.night_rating, {
+  const opportunityScore = renderOpportunityScore(data.night_rating, {
     darkness: data.darkness,
     target,
   });
+  setText("hosted-action-summary", actionSummaryText(decision, target, opportunityScore));
   setText(
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",

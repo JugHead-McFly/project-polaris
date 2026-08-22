@@ -286,6 +286,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "opportunityComponentScore" in script
     assert "opportunityScoreLabel" in script
     assert "Challenging" in script
+    assert "Opportunity looks" in script
     assert "Cloud + stability" in script
     assert "Future data" in script
     assert "Target altitude" in script
