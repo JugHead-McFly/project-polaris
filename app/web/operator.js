@@ -690,6 +690,11 @@ const actionSummaryText = (decision, target, opportunityScore = null) => {
   return "Best move tonight: refresh once conditions are available so Polaris can build a complete plan.";
 };
 
+const displayedDecisionLabel = (decision) => {
+  if (decision === "Do Not Image") return "Wait for better conditions";
+  return decision;
+};
+
 const renderHostedTonight = (data) => {
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
@@ -698,7 +703,7 @@ const renderHostedTonight = (data) => {
   setText("hosted-tonight-observatory", data.observatory?.name, "your observatory");
   setText("observatory-name", data.observatory?.name, "Your observatory");
   setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
-  setText("hosted-decision", decision);
+  setText("hosted-decision", displayedDecisionLabel(decision));
   setText(
     "hosted-decision-message",
     decision === "Use Caution"
