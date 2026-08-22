@@ -236,7 +236,9 @@ def get_weather_summary(
             "observing_rating": 0,
             "status": f"Weather unavailable: {error}",
             "observed_at": None,
-            "fetched_at": checked_at.isoformat(),
+            # No provider returned data, so there is no truthful data-pull
+            # timestamp to expose. Attempt timing remains in diagnostics.
+            "fetched_at": None,
         }
 
 

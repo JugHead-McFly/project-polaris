@@ -302,6 +302,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
         < html.index('id="hosted-plan-message"')
         < html.index('id="data-updated"')
     )
+    assert '<span id="data-updated">Weather pull time unavailable</span>' in html
     assert (
         html.index('id="hosted-refresh-button"')
         < html.index('id="account-email"')
@@ -318,6 +319,12 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "hosted-opportunity-total-bar" in script
     assert "Number(opportunityScore).toFixed(1)" in script
     assert "data.opportunity_score" in script
+    assert "`Weather pulled ${displayDateTime(weather.fetched_at)}`" in script
+    assert "Weather pull time unavailable" in script
+    assert (
+        "weather.planned_temperature_at || weather.observed_at || weather.fetched_at"
+        not in script
+    )
     assert "opportunityComponentScore" in script
     assert "opportunityScoreLabel" in script
     assert "Challenging" in script

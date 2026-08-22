@@ -29,6 +29,7 @@ def test_unavailable_weather_fails_closed():
     assert weather["observing_rating"] == 0
     assert weather["cloud_cover_percent"] is None
     assert weather["status"].startswith("Weather unavailable:")
+    assert weather["fetched_at"] is None
 
 
 def test_weather_request_retries_once_after_transient_failure():
@@ -64,6 +65,8 @@ def test_weather_uses_short_lived_cache_for_repeated_requests():
     assert first["status"] == "Live weather connected."
     assert second["status"] == "Live weather connected."
     assert second["cache_status"] == "fresh"
+    assert second["fetched_at"] == first["fetched_at"]
+    assert second["fetched_at"] != second["observed_at"]
 
 
 def test_weather_rate_limit_can_use_recent_cached_weather():
