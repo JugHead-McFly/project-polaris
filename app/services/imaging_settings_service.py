@@ -205,8 +205,9 @@ def recommend_imaging_settings(
             exposure_seconds = 15
             adjustments.append("exposure")
         reasons.append(
-            "Use 15-second exposures because strong wind may shake the "
-            "telescope. A short exposure loses less time if one image is blurry."
+            f"Use {exposure_seconds}-second exposures because strong wind may "
+            "shake the telescope. A short exposure loses less time if one image "
+            "is blurry."
         )
     elif (
         rig_context["requires_eq_for_longer_subs"]
@@ -236,8 +237,8 @@ def recommend_imaging_settings(
             exposure_seconds = 15
             adjustments.append("exposure")
         reasons.append(
-            "Use 15-second exposures so Moon or city glow does not make the "
-            "whole image too bright before the exposure finishes."
+            f"Use {exposure_seconds}-second exposures so Moon or city glow does "
+            "not make the whole image too bright before the exposure finishes."
         )
     elif (
         emission_target

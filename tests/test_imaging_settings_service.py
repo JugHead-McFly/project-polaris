@@ -82,6 +82,47 @@ def test_selected_seestar_uses_its_supported_ten_second_subs():
     )
 
 
+def test_selected_seestar_weather_reasons_match_its_ten_second_subs():
+    windy_settings = _recommend(
+        "M16",
+        exposure=60,
+        source="best_capture",
+        weather={"planned_wind_speed_mph": 13},
+        rig_profile_key="seestar-s50",
+    )
+
+    assert windy_settings["sub_exposure_seconds"] == 10
+    assert any(
+        "Use 10-second exposures because strong wind" in reason
+        for reason in windy_settings["reasons"]
+    )
+    assert not any(
+        "Use 15-second exposures" in reason
+        for reason in windy_settings["reasons"]
+    )
+
+    moon_settings = _recommend(
+        "M31",
+        exposure=60,
+        filter_name="Duo-Band",
+        weather={"planned_wind_speed_mph": 2},
+        moon={"illumination_percent": 90},
+        moon_warning="High",
+        moon_separation=35,
+        rig_profile_key="seestar-s50",
+    )
+
+    assert moon_settings["sub_exposure_seconds"] == 10
+    assert any(
+        "Use 10-second exposures so Moon or city glow" in reason
+        for reason in moon_settings["reasons"]
+    )
+    assert not any(
+        "Use 15-second exposures" in reason
+        for reason in moon_settings["reasons"]
+    )
+
+
 def test_emission_nebula_can_use_longer_subs_when_eq_is_confirmed():
     settings = _recommend(
         "C20",

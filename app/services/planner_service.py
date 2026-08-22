@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
+from app.data.rig_profiles import get_rig_profile
 from app.data.targets import TARGETS
 from app.models import Capture
 from app.services.advisor_service import get_catalog_exposure_advice
@@ -36,6 +37,15 @@ from app.core.planner_config import (
 MINIMUM_ALTITUDE_DEGREES = 20.0
 SAMPLE_INTERVAL_MINUTES = 15
 MINIMUM_USABLE_DARK_MINUTES = 45
+
+
+def _context_equipment_label(context: ObservatoryContext) -> str:
+    if context.rig_profile_key:
+        rig = get_rig_profile(context.rig_profile_key)
+        if rig is not None:
+            return rig.label
+
+    return context.telescope_model or "smart telescope"
 
 
 def get_priority_bonus(object_name: str) -> int:
@@ -752,6 +762,7 @@ def get_tonight_plan(
 
     decision = get_weather_decision(weather)
     recommended_target = None
+    equipment_label = _context_equipment_label(context)
 
     if decision == "Do Not Image":
         notes.append(
@@ -763,7 +774,7 @@ def get_tonight_plan(
             notes.append(
                 f"Forecast temperature near the planned start is "
                 f"{temperature_f:g}°F, at or above Polaris's conservative "
-                f"heat limit of {HEAT_STOP_F}°F. Allow the DWARF mini to cool before "
+                f"heat limit of {HEAT_STOP_F}°F. Allow the {equipment_label} to cool before "
                 "imaging."
             )
 
@@ -826,7 +837,7 @@ def get_tonight_plan(
             notes.append(
                 f"Heat: Forecast temperature near the planned start is "
                 f"{temperature_f:g}°F. This is a hot operating condition for "
-                "the DWARF mini and may add thermal noise to the image."
+                f"the {equipment_label} and may add thermal noise to the image."
             )
             notes.append(
                 "Heat guidance: Avoid charging; keep it out of stored heat; "
