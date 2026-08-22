@@ -15,6 +15,7 @@ def _recommend(
     moon_separation=90,
     bortle=5,
     equatorial_mode=None,
+    rig_profile_key=None,
 ):
     return recommend_imaging_settings(
         object_name=object_name,
@@ -28,6 +29,7 @@ def _recommend(
         moon_separation_degrees=moon_separation,
         bortle_class=bortle,
         equatorial_mode_enabled=equatorial_mode,
+        rig_profile_key=rig_profile_key,
     )
 
 
@@ -50,6 +52,32 @@ def test_emission_nebula_stays_at_normal_mode_limit_without_eq_confirmation():
     assert settings["confidence_label"] == "Beginner-safe starting point"
     assert any(
         "has not been told that equatorial tracking is enabled" in reason
+        for reason in settings["reasons"]
+    )
+    assert any(
+        "DWARF's normal tracking mode is limited to 15 seconds" in reason
+        for reason in settings["reasons"]
+    )
+
+
+def test_selected_seestar_uses_its_supported_ten_second_subs():
+    settings = _recommend(
+        "C20",
+        exposure=15,
+        filter_name="Duo-Band",
+        weather={"planned_wind_speed_mph": 3},
+        moon={"illumination_percent": 80},
+        moon_warning="High",
+        moon_separation=35,
+        bortle=7,
+        equatorial_mode=False,
+        rig_profile_key="seestar-s50",
+    )
+
+    assert settings["sub_exposure_seconds"] == 10
+    assert not any("DWARF" in reason for reason in settings["reasons"])
+    assert any(
+        "Start with 10-second exposures" in reason
         for reason in settings["reasons"]
     )
 

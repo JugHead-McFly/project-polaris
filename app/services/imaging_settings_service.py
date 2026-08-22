@@ -1,6 +1,7 @@
 import math
 from typing import Dict, Optional
 
+from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_profile
 
 
@@ -53,14 +54,46 @@ def _moon_is_relevant(moon_warning: Optional[str]) -> bool:
     )
 
 
-def _supported_exposure(value: Optional[int]) -> int:
-    if value in SUPPORTED_EXPOSURES:
+def _supported_exposure(
+    value: Optional[int],
+    supported_exposures: Optional[tuple] = None,
+) -> int:
+    supported = tuple(sorted(supported_exposures or SUPPORTED_EXPOSURES))
+    if value in supported:
         return int(value)
-    if value is not None and value > 0:
+    if value is not None and value > 0 and not supported_exposures:
         # Preserve a user's successful historical setting even when it is outside
         # the current catalog choices (for example a successful 10-second run).
         return int(value)
-    return 15
+    if value is not None and value > 0:
+        lower_or_equal = [exposure for exposure in supported if exposure <= value]
+        if lower_or_equal:
+            return int(max(lower_or_equal))
+        return int(min(supported))
+    return int(min(supported, key=lambda exposure: abs(exposure - 15)))
+
+
+def _rig_exposure_context(
+    rig_profile_key: Optional[str],
+) -> Dict:
+    rig = get_rig_profile(rig_profile_key or "")
+    if rig is None:
+        return {
+            "label": "DWARF",
+            "supported_exposures": None,
+            "normal_tracking_limit": 15,
+            "requires_eq_for_longer_subs": True,
+        }
+
+    supported = rig.supported_exposures_seconds or SUPPORTED_EXPOSURES
+    has_equatorial = "equatorial" in rig.tracking_modes
+    normal_limit = 15 if has_equatorial else max(supported)
+    return {
+        "label": f"{rig.manufacturer} {rig.model}",
+        "supported_exposures": supported,
+        "normal_tracking_limit": normal_limit,
+        "requires_eq_for_longer_subs": has_equatorial,
+    }
 
 
 def recommend_imaging_settings(
@@ -76,6 +109,7 @@ def recommend_imaging_settings(
     moon_separation_degrees: Optional[float],
     bortle_class: Optional[int],
     equatorial_mode_enabled: Optional[bool] = None,
+    rig_profile_key: Optional[str] = None,
 ) -> Dict:
     """Return conservative, explainable settings for tonight's conditions.
 
@@ -87,8 +121,12 @@ def recommend_imaging_settings(
     broadband_target = _is_broadband_target(target_type)
     source = recommendation_source or "none"
     historical_source = source in {"best_capture", "capture_history"}
+    rig_context = _rig_exposure_context(rig_profile_key)
 
-    exposure_seconds = _supported_exposure(base_exposure_seconds)
+    exposure_seconds = _supported_exposure(
+        base_exposure_seconds,
+        rig_context["supported_exposures"],
+    )
     gain = float(base_gain) if base_gain is not None else 60.0
     filter_name = _normalized_filter(base_filter)
     reasons = []
@@ -171,17 +209,19 @@ def recommend_imaging_settings(
             "telescope. A short exposure loses less time if one image is blurry."
         )
     elif (
+        rig_context["requires_eq_for_longer_subs"]
+        and
         equatorial_mode_enabled is not True
-        and exposure_seconds > 15
+        and exposure_seconds > rig_context["normal_tracking_limit"]
     ):
         previous_exposure_seconds = exposure_seconds
-        exposure_seconds = 15
+        exposure_seconds = rig_context["normal_tracking_limit"]
         adjustments.append("exposure")
         reasons.append(
-            f"Use 15-second exposures instead of the saved "
+            f"Use {exposure_seconds}-second exposures instead of the saved "
             f"{previous_exposure_seconds}-second setting because equatorial "
-            "tracking is not confirmed for tonight. DWARF's normal tracking "
-            "mode is limited to 15 seconds."
+            f"tracking is not confirmed for tonight. {rig_context['label']}'s "
+            f"normal tracking mode is limited to {exposure_seconds} seconds."
         )
     elif wind_speed is not None and wind_speed >= 8:
         if exposure_seconds > 30:
@@ -205,6 +245,7 @@ def recommend_imaging_settings(
         and exposure_seconds == 15
         and (wind_speed is None or wind_speed < 8)
         and equatorial_mode_enabled is True
+        and 30 in (rig_context["supported_exposures"] or SUPPORTED_EXPOSURES)
     ):
         exposure_seconds = 30
         adjustments.append("exposure")
@@ -227,15 +268,17 @@ def recommend_imaging_settings(
         emission_target
         and filter_name == "Duo-Band"
         and not historical_source
-        and exposure_seconds == 15
+        and exposure_seconds == rig_context["normal_tracking_limit"]
         and (wind_speed is None or wind_speed < 8)
+        and rig_context["requires_eq_for_longer_subs"]
     ):
         reasons.append(
-            "Use 15-second exposures because Polaris has not been told that "
-            "equatorial tracking is enabled. DWARF's normal tracking mode is "
-            "limited to 15 seconds; 30 seconds or longer requires EQ mode. "
-            "Polaris will split a long session into separate 999-frame runs "
-            "instead of assuming a tracking mode that may not be set."
+            f"Use {exposure_seconds}-second exposures because Polaris has not been told that "
+            f"equatorial tracking is enabled. {rig_context['label']}'s normal "
+            f"tracking mode is limited to {exposure_seconds} seconds; longer "
+            "subs require EQ mode. Polaris will split a long session when it "
+            "has an official single-run frame limit instead of assuming a "
+            "tracking mode that may not be set."
         )
     elif historical_source:
         reasons.append(
@@ -331,6 +374,7 @@ def apply_tonight_settings(
     moon_separation_degrees: Optional[float],
     bortle_class: Optional[int],
     equatorial_mode_enabled: Optional[bool] = None,
+    rig_profile_key: Optional[str] = None,
 ) -> Dict:
     settings = recommend_imaging_settings(
         object_name=advisor["object"],
@@ -346,6 +390,7 @@ def apply_tonight_settings(
         moon_separation_degrees=moon_separation_degrees,
         bortle_class=bortle_class,
         equatorial_mode_enabled=equatorial_mode_enabled,
+        rig_profile_key=rig_profile_key,
     )
 
     updated = dict(advisor)

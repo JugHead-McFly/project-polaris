@@ -747,6 +747,7 @@ def get_tonight_plan(
             ),
             bortle_class=context.bortle_class,
             equatorial_mode_enabled=equatorial_mode_enabled,
+            rig_profile_key=context.rig_profile_key,
         )
 
     decision = get_weather_decision(weather)
