@@ -298,6 +298,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-filter", "—");
   setText("hosted-darkness-window", "—");
   setText("hosted-weather-summary", "—");
+  renderOpportunityScore(null);
   renderSkyQuality(null);
   setText("hosted-weather-updated", "Weather time unavailable");
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
@@ -438,6 +439,17 @@ const renderSkyQuality = (rating) => {
   });
 };
 
+const renderOpportunityScore = (rating) => {
+  if (!rating || rating.quality === "Unavailable") {
+    setText("hosted-opportunity-score", "--");
+    setText("hosted-opportunity-label", "Unavailable");
+    return;
+  }
+
+  setText("hosted-opportunity-score", `${rating.score}/100`);
+  setText("hosted-opportunity-label", rating.quality);
+};
+
 const renderHostedSchedule = (schedule) => {
   const container = byId("hosted-schedule-list");
   const blocks = schedule?.blocks || [];
@@ -528,6 +540,7 @@ const renderHostedTonight = (data) => {
   );
 
   const target = data.recommended_target || data.backup_target;
+  renderOpportunityScore(data.night_rating);
   setText(
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
