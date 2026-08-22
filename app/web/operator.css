@@ -1148,8 +1148,11 @@ footer {
 .hosted-command-target-card {
   position: relative;
   min-height: 92px;
-  padding-right: 78px !important;
   overflow: hidden;
+}
+
+.hosted-command-target-card.has-target-illustration {
+  padding-right: 78px !important;
 }
 
 .hosted-command-target-illustration {
@@ -3969,6 +3972,10 @@ footer {
     align-items: start;
     min-height: 74px;
     padding-right: 124px;
+  }
+
+  .hosted-target-heading:not(.has-target-illustration) {
+    padding-right: 0;
   }
 
   .hosted-target-visuals {

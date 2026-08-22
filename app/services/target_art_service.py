@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 NASA_IMAGE_SEARCH_URL = "https://images-api.nasa.gov/search"
 NASA_MEDIA_USAGE_URL = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
-TARGET_ART_CACHE_SCHEMA = 3
+TARGET_ART_CACHE_SCHEMA = 4
 TARGET_ART_CACHE_TTL = timedelta(days=30)
 TARGET_ART_CACHE_ROOT = settings.BASE_DIR / ".cache" / "target-art"
 CANONICAL_TARGET_ART_PALETTE = (
@@ -196,7 +196,6 @@ def _svg_shell(
     palette: tuple,
     body: str,
 ) -> str:
-    safe_target = html.escape(target_name)
     safe_profile = html.escape(profile)
     teal, cream, shadow_teal, amber = palette
     prefix = "polaris-" + target_name.lower().replace(" ", "-")
@@ -205,7 +204,6 @@ def _svg_shell(
         'preserveAspectRatio="xMidYMid meet" aria-hidden="true" '
         f'focusable="false" data-reference="nasa" data-profile="{safe_profile}" '
         'data-visual-treatment="canonical-m31-v3">'
-        f'<title>Polaris representative artwork for {safe_target}</title>'
         '<defs>'
         f'<radialGradient id="{prefix}-glow"><stop offset="0" stop-color="{cream}"/>'
         f'<stop offset=".32" stop-color="{teal}" stop-opacity=".72"/>'

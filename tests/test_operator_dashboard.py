@@ -343,8 +343,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "M37 92C54 40 91 31" not in script
     assert "M34 104Q120 28 206 104" not in script
     assert "parseCachedTargetIllustration" in script
+    assert 'svg.querySelector("script, foreignObject, image, use, a, text, title")' in script
     assert "artwork_svg" in script
     assert "renderReferenceAttribution" not in script
+    assert "NASA source" not in script
+    assert "Polaris artwork" not in script
     assert "TARGET_REFERENCE_IMAGE_FALLBACKS" not in script
     assert 'id="hosted-reference-image"' not in html
     assert 'id="target-reference-image"' not in html
@@ -355,6 +358,16 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'return "deep-sky"' in script
     assert 'renderTargetIllustration("hosted-command-target-illustration"' in script
     assert 'renderTargetIllustration("hosted-target-illustration"' in script
+    assert "if (!target)" in script
+    assert "container.replaceChildren();" in script
+    assert "container.hidden = true;" in script
+    assert 'classList.toggle("has-target-illustration", Boolean(target))' in script
+    assert "if (targetVisuals) targetVisuals.hidden = !target;" in script
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    assert ".hosted-command-target-card.has-target-illustration" in css
+    assert ".hosted-target-heading:not(.has-target-illustration)" in css
+    assert ".hosted-reference-image" not in css
+    assert ".target-reference-image" not in css
     assert "setMobileHeaderMenu" in script
     assert "setHostedRefreshState" in script
     assert 'byId("mobile-refresh-button").addEventListener("click", loadHostedTonight)' in script

@@ -458,7 +458,7 @@ const parseCachedTargetIllustration = (target) => {
   const parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
   const svg = parsed.documentElement;
   if (svg?.localName !== "svg" || parsed.querySelector("parsererror")) return null;
-  if (svg.querySelector("script, foreignObject, image, use")) return null;
+  if (svg.querySelector("script, foreignObject, image, use, a, text, title")) return null;
   for (const element of [svg, ...svg.querySelectorAll("*")]) {
     for (const attribute of element.attributes) {
       const name = attribute.name.toLowerCase();
@@ -472,6 +472,24 @@ const parseCachedTargetIllustration = (target) => {
 
 const renderTargetIllustration = (containerId, target, compact = false) => {
   const container = byId(containerId);
+  const commandCard = container.closest(".hosted-command-target-card");
+  const targetVisuals = container.closest(".hosted-target-visuals");
+  const targetHeading = container.closest(".hosted-target-heading");
+
+  commandCard?.classList.toggle("has-target-illustration", Boolean(target));
+  targetHeading?.classList.toggle("has-target-illustration", Boolean(target));
+  if (targetVisuals) targetVisuals.hidden = !target;
+
+  if (!target) {
+    container.replaceChildren();
+    container.hidden = true;
+    container.classList.remove("is-reference-informed");
+    delete container.dataset.kind;
+    if (!compact) container.removeAttribute("aria-label");
+    return;
+  }
+
+  container.hidden = false;
   const cachedIllustration = parseCachedTargetIllustration(target);
   container.replaceChildren(
     cachedIllustration || buildTargetIllustrationSvg(target, compact),
@@ -847,6 +865,8 @@ const renderHostedTonight = (data) => {
     renderFilterValue("hosted-target-filter", settings.filter_name, false);
     setText("hosted-target-tracking", hostedTrackingModeLabel());
   } else {
+    renderTargetIllustration("hosted-command-target-illustration", null, true);
+    renderTargetIllustration("hosted-target-illustration", null);
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
     setText("hosted-target-reason", "No target currently meets the planner requirements.");

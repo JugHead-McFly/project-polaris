@@ -114,6 +114,7 @@ def test_refresh_caches_nasa_metadata_and_generated_svg(tmp_path):
     assert 'data-reference="nasa"' in reference["artwork_svg"]
     assert 'preserveAspectRatio="xMidYMid meet"' in reference["artwork_svg"]
     assert 'data-visual-treatment="canonical-m31-v3"' in reference["artwork_svg"]
+    assert "<title>" not in reference["artwork_svg"]
     assert "#d5a54d" in reference["artwork_svg"]
     assert "#e48191" not in reference["artwork_svg"]
     assert "#6e9fd0" not in reference["artwork_svg"]
@@ -250,6 +251,7 @@ def test_every_catalog_target_uses_the_canonical_m31_visual_grammar():
         svg = _generate_artwork_svg(target_name, catalog_entry)
 
         assert 'data-visual-treatment="canonical-m31-v3"' in svg
+        assert "<title>" not in svg
         assert 'transform="rotate(-17 120 70)"' in svg
         assert 'ellipse cx="120" cy="70" rx="92" ry="36"' in svg
         for path in canonical_paths:
