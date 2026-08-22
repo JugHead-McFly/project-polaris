@@ -244,6 +244,8 @@ def ready_health(db: Session = Depends(get_db)):
     """Confirm that Polaris can reach its operational database."""
     try:
         db.execute(text("SELECT 1"))
+        if settings.ENVIRONMENT in {"production", "staging"}:
+            db.execute(text("SELECT rig_profile_key FROM observatories LIMIT 1"))
     except SQLAlchemyError:
         return JSONResponse(
             status_code=503,

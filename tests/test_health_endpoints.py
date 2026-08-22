@@ -8,7 +8,11 @@ from app.main import ready_health
 
 
 class AvailableDatabase:
+    def __init__(self):
+        self.statements = []
+
     def execute(self, statement):
+        self.statements.append(str(statement))
         return statement
 
 
@@ -29,6 +33,20 @@ def test_readiness_passes_when_database_is_reachable():
         "status": "ready",
         "version": settings.VERSION,
     }
+
+
+def test_production_readiness_checks_hosted_observatory_schema(monkeypatch):
+    database = AvailableDatabase()
+    monkeypatch.setattr(settings, "ENVIRONMENT", "production")
+
+    assert ready_health(database) == {
+        "status": "ready",
+        "version": settings.VERSION,
+    }
+    assert database.statements == [
+        "SELECT 1",
+        "SELECT rig_profile_key FROM observatories LIMIT 1",
+    ]
 
 
 def test_readiness_fails_without_disclosing_database_details():

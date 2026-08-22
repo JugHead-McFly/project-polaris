@@ -27,6 +27,13 @@ HOSTED_REQUIRED_DATABASE_TABLES = {
     "recommendation_feedback",
     "recommendation_runs",
 }
+HOSTED_REQUIRED_DATABASE_COLUMNS = {
+    "observatories": {
+        "rig_profile_key",
+        "telescope_model",
+        "tracking_preference",
+    },
+}
 REQUIRED_WEB_ASSETS = {
     "landing.css",
     "landing.html",
@@ -128,9 +135,33 @@ def required_database_tables(environment: str) -> set:
     return required_tables
 
 
+def required_database_columns(environment: str) -> Dict[str, set]:
+    if environment in {"production", "staging"}:
+        return {
+            table_name: set(column_names)
+            for table_name, column_names in (
+                HOSTED_REQUIRED_DATABASE_COLUMNS.items()
+            )
+        }
+    return {}
+
+
+def _format_missing_columns(
+    available_columns_by_table: Dict[str, set],
+    required_columns: Dict[str, set],
+) -> str:
+    missing_columns = []
+    for table_name, column_names in sorted(required_columns.items()):
+        available_columns = available_columns_by_table.get(table_name, set())
+        for column_name in sorted(column_names - available_columns):
+            missing_columns.append(f"{table_name}.{column_name}")
+    return ", ".join(missing_columns)
+
+
 def _check_sqlite_database(
     database_file: Path,
     required_tables: set,
+    required_columns: Dict[str, set],
 ) -> Dict[str, str]:
     resolved_path = database_file.expanduser().resolve()
     if not resolved_path.is_file():
@@ -159,6 +190,14 @@ def _check_sqlite_database(
                 "SELECT name FROM sqlite_master WHERE type = 'table'"
             )
         }
+        available_columns_by_table = {}
+        for table_name in required_columns:
+            if table_name not in table_names:
+                continue
+            available_columns_by_table[table_name] = {
+                row[1]
+                for row in connection.execute(f"PRAGMA table_info({table_name})")
+            }
     except sqlite3.Error as error:
         return _check(
             "database",
@@ -182,6 +221,16 @@ def _check_sqlite_database(
             "fail",
             f"Database is missing required tables: {', '.join(missing_tables)}",
         )
+    missing_columns = _format_missing_columns(
+        available_columns_by_table,
+        required_columns,
+    )
+    if missing_columns:
+        return _check(
+            "database",
+            "fail",
+            f"Database is missing required columns: {missing_columns}",
+        )
     return _check(
         "database",
         "pass",
@@ -192,6 +241,7 @@ def _check_sqlite_database(
 def _check_postgresql_database(
     database_url: str,
     required_tables: set,
+    required_columns: Dict[str, set],
 ) -> Dict[str, str]:
     database_engine = None
     try:
@@ -201,7 +251,16 @@ def _check_postgresql_database(
         )
         with database_engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-            table_names = set(inspect(connection).get_table_names())
+            database_inspector = inspect(connection)
+            table_names = set(database_inspector.get_table_names())
+            available_columns_by_table = {}
+            for table_name in required_columns:
+                if table_name not in table_names:
+                    continue
+                available_columns_by_table[table_name] = {
+                    column["name"]
+                    for column in database_inspector.get_columns(table_name)
+                }
     except (ArgumentError, SQLAlchemyError):
         return _check(
             "database",
@@ -220,6 +279,16 @@ def _check_postgresql_database(
             "PostgreSQL is missing required tables: "
             f"{', '.join(missing_tables)}",
         )
+    missing_columns = _format_missing_columns(
+        available_columns_by_table,
+        required_columns,
+    )
+    if missing_columns:
+        return _check(
+            "database",
+            "fail",
+            f"PostgreSQL is missing required columns: {missing_columns}",
+        )
     return _check(
         "database",
         "pass",
@@ -231,6 +300,7 @@ def _check_database(
     database_url: str,
     database_file: Path,
     required_tables: set,
+    required_columns: Dict[str, set],
 ) -> Dict[str, str]:
     try:
         backend = make_url(database_url).get_backend_name()
@@ -241,9 +311,17 @@ def _check_database(
             "Database health cannot be checked until the URL is valid.",
         )
     if backend == "sqlite":
-        return _check_sqlite_database(database_file, required_tables)
+        return _check_sqlite_database(
+            database_file,
+            required_tables,
+            required_columns,
+        )
     if backend == "postgresql":
-        return _check_postgresql_database(database_url, required_tables)
+        return _check_postgresql_database(
+            database_url,
+            required_tables,
+            required_columns,
+        )
     return _check(
         "database",
         "fail",
@@ -297,6 +375,7 @@ def run_startup_preflight(
     )
     normalized_log_level = log_level.upper().strip()
     required_tables = required_database_tables(environment)
+    required_columns = required_database_columns(environment)
     checks: List[Dict[str, str]] = [
         _check_directory("application_root", resolved_base),
         _check_web_assets(resolved_web),
@@ -305,6 +384,7 @@ def run_startup_preflight(
             database_url,
             resolved_database,
             required_tables,
+            required_columns,
         ),
     ]
     if require_local_capture_library:

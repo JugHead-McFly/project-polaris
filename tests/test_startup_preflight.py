@@ -6,6 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.core.startup_preflight import format_preflight_failure
+from app.core.startup_preflight import required_database_columns
 from app.core.startup_preflight import required_database_tables
 from app.core.startup_preflight import run_startup_preflight
 from app.main import app
@@ -51,6 +52,47 @@ def test_hosted_runtime_requires_tenant_schema():
         "recommendation_runs",
         "sessions",
     }
+    assert required_database_columns("local") == {}
+    assert required_database_columns("production") == {
+        "observatories": {
+            "rig_profile_key",
+            "telescope_model",
+            "tracking_preference",
+        },
+    }
+
+
+def test_hosted_runtime_requires_current_observatory_columns(tmp_path):
+    base_dir, database_file, library_root, web_directory = (
+        create_runtime_layout(tmp_path)
+    )
+    connection = sqlite3.connect(database_file)
+    for table_name in (
+        "observatories",
+        "profiles",
+        "recommendation_feedback",
+        "recommendation_runs",
+    ):
+        connection.execute(f"CREATE TABLE {table_name} (id INTEGER)")
+    connection.commit()
+    connection.close()
+
+    report = run_startup_preflight(
+        base_dir=base_dir,
+        database_file=database_file,
+        database_url=f"sqlite:///{database_file}",
+        library_root=library_root,
+        log_level="INFO",
+        require_local_capture_library=False,
+        environment="production",
+        web_directory=web_directory,
+    )
+
+    failures = {failure["name"]: failure for failure in report["failures"]}
+    assert set(failures) == {"database"}
+    assert "observatories.rig_profile_key" in failures["database"]["message"]
+    assert "observatories.telescope_model" in failures["database"]["message"]
+    assert "observatories.tracking_preference" in failures["database"]["message"]
 
 
 def test_valid_startup_configuration_is_ready(tmp_path):
