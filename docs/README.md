@@ -97,10 +97,11 @@ project-manager notes, not public user documentation.
 
 ## Rule of thumb
 
-For active V1.8 work, use only these first unless a problem points elsewhere:
+For active V1.9 work, use only these first unless a problem points elsewhere:
 
-1. [`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md)
-2. [`PRIVATE_ALPHA_TEST_PLAN.md`](PRIVATE_ALPHA_TEST_PLAN.md)
-3. [`ALPHA_TESTER_FLIGHT_LOG.md`](ALPHA_TESTER_FLIGHT_LOG.md)
-4. [`ALPHA_METRICS.md`](ALPHA_METRICS.md)
-5. [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md)
+1. [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md)
+2. [`RIG_PROFILES.md`](RIG_PROFILES.md)
+3. [`TARGET_OPPORTUNITY_SCORING.md`](TARGET_OPPORTUNITY_SCORING.md)
+4. [`PRIVATE_ALPHA_TEST_PLAN.md`](PRIVATE_ALPHA_TEST_PLAN.md)
+5. [`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md)
+6. [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md)

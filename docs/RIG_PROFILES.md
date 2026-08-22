@@ -1,10 +1,11 @@
 # Rig profiles
 
-Status: starter data foundation; not yet wired into live recommendations
+Status: V1.9 foundation wired into hosted Tonight recommendations
 
 Polaris needs rig-specific data before it can make trustworthy SNR-style
 target and exposure decisions. The first catalog lives in
-`app/data/rig_profiles.py` and intentionally starts small.
+`app/data/rig_profiles.py` and is now used by hosted Tonight planning when a
+user selects a rig for their observing home.
 
 ## Current device coverage
 
@@ -61,16 +62,23 @@ accepts imaging minutes and sub-exposure seconds and returns estimated frame
 count plus single-run, split-run, or unknown-limit status. The target-score
 route accepts experimental opportunity inputs and returns a 0-100 score with
 the component-by-component reasoning. These routes do not create, edit, or
-delete profiles, and they are not yet wired into the hosted alpha UI.
+delete profiles.
 
 ## User rig selection foundation
 
 Hosted observatories can now store an optional `rig_profile_key`. The field is
 validated against the known rig catalog and normalized to the stable key, such
-as `dwarf-3`, even if a model name like `DWARF 3` is submitted. Existing
-observatories may leave this blank until the UI asks users to choose a rig.
-The hosted planning context now carries this selected key internally, but the
-live Tonight recommendation does not yet change behavior from it.
+as `dwarf-3`, even if a model name like `DWARF 3` is submitted.
+
+The hosted operator setup and **Edit observing home** flow now let a user pick
+their rig from the catalog. Tonight displays the selected rig on the primary
+target card and includes a short rig-match explanation for the selected target.
+If the selected rig has incomplete official field-of-view data, Polaris says so
+plainly instead of guessing.
+
+Existing observatories may still have no rig selected. In that case Tonight
+falls back to the existing generic explanation and labels the rig profile as
+not specified until the user updates their observing home.
 
 ## Data policy
 
@@ -144,6 +152,8 @@ create runs, or assume that undocumented app limits are safe.
 
 ## Future use
 
-The first safe uses are target fit, supported exposure choices, and device
-limits. Real SNR calculation should wait until Polaris has reliable sensor
-noise, dark-current, gain, and sky-background inputs for the selected rig.
+The active safe use is target fit and visible target-to-rig reasoning. The next
+safe uses are supported exposure choices and device limits, especially
+single-run frame limits, tracking mode, battery, storage, and heat cautions.
+Real SNR calculation should wait until Polaris has reliable sensor noise,
+dark-current, gain, and sky-background inputs for the selected rig.

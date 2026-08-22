@@ -1,6 +1,6 @@
 # Project Polaris Status
 
-Last updated: 2026-08-02
+Last updated: 2026-08-22
 
 ## Project locations
 
@@ -87,6 +87,16 @@ before fetching the next plan, and the fix is deployed on Render.
 The next product gate is inviting the next carefully selected alpha tester and
 using the metrics report plus flight log to decide whether to hold, fix, or
 expand.
+
+As of August 22, 2026, V1.9 rig-aware planning is underway for Doug-first
+development while external alpha tester replies remain slow. Hosted observing
+homes can store a selected smart-telescope rig, the operator setup/edit flow
+loads the protected rig catalog, and Tonight now shows the selected rig plus a
+plain-language target-to-rig match explanation. The first visible use is target
+fit and official-spec confidence, not full SNR modeling. A hosted schema
+readiness guard now checks for the current observatory rig columns so a missing
+manual Supabase migration is caught clearly during startup/readiness instead
+of appearing as a confusing operator-page failure.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
