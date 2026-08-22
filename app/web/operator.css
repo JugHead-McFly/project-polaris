@@ -650,20 +650,20 @@ footer {
 
 .hosted-decision,
 .hosted-target {
-  padding: clamp(24px, 4vw, 36px);
+  padding: clamp(20px, 3.2vw, 30px);
 }
 
 .hosted-decision h2 {
-  font-size: clamp(32px, 4.5vw, 48px);
+  font-size: clamp(30px, 4vw, 44px);
   letter-spacing: -0.04em;
   line-height: 1;
 }
 
 .hosted-opportunity-score {
   display: grid;
-  gap: 10px;
-  margin-top: 14px;
-  padding: 14px 16px;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 14px;
   max-width: 390px;
   background: rgba(4, 15, 22, 0.38);
   border: 1px solid rgba(84, 224, 211, 0.24);
@@ -677,19 +677,19 @@ footer {
 }
 
 .hosted-opportunity-score strong {
-  font-size: clamp(34px, 4vw, 52px);
+  font-size: clamp(34px, 3.7vw, 48px);
   line-height: 0.95;
 }
 
 .hosted-opportunity-score span {
   color: var(--cyan);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
 }
 
 .hosted-score-bar {
   overflow: hidden;
-  height: 9px;
+  height: 8px;
   background: rgba(156, 181, 187, 0.16);
   border-radius: 999px;
 }
@@ -705,8 +705,8 @@ footer {
 
 .hosted-score-components {
   display: grid;
-  gap: 8px;
-  margin-top: 3px;
+  gap: 7px;
+  margin-top: 2px;
 }
 
 .hosted-score-components p {
@@ -718,7 +718,7 @@ footer {
 .hosted-score-component {
   display: grid;
   grid-template-columns: minmax(115px, 1fr) minmax(68px, auto);
-  gap: 5px 10px;
+  gap: 4px 10px;
   align-items: center;
 }
 
@@ -736,7 +736,7 @@ footer {
 
 .hosted-score-component .hosted-score-bar {
   grid-column: 1 / -1;
-  height: 7px;
+  height: 6px;
 }
 
 .hosted-score-component.is-strong .hosted-score-bar span {
@@ -770,13 +770,13 @@ footer {
 .hosted-command-summary {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 16px 0 0;
+  gap: 8px;
+  margin: 12px 0 0;
 }
 
 .hosted-command-summary div {
   min-width: 0;
-  padding: 11px 12px;
+  padding: 9px 11px;
   background: rgba(84, 224, 211, 0.08);
   border: 1px solid rgba(84, 224, 211, 0.18);
   border-radius: 8px;
@@ -795,27 +795,27 @@ footer {
   overflow-wrap: anywhere;
   margin: 0;
   color: #eaf4f5;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.25;
 }
 
 .hosted-action-summary {
-  margin: 16px 0 0;
-  padding: 13px 15px;
+  margin: 12px 0 0;
+  padding: 11px 13px;
   color: #eaf4f5;
   background: rgba(242, 190, 103, 0.1);
   border: 1px solid rgba(242, 190, 103, 0.22);
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 750;
   line-height: 1.45;
 }
 
 .hosted-decision > p:not(.eyebrow) {
-  margin: 18px 0 0 34px;
+  margin: 14px 0 0 34px;
   color: #bfd0d4;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .hosted-plan-notes {
@@ -3437,6 +3437,10 @@ footer {
   .hosted-recommendation,
   .hosted-feedback-panel,
   .hosted-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hosted-command-summary {
     grid-template-columns: 1fr;
   }
 
