@@ -27,6 +27,9 @@ class ScheduledImagingBlock(BaseModel):
     planned_subframes: Optional[int] = None
     total_planned_subframes: Optional[int] = None
     subframe_runs: List[int] = Field(default_factory=list)
+    frame_limit: Optional[int] = None
+    frame_limit_label: Optional[str] = None
+    frame_limit_reason: Optional[str] = None
     run_number: int = 1
     total_runs: int = 1
     setup_changes: List[str]

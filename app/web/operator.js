@@ -1908,7 +1908,9 @@ const equipmentChips = (block) => {
     if (subframeRuns.length > 1) {
       chips.push({
         label: `${block.planned_subframes} frames: ${subframeRuns.join(" + ")}`,
-        title: `DWARF accepts up to 999 frames per run: ${subframeRuns.join(" + ")}.`,
+        title: block.frame_limit_reason
+          ? `${block.frame_limit_reason} Split as ${subframeRuns.join(" + ")}.`
+          : `Split as ${subframeRuns.join(" + ")} frames.`,
       });
     } else {
       chips.push({ label: `${block.planned_subframes} frames` });

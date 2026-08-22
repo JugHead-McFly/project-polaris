@@ -190,7 +190,7 @@ def test_tonight_adds_selected_rig_profile_and_target_fit():
         patch(
             "app.api.tonight.build_tonight_schedule",
             return_value=schedule_response(planner),
-        ),
+        ) as build_schedule,
         patch(
             "app.api.tonight.build_target_response",
             side_effect=lambda db, target_name: target_response(target_name),
@@ -202,6 +202,7 @@ def test_tonight_adds_selected_rig_profile_and_target_fit():
     payload = response.json()
     assert payload["observatory"]["rig_profile_key"] == "seestar-s50"
     assert payload["observatory"]["rig_profile_label"] == "ZWO Seestar S50"
+    assert build_schedule.call_args.kwargs["rig_profile_key"] == "seestar-s50"
     assert payload["recommended_target"]["rig_fit"]["rig_key"] == "seestar-s50"
     assert payload["recommended_target"]["rig_fit"]["label"] == "Very small"
     assert payload["recommended_target"]["rig_fit"]["target_width_degrees"] == 0.023

@@ -205,7 +205,8 @@ def test_schedule_splits_more_than_999_subframes_into_timed_dwarf_runs():
                 gain=60,
                 filter_name="Duo-Band",
             )
-        ]
+        ],
+        rig_profile_key="dwarf-3",
     )
 
     assert [(block["start"], block["end"]) for block in blocks] == [
@@ -214,6 +215,11 @@ def test_schedule_splits_more_than_999_subframes_into_timed_dwarf_runs():
     ]
     assert [block["planned_subframes"] for block in blocks] == [999, 661]
     assert [block["total_planned_subframes"] for block in blocks] == [1660, 1660]
+    assert [block["frame_limit"] for block in blocks] == [999, 999]
+    assert blocks[0]["frame_limit_label"] == "DWARFLAB DWARF 3"
+    assert blocks[0]["frame_limit_reason"] == (
+        "DWARFLAB DWARF 3 has a recorded 999-frame single-run limit."
+    )
     assert [(block["run_number"], block["total_runs"]) for block in blocks] == [
         (1, 2),
         (2, 2),
@@ -222,6 +228,32 @@ def test_schedule_splits_more_than_999_subframes_into_timed_dwarf_runs():
     assert blocks[1]["setup_changes"] == [
         "When the previous run completes, start run 2 with 661 frames."
     ]
+
+
+def test_schedule_does_not_invent_frame_limit_for_selected_unknown_limit_rig():
+    blocks = build_schedule_blocks(
+        [
+            candidate(
+                "C20",
+                120,
+                "2026-07-17 09:00 PM",
+                "2026-07-18 04:00 AM",
+                exposure=15,
+                gain=60,
+                filter_name="Duo-Band",
+            )
+        ],
+        rig_profile_key="seestar-s50",
+    )
+
+    assert len(blocks) == 1
+    assert blocks[0]["planned_subframes"] == 1660
+    assert blocks[0]["subframe_runs"] == []
+    assert blocks[0]["run_number"] == 1
+    assert blocks[0]["total_runs"] == 1
+    assert blocks[0]["frame_limit"] is None
+    assert blocks[0]["frame_limit_label"] == "ZWO Seestar S50"
+    assert blocks[0]["frame_limit_reason"] is None
 
 
 def test_do_not_image_returns_no_blocks_and_full_unscheduled_darkness():

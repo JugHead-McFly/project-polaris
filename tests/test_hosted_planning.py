@@ -136,7 +136,7 @@ def test_hosted_plans_use_each_users_own_observatory():
             ),
             patch(
                 "app.api.tonight.build_tonight_schedule",
-                side_effect=lambda planner, timezone_name: _schedule_response(
+                side_effect=lambda planner, timezone_name, **kwargs: _schedule_response(
                     planner,
                     "2026-07-26",
                 ),
@@ -197,7 +197,7 @@ def test_hosted_recommendation_is_saved_for_its_owner():
             ),
             patch(
                 "app.api.tonight.build_tonight_schedule",
-                side_effect=lambda plan, timezone_name: _schedule_response(
+                side_effect=lambda plan, timezone_name, **kwargs: _schedule_response(
                     plan,
                     "2026-07-26",
                 ),

@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.observatory import TIMEZONE
 from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
+from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_common_name
 from app.services.planner_service import get_tonight_plan
 
@@ -219,16 +220,22 @@ def _planned_subframes(
 
 def _subframe_runs(
     planned_subframes: Optional[int],
+    frame_limit: Optional[int] = DWARF_MAXIMUM_SUBFRAMES_PER_RUN,
 ) -> List[int]:
-    """Split a scheduled DWARF run into its 999-subframe app limit."""
-    if planned_subframes is None or planned_subframes <= 0:
+    """Split a scheduled run when the selected rig has a known frame limit."""
+    if (
+        planned_subframes is None
+        or planned_subframes <= 0
+        or frame_limit is None
+        or frame_limit <= 0
+    ):
         return []
 
     full_runs, remainder = divmod(
         planned_subframes,
-        DWARF_MAXIMUM_SUBFRAMES_PER_RUN,
+        frame_limit,
     )
-    runs = [DWARF_MAXIMUM_SUBFRAMES_PER_RUN] * full_runs
+    runs = [frame_limit] * full_runs
     if remainder:
         runs.append(remainder)
     return runs
@@ -239,10 +246,18 @@ def _dwarf_run_blocks(
     settings: Dict,
     planned_subframes: Optional[int],
     setup_changes: List[str],
+    frame_limit: Optional[int] = DWARF_MAXIMUM_SUBFRAMES_PER_RUN,
+    frame_limit_label: Optional[str] = "DWARF",
 ) -> List[Dict]:
-    """Turn an oversized DWARF block into individually startable runs."""
-    subframe_runs = _subframe_runs(planned_subframes)
+    """Turn an oversized block into individually startable rig-limited runs."""
+    subframe_runs = _subframe_runs(planned_subframes, frame_limit)
     exposure_seconds = settings["sub_exposure_seconds"]
+    frame_limit_reason = (
+        f"{frame_limit_label or 'This rig'} has a recorded "
+        f"{frame_limit}-frame single-run limit."
+        if frame_limit is not None
+        else None
+    )
 
     base_block = {
         "object": block["object"],
@@ -256,6 +271,9 @@ def _dwarf_run_blocks(
         "settings_reasons": settings["reasons"],
         "settings_adjustments": settings["adjustments"],
         "total_planned_subframes": planned_subframes,
+        "frame_limit": frame_limit,
+        "frame_limit_label": frame_limit_label,
+        "frame_limit_reason": frame_limit_reason,
     }
 
     if len(subframe_runs) <= 1 or not exposure_seconds:
@@ -323,7 +341,9 @@ def _dwarf_run_blocks(
                     block["reason"]
                     if index == 1
                     else (
-                        "Continue after the DWARF 999-frame run limit."
+                        "Continue after the recorded "
+                        f"{frame_limit_label or 'rig'} "
+                        f"{frame_limit}-frame run limit."
                     )
                 ),
                 "planned_subframes": run_subframes,
@@ -369,6 +389,7 @@ def _remaining_imaging_minutes(candidate: Dict) -> Optional[int]:
 def build_schedule_blocks(
     candidates: Iterable[Dict],
     timezone_name: str = TIMEZONE,
+    rig_profile_key: Optional[str] = None,
 ) -> List[Dict]:
     """Build a non-overlapping, advisory schedule from Planner V2 windows."""
     windows = _candidate_windows(
@@ -517,7 +538,18 @@ def build_schedule_blocks(
 
     scheduled_blocks = []
     previous_candidate = None
-    # Limit target selections before expanding a long target into DWARF runs.
+    rig_profile = get_rig_profile(rig_profile_key or "")
+    frame_limit = (
+        rig_profile.frame_limit
+        if rig_profile is not None
+        else DWARF_MAXIMUM_SUBFRAMES_PER_RUN
+    )
+    frame_limit_label = (
+        f"{rig_profile.manufacturer} {rig_profile.model}"
+        if rig_profile is not None
+        else "DWARF"
+    )
+    # Limit target selections before expanding a long target into rig-limited runs.
     # A split run is still part of the same selected target and must not cause
     # later portions of that target to disappear from the schedule.
     for block in blocks[:MAXIMUM_BLOCKS]:
@@ -547,6 +579,8 @@ def build_schedule_blocks(
                     previous=previous_candidate,
                     selected=block["candidate"],
                 ),
+                frame_limit=frame_limit,
+                frame_limit_label=frame_limit_label,
             )
         )
         previous_candidate = block["candidate"]
@@ -557,6 +591,7 @@ def build_schedule_blocks(
 def build_tonight_schedule(
     planner: Dict,
     timezone_name: str = TIMEZONE,
+    rig_profile_key: Optional[str] = None,
 ) -> Dict:
     """Build the advisory schedule from one Planner V3 result."""
     decision = planner["decision"]
@@ -574,6 +609,7 @@ def build_tonight_schedule(
         blocks = build_schedule_blocks(
             candidates,
             timezone_name=timezone_name,
+            rig_profile_key=rig_profile_key,
         )
 
         if not blocks:

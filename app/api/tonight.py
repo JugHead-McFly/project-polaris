@@ -280,6 +280,7 @@ def _build_tonight_payload(
     schedule = build_tonight_schedule(
         planner,
         timezone_name=observatory.timezone_name,
+        rig_profile_key=observatory.rig_profile_key,
     )
     recommended_target = _build_legacy_target(
         db,
