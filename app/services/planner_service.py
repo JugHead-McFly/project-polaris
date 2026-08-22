@@ -43,9 +43,9 @@ def _context_equipment_label(context: ObservatoryContext) -> str:
     if context.rig_profile_key:
         rig = get_rig_profile(context.rig_profile_key)
         if rig is not None:
-            return rig.label
+            return f"{rig.manufacturer} {rig.model}"
 
-    return context.telescope_model or "smart telescope"
+    return "smart telescope"
 
 
 def get_priority_bonus(object_name: str) -> int:
