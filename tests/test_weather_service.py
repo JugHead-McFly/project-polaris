@@ -335,6 +335,18 @@ def test_planner_heat_guidance_label_uses_selected_rig_catalog_name():
     assert _context_equipment_label(observatory) == "ZWO Seestar S50"
 
 
+def test_planner_heat_guidance_uses_familiar_dwarf_model_name():
+    observatory = ObservatoryContext(
+        name="Home",
+        latitude=33.3,
+        longitude=-111.8,
+        timezone_name="America/Phoenix",
+        rig_profile_key="dwarf-mini",
+    )
+
+    assert _context_equipment_label(observatory) == "Dwarf Mini"
+
+
 def test_planner_heat_guidance_label_falls_back_to_generic_equipment():
     observatory = ObservatoryContext(
         name="Home",

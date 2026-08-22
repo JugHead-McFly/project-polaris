@@ -373,22 +373,28 @@ const targetIllustrationKind = (target) => {
   return "deep-sky";
 };
 
-const appendTargetStars = (svg, compact) => {
-  const stars = compact
-    ? [[24, 24, 1.3], [206, 24, 1], [196, 108, 1.2], [38, 112, 0.9]]
-    : [[22, 24, 1.3], [52, 42, 0.8], [205, 25, 1.1], [222, 69, 0.8], [194, 114, 1.2], [37, 113, 0.9], [88, 18, 0.7]];
-  stars.forEach(([cx, cy, r], index) => {
+const appendTargetStars = (svg) => {
+  const stars = [
+    [18, 29, 0.7], [43, 116, 0.55], [74, 19, 0.45], [105, 126, 0.75],
+    [184, 18, 0.55], [218, 108, 0.65], [228, 47, 0.4],
+  ];
+  stars.forEach(([cx, cy, r]) => {
     appendTargetSvgElement(svg, "circle", {
       cx,
       cy,
       r,
-      fill: index % 2 ? "#f2be67" : "#c9fff7",
-      opacity: index % 3 === 0 ? ".92" : ".62",
+      fill: "#f0e4c5",
+      opacity: ".66",
+    });
+  });
+  [[31, 67, 0.55], [117, 22, 0.45], [197, 96, 0.5]].forEach(([cx, cy, r]) => {
+    appendTargetSvgElement(svg, "circle", {
+      cx, cy, r, fill: "#d5a54d", opacity: ".34",
     });
   });
 };
 
-const buildTargetIllustrationSvg = (target, compact = false) => {
+const buildTargetIllustrationSvg = (target, _compact = false) => {
   const kind = targetIllustrationKind(target);
   const uniqueId = `target-art-${targetIllustrationSequence += 1}`;
   const svg = appendTargetSvgElement(document.createDocumentFragment(), "svg", {
@@ -399,42 +405,48 @@ const buildTargetIllustrationSvg = (target, compact = false) => {
   });
   const defs = appendTargetSvgElement(svg, "defs");
   const glow = appendTargetSvgElement(defs, "radialGradient", { id: `${uniqueId}-glow` });
-  appendTargetSvgElement(glow, "stop", { offset: "0", "stop-color": "#f7ead2", "stop-opacity": ".98" });
-  appendTargetSvgElement(glow, "stop", { offset: ".28", "stop-color": "#79e4d7", "stop-opacity": ".82" });
-  appendTargetSvgElement(glow, "stop", { offset: "1", "stop-color": "#28485f", "stop-opacity": "0" });
-  const mist = appendTargetSvgElement(defs, "linearGradient", {
-    id: `${uniqueId}-mist`, x1: "0", y1: "0", x2: "1", y2: "1",
+  appendTargetSvgElement(glow, "stop", { offset: "0", "stop-color": "#f0e4c5" });
+  appendTargetSvgElement(glow, "stop", { offset: ".32", "stop-color": "#72d8c6", "stop-opacity": ".72" });
+  appendTargetSvgElement(glow, "stop", { offset: "1", "stop-color": "#315f63", "stop-opacity": "0" });
+
+  appendTargetSvgElement(svg, "rect", { width: "240", height: "140", fill: "#06131a" });
+  appendTargetStars(svg);
+  appendTargetSvgElement(svg, "path", {
+    d: "M-8 118C42 104 61 124 104 114S177 97 249 108",
+    fill: "none", stroke: "#315f63", "stroke-width": ".7",
+    "stroke-dasharray": "1 7", opacity: ".44",
   });
-  appendTargetSvgElement(mist, "stop", { offset: "0", "stop-color": "#5bddcd", "stop-opacity": ".72" });
-  appendTargetSvgElement(mist, "stop", { offset: ".52", "stop-color": "#5d6fab", "stop-opacity": ".48" });
-  appendTargetSvgElement(mist, "stop", { offset: "1", "stop-color": "#f2be67", "stop-opacity": ".18" });
-
-  appendTargetSvgElement(svg, "rect", { width: "240", height: "140", rx: "14", fill: "#06141e" });
-  appendTargetStars(svg, compact);
-
-  if (kind === "galaxy") {
-    const galaxy = appendTargetSvgElement(svg, "g", { transform: "rotate(-18 120 70)" });
-    appendTargetSvgElement(galaxy, "ellipse", { cx: "120", cy: "70", rx: "94", ry: "39", fill: `url(#${uniqueId}-glow)`, opacity: ".95" });
-    appendTargetSvgElement(galaxy, "ellipse", { cx: "120", cy: "70", rx: "82", ry: "27", fill: "none", stroke: "#6eddd2", "stroke-width": "2", opacity: ".42" });
-    appendTargetSvgElement(galaxy, "path", { d: "M38 77C72 40 166 40 202 69C165 55 83 63 52 91", fill: "none", stroke: "#b7fff5", "stroke-width": "2.2", opacity: ".58" });
-    appendTargetSvgElement(galaxy, "path", { d: "M49 56C86 86 165 91 195 61C166 100 84 102 43 70", fill: "none", stroke: "#f2be67", "stroke-width": "1.4", opacity: ".34" });
-    appendTargetSvgElement(galaxy, "ellipse", { cx: "120", cy: "70", rx: "26", ry: "12", fill: "#f7ead2", opacity: ".9" });
-  } else if (kind === "nebula") {
-    appendTargetSvgElement(svg, "path", { d: "M37 92C54 40 91 31 119 59C145 24 202 42 208 89C181 117 147 110 125 96C96 121 56 119 37 92Z", fill: `url(#${uniqueId}-mist)`, opacity: ".76" });
-    appendTargetSvgElement(svg, "path", { d: "M61 91C84 65 106 94 128 67C151 42 181 56 191 84", fill: "none", stroke: "#b9fff5", "stroke-width": "2.4", opacity: ".55" });
-    appendTargetSvgElement(svg, "circle", { cx: "127", cy: "68", r: "7", fill: "#f7ead2", opacity: ".88" });
-  } else if (kind === "cluster") {
-    const clusterStars = [[120, 67, 7], [94, 55, 4], [143, 48, 5], [151, 78, 4], [87, 84, 5], [121, 98, 3], [68, 67, 3], [176, 63, 3]];
-    clusterStars.forEach(([cx, cy, r], index) => {
-      appendTargetSvgElement(svg, "circle", { cx, cy, r, fill: index % 2 ? "#6ee2d5" : "#f7ead2", opacity: index === 0 ? ".98" : ".74" });
-    });
-    appendTargetSvgElement(svg, "circle", { cx: "120", cy: "70", r: "52", fill: `url(#${uniqueId}-glow)`, opacity: ".32" });
-  } else {
-    appendTargetSvgElement(svg, "path", { d: "M34 104Q120 28 206 104", fill: "none", stroke: "#5bddcd", "stroke-width": "2", "stroke-dasharray": "5 6", opacity: ".68" });
-    appendTargetSvgElement(svg, "path", { d: "M27 105H213", fill: "none", stroke: "#718d99", "stroke-width": "1", opacity: ".5" });
-    appendTargetSvgElement(svg, "circle", { cx: "120", cy: "48", r: "12", fill: `url(#${uniqueId}-glow)` });
-    appendTargetSvgElement(svg, "path", { d: "M120 34V62M106 48H134", stroke: "#f7ead2", "stroke-width": "1.7", opacity: ".86" });
-  }
+  const targetMark = appendTargetSvgElement(svg, "g", {
+    transform: "rotate(-17 120 70)",
+  });
+  appendTargetSvgElement(targetMark, "ellipse", {
+    cx: "120", cy: "70", rx: "92", ry: "36",
+    fill: `url(#${uniqueId}-glow)`, opacity: ".72",
+  });
+  appendTargetSvgElement(targetMark, "path", {
+    d: "M28 75C63 41 159 40 212 68", fill: "none", stroke: "#72d8c6",
+    "stroke-width": "3", "stroke-linecap": "round",
+    "stroke-dasharray": "76 10 42 18", opacity: ".68",
+  });
+  appendTargetSvgElement(targetMark, "path", {
+    d: "M35 56C75 86 160 92 205 61", fill: "none", stroke: "#f0e4c5",
+    "stroke-width": "1.8", "stroke-linecap": "round",
+    "stroke-dasharray": "42 13 65 17", opacity: ".52",
+  });
+  appendTargetSvgElement(targetMark, "path", {
+    d: "M45 87C87 65 162 65 196 78", fill: "none", stroke: "#315f63",
+    "stroke-width": "4", "stroke-linecap": "round",
+    "stroke-dasharray": "61 14", opacity: ".56",
+  });
+  appendTargetSvgElement(targetMark, "ellipse", {
+    cx: "120", cy: "70", rx: "25", ry: "9", fill: "#f0e4c5", opacity: ".86",
+  });
+  appendTargetSvgElement(targetMark, "circle", {
+    cx: "178", cy: "58", r: "1.8", fill: "#d5a54d",
+  });
+  appendTargetSvgElement(targetMark, "circle", {
+    cx: "68", cy: "78", r: "1.4", fill: "#d5a54d",
+  });
 
   svg.dataset.kind = kind;
   return svg;

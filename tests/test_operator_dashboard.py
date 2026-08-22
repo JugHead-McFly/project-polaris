@@ -337,6 +337,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "targetRigMatchLabel(target)" in script
     assert "targetIllustrationKind" in script
     assert "buildTargetIllustrationSvg" in script
+    assert "M28 75C63 41 159 40 212 68" in script
+    assert "M35 56C75 86 160 92 205 61" in script
+    assert "M45 87C87 65 162 65 196 78" in script
+    assert "M37 92C54 40 91 31" not in script
+    assert "M34 104Q120 28 206 104" not in script
     assert "parseCachedTargetIllustration" in script
     assert "artwork_svg" in script
     assert "renderReferenceAttribution" not in script

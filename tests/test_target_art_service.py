@@ -2,6 +2,8 @@ from datetime import datetime, timedelta, timezone
 
 import httpx
 
+from app.data.target_art_catalog import NASA_TARGET_ART_CATALOG
+from app.services.target_art_service import _generate_artwork_svg
 from app.services.target_art_service import get_cached_target_reference
 from app.services.target_art_service import refresh_target_art_cache
 
@@ -110,7 +112,8 @@ def test_refresh_caches_nasa_metadata_and_generated_svg(tmp_path):
     assert reference["credit"] == "NASA Goddard · Hubble Heritage Team"
     assert reference["artwork_profile"] == "inclined_spiral"
     assert 'data-reference="nasa"' in reference["artwork_svg"]
-    assert 'data-visual-treatment="supporting-vignette-v2"' in reference["artwork_svg"]
+    assert 'preserveAspectRatio="xMidYMid meet"' in reference["artwork_svg"]
+    assert 'data-visual-treatment="canonical-m31-v3"' in reference["artwork_svg"]
     assert "#d5a54d" in reference["artwork_svg"]
     assert "#e48191" not in reference["artwork_svg"]
     assert "#6e9fd0" not in reference["artwork_svg"]
@@ -222,7 +225,7 @@ def test_m51_uses_curated_official_source_and_credit(tmp_path):
         "NASA, ESA, S. Beckwith (STScI), and the Hubble Heritage Team "
         "(STScI/AURA)"
     )
-    assert 'data-visual-treatment="supporting-vignette-v2"' in reference["artwork_svg"]
+    assert 'data-visual-treatment="canonical-m31-v3"' in reference["artwork_svg"]
     assert "#d5a54d" in reference["artwork_svg"]
     assert "#e48191" not in reference["artwork_svg"]
     assert "#6e9fd0" not in reference["artwork_svg"]
@@ -234,3 +237,25 @@ def test_unsupported_target_never_uses_a_cache_entry(tmp_path):
         cache_dir=tmp_path,
         now=NOW,
     ) is None
+
+
+def test_every_catalog_target_uses_the_canonical_m31_visual_grammar():
+    canonical_paths = (
+        "M28 75C63 41 159 40 212 68",
+        "M35 56C75 86 160 92 205 61",
+        "M45 87C87 65 162 65 196 78",
+    )
+
+    for target_name, catalog_entry in NASA_TARGET_ART_CATALOG.items():
+        svg = _generate_artwork_svg(target_name, catalog_entry)
+
+        assert 'data-visual-treatment="canonical-m31-v3"' in svg
+        assert 'transform="rotate(-17 120 70)"' in svg
+        assert 'ellipse cx="120" cy="70" rx="92" ry="36"' in svg
+        for path in canonical_paths:
+            assert path in svg
+
+        # These markers belonged to the former target-specific treatments.
+        assert "translate(78 82)" not in svg
+        assert "M101 48C121 20" not in svg
+        assert "M55 118C63 50" not in svg

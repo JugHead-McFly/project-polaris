@@ -21,9 +21,15 @@ logger = logging.getLogger(__name__)
 
 NASA_IMAGE_SEARCH_URL = "https://images-api.nasa.gov/search"
 NASA_MEDIA_USAGE_URL = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
-TARGET_ART_CACHE_SCHEMA = 2
+TARGET_ART_CACHE_SCHEMA = 3
 TARGET_ART_CACHE_TTL = timedelta(days=30)
 TARGET_ART_CACHE_ROOT = settings.BASE_DIR / ".cache" / "target-art"
+CANONICAL_TARGET_ART_PALETTE = (
+    "#72d8c6",
+    "#f0e4c5",
+    "#315f63",
+    "#d5a54d",
+)
 
 
 def _utc_now() -> datetime:
@@ -196,17 +202,14 @@ def _svg_shell(
     prefix = "polaris-" + target_name.lower().replace(" ", "-")
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" '
-        'preserveAspectRatio="xMidYMid slice" aria-hidden="true" '
+        'preserveAspectRatio="xMidYMid meet" aria-hidden="true" '
         f'focusable="false" data-reference="nasa" data-profile="{safe_profile}" '
-        'data-visual-treatment="supporting-vignette-v2">'
+        'data-visual-treatment="canonical-m31-v3">'
         f'<title>Polaris representative artwork for {safe_target}</title>'
         '<defs>'
         f'<radialGradient id="{prefix}-glow"><stop offset="0" stop-color="{cream}"/>'
         f'<stop offset=".32" stop-color="{teal}" stop-opacity=".72"/>'
         f'<stop offset="1" stop-color="{shadow_teal}" stop-opacity="0"/></radialGradient>'
-        f'<linearGradient id="{prefix}-accent" x1="0" y1="0" x2="1" y2="1">'
-        f'<stop offset="0" stop-color="{teal}"/><stop offset=".72" stop-color="{cream}"/>'
-        f'<stop offset="1" stop-color="{amber}"/></linearGradient>'
         '</defs><rect width="240" height="140" fill="#06131a"/>'
         f'<g fill="{cream}" opacity=".66"><circle cx="18" cy="29" r=".7"/>'
         '<circle cx="43" cy="116" r=".55"/><circle cx="74" cy="19" r=".45"/>'
@@ -225,88 +228,25 @@ def _generate_artwork_svg(
     catalog_entry: Dict[str, Any],
 ) -> str:
     profile = catalog_entry["profile"]
-    palette = catalog_entry.get("palette") or (
-        "#72d8c6",
-        "#f0e4c5",
-        "#315f63",
-        "#d5a54d",
-    )
+    palette = CANONICAL_TARGET_ART_PALETTE
     teal, cream, shadow_teal, amber = palette
     prefix = "polaris-" + target_name.lower().replace(" ", "-")
-    if profile == "face_on_spiral_companion":
-        body = (
-            '<g transform="translate(78 82) rotate(-23)">'
-            f'<circle r="62" fill="url(#{prefix}-glow)" opacity=".33"/>'
-            '<path d="M-18-8C8-42 62-44 77-11C91 20 56 55 8 55C-40 56-75 28-65-5" '
-            f'fill="none" stroke="{shadow_teal}" stroke-width="10" opacity=".52"/>'
-            '<path d="M-9-2C20-31 58-24 62 2C65 25 41 45 9 46C-20 48-44 31-47 11" '
-            f'fill="none" stroke="{teal}" stroke-width="5" stroke-linecap="round" '
-            'stroke-dasharray="54 11 23 17" opacity=".82"/>'
-            '<path d="M5 7C-18 29-52 17-55-9C-59-34-25-55 15-48C49-42 71-15 59 9" '
-            f'fill="none" stroke="{cream}" stroke-width="2.4" stroke-linecap="round" '
-            'stroke-dasharray="33 9 48 15" opacity=".58"/>'
-            f'<ellipse cx="-3" cy="4" rx="13" ry="9" fill="{cream}" opacity=".9"/>'
-            f'<g fill="{amber}"><circle cx="-47" cy="16" r="1.8"/>'
-            '<circle cx="-20" cy="43" r="1.25"/><circle cx="30" cy="38" r="1.6"/>'
-            '<circle cx="61" cy="-10" r="1.2"/></g></g>'
-            f'<path d="M135 54C158 35 178 31 198 38" fill="none" stroke="{teal}" '
-            'stroke-width="1.3" stroke-dasharray="2 6" opacity=".38"/>'
-            f'<ellipse cx="204" cy="36" rx="20" ry="13" fill="{amber}" opacity=".52" '
-            'transform="rotate(13 204 36)"/>'
-            f'<ellipse cx="202" cy="35" rx="7" ry="4.5" fill="{cream}" opacity=".9"/>'
-        )
-    elif profile == "inclined_spiral":
-        body = (
-            '<g transform="rotate(-17 151 72)">'
-            f'<ellipse cx="151" cy="72" rx="99" ry="38" fill="url(#{prefix}-glow)" opacity=".72"/>'
-            f'<path d="M53 77C89 40 185 39 243 69" fill="none" stroke="{teal}" '
-            'stroke-width="3" stroke-linecap="round" stroke-dasharray="76 10 42 18" opacity=".68"/>'
-            f'<path d="M63 57C103 88 188 94 235 62" fill="none" stroke="{cream}" '
-            'stroke-width="1.8" stroke-linecap="round" stroke-dasharray="42 13 65 17" opacity=".52"/>'
-            f'<path d="M74 89C116 66 193 66 224 79" fill="none" stroke="{shadow_teal}" '
-            'stroke-width="4" stroke-linecap="round" stroke-dasharray="61 14" opacity=".56"/>'
-            f'<ellipse cx="145" cy="71" rx="25" ry="9" fill="{cream}" opacity=".86"/>'
-            f'<circle cx="205" cy="60" r="1.8" fill="{amber}"/>'
-            f'<circle cx="92" cy="79" r="1.4" fill="{amber}"/></g>'
-        )
-    elif profile == "ring_nebula":
-        body = (
-            f'<ellipse cx="145" cy="69" rx="59" ry="43" fill="url(#{prefix}-glow)" opacity=".42"/>'
-            f'<path d="M101 48C121 20 169 23 190 55C209 85 180 112 143 108C108 105 85 78 101 48Z" '
-            f'fill="none" stroke="{teal}" stroke-width="12" stroke-linecap="round" '
-            'stroke-dasharray="67 9 35 12" opacity=".74"/>'
-            f'<path d="M115 49C137 36 168 42 179 62C190 82 166 98 142 94C119 91 105 70 115 49Z" '
-            f'fill="#071720" stroke="{cream}" stroke-width="2" stroke-dasharray="35 8" opacity=".9"/>'
-            f'<circle cx="148" cy="68" r="2" fill="{amber}"/>'
-        )
-    elif profile == "globular_cluster":
-        stars = (
-            (120, 70, 7), (95, 53, 4), (145, 49, 5), (151, 79, 4),
-            (88, 86, 5), (120, 101, 3), (68, 68, 3), (175, 64, 3),
-        )
-        circles = "".join(
-            f'<circle cx="{cx + 22}" cy="{cy}" r="{radius}" fill="{(cream if index % 2 == 0 else teal)}" opacity=".78"/>'
-            for index, (cx, cy, radius) in enumerate(stars)
-        )
-        body = (
-            f'<circle cx="142" cy="70" r="58" fill="url(#{prefix}-glow)" opacity=".34"/>'
-            f'{circles}<path d="M83 91C121 111 177 105 202 76" fill="none" '
-            f'stroke="{shadow_teal}" stroke-width="1" stroke-dasharray="2 7" opacity=".5"/>'
-        )
-    elif profile == "pillar_nebula":
-        body = (
-            f'<path d="M55 118C63 50 91 38 111 67C130 25 174 30 181 80C198 58 220 70 228 111Z" fill="url(#{prefix}-accent)" opacity=".5"/>'
-            '<path d="M102 116C94 89 101 57 116 48C128 73 122 96 132 116M151 116C147 81 159 50 175 42C185 70 173 98 184 116" '
-            f'fill="#102a32" stroke="{amber}" stroke-width="1.8" stroke-dasharray="45 6" opacity=".88"/>'
-            f'<circle cx="141" cy="40" r="3" fill="{cream}"/>'
-        )
-    else:
-        body = (
-            f'<path d="M56 101C75 44 112 34 137 61C166 25 220 45 233 91C204 118 167 108 145 97C116 121 76 121 56 101Z" fill="url(#{prefix}-accent)" opacity=".5"/>'
-            f'<path d="M79 94C102 65 124 93 146 67C169 43 204 57 219 84" fill="none" stroke="{cream}" '
-            'stroke-width="2" stroke-linecap="round" stroke-dasharray="39 11 30 16" opacity=".52"/>'
-            f'<circle cx="151" cy="67" r="5" fill="{amber}" opacity=".82"/>'
-        )
+    # M31 defines the Polaris target-art system. Target metadata and profiles
+    # remain useful for provenance and catalog behavior, but they must not
+    # introduce a separate illustration language for individual objects.
+    body = (
+        '<g transform="rotate(-17 120 70)">'
+        f'<ellipse cx="120" cy="70" rx="92" ry="36" fill="url(#{prefix}-glow)" opacity=".72"/>'
+        f'<path d="M28 75C63 41 159 40 212 68" fill="none" stroke="{teal}" '
+        'stroke-width="3" stroke-linecap="round" stroke-dasharray="76 10 42 18" opacity=".68"/>'
+        f'<path d="M35 56C75 86 160 92 205 61" fill="none" stroke="{cream}" '
+        'stroke-width="1.8" stroke-linecap="round" stroke-dasharray="42 13 65 17" opacity=".52"/>'
+        f'<path d="M45 87C87 65 162 65 196 78" fill="none" stroke="{shadow_teal}" '
+        'stroke-width="4" stroke-linecap="round" stroke-dasharray="61 14" opacity=".56"/>'
+        f'<ellipse cx="120" cy="70" rx="25" ry="9" fill="{cream}" opacity=".86"/>'
+        f'<circle cx="178" cy="58" r="1.8" fill="{amber}"/>'
+        f'<circle cx="68" cy="78" r="1.4" fill="{amber}"/></g>'
+    )
     return _svg_shell(target_name, profile, palette, body)
 
 

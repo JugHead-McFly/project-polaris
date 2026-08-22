@@ -43,6 +43,10 @@ def _context_equipment_label(context: ObservatoryContext) -> str:
     if context.rig_profile_key:
         rig = get_rig_profile(context.rig_profile_key)
         if rig is not None:
+            if rig.manufacturer.upper() == "DWARFLAB":
+                return rig.model.replace("DWARF", "Dwarf").replace(
+                    "mini", "Mini"
+                )
             return f"{rig.manufacturer} {rig.model}"
 
     return "smart telescope"
