@@ -29,6 +29,22 @@ class NightPlan(BaseModel):
     notes: List[str]
 
 
+class OpportunityScoreComponent(BaseModel):
+    key: str
+    label: str
+    description: str
+    points: Optional[float] = None
+    max: float
+    source: str
+    detail_title: Optional[str] = None
+    detail: Optional[str] = None
+
+
+class OpportunityScore(BaseModel):
+    total: float
+    components: List[OpportunityScoreComponent]
+
+
 class TonightResponse(BaseModel):
     recommendation_run_id: Optional[UUID] = None
     date: str
@@ -38,6 +54,7 @@ class TonightResponse(BaseModel):
     moon: MoonSummary
     weather: WeatherSummary
     night_rating: NightRating
+    opportunity_score: OpportunityScore
     message: str
     night_plan: NightPlan
     darkness: DarknessSummary

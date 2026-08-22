@@ -299,9 +299,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-command-window-label", "Best imaging window");
   setText("hosted-command-target", "—");
   setText("hosted-command-fallback", "—");
-  setText("hosted-action-summary", "Building tonight's action summary…");
   setText("hosted-target-tracking", "—");
-  setText("hosted-darkness-window", "—");
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
   renderSkyQuality(null);
@@ -309,8 +307,6 @@ const resetHostedPlanDetails = () => {
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
   weatherDiagnostic.hidden = true;
   weatherDiagnostic.textContent = "";
-  setText("hosted-moon-summary", "—");
-  setText("hosted-moon-context", "Moon position unavailable");
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
   notes.hidden = true;
@@ -447,92 +443,6 @@ const renderSkyQuality = (rating) => {
 
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
 
-const scoreDeductionPoints = (rating, labels) => (rating?.deductions || [])
-  .filter((deduction) => labels.includes(deduction.label))
-  .reduce((total, deduction) => total + (Number(deduction.points) || 0), 0);
-
-const darknessAvailable = (darkness) => Boolean(
-  darkness?.astronomical_darkness_start && darkness?.astronomical_darkness_end,
-);
-
-const targetAltitudePoints = (target) => {
-  const altitude = Number(
-    target?.maximum_dark_altitude
-    ?? target?.altitude_at_dark_midpoint
-    ?? target?.average_dark_altitude
-    ?? target?.current_altitude,
-  );
-  if (!Number.isFinite(altitude)) return null;
-  if (altitude >= 55) return 5;
-  if (altitude >= 40) return 4;
-  if (altitude >= 25) return 3;
-  if (altitude >= 20) return 2;
-  return 0;
-};
-
-const buildOpportunityComponents = (rating, context = {}) => {
-  const weatherPenalty = scoreDeductionPoints(
-    rating,
-    ["Cloud cover", "High humidity", "Strong wind"],
-  );
-  const moonPenalty = scoreDeductionPoints(
-    rating,
-    ["Bright Moon", "Moon close to target"],
-  );
-  const altitudePoints = targetAltitudePoints(context.target);
-
-  return [
-    {
-      icon: "cloud",
-      label: "Cloud + stability",
-      description: "Clouds, humidity, and wind",
-      points: Math.max(0, 45 - Math.min(45, weatherPenalty)),
-      max: 45,
-      source: "Measured",
-    },
-    {
-      icon: "night",
-      label: "Astronomical darkness",
-      description: "Usable time after twilight",
-      points: darknessAvailable(context.darkness) ? 20 : null,
-      max: 20,
-      source: darknessAvailable(context.darkness) ? "Measured" : "Unavailable",
-    },
-    {
-      icon: "moon",
-      label: "Moon interference",
-      description: "Brightness and target separation",
-      points: Math.max(0, 15 - Math.min(15, moonPenalty)),
-      max: 15,
-      source: "Measured",
-    },
-    {
-      icon: "visibility",
-      label: "Transparency",
-      description: "Atmospheric clarity",
-      points: null,
-      max: 10,
-      source: "Future data",
-    },
-    {
-      icon: "seeing",
-      label: "Seeing",
-      description: "Star steadiness and sharpness",
-      points: null,
-      max: 5,
-      source: "Future data",
-    },
-    {
-      icon: "altitude",
-      label: "Target altitude",
-      description: "Height above the horizon",
-      points: altitudePoints,
-      max: 5,
-      source: altitudePoints === null ? "Unavailable" : "Measured",
-    },
-  ];
-};
-
 const opportunityFactorIconPaths = {
   cloud: "M7 18.5h10.5a4 4 0 0 0 .1-8 6 6 0 0 0-11.3 1.1A3.5 3.5 0 0 0 7 18.5Z",
   night: "M4 19h16M7 16a5 5 0 0 1 10 0M8 5v3M6.5 6.5h3M17 4l.45 1.05L18.5 5.5l-1.05.45L17 7l-.45-1.05L15.5 5.5l1.05-.45L17 4Z",
@@ -569,10 +479,28 @@ const appendOpportunityComponent = (container, component) => {
     row.classList.add("is-unavailable");
   }
 
-  appendOpportunityFactorIcon(row, component.icon);
+  appendOpportunityFactorIcon(row, component.key);
   const copy = appendTextElement(row, "div", "hosted-score-factor-copy", "");
   const label = appendTextElement(copy, "span", "hosted-score-factor-label", component.label);
   appendTextElement(label, "em", "", component.source || "Measured");
+  if (component.detail) {
+    const info = appendTextElement(
+      label,
+      "button",
+      "quality-info-button term-info-button hosted-score-factor-info",
+      "i",
+    );
+    info.type = "button";
+    info.setAttribute("aria-label", `More about ${component.label}`);
+    info.addEventListener("click", () => {
+      openInfoDialog(
+        component.detail_title || component.label,
+        component.label,
+        component.description,
+        component.detail,
+      );
+    });
+  }
   appendTextElement(
     copy,
     "small",
@@ -610,12 +538,12 @@ const opportunityScoreLabel = (score) => {
   return "Poor";
 };
 
-const renderOpportunityScore = (rating, context = {}) => {
+const renderOpportunityScore = (scoreBreakdown) => {
   const drivers = byId("hosted-opportunity-drivers");
   const reading = document.querySelector(".hosted-opportunity-reading");
   drivers.replaceChildren();
 
-  if (!rating || rating.quality === "Unavailable") {
+  if (!scoreBreakdown || !Array.isArray(scoreBreakdown.components)) {
     setText("hosted-opportunity-score", "--");
     setText("hosted-opportunity-label", "Unavailable");
     reading.style.setProperty("--opportunity-score", "0%");
@@ -624,8 +552,10 @@ const renderOpportunityScore = (rating, context = {}) => {
     return null;
   }
 
-  const components = buildOpportunityComponents(rating, context);
-  const opportunityScore = opportunityComponentScore(components);
+  const components = scoreBreakdown.components;
+  const opportunityScore = Number.isFinite(Number(scoreBreakdown.total))
+    ? Number(scoreBreakdown.total)
+    : opportunityComponentScore(components);
 
   setText("hosted-opportunity-score", displayMeasuredNumber(opportunityScore));
   setText("hosted-opportunity-label", opportunityScoreLabel(opportunityScore));
@@ -711,12 +641,6 @@ const displayedTargetSettings = (target, schedule) => {
   };
 };
 
-const targetDisplayName = (target) => {
-  if (!target) return "the selected target";
-  if (target.common_name) return `${target.object} (${target.common_name})`;
-  return target.object || "the selected target";
-};
-
 const shortTargetName = (target) => {
   if (!target) return "None";
   return target.common_name ? `${target.object} · ${target.common_name}` : target.object || "Unknown target";
@@ -727,25 +651,6 @@ const hostedTrackingModeLabel = () => (
     ? "EQ allowed tonight"
     : "Alt-Az-safe tracking"
 );
-
-const actionSummaryText = (decision, target, opportunityScore = null) => {
-  const name = targetDisplayName(target);
-  const scoreLabel = opportunityScore === null
-    ? null
-    : opportunityScoreLabel(opportunityScore).toLowerCase();
-  if (decision === "Proceed") {
-    return `Best move tonight: image ${name} during the recommended window. Opportunity looks ${scoreLabel || "favorable"}.`;
-  }
-  if (decision === "Use Caution") {
-    return `Best move tonight: image ${name}, but treat the plan as conditional. Opportunity looks ${scoreLabel || "usable"} with cautions.`;
-  }
-  if (decision === "Do Not Image") {
-    return target
-      ? `Best move tonight: wait. If conditions improve, ${name} is the best fallback, but tonight's opportunity is ${scoreLabel || "limited"}.`
-      : "Best move tonight: wait. Polaris did not find a usable target window with the current conditions.";
-  }
-  return "Best move tonight: refresh once conditions are available so Polaris can build a complete plan.";
-};
 
 const displayedDecisionLabel = (decision) => {
   if (decision === "Do Not Image") return "Wait for better conditions";
@@ -789,11 +694,7 @@ const renderHostedTonight = (data) => {
   setText("hosted-decision-message", displayedDecisionMessage(decision, data.message));
 
   const target = data.recommended_target || data.backup_target;
-  const opportunityScore = renderOpportunityScore(data.night_rating, {
-    darkness: data.darkness,
-    target,
-  });
-  setText("hosted-action-summary", actionSummaryText(decision, target, opportunityScore));
+  renderOpportunityScore(data.opportunity_score);
   const fallbackTarget = data.backup_target?.object === data.recommended_target?.object
     ? null
     : data.backup_target;
@@ -849,15 +750,7 @@ const renderHostedTonight = (data) => {
     renderHostedReferenceImage(null);
   }
 
-  const darkness = data.darkness || {};
   const weather = data.weather || {};
-  const moon = data.moon || {};
-  setText(
-    "hosted-darkness-window",
-    `${shortTime(darkness.astronomical_darkness_start)}–${shortTime(
-      darkness.astronomical_darkness_end,
-    )}`,
-  );
   renderSkyQuality(data.night_rating);
   setText(
     "hosted-weather-summary",
@@ -884,23 +777,6 @@ const renderHostedTonight = (data) => {
   weatherDiagnostic.textContent = weatherUnavailable
     ? weather.status
     : "";
-  setText(
-    "hosted-moon-summary",
-    `${moon.phase_name || "Moon"} · ${displayNumber(
-      moon.illumination_percent,
-      "% illuminated",
-    )}`,
-  );
-  setText(
-    "hosted-moon-context",
-    moon.above_horizon
-      ? moon.next_moonset
-        ? `Above horizon now · sets ${shortTime(moon.next_moonset)}`
-        : "Above horizon now"
-      : moon.next_moonrise
-        ? `Below horizon now · rises ${shortTime(moon.next_moonrise)}`
-        : "Below horizon now",
-  );
 
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();

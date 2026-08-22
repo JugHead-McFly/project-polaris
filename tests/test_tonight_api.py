@@ -177,6 +177,11 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["backup_target"]["maximum_dark_altitude"] == 81.9
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
+    assert payload["opportunity_score"]["total"] == 75.7
+    assert [
+        component["key"]
+        for component in payload["opportunity_score"]["components"]
+    ] == ["cloud", "night", "moon", "visibility", "seeing", "altitude"]
     assert payload["message"].startswith("Conditions currently support imaging")
 
 
@@ -216,7 +221,7 @@ def test_tonight_adds_selected_rig_profile_and_target_fit():
     assert payload["recommended_target"]["rig_fit"]["label"] == "Very small"
     assert payload["recommended_target"]["rig_fit"]["target_width_degrees"] == 0.023
     assert (
-        "Polaris selected M57 for ZWO Seestar S50"
+        "Polaris selected M57 for Seestar S50"
         in payload["recommended_target"]["rig_fit"]["match_summary"]
     )
     assert "framing check is very small" in payload["recommended_target"]["rig_fit"]["match_summary"]
@@ -255,6 +260,8 @@ def test_tonight_explains_unknown_official_rig_fov_without_guessing():
     fit = payload["recommended_target"]["rig_fit"]
     assert fit["rig_label"] == "DWARFLAB DWARF mini"
     assert fit["label"] == "Unknown fit"
+    assert "for Dwarf Mini" in fit["match_summary"]
+    assert "DWARFLAB" not in fit["match_summary"]
     assert "official rig field-of-view data is incomplete" in fit["match_summary"]
     assert database.closed
 
@@ -372,13 +379,13 @@ def test_night_rating_allows_no_recommended_target():
     )
 
     assert rating == {
-        "score": 10,
+        "score": 15,
         "quality": "Very Poor",
         "deductions": [
             {"label": "Cloud cover", "points": 50.0},
             {"label": "High humidity", "points": 10},
             {"label": "Strong wind", "points": 10},
-            {"label": "Bright Moon", "points": 20},
+            {"label": "Moon illumination", "points": 15.0},
         ],
     }
 
@@ -409,13 +416,13 @@ def test_night_rating_explains_bright_moon_deduction():
     )
 
     assert rating == {
-        "score": 80,
+        "score": 86,
         "quality": "Good",
-        "deductions": [{"label": "Bright Moon", "points": 20}],
+        "deductions": [{"label": "Moon illumination", "points": 14.1}],
     }
 
 
-def test_night_rating_moon_threshold_matches_displayed_whole_percent():
+def test_night_rating_moon_deduction_is_proportional():
     weather = {
         "cloud_cover_percent": 0,
         "humidity_percent": 44,
@@ -423,22 +430,19 @@ def test_night_rating_moon_threshold_matches_displayed_whole_percent():
     }
     target = {"moon_separation_degrees": 55.7}
 
-    for illumination in (74.9, 75.0, 75.1):
+    expected = {
+        0: None,
+        50: {"label": "Moon illumination", "points": 7.5},
+        75: {"label": "Moon illumination", "points": 11.2},
+        100: {"label": "Moon illumination", "points": 15.0},
+    }
+    for illumination, deduction in expected.items():
         rating = calculate_night_rating(
             weather=weather,
             moon={"illumination_percent": illumination},
             target=target,
         )
-        assert rating["score"] == 100
-        assert rating["deductions"] == []
-
-    rating = calculate_night_rating(
-        weather=weather,
-        moon={"illumination_percent": 75.6},
-        target=target,
-    )
-    assert rating["score"] == 80
-    assert rating["deductions"] == [{"label": "Bright Moon", "points": 20}]
+        assert rating["deductions"] == ([] if deduction is None else [deduction])
 
 
 def test_night_rating_uses_planned_start_weather_when_available():
@@ -456,10 +460,10 @@ def test_night_rating_uses_planned_start_weather_when_available():
     )
 
     assert rating == {
-        "score": 31,
+        "score": 39,
         "quality": "Very Poor",
         "deductions": [
             {"label": "Cloud cover", "points": 49.0},
-            {"label": "Bright Moon", "points": 20},
+            {"label": "Moon illumination", "points": 12.4},
         ],
     }

@@ -60,7 +60,6 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'data-term-info="sub-exposure"' in response.text
     assert 'data-term-info="gain"' in response.text
     assert 'data-term-info="filter"' in response.text
-    assert 'data-term-info="astronomical-darkness"' in response.text
     assert 'data-term-info="bortle"' in response.text
     assert 'id="hosted-rig-profile"' in response.text
     assert "Smart telescope profile" in response.text
@@ -262,11 +261,15 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'class="hosted-score-breakdown-card"' in html
     assert 'aria-label="Opportunity score breakdown"' in html
     assert "How tonight earns points" not in html
+    assert "Continuous inputs scale proportionally" not in html
+    assert 'id="hosted-darkness-window"' not in html
+    assert 'id="hosted-moon-summary"' not in html
+    assert 'id="hosted-moon-context"' not in html
     assert 'id="hosted-command-window"' in html
     assert 'id="hosted-command-window-label"' in html
     assert 'id="hosted-command-target"' in html
     assert 'id="hosted-command-fallback"' in html
-    assert 'id="hosted-action-summary"' in html
+    assert 'id="hosted-action-summary"' not in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
     assert 'id="hosted-target-rig"' in html
@@ -286,28 +289,21 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedTonight" in script
     assert "renderOpportunityScore" in script
     assert "hosted-opportunity-total-bar" in script
-    assert "buildOpportunityComponents" in script
+    assert "data.opportunity_score" in script
     assert "opportunityComponentScore" in script
     assert "opportunityScoreLabel" in script
     assert "Challenging" in script
-    assert "Opportunity looks" in script
     assert "Wait for better conditions" in script
-    assert "Cloud + stability" in script
-    assert "Clouds, humidity, and wind" in script
-    assert "Star steadiness and sharpness" in script
     assert "hosted-score-factor-icon" in script
     assert "opportunityFactorIconPaths" in script
     assert "appendOpportunityFactorIcon" in script
-    assert 'icon: "moon"' in script
-    assert 'icon: "visibility"' in script
-    assert 'icon: "altitude"' in script
+    assert "hosted-score-factor-info" in script
+    assert "More about ${component.label}" in script
+    assert "component.key" in script
     assert "hosted-score-factor-description" in script
-    assert "Future data" in script
-    assert "Target altitude" in script
-    assert "maximum_dark_altitude" in script
     assert "displayedDecisionMessage" in script
     assert "softenAdvisoryNote" in script
-    assert "Best move tonight" in script
+    assert "Best move tonight" not in script
     assert "renderHostedSchedule" in script
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script
@@ -333,7 +329,6 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "hosted-weather-diagnostic" in script
     assert 'includes("unavailable")' in script
     assert "Sky quality" in script
-    assert "Above horizon now · sets" in script
     assert "hostedPlanFailureMessage" in script
     assert "send Doug request ID" in script
     assert "This is a planning refresh problem, not a telescope-control action." in script

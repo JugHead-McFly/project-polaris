@@ -31,6 +31,19 @@
       <div class="header-actions">
         <div class="account-control" id="account-control" hidden>
           <span class="account-email" id="account-email"></span>
+          <label
+            class="tracking-mode-control hosted-header-eq-control"
+            title="Leave unchecked for Alt-Az-safe exposures. Check only after the telescope is physically EQ aligned and EQ mode is enabled for tonight."
+          >
+            <input id="hosted-eq-mode-checkbox" type="checkbox">
+            <span>Allow EQ-mode exposures</span>
+          </label>
+          <button class="account-button" id="hosted-edit-home-button" type="button">
+            Edit observing home
+          </button>
+          <button class="refresh-button" id="hosted-refresh-button" type="button">
+            Refresh tonight
+          </button>
           <button class="account-button" id="sign-out-button" type="button">
             Sign out
           </button>
@@ -129,21 +142,6 @@
             <h1 id="hosted-tonight-title">Your imaging plan</h1>
             <p id="hosted-tonight-date">Building tonight's recommendation…</p>
           </div>
-          <div class="hosted-tonight-actions">
-            <label
-              class="tracking-mode-control"
-              title="Leave unchecked for Alt-Az-safe exposures. Check only after the telescope is physically EQ aligned and EQ mode is enabled for tonight."
-            >
-              <input id="hosted-eq-mode-checkbox" type="checkbox">
-              <span>Allow EQ-mode exposures</span>
-            </label>
-            <button class="account-button" id="hosted-edit-home-button" type="button">
-              Edit observing home
-            </button>
-            <button class="refresh-button" id="hosted-refresh-button" type="button">
-              Refresh tonight
-            </button>
-          </div>
         </div>
 
         <section class="hosted-recommendation status-loading" id="hosted-recommendation">
@@ -178,6 +176,12 @@
               <div>
                 <dt id="hosted-command-window-label">Best imaging window</dt>
                 <dd id="hosted-command-window">—</dd>
+                <dd class="hosted-command-weather">
+                  <span id="hosted-weather-summary">Conditions loading…</span>
+                  <span class="hosted-sky-quality" id="hosted-sky-quality">Sky quality unavailable</span>
+                  <span id="hosted-weather-updated">Weather time unavailable</span>
+                  <span class="hosted-weather-diagnostic" id="hosted-weather-diagnostic" hidden></span>
+                </dd>
               </div>
               <div>
                 <dt>Best target</dt>
@@ -188,9 +192,6 @@
                 <dd id="hosted-command-fallback">—</dd>
               </div>
             </dl>
-            <div class="hosted-action-summary" id="hosted-action-summary">
-              Building tonight's action summary…
-            </div>
           </div>
 
           <section
@@ -199,7 +200,6 @@
           >
             <div class="hosted-score-breakdown-heading">
               <p class="eyebrow">Score breakdown</p>
-              <p>Each factor contributes independently to the 100-point total.</p>
             </div>
             <div class="hosted-score-components" id="hosted-opportunity-drivers">
               <p>Score factors will appear after conditions load.</p>
@@ -267,25 +267,6 @@
             <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
             <p id="hosted-cautions-empty">No special cautions once conditions finish loading.</p>
           </div>
-        </section>
-
-        <section class="hosted-summary-grid" aria-label="Tonight's conditions">
-          <article class="panel hosted-summary-card">
-            <p class="eyebrow">Astronomical darkness <button class="quality-info-button term-info-button" data-term-info="astronomical-darkness" type="button" aria-label="About astronomical darkness">i</button></p>
-            <strong id="hosted-darkness-window">—</strong>
-          </article>
-          <article class="panel hosted-summary-card">
-            <p class="eyebrow">Conditions at planned start</p>
-            <strong id="hosted-weather-summary">—</strong>
-            <span class="hosted-sky-quality" id="hosted-sky-quality">Sky quality unavailable</span>
-            <span id="hosted-weather-updated">Weather time unavailable</span>
-            <span class="hosted-weather-diagnostic" id="hosted-weather-diagnostic" hidden></span>
-          </article>
-          <article class="panel hosted-summary-card">
-            <p class="eyebrow">Moon</p>
-            <strong id="hosted-moon-summary">—</strong>
-            <span id="hosted-moon-context">Moon position unavailable</span>
-          </article>
         </section>
 
         <section class="panel hosted-schedule-panel" aria-labelledby="hosted-schedule-title">

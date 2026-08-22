@@ -10,6 +10,7 @@ from app.schemas.tonight import TonightResponse
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_angular_size
 from app.services.night_rating_service import calculate_night_rating
+from app.services.opportunity_score_service import calculate_opportunity_score
 from app.services.planner_service import get_tonight_plan
 from app.services.scheduler_service import build_tonight_schedule
 from app.services.hosted_account_service import get_planning_context
@@ -148,9 +149,10 @@ def _build_rig_fit_summary(
     target_width = target_size[0] if target_size else None
     target_height = target_size[1] if target_size else None
     fit = rig.assess_target_fit(target_width, target_height)
+    display_rig_name = _display_rig_name(rig.manufacturer, rig.model)
     match_summary = _build_rig_match_summary(
         target_name=target_name,
-        rig_label=f"{rig.manufacturer} {rig.model}",
+        rig_label=display_rig_name,
         target_width=target_width,
         target_height=target_height,
         fit_label=fit.label,
@@ -167,6 +169,14 @@ def _build_rig_fit_summary(
         "match_summary": match_summary,
         "margin_degrees": fit.margin_degrees,
     }
+
+
+def _display_rig_name(manufacturer: str, model: str) -> str:
+    if manufacturer.upper() == "DWARFLAB":
+        return model.replace("DWARF", "Dwarf").replace("mini", "Mini")
+    if manufacturer.upper() == "ZWO" and model.lower().startswith("seestar"):
+        return model
+    return f"{manufacturer} {model}"
 
 
 def _build_rig_match_summary(
@@ -310,6 +320,7 @@ def _build_tonight_payload(
         rig_profile_key=observatory.rig_profile_key,
     )
     rig_profile = get_rig_profile(observatory.rig_profile_key or "")
+    opportunity_target = recommended_target or backup_target
 
     return {
         "date": schedule["date"],
@@ -335,6 +346,12 @@ def _build_tonight_payload(
             planner["weather"],
             planner["moon"],
             recommended_target,
+        ),
+        "opportunity_score": calculate_opportunity_score(
+            weather=planner["weather"],
+            moon=planner["moon"],
+            darkness=planner["darkness"],
+            target=opportunity_target,
         ),
         "message": _build_operator_message(schedule),
         "night_plan": _build_legacy_night_plan(
