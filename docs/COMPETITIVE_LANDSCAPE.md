@@ -1,6 +1,6 @@
 # Polaris Competitive Landscape
 
-Last reviewed: 2026-07-23
+Last reviewed: 2026-08-22
 
 ## Scope and limits
 
@@ -74,6 +74,33 @@ Polaris should not build a full image processor to match it. Instead, alpha
 research should test whether users want Polaris to hand an imported capture
 off to a processor, receive a processed result back, or simply retain the
 planning and capture-history context around that separate workflow.
+
+### Community prototype: Beaconsfield DSO Daily
+
+On 2026-08-22 Doug reviewed a Facebook community prototype called
+**Beaconsfield DSO Daily** by Russell Duncan. This is not a product to copy and
+has not been hands-on tested, but it is a useful UI and scoring reference for
+Polaris.
+
+The useful pattern is an at-a-glance nightly command card:
+
+- large opportunity score and plain-language label;
+- compact condition breakdown;
+- best imaging window;
+- recommended DSO of the night;
+- fallback target;
+- equipment and operational guidance; and
+- a short bottom-line recommendation.
+
+The strategic lesson is that Polaris should feel less like a cautious weather
+report and more like an adaptive opportunity advisor. The central question is:
+
+> Given tonight's conditions, what can I realistically image successfully?
+
+This does not replace Polaris's product rule that recommendations must be
+explainable and user-controlled. It does suggest that the hosted Tonight page
+should move toward a compact, colorful, decision-first layout once V1.9 rig and
+settings logic is stable.
 
 ## Capability comparison
 

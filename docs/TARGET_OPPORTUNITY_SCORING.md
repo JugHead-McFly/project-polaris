@@ -45,11 +45,59 @@ Do not expose the formula as a promise. Polaris should explain the major
 reasons behind a recommendation without implying scientific certainty or
 equipment safety control.
 
+## Beaconsfield-style scoring reference
+
+A community prototype reviewed on 2026-08-22 appeared to use this 100-point
+night-quality weighting:
+
+- cloud and stability: 45 points;
+- astronomical darkness: 20 points;
+- Moon interference: 15 points;
+- transparency: 10 points;
+- seeing: 5 points; and
+- target altitude: 5 points.
+
+Treat these weights as a research input, not a Polaris formula. They are useful
+because they make the score easy to explain at a glance. They are incomplete
+for Polaris because they score the night more than the target. Polaris should
+prefer a **target-specific opportunity score** where a difficult night can still
+produce a practical recommendation for the right target, filter, window, and
+rig.
+
+Example product direction:
+
+- overall night: 58/100, Challenging;
+- C 20 with Duo-Band: 72/100, Usable;
+- faint broadband galaxy: 39/100, Poor.
+
+This prevents mediocre conditions from becoming a simplistic "no-go" when a
+realistic narrowband or high-surface-brightness target is still worth trying.
+
+## Candidate Polaris components
+
+A Polaris-native opportunity score should investigate:
+
+- weather and cloud reliability;
+- usable darkness and window length;
+- Moon impact by target type and filter;
+- target altitude and geometry;
+- rig field-of-view, target scale, exposure support, and frame limits;
+- operational risks such as heat, wind, dew, and tracking mode; and
+- source confidence, including missing weather or incomplete official rig data.
+
+Separate blockers from reducers. Rain, unsafe wind, extreme heat, missing
+critical weather, or no usable target window may block a recommendation.
+Moonlight, mediocre transparency, short windows, light pollution, low-but-usable
+altitude, or imperfect seeing should usually reduce or adapt the recommendation
+instead of automatically stopping the user.
+
 ## Future path
 
 1. Keep this scorer behind tests until the current alpha loop is stable.
 2. Compare its output against the existing planner score on known nights.
-3. Add calibrated sensor/exposure inputs only after the FITS data and equipment
+3. Prototype the Tonight UI with an opportunity score label before exposing the
+   score as a calibrated product promise.
+4. Add calibrated sensor/exposure inputs only after the FITS data and equipment
    profile are dependable.
-4. Wire it into the planner only when it improves explanation and trust without
+5. Wire it into the planner only when it improves explanation and trust without
    surprising existing recommendations.

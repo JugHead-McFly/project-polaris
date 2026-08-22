@@ -80,7 +80,8 @@ project-manager notes, not public user documentation.
   controlled validation plan for C20 15-second versus 30-second sub-exposures.
 - [`TARGET_OPPORTUNITY_SCORING.md`](TARGET_OPPORTUNITY_SCORING.md) —
   experimental target-scoring foundation based on altitude, usable window,
-  Moon, sky brightness, field fit, and exposure confidence.
+  Moon, sky brightness, field fit, exposure confidence, and the V1.10
+  Beaconsfield-style opportunity-score research direction.
 - [`RIG_PROFILES.md`](RIG_PROFILES.md) — starter smart-telescope rig catalog
   and source/confidence policy for equipment-specific scoring.
 - [`GOAL_ENGINE.md`](GOAL_ENGINE.md) — imaging goal and integration-target

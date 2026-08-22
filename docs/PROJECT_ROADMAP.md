@@ -1,6 +1,6 @@
 # Polaris Roadmap to Private Alpha and Beta
 
-Last updated: 2026-08-20
+Last updated: 2026-08-22
 
 ## How to read this plan
 
@@ -25,7 +25,8 @@ what to do and more time under the sky.
 | **v1.7 — Alpha foundation** | Complete | Accounts, tenant boundaries, secure configuration, deployment, monitoring, backup, and recovery | Passed: two-user isolation, hosted deployment, privacy-safe monitoring, tenant export, and full recovery drill |
 | **v1.8 — Feedback + scoring loop** | Active; foundation complete Aug. 2 | Turn Yes/No feedback and first-tester observations into a simple alpha learning loop | Passed internally: aggregate metrics, review focus, and trust-oriented feedback prompts exist. Exit requires the live-tester criteria in `PRIVATE_ALPHA_TEST_PLAN.md`. |
 | **v1.9 — Exposure and reliability logic** | Mid–late August | Improve recommendation trust where weather, Moon, tracking mode, heat, and 999-frame limits affect the actual plan | Testers see conservative, explainable settings and no critical planning/safety confusion repeats |
-| **v1.10 — First private alpha cohort** | Late August–September | 2–5 invited users use Polaris for real observing decisions before any broader cohort | Returning use, understandable recommendations, and no unresolved privacy/security blocker |
+| **v1.10 — Opportunity Advisor UI + scoring investigation** | Late August–September | Turn Tonight into a compact, at-a-glance opportunity card while validating score components before exposing them as product promises | Doug can review a local/alpha Tonight page that explains the realistic opportunity, best target, fallback, score drivers, and rig match without implying false certainty |
+| **v1.11 — First private alpha cohort** | After V1.10 UI stabilizes | 2–5 invited users use Polaris for real observing decisions before any broader cohort | Returning use, understandable recommendations, and no unresolved privacy/security blocker |
 | **v2.0 — Closed beta decision** | After alpha evidence, not before | Decide whether to expand toward 25–100 users, narrow scope, extend alpha, or pause | Decision is based on retention, trust, support burden, and willingness-to-pay evidence, not feature count |
 | **Public-launch decision** | Future | Decide whether to launch, narrow the audience, extend beta, or stop | Launch only when repeat use and trust are proven by behavior |
 
@@ -114,6 +115,11 @@ The hosted alpha must do only a few things well:
    recommended target is or is not a good match for their rig, including field
    of view, target scale, filter fit, smart-telescope workflow fit, and any
    unknown official-spec gaps such as incomplete DWARF mini framing data.
+8. Move the Tonight presentation toward an opportunity-advisor layout: large
+   score/label, best window, best target, fallback target, score drivers, and a
+   bottom-line "what to do" recommendation. Use current data first; do not
+   present new scoring math as calibrated until it has been compared against
+   real nights and alpha feedback.
 
 The v1.7 foundation is complete: two real accounts were isolated successfully,
 the hosted application was deployed, Sentry monitoring and privacy scrubbing

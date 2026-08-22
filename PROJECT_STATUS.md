@@ -97,6 +97,13 @@ fit and official-spec confidence, not full SNR modeling. A hosted schema
 readiness guard now checks for the current observatory rig columns so a missing
 manual Supabase migration is caught clearly during startup/readiness instead
 of appearing as a confusing operator-page failure.
+The next UI direction is now captured as V1.10 Opportunity Advisor: use the
+Beaconsfield-style nightly command-card pattern as inspiration for a
+Polaris-native Tonight layout with a large opportunity score, best window,
+recommended and fallback targets, score drivers, rig match, and bottom-line
+guidance. The apparent Beaconsfield scoring weights are recorded as research
+input only; Polaris should validate target-specific opportunity scoring before
+exposing a formula as product truth.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
