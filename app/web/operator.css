@@ -800,6 +800,18 @@ footer {
   line-height: 1.25;
 }
 
+.hosted-action-summary {
+  margin: 16px 0 0;
+  padding: 13px 15px;
+  color: #eaf4f5;
+  background: rgba(242, 190, 103, 0.1);
+  border: 1px solid rgba(242, 190, 103, 0.22);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
 .hosted-decision > p:not(.eyebrow) {
   margin: 18px 0 0 34px;
   color: #bfd0d4;

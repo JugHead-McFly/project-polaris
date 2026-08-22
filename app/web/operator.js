@@ -300,6 +300,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-command-target", "—");
   setText("hosted-command-fit", "—");
   setText("hosted-command-settings", "—");
+  setText("hosted-action-summary", "Building tonight's action summary…");
   setText("hosted-darkness-window", "—");
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
@@ -634,6 +635,28 @@ const displayedTargetSettings = (target, schedule) => {
   };
 };
 
+const targetDisplayName = (target) => {
+  if (!target) return "the selected target";
+  if (target.common_name) return `${target.object} (${target.common_name})`;
+  return target.object || "the selected target";
+};
+
+const actionSummaryText = (decision, target) => {
+  const name = targetDisplayName(target);
+  if (decision === "Proceed") {
+    return `Best move tonight: image ${name} during the recommended window. Conditions support a normal run.`;
+  }
+  if (decision === "Use Caution") {
+    return `Best move tonight: image ${name}, but treat the plan as conditional and watch the cautions before starting.`;
+  }
+  if (decision === "Do Not Image") {
+    return target
+      ? `Best move tonight: wait. If conditions improve, ${name} is the best fallback opportunity.`
+      : "Best move tonight: wait. Polaris did not find a usable target window with the current conditions.";
+  }
+  return "Best move tonight: refresh once conditions are available so Polaris can build a complete plan.";
+};
+
 const renderHostedTonight = (data) => {
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
@@ -652,6 +675,7 @@ const renderHostedTonight = (data) => {
   );
 
   const target = data.recommended_target || data.backup_target;
+  setText("hosted-action-summary", actionSummaryText(decision, target));
   renderOpportunityScore(data.night_rating, {
     darkness: data.darkness,
     target,

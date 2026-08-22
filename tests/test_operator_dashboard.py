@@ -262,6 +262,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-command-target"' in html
     assert 'id="hosted-command-fit"' in html
     assert 'id="hosted-command-settings"' in html
+    assert 'id="hosted-action-summary"' in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
     assert 'id="hosted-target-rig"' in html
@@ -285,6 +286,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Cloud + stability" in script
     assert "Target altitude" in script
     assert "hosted-command-settings" in script
+    assert "Best move tonight" in script
     assert "renderHostedSchedule" in script
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script
