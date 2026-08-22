@@ -258,6 +258,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Opportunity score" in html
     assert 'id="hosted-opportunity-score"' in html
     assert 'id="hosted-opportunity-drivers"' in html
+    assert 'id="hosted-command-window"' in html
+    assert 'id="hosted-command-target"' in html
+    assert 'id="hosted-command-fit"' in html
+    assert 'id="hosted-command-settings"' in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
     assert 'id="hosted-target-rig"' in html
@@ -280,6 +284,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "buildOpportunityComponents" in script
     assert "Cloud + stability" in script
     assert "Target altitude" in script
+    assert "hosted-command-settings" in script
     assert "renderHostedSchedule" in script
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script

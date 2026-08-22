@@ -296,6 +296,10 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-exposure", "—");
   setText("hosted-target-gain", "—");
   setText("hosted-target-filter", "—");
+  setText("hosted-command-window", "—");
+  setText("hosted-command-target", "—");
+  setText("hosted-command-fit", "—");
+  setText("hosted-command-settings", "—");
   setText("hosted-darkness-window", "—");
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
@@ -669,11 +673,24 @@ const renderHostedTonight = (data) => {
       targetWindowLabel(target.recommended_start, target.recommended_end),
     );
     setText(
+      "hosted-command-window",
+      targetWindowLabel(target.recommended_start, target.recommended_end),
+    );
+    setText("hosted-command-target", target.object, "Unknown target");
+    setText("hosted-command-fit", targetFitLabel(target));
+    setText(
       "hosted-target-exposure",
       displayNumber(settings.exposure_seconds, " sec"),
     );
     setText("hosted-target-gain", displayNumber(settings.gain));
     renderFilterValue("hosted-target-filter", settings.filter_name);
+    setText(
+      "hosted-command-settings",
+      `${displayNumber(settings.exposure_seconds, " sec")} · ${displayNumber(
+        settings.gain,
+        " gain",
+      )} · ${settings.filter_name || "Filter TBD"}`,
+    );
     renderHostedReferenceImage(target);
   } else {
     setText("hosted-target-name", "No target");
@@ -685,6 +702,10 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);
+    setText("hosted-command-window", "No usable window");
+    setText("hosted-command-target", "No target");
+    setText("hosted-command-fit", "Not checked");
+    setText("hosted-command-settings", "Not available");
     renderHostedReferenceImage(null);
   }
 
