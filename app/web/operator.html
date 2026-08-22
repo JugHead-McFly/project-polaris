@@ -35,13 +35,17 @@
             title="Leave unchecked for Alt-Az-safe exposures. Check only after the telescope is physically EQ aligned and EQ mode is enabled for tonight."
           >
             <input id="hosted-eq-mode-checkbox" type="checkbox">
-            <span>Allow EQ-mode exposures</span>
+            <span class="tracking-mode-name">Tracking</span>
+            <span class="tracking-mode-options" aria-hidden="true">
+              <span class="tracking-mode-altaz">Alt-Az</span>
+              <span class="tracking-mode-eq">EQ</span>
+            </span>
           </label>
           <button class="account-button" id="hosted-edit-home-button" type="button">
-            Edit observing home
+            Edit home
           </button>
           <button class="refresh-button" id="hosted-refresh-button" type="button">
-            Refresh tonight
+            Refresh plan
           </button>
           <span class="account-email" id="account-email"></span>
           <button class="account-button" id="sign-out-button" type="button">
@@ -280,47 +284,6 @@
           <div class="hosted-schedule-list" id="hosted-schedule-list">
             <div class="empty-state">Building tonight's schedule…</div>
           </div>
-        </section>
-        <section
-          class="panel hosted-feedback-panel"
-          id="hosted-feedback-panel"
-          aria-labelledby="hosted-feedback-title"
-          hidden
-        >
-          <div>
-            <p class="eyebrow">Help improve Polaris</p>
-            <h2 id="hosted-feedback-title">Was this plan useful?</h2>
-            <p>Your response helps us learn whether the recommendation was clear and trustworthy.</p>
-          </div>
-          <div class="hosted-feedback-actions" role="group" aria-label="Rate this plan">
-            <button class="account-button" id="hosted-feedback-yes" type="button">
-              Yes
-            </button>
-            <button class="account-button" id="hosted-feedback-no" type="button">
-              Not really
-            </button>
-          </div>
-          <div class="hosted-feedback-detail" id="hosted-feedback-detail" hidden>
-            <label for="hosted-feedback-reason">
-              What made it unclear, untrustworthy, or less useful? <span>Optional</span>
-            </label>
-            <textarea
-              id="hosted-feedback-reason"
-              maxlength="500"
-              rows="3"
-              placeholder="For example: the target choice, timing, weather, Moon, local sky, or setup steps did not match what you expected."
-            ></textarea>
-            <p>Do not include passwords, sign-in links, or your exact observing address.</p>
-            <button class="account-button" id="hosted-feedback-save-note" type="button">
-              Save note
-            </button>
-          </div>
-          <p
-            class="auth-message hosted-feedback-message"
-            id="hosted-feedback-message"
-            role="status"
-            aria-live="polite"
-          ></p>
         </section>
         <p class="auth-message hosted-plan-message" id="hosted-plan-message" role="status" aria-live="polite"></p>
       </section>
@@ -1025,7 +988,40 @@
 
     <footer>
       <span id="data-updated">Source data times unavailable</span>
-      <span>Planner V3 · advisory only · no equipment control</span>
+      <section
+        class="hosted-feedback-panel"
+        id="hosted-feedback-panel"
+        aria-labelledby="hosted-feedback-title"
+        hidden
+      >
+        <div class="hosted-feedback-prompt">
+          <span class="eyebrow">Help improve Polaris</span>
+          <strong id="hosted-feedback-title">Was this plan useful?</strong>
+        </div>
+        <div class="hosted-feedback-actions" role="group" aria-label="Rate this plan">
+          <button class="account-button" id="hosted-feedback-yes" type="button">Yes</button>
+          <button class="account-button" id="hosted-feedback-no" type="button">Not really</button>
+        </div>
+        <div class="hosted-feedback-detail" id="hosted-feedback-detail" hidden>
+          <label for="hosted-feedback-reason">
+            What made it unclear, untrustworthy, or less useful? <span>Optional</span>
+          </label>
+          <textarea
+            id="hosted-feedback-reason"
+            maxlength="500"
+            rows="3"
+            placeholder="For example: the target choice, timing, weather, Moon, local sky, or setup steps did not match what you expected."
+          ></textarea>
+          <p>Do not include passwords, sign-in links, or your exact observing address.</p>
+          <button class="account-button" id="hosted-feedback-save-note" type="button">Save note</button>
+        </div>
+        <p
+          class="auth-message hosted-feedback-message"
+          id="hosted-feedback-message"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
     </footer>
   </body>
 </html>

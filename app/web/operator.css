@@ -291,7 +291,63 @@ footer {
 }
 
 .hosted-header-eq-control {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto;
   min-height: 36px;
+  gap: 8px;
+  padding: 3px 4px 3px 10px;
+  background: rgba(3, 14, 22, 0.5);
+}
+
+.tracking-mode-control.hosted-header-eq-control input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.tracking-mode-name {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tracking-mode-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(48px, 1fr));
+  gap: 2px;
+  padding: 2px;
+  background: rgba(2, 12, 19, 0.72);
+  border: 1px solid rgba(153, 202, 207, 0.16);
+  border-radius: 7px;
+}
+
+.tracking-mode-options > span {
+  padding: 5px 8px;
+  color: var(--muted);
+  border-radius: 5px;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+}
+
+.hosted-header-eq-control input:not(:checked) + .tracking-mode-name + .tracking-mode-options .tracking-mode-altaz,
+.hosted-header-eq-control input:checked + .tracking-mode-name + .tracking-mode-options .tracking-mode-eq {
+  color: #07161e;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(82, 214, 199, 0.22);
+}
+
+.hosted-header-eq-control input:focus-visible + .tracking-mode-name + .tracking-mode-options {
+  outline: 2px solid rgba(82, 214, 199, 0.72);
+  outline-offset: 2px;
+}
+
+.hosted-header-eq-control:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .account-email {
@@ -307,8 +363,8 @@ footer {
   min-height: 36px;
   padding: 0 12px;
   color: var(--text);
-  background: transparent;
-  border: 1px solid var(--line);
+  background: rgba(3, 14, 22, 0.42);
+  border: 1px solid rgba(153, 202, 207, 0.25);
   border-radius: 9px;
   cursor: pointer;
   font-size: 13px;
@@ -632,38 +688,20 @@ footer {
     "breakdown breakdown"
     "target setup"
     "cautions cautions";
-  gap: 0;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 9% 0%, rgba(69, 191, 182, 0.2), transparent 34%),
-    radial-gradient(ellipse at 92% 16%, rgba(72, 79, 142, 0.18), transparent 38%),
-    linear-gradient(145deg, rgba(8, 28, 36, 0.98), rgba(5, 15, 25, 0.99) 48%, rgba(16, 24, 45, 0.98)),
-    var(--surface);
-  border: 1px solid rgba(91, 221, 205, 0.24);
-  border-radius: 24px;
-  box-shadow: var(--shadow);
+  gap: 14px;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .hosted-recommendation::after {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    radial-gradient(circle at 12% 16%, rgba(255, 255, 255, 0.42) 0 1px, transparent 1.4px),
-    radial-gradient(circle at 76% 28%, rgba(130, 230, 220, 0.34) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 38% 82%, rgba(255, 225, 167, 0.3) 0 1px, transparent 1.4px);
-  background-size: 230px 190px, 310px 260px, 390px 330px;
-  content: "";
-  opacity: 0.34;
-  pointer-events: none;
+  display: none;
 }
 
 .hosted-recommendation::before {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: var(--muted);
-  content: "";
+  display: none;
 }
 
 .hosted-recommendation.status-proceed::before {
@@ -694,6 +732,14 @@ footer {
 .hosted-setup-card,
 .hosted-cautions-card {
   padding: clamp(20px, 3.2vw, 30px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(69, 191, 182, 0.11), transparent 40%),
+    radial-gradient(ellipse at 92% 18%, rgba(72, 79, 142, 0.12), transparent 42%),
+    linear-gradient(145deg, rgba(8, 28, 36, 0.94), rgba(5, 15, 25, 0.97) 52%, rgba(16, 24, 45, 0.94));
+  border: 1px solid rgba(91, 221, 205, 0.24);
+  border-radius: 16px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.17), inset 0 1px rgba(255, 255, 255, 0.025);
 }
 
 .hosted-score-command {
@@ -701,7 +747,9 @@ footer {
   display: grid;
   align-content: start;
   gap: 16px;
-  background: linear-gradient(145deg, rgba(3, 13, 20, 0.16), rgba(7, 35, 40, 0.2));
+  background:
+    radial-gradient(circle at 24% 12%, rgba(91, 221, 205, 0.11), transparent 42%),
+    linear-gradient(145deg, rgba(5, 24, 31, 0.97), rgba(5, 15, 25, 0.98));
 }
 
 .hosted-command-board {
@@ -709,16 +757,16 @@ footer {
   display: grid;
   align-content: start;
   gap: 14px;
-  background: linear-gradient(150deg, rgba(5, 18, 27, 0.3), rgba(22, 24, 46, 0.22));
-  border-left: 1px solid var(--line);
+  background: linear-gradient(150deg, rgba(6, 24, 31, 0.97), rgba(18, 23, 43, 0.96));
+  border: 1px solid rgba(91, 221, 205, 0.24);
 }
 
 .hosted-decision {
-  padding: 18px 20px;
-  background: linear-gradient(135deg, rgba(4, 15, 22, 0.64), rgba(19, 31, 49, 0.48));
-  border: 1px solid rgba(91, 221, 205, 0.25);
-  border-radius: 14px;
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .hosted-decision h2 {
@@ -731,13 +779,11 @@ footer {
 .hosted-opportunity-score {
   display: grid;
   gap: 10px;
-  padding: 18px;
-  background:
-    radial-gradient(circle at 28% 16%, rgba(91, 221, 205, 0.08), transparent 38%),
-    rgba(3, 14, 21, 0.66);
-  border: 1px solid rgba(91, 221, 205, 0.34);
-  border-radius: 16px;
-  box-shadow: inset 0 0 32px rgba(54, 177, 170, 0.045), 0 18px 38px rgba(0, 0, 0, 0.16);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .hosted-opportunity-total {
@@ -1278,24 +1324,31 @@ footer {
 
 .hosted-feedback-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 20px;
-  padding: 20px 24px;
+  justify-items: center;
+  width: min(100%, 720px);
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(153, 202, 207, 0.14);
 }
 
 .hosted-feedback-panel[hidden] {
   display: none;
 }
 
-.hosted-feedback-panel h2 {
-  margin-top: 4px;
-  font-size: 20px;
+.hosted-feedback-prompt {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px 12px;
 }
 
-.hosted-feedback-panel > div:first-child > p:last-child {
-  margin: 5px 0 0;
-  color: var(--muted);
+.hosted-feedback-prompt .eyebrow {
+  margin: 0;
+}
+
+.hosted-feedback-prompt strong {
+  color: #dce9eb;
   font-size: 13px;
 }
 
@@ -1311,16 +1364,17 @@ footer {
 }
 
 .hosted-feedback-message {
-  grid-column: 1 / -1;
   min-height: 0;
   margin: 0;
 }
 
 .hosted-feedback-detail {
   display: grid;
-  grid-column: 1 / -1;
+  justify-items: stretch;
+  width: min(100%, 620px);
   gap: 8px;
-  padding-top: 4px;
+  padding-top: 6px;
+  text-align: left;
 }
 
 .hosted-feedback-detail[hidden] {
@@ -3592,12 +3646,13 @@ dd {
 }
 
 footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
   padding: 28px 0 40px;
   color: var(--muted);
   font-size: 12px;
+  text-align: center;
 }
 
 @media (min-width: 1041px) {
@@ -3663,8 +3718,7 @@ footer {
   .hosted-command-board,
   .hosted-target,
   .hosted-setup-card {
-    border-top: 1px solid var(--line);
-    border-left: 0;
+    border: 1px solid rgba(91, 221, 205, 0.24);
   }
 
   .decision-panel,
@@ -3699,8 +3753,12 @@ footer {
     align-items: stretch;
     flex-direction: column;
     min-height: 0;
-    gap: 14px;
-    padding-block: 16px 14px;
+    gap: 11px;
+    margin-top: 10px;
+    padding: 14px;
+    background: linear-gradient(145deg, rgba(8, 28, 36, 0.88), rgba(7, 17, 28, 0.94));
+    border: 1px solid rgba(91, 221, 205, 0.2);
+    border-radius: 14px;
   }
 
   .header-actions {
@@ -3719,17 +3777,39 @@ footer {
   .account-control {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 44px 44px 44px;
+    gap: 8px;
     width: 100%;
     max-width: none;
   }
 
   .account-email {
+    grid-row: 1;
+    grid-column: 1;
     align-self: center;
+    padding-left: 4px;
     max-width: none;
   }
 
   .hosted-header-eq-control {
+    grid-row: 2;
     grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+
+  #sign-out-button {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  #hosted-edit-home-button {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  #hosted-refresh-button {
+    grid-row: 3;
+    grid-column: 2;
   }
 
   .account-control > button,
@@ -3752,7 +3832,7 @@ footer {
   .auth-gate,
   .hosted-account-main {
     width: min(100% - 28px, 760px);
-    margin: 20px auto;
+    margin: 14px auto 20px;
   }
 
   .auth-gate {
@@ -3776,10 +3856,6 @@ footer {
   .hosted-recommendation,
   .hosted-feedback-panel {
     grid-template-columns: 1fr;
-  }
-
-  .hosted-recommendation {
-    border-radius: 14px;
   }
 
   .hosted-command-summary {

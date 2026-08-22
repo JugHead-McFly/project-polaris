@@ -215,7 +215,7 @@ def test_tonight_adds_selected_rig_profile_and_target_fit():
     assert response.status_code == 200
     payload = response.json()
     assert payload["observatory"]["rig_profile_key"] == "seestar-s50"
-    assert payload["observatory"]["rig_profile_label"] == "ZWO Seestar S50"
+    assert payload["observatory"]["rig_profile_label"] == "Seestar S50"
     assert build_schedule.call_args.kwargs["rig_profile_key"] == "seestar-s50"
     assert payload["recommended_target"]["rig_fit"]["rig_key"] == "seestar-s50"
     assert payload["recommended_target"]["rig_fit"]["label"] == "Very small"

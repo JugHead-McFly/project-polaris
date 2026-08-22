@@ -333,7 +333,7 @@ def _build_tonight_payload(
             "elevation_meters": observatory.elevation_meters,
             "rig_profile_key": rig_profile.key if rig_profile else None,
             "rig_profile_label": (
-                f"{rig_profile.manufacturer} {rig_profile.model}"
+                _display_rig_name(rig_profile.manufacturer, rig_profile.model)
                 if rig_profile
                 else None
             ),

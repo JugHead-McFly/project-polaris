@@ -346,7 +346,7 @@ const hostedPlanFailureMessage = (requestId = "") => {
   const requestNote = requestId
     ? ` If this keeps happening, send Doug request ID ${requestId}.`
     : "";
-  return `Polaris could not build tonight's plan. Try Refresh tonight once more.${requestNote}`;
+  return `Polaris could not build tonight's plan. Try Refresh plan once more.${requestNote}`;
 };
 
 const renderHostedReferenceImage = (target) => {
@@ -559,7 +559,7 @@ const renderOpportunityScore = (scoreBreakdown) => {
     ? Number(scoreBreakdown.total)
     : opportunityComponentScore(components);
 
-  setText("hosted-opportunity-score", displayMeasuredNumber(opportunityScore));
+  setText("hosted-opportunity-score", Number(opportunityScore).toFixed(1));
   setText("hosted-opportunity-label", opportunityScoreLabel(opportunityScore));
   reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
   byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
@@ -650,8 +650,8 @@ const shortTargetName = (target) => {
 
 const hostedTrackingModeLabel = () => (
   byId("hosted-eq-mode-checkbox").checked
-    ? "EQ allowed tonight"
-    : "Alt-Az-safe tracking"
+    ? "EQ"
+    : "Alt-Az"
 );
 
 const displayedDecisionLabel = (decision) => {
@@ -733,7 +733,7 @@ const renderHostedTonight = (data) => {
       displayNumber(settings.exposure_seconds, " sec"),
     );
     setText("hosted-target-gain", displayNumber(settings.gain));
-    renderFilterValue("hosted-target-filter", settings.filter_name);
+    renderFilterValue("hosted-target-filter", settings.filter_name, false);
     setText("hosted-target-tracking", hostedTrackingModeLabel());
     renderHostedReferenceImage(target);
   } else {
@@ -839,10 +839,10 @@ const loadHostedTonight = async () => {
     setText("hosted-decision-message", error.message);
     setText("hosted-target-reason", "Your observing home is still saved. This is a planning refresh problem, not a telescope-control action.");
     renderHostedSchedule({ decision: "Plan unavailable", blocks: [] });
-    setText("hosted-plan-message", "Try Refresh tonight again. If it fails twice, send Doug the request ID and a screenshot.");
+    setText("hosted-plan-message", "Try Refresh plan again. If it fails twice, send Doug the request ID and a screenshot.");
   } finally {
     refresh.disabled = false;
-    refresh.textContent = "Refresh tonight";
+    refresh.textContent = "Refresh plan";
   }
 };
 
@@ -1359,11 +1359,11 @@ const appendSettingsInfoButton = (parent, block) => {
   });
 };
 
-const renderFilterValue = (id, value) => {
+const renderFilterValue = (id, value, includeInfo = true) => {
   const container = byId(id);
   container.replaceChildren();
   appendTextElement(container, "span", "", friendlyFilterLabel(value));
-  appendFilterInfoButton(container, value);
+  if (includeInfo) appendFilterInfoButton(container, value);
 };
 
 const qualityInterpretation = (score) => {

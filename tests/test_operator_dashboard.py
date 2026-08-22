@@ -74,13 +74,15 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'id="image-dialog"' in response.text
     assert "Weather service" not in response.text
     assert "JPL ephemeris" not in response.text
-    assert "Planner V3 · advisory only · no equipment control" in response.text
+    assert "Planner V3 · advisory only · no equipment control" not in response.text
     assert stylesheet.status_code == 200
     assert script.status_code == 200
     assert leaflet_stylesheet.status_code == 200
     assert leaflet_script.status_code == 200
     assert "equatorial_mode_enabled=${eqEnabled}" in script.text
     assert "Allow EQ-mode exposures" in response.text
+    assert 'class="tracking-mode-options"' in response.text
+    assert "Alt-Az" in response.text
     assert "Leave unchecked for Alt-Az-safe exposures" in response.text
     assert 'const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";' in script.text
     assert "window.localStorage.getItem(EQ_MODE_PREFERENCE_KEY)" in script.text
@@ -192,7 +194,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "Sharpness (FWHM)" in script.text
     assert "diagnostic only" in script.text
     assert "quality-info-dialog" in response.text
-    assert "clear and trustworthy" in response.text
+    assert "Was this plan useful?" in response.text
     assert "unclear, untrustworthy, or less useful" in response.text
     assert "target choice, timing, weather, Moon, local sky" in response.text
     assert "Individual image analysis" in response.text
@@ -271,8 +273,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-command-target"' in html
     assert 'id="hosted-command-fallback"' in html
     assert 'id="hosted-action-summary"' not in html
-    assert "Refresh tonight" in html
-    assert "Edit observing home" in html
+    assert "Refresh plan" in html
+    assert "Edit home" in html
     assert 'id="hosted-target-rig"' in html
     assert "Rig profile" in html
     assert 'id="hosted-target-fit"' in html
@@ -281,6 +283,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Why this rig matches" in html
     assert 'id="hosted-weather-diagnostic"' in html
     assert "Sign out" in html
+    assert (
+        html.index('id="hosted-plan-message"')
+        < html.index('id="data-updated"')
+        < html.index('id="hosted-feedback-panel"')
+    )
     assert (
         html.index('id="hosted-refresh-button"')
         < html.index('id="account-email"')
@@ -295,6 +302,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedTonight" in script
     assert "renderOpportunityScore" in script
     assert "hosted-opportunity-total-bar" in script
+    assert "Number(opportunityScore).toFixed(1)" in script
     assert "data.opportunity_score" in script
     assert "opportunityComponentScore" in script
     assert "opportunityScoreLabel" in script
@@ -308,6 +316,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "component.key" in script
     assert "hosted-score-factor-description" in script
     assert 'component.source !== "Proportional"' in script
+    assert 'renderFilterValue("hosted-target-filter", settings.filter_name, false)' in script
+    assert '? "EQ"' in script
+    assert ': "Alt-Az"' in script
     assert "displayedDecisionMessage" in script
     assert "softenAdvisoryNote" in script
     assert "Best move tonight" not in script
