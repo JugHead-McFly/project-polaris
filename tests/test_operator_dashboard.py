@@ -275,6 +275,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-command-fallback"' in html
     assert 'id="hosted-action-summary"' not in html
     assert 'aria-label="Refresh tonight\'s plan"' in html
+    assert '<span class="header-refresh-label">Refresh plan</span>' in html
+    assert '<span class="header-refresh-label">Refresh</span>' in html
     assert 'id="mobile-refresh-button"' in html
     assert 'id="mobile-account-menu-button"' in html
     assert 'aria-controls="account-control"' in html
@@ -294,9 +296,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
         < html.index('id="hosted-feedback-panel"')
     )
     assert (
-        html.index('id="account-email"')
+        html.index('id="hosted-refresh-button"')
+        < html.index('id="account-email"')
         < html.index('id="sign-out-button"')
-        < html.index('id="hosted-refresh-button"')
     )
     assert "secret" not in html.lower()
     assert 'nonce="safe-test-nonce"' in html

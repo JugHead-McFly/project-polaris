@@ -47,12 +47,6 @@
             </button>
           </div>
           <div class="header-session-actions">
-            <div class="header-identity-row">
-              <span class="account-email" id="account-email"></span>
-              <button class="account-button" id="sign-out-button" type="button">
-                Sign out
-              </button>
-            </div>
             <button
               class="refresh-button header-refresh-button"
               id="hosted-refresh-button"
@@ -63,7 +57,14 @@
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M20 11a8 8 0 1 0-2.35 5.65M20 4v7h-7"></path>
               </svg>
+              <span class="header-refresh-label">Refresh plan</span>
             </button>
+            <div class="header-identity-row">
+              <span class="account-email" id="account-email"></span>
+              <button class="account-button" id="sign-out-button" type="button">
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
         <div class="mobile-header-actions" id="mobile-header-actions" hidden>
@@ -77,6 +78,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M20 11a8 8 0 1 0-2.35 5.65M20 4v7h-7"></path>
             </svg>
+            <span class="header-refresh-label">Refresh</span>
           </button>
           <button
             class="account-button mobile-account-menu-button"

@@ -288,7 +288,7 @@ footer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 18px;
+  gap: 24px;
   width: 100%;
 }
 
@@ -304,26 +304,36 @@ footer {
 }
 
 .header-session-actions {
-  display: grid;
-  justify-items: center;
-  gap: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .header-identity-row {
   display: flex;
   align-items: center;
-  gap: 9px;
+  min-height: 44px;
+  gap: 5px;
+  padding: 3px 3px 3px 10px;
+  background: rgba(3, 14, 22, 0.42);
+  border: 1px solid rgba(153, 202, 207, 0.2);
+  border-radius: 10px;
 }
 
-.header-refresh-button,
-.mobile-header-refresh-button {
-  display: inline-grid;
-  width: 44px;
+.refresh-button.header-refresh-button,
+.refresh-button.mobile-header-refresh-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
   height: 44px;
   min-height: 44px;
-  padding: 0;
-  place-items: center;
-  border-radius: 50%;
+  gap: 8px;
+  padding: 0 13px;
+  border-radius: 10px;
+  font-size: 12px;
+  letter-spacing: 0.01em;
 }
 
 .header-refresh-button svg,
@@ -343,6 +353,10 @@ footer {
   animation: refresh-spin 900ms linear infinite;
 }
 
+.header-refresh-label {
+  white-space: nowrap;
+}
+
 .mobile-header-actions {
   display: none;
 }
@@ -357,10 +371,14 @@ footer {
   position: relative;
   display: grid;
   grid-template-columns: auto auto;
-  min-height: 36px;
+  min-height: 44px;
   gap: 8px;
   padding: 3px 4px 3px 10px;
   background: rgba(3, 14, 22, 0.5);
+}
+
+#hosted-edit-home-button {
+  min-height: 44px;
 }
 
 .tracking-mode-control.hosted-header-eq-control input {
@@ -3891,6 +3909,15 @@ footer {
     padding: 0 10px;
   }
 
+  .refresh-button.mobile-header-refresh-button {
+    gap: 6px;
+    padding-inline: 9px;
+  }
+
+  .brand small {
+    display: none;
+  }
+
   .mobile-account-menu-button svg {
     width: 17px;
     height: 17px;
@@ -3929,6 +3956,10 @@ footer {
   .header-identity-row {
     justify-content: space-between;
     width: 100%;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
   }
 
   .account-email {
@@ -4159,6 +4190,22 @@ footer {
 
   footer {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-header-refresh-button .header-refresh-label {
+    display: none;
+  }
+
+  .refresh-button.mobile-header-refresh-button {
+    width: 44px;
+    padding: 0;
+  }
+
+  .mobile-account-menu-button {
+    gap: 5px;
+    padding-inline: 8px;
   }
 }
 
