@@ -143,6 +143,15 @@ Advanced portfolio, quality, locations, image-processing, native mobile,
 subscriptions, and a broad device matrix remain optional until user evidence
 shows they are needed for repeat use.
 
+### Parked v1.10 follow-up backlog
+
+- [ ] Expand the cached NASA-informed target-art catalog across common
+  galaxies, nebulae, and clusters so popular targets resolve quickly. Preserve
+  catalog-driven configuration, background-only refreshes, expiry and stale
+  fallback behavior, official-source and credit metadata, accessible source
+  links, rights-safe candidate selection, and category/generic artwork
+  fallbacks.
+
 ## Weekly operating rhythm
 
 At the beginning of each coding session, Polaris should state:
