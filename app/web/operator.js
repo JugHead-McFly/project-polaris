@@ -504,13 +504,22 @@ const buildOpportunityComponents = (rating, context = {}) => {
   ];
 };
 
+const scoreComponentTone = (component) => {
+  if (component.points === null || component.points === undefined) return "unavailable";
+  const percent = component.points / component.max;
+  if (percent >= 0.75) return "strong";
+  if (percent >= 0.45) return "mixed";
+  return "weak";
+};
+
 const appendOpportunityComponent = (container, component) => {
   const row = appendTextElement(container, "div", "hosted-score-component", "");
+  row.classList.add(`is-${scoreComponentTone(component)}`);
   if (component.points === null || component.points === undefined) {
     row.classList.add("is-unavailable");
   }
 
-  appendTextElement(row, "span", "", component.label);
+  appendTextElement(row, "span", "", `${component.label} · ${component.max} pts`);
   appendTextElement(
     row,
     "strong",
