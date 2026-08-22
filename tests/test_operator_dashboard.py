@@ -273,6 +273,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-command-target"' in html
     assert 'id="hosted-command-target-illustration"' in html
     assert 'id="hosted-command-fallback"' in html
+    assert 'id="hosted-command-fallback-illustration"' in html
     assert 'id="hosted-action-summary"' not in html
     assert 'aria-label="Refresh tonight\'s plan"' in html
     assert '<span class="header-refresh-label">Refresh plan</span>' in html
@@ -357,6 +358,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'return "cluster"' in script
     assert 'return "deep-sky"' in script
     assert 'renderTargetIllustration("hosted-command-target-illustration"' in script
+    assert 'renderTargetIllustration("hosted-command-fallback-illustration"' in script
     assert 'renderTargetIllustration("hosted-target-illustration"' in script
     assert "if (!target)" in script
     assert "container.replaceChildren();" in script
@@ -365,6 +367,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "if (targetVisuals) targetVisuals.hidden = !target;" in script
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
     assert ".hosted-command-target-card.has-target-illustration" in css
+    assert ".hosted-command-fallback-card.has-target-illustration" in css
     assert ".hosted-target-heading:not(.has-target-illustration)" in css
     assert ".hosted-reference-image" not in css
     assert ".target-reference-image" not in css
@@ -401,6 +404,36 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "equatorial_mode_enabled=${eqEnabled}" in script
     assert '`${value}T12:00:00`' in script
     assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script
+
+
+def test_command_cards_separate_empty_best_target_from_real_fallback_art():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    # Each command card owns exactly one mount; renderTargetIllustration is
+    # responsible for leaving a null mount empty or adding one SVG for a real
+    # cached/client-fallback target.
+    assert html.count('id="hosted-command-target-illustration"') == 1
+    assert html.count('id="hosted-command-fallback-illustration"') == 1
+    assert (
+        '"hosted-command-target-illustration",\n'
+        "      data.recommended_target || null,"
+    ) in script
+    assert (
+        '"hosted-command-fallback-illustration",\n'
+        "    fallbackTarget,"
+    ) in script
+    assert "if (!target) {\n    container.replaceChildren();\n    container.hidden = true;" in script
+    assert "cachedIllustration || buildTargetIllustrationSvg(target, compact)" in script
+    assert (
+        ".hosted-command-fallback-card.has-target-illustration"
+        " {\n  padding-right: 78px !important;"
+    ) in css
+
+    assert 'id="hosted-reference-image"' not in html
+    assert 'id="target-reference-image"' not in html
+    assert "renderReferenceAttribution" not in script
 
 
 def test_operator_dashboard_sets_restrictive_content_policy():

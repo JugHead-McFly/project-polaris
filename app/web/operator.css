@@ -1145,13 +1145,15 @@ footer {
   line-height: 1.35;
 }
 
-.hosted-command-target-card {
+.hosted-command-target-card,
+.hosted-command-fallback-card {
   position: relative;
   min-height: 92px;
   overflow: hidden;
 }
 
-.hosted-command-target-card.has-target-illustration {
+.hosted-command-target-card.has-target-illustration,
+.hosted-command-fallback-card.has-target-illustration {
   padding-right: 78px !important;
 }
 
@@ -3962,7 +3964,8 @@ footer {
     min-height: 44px;
   }
 
-  .hosted-command-target-card {
+  .hosted-command-target-card,
+  .hosted-command-fallback-card {
     min-height: 96px;
   }
 

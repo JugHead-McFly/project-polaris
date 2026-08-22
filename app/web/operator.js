@@ -301,6 +301,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-command-target", "—");
   setText("hosted-command-fallback", "—");
   renderTargetIllustration("hosted-command-target-illustration", null, true);
+  renderTargetIllustration("hosted-command-fallback-illustration", null, true);
   renderTargetIllustration("hosted-target-illustration", null);
   setText("hosted-target-tracking", "—");
   setText("hosted-weather-summary", "—");
@@ -472,7 +473,9 @@ const parseCachedTargetIllustration = (target) => {
 
 const renderTargetIllustration = (containerId, target, compact = false) => {
   const container = byId(containerId);
-  const commandCard = container.closest(".hosted-command-target-card");
+  const commandCard = container.closest(
+    ".hosted-command-target-card, .hosted-command-fallback-card",
+  );
   const targetVisuals = container.closest(".hosted-target-visuals");
   const targetHeading = container.closest(".hosted-target-heading");
 
@@ -826,6 +829,11 @@ const renderHostedTonight = (data) => {
   setText(
     "hosted-command-fallback",
     fallbackTarget ? shortTargetName(fallbackTarget) : "No alternate ranked",
+  );
+  renderTargetIllustration(
+    "hosted-command-fallback-illustration",
+    fallbackTarget,
+    true,
   );
   setText(
     "hosted-target-label",
