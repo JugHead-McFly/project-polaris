@@ -778,7 +778,7 @@ footer {
 
 #hosted-opportunity-score {
   color: inherit;
-  font-size: clamp(40px, 4vw, 48px);
+  font-size: clamp(42px, 4vw, 44px);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.045em;
   line-height: 0.95;
@@ -794,7 +794,7 @@ footer {
 
 .hosted-opportunity-reading small {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
 }
 

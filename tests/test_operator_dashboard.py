@@ -22,7 +22,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert response.headers["content-type"].startswith("text/html")
     assert response.headers["cache-control"] == "no-store"
     assert ".hosted-recommendation.status-loading #hosted-opportunity-score" in stylesheet.text
-    assert "font-size: clamp(40px, 4vw, 48px);" in stylesheet.text
+    assert "font-size: clamp(42px, 4vw, 44px);" in stylesheet.text
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text
