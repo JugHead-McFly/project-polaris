@@ -39,6 +39,7 @@ class RigTargetFitSummary(BaseModel):
     fits: Optional[bool] = None
     label: str
     reason: str
+    match_summary: str
     margin_degrees: Optional[float] = None
 
 

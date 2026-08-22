@@ -205,6 +205,47 @@ def test_tonight_adds_selected_rig_profile_and_target_fit():
     assert payload["recommended_target"]["rig_fit"]["rig_key"] == "seestar-s50"
     assert payload["recommended_target"]["rig_fit"]["label"] == "Very small"
     assert payload["recommended_target"]["rig_fit"]["target_width_degrees"] == 0.023
+    assert (
+        "Polaris selected M57 for ZWO Seestar S50"
+        in payload["recommended_target"]["rig_fit"]["match_summary"]
+    )
+    assert "framing check is very small" in payload["recommended_target"]["rig_fit"]["match_summary"]
+    assert database.closed
+
+
+def test_tonight_explains_unknown_official_rig_fov_without_guessing():
+    database = FakeDatabase()
+    planner = planner_response()
+    context = ObservatoryContext(
+        name="Doug's Rig Test",
+        postal_code="85297",
+        timezone_name="America/Phoenix",
+        latitude=33.2,
+        longitude=-111.7,
+        rig_profile_key="dwarf-mini",
+    )
+
+    with (
+        patch("app.database.database.SessionLocal", return_value=database),
+        patch("app.api.tonight.get_planning_context", return_value=context),
+        patch("app.api.tonight.get_tonight_plan", return_value=planner),
+        patch(
+            "app.api.tonight.build_tonight_schedule",
+            return_value=schedule_response(planner),
+        ),
+        patch(
+            "app.api.tonight.build_target_response",
+            side_effect=lambda db, target_name: target_response(target_name),
+        ),
+    ):
+        response = TestClient(app).get("/tonight")
+
+    assert response.status_code == 200
+    payload = response.json()
+    fit = payload["recommended_target"]["rig_fit"]
+    assert fit["rig_label"] == "DWARFLAB DWARF mini"
+    assert fit["label"] == "Unknown fit"
+    assert "official rig field-of-view data is incomplete" in fit["match_summary"]
     assert database.closed
 
 

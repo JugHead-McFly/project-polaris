@@ -133,6 +133,14 @@ def _build_rig_fit_summary(
     target_width = target_size[0] if target_size else None
     target_height = target_size[1] if target_size else None
     fit = rig.assess_target_fit(target_width, target_height)
+    match_summary = _build_rig_match_summary(
+        target_name=target_name,
+        rig_label=f"{rig.manufacturer} {rig.model}",
+        target_width=target_width,
+        target_height=target_height,
+        fit_label=fit.label,
+        fit_reason=fit.reason,
+    )
     return {
         "rig_key": rig.key,
         "rig_label": f"{rig.manufacturer} {rig.model}",
@@ -141,8 +149,60 @@ def _build_rig_fit_summary(
         "fits": fit.fits,
         "label": fit.label,
         "reason": fit.reason,
+        "match_summary": match_summary,
         "margin_degrees": fit.margin_degrees,
     }
+
+
+def _build_rig_match_summary(
+    *,
+    target_name: str,
+    rig_label: str,
+    target_width: Optional[float],
+    target_height: Optional[float],
+    fit_label: str,
+    fit_reason: str,
+) -> str:
+    target = target_name.strip().upper()
+    common_target_names = {
+        "C 20": "a wide emission nebula",
+        "M8": "a bright emission nebula",
+        "M16": "an emission nebula",
+        "M17": "an emission nebula",
+        "M20": "a nebula target",
+        "M27": "a compact nebula",
+        "M31": "a very large galaxy",
+        "M51": "a compact galaxy",
+        "M57": "a very small planetary nebula",
+        "M63": "a compact galaxy",
+        "M64": "a compact galaxy",
+        "M97": "a compact planetary nebula",
+    }
+    target_description = common_target_names.get(target, "tonight's target")
+
+    if target_width is None or target_height is None:
+        return (
+            f"Polaris selected {target_name} for {rig_label} because it is "
+            f"{target_description} with a usable window and recommended "
+            "settings for this smart-telescope workflow. Exact framing fit "
+            "is still marked unknown because Polaris does not yet have "
+            "complete official target-size or rig field-of-view data."
+        )
+
+    if fit_label == "Unknown fit":
+        return (
+            f"Polaris selected {target_name} for {rig_label} because it is "
+            f"{target_description} with a usable window and recommended "
+            "settings for this smart-telescope workflow. Exact framing fit "
+            "is still marked unknown because the official rig field-of-view "
+            "data is incomplete."
+        )
+
+    return (
+        f"Polaris selected {target_name} for {rig_label} because it is "
+        f"{target_description}, has a usable imaging window, and the rig "
+        f"framing check is {fit_label.lower()}. {fit_reason}"
+    )
 
 
 def _select_backup_plan(planner: Dict) -> Optional[Dict]:

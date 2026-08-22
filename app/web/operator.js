@@ -170,6 +170,11 @@ const targetFitLabel = (target) => {
   return fit.reason ? `${fit.label}: ${fit.reason}` : fit.label;
 };
 
+const targetRigMatchLabel = (target) => (
+  target?.rig_fit?.match_summary
+  || "Rig-specific reasoning is not available until a smart telescope profile is selected."
+);
+
 const roundedApproximateCoordinate = (value) => Number(Number(value).toFixed(2));
 
 const useDeviceLocation = () => {
@@ -255,6 +260,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-name", "—");
   setText("hosted-target-common-name", "");
   setText("hosted-target-reason", "Waiting for tonight's target.");
+  setText("hosted-target-rig-match", "Rig match will appear after a target is selected.");
   setText("hosted-target-window", "—");
   setText("hosted-target-rig", "—");
   setText("hosted-target-fit", "—");
@@ -503,6 +509,7 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-name", target.object, "Unknown target");
     setText("hosted-target-common-name", target.common_name, "");
     setText("hosted-target-reason", target.reason, "Planner recommendation available.");
+    setText("hosted-target-rig-match", targetRigMatchLabel(target));
     setText("hosted-target-fit", targetFitLabel(target));
     setText(
       "hosted-target-window",
@@ -519,6 +526,7 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
     setText("hosted-target-reason", "No target currently meets the planner requirements.");
+    setText("hosted-target-rig-match", "Rig-specific reasoning is not available without a selected target.");
     setText("hosted-target-window", "No usable window");
     setText("hosted-target-fit", "Not checked");
     setText("hosted-target-exposure", null);
