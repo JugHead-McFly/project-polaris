@@ -381,6 +381,14 @@ const isM31Target = (target) => {
   return /(^|[^a-z0-9])m31([^a-z0-9]|$)/i.test(identifier);
 };
 
+const TARGET_ILLUSTRATION_ASSETS = Object.freeze({
+  M31: "/operator-assets/target-art/m31-andromeda.svg?v=2f1d3e60",
+});
+
+const mappedTargetIllustrationAsset = (target) => (
+  isM31Target(target) ? TARGET_ILLUSTRATION_ASSETS.M31 : null
+);
+
 const appendTargetStars = (svg) => {
   const stars = [
     [18, 29, 0.7], [43, 116, 0.55], [74, 19, 0.45], [105, 126, 0.75],
@@ -404,6 +412,18 @@ const appendTargetStars = (svg) => {
 
 const buildTargetIllustrationSvg = (target, _compact = false) => {
   const kind = targetIllustrationKind(target);
+  const mappedAsset = mappedTargetIllustrationAsset(target);
+  if (mappedAsset) {
+    const image = document.createElement("img");
+    image.src = mappedAsset;
+    image.alt = "";
+    image.setAttribute("aria-hidden", "true");
+    image.decoding = "async";
+    image.dataset.kind = kind;
+    image.dataset.visualTreatment = "m31-library-v2";
+    return image;
+  }
+
   const uniqueId = `target-art-${targetIllustrationSequence += 1}`;
   const svg = appendTargetSvgElement(document.createDocumentFragment(), "svg", {
     viewBox: "0 0 240 140",
@@ -424,48 +444,6 @@ const buildTargetIllustrationSvg = (target, _compact = false) => {
     fill: "none", stroke: "#315f63", "stroke-width": ".7",
     "stroke-dasharray": "1 7", opacity: ".44",
   });
-  if (isM31Target(target)) {
-    const m31 = appendTargetSvgElement(svg, "g", {
-      "data-morphology": "m31-andromeda-v1",
-      transform: "translate(-10 -27.5) scale(.65)",
-    });
-    appendTargetSvgElement(m31, "ellipse", {
-      cx: "200", cy: "150", rx: "132", ry: "47",
-      fill: `url(#${uniqueId}-glow)`, opacity: ".76",
-    });
-    appendTargetSvgElement(m31, "ellipse", {
-      cx: "183", cy: "146", rx: "31", ry: "18",
-      fill: "#f0e4c5", opacity: ".9",
-    });
-    [
-      ["M87.9 132.1 A124 42 0 0 1 316.5 135.6", "#72d8c6", "6", ".72"],
-      ["M310.3 161.6 A113 35 0 0 1 106.2 173.5", "#f0e4c5", "5", ".58"],
-      ["M148.7 131.6 A74 22 0 0 1 261.1 136.5", "#315f63", "3", ".76"],
-      ["M91.7 139.1 A111 38 0 0 1 307.8 144.3", "#06131a", "5", ".48"],
-      ["M292.2 163 A92 30 0 0 1 113.9 165.6", "#06131a", "4", ".42"],
-    ].forEach(([d, stroke, strokeWidth, opacity]) => {
-      appendTargetSvgElement(m31, "path", {
-        d, fill: "none", stroke, "stroke-width": strokeWidth,
-        "stroke-linecap": "round", opacity,
-      });
-    });
-    appendTargetSvgElement(m31, "circle", {
-      cx: "254", cy: "135", r: "3", fill: "#d5a54d", opacity: ".55",
-    });
-    [
-      ["M66.3 128.5 A137 98 0 0 1 121.6 69.6", "#f0e4c5", ".24"],
-      ["M282.5 219.6 A128 91 0 0 1 202.7 241", "#72d8c6", ".22"],
-      ["M113.9 208 A119 84 0 0 1 86.7 175.8", "#d5a54d", ".28"],
-    ].forEach(([d, stroke, opacity]) => {
-      appendTargetSvgElement(m31, "path", {
-        d, fill: "none", stroke, "stroke-width": "2",
-        "stroke-linecap": "round", opacity,
-      });
-    });
-    svg.dataset.kind = kind;
-    svg.dataset.visualTreatment = "m31-morphology-v1";
-    return svg;
-  }
   const targetMark = appendTargetSvgElement(svg, "g", {
     transform: "rotate(-17 120 70)",
   });
@@ -508,7 +486,7 @@ const parseCachedTargetIllustration = (target) => {
   const parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
   const svg = parsed.documentElement;
   if (svg?.localName !== "svg" || parsed.querySelector("parsererror")) return null;
-  if (svg.querySelector("script, foreignObject, image, use, a, text, title")) return null;
+  if (svg.querySelector("script, foreignObject, image, use, a, text, title, desc")) return null;
   for (const element of [svg, ...svg.querySelectorAll("*")]) {
     for (const attribute of element.attributes) {
       const name = attribute.name.toLowerCase();

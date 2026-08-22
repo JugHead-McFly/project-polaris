@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" data-visual-treatment="m31-library-v2" data-morphology="m31-andromeda-current">
+  <defs>
+    <radialGradient id="m31-andromeda-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="m31-andromeda-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <rect width="400" height="300" fill="#102a2c"/>
+  <g opacity="0.9">
+    <circle cx="234" cy="94" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="281" cy="165" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="328" cy="236" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="375" cy="43" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="58" cy="114" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="105" cy="185" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="152" cy="256" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="199" cy="63" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="246" cy="134" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="293" cy="205" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="340" cy="276" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="23" cy="83" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="70" cy="154" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="117" cy="225" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="164" cy="32" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="258" cy="174" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="305" cy="245" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="352" cy="52" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="35" cy="123" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="82" cy="194" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="129" cy="265" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="270" cy="214" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="317" cy="21" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="364" cy="92" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="47" cy="163" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="94" cy="234" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="141" cy="41" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="282" cy="254" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="329" cy="61" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="132" ry="47" fill="url(#m31-andromeda-glow)"/>
+    <ellipse cx="183" cy="146" rx="31" ry="18" fill="#f3ead2" opacity=".9"/>
+    <path d="M87.9 132.1 A124 42 0 0 1 316.5 135.6" fill="none" stroke="#9ec9bf" stroke-width="6" stroke-linecap="round" opacity="0.72"/>
+    <path d="M310.3 161.6 A113 35 0 0 1 106.2 173.5" fill="none" stroke="#d8caa7" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+    <path d="M148.7 131.6 A74 22 0 0 1 261.1 136.5" fill="none" stroke="#2f8f8a" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <path d="M91.7 139.1 A111 38 0 0 1 307.8 144.3" fill="none" stroke="#102a2c" stroke-width="5" stroke-linecap="round" opacity="0.42"/>
+    <path d="M292.2 163.0 A92 30 0 0 1 113.9 165.6" fill="none" stroke="#102a2c" stroke-width="4" stroke-linecap="round" opacity="0.36"/>
+    <circle cx="254" cy="135" r="3" fill="#d49a3a" opacity=".55"/>
+  </g>
+</svg>

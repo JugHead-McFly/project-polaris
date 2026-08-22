@@ -5,6 +5,7 @@ from __future__ import annotations
 import html
 import json
 import logging
+import xml.etree.ElementTree as ElementTree
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 NASA_IMAGE_SEARCH_URL = "https://images-api.nasa.gov/search"
 NASA_MEDIA_USAGE_URL = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
-TARGET_ART_CACHE_SCHEMA = 5
+TARGET_ART_CACHE_SCHEMA = 6
 TARGET_ART_CACHE_TTL = timedelta(days=30)
 TARGET_ART_CACHE_ROOT = settings.BASE_DIR / ".cache" / "target-art"
 CANONICAL_TARGET_ART_PALETTE = (
@@ -30,10 +31,58 @@ CANONICAL_TARGET_ART_PALETTE = (
     "#315f63",
     "#d5a54d",
 )
+MAPPED_TARGET_ART_ASSETS = {
+    "M31": {
+        "path": settings.BASE_DIR
+        / "app"
+        / "web"
+        / "target-art"
+        / "m31-andromeda.svg",
+        "source_catalog_sha256": (
+            "2f1d3e608eef02139168a2555041c306"
+            "b11f19d744b09a005a3a4365fe444e7c"
+        ),
+    },
+}
+_DISALLOWED_ASSET_ELEMENTS = {
+    "a",
+    "desc",
+    "foreignObject",
+    "image",
+    "script",
+    "text",
+    "title",
+    "use",
+}
 
 
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def _mapped_artwork_svg(target_name: str) -> Optional[str]:
+    mapping = MAPPED_TARGET_ART_ASSETS.get(target_name.strip().upper())
+    if mapping is None:
+        return None
+    markup = Path(mapping["path"]).read_text(encoding="utf-8").strip()
+    try:
+        root = ElementTree.fromstring(markup)
+    except ElementTree.ParseError as error:
+        raise ValueError("Mapped target artwork is not valid SVG") from error
+    if root.tag.rsplit("}", 1)[-1] != "svg":
+        raise ValueError("Mapped target artwork must have an SVG root")
+    for element in root.iter():
+        tag = element.tag.rsplit("}", 1)[-1]
+        if tag in _DISALLOWED_ASSET_ELEMENTS:
+            raise ValueError(f"Mapped target artwork contains disallowed {tag}")
+        for raw_name, raw_value in element.attrib.items():
+            name = raw_name.rsplit("}", 1)[-1].lower()
+            value = str(raw_value).lower()
+            if name.startswith("on") or name in {"href", "xlink:href"}:
+                raise ValueError("Mapped target artwork contains an unsafe attribute")
+            if name == "style" and "http" in value:
+                raise ValueError("Mapped target artwork contains an external style URL")
+    return markup
 
 
 def _cache_path(target_name: str, cache_dir: Optional[Path] = None) -> Path:
@@ -228,6 +277,10 @@ def _generate_artwork_svg(
     target_name: str,
     catalog_entry: Dict[str, Any],
 ) -> str:
+    mapped_artwork = _mapped_artwork_svg(target_name)
+    if mapped_artwork is not None:
+        return mapped_artwork
+
     profile = catalog_entry["profile"]
     palette = CANONICAL_TARGET_ART_PALETTE
     teal, cream, shadow_teal, amber = palette
@@ -245,41 +298,7 @@ def _generate_artwork_svg(
         f'<circle cx="178" cy="58" r="1.8" fill="{amber}"/>'
         f'<circle cx="68" cy="78" r="1.4" fill="{amber}"/></g>'
     )
-    if target_name.strip().upper() != "M31":
-        return _svg_shell(target_name, profile, palette, canonical_body)
-
-    # The approved M31 library asset is an original morphology-driven drawing.
-    # Its inclined disk, offset bulge, dust lanes, and asymmetric outer arcs are
-    # adapted into the existing 240x140 cached/client vignette coordinate space.
-    m31_body = (
-        '<g data-morphology="m31-andromeda-v1" transform="translate(-10 -27.5) scale(.65)">'
-        f'<ellipse cx="200" cy="150" rx="132" ry="47" fill="url(#{prefix}-glow)" opacity=".76"/>'
-        f'<ellipse cx="183" cy="146" rx="31" ry="18" fill="{cream}" opacity=".9"/>'
-        f'<path d="M87.9 132.1 A124 42 0 0 1 316.5 135.6" fill="none" stroke="{teal}" '
-        'stroke-width="6" stroke-linecap="round" opacity=".72"/>'
-        f'<path d="M310.3 161.6 A113 35 0 0 1 106.2 173.5" fill="none" stroke="{cream}" '
-        'stroke-width="5" stroke-linecap="round" opacity=".58"/>'
-        f'<path d="M148.7 131.6 A74 22 0 0 1 261.1 136.5" fill="none" stroke="{shadow_teal}" '
-        'stroke-width="3" stroke-linecap="round" opacity=".76"/>'
-        '<path d="M91.7 139.1 A111 38 0 0 1 307.8 144.3" fill="none" stroke="#06131a" '
-        'stroke-width="5" stroke-linecap="round" opacity=".48"/>'
-        '<path d="M292.2 163 A92 30 0 0 1 113.9 165.6" fill="none" stroke="#06131a" '
-        'stroke-width="4" stroke-linecap="round" opacity=".42"/>'
-        f'<circle cx="254" cy="135" r="3" fill="{amber}" opacity=".55"/>'
-        f'<path d="M66.3 128.5 A137 98 0 0 1 121.6 69.6" fill="none" stroke="{cream}" '
-        'stroke-width="2" stroke-linecap="round" opacity=".24"/>'
-        f'<path d="M282.5 219.6 A128 91 0 0 1 202.7 241" fill="none" stroke="{teal}" '
-        'stroke-width="2" stroke-linecap="round" opacity=".22"/>'
-        f'<path d="M113.9 208 A119 84 0 0 1 86.7 175.8" fill="none" stroke="{amber}" '
-        'stroke-width="2" stroke-linecap="round" opacity=".28"/></g>'
-    )
-    return _svg_shell(
-        target_name,
-        profile,
-        palette,
-        m31_body,
-        visual_treatment="m31-morphology-v1",
-    )
+    return _svg_shell(target_name, profile, palette, canonical_body)
 
 
 def _build_cache_entry(

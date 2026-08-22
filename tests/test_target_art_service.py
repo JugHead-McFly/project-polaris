@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta, timezone
 
 import httpx
+import pytest
 
 from app.data.target_art_catalog import NASA_TARGET_ART_CATALOG
+from app.services.target_art_service import MAPPED_TARGET_ART_ASSETS
 from app.services.target_art_service import _generate_artwork_svg
+from app.services.target_art_service import _mapped_artwork_svg
 from app.services.target_art_service import get_cached_target_reference
 from app.services.target_art_service import refresh_target_art_cache
 
@@ -111,16 +114,17 @@ def test_refresh_caches_nasa_metadata_and_generated_svg(tmp_path):
     assert reference["source_url"].startswith("https://images.nasa.gov/details/")
     assert reference["credit"] == "NASA Goddard · Hubble Heritage Team"
     assert reference["artwork_profile"] == "inclined_spiral"
-    assert 'data-reference="nasa"' in reference["artwork_svg"]
     assert 'preserveAspectRatio="xMidYMid meet"' in reference["artwork_svg"]
-    assert 'data-visual-treatment="m31-morphology-v1"' in reference["artwork_svg"]
-    assert 'data-morphology="m31-andromeda-v1"' in reference["artwork_svg"]
+    assert 'viewBox="0 0 400 300"' in reference["artwork_svg"]
+    assert 'data-visual-treatment="m31-library-v2"' in reference["artwork_svg"]
+    assert 'data-morphology="m31-andromeda-current"' in reference["artwork_svg"]
     assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in reference["artwork_svg"]
     assert "<title>" not in reference["artwork_svg"]
-    assert "#d5a54d" in reference["artwork_svg"]
+    assert "<desc" not in reference["artwork_svg"]
+    assert "#d49a3a" in reference["artwork_svg"]
     assert "#e48191" not in reference["artwork_svg"]
     assert "#6e9fd0" not in reference["artwork_svg"]
-    assert 'stroke-dasharray="' in reference["artwork_svg"]
+    assert "M66.3 128.5 A137 98" not in reference["artwork_svg"]
     assert "<image" not in reference["artwork_svg"]
     assert client.calls[3][1] == {
         "q": "M31 Andromeda Galaxy",
@@ -242,17 +246,42 @@ def test_unsupported_target_never_uses_a_cache_entry(tmp_path):
     ) is None
 
 
-def test_m31_uses_approved_morphology_driven_visual():
+def test_m31_uses_current_approved_library_asset_without_removed_wrapper():
     svg = _generate_artwork_svg("M31", NASA_TARGET_ART_CATALOG["M31"])
 
-    assert 'data-visual-treatment="m31-morphology-v1"' in svg
-    assert 'data-morphology="m31-andromeda-v1"' in svg
-    assert 'transform="translate(-10 -27.5) scale(.65)"' in svg
+    assert 'data-visual-treatment="m31-library-v2"' in svg
+    assert 'data-morphology="m31-andromeda-current"' in svg
+    assert 'viewBox="0 0 400 300"' in svg
+    assert '<rect width="400" height="300" fill="#102a2c"/>' in svg
     assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in svg
     assert "M91.7 139.1 A111 38 0 0 1 307.8 144.3" in svg
     assert '<ellipse cx="183" cy="146" rx="31" ry="18"' in svg
     assert "M28 75C63 41 159 40 212 68" not in svg
+    assert "M66.3 128.5 A137 98" not in svg
+    assert "M282.5 219.6 A128 91" not in svg
+    assert "M113.9 208 A119 84" not in svg
     assert "<title>" not in svg
+    assert "<desc" not in svg
+    assert MAPPED_TARGET_ART_ASSETS["M31"]["source_catalog_sha256"] == (
+        "2f1d3e608eef02139168a2555041c306"
+        "b11f19d744b09a005a3a4365fe444e7c"
+    )
+
+
+def test_mapped_artwork_rejects_visible_labels(monkeypatch, tmp_path):
+    unsafe_asset = tmp_path / "unsafe.svg"
+    unsafe_asset.write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg"><text>Source</text></svg>',
+        encoding="utf-8",
+    )
+    monkeypatch.setitem(
+        MAPPED_TARGET_ART_ASSETS,
+        "M31",
+        {"path": unsafe_asset, "source_catalog_sha256": "fixture"},
+    )
+
+    with pytest.raises(ValueError, match="disallowed text"):
+        _mapped_artwork_svg("M31")
 
 
 def test_non_m31_catalog_targets_keep_existing_visual_grammar():
@@ -274,7 +303,7 @@ def test_non_m31_catalog_targets_keep_existing_visual_grammar():
         for path in canonical_paths:
             assert path in svg
 
-        assert 'data-morphology="m31-andromeda-v1"' not in svg
+        assert 'data-morphology="m31-andromeda-current"' not in svg
         assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" not in svg
 
         # These markers belonged to the former target-specific treatments.

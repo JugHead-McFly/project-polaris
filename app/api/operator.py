@@ -29,6 +29,7 @@ ASSET_FILES = (
     WEB_DIRECTORY / "operator.js",
     WEB_DIRECTORY / "leaflet.css",
     WEB_DIRECTORY / "leaflet.js",
+    WEB_DIRECTORY / "target-art" / "m31-andromeda.svg",
 )
 
 
