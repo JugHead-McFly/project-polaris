@@ -319,6 +319,7 @@ footer {
 .mobile-header-refresh-button {
   display: inline-grid;
   width: 44px;
+  height: 44px;
   min-height: 44px;
   padding: 0;
   place-items: center;
@@ -3876,6 +3877,7 @@ footer {
   .mobile-header-actions:not([hidden]) {
     display: flex;
     grid-column: 2;
+    grid-row: 1;
     align-items: center;
     justify-content: flex-end;
     gap: 6px;
@@ -3905,6 +3907,7 @@ footer {
   .account-control {
     display: none;
     grid-column: 1 / -1;
+    grid-row: 2;
     grid-template-columns: 1fr;
     gap: 10px;
     width: 100%;
