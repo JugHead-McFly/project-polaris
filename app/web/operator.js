@@ -483,7 +483,7 @@ const buildOpportunityComponents = (rating, context = {}) => {
 
   return [
     {
-      icon: "☁",
+      icon: "cloud",
       label: "Cloud + stability",
       description: "Clouds, humidity, and wind",
       points: Math.max(0, 45 - Math.min(45, weatherPenalty)),
@@ -491,7 +491,7 @@ const buildOpportunityComponents = (rating, context = {}) => {
       source: "Measured",
     },
     {
-      icon: "✦",
+      icon: "night",
       label: "Astronomical darkness",
       description: "Usable time after twilight",
       points: darknessAvailable(context.darkness) ? 20 : null,
@@ -499,7 +499,7 @@ const buildOpportunityComponents = (rating, context = {}) => {
       source: darknessAvailable(context.darkness) ? "Measured" : "Unavailable",
     },
     {
-      icon: "◕",
+      icon: "moon",
       label: "Moon interference",
       description: "Brightness and target separation",
       points: Math.max(0, 15 - Math.min(15, moonPenalty)),
@@ -507,7 +507,7 @@ const buildOpportunityComponents = (rating, context = {}) => {
       source: "Measured",
     },
     {
-      icon: "◇",
+      icon: "visibility",
       label: "Transparency",
       description: "Atmospheric clarity",
       points: null,
@@ -515,7 +515,7 @@ const buildOpportunityComponents = (rating, context = {}) => {
       source: "Future data",
     },
     {
-      icon: "≋",
+      icon: "seeing",
       label: "Seeing",
       description: "Star steadiness and sharpness",
       points: null,
@@ -523,7 +523,7 @@ const buildOpportunityComponents = (rating, context = {}) => {
       source: "Future data",
     },
     {
-      icon: "△",
+      icon: "altitude",
       label: "Target altitude",
       description: "Height above the horizon",
       points: altitudePoints,
@@ -531,6 +531,27 @@ const buildOpportunityComponents = (rating, context = {}) => {
       source: altitudePoints === null ? "Unavailable" : "Measured",
     },
   ];
+};
+
+const opportunityFactorIconPaths = {
+  cloud: "M7 18.5h10.5a4 4 0 0 0 .1-8 6 6 0 0 0-11.3 1.1A3.5 3.5 0 0 0 7 18.5Z",
+  night: "M4 19h16M7 16a5 5 0 0 1 10 0M8 5v3M6.5 6.5h3M17 4l.45 1.05L18.5 5.5l-1.05.45L17 7l-.45-1.05L15.5 5.5l1.05-.45L17 4Z",
+  moon: "M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7Z",
+  visibility: "M2.5 12s3.5-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.5 5.5-9.5 5.5S2.5 12 2.5 12Zm9.5-2.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z",
+  seeing: "M4 8c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 4-1.5M4 12c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 4-1.5M4 16c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 4-1.5",
+  altitude: "M4 19h16M12 16V5M8.5 8.5 12 5l3.5 3.5",
+};
+
+const appendOpportunityFactorIcon = (container, iconName) => {
+  const icon = appendTextElement(container, "span", "hosted-score-factor-icon", "");
+  icon.setAttribute("aria-hidden", "true");
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("focusable", "false");
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", opportunityFactorIconPaths[iconName] || opportunityFactorIconPaths.night);
+  svg.appendChild(path);
+  icon.appendChild(svg);
 };
 
 const scoreComponentTone = (component) => {
@@ -548,13 +569,7 @@ const appendOpportunityComponent = (container, component) => {
     row.classList.add("is-unavailable");
   }
 
-  const icon = appendTextElement(
-    row,
-    "span",
-    "hosted-score-factor-icon",
-    component.icon || "•",
-  );
-  icon.setAttribute("aria-hidden", "true");
+  appendOpportunityFactorIcon(row, component.icon);
   const copy = appendTextElement(row, "div", "hosted-score-factor-copy", "");
   const label = appendTextElement(copy, "span", "hosted-score-factor-label", component.label);
   appendTextElement(label, "em", "", component.source || "Measured");

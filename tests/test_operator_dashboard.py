@@ -21,6 +21,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
     assert response.headers["cache-control"] == "no-store"
+    assert ".hosted-recommendation.status-loading #hosted-opportunity-score" in stylesheet.text
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text
@@ -259,7 +260,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-opportunity-score"' in html
     assert 'id="hosted-opportunity-drivers"' in html
     assert 'class="hosted-score-breakdown-card"' in html
-    assert "How tonight earns points" in html
+    assert 'aria-label="Opportunity score breakdown"' in html
+    assert "How tonight earns points" not in html
     assert 'id="hosted-command-window"' in html
     assert 'id="hosted-command-window-label"' in html
     assert 'id="hosted-command-target"' in html
@@ -294,6 +296,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Clouds, humidity, and wind" in script
     assert "Star steadiness and sharpness" in script
     assert "hosted-score-factor-icon" in script
+    assert "opportunityFactorIconPaths" in script
+    assert "appendOpportunityFactorIcon" in script
+    assert 'icon: "moon"' in script
+    assert 'icon: "visibility"' in script
+    assert 'icon: "altitude"' in script
     assert "hosted-score-factor-description" in script
     assert "Future data" in script
     assert "Target altitude" in script
