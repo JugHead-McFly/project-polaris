@@ -4034,13 +4034,17 @@ footer {
   }
 
   .hosted-target-heading {
-    display: grid;
+    position: relative;
+    display: block;
     align-items: start;
-    grid-template-columns: minmax(0, 1fr) 112px;
-    gap: 12px;
+    min-height: 112px;
+    padding-right: 124px;
   }
 
   .hosted-target-visuals {
+    position: absolute;
+    top: 0;
+    right: 0;
     flex-basis: auto;
     width: 112px;
     justify-items: end;
@@ -4057,9 +4061,16 @@ footer {
   }
 
   .hosted-reference-image.is-attribution-only span {
+    max-width: 82px;
     overflow: hidden;
+    font-size: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .hosted-reference-image.is-attribution-only span::before {
+    content: "NASA source";
+    font-size: 9px;
   }
 
   .hosted-opportunity-reading {
