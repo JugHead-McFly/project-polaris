@@ -559,6 +559,14 @@ const opportunityComponentScore = (components) => components.reduce(
   0,
 );
 
+const opportunityScoreLabel = (score) => {
+  if (score >= 85) return "Excellent";
+  if (score >= 70) return "Very good";
+  if (score >= 55) return "Usable";
+  if (score >= 35) return "Challenging";
+  return "Poor";
+};
+
 const renderOpportunityScore = (rating, context = {}) => {
   const drivers = byId("hosted-opportunity-drivers");
   drivers.replaceChildren();
@@ -575,7 +583,7 @@ const renderOpportunityScore = (rating, context = {}) => {
   const opportunityScore = opportunityComponentScore(components);
 
   setText("hosted-opportunity-score", `${displayMeasuredNumber(opportunityScore)}/100`);
-  setText("hosted-opportunity-label", rating.quality);
+  setText("hosted-opportunity-label", opportunityScoreLabel(opportunityScore));
   byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
 
   components.forEach((component) => {
