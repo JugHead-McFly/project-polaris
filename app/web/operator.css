@@ -615,11 +615,18 @@ footer {
 .hosted-recommendation {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  grid-template-columns: minmax(300px, 0.92fr) minmax(360px, 1.08fr);
+  grid-template-areas:
+    "score command"
+    "target setup"
+    "cautions cautions";
+  gap: 0;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(16, 43, 54, 0.98), rgba(9, 25, 36, 0.98));
+  background:
+    linear-gradient(135deg, rgba(20, 62, 66, 0.92), rgba(9, 25, 36, 0.98) 44%, rgba(29, 41, 68, 0.92)),
+    var(--surface);
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 18px;
   box-shadow: var(--shadow);
 }
 
@@ -648,37 +655,52 @@ footer {
   box-shadow: 0 0 22px var(--red);
 }
 
-.hosted-decision,
-.hosted-target {
+.hosted-score-command,
+.hosted-command-board,
+.hosted-target,
+.hosted-setup-card,
+.hosted-cautions-card {
   padding: clamp(20px, 3.2vw, 30px);
 }
 
+.hosted-score-command {
+  grid-area: score;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  background: rgba(3, 13, 20, 0.34);
+}
+
+.hosted-command-board {
+  grid-area: command;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  border-left: 1px solid var(--line);
+}
+
 .hosted-decision h2 {
-  font-size: clamp(30px, 4vw, 44px);
-  letter-spacing: -0.04em;
-  line-height: 1;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.05;
 }
 
 .hosted-opportunity-score {
   display: grid;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 12px 14px;
-  max-width: 390px;
-  background: rgba(4, 15, 22, 0.38);
-  border: 1px solid rgba(84, 224, 211, 0.24);
+  gap: 10px;
+  padding: 18px;
+  background: rgba(4, 15, 22, 0.5);
+  border: 1px solid rgba(84, 224, 211, 0.28);
   border-radius: 8px;
 }
 
 .hosted-opportunity-total {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
+  display: grid;
+  gap: 3px;
 }
 
 .hosted-opportunity-score strong {
-  font-size: clamp(34px, 3.7vw, 48px);
-  line-height: 0.95;
+  font-size: clamp(48px, 7vw, 76px);
+  line-height: 0.9;
 }
 
 .hosted-opportunity-score span {
@@ -694,6 +716,10 @@ footer {
   border-radius: 999px;
 }
 
+.hosted-total-score-bar {
+  height: 14px;
+}
+
 .hosted-score-bar span {
   display: block;
   width: 0%;
@@ -705,8 +731,8 @@ footer {
 
 .hosted-score-components {
   display: grid;
-  gap: 7px;
-  margin-top: 2px;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .hosted-score-components p {
@@ -717,7 +743,7 @@ footer {
 
 .hosted-score-component {
   display: grid;
-  grid-template-columns: minmax(115px, 1fr) minmax(68px, auto);
+  grid-template-columns: minmax(150px, 1fr) minmax(78px, auto);
   gap: 4px 10px;
   align-items: center;
 }
@@ -778,15 +804,15 @@ footer {
 .hosted-command-summary {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin: 12px 0 0;
+  gap: 10px;
+  margin: 0;
 }
 
 .hosted-command-summary div {
   min-width: 0;
-  padding: 9px 11px;
-  background: rgba(84, 224, 211, 0.08);
-  border: 1px solid rgba(84, 224, 211, 0.18);
+  padding: 14px;
+  background: rgba(84, 224, 211, 0.1);
+  border: 1px solid rgba(84, 224, 211, 0.2);
   border-radius: 8px;
 }
 
@@ -803,41 +829,39 @@ footer {
   overflow-wrap: anywhere;
   margin: 0;
   color: #eaf4f5;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   line-height: 1.25;
 }
 
 .hosted-action-summary {
-  margin: 12px 0 0;
-  padding: 11px 13px;
+  margin: 0;
+  padding: 16px 18px;
   color: #eaf4f5;
-  background: rgba(242, 190, 103, 0.1);
-  border: 1px solid rgba(242, 190, 103, 0.22);
+  background: linear-gradient(135deg, rgba(242, 190, 103, 0.16), rgba(82, 214, 199, 0.1));
+  border: 1px solid rgba(242, 190, 103, 0.28);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 750;
   line-height: 1.45;
 }
 
 .hosted-decision > p:not(.eyebrow) {
-  margin: 14px 0 0 34px;
+  margin: 10px 0 0 34px;
   color: #bfd0d4;
   font-size: 15px;
 }
 
 .hosted-plan-notes {
-  margin: 18px 0 0 34px;
-  padding: 14px 18px 14px 36px;
+  margin: 10px 0 0;
+  padding: 0 0 0 18px;
   color: #c4d5d8;
-  background: rgba(5, 15, 22, 0.35);
-  border: 1px solid var(--line);
-  border-radius: 12px;
 }
 
 .hosted-target {
+  grid-area: target;
   background: rgba(4, 15, 22, 0.42);
-  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
 }
 
 .hosted-target-heading {
@@ -853,8 +877,7 @@ footer {
 }
 
 .hosted-target-heading > div > strong {
-  font-size: clamp(34px, 5vw, 50px);
-  letter-spacing: -0.045em;
+  font-size: clamp(28px, 4vw, 44px);
   line-height: 1;
 }
 
@@ -911,17 +934,26 @@ footer {
   margin: 0;
 }
 
+.hosted-setup-card {
+  grid-area: setup;
+  background: rgba(7, 24, 34, 0.58);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
 .hosted-target-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin: 22px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
+  gap: 12px;
+  margin: 12px 0 0;
 }
 
 .hosted-target-facts div {
   min-width: 0;
+  padding: 12px;
+  background: rgba(4, 15, 22, 0.32);
+  border: 1px solid rgba(165, 198, 211, 0.13);
+  border-radius: 8px;
 }
 
 .hosted-target-facts dt,
@@ -938,6 +970,17 @@ footer {
 .hosted-target-facts dd {
   margin: 4px 0 0;
   font-weight: 700;
+}
+
+.hosted-cautions-card {
+  grid-area: cautions;
+  background: rgba(4, 15, 22, 0.28);
+  border-top: 1px solid var(--line);
+}
+
+.hosted-cautions-card > p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
 }
 
 .hosted-summary-grid {
@@ -3448,8 +3491,24 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .hosted-recommendation {
+    grid-template-areas:
+      "score"
+      "command"
+      "target"
+      "setup"
+      "cautions";
+    border-radius: 14px;
+  }
+
   .hosted-command-summary {
     grid-template-columns: 1fr;
+  }
+
+  .hosted-command-board,
+  .hosted-setup-card {
+    border-top: 1px solid var(--line);
+    border-left: 0;
   }
 
   .hosted-target {

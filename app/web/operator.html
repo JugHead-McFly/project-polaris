@@ -147,24 +147,36 @@
         </div>
 
         <section class="hosted-recommendation status-loading" id="hosted-recommendation">
-          <div class="hosted-decision">
-            <p class="eyebrow">Tonight's recommendation</p>
+          <div class="hosted-score-command">
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
               <div class="hosted-opportunity-total">
                 <strong id="hosted-opportunity-score">--</strong>
                 <span id="hosted-opportunity-label">Building score</span>
               </div>
-              <div class="hosted-score-bar" aria-hidden="true">
+              <div class="hosted-score-bar hosted-total-score-bar" aria-hidden="true">
                 <span id="hosted-opportunity-total-bar"></span>
               </div>
               <div class="hosted-score-components" id="hosted-opportunity-drivers">
                 <p>Score drivers will appear after conditions load.</p>
               </div>
             </div>
+            <div class="hosted-decision">
+              <p class="eyebrow">Plain-English read</p>
+              <div class="decision-line">
+                <span class="status-light" aria-hidden="true"></span>
+                <h2 id="hosted-decision">Checking conditions…</h2>
+              </div>
+              <p id="hosted-decision-message">
+                Comparing weather, darkness, Moon conditions, and target visibility.
+              </p>
+            </div>
+          </div>
+
+          <div class="hosted-command-board">
             <dl class="hosted-command-summary" aria-label="Tonight's command summary">
               <div>
-                <dt>Best window</dt>
+                <dt>Best imaging window</dt>
                 <dd id="hosted-command-window">—</dd>
               </div>
               <div>
@@ -172,26 +184,27 @@
                 <dd id="hosted-command-target">—</dd>
               </div>
               <div>
-                <dt>Target fit</dt>
+                <dt>Fallback target</dt>
+                <dd id="hosted-command-fallback">—</dd>
+              </div>
+              <div>
+                <dt>Rig match</dt>
                 <dd id="hosted-command-fit">—</dd>
               </div>
               <div>
-                <dt>Settings</dt>
+                <dt>Exposure / gain / filter</dt>
                 <dd id="hosted-command-settings">—</dd>
               </div>
+              <div>
+                <dt>Tracking</dt>
+                <dd id="hosted-command-tracking">—</dd>
+              </div>
             </dl>
-            <p class="hosted-action-summary" id="hosted-action-summary">
+            <div class="hosted-action-summary" id="hosted-action-summary">
               Building tonight's action summary…
-            </p>
-            <div class="decision-line">
-              <span class="status-light" aria-hidden="true"></span>
-              <h2 id="hosted-decision">Checking conditions…</h2>
             </div>
-            <p id="hosted-decision-message">
-              Comparing weather, darkness, Moon conditions, and target visibility.
-            </p>
-            <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
           </div>
+
           <div class="hosted-target">
             <div class="hosted-target-heading">
               <div>
@@ -216,6 +229,10 @@
               <p class="eyebrow">Why this rig matches</p>
               <p id="hosted-target-rig-match">Rig match will appear after a target is selected.</p>
             </div>
+          </div>
+
+          <div class="hosted-setup-card">
+            <p class="eyebrow">Recommended setup</p>
             <dl class="hosted-target-facts">
               <div>
                 <dt>Best window</dt>
@@ -241,7 +258,17 @@
                 <dt>Filter <button class="quality-info-button term-info-button" data-term-info="filter" type="button" aria-label="About filter">i</button></dt>
                 <dd id="hosted-target-filter">—</dd>
               </div>
+              <div>
+                <dt>Tracking mode</dt>
+                <dd id="hosted-target-tracking">—</dd>
+              </div>
             </dl>
+          </div>
+
+          <div class="hosted-cautions-card">
+            <p class="eyebrow">Cautions &amp; adaptations</p>
+            <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
+            <p id="hosted-cautions-empty">No special cautions once conditions finish loading.</p>
           </div>
         </section>
 

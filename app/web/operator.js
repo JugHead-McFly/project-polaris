@@ -298,9 +298,12 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-filter", "—");
   setText("hosted-command-window", "—");
   setText("hosted-command-target", "—");
+  setText("hosted-command-fallback", "—");
   setText("hosted-command-fit", "—");
   setText("hosted-command-settings", "—");
+  setText("hosted-command-tracking", "—");
   setText("hosted-action-summary", "Building tonight's action summary…");
+  setText("hosted-target-tracking", "—");
   setText("hosted-darkness-window", "—");
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
@@ -314,6 +317,7 @@ const resetHostedPlanDetails = () => {
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
   notes.hidden = true;
+  byId("hosted-cautions-empty").hidden = false;
   const scheduleList = byId("hosted-schedule-list");
   scheduleList.replaceChildren();
   appendTextElement(
@@ -671,6 +675,17 @@ const targetDisplayName = (target) => {
   return target.object || "the selected target";
 };
 
+const shortTargetName = (target) => {
+  if (!target) return "None";
+  return target.common_name ? `${target.object} · ${target.common_name}` : target.object || "Unknown target";
+};
+
+const hostedTrackingModeLabel = () => (
+  byId("hosted-eq-mode-checkbox").checked
+    ? "EQ allowed tonight"
+    : "Alt-Az-safe tracking"
+);
+
 const actionSummaryText = (decision, target, opportunityScore = null) => {
   const name = targetDisplayName(target);
   const scoreLabel = opportunityScore === null
@@ -718,6 +733,7 @@ const renderHostedTonight = (data) => {
     target,
   });
   setText("hosted-action-summary", actionSummaryText(decision, target, opportunityScore));
+  setText("hosted-command-fallback", shortTargetName(data.backup_target));
   setText(
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
@@ -746,6 +762,8 @@ const renderHostedTonight = (data) => {
     );
     setText("hosted-target-gain", displayNumber(settings.gain));
     renderFilterValue("hosted-target-filter", settings.filter_name);
+    setText("hosted-target-tracking", hostedTrackingModeLabel());
+    setText("hosted-command-tracking", hostedTrackingModeLabel());
     setText(
       "hosted-command-settings",
       `${displayNumber(settings.exposure_seconds, " sec")} · ${displayNumber(
@@ -764,10 +782,13 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);
+    setText("hosted-target-tracking", null);
     setText("hosted-command-window", "No usable window");
     setText("hosted-command-target", "No target");
+    setText("hosted-command-fallback", "None");
     setText("hosted-command-fit", "Not checked");
     setText("hosted-command-settings", "Not available");
+    setText("hosted-command-tracking", "Not available");
     renderHostedReferenceImage(null);
   }
 
@@ -834,6 +855,7 @@ const renderHostedTonight = (data) => {
       note !== "Review live conditions before starting any scheduled block.",
   );
   notes.hidden = decision === "Proceed" || visibleNotes.length === 0;
+  byId("hosted-cautions-empty").hidden = !notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
   renderHostedSchedule(schedule);
   hostedRecommendationRunId = data.recommendation_run_id || null;
