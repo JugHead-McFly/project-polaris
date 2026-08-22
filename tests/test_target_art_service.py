@@ -110,6 +110,11 @@ def test_refresh_caches_nasa_metadata_and_generated_svg(tmp_path):
     assert reference["credit"] == "NASA Goddard · Hubble Heritage Team"
     assert reference["artwork_profile"] == "inclined_spiral"
     assert 'data-reference="nasa"' in reference["artwork_svg"]
+    assert 'data-visual-treatment="supporting-vignette-v2"' in reference["artwork_svg"]
+    assert "#d5a54d" in reference["artwork_svg"]
+    assert "#e48191" not in reference["artwork_svg"]
+    assert "#6e9fd0" not in reference["artwork_svg"]
+    assert 'stroke-dasharray="' in reference["artwork_svg"]
     assert "<image" not in reference["artwork_svg"]
     assert client.calls[3][1] == {
         "q": "M31 Andromeda Galaxy",
@@ -217,6 +222,10 @@ def test_m51_uses_curated_official_source_and_credit(tmp_path):
         "NASA, ESA, S. Beckwith (STScI), and the Hubble Heritage Team "
         "(STScI/AURA)"
     )
+    assert 'data-visual-treatment="supporting-vignette-v2"' in reference["artwork_svg"]
+    assert "#d5a54d" in reference["artwork_svg"]
+    assert "#e48191" not in reference["artwork_svg"]
+    assert "#6e9fd0" not in reference["artwork_svg"]
 
 
 def test_unsupported_target_never_uses_a_cache_entry(tmp_path):
