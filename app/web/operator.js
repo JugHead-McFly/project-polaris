@@ -323,7 +323,6 @@ const resetHostedPlanDetails = () => {
     "Building tonight's schedule…",
   );
   setText("hosted-schedule-count", "0 blocks");
-  renderHostedReferenceImage(null);
 };
 
 const setHostedPlanLoading = () => {
@@ -350,42 +349,6 @@ const hostedPlanFailureMessage = (requestId = "") => {
     ? ` If this keeps happening, send Doug request ID ${requestId}.`
     : "";
   return `Polaris could not build tonight's plan. Try Refresh plan once more.${requestNote}`;
-};
-
-const renderReferenceAttribution = (linkId, imageId, labelId, target) => {
-  const link = byId(linkId);
-  const image = byId(imageId);
-  const label = byId(labelId);
-  const reference = target?.reference_image;
-  image.hidden = true;
-  image.removeAttribute("src");
-  link.classList.add("is-attribution-only");
-  if (!reference?.source_url) {
-    link.hidden = true;
-    return;
-  }
-  link.href = reference.source_url;
-  link.title = reference.credit
-    ? `${reference.title || target?.object || "Target reference"} · Credit: ${reference.credit}`
-    : reference.title || "Open reference source";
-  link.setAttribute(
-    "aria-label",
-    reference.credit
-      ? `Open ${reference.source_label || "reference"} source. Source credit: ${reference.credit}`
-      : `Open ${reference.source_label || "reference"} source`,
-  );
-  label.textContent = reference.attribution
-    || `Reference source · ${reference.source_label || "source"}`;
-  link.hidden = false;
-};
-
-const renderHostedReferenceImage = (target) => {
-  renderReferenceAttribution(
-    "hosted-reference-image",
-    "hosted-reference-image-thumbnail",
-    "hosted-reference-image-label",
-    target,
-  );
 };
 
 let targetIllustrationSequence = 0;
@@ -510,19 +473,10 @@ const renderTargetIllustration = (containerId, target, compact = false) => {
     container.setAttribute(
       "aria-label",
       cachedIllustration
-        ? `Polaris representative illustration of ${name}, informed by cached NASA reference metadata`
+        ? `Illustration of ${name}`
         : `Abstract illustration of ${name}`,
     );
   }
-};
-
-const renderLegacyReferenceImage = (target) => {
-  renderReferenceAttribution(
-    "target-reference-image",
-    "target-reference-image-thumbnail",
-    "target-reference-image-label",
-    target,
-  );
 };
 
 const skyQualityStars = (score) => {
@@ -880,7 +834,6 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-gain", displayNumber(settings.gain));
     renderFilterValue("hosted-target-filter", settings.filter_name, false);
     setText("hosted-target-tracking", hostedTrackingModeLabel());
-    renderHostedReferenceImage(target);
   } else {
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
@@ -894,7 +847,6 @@ const renderHostedTonight = (data) => {
     setText("hosted-command-window", "No usable window");
     setText("hosted-command-target", "None recommended");
     setText("hosted-command-fallback", "No alternate ranked");
-    renderHostedReferenceImage(null);
   }
 
   const weather = data.weather || {};
@@ -2189,7 +2141,6 @@ const renderDecision = (data) => {
     setText("target-exposure", null);
     setText("target-gain", null);
     setText("target-filter", null);
-    renderLegacyReferenceImage(null);
     targetForecast.hidden = true;
     return;
   }
@@ -2197,7 +2148,6 @@ const renderDecision = (data) => {
   setText("target-name", target.object);
   setText("target-common-name", target.common_name, "");
   setText("target-reason", target.reason, "Planner recommendation available.");
-  renderLegacyReferenceImage(target);
   if (plannedTemperature === null || plannedTemperature === undefined) {
     targetForecast.hidden = true;
   } else {

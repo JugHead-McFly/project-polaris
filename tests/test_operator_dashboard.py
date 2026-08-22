@@ -339,8 +339,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "buildTargetIllustrationSvg" in script
     assert "parseCachedTargetIllustration" in script
     assert "artwork_svg" in script
-    assert "renderReferenceAttribution" in script
+    assert "renderReferenceAttribution" not in script
     assert "TARGET_REFERENCE_IMAGE_FALLBACKS" not in script
+    assert 'id="hosted-reference-image"' not in html
+    assert 'id="target-reference-image"' not in html
+    assert "informed by cached NASA reference metadata" not in script
     assert 'return "galaxy"' in script
     assert 'return "nebula"' in script
     assert 'return "cluster"' in script

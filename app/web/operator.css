@@ -1154,10 +1154,10 @@ footer {
 
 .hosted-command-target-illustration {
   position: absolute;
-  right: -5px;
-  bottom: 7px;
-  width: 70px;
-  height: 46px;
+  right: 10px;
+  bottom: 10px;
+  width: 64px;
+  height: 42px;
   overflow: hidden;
   border: 1px solid rgba(91, 221, 205, 0.18);
   border-radius: 10px 3px 9px 5px;
@@ -1211,11 +1211,17 @@ footer {
   display: block;
 }
 
+.hosted-target-heading > div:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .hosted-target-visuals {
   display: grid;
   flex: 0 0 154px;
   gap: 7px;
-  justify-items: end;
+  justify-items: center;
+  margin-right: 22px;
 }
 
 .hosted-target-illustration {
@@ -1242,61 +1248,6 @@ footer {
   color: var(--cyan);
   font-size: 17px;
   font-weight: 700;
-}
-
-.hosted-reference-image {
-  display: grid;
-  gap: 5px;
-  flex: 0 0 88px;
-  color: var(--muted);
-  font-size: 10px;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-}
-
-.hosted-reference-image img {
-  width: 88px;
-  height: 66px;
-  object-fit: cover;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-.hosted-reference-image:hover img {
-  border-color: var(--cyan);
-}
-
-.hosted-reference-image.is-attribution-only,
-.target-reference-image.is-attribution-only {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  max-width: 100%;
-  min-height: 28px;
-  gap: 5px;
-  padding: 5px 8px;
-  background: rgba(3, 14, 22, 0.42);
-  border: 1px solid rgba(153, 202, 207, 0.18);
-  border-radius: 999px;
-  line-height: 1.25;
-  text-align: left;
-}
-
-.hosted-reference-image.is-attribution-only::after,
-.target-reference-image.is-attribution-only::after {
-  color: var(--cyan);
-  content: "↗";
-  font-size: 11px;
-}
-
-.hosted-reference-image.is-attribution-only:hover,
-.hosted-reference-image.is-attribution-only:focus-visible,
-.target-reference-image.is-attribution-only:hover,
-.target-reference-image.is-attribution-only:focus-visible {
-  color: var(--text);
-  border-color: rgba(82, 214, 199, 0.48);
 }
 
 .hosted-target-illustration.is-reference-informed,
@@ -1664,29 +1615,6 @@ footer {
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
-}
-
-.target-reference-image {
-  display: grid;
-  gap: 5px;
-  flex: 0 0 88px;
-  color: var(--muted);
-  font-size: 10px;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-}
-
-.target-reference-image img {
-  width: 88px;
-  height: 66px;
-  object-fit: cover;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-.target-reference-image:hover img {
-  border-color: var(--cyan);
 }
 
 .eyebrow {
@@ -4037,7 +3965,7 @@ footer {
     position: relative;
     display: block;
     align-items: start;
-    min-height: 112px;
+    min-height: 74px;
     padding-right: 124px;
   }
 
@@ -4048,29 +3976,12 @@ footer {
     flex-basis: auto;
     width: 112px;
     justify-items: end;
+    margin-right: 0;
   }
 
   .hosted-target-illustration {
     width: 112px;
     height: 70px;
-  }
-
-  .hosted-reference-image {
-    justify-self: end;
-    max-width: 112px;
-  }
-
-  .hosted-reference-image.is-attribution-only span {
-    max-width: 82px;
-    overflow: hidden;
-    font-size: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .hosted-reference-image.is-attribution-only span::before {
-    content: "NASA source";
-    font-size: 9px;
   }
 
   .hosted-opportunity-reading {
