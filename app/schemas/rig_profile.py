@@ -12,6 +12,7 @@ class RigProfileSummaryResponse(BaseModel):
     has_storage_limit: bool
     has_temperature_limit: bool
     has_frame_limit: bool
+    has_equatorial_tracking: bool
     confidence: str
 
 

@@ -41,10 +41,36 @@ const applyEqModePreference = (enabled) => {
   byId("hosted-eq-mode-checkbox").checked = enabled;
 };
 
+const hostedSelectedRigProfile = () => {
+  const selectedKey = byId("hosted-rig-profile").value
+    || hostedObservatory?.rig_profile_key
+    || "";
+  return rigProfiles.find((profile) => profile.key === selectedKey) || null;
+};
+
+const updateHostedEqModeAvailability = () => {
+  const control = byId("hosted-eq-mode-checkbox");
+  const label = control.closest(".tracking-mode-control");
+  const selectedProfile = hostedSelectedRigProfile();
+  const selectedRigHasNoEq = (
+    selectedProfile
+    && selectedProfile.has_equatorial_tracking === false
+  );
+
+  control.disabled = selectedRigHasNoEq;
+  if (selectedRigHasNoEq) {
+    control.checked = false;
+    label.title = `${selectedProfile.label} does not list EQ tracking in its official profile, so Polaris will use Alt-Az-safe exposures.`;
+  } else {
+    label.title = "Leave unchecked for Alt-Az-safe exposures. Check only after the telescope is physically EQ aligned and EQ mode is enabled for tonight.";
+  }
+};
+
 const rememberEqModePreference = (event) => {
   const enabled = event.target.checked;
   saveEqModePreference(enabled);
   applyEqModePreference(enabled);
+  updateHostedEqModeAvailability();
 };
 
 // Keep the Tonight view useful when a catalog response is temporarily missing
@@ -118,6 +144,7 @@ const updateHostedAccountForm = (profile, observatory) => {
   byId("hosted-coordinates-approximate").checked = observatory
     ? Boolean(observatory.coordinates_are_approximate)
     : true;
+  updateHostedEqModeAvailability();
 };
 
 const populateRigProfileSelect = (profiles) => {
@@ -147,8 +174,10 @@ const loadRigProfiles = async () => {
     const payload = await response.json();
     rigProfiles = Array.isArray(payload.profiles) ? payload.profiles : [];
     populateRigProfileSelect(rigProfiles);
+    updateHostedEqModeAvailability();
   } catch {
     rigProfiles = [];
+    updateHostedEqModeAvailability();
   }
 };
 
@@ -3616,6 +3645,7 @@ activateCurrentView();
 applyEqModePreference(readEqModePreference());
 byId("eq-mode-checkbox").addEventListener("change", rememberEqModePreference);
 byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference);
+byId("hosted-rig-profile").addEventListener("change", updateHostedEqModeAvailability);
 byId("refresh-button").addEventListener("click", runDashboardLoad);
 byId("history-toggle").addEventListener("click", () => {
   toggleHistory();

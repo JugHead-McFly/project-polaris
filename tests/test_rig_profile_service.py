@@ -33,6 +33,8 @@ def test_rig_profile_summary_keeps_unknown_limits_visible():
     summaries = {summary.key: summary for summary in list_rig_profile_summaries()}
 
     assert summaries["dwarf-3"].has_frame_limit is True
+    assert summaries["dwarf-3"].has_equatorial_tracking is True
     assert summaries["seestar-s50"].has_frame_limit is False
+    assert summaries["seestar-s50"].has_equatorial_tracking is False
     assert summaries["hestia"].has_battery_limit is False
     assert summaries["dwarf-mini"].has_field_of_view is False

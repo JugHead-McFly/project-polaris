@@ -15,6 +15,7 @@ class RigProfileSummary:
     has_storage_limit: bool
     has_temperature_limit: bool
     has_frame_limit: bool
+    has_equatorial_tracking: bool
     confidence: str
 
 
@@ -39,6 +40,7 @@ def summarize_rig_profile(profile: RigProfile) -> RigProfileSummary:
         has_storage_limit=profile.storage_gb is not None,
         has_temperature_limit=profile.operating_temperature_c is not None,
         has_frame_limit=profile.frame_limit is not None,
+        has_equatorial_tracking="equatorial" in profile.tracking_modes,
         confidence=profile.confidence,
     )
 

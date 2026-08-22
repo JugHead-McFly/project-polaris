@@ -32,8 +32,10 @@ def test_rig_profiles_endpoint_exposes_plain_language_profile_summaries():
 
     assert dwarf["label"] == "DWARFLAB DWARF 3"
     assert dwarf["has_frame_limit"] is True
+    assert dwarf["has_equatorial_tracking"] is True
     assert seestar["label"] == "ZWO Seestar S50"
     assert seestar["has_frame_limit"] is False
+    assert seestar["has_equatorial_tracking"] is False
 
 
 def test_rig_profile_detail_endpoint_returns_source_backed_fields():

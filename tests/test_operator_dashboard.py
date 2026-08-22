@@ -88,6 +88,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'apiFetch("/system"' in script.text
     assert 'apiFetch("/rig-profiles"' in script.text
+    assert "has_equatorial_tracking === false" in script.text
+    assert "does not list EQ tracking in its official profile" in script.text
+    assert 'byId("hosted-rig-profile").addEventListener("change", updateHostedEqModeAvailability)' in script.text
     assert 'rig_profile_key: byId("hosted-rig-profile").value || null' in script.text
     assert 'byId("hosted-rig-profile").value = observatory?.rig_profile_key || ""' in script.text
     assert 'apiFetch(`/dashboard?include_all_history=${historyExpanded}`' in script.text
