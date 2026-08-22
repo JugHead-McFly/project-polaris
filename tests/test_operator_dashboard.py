@@ -258,6 +258,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Opportunity score" in html
     assert 'id="hosted-opportunity-score"' in html
     assert 'id="hosted-opportunity-drivers"' in html
+    assert 'class="hosted-score-breakdown-card"' in html
+    assert "How tonight earns points" in html
     assert 'id="hosted-command-window"' in html
     assert 'id="hosted-command-window-label"' in html
     assert 'id="hosted-command-target"' in html
@@ -289,6 +291,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Opportunity looks" in script
     assert "Wait for better conditions" in script
     assert "Cloud + stability" in script
+    assert "Clouds, humidity, and wind" in script
+    assert "Star steadiness and sharpness" in script
+    assert "hosted-score-factor-icon" in script
+    assert "hosted-score-factor-description" in script
     assert "Future data" in script
     assert "Target altitude" in script
     assert "maximum_dark_altitude" in script

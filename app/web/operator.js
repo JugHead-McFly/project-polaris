@@ -483,37 +483,49 @@ const buildOpportunityComponents = (rating, context = {}) => {
 
   return [
     {
+      icon: "☁",
       label: "Cloud + stability",
+      description: "Clouds, humidity, and wind",
       points: Math.max(0, 45 - Math.min(45, weatherPenalty)),
       max: 45,
       source: "Measured",
     },
     {
+      icon: "✦",
       label: "Astronomical darkness",
+      description: "Usable time after twilight",
       points: darknessAvailable(context.darkness) ? 20 : null,
       max: 20,
       source: darknessAvailable(context.darkness) ? "Measured" : "Unavailable",
     },
     {
+      icon: "◕",
       label: "Moon interference",
+      description: "Brightness and target separation",
       points: Math.max(0, 15 - Math.min(15, moonPenalty)),
       max: 15,
       source: "Measured",
     },
     {
+      icon: "◇",
       label: "Transparency",
+      description: "Atmospheric clarity",
       points: null,
       max: 10,
       source: "Future data",
     },
     {
+      icon: "≋",
       label: "Seeing",
+      description: "Star steadiness and sharpness",
       points: null,
       max: 5,
       source: "Future data",
     },
     {
+      icon: "△",
       label: "Target altitude",
+      description: "Height above the horizon",
       points: altitudePoints,
       max: 5,
       source: altitudePoints === null ? "Unavailable" : "Measured",
@@ -536,17 +548,32 @@ const appendOpportunityComponent = (container, component) => {
     row.classList.add("is-unavailable");
   }
 
-  const label = appendTextElement(row, "span", "", `${component.label} · ${component.max} pts`);
+  const icon = appendTextElement(
+    row,
+    "span",
+    "hosted-score-factor-icon",
+    component.icon || "•",
+  );
+  icon.setAttribute("aria-hidden", "true");
+  const copy = appendTextElement(row, "div", "hosted-score-factor-copy", "");
+  const label = appendTextElement(copy, "span", "hosted-score-factor-label", component.label);
   appendTextElement(label, "em", "", component.source || "Measured");
+  appendTextElement(
+    copy,
+    "small",
+    "hosted-score-factor-description",
+    component.description || `${component.max}-point factor`,
+  );
   appendTextElement(
     row,
     "strong",
     "",
     component.points === null || component.points === undefined
-      ? component.source || "Unavailable"
+      ? `— / ${component.max}`
       : `${displayMeasuredNumber(component.points)} / ${component.max}`,
   );
   const bar = appendTextElement(row, "div", "hosted-score-bar", "");
+  bar.setAttribute("aria-hidden", "true");
   const fill = appendTextElement(bar, "span", "", "");
   if (component.points === null || component.points === undefined) {
     fill.style.width = "100%";
