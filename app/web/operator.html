@@ -151,7 +151,10 @@
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
               <div class="hosted-opportunity-total">
-                <strong id="hosted-opportunity-score">--</strong>
+                <div class="hosted-opportunity-reading">
+                  <strong id="hosted-opportunity-score">--</strong>
+                  <small>/100</small>
+                </div>
                 <span id="hosted-opportunity-label">Building score</span>
               </div>
               <div class="hosted-score-bar hosted-total-score-bar" aria-hidden="true">
@@ -161,6 +164,9 @@
                 <p>Score drivers will appear after conditions load.</p>
               </div>
             </div>
+          </div>
+
+          <div class="hosted-command-board">
             <div class="hosted-decision">
               <p class="eyebrow">Plain-English read</p>
               <div class="decision-line">
@@ -171,12 +177,9 @@
                 Comparing weather, darkness, Moon conditions, and target visibility.
               </p>
             </div>
-          </div>
-
-          <div class="hosted-command-board">
             <dl class="hosted-command-summary" aria-label="Tonight's command summary">
               <div>
-                <dt>Best imaging window</dt>
+                <dt id="hosted-command-window-label">Best imaging window</dt>
                 <dd id="hosted-command-window">—</dd>
               </div>
               <div>
@@ -186,18 +189,6 @@
               <div>
                 <dt>Fallback target</dt>
                 <dd id="hosted-command-fallback">—</dd>
-              </div>
-              <div>
-                <dt>Rig match</dt>
-                <dd id="hosted-command-fit">—</dd>
-              </div>
-              <div>
-                <dt>Exposure / gain / filter</dt>
-                <dd id="hosted-command-settings">—</dd>
-              </div>
-              <div>
-                <dt>Tracking</dt>
-                <dd id="hosted-command-tracking">—</dd>
               </div>
             </dl>
             <div class="hosted-action-summary" id="hosted-action-summary">
@@ -234,10 +225,6 @@
           <div class="hosted-setup-card">
             <p class="eyebrow">Recommended setup</p>
             <dl class="hosted-target-facts">
-              <div>
-                <dt>Best window</dt>
-                <dd id="hosted-target-window">—</dd>
-              </div>
               <div>
                 <dt>Rig profile</dt>
                 <dd id="hosted-target-rig">—</dd>

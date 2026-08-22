@@ -320,7 +320,7 @@ footer {
 }
 
 .hosted-account-main {
-  width: min(1120px, calc(100% - 48px));
+  width: min(1240px, calc(100% - 48px));
 }
 
 .auth-gate {
@@ -615,7 +615,7 @@ footer {
 .hosted-recommendation {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(300px, 0.92fr) minmax(360px, 1.08fr);
+  grid-template-columns: minmax(380px, 0.86fr) minmax(560px, 1.14fr);
   grid-template-areas:
     "score command"
     "target setup"
@@ -649,7 +649,11 @@ footer {
 }
 
 .hosted-recommendation.status-do-not-image::before,
-.hosted-recommendation.status-conditions-unknown::before,
+.hosted-recommendation.status-conditions-unknown::before {
+  background: var(--amber);
+  box-shadow: 0 0 22px var(--amber);
+}
+
 .hosted-recommendation.status-error::before {
   background: var(--red);
   box-shadow: 0 0 22px var(--red);
@@ -679,6 +683,13 @@ footer {
   border-left: 1px solid var(--line);
 }
 
+.hosted-decision {
+  padding: 18px 20px;
+  background: rgba(4, 15, 22, 0.44);
+  border: 1px solid rgba(84, 224, 211, 0.2);
+  border-radius: 10px;
+}
+
 .hosted-decision h2 {
   font-size: clamp(22px, 2.6vw, 34px);
   line-height: 1.05;
@@ -694,13 +705,39 @@ footer {
 }
 
 .hosted-opportunity-total {
-  display: grid;
-  gap: 3px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
 }
 
-.hosted-opportunity-score strong {
-  font-size: clamp(48px, 7vw, 76px);
+.hosted-opportunity-reading {
+  --opportunity-score: 0%;
+  display: grid;
+  grid-template-columns: auto auto;
+  place-content: center;
+  align-items: baseline;
+  width: clamp(132px, 12vw, 158px);
+  aspect-ratio: 1;
+  color: #f8fbfb;
+  background:
+    radial-gradient(circle, #07161e 58%, transparent 59%),
+    conic-gradient(var(--cyan) var(--opportunity-score), rgba(156, 181, 187, 0.14) 0);
+  border: 1px solid rgba(84, 224, 211, 0.34);
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(82, 214, 199, 0.12);
+}
+
+#hosted-opportunity-score {
+  color: inherit;
+  font-size: clamp(46px, 5vw, 64px);
+  letter-spacing: -0.06em;
   line-height: 0.9;
+}
+
+.hosted-opportunity-reading small {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .hosted-opportunity-score span {
@@ -803,7 +840,7 @@ footer {
 
 .hosted-command-summary {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin: 0;
 }
@@ -3401,6 +3438,23 @@ footer {
 }
 
 @media (max-width: 1040px) {
+  .hosted-recommendation {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "score"
+      "command"
+      "target"
+      "setup"
+      "cautions";
+  }
+
+  .hosted-command-board,
+  .hosted-target,
+  .hosted-setup-card {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
   .decision-panel,
   .dashboard-grid {
     grid-template-columns: 1fr;
@@ -3492,28 +3546,11 @@ footer {
   }
 
   .hosted-recommendation {
-    grid-template-areas:
-      "score"
-      "command"
-      "target"
-      "setup"
-      "cautions";
     border-radius: 14px;
   }
 
   .hosted-command-summary {
     grid-template-columns: 1fr;
-  }
-
-  .hosted-command-board,
-  .hosted-setup-card {
-    border-top: 1px solid var(--line);
-    border-left: 0;
-  }
-
-  .hosted-target {
-    border-top: 1px solid var(--line);
-    border-left: 0;
   }
 
   .hosted-decision > p:not(.eyebrow),

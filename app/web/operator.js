@@ -290,18 +290,15 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-common-name", "");
   setText("hosted-target-reason", "Waiting for tonight's target.");
   setText("hosted-target-rig-match", "Rig match will appear after a target is selected.");
-  setText("hosted-target-window", "—");
   setText("hosted-target-rig", "—");
   setText("hosted-target-fit", "—");
   setText("hosted-target-exposure", "—");
   setText("hosted-target-gain", "—");
   setText("hosted-target-filter", "—");
   setText("hosted-command-window", "—");
+  setText("hosted-command-window-label", "Best imaging window");
   setText("hosted-command-target", "—");
   setText("hosted-command-fallback", "—");
-  setText("hosted-command-fit", "—");
-  setText("hosted-command-settings", "—");
-  setText("hosted-command-tracking", "—");
   setText("hosted-action-summary", "Building tonight's action summary…");
   setText("hosted-target-tracking", "—");
   setText("hosted-darkness-window", "—");
@@ -573,11 +570,13 @@ const opportunityScoreLabel = (score) => {
 
 const renderOpportunityScore = (rating, context = {}) => {
   const drivers = byId("hosted-opportunity-drivers");
+  const reading = document.querySelector(".hosted-opportunity-reading");
   drivers.replaceChildren();
 
   if (!rating || rating.quality === "Unavailable") {
     setText("hosted-opportunity-score", "--");
     setText("hosted-opportunity-label", "Unavailable");
+    reading.style.setProperty("--opportunity-score", "0%");
     byId("hosted-opportunity-total-bar").style.width = "0%";
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
     return null;
@@ -586,8 +585,9 @@ const renderOpportunityScore = (rating, context = {}) => {
   const components = buildOpportunityComponents(rating, context);
   const opportunityScore = opportunityComponentScore(components);
 
-  setText("hosted-opportunity-score", `${displayMeasuredNumber(opportunityScore)}/100`);
+  setText("hosted-opportunity-score", displayMeasuredNumber(opportunityScore));
   setText("hosted-opportunity-label", opportunityScoreLabel(opportunityScore));
+  reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
   byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
 
   components.forEach((component) => {
@@ -710,6 +710,26 @@ const displayedDecisionLabel = (decision) => {
   return decision;
 };
 
+const displayedDecisionMessage = (decision, message) => {
+  if (decision === "Use Caution") {
+    return "Conditions are usable, but one or more factors need attention before imaging.";
+  }
+  if (decision !== "Do Not Image") return message || "Recommendation available.";
+
+  const reason = (message || "Current conditions are unsuitable")
+    .replace(/^do not image:\s*/i, "")
+    .trim();
+  const sentence = /[.!?]$/.test(reason) ? reason : `${reason}.`;
+  return `${sentence} Save the setup time and reassess if conditions improve.`;
+};
+
+const softenAdvisoryNote = (note) => note
+  .replace(
+    /while the weather decision is Do Not Image/gi,
+    "while conditions are unsuitable",
+  )
+  .replace(/^do not image:\s*/i, "");
+
 const renderHostedTonight = (data) => {
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
@@ -719,13 +739,7 @@ const renderHostedTonight = (data) => {
   setText("observatory-name", data.observatory?.name, "Your observatory");
   setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
   setText("hosted-decision", displayedDecisionLabel(decision));
-  setText(
-    "hosted-decision-message",
-    decision === "Use Caution"
-      ? "Conditions are usable, but one or more factors need attention before imaging."
-      : data.message,
-    "Recommendation available.",
-  );
+  setText("hosted-decision-message", displayedDecisionMessage(decision, data.message));
 
   const target = data.recommended_target || data.backup_target;
   const opportunityScore = renderOpportunityScore(data.night_rating, {
@@ -733,7 +747,13 @@ const renderHostedTonight = (data) => {
     target,
   });
   setText("hosted-action-summary", actionSummaryText(decision, target, opportunityScore));
-  setText("hosted-command-fallback", shortTargetName(data.backup_target));
+  const fallbackTarget = data.backup_target?.object === data.recommended_target?.object
+    ? null
+    : data.backup_target;
+  setText(
+    "hosted-command-fallback",
+    fallbackTarget ? shortTargetName(fallbackTarget) : "No alternate ranked",
+  );
   setText(
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
@@ -747,15 +767,17 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-rig-match", targetRigMatchLabel(target));
     setText("hosted-target-fit", targetFitLabel(target));
     setText(
-      "hosted-target-window",
-      targetWindowLabel(target.recommended_start, target.recommended_end),
+      "hosted-command-window-label",
+      data.recommended_target ? "Best imaging window" : "If conditions improve",
     );
     setText(
       "hosted-command-window",
       targetWindowLabel(target.recommended_start, target.recommended_end),
     );
-    setText("hosted-command-target", target.object, "Unknown target");
-    setText("hosted-command-fit", targetFitLabel(target));
+    setText(
+      "hosted-command-target",
+      data.recommended_target?.object || "None recommended",
+    );
     setText(
       "hosted-target-exposure",
       displayNumber(settings.exposure_seconds, " sec"),
@@ -763,32 +785,20 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-gain", displayNumber(settings.gain));
     renderFilterValue("hosted-target-filter", settings.filter_name);
     setText("hosted-target-tracking", hostedTrackingModeLabel());
-    setText("hosted-command-tracking", hostedTrackingModeLabel());
-    setText(
-      "hosted-command-settings",
-      `${displayNumber(settings.exposure_seconds, " sec")} · ${displayNumber(
-        settings.gain,
-        " gain",
-      )} · ${settings.filter_name || "Filter TBD"}`,
-    );
     renderHostedReferenceImage(target);
   } else {
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
     setText("hosted-target-reason", "No target currently meets the planner requirements.");
     setText("hosted-target-rig-match", "Rig-specific reasoning is not available without a selected target.");
-    setText("hosted-target-window", "No usable window");
     setText("hosted-target-fit", "Not checked");
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);
     setText("hosted-target-tracking", null);
     setText("hosted-command-window", "No usable window");
-    setText("hosted-command-target", "No target");
-    setText("hosted-command-fallback", "None");
-    setText("hosted-command-fit", "Not checked");
-    setText("hosted-command-settings", "Not available");
-    setText("hosted-command-tracking", "Not available");
+    setText("hosted-command-target", "None recommended");
+    setText("hosted-command-fallback", "No alternate ranked");
     renderHostedReferenceImage(null);
   }
 
@@ -853,7 +863,7 @@ const renderHostedTonight = (data) => {
       note !== data.message &&
       !note.toLowerCase().startsWith("use caution:") &&
       note !== "Review live conditions before starting any scheduled block.",
-  );
+  ).map(softenAdvisoryNote);
   notes.hidden = decision === "Proceed" || visibleNotes.length === 0;
   byId("hosted-cautions-empty").hidden = !notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
