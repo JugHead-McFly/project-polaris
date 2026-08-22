@@ -727,6 +727,14 @@ footer {
   font-size: 12px;
 }
 
+.hosted-score-component em {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 700;
+}
+
 .hosted-score-component strong {
   justify-self: end;
   color: #eaf4f5;

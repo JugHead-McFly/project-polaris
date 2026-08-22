@@ -285,6 +285,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "buildOpportunityComponents" in script
     assert "opportunityComponentScore" in script
     assert "Cloud + stability" in script
+    assert "Future data" in script
     assert "Target altitude" in script
     assert "maximum_dark_altitude" in script
     assert "hosted-command-settings" in script

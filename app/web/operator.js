@@ -485,31 +485,37 @@ const buildOpportunityComponents = (rating, context = {}) => {
       label: "Cloud + stability",
       points: Math.max(0, 45 - Math.min(45, weatherPenalty)),
       max: 45,
+      source: "Measured",
     },
     {
       label: "Astronomical darkness",
       points: darknessAvailable(context.darkness) ? 20 : null,
       max: 20,
+      source: darknessAvailable(context.darkness) ? "Measured" : "Unavailable",
     },
     {
       label: "Moon interference",
       points: Math.max(0, 15 - Math.min(15, moonPenalty)),
       max: 15,
+      source: "Measured",
     },
     {
       label: "Transparency",
       points: null,
       max: 10,
+      source: "Future data",
     },
     {
       label: "Seeing",
       points: null,
       max: 5,
+      source: "Future data",
     },
     {
       label: "Target altitude",
       points: altitudePoints,
       max: 5,
+      source: altitudePoints === null ? "Unavailable" : "Measured",
     },
   ];
 };
@@ -529,13 +535,14 @@ const appendOpportunityComponent = (container, component) => {
     row.classList.add("is-unavailable");
   }
 
-  appendTextElement(row, "span", "", `${component.label} · ${component.max} pts`);
+  const label = appendTextElement(row, "span", "", `${component.label} · ${component.max} pts`);
+  appendTextElement(label, "em", "", component.source || "Measured");
   appendTextElement(
     row,
     "strong",
     "",
     component.points === null || component.points === undefined
-      ? "Unavailable"
+      ? component.source || "Unavailable"
       : `${displayMeasuredNumber(component.points)} / ${component.max}`,
   );
   const bar = appendTextElement(row, "div", "hosted-score-bar", "");
