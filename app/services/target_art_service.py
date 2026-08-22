@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 NASA_IMAGE_SEARCH_URL = "https://images-api.nasa.gov/search"
 NASA_MEDIA_USAGE_URL = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
-TARGET_ART_CACHE_SCHEMA = 4
+TARGET_ART_CACHE_SCHEMA = 5
 TARGET_ART_CACHE_TTL = timedelta(days=30)
 TARGET_ART_CACHE_ROOT = settings.BASE_DIR / ".cache" / "target-art"
 CANONICAL_TARGET_ART_PALETTE = (
@@ -195,15 +195,18 @@ def _svg_shell(
     profile: str,
     palette: tuple,
     body: str,
+    *,
+    visual_treatment: str = "canonical-m31-v3",
 ) -> str:
     safe_profile = html.escape(profile)
+    safe_visual_treatment = html.escape(visual_treatment)
     teal, cream, shadow_teal, amber = palette
     prefix = "polaris-" + target_name.lower().replace(" ", "-")
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" '
         'preserveAspectRatio="xMidYMid meet" aria-hidden="true" '
         f'focusable="false" data-reference="nasa" data-profile="{safe_profile}" '
-        'data-visual-treatment="canonical-m31-v3">'
+        f'data-visual-treatment="{safe_visual_treatment}">'
         '<defs>'
         f'<radialGradient id="{prefix}-glow"><stop offset="0" stop-color="{cream}"/>'
         f'<stop offset=".32" stop-color="{teal}" stop-opacity=".72"/>'
@@ -229,10 +232,7 @@ def _generate_artwork_svg(
     palette = CANONICAL_TARGET_ART_PALETTE
     teal, cream, shadow_teal, amber = palette
     prefix = "polaris-" + target_name.lower().replace(" ", "-")
-    # M31 defines the Polaris target-art system. Target metadata and profiles
-    # remain useful for provenance and catalog behavior, but they must not
-    # introduce a separate illustration language for individual objects.
-    body = (
+    canonical_body = (
         '<g transform="rotate(-17 120 70)">'
         f'<ellipse cx="120" cy="70" rx="92" ry="36" fill="url(#{prefix}-glow)" opacity=".72"/>'
         f'<path d="M28 75C63 41 159 40 212 68" fill="none" stroke="{teal}" '
@@ -245,7 +245,41 @@ def _generate_artwork_svg(
         f'<circle cx="178" cy="58" r="1.8" fill="{amber}"/>'
         f'<circle cx="68" cy="78" r="1.4" fill="{amber}"/></g>'
     )
-    return _svg_shell(target_name, profile, palette, body)
+    if target_name.strip().upper() != "M31":
+        return _svg_shell(target_name, profile, palette, canonical_body)
+
+    # The approved M31 library asset is an original morphology-driven drawing.
+    # Its inclined disk, offset bulge, dust lanes, and asymmetric outer arcs are
+    # adapted into the existing 240x140 cached/client vignette coordinate space.
+    m31_body = (
+        '<g data-morphology="m31-andromeda-v1" transform="translate(-10 -27.5) scale(.65)">'
+        f'<ellipse cx="200" cy="150" rx="132" ry="47" fill="url(#{prefix}-glow)" opacity=".76"/>'
+        f'<ellipse cx="183" cy="146" rx="31" ry="18" fill="{cream}" opacity=".9"/>'
+        f'<path d="M87.9 132.1 A124 42 0 0 1 316.5 135.6" fill="none" stroke="{teal}" '
+        'stroke-width="6" stroke-linecap="round" opacity=".72"/>'
+        f'<path d="M310.3 161.6 A113 35 0 0 1 106.2 173.5" fill="none" stroke="{cream}" '
+        'stroke-width="5" stroke-linecap="round" opacity=".58"/>'
+        f'<path d="M148.7 131.6 A74 22 0 0 1 261.1 136.5" fill="none" stroke="{shadow_teal}" '
+        'stroke-width="3" stroke-linecap="round" opacity=".76"/>'
+        '<path d="M91.7 139.1 A111 38 0 0 1 307.8 144.3" fill="none" stroke="#06131a" '
+        'stroke-width="5" stroke-linecap="round" opacity=".48"/>'
+        '<path d="M292.2 163 A92 30 0 0 1 113.9 165.6" fill="none" stroke="#06131a" '
+        'stroke-width="4" stroke-linecap="round" opacity=".42"/>'
+        f'<circle cx="254" cy="135" r="3" fill="{amber}" opacity=".55"/>'
+        f'<path d="M66.3 128.5 A137 98 0 0 1 121.6 69.6" fill="none" stroke="{cream}" '
+        'stroke-width="2" stroke-linecap="round" opacity=".24"/>'
+        f'<path d="M282.5 219.6 A128 91 0 0 1 202.7 241" fill="none" stroke="{teal}" '
+        'stroke-width="2" stroke-linecap="round" opacity=".22"/>'
+        f'<path d="M113.9 208 A119 84 0 0 1 86.7 175.8" fill="none" stroke="{amber}" '
+        'stroke-width="2" stroke-linecap="round" opacity=".28"/></g>'
+    )
+    return _svg_shell(
+        target_name,
+        profile,
+        palette,
+        m31_body,
+        visual_treatment="m31-morphology-v1",
+    )
 
 
 def _build_cache_entry(

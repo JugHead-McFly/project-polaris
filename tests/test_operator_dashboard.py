@@ -337,7 +337,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'setText("hosted-target-fit", "—")' in script
     assert "targetRigMatchLabel(target)" in script
     assert "targetIllustrationKind" in script
+    assert "isM31Target" in script
     assert "buildTargetIllustrationSvg" in script
+    assert "m31-andromeda-v1" in script
+    assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in script
     assert "M28 75C63 41 159 40 212 68" in script
     assert "M35 56C75 86 160 92 205 61" in script
     assert "M45 87C87 65 162 65 196 78" in script
@@ -426,6 +429,8 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     ) in script
     assert "if (!target) {\n    container.replaceChildren();\n    container.hidden = true;" in script
     assert "cachedIllustration || buildTargetIllustrationSvg(target, compact)" in script
+    assert "if (isM31Target(target))" in script
+    assert 'svg.dataset.visualTreatment = "m31-morphology-v1"' in script
     assert (
         ".hosted-command-fallback-card.has-target-illustration"
         " {\n  padding-right: 78px !important;"

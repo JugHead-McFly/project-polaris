@@ -113,7 +113,9 @@ def test_refresh_caches_nasa_metadata_and_generated_svg(tmp_path):
     assert reference["artwork_profile"] == "inclined_spiral"
     assert 'data-reference="nasa"' in reference["artwork_svg"]
     assert 'preserveAspectRatio="xMidYMid meet"' in reference["artwork_svg"]
-    assert 'data-visual-treatment="canonical-m31-v3"' in reference["artwork_svg"]
+    assert 'data-visual-treatment="m31-morphology-v1"' in reference["artwork_svg"]
+    assert 'data-morphology="m31-andromeda-v1"' in reference["artwork_svg"]
+    assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in reference["artwork_svg"]
     assert "<title>" not in reference["artwork_svg"]
     assert "#d5a54d" in reference["artwork_svg"]
     assert "#e48191" not in reference["artwork_svg"]
@@ -240,7 +242,20 @@ def test_unsupported_target_never_uses_a_cache_entry(tmp_path):
     ) is None
 
 
-def test_every_catalog_target_uses_the_canonical_m31_visual_grammar():
+def test_m31_uses_approved_morphology_driven_visual():
+    svg = _generate_artwork_svg("M31", NASA_TARGET_ART_CATALOG["M31"])
+
+    assert 'data-visual-treatment="m31-morphology-v1"' in svg
+    assert 'data-morphology="m31-andromeda-v1"' in svg
+    assert 'transform="translate(-10 -27.5) scale(.65)"' in svg
+    assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in svg
+    assert "M91.7 139.1 A111 38 0 0 1 307.8 144.3" in svg
+    assert '<ellipse cx="183" cy="146" rx="31" ry="18"' in svg
+    assert "M28 75C63 41 159 40 212 68" not in svg
+    assert "<title>" not in svg
+
+
+def test_non_m31_catalog_targets_keep_existing_visual_grammar():
     canonical_paths = (
         "M28 75C63 41 159 40 212 68",
         "M35 56C75 86 160 92 205 61",
@@ -248,6 +263,8 @@ def test_every_catalog_target_uses_the_canonical_m31_visual_grammar():
     )
 
     for target_name, catalog_entry in NASA_TARGET_ART_CATALOG.items():
+        if target_name == "M31":
+            continue
         svg = _generate_artwork_svg(target_name, catalog_entry)
 
         assert 'data-visual-treatment="canonical-m31-v3"' in svg
@@ -256,6 +273,9 @@ def test_every_catalog_target_uses_the_canonical_m31_visual_grammar():
         assert 'ellipse cx="120" cy="70" rx="92" ry="36"' in svg
         for path in canonical_paths:
             assert path in svg
+
+        assert 'data-morphology="m31-andromeda-v1"' not in svg
+        assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" not in svg
 
         # These markers belonged to the former target-specific treatments.
         assert "translate(78 82)" not in svg
