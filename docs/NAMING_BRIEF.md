@@ -1,6 +1,6 @@
 # Polaris Naming Brief
 
-Last updated: 2026-07-23
+Last updated: 2026-08-02
 
 ## Current status
 
@@ -8,6 +8,42 @@ Last updated: 2026-07-23
 brand name, and the current logo should be treated as temporary. The name has
 strong astronomical meaning but is crowded across adjacent product categories,
 so it should not be assumed available for an app or company.
+
+## Current frontrunner
+
+**Distant Light** is the current public-brand frontrunner for the product, while
+**Project Polaris** remains the internal codename. Distant Light has not been
+cleared for trademark, domain, app-store, or social-handle availability, and it
+should not be used publicly as a final name until the review process below is
+complete.
+
+Working tagline:
+
+> Plan the night. Keep the wonder.
+
+Working descriptor:
+
+> A smart-telescope planning companion that gives clear, explainable
+> recommendations for what to image tonight.
+
+Strategic rationale:
+
+- Warm and beginner-friendly without sounding childish.
+- Keeps the sense of wonder while supporting practical nightly planning.
+- Does not imply telescope control, automation, or equipment-safety authority.
+- Supports the visual motif explored in the July 2026 mockups: distant starlight
+  becoming a clear path from sky to observer.
+
+Strategic risks:
+
+- The name is poetic, so public copy must make the product function concrete.
+- It may overlap with photography, observatory, media, or astronomy brands.
+- Availability and registrability are unknown until formal review.
+
+Supporting language candidates from the same exploration:
+
+- **Under Vast Skies**: promising as campaign or section language.
+- **The Long View**: promising for portfolio, history, or user-progress framing.
 
 ## Creative direction
 

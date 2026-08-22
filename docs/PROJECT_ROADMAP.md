@@ -1,6 +1,6 @@
 # Polaris Roadmap to Private Alpha and Beta
 
-Last updated: 2026-08-02
+Last updated: 2026-08-20
 
 ## How to read this plan
 
@@ -110,6 +110,10 @@ The hosted alpha must do only a few things well:
    successful capture history proves the longer setting worked. Add telescope
    model and tracking-mode selection before enabling this automatically for new
    users.
+7. Make selected-rig reasoning visible in Tonight. A user should see why the
+   recommended target is or is not a good match for their rig, including field
+   of view, target scale, filter fit, smart-telescope workflow fit, and any
+   unknown official-spec gaps such as incomplete DWARF mini framing data.
 
 The v1.7 foundation is complete: two real accounts were isolated successfully,
 the hosted application was deployed, Sentry monitoring and privacy scrubbing
