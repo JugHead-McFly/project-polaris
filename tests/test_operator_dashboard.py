@@ -337,6 +337,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "targetRigMatchLabel(target)" in script
     assert "targetIllustrationKind" in script
     assert "buildTargetIllustrationSvg" in script
+    assert "parseCachedTargetIllustration" in script
+    assert "artwork_svg" in script
+    assert "renderReferenceAttribution" in script
+    assert "TARGET_REFERENCE_IMAGE_FALLBACKS" not in script
     assert 'return "galaxy"' in script
     assert 'return "nebula"' in script
     assert 'return "cluster"' in script
@@ -387,7 +391,7 @@ def test_operator_dashboard_sets_restrictive_content_policy():
     assert "default-src 'self'" in policy
     assert "object-src 'none'" in policy
     assert "frame-ancestors 'none'" in policy
-    assert "https://cdn.esahubble.org" in policy
+    assert "https://cdn.esahubble.org" not in policy
     assert "https://cdn.jsdelivr.net" not in policy
     nonce = response.text.split('nonce="', 1)[1].split('"', 1)[0]
     assert f"'nonce-{nonce}'" in policy

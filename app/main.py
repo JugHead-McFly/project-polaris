@@ -1,6 +1,8 @@
+import asyncio
 import os
 import tempfile
 from contextlib import asynccontextmanager
+from contextlib import suppress
 from time import perf_counter
 from uuid import uuid4
 
@@ -41,6 +43,7 @@ from app.database.database import get_tenant_db
 from app.services.capture_service import (
     create_capture_from_parsed_fits,
 )
+from app.services.target_art_service import refresh_target_art_cache
 from parser.fits_parser import parse_fits
 from app.api.planner import (
     router as planner_router,
@@ -71,13 +74,31 @@ def apply_browser_security_headers(response):
     return response
 
 
+async def maintain_target_art_cache() -> None:
+    while True:
+        statuses = await asyncio.to_thread(refresh_target_art_cache)
+        logger.info("target_art_cache_refresh statuses=%s", statuses)
+        await asyncio.sleep(24 * 60 * 60)
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     report = run_startup_preflight()
     log_preflight_report(report, logger)
     if not report["ready"]:
         raise RuntimeError(format_preflight_failure(report))
-    yield
+    target_art_task = (
+        asyncio.create_task(maintain_target_art_cache())
+        if settings.ENVIRONMENT == "production"
+        else None
+    )
+    try:
+        yield
+    finally:
+        if target_art_task is not None:
+            target_art_task.cancel()
+            with suppress(asyncio.CancelledError):
+                await target_art_task
 
 
 app = FastAPI(

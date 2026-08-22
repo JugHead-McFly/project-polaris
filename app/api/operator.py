@@ -82,8 +82,7 @@ def _dashboard_content_security_policy(script_nonce: str) -> str:
             "style-src 'self' 'unsafe-inline'",
             (
                 "img-src 'self' data: blob: "
-                "https://*.tile.openstreetmap.org "
-                "https://cdn.esahubble.org"
+                "https://*.tile.openstreetmap.org"
             ),
             f"connect-src {' '.join(connect_sources)}",
             "font-src 'self' data:",

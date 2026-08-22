@@ -119,7 +119,6 @@ def get_target_angular_size(target_name):
 # agency image belongs to the user's portfolio.
 TARGET_REFERENCE_IMAGES = {
     "C 20": {
-        "thumbnail_url": "https://cdn.esahubble.org/archives/images/thumb300y/heic0510a.jpg",
         "source_url": "https://esahubble.org/images/heic0510a/",
         "source_label": "ESA/Hubble",
         "alt": "North America Nebula reference image from ESA/Hubble",

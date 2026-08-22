@@ -9,6 +9,14 @@ from app.models import Capture
 from app.models import CaptureAnalysis
 from app.services.portfolio_service import build_portfolio_target
 from app.services.portfolio_service import get_target_metadata
+from app.services.target_art_service import get_cached_target_reference
+
+
+def _target_reference_image(target_name: str):
+    return (
+        get_cached_target_reference(target_name)
+        or get_target_reference_image(target_name)
+    )
 
 
 def get_capture_integration_seconds(
@@ -350,7 +358,7 @@ def build_target_response(
     return {
         "object": normalized_name,
         "common_name": get_target_common_name(normalized_name),
-        "reference_image": get_target_reference_image(normalized_name),
+        "reference_image": _target_reference_image(normalized_name),
         "capture_count": summary["captures"],
         "session_count": summary["sessions"],
         "total_integration_seconds": total_seconds,
@@ -408,7 +416,7 @@ def build_catalog_target_response(
     return {
         "object": normalized_name,
         "common_name": get_target_common_name(normalized_name),
-        "reference_image": get_target_reference_image(normalized_name),
+        "reference_image": _target_reference_image(normalized_name),
         "capture_count": 0,
         "session_count": 0,
         "total_integration_seconds": 0,

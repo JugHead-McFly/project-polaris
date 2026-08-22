@@ -25,10 +25,20 @@ class RecommendedSettings(BaseModel):
 
 
 class TargetReferenceImage(BaseModel):
-    thumbnail_url: str
+    thumbnail_url: Optional[str] = None
     source_url: str
     source_label: str
     alt: str
+    title: Optional[str] = None
+    nasa_id: Optional[str] = None
+    credit: Optional[str] = None
+    attribution: Optional[str] = None
+    usage_url: Optional[str] = None
+    remote_preview_url: Optional[str] = None
+    artwork_profile: Optional[str] = None
+    artwork_svg: Optional[str] = None
+    cache_expires_at: Optional[str] = None
+    cache_status: Optional[str] = None
 
 
 class RigTargetFitSummary(BaseModel):

@@ -73,18 +73,6 @@ const rememberEqModePreference = (event) => {
   updateHostedEqModeAvailability();
 };
 
-// Keep the Tonight view useful when a catalog response is temporarily missing
-// its optional reference-image metadata. The server remains the source of
-// truth; this simply gives known targets a safe, official display fallback.
-const TARGET_REFERENCE_IMAGE_FALLBACKS = {
-  C20: {
-    thumbnail_url: "https://cdn.esahubble.org/archives/images/thumb300y/heic0510a.jpg",
-    source_url: "https://esahubble.org/images/heic0510a/",
-    source_label: "ESA/Hubble",
-    alt: "North America Nebula reference image from ESA/Hubble",
-  },
-};
-
 const apiFetch = async (input, options = {}) => {
   const headers = new Headers(options.headers || {});
   if (hostedSession?.access_token) {
@@ -364,29 +352,40 @@ const hostedPlanFailureMessage = (requestId = "") => {
   return `Polaris could not build tonight's plan. Try Refresh plan once more.${requestNote}`;
 };
 
-const renderHostedReferenceImage = (target) => {
-  const link = byId("hosted-reference-image");
-  const image = byId("hosted-reference-image-thumbnail");
-  const label = byId("hosted-reference-image-label");
-  const targetKey = String(target?.object || "")
-    .replaceAll(/\s/g, "")
-    .toUpperCase();
-  const reference = target?.reference_image || TARGET_REFERENCE_IMAGE_FALLBACKS[targetKey];
-
-  if (!reference?.thumbnail_url || !reference?.source_url) {
+const renderReferenceAttribution = (linkId, imageId, labelId, target) => {
+  const link = byId(linkId);
+  const image = byId(imageId);
+  const label = byId(labelId);
+  const reference = target?.reference_image;
+  image.hidden = true;
+  image.removeAttribute("src");
+  link.classList.add("is-attribution-only");
+  if (!reference?.source_url) {
     link.hidden = true;
-    image.removeAttribute("src");
     return;
   }
-
   link.href = reference.source_url;
-  image.src = reference.thumbnail_url;
-  image.alt = reference.alt || "Official target reference image";
-  label.textContent = `Reference image · ${reference.source_label || "source"}`;
-  image.onerror = () => {
-    link.hidden = true;
-  };
+  link.title = reference.credit
+    ? `${reference.title || target?.object || "Target reference"} · Credit: ${reference.credit}`
+    : reference.title || "Open reference source";
+  link.setAttribute(
+    "aria-label",
+    reference.credit
+      ? `Open ${reference.source_label || "reference"} source. Source credit: ${reference.credit}`
+      : `Open ${reference.source_label || "reference"} source`,
+  );
+  label.textContent = reference.attribution
+    || `Reference source · ${reference.source_label || "source"}`;
   link.hidden = false;
+};
+
+const renderHostedReferenceImage = (target) => {
+  renderReferenceAttribution(
+    "hosted-reference-image",
+    "hosted-reference-image-thumbnail",
+    "hosted-reference-image-label",
+    target,
+  );
 };
 
 let targetIllustrationSequence = 0;
@@ -478,39 +477,52 @@ const buildTargetIllustrationSvg = (target, compact = false) => {
   return svg;
 };
 
+const parseCachedTargetIllustration = (target) => {
+  const markup = target?.reference_image?.artwork_svg;
+  if (typeof markup !== "string" || markup.length > 16000) return null;
+  const parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
+  const svg = parsed.documentElement;
+  if (svg?.localName !== "svg" || parsed.querySelector("parsererror")) return null;
+  if (svg.querySelector("script, foreignObject, image, use")) return null;
+  for (const element of [svg, ...svg.querySelectorAll("*")]) {
+    for (const attribute of element.attributes) {
+      const name = attribute.name.toLowerCase();
+      const value = attribute.value.toLowerCase();
+      if (name.startsWith("on") || name === "href" || name === "xlink:href") return null;
+      if (name === "style" && /url\s*\(\s*['\"]?https?:/.test(value)) return null;
+    }
+  }
+  return document.importNode(svg, true);
+};
+
 const renderTargetIllustration = (containerId, target, compact = false) => {
   const container = byId(containerId);
-  container.replaceChildren(buildTargetIllustrationSvg(target, compact));
-  container.dataset.kind = targetIllustrationKind(target);
+  const cachedIllustration = parseCachedTargetIllustration(target);
+  container.replaceChildren(
+    cachedIllustration || buildTargetIllustrationSvg(target, compact),
+  );
+  container.dataset.kind = cachedIllustration
+    ? `nasa-${target.reference_image.artwork_profile || targetIllustrationKind(target)}`
+    : targetIllustrationKind(target);
+  container.classList.toggle("is-reference-informed", Boolean(cachedIllustration));
   if (!compact) {
     const name = target?.common_name || target?.object || "deep-sky target";
-    container.setAttribute("aria-label", `Abstract illustration of ${name}`);
+    container.setAttribute(
+      "aria-label",
+      cachedIllustration
+        ? `Polaris representative illustration of ${name}, informed by cached NASA reference metadata`
+        : `Abstract illustration of ${name}`,
+    );
   }
 };
 
 const renderLegacyReferenceImage = (target) => {
-  const link = byId("target-reference-image");
-  const image = byId("target-reference-image-thumbnail");
-  const label = byId("target-reference-image-label");
-  const targetKey = String(target?.object || "")
-    .replaceAll(/\s/g, "")
-    .toUpperCase();
-  const reference = target?.reference_image || TARGET_REFERENCE_IMAGE_FALLBACKS[targetKey];
-
-  if (!reference?.thumbnail_url || !reference?.source_url) {
-    link.hidden = true;
-    image.removeAttribute("src");
-    return;
-  }
-
-  link.href = reference.source_url;
-  image.src = reference.thumbnail_url;
-  image.alt = reference.alt || "Official target reference image";
-  label.textContent = `Reference image · ${reference.source_label || "source"}`;
-  image.onerror = () => {
-    link.hidden = true;
-  };
-  link.hidden = false;
+  renderReferenceAttribution(
+    "target-reference-image",
+    "target-reference-image-thumbnail",
+    "target-reference-image-label",
+    target,
+  );
 };
 
 const skyQualityStars = (score) => {
