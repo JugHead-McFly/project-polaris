@@ -97,6 +97,17 @@ const setAuthMessage = (message, targetId = "auth-message") => {
   setText(targetId, message, "");
 };
 
+const setMobileHeaderMenu = (open) => {
+  const header = document.querySelector(".site-header");
+  const button = byId("mobile-account-menu-button");
+  header.classList.toggle("mobile-controls-open", open);
+  button.setAttribute("aria-expanded", String(open));
+  button.setAttribute(
+    "aria-label",
+    open ? "Close account and plan controls" : "Open account and plan controls",
+  );
+};
+
 const setHostedShell = (signedIn) => {
   byId("auth-gate").hidden = signedIn;
   byId("hosted-account-main").hidden = !signedIn;
@@ -104,9 +115,11 @@ const setHostedShell = (signedIn) => {
   document.querySelector(".app-nav").hidden = signedIn;
   byId("simulation-banner").hidden = true;
   byId("account-control").hidden = !signedIn;
+  byId("mobile-header-actions").hidden = !signedIn;
   byId("refresh-button").closest(".refresh-control").hidden = signedIn;
   byId("eq-mode-checkbox").closest(".tracking-mode-control").hidden = signedIn;
   document.querySelector(".readonly-badge").hidden = signedIn;
+  if (!signedIn) setMobileHeaderMenu(false);
 };
 
 const showPasswordSetup = () => {
@@ -299,6 +312,8 @@ const resetHostedPlanDetails = () => {
   setText("hosted-command-window-label", "Best imaging window");
   setText("hosted-command-target", "—");
   setText("hosted-command-fallback", "—");
+  renderTargetIllustration("hosted-command-target-illustration", null, true);
+  renderTargetIllustration("hosted-target-illustration", null);
   setText("hosted-target-tracking", "—");
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
@@ -372,6 +387,105 @@ const renderHostedReferenceImage = (target) => {
     link.hidden = true;
   };
   link.hidden = false;
+};
+
+let targetIllustrationSequence = 0;
+
+const appendTargetSvgElement = (parent, name, attributes = {}) => {
+  const element = document.createElementNS("http://www.w3.org/2000/svg", name);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  parent.append(element);
+  return element;
+};
+
+const targetIllustrationKind = (target) => {
+  const descriptor = [
+    target?.object,
+    target?.common_name,
+    target?.object_type,
+    target?.type,
+  ].filter(Boolean).join(" ").toLowerCase();
+  if (/galaxy|\bm31\b|\bm33\b|\bm51\b|\bm81\b|\bm82\b/.test(descriptor)) return "galaxy";
+  if (/nebula|\bm8\b|\bm16\b|\bm17\b|\bm20\b|\bm27\b|\bm42\b|\bm57\b/.test(descriptor)) return "nebula";
+  if (/cluster|pleiades|\bm13\b|\bm45\b/.test(descriptor)) return "cluster";
+  return "deep-sky";
+};
+
+const appendTargetStars = (svg, compact) => {
+  const stars = compact
+    ? [[24, 24, 1.3], [206, 24, 1], [196, 108, 1.2], [38, 112, 0.9]]
+    : [[22, 24, 1.3], [52, 42, 0.8], [205, 25, 1.1], [222, 69, 0.8], [194, 114, 1.2], [37, 113, 0.9], [88, 18, 0.7]];
+  stars.forEach(([cx, cy, r], index) => {
+    appendTargetSvgElement(svg, "circle", {
+      cx,
+      cy,
+      r,
+      fill: index % 2 ? "#f2be67" : "#c9fff7",
+      opacity: index % 3 === 0 ? ".92" : ".62",
+    });
+  });
+};
+
+const buildTargetIllustrationSvg = (target, compact = false) => {
+  const kind = targetIllustrationKind(target);
+  const uniqueId = `target-art-${targetIllustrationSequence += 1}`;
+  const svg = appendTargetSvgElement(document.createDocumentFragment(), "svg", {
+    viewBox: "0 0 240 140",
+    preserveAspectRatio: "xMidYMid meet",
+    "aria-hidden": "true",
+    focusable: "false",
+  });
+  const defs = appendTargetSvgElement(svg, "defs");
+  const glow = appendTargetSvgElement(defs, "radialGradient", { id: `${uniqueId}-glow` });
+  appendTargetSvgElement(glow, "stop", { offset: "0", "stop-color": "#f7ead2", "stop-opacity": ".98" });
+  appendTargetSvgElement(glow, "stop", { offset: ".28", "stop-color": "#79e4d7", "stop-opacity": ".82" });
+  appendTargetSvgElement(glow, "stop", { offset: "1", "stop-color": "#28485f", "stop-opacity": "0" });
+  const mist = appendTargetSvgElement(defs, "linearGradient", {
+    id: `${uniqueId}-mist`, x1: "0", y1: "0", x2: "1", y2: "1",
+  });
+  appendTargetSvgElement(mist, "stop", { offset: "0", "stop-color": "#5bddcd", "stop-opacity": ".72" });
+  appendTargetSvgElement(mist, "stop", { offset: ".52", "stop-color": "#5d6fab", "stop-opacity": ".48" });
+  appendTargetSvgElement(mist, "stop", { offset: "1", "stop-color": "#f2be67", "stop-opacity": ".18" });
+
+  appendTargetSvgElement(svg, "rect", { width: "240", height: "140", rx: "14", fill: "#06141e" });
+  appendTargetStars(svg, compact);
+
+  if (kind === "galaxy") {
+    const galaxy = appendTargetSvgElement(svg, "g", { transform: "rotate(-18 120 70)" });
+    appendTargetSvgElement(galaxy, "ellipse", { cx: "120", cy: "70", rx: "94", ry: "39", fill: `url(#${uniqueId}-glow)`, opacity: ".95" });
+    appendTargetSvgElement(galaxy, "ellipse", { cx: "120", cy: "70", rx: "82", ry: "27", fill: "none", stroke: "#6eddd2", "stroke-width": "2", opacity: ".42" });
+    appendTargetSvgElement(galaxy, "path", { d: "M38 77C72 40 166 40 202 69C165 55 83 63 52 91", fill: "none", stroke: "#b7fff5", "stroke-width": "2.2", opacity: ".58" });
+    appendTargetSvgElement(galaxy, "path", { d: "M49 56C86 86 165 91 195 61C166 100 84 102 43 70", fill: "none", stroke: "#f2be67", "stroke-width": "1.4", opacity: ".34" });
+    appendTargetSvgElement(galaxy, "ellipse", { cx: "120", cy: "70", rx: "26", ry: "12", fill: "#f7ead2", opacity: ".9" });
+  } else if (kind === "nebula") {
+    appendTargetSvgElement(svg, "path", { d: "M37 92C54 40 91 31 119 59C145 24 202 42 208 89C181 117 147 110 125 96C96 121 56 119 37 92Z", fill: `url(#${uniqueId}-mist)`, opacity: ".76" });
+    appendTargetSvgElement(svg, "path", { d: "M61 91C84 65 106 94 128 67C151 42 181 56 191 84", fill: "none", stroke: "#b9fff5", "stroke-width": "2.4", opacity: ".55" });
+    appendTargetSvgElement(svg, "circle", { cx: "127", cy: "68", r: "7", fill: "#f7ead2", opacity: ".88" });
+  } else if (kind === "cluster") {
+    const clusterStars = [[120, 67, 7], [94, 55, 4], [143, 48, 5], [151, 78, 4], [87, 84, 5], [121, 98, 3], [68, 67, 3], [176, 63, 3]];
+    clusterStars.forEach(([cx, cy, r], index) => {
+      appendTargetSvgElement(svg, "circle", { cx, cy, r, fill: index % 2 ? "#6ee2d5" : "#f7ead2", opacity: index === 0 ? ".98" : ".74" });
+    });
+    appendTargetSvgElement(svg, "circle", { cx: "120", cy: "70", r: "52", fill: `url(#${uniqueId}-glow)`, opacity: ".32" });
+  } else {
+    appendTargetSvgElement(svg, "path", { d: "M34 104Q120 28 206 104", fill: "none", stroke: "#5bddcd", "stroke-width": "2", "stroke-dasharray": "5 6", opacity: ".68" });
+    appendTargetSvgElement(svg, "path", { d: "M27 105H213", fill: "none", stroke: "#718d99", "stroke-width": "1", opacity: ".5" });
+    appendTargetSvgElement(svg, "circle", { cx: "120", cy: "48", r: "12", fill: `url(#${uniqueId}-glow)` });
+    appendTargetSvgElement(svg, "path", { d: "M120 34V62M106 48H134", stroke: "#f7ead2", "stroke-width": "1.7", opacity: ".86" });
+  }
+
+  svg.dataset.kind = kind;
+  return svg;
+};
+
+const renderTargetIllustration = (containerId, target, compact = false) => {
+  const container = byId(containerId);
+  container.replaceChildren(buildTargetIllustrationSvg(target, compact));
+  container.dataset.kind = targetIllustrationKind(target);
+  if (!compact) {
+    const name = target?.common_name || target?.object || "deep-sky target";
+    container.setAttribute("aria-label", `Abstract illustration of ${name}`);
+  }
 };
 
 const renderLegacyReferenceImage = (target) => {
@@ -654,6 +768,19 @@ const hostedTrackingModeLabel = () => (
     : "Alt-Az"
 );
 
+const setHostedRefreshState = (loading) => {
+  ["hosted-refresh-button", "mobile-refresh-button"].forEach((id) => {
+    const button = byId(id);
+    button.disabled = loading;
+    button.classList.toggle("is-refreshing", loading);
+    button.setAttribute(
+      "aria-label",
+      loading ? "Refreshing tonight's plan" : "Refresh tonight's plan",
+    );
+    button.title = loading ? "Refreshing tonight's plan" : "Refresh tonight's plan";
+  });
+};
+
 const displayedDecisionLabel = (decision) => {
   if (decision === "Do Not Image") return "Wait for better conditions";
   return decision;
@@ -728,6 +855,12 @@ const renderHostedTonight = (data) => {
       "hosted-command-target",
       data.recommended_target?.object || "None recommended",
     );
+    renderTargetIllustration(
+      "hosted-command-target-illustration",
+      data.recommended_target || null,
+      true,
+    );
+    renderTargetIllustration("hosted-target-illustration", target);
     setText(
       "hosted-target-exposure",
       displayNumber(settings.exposure_seconds, " sec"),
@@ -810,9 +943,7 @@ const renderHostedTonight = (data) => {
 };
 
 const loadHostedTonight = async () => {
-  const refresh = byId("hosted-refresh-button");
-  refresh.disabled = true;
-  refresh.textContent = "Refreshing…";
+  setHostedRefreshState(true);
   setHostedPlanLoading();
   showHostedTonight();
 
@@ -841,8 +972,7 @@ const loadHostedTonight = async () => {
     renderHostedSchedule({ decision: "Plan unavailable", blocks: [] });
     setText("hosted-plan-message", "Try Refresh plan again. If it fails twice, send Doug the request ID and a screenshot.");
   } finally {
-    refresh.disabled = false;
-    refresh.textContent = "Refresh plan";
+    setHostedRefreshState(false);
   }
 };
 
@@ -3851,6 +3981,18 @@ byId("hosted-account-retry").addEventListener("click", retryHostedAccountLoad);
 byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-use-device-location").addEventListener("click", useDeviceLocation);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
+byId("mobile-refresh-button").addEventListener("click", loadHostedTonight);
+byId("mobile-account-menu-button").addEventListener("click", () => {
+  setMobileHeaderMenu(
+    byId("mobile-account-menu-button").getAttribute("aria-expanded") !== "true",
+  );
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && byId("mobile-account-menu-button").getAttribute("aria-expanded") === "true") {
+    setMobileHeaderMenu(false);
+    byId("mobile-account-menu-button").focus();
+  }
+});
 byId("hosted-feedback-yes").addEventListener("click", () => {
   byId("hosted-feedback-detail").hidden = true;
   byId("hosted-feedback-reason").value = "";
@@ -3869,6 +4011,7 @@ byId("hosted-feedback-save-note").addEventListener("click", () => {
   saveHostedPlanFeedback(false, reason);
 });
 byId("hosted-edit-home-button").addEventListener("click", () => {
+  setMobileHeaderMenu(false);
   updateHostedAccountForm(hostedProfile, hostedObservatory);
   showHostedAccountSetup();
 });

@@ -30,26 +30,65 @@
 
       <div class="header-actions">
         <div class="account-control" id="account-control" hidden>
-          <label
-            class="tracking-mode-control hosted-header-eq-control"
-            title="Leave unchecked for Alt-Az-safe exposures. Check only after the telescope is physically EQ aligned and EQ mode is enabled for tonight."
+          <div class="header-primary-actions">
+            <label
+              class="tracking-mode-control hosted-header-eq-control"
+              title="Leave unchecked for Alt-Az-safe exposures. Check only after the telescope is physically EQ aligned and EQ mode is enabled for tonight."
+            >
+              <input id="hosted-eq-mode-checkbox" type="checkbox">
+              <span class="tracking-mode-name">Tracking</span>
+              <span class="tracking-mode-options" aria-hidden="true">
+                <span class="tracking-mode-altaz">Alt-Az</span>
+                <span class="tracking-mode-eq">EQ</span>
+              </span>
+            </label>
+            <button class="account-button" id="hosted-edit-home-button" type="button">
+              Edit home
+            </button>
+          </div>
+          <div class="header-session-actions">
+            <div class="header-identity-row">
+              <span class="account-email" id="account-email"></span>
+              <button class="account-button" id="sign-out-button" type="button">
+                Sign out
+              </button>
+            </div>
+            <button
+              class="refresh-button header-refresh-button"
+              id="hosted-refresh-button"
+              type="button"
+              aria-label="Refresh tonight's plan"
+              title="Refresh tonight's plan"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20 11a8 8 0 1 0-2.35 5.65M20 4v7h-7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="mobile-header-actions" id="mobile-header-actions" hidden>
+          <button
+            class="refresh-button mobile-header-refresh-button"
+            id="mobile-refresh-button"
+            type="button"
+            aria-label="Refresh tonight's plan"
+            title="Refresh tonight's plan"
           >
-            <input id="hosted-eq-mode-checkbox" type="checkbox">
-            <span class="tracking-mode-name">Tracking</span>
-            <span class="tracking-mode-options" aria-hidden="true">
-              <span class="tracking-mode-altaz">Alt-Az</span>
-              <span class="tracking-mode-eq">EQ</span>
-            </span>
-          </label>
-          <button class="account-button" id="hosted-edit-home-button" type="button">
-            Edit home
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20 11a8 8 0 1 0-2.35 5.65M20 4v7h-7"></path>
+            </svg>
           </button>
-          <button class="refresh-button" id="hosted-refresh-button" type="button">
-            Refresh plan
-          </button>
-          <span class="account-email" id="account-email"></span>
-          <button class="account-button" id="sign-out-button" type="button">
-            Sign out
+          <button
+            class="account-button mobile-account-menu-button"
+            id="mobile-account-menu-button"
+            type="button"
+            aria-expanded="false"
+            aria-controls="account-control"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M4 7h16M4 12h16M4 17h16"></path>
+            </svg>
+            <span>Controls</span>
           </button>
         </div>
         <span class="readonly-badge">Read-only advisory</span>
@@ -187,9 +226,14 @@
                   <span class="hosted-weather-diagnostic" id="hosted-weather-diagnostic" hidden></span>
                 </dd>
               </div>
-              <div>
+              <div class="hosted-command-target-card">
                 <dt>Best target</dt>
                 <dd id="hosted-command-target">—</dd>
+                <span
+                  class="hosted-command-target-illustration"
+                  id="hosted-command-target-illustration"
+                  aria-hidden="true"
+                ></span>
               </div>
               <div>
                 <dt>Fallback target</dt>
@@ -217,17 +261,25 @@
                 <strong id="hosted-target-name">—</strong>
                 <span id="hosted-target-common-name"></span>
               </div>
-              <a
-                class="hosted-reference-image"
-                id="hosted-reference-image"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                hidden
-              >
-                <img id="hosted-reference-image-thumbnail" alt="" />
-                <span id="hosted-reference-image-label">Reference image</span>
-              </a>
+              <div class="hosted-target-visuals">
+                <div
+                  class="hosted-target-illustration"
+                  id="hosted-target-illustration"
+                  role="img"
+                  aria-label="Abstract deep-sky target illustration"
+                ></div>
+                <a
+                  class="hosted-reference-image"
+                  id="hosted-reference-image"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  hidden
+                >
+                  <img id="hosted-reference-image-thumbnail" alt="" />
+                  <span id="hosted-reference-image-label">Reference image</span>
+                </a>
+              </div>
             </div>
             <p id="hosted-target-reason">Waiting for tonight's target.</p>
             <div class="hosted-rig-match">

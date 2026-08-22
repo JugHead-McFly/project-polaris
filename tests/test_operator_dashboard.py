@@ -271,10 +271,15 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-command-window"' in html
     assert 'id="hosted-command-window-label"' in html
     assert 'id="hosted-command-target"' in html
+    assert 'id="hosted-command-target-illustration"' in html
     assert 'id="hosted-command-fallback"' in html
     assert 'id="hosted-action-summary"' not in html
-    assert "Refresh plan" in html
+    assert 'aria-label="Refresh tonight\'s plan"' in html
+    assert 'id="mobile-refresh-button"' in html
+    assert 'id="mobile-account-menu-button"' in html
+    assert 'aria-controls="account-control"' in html
     assert "Edit home" in html
+    assert 'id="hosted-target-illustration"' in html
     assert 'id="hosted-target-rig"' in html
     assert "Rig profile" in html
     assert 'id="hosted-target-fit"' in html
@@ -289,9 +294,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
         < html.index('id="hosted-feedback-panel"')
     )
     assert (
-        html.index('id="hosted-refresh-button"')
-        < html.index('id="account-email"')
+        html.index('id="account-email"')
         < html.index('id="sign-out-button"')
+        < html.index('id="hosted-refresh-button"')
     )
     assert "secret" not in html.lower()
     assert 'nonce="safe-test-nonce"' in html
@@ -328,6 +333,17 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'setText("hosted-target-rig", "—")' in script
     assert 'setText("hosted-target-fit", "—")' in script
     assert "targetRigMatchLabel(target)" in script
+    assert "targetIllustrationKind" in script
+    assert "buildTargetIllustrationSvg" in script
+    assert 'return "galaxy"' in script
+    assert 'return "nebula"' in script
+    assert 'return "cluster"' in script
+    assert 'return "deep-sky"' in script
+    assert 'renderTargetIllustration("hosted-command-target-illustration"' in script
+    assert 'renderTargetIllustration("hosted-target-illustration"' in script
+    assert "setMobileHeaderMenu" in script
+    assert "setHostedRefreshState" in script
+    assert 'byId("mobile-refresh-button").addEventListener("click", loadHostedTonight)' in script
     assert "rigProfileLabel(data.observatory)" in script
     assert "targetFitLabel(target)" in script
     assert "profile?.label || observatory.telescope_model || observatory.rig_profile_key" in script
