@@ -686,6 +686,25 @@ footer {
   font-weight: 800;
 }
 
+.hosted-opportunity-score ul {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hosted-opportunity-score li {
+  padding: 4px 8px;
+  color: #b4c7cc;
+  background: rgba(84, 224, 211, 0.1);
+  border: 1px solid rgba(84, 224, 211, 0.18);
+  border-radius: 999px;
+  font-size: 12px;
+}
+
 .hosted-decision > p:not(.eyebrow) {
   margin: 18px 0 0 34px;
   color: #bfd0d4;

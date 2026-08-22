@@ -257,6 +257,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Your imaging plan" in html
     assert "Opportunity score" in html
     assert 'id="hosted-opportunity-score"' in html
+    assert 'id="hosted-opportunity-drivers"' in html
     assert "Refresh tonight" in html
     assert "Edit observing home" in html
     assert 'id="hosted-target-rig"' in html
@@ -275,6 +276,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderOpportunityScore" in script
+    assert "No major deductions" in script
     assert "renderHostedSchedule" in script
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script

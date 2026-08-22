@@ -440,14 +440,33 @@ const renderSkyQuality = (rating) => {
 };
 
 const renderOpportunityScore = (rating) => {
+  const drivers = byId("hosted-opportunity-drivers");
+  drivers.replaceChildren();
+
   if (!rating || rating.quality === "Unavailable") {
     setText("hosted-opportunity-score", "--");
     setText("hosted-opportunity-label", "Unavailable");
+    appendTextElement(drivers, "li", "", "Score drivers unavailable");
     return;
   }
 
   setText("hosted-opportunity-score", `${rating.score}/100`);
   setText("hosted-opportunity-label", rating.quality);
+
+  const deductions = rating.deductions || [];
+  if (!deductions.length) {
+    appendTextElement(drivers, "li", "", "No major deductions");
+    return;
+  }
+
+  deductions.slice(0, 3).forEach((deduction) => {
+    appendTextElement(
+      drivers,
+      "li",
+      "",
+      `${deduction.label}: -${displayMeasuredNumber(deduction.points)}`,
+    );
+  });
 };
 
 const renderHostedSchedule = (schedule) => {
