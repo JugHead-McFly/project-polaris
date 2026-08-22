@@ -719,7 +719,12 @@ const displayedDecisionMessage = (decision, message) => {
   const reason = (message || "Current conditions are unsuitable")
     .replace(/^do not image:\s*/i, "")
     .trim();
-  const sentence = /[.!?]$/.test(reason) ? reason : `${reason}.`;
+  const capitalizedReason = reason
+    ? `${reason.charAt(0).toUpperCase()}${reason.slice(1)}`
+    : "Current conditions are unsuitable";
+  const sentence = /[.!?]$/.test(capitalizedReason)
+    ? capitalizedReason
+    : `${capitalizedReason}.`;
   return `${sentence} Save the setup time and reassess if conditions improve.`;
 };
 
