@@ -1445,12 +1445,19 @@ footer {
   text-align: center;
 }
 
+.hosted-footer-metadata {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  line-height: 1.45;
+}
+
 .hosted-feedback-panel {
   display: grid;
   justify-items: center;
   width: min(100%, 720px);
-  gap: 10px;
-  padding-top: 16px;
+  gap: 8px;
+  padding-top: 10px;
   border-top: 1px solid rgba(153, 202, 207, 0.14);
 }
 
@@ -3748,8 +3755,8 @@ dd {
 footer {
   display: grid;
   justify-items: center;
-  gap: 12px;
-  padding: 28px 0 40px;
+  gap: 10px;
+  padding: 16px 0 30px;
   color: var(--muted);
   font-size: 12px;
   text-align: center;

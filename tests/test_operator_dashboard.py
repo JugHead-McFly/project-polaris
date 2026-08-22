@@ -296,6 +296,12 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
         < html.index('id="data-updated"')
         < html.index('id="hosted-feedback-panel"')
     )
+    assert 'class="hosted-footer-metadata"' in html
+    assert (
+        html.index('class="hosted-footer-metadata"')
+        < html.index('id="hosted-plan-message"')
+        < html.index('id="data-updated"')
+    )
     assert (
         html.index('id="hosted-refresh-button"')
         < html.index('id="account-email"')
@@ -369,6 +375,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'classList.toggle("has-target-illustration", Boolean(target))' in script
     assert "if (targetVisuals) targetVisuals.hidden = !target;" in script
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    assert ".hosted-footer-metadata" in css
     assert ".hosted-command-target-card.has-target-illustration" in css
     assert ".hosted-command-fallback-card.has-target-illustration" in css
     assert ".hosted-target-heading:not(.has-target-illustration)" in css
