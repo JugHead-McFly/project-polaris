@@ -3737,6 +3737,18 @@ footer {
     min-height: 44px;
   }
 
+  .hosted-opportunity-reading {
+    width: 144px;
+  }
+
+  #hosted-opportunity-score {
+    font-size: 38px;
+  }
+
+  .hosted-opportunity-reading small {
+    font-size: 10px;
+  }
+
   .auth-gate,
   .hosted-account-main {
     width: min(100% - 28px, 760px);
