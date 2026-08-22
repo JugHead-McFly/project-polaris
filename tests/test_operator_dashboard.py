@@ -262,6 +262,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-target-fit"' in html
     assert "Target fit" in html
     assert 'id="hosted-target-rig-match"' in html
+    assert "Why this rig matches" in html
     assert 'id="hosted-weather-diagnostic"' in html
     assert "Sign out" in html
     assert "secret" not in html.lower()
