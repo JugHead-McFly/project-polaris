@@ -84,7 +84,7 @@ button {
 .app-nav,
 main,
 footer {
-  width: min(1440px, calc(100% - 48px));
+  width: min(1540px, calc(100% - 40px));
   margin-inline: auto;
 }
 
@@ -322,7 +322,7 @@ footer {
 }
 
 .hosted-account-main {
-  width: min(1240px, calc(100% - 48px));
+  width: min(1540px, calc(100% - 40px));
 }
 
 .auth-gate {
@@ -3608,6 +3608,61 @@ footer {
   padding: 28px 0 40px;
   color: var(--muted);
   font-size: 12px;
+}
+
+@media (min-width: 1041px) {
+  .site-header {
+    min-height: 70px;
+  }
+
+  .hosted-account-main {
+    margin-block: 14px 28px;
+  }
+
+  .hosted-tonight {
+    gap: 14px;
+  }
+
+  .hosted-tonight-heading > div:first-child > p:last-child {
+    margin-top: 5px;
+  }
+
+  .hosted-score-command,
+  .hosted-command-board,
+  .hosted-score-breakdown-card,
+  .hosted-target,
+  .hosted-setup-card,
+  .hosted-cautions-card {
+    padding: 24px 26px;
+  }
+
+  .hosted-command-board {
+    gap: 10px;
+  }
+
+  .hosted-decision {
+    padding: 16px 18px;
+  }
+
+  .hosted-command-summary div {
+    padding: 12px;
+  }
+
+  .hosted-action-summary {
+    padding: 13px 16px;
+  }
+
+  .hosted-score-breakdown-heading {
+    margin-bottom: 10px;
+  }
+
+  .hosted-score-components {
+    gap: 8px 20px;
+  }
+
+  .hosted-summary-grid {
+    gap: 12px;
+  }
 }
 
 @media (max-width: 1040px) {

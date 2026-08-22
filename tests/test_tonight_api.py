@@ -415,6 +415,32 @@ def test_night_rating_explains_bright_moon_deduction():
     }
 
 
+def test_night_rating_moon_threshold_matches_displayed_whole_percent():
+    weather = {
+        "cloud_cover_percent": 0,
+        "humidity_percent": 44,
+        "wind_speed_mph": 5.6,
+    }
+    target = {"moon_separation_degrees": 55.7}
+
+    for illumination in (74.9, 75.0, 75.1):
+        rating = calculate_night_rating(
+            weather=weather,
+            moon={"illumination_percent": illumination},
+            target=target,
+        )
+        assert rating["score"] == 100
+        assert rating["deductions"] == []
+
+    rating = calculate_night_rating(
+        weather=weather,
+        moon={"illumination_percent": 75.6},
+        target=target,
+    )
+    assert rating["score"] == 80
+    assert rating["deductions"] == [{"label": "Bright Moon", "points": 20}]
+
+
 def test_night_rating_uses_planned_start_weather_when_available():
     rating = calculate_night_rating(
         weather={

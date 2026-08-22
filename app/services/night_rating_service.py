@@ -39,7 +39,10 @@ def calculate_night_rating(weather, moon, target):
         deductions.append({"label": "Strong wind", "points": 10})
 
     illumination = moon.get("illumination_percent")
-    if illumination is not None and illumination > 75:
+    # Keep the threshold aligned with the whole-percent value shown to users.
+    # Otherwise two refreshes can straddle 75.0/75.1, display the same "75%",
+    # and still disagree by the full bright-Moon deduction.
+    if illumination is not None and round(illumination) > 75:
         score -= 20
         deductions.append({"label": "Bright Moon", "points": 20})
 
