@@ -439,33 +439,113 @@ const renderSkyQuality = (rating) => {
   });
 };
 
-const renderOpportunityScore = (rating) => {
+const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
+
+const scoreDeductionPoints = (rating, labels) => (rating?.deductions || [])
+  .filter((deduction) => labels.includes(deduction.label))
+  .reduce((total, deduction) => total + (Number(deduction.points) || 0), 0);
+
+const darknessAvailable = (darkness) => Boolean(
+  darkness?.astronomical_darkness_start && darkness?.astronomical_darkness_end,
+);
+
+const targetAltitudePoints = (target) => {
+  const altitude = Number(target?.current_altitude);
+  if (!Number.isFinite(altitude)) return null;
+  if (altitude >= 55) return 5;
+  if (altitude >= 40) return 4;
+  if (altitude >= 25) return 3;
+  if (altitude >= 20) return 2;
+  return 0;
+};
+
+const buildOpportunityComponents = (rating, context = {}) => {
+  const weatherPenalty = scoreDeductionPoints(
+    rating,
+    ["Cloud cover", "High humidity", "Strong wind"],
+  );
+  const moonPenalty = scoreDeductionPoints(
+    rating,
+    ["Bright Moon", "Moon close to target"],
+  );
+  const altitudePoints = targetAltitudePoints(context.target);
+
+  return [
+    {
+      label: "Cloud + stability",
+      points: Math.max(0, 45 - Math.min(45, weatherPenalty)),
+      max: 45,
+    },
+    {
+      label: "Astronomical darkness",
+      points: darknessAvailable(context.darkness) ? 20 : null,
+      max: 20,
+    },
+    {
+      label: "Moon interference",
+      points: Math.max(0, 15 - Math.min(15, moonPenalty)),
+      max: 15,
+    },
+    {
+      label: "Transparency",
+      points: null,
+      max: 10,
+    },
+    {
+      label: "Seeing",
+      points: null,
+      max: 5,
+    },
+    {
+      label: "Target altitude",
+      points: altitudePoints,
+      max: 5,
+    },
+  ];
+};
+
+const appendOpportunityComponent = (container, component) => {
+  const row = appendTextElement(container, "div", "hosted-score-component", "");
+  if (component.points === null || component.points === undefined) {
+    row.classList.add("is-unavailable");
+  }
+
+  appendTextElement(row, "span", "", component.label);
+  appendTextElement(
+    row,
+    "strong",
+    "",
+    component.points === null || component.points === undefined
+      ? "Unavailable"
+      : `${displayMeasuredNumber(component.points)} / ${component.max}`,
+  );
+  const bar = appendTextElement(row, "div", "hosted-score-bar", "");
+  const fill = appendTextElement(bar, "span", "", "");
+  if (component.points === null || component.points === undefined) {
+    fill.style.width = "100%";
+  } else {
+    fill.style.width = `${clampPercent((component.points / component.max) * 100)}%`;
+  }
+};
+
+const renderOpportunityScore = (rating, context = {}) => {
   const drivers = byId("hosted-opportunity-drivers");
   drivers.replaceChildren();
 
   if (!rating || rating.quality === "Unavailable") {
     setText("hosted-opportunity-score", "--");
     setText("hosted-opportunity-label", "Unavailable");
-    appendTextElement(drivers, "li", "", "Score drivers unavailable");
+    byId("hosted-opportunity-total-bar").style.width = "0%";
+    appendTextElement(drivers, "p", "", "Score drivers unavailable");
     return;
   }
 
   setText("hosted-opportunity-score", `${rating.score}/100`);
   setText("hosted-opportunity-label", rating.quality);
+  byId("hosted-opportunity-total-bar").style.width = `${clampPercent(rating.score)}%`;
 
-  const deductions = rating.deductions || [];
-  if (!deductions.length) {
-    appendTextElement(drivers, "li", "", "No major deductions");
-    return;
-  }
-
-  deductions.slice(0, 3).forEach((deduction) => {
-    appendTextElement(
-      drivers,
-      "li",
-      "",
-      `${deduction.label}: -${displayMeasuredNumber(deduction.points)}`,
-    );
+  buildOpportunityComponents(rating, context).forEach((component) => {
+    appendOpportunityComponent(drivers, component);
   });
 };
 
@@ -559,7 +639,10 @@ const renderHostedTonight = (data) => {
   );
 
   const target = data.recommended_target || data.backup_target;
-  renderOpportunityScore(data.night_rating);
+  renderOpportunityScore(data.night_rating, {
+    darkness: data.darkness,
+    target,
+  });
   setText(
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",

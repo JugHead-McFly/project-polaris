@@ -151,11 +151,16 @@
             <p class="eyebrow">Tonight's recommendation</p>
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
-              <strong id="hosted-opportunity-score">--</strong>
-              <span id="hosted-opportunity-label">Building score</span>
-              <ul id="hosted-opportunity-drivers">
-                <li>Score drivers will appear after conditions load.</li>
-              </ul>
+              <div class="hosted-opportunity-total">
+                <strong id="hosted-opportunity-score">--</strong>
+                <span id="hosted-opportunity-label">Building score</span>
+              </div>
+              <div class="hosted-score-bar" aria-hidden="true">
+                <span id="hosted-opportunity-total-bar"></span>
+              </div>
+              <div class="hosted-score-components" id="hosted-opportunity-drivers">
+                <p>Score drivers will appear after conditions load.</p>
+              </div>
             </div>
             <div class="decision-line">
               <span class="status-light" aria-hidden="true"></span>

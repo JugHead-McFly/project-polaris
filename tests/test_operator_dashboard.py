@@ -276,7 +276,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderOpportunityScore" in script
-    assert "No major deductions" in script
+    assert "hosted-opportunity-total-bar" in script
+    assert "buildOpportunityComponents" in script
+    assert "Cloud + stability" in script
+    assert "Target altitude" in script
     assert "renderHostedSchedule" in script
     assert "resetHostedPlanDetails" in script
     assert 'setText("hosted-target-exposure", "—")' in script
