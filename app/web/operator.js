@@ -455,7 +455,12 @@ const darknessAvailable = (darkness) => Boolean(
 );
 
 const targetAltitudePoints = (target) => {
-  const altitude = Number(target?.current_altitude);
+  const altitude = Number(
+    target?.maximum_dark_altitude
+    ?? target?.altitude_at_dark_midpoint
+    ?? target?.average_dark_altitude
+    ?? target?.current_altitude,
+  );
   if (!Number.isFinite(altitude)) return null;
   if (altitude >= 55) return 5;
   if (altitude >= 40) return 4;
