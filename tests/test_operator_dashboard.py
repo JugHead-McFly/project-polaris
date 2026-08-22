@@ -79,6 +79,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert leaflet_stylesheet.status_code == 200
     assert leaflet_script.status_code == 200
     assert "equatorial_mode_enabled=${eqEnabled}" in script.text
+    assert "Allow EQ-mode exposures" in response.text
+    assert "Leave unchecked for Alt-Az-safe exposures" in response.text
     assert 'const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";' in script.text
     assert "window.localStorage.getItem(EQ_MODE_PREFERENCE_KEY)" in script.text
     assert "window.localStorage.setItem(EQ_MODE_PREFERENCE_KEY, String(enabled))" in script.text
