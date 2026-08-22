@@ -22,6 +22,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert response.headers["content-type"].startswith("text/html")
     assert response.headers["cache-control"] == "no-store"
     assert ".hosted-recommendation.status-loading #hosted-opportunity-score" in stylesheet.text
+    assert "font-size: clamp(40px, 4vw, 48px);" in stylesheet.text
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text
@@ -280,6 +281,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Why this rig matches" in html
     assert 'id="hosted-weather-diagnostic"' in html
     assert "Sign out" in html
+    assert (
+        html.index('id="hosted-refresh-button"')
+        < html.index('id="account-email"')
+        < html.index('id="sign-out-button"')
+    )
     assert "secret" not in html.lower()
     assert 'nonce="safe-test-nonce"' in html
 
@@ -301,6 +307,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "More about ${component.label}" in script
     assert "component.key" in script
     assert "hosted-score-factor-description" in script
+    assert 'component.source !== "Proportional"' in script
     assert "displayedDecisionMessage" in script
     assert "softenAdvisoryNote" in script
     assert "Best move tonight" not in script

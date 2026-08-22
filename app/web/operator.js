@@ -482,7 +482,9 @@ const appendOpportunityComponent = (container, component) => {
   appendOpportunityFactorIcon(row, component.key);
   const copy = appendTextElement(row, "div", "hosted-score-factor-copy", "");
   const label = appendTextElement(copy, "span", "hosted-score-factor-label", component.label);
-  appendTextElement(label, "em", "", component.source || "Measured");
+  if (component.source && component.source !== "Proportional") {
+    appendTextElement(label, "em", "", component.source);
+  }
   if (component.detail) {
     const info = appendTextElement(
       label,

@@ -778,9 +778,10 @@ footer {
 
 #hosted-opportunity-score {
   color: inherit;
-  font-size: clamp(46px, 5vw, 64px);
-  letter-spacing: -0.06em;
-  line-height: 0.9;
+  font-size: clamp(40px, 4vw, 48px);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
 }
 
 .hosted-recommendation.status-loading #hosted-opportunity-score {
@@ -793,7 +794,7 @@ footer {
 
 .hosted-opportunity-reading small {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -3723,7 +3724,7 @@ footer {
   }
 
   .account-email {
-    grid-column: 1 / -1;
+    align-self: center;
     max-width: none;
   }
 
