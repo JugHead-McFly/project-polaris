@@ -104,6 +104,11 @@ class TargetSummary(BaseModel):
 
     observable: bool
     current_altitude: Optional[float] = None
+    altitude_at_dark_midpoint: Optional[float] = None
+    maximum_dark_altitude: Optional[float] = None
+    average_dark_altitude: Optional[float] = None
+    usable_dark_minutes: Optional[int] = None
+    usable_dark_hours: Optional[float] = None
     transit_time: Optional[str] = None
     moon_warning: Optional[str] = None
     recommended_start: Optional[str] = None

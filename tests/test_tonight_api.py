@@ -21,6 +21,11 @@ def planner_target(name, score):
         "planner_score": score,
         "observable": True,
         "current_altitude": 55.0,
+        "altitude_at_dark_midpoint": 64.2,
+        "maximum_dark_altitude": 81.9,
+        "average_dark_altitude": 58.4,
+        "usable_dark_minutes": 444,
+        "usable_dark_hours": 7.4,
         "transit_time": "2026-07-17 11:30 PM",
         "recommended_start": "2026-07-17 09:14 PM",
         "recommended_end": "2026-07-18 01:00 AM",
@@ -165,7 +170,11 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert response.status_code == 200
     payload = response.json()
     assert payload["recommended_target"]["capture_count"] == 1
+    assert payload["recommended_target"]["maximum_dark_altitude"] == 81.9
+    assert payload["recommended_target"]["average_dark_altitude"] == 58.4
+    assert payload["recommended_target"]["usable_dark_hours"] == 7.4
     assert payload["backup_target"]["object"] == "M27"
+    assert payload["backup_target"]["maximum_dark_altitude"] == 81.9
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
     assert payload["message"].startswith("Conditions currently support imaging")

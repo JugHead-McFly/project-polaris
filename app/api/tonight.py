@@ -101,6 +101,21 @@ def _build_legacy_target(
         {
             "observable": planner_target["observable"],
             "current_altitude": planner_target["current_altitude"],
+            "altitude_at_dark_midpoint": planner_target.get(
+                "altitude_at_dark_midpoint"
+            ),
+            "maximum_dark_altitude": planner_target.get(
+                "maximum_dark_altitude"
+            ),
+            "average_dark_altitude": planner_target.get(
+                "average_dark_altitude"
+            ),
+            "usable_dark_minutes": planner_target.get(
+                "usable_dark_minutes"
+            ),
+            "usable_dark_hours": planner_target.get(
+                "usable_dark_hours"
+            ),
             "transit_time": planner_target["transit_time"],
             "moon_warning": planner_target["moon_warning"],
             "recommended_start": planner_target["recommended_start"],
