@@ -576,7 +576,7 @@ const appendOpportunityComponent = (container, component) => {
   bar.setAttribute("aria-hidden", "true");
   const fill = appendTextElement(bar, "span", "", "");
   if (component.points === null || component.points === undefined) {
-    fill.style.width = "100%";
+    fill.style.width = "0%";
   } else {
     fill.style.width = `${clampPercent((component.points / component.max) * 100)}%`;
   }

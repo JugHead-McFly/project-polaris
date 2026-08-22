@@ -893,8 +893,7 @@ footer {
   color: var(--muted);
 }
 
-.hosted-score-component.is-unavailable .hosted-score-bar span {
-  width: 100%;
+.hosted-score-component.is-unavailable .hosted-score-bar {
   background: repeating-linear-gradient(
     90deg,
     rgba(156, 181, 187, 0.18) 0,
@@ -902,6 +901,11 @@ footer {
     rgba(156, 181, 187, 0.05) 5px,
     rgba(156, 181, 187, 0.05) 10px
   );
+}
+
+.hosted-score-component.is-unavailable .hosted-score-bar span {
+  width: 0% !important;
+  background: transparent;
 }
 
 .hosted-command-summary {
