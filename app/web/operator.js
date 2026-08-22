@@ -547,6 +547,11 @@ const appendOpportunityComponent = (container, component) => {
   }
 };
 
+const opportunityComponentScore = (components) => components.reduce(
+  (total, component) => total + (Number(component.points) || 0),
+  0,
+);
+
 const renderOpportunityScore = (rating, context = {}) => {
   const drivers = byId("hosted-opportunity-drivers");
   drivers.replaceChildren();
@@ -559,11 +564,14 @@ const renderOpportunityScore = (rating, context = {}) => {
     return;
   }
 
-  setText("hosted-opportunity-score", `${rating.score}/100`);
-  setText("hosted-opportunity-label", rating.quality);
-  byId("hosted-opportunity-total-bar").style.width = `${clampPercent(rating.score)}%`;
+  const components = buildOpportunityComponents(rating, context);
+  const opportunityScore = opportunityComponentScore(components);
 
-  buildOpportunityComponents(rating, context).forEach((component) => {
+  setText("hosted-opportunity-score", `${displayMeasuredNumber(opportunityScore)}/100`);
+  setText("hosted-opportunity-label", rating.quality);
+  byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
+
+  components.forEach((component) => {
     appendOpportunityComponent(drivers, component);
   });
 };
