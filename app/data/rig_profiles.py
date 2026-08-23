@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from math import atan, degrees
 from typing import Dict, Optional, Tuple
 
 
@@ -8,6 +9,7 @@ class RigTargetFit:
     label: str
     margin_degrees: Optional[float]
     reason: str
+    data_status: str
 
 
 @dataclass(frozen=True)
@@ -49,33 +51,74 @@ class RigProfile:
     notes: str = ""
 
     @property
-    def field_width_degrees(self) -> Optional[float]:
-        if self.native_fov_degrees is None:
+    def calculated_fov_degrees(self) -> Optional[Tuple[float, float]]:
+        trusted_confidence = {
+            "manufacturer",
+            "manufacturer_and_help_center",
+            "manufacturer_and_official_faq",
+            "official_faq_partial",
+        }
+        if self.confidence not in trusted_confidence or not self.focal_length_mm:
             return None
-        return max(self.native_fov_degrees)
+
+        sensor_size = self.sensor_size_mm
+        if sensor_size is None and self.resolution and self.pixel_size_um:
+            sensor_size = (
+                self.resolution[0] * self.pixel_size_um / 1000,
+                self.resolution[1] * self.pixel_size_um / 1000,
+            )
+        if sensor_size is None or min(sensor_size) <= 0:
+            return None
+
+        return tuple(
+            round(degrees(2 * atan(size_mm / (2 * self.focal_length_mm))), 2)
+            for size_mm in sensor_size
+        )
+
+    @property
+    def framing_fov_degrees(self) -> Optional[Tuple[float, float]]:
+        return self.native_fov_degrees or self.calculated_fov_degrees
+
+    @property
+    def framing_fov_source(self) -> Optional[str]:
+        if self.native_fov_degrees is not None:
+            return "published"
+        if self.calculated_fov_degrees is not None:
+            return "calculated_from_official_specs"
+        return None
+
+    @property
+    def field_width_degrees(self) -> Optional[float]:
+        if self.framing_fov_degrees is None:
+            return None
+        return max(self.framing_fov_degrees)
 
     @property
     def field_height_degrees(self) -> Optional[float]:
-        if self.native_fov_degrees is None:
+        if self.framing_fov_degrees is None:
             return None
-        return min(self.native_fov_degrees)
+        return min(self.framing_fov_degrees)
 
     def assess_target_fit(
         self,
         target_width_degrees: Optional[float],
         target_height_degrees: Optional[float],
     ) -> RigTargetFit:
-        if (
-            target_width_degrees is None
-            or target_height_degrees is None
-            or self.field_width_degrees is None
-            or self.field_height_degrees is None
-        ):
+        if target_width_degrees is None or target_height_degrees is None:
             return RigTargetFit(
                 fits=None,
                 label="Unknown fit",
                 margin_degrees=None,
-                reason="Target size or rig field of view is incomplete.",
+                reason="Target size is not available.",
+                data_status="target_size_unavailable",
+            )
+        if self.field_width_degrees is None or self.field_height_degrees is None:
+            return RigTargetFit(
+                fits=None,
+                label="Unknown fit",
+                margin_degrees=None,
+                reason="Framing is not yet supported for this rig.",
+                data_status="rig_fov_unavailable",
             )
 
         target_width = max(target_width_degrees, target_height_degrees)
@@ -89,7 +132,8 @@ class RigProfile:
                 fits=False,
                 label="Too large",
                 margin_degrees=margin,
-                reason="The target is larger than the rig's native field of view.",
+                reason="The target is larger than the rig's single-frame view.",
+                data_status="supported",
             )
 
         largest_field = max(self.field_width_degrees, self.field_height_degrees)
@@ -101,6 +145,7 @@ class RigProfile:
                 label="Very small",
                 margin_degrees=margin,
                 reason="The target fits, but it will appear small in this rig.",
+                data_status="supported",
             )
         if margin <= 0.2:
             return RigTargetFit(
@@ -108,12 +153,14 @@ class RigProfile:
                 label="Tight fit",
                 margin_degrees=margin,
                 reason="The target fits, but framing tolerance is narrow.",
+                data_status="supported",
             )
         return RigTargetFit(
             fits=True,
             label="Comfortable fit",
             margin_degrees=margin,
             reason="The target fits comfortably in this rig's field of view.",
+            data_status="supported",
         )
 
     def estimate_run_plan(
@@ -268,12 +315,16 @@ RIG_PROFILES: Dict[str, RigProfile] = {
             "https://checkout.dwarflab.com/pages/dwarf-mini-smart-telescope",
             "https://help.dwarflab.com/en/docs/DWARF-mini-Smart-Telescope-User-Manual",
             "https://www.kenko-tokina.co.jp/optics/tele_scope/dwarf/dwarfmini.html",
+            "https://www.sony-semicon.com/files/62/pdf/p-12_IMX662-AAQR_AAQR1_Flyer.pdf",
         ),
         confidence="manufacturer_and_help_center",
         notes=(
-            "Official DWARFLAB product copy highlights sharp stars on 90s "
-            "exposures in EQ mode. Kenko-Tokina's official regional spec page "
-            "lists 64GB storage and 4h battery life."
+            "Official DWARFLAB specs list the 150mm telephoto focal length, "
+            "IMX662 sensor, and 1920x1080 output. Sony's official IMX662 "
+            "specification lists 2.9um pixels, allowing Polaris to calculate "
+            "a 2.13x1.20 degree framing field without estimating. DWARFLAB "
+            "also highlights 90s EQ exposures; Kenko-Tokina's official "
+            "regional page lists 64GB storage and 4h battery life."
         ),
     ),
     "seestar-s50": RigProfile(

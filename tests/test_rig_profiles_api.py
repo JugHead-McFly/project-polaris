@@ -16,7 +16,7 @@ def test_rig_profiles_endpoint_returns_catalog_summary():
         "Vaonis",
         "ZWO",
     ]
-    assert payload["profiles_with_field_of_view"] == 14
+    assert payload["profiles_with_field_of_view"] == 15
     assert payload["profiles_with_frame_limit"] == 1
     assert len(payload["profiles"]) == 17
 
@@ -63,6 +63,16 @@ def test_rig_profile_detail_endpoint_accepts_model_names():
     assert payload["frame_limit"] is None
 
 
+def test_rig_profile_detail_exposes_calculated_dwarf_mini_fov():
+    response = TestClient(app).get("/rig-profiles/dwarf-mini")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["native_fov_degrees"] is None
+    assert payload["framing_fov_degrees"] == [2.13, 1.2]
+    assert payload["framing_fov_source"] == "calculated_from_official_specs"
+
+
 def test_rig_profile_detail_endpoint_returns_404_for_unknown_rig():
     response = TestClient(app).get("/rig-profiles/not-a-real-rig")
 
@@ -97,7 +107,7 @@ def test_rig_profile_fit_check_endpoint_returns_too_large():
     assert payload["label"] == "Too large"
 
 
-def test_rig_profile_fit_check_endpoint_keeps_unknown_fov_visible():
+def test_rig_profile_fit_check_uses_calculated_dwarf_mini_fov():
     response = TestClient(app).get(
         "/rig-profiles/dwarf-mini/fit-check",
         params={"target_width_degrees": 2.0, "target_height_degrees": 1.0},
@@ -105,8 +115,24 @@ def test_rig_profile_fit_check_endpoint_keeps_unknown_fov_visible():
 
     assert response.status_code == 200
     payload = response.json()
+    assert payload["fits"] is True
+    assert payload["label"] == "Tight fit"
+    assert payload["data_status"] == "supported"
+    assert payload["framing_fov_degrees"] == [2.13, 1.2]
+
+
+def test_rig_profile_fit_check_keeps_missing_rig_fov_visible():
+    response = TestClient(app).get(
+        "/rig-profiles/dwarf-2/fit-check",
+        params={"target_width_degrees": 2.0, "target_height_degrees": 1.0},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
     assert payload["fits"] is None
     assert payload["label"] == "Unknown fit"
+    assert payload["data_status"] == "rig_fov_unavailable"
+    assert payload["framing_fov_degrees"] is None
 
 
 def test_rig_profile_fit_check_endpoint_validates_positive_target_size():

@@ -280,7 +280,7 @@ def test_tonight_adds_selected_rig_profile_and_target_fit():
     assert database.closed
 
 
-def test_tonight_explains_unknown_official_rig_fov_without_guessing():
+def test_tonight_uses_calculated_dwarf_mini_fov_without_guessing():
     database = FakeDatabase()
     planner = planner_response()
     context = ObservatoryContext(
@@ -311,10 +311,48 @@ def test_tonight_explains_unknown_official_rig_fov_without_guessing():
     payload = response.json()
     fit = payload["recommended_target"]["rig_fit"]
     assert fit["rig_label"] == "DWARFLAB DWARF mini"
-    assert fit["label"] == "Unknown fit"
+    assert fit["label"] == "Very small"
+    assert fit["data_status"] == "supported"
+    assert fit["framing_fov_degrees"] == [2.13, 1.2]
+    assert fit["framing_fov_source"] == "calculated_from_official_specs"
     assert "for Dwarf Mini" in fit["match_summary"]
     assert "DWARFLAB" not in fit["match_summary"]
-    assert "official rig field-of-view data is incomplete" in fit["match_summary"]
+    assert "framing check is very small" in fit["match_summary"]
+    assert database.closed
+
+
+def test_tonight_explains_when_rig_framing_is_not_supported():
+    database = FakeDatabase()
+    planner = planner_response()
+    context = ObservatoryContext(
+        name="Doug's Rig Test",
+        postal_code="85297",
+        timezone_name="America/Phoenix",
+        latitude=33.2,
+        longitude=-111.7,
+        rig_profile_key="dwarf-2",
+    )
+
+    with (
+        patch("app.database.database.SessionLocal", return_value=database),
+        patch("app.api.tonight.get_planning_context", return_value=context),
+        patch("app.api.tonight.get_tonight_plan", return_value=planner),
+        patch(
+            "app.api.tonight.build_tonight_schedule",
+            return_value=schedule_response(planner),
+        ),
+        patch(
+            "app.api.tonight.build_target_response",
+            side_effect=lambda db, target_name: target_response(target_name),
+        ),
+    ):
+        response = TestClient(app).get("/tonight")
+
+    assert response.status_code == 200
+    fit = response.json()["recommended_target"]["rig_fit"]
+    assert fit["label"] == "Unknown fit"
+    assert fit["data_status"] == "rig_fov_unavailable"
+    assert "Framing is not yet supported" in fit["match_summary"]
     assert database.closed
 
 

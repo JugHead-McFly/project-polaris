@@ -39,6 +39,8 @@ class RigProfileDetailResponse(BaseModel):
     pixel_size_um: Optional[float]
     sensor_size_mm: Optional[Tuple[float, float]]
     native_fov_degrees: Optional[Tuple[float, float]]
+    framing_fov_degrees: Optional[Tuple[float, float]]
+    framing_fov_source: Optional[str]
     supported_exposures_seconds: Tuple[int, ...]
     default_gain: Optional[float]
     filters: Tuple[str, ...]
@@ -62,6 +64,9 @@ class RigTargetFitResponse(BaseModel):
     label: str
     margin_degrees: Optional[float]
     reason: str
+    data_status: str
+    framing_fov_degrees: Optional[Tuple[float, float]]
+    framing_fov_source: Optional[str]
 
 
 class RigRunPlanResponse(BaseModel):

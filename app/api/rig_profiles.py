@@ -94,6 +94,9 @@ def check_target_fit_for_rig(
         "label": fit.label,
         "margin_degrees": fit.margin_degrees,
         "reason": fit.reason,
+        "data_status": fit.data_status,
+        "framing_fov_degrees": profile.framing_fov_degrees,
+        "framing_fov_source": profile.framing_fov_source,
     }
 
 

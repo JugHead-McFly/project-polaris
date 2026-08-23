@@ -187,6 +187,9 @@ def _build_rig_fit_summary(
         "fits": fit.fits,
         "label": fit.label,
         "reason": fit.reason,
+        "data_status": fit.data_status,
+        "framing_fov_degrees": rig.framing_fov_degrees,
+        "framing_fov_source": rig.framing_fov_source,
         "match_summary": match_summary,
         "margin_degrees": fit.margin_degrees,
     }
@@ -230,18 +233,18 @@ def _build_rig_match_summary(
         return (
             f"Polaris selected {target_name} for {rig_label} because it is "
             f"{target_description} with a usable window and recommended "
-            "settings for this smart-telescope workflow. Exact framing fit "
-            "is still marked unknown because Polaris does not yet have "
-            "complete official target-size or rig field-of-view data."
+            "settings for this smart-telescope workflow. Framing is not "
+            "shown because Polaris does not yet have a "
+            "reliable angular size for this target."
         )
 
     if fit_label == "Unknown fit":
         return (
             f"Polaris selected {target_name} for {rig_label} because it is "
             f"{target_description} with a usable window and recommended "
-            "settings for this smart-telescope workflow. Exact framing fit "
-            "is still marked unknown because the official rig field-of-view "
-            "data is incomplete."
+            "settings for this smart-telescope workflow. Framing is not yet "
+            "supported because the rig profile lacks enough reliable optical "
+            "data."
         )
 
     return (

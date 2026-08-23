@@ -38,7 +38,7 @@ Current catalog summary:
 
 - 17 total profiles.
 - 5 manufacturers: Celestron, DWARFLAB, Unistellar, Vaonis, and ZWO.
-- 14 profiles with rectangular field-of-view data usable for framing checks.
+- 15 profiles with rectangular field-of-view data usable for framing checks.
 - 14 profiles with a published normal battery-life value.
 - 13 profiles with a published storage-capacity value.
 - 5 profiles with a published operating-temperature range.
@@ -73,8 +73,10 @@ as `dwarf-3`, even if a model name like `DWARF 3` is submitted.
 The hosted operator setup and **Edit observing home** flow now let a user pick
 their rig from the catalog. Tonight displays the selected rig on the primary
 target card and includes a short rig-match explanation for the selected target.
-If the selected rig has incomplete official field-of-view data, Polaris says so
-plainly instead of guessing.
+If the selected rig has no published rectangular field of view, Polaris can
+calculate one only when trusted focal-length, resolution, and pixel-size specs
+are all present. Otherwise, Polaris says framing is not yet supported instead
+of guessing.
 
 Existing observatories may still have no rig selected. In that case Tonight
 falls back to the existing generic explanation and labels the rig profile as

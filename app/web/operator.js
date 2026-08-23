@@ -197,8 +197,13 @@ const rigProfileLabel = (observatory) => {
 const targetFitLabel = (target) => {
   const fit = target?.rig_fit;
   if (!fit) return "Not checked";
-  if (fit.label === "Unknown fit") return "Unknown";
-  return fit.reason ? `${fit.label}: ${fit.reason}` : fit.label;
+  if (fit.data_status === "target_size_unavailable") return "Target size unavailable";
+  if (fit.data_status === "rig_fov_unavailable") return "Not yet supported for this rig";
+  if (fit.label === "Too large") return "Too large for one frame";
+  if (fit.label === "Very small") return "Fits, but appears small";
+  if (fit.label === "Tight fit") return "Fits with little framing room";
+  if (fit.label === "Comfortable fit") return "Comfortably framed";
+  return fit.label || "Not checked";
 };
 
 const targetRigMatchLabel = (target) => (
@@ -1059,7 +1064,7 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-common-name", "");
     setText("hosted-target-reason", "No target currently meets the planner requirements.");
     setText("hosted-target-rig-match", "Rig-specific reasoning is not available without a selected target.");
-    setText("hosted-target-fit", "Not checked");
+    setText("hosted-target-fit", "No target selected");
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);

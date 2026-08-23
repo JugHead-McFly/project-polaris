@@ -35,7 +35,7 @@ def summarize_rig_profile(profile: RigProfile) -> RigProfileSummary:
         key=profile.key,
         label=f"{profile.manufacturer} {profile.model}",
         manufacturer=profile.manufacturer,
-        has_field_of_view=profile.native_fov_degrees is not None,
+        has_field_of_view=profile.framing_fov_degrees is not None,
         has_battery_limit=profile.battery_life_hours is not None,
         has_storage_limit=profile.storage_gb is not None,
         has_temperature_limit=profile.operating_temperature_c is not None,

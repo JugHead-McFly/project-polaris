@@ -78,7 +78,10 @@ def test_expanded_smart_telescope_profiles_keep_official_unknowns_unknown():
     hestia = get_rig_profile("Hestia")
 
     assert dwarf_mini.native_fov_degrees is None
+    assert dwarf_mini.framing_fov_degrees == (2.13, 1.2)
+    assert dwarf_mini.framing_fov_source == "calculated_from_official_specs"
     assert dwarf_2.native_fov_degrees is None
+    assert dwarf_2.framing_fov_degrees is None
     assert hestia.battery_life_hours is None
     assert hestia.tracking_modes == ()
 
@@ -111,6 +114,7 @@ def test_rig_profile_assesses_comfortable_target_fit():
     assert fit.fits is True
     assert fit.label == "Comfortable fit"
     assert fit.margin_degrees == 0.8
+    assert fit.data_status == "supported"
 
 
 def test_rig_profile_flags_oversized_targets():
@@ -121,6 +125,19 @@ def test_rig_profile_flags_oversized_targets():
     assert fit.fits is False
     assert fit.label == "Too large"
     assert fit.margin_degrees == -0.71
+
+
+def test_rig_profile_uses_calculated_field_of_view_when_specs_are_complete():
+    profile = get_rig_profile("DWARF mini")
+
+    fit = profile.assess_target_fit(
+        target_width_degrees=3.17,
+        target_height_degrees=1.0,
+    )
+
+    assert fit.fits is False
+    assert fit.label == "Too large"
+    assert fit.data_status == "supported"
 
 
 def test_rig_profile_flags_tiny_targets_separately_from_bad_fit():
@@ -139,6 +156,20 @@ def test_rig_profile_keeps_unknown_target_fit_explicit():
 
     assert fit.fits is None
     assert fit.label == "Unknown fit"
+    assert fit.data_status == "target_size_unavailable"
+
+
+def test_rig_profile_keeps_missing_rig_fov_explicit():
+    profile = get_rig_profile("DWARF II")
+
+    fit = profile.assess_target_fit(
+        target_width_degrees=1.0,
+        target_height_degrees=0.5,
+    )
+
+    assert fit.fits is None
+    assert fit.label == "Unknown fit"
+    assert fit.data_status == "rig_fov_unavailable"
 
 
 def test_rig_profile_estimates_single_run_inside_frame_limit():

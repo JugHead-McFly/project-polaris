@@ -13,7 +13,7 @@ def test_rig_profile_catalog_summary_counts_current_database():
         "Vaonis",
         "ZWO",
     ]
-    assert summary.profiles_with_field_of_view == 14
+    assert summary.profiles_with_field_of_view == 15
     assert summary.profiles_with_battery_limit == 14
     assert summary.profiles_with_storage_limit == 13
     assert summary.profiles_with_temperature_limit == 5
@@ -37,4 +37,5 @@ def test_rig_profile_summary_keeps_unknown_limits_visible():
     assert summaries["seestar-s50"].has_frame_limit is False
     assert summaries["seestar-s50"].has_equatorial_tracking is False
     assert summaries["hestia"].has_battery_limit is False
-    assert summaries["dwarf-mini"].has_field_of_view is False
+    assert summaries["dwarf-mini"].has_field_of_view is True
+    assert summaries["dwarf-2"].has_field_of_view is False

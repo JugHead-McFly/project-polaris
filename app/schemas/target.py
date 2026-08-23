@@ -70,6 +70,9 @@ class RigTargetFitSummary(BaseModel):
     fits: Optional[bool] = None
     label: str
     reason: str
+    data_status: str
+    framing_fov_degrees: Optional[List[float]] = None
+    framing_fov_source: Optional[str] = None
     match_summary: str
     margin_degrees: Optional[float] = None
 

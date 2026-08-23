@@ -316,6 +316,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'nonce="safe-test-nonce"' in html
 
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    assert 'setText("hosted-target-fit", "No target selected")' in script
     assert "loadHostedTonight" in script
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
