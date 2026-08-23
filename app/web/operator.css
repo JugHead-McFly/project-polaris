@@ -1300,6 +1300,111 @@ footer {
   color: #b4c7cc;
 }
 
+.hosted-target-geometry {
+  margin-top: 18px;
+  padding: 16px 0 12px;
+  border-top: 1px solid rgba(91, 221, 205, 0.18);
+  border-bottom: 1px solid rgba(165, 198, 211, 0.12);
+}
+
+.hosted-target-geometry-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.hosted-target-geometry-heading > div:first-child {
+  min-width: 0;
+}
+
+#hosted-target-geometry-metadata {
+  margin: 5px 0 0;
+  color: #b4c7cc;
+  font-size: 13px;
+}
+
+.hosted-target-geometry-peak {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 22px;
+  margin: 0;
+}
+
+.hosted-target-geometry-peak div {
+  min-width: 92px;
+}
+
+.hosted-target-geometry-peak dt {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hosted-target-geometry-peak dd {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.hosted-target-altitude-chart {
+  min-height: 104px;
+  margin-top: 10px;
+}
+
+.hosted-target-altitude-chart svg {
+  display: block;
+  width: 100%;
+  height: 112px;
+  overflow: visible;
+}
+
+.target-altitude-horizon {
+  stroke: rgba(165, 198, 211, 0.22);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.target-altitude-line-glow,
+.target-altitude-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.target-altitude-line-glow {
+  stroke: rgba(85, 216, 200, 0.16);
+  stroke-width: 10;
+}
+
+.target-altitude-line {
+  stroke: #62d8c6;
+  stroke-width: 3;
+}
+
+.target-altitude-peak {
+  fill: #f1c56f;
+  stroke: #102731;
+  stroke-width: 2;
+}
+
+.target-altitude-time-label {
+  fill: #8fa8af;
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+}
+
+.hosted-target-geometry-unavailable {
+  margin: 17px 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hosted-target-geometry.is-unavailable .hosted-target-altitude-chart {
+  min-height: 34px;
+}
+
 .hosted-rig-match {
   margin-top: 16px;
   padding: 14px 16px;
@@ -1546,6 +1651,14 @@ footer {
   border: 1px solid rgba(213, 165, 77, 0.26);
   border-radius: 10px 4px 9px 6px;
   line-height: 1.5;
+}
+
+.target-art-preview-geometry-note {
+  max-width: 88ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .target-art-preview-grid {
@@ -4161,6 +4274,21 @@ footer {
   .hosted-target-illustration {
     width: 112px;
     height: 70px;
+  }
+
+  .hosted-target-geometry-heading {
+    display: grid;
+    gap: 12px;
+  }
+
+  .hosted-target-geometry-peak {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hosted-target-geometry-peak div {
+    min-width: 0;
   }
 
   .hosted-opportunity-reading {

@@ -169,9 +169,34 @@ def get_dark_visibility(
                 "average_dark_altitude": None,
                 "recommended_start_datetime": None,
                 "recommended_end_datetime": None,
+                "target_geometry": None,
             }
 
         altitude_samples.append((sample_time, altitude))
+
+    peak_time, peak_altitude = max(
+        altitude_samples,
+        key=lambda sample: sample[1],
+    )
+    def local_time_label(value: datetime) -> str:
+        label = value.strftime("%I:%M %p").lstrip("0")
+        if value.date() > dark_start.date():
+            return f"{label} next day"
+        return label
+
+    target_geometry = {
+        "samples": [
+            {
+                "at": sample_time.isoformat(),
+                "altitude_degrees": round(altitude, 1),
+                "label": local_time_label(sample_time),
+            }
+            for sample_time, altitude in altitude_samples
+        ],
+        "peak_altitude_degrees": round(peak_altitude, 1),
+        "peak_at": peak_time.isoformat(),
+        "peak_label": local_time_label(peak_time),
+    }
 
     all_altitudes = [altitude for _, altitude in altitude_samples]
     usable_samples = [
@@ -192,6 +217,7 @@ def get_dark_visibility(
             ),
             "recommended_start_datetime": None,
             "recommended_end_datetime": None,
+            "target_geometry": target_geometry,
         }
 
     longest_run = find_longest_usable_run(usable_samples)
@@ -208,6 +234,7 @@ def get_dark_visibility(
             ),
             "recommended_start_datetime": None,
             "recommended_end_datetime": None,
+            "target_geometry": target_geometry,
         }
 
     recommended_start = longest_run[0][0]
@@ -231,6 +258,7 @@ def get_dark_visibility(
         ),
         "recommended_start_datetime": recommended_start,
         "recommended_end_datetime": recommended_end,
+        "target_geometry": target_geometry,
     }
 
 def get_altitude_score(
@@ -531,6 +559,7 @@ def build_target_plan(
         "altitude_at_dark_midpoint": altitude_at_midpoint,
         "maximum_dark_altitude": visibility["maximum_dark_altitude"],
         "average_dark_altitude": visibility["average_dark_altitude"],
+        "target_geometry": visibility["target_geometry"],
         "usable_dark_minutes": usable_dark_minutes,
         "usable_dark_hours": visibility["usable_dark_hours"],
         "transit_time": get_transit_time(

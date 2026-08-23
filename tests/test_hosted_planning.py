@@ -24,6 +24,7 @@ from app.services.hosted_recommendation_service import (
     save_recommendation_feedback,
 )
 from app.services.planner_service import build_target_plan
+from app.services.planner_service import get_dark_visibility
 
 
 ALICE_ID = UUID("4d3d6526-f7ce-4e5a-a4d9-4dca6bf671ba")
@@ -385,6 +386,48 @@ def test_hosted_target_plan_does_not_query_private_capture_history():
 
     assert plan["advisor"]["recommendation_source"] == "catalog_fallback"
     assert plan["advisor"]["current_integration_seconds"] == 0
+
+
+def test_target_geometry_preserves_local_offset_across_midnight():
+    timezone = ZoneInfo("America/New_York")
+    dark_start = datetime(2026, 8, 23, 23, 45, tzinfo=timezone)
+    dark_end = datetime(2026, 8, 24, 0, 15, tzinfo=timezone)
+
+    with patch(
+        "app.services.planner_service.get_altitudes_at",
+        return_value=[30.0, 52.0, 44.0],
+    ):
+        visibility = get_dark_visibility(
+            object_name="M31",
+            dark_start=dark_start,
+            dark_end=dark_end,
+        )
+
+    geometry = visibility["target_geometry"]
+    assert geometry["peak_altitude_degrees"] == 52.0
+    assert geometry["peak_at"] == "2026-08-24T00:00:00-04:00"
+    assert geometry["peak_label"] == "12:00 AM next day"
+    assert geometry["samples"][0]["label"] == "11:45 PM"
+    assert geometry["samples"][-1]["label"] == "12:15 AM next day"
+
+
+def test_target_geometry_is_absent_when_position_is_unknown():
+    timezone = ZoneInfo("America/Phoenix")
+    dark_start = datetime(2026, 8, 23, 20, 0, tzinfo=timezone)
+    dark_end = datetime(2026, 8, 23, 20, 15, tzinfo=timezone)
+
+    with patch(
+        "app.services.planner_service.get_altitudes_at",
+        return_value=[None, None],
+    ):
+        visibility = get_dark_visibility(
+            object_name="UNRESOLVED",
+            dark_start=dark_start,
+            dark_end=dark_end,
+        )
+
+    assert visibility["known_position"] is False
+    assert visibility["target_geometry"] is None
 
 
 def test_hosted_catalog_recommends_a_filter_for_every_supported_target():

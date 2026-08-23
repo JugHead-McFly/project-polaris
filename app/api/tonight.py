@@ -125,6 +125,7 @@ def _build_legacy_target(
             "average_dark_altitude": planner_target.get(
                 "average_dark_altitude"
             ),
+            "target_geometry": planner_target.get("target_geometry"),
             "usable_dark_minutes": planner_target.get(
                 "usable_dark_minutes"
             ),

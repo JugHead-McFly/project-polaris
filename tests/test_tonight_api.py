@@ -24,6 +24,23 @@ def planner_target(name, score):
         "altitude_at_dark_midpoint": 64.2,
         "maximum_dark_altitude": 81.9,
         "average_dark_altitude": 58.4,
+        "target_geometry": {
+            "samples": [
+                {
+                    "at": "2026-07-17T21:14:00-07:00",
+                    "altitude_degrees": 42.0,
+                    "label": "9:14 PM",
+                },
+                {
+                    "at": "2026-07-17T23:29:00-07:00",
+                    "altitude_degrees": 81.9,
+                    "label": "11:29 PM",
+                },
+            ],
+            "peak_altitude_degrees": 81.9,
+            "peak_at": "2026-07-17T23:29:00-07:00",
+            "peak_label": "11:29 PM",
+        },
         "usable_dark_minutes": 444,
         "usable_dark_hours": 7.4,
         "transit_time": "2026-07-17 11:30 PM",
@@ -182,6 +199,8 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["recommended_target"]["capture_count"] == 1
     assert payload["recommended_target"]["maximum_dark_altitude"] == 81.9
     assert payload["recommended_target"]["average_dark_altitude"] == 58.4
+    assert payload["recommended_target"]["target_geometry"]["peak_altitude_degrees"] == 81.9
+    assert payload["recommended_target"]["target_geometry"]["peak_label"] == "11:29 PM"
     assert payload["recommended_target"]["usable_dark_hours"] == 7.4
     assert payload["recommended_target"]["artwork"]["slug"] == "ring-nebula-m57"
     assert payload["recommended_target"]["artwork"]["match_kind"] == "exact"

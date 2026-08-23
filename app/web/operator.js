@@ -342,6 +342,7 @@ const resetHostedPlanDetails = () => {
   renderTargetIllustration("hosted-command-target-illustration", null, true);
   renderTargetIllustration("hosted-command-fallback-illustration", null, true);
   renderTargetIllustration("hosted-target-illustration", null);
+  renderTargetGeometry(null);
   setText("hosted-target-tracking", "—");
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
@@ -812,6 +813,134 @@ const renderConditionsTrend = (elementId, trend) => {
   );
 };
 
+const knownTargetMetadata = (value) => {
+  if (typeof value !== "string") return null;
+  const cleaned = value.trim();
+  if (!cleaned || ["unknown", "unavailable", "n/a"].includes(cleaned.toLowerCase())) {
+    return null;
+  }
+  return cleaned;
+};
+
+const svgElement = (name, attributes = {}) => {
+  const element = document.createElementNS("http://www.w3.org/2000/svg", name);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+};
+
+const renderTargetGeometry = (target) => {
+  const panel = byId("hosted-target-geometry");
+  const chart = byId("hosted-target-altitude-chart");
+  panel.hidden = !target;
+  chart.replaceChildren();
+  panel.classList.remove("is-unavailable");
+
+  if (!target) return;
+
+  const metadata = [
+    knownTargetMetadata(target.constellation),
+    knownTargetMetadata(target.target_type),
+  ].filter(Boolean);
+  setText(
+    "hosted-target-geometry-metadata",
+    metadata.join(" · "),
+    "Verified target metadata unavailable",
+  );
+
+  const geometry = target.target_geometry;
+  const samples = Array.isArray(geometry?.samples)
+    ? geometry.samples.filter((sample) => (
+      Number.isFinite(Number(sample?.altitude_degrees))
+      && Number.isFinite(new Date(sample?.at).getTime())
+    ))
+    : [];
+  const peakAltitude = Number(geometry?.peak_altitude_degrees);
+  const peakLabel = geometry?.peak_label;
+
+  if (samples.length < 2 || !Number.isFinite(peakAltitude) || !peakLabel) {
+    panel.classList.add("is-unavailable");
+    setText("hosted-target-peak-altitude", "Unavailable");
+    setText("hosted-target-peak-time", "Unavailable");
+    const unavailable = document.createElement("p");
+    unavailable.className = "hosted-target-geometry-unavailable";
+    unavailable.textContent = "Altitude path unavailable for this target.";
+    chart.append(unavailable);
+    return;
+  }
+
+  setText("hosted-target-peak-altitude", `${peakAltitude.toFixed(1)}°`);
+  setText("hosted-target-peak-time", peakLabel);
+
+  const width = 640;
+  const height = 132;
+  const left = 12;
+  const right = width - 12;
+  const top = 10;
+  const bottom = 94;
+  const times = samples.map((sample) => new Date(sample.at).getTime());
+  const altitudes = samples.map((sample) => Number(sample.altitude_degrees));
+  const timeStart = Math.min(...times);
+  const timeEnd = Math.max(...times);
+  const altitudeFloor = Math.min(-10, Math.floor(Math.min(...altitudes) / 10) * 10);
+  const altitudeCeiling = 90;
+  const x = (time) => left + ((time - timeStart) / Math.max(1, timeEnd - timeStart)) * (right - left);
+  const y = (altitude) => bottom - (
+    (Math.max(altitudeFloor, Math.min(altitudeCeiling, altitude)) - altitudeFloor)
+    / (altitudeCeiling - altitudeFloor)
+  ) * (bottom - top);
+
+  const svg = svgElement("svg", {
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": `${target.object} reaches a forecast peak altitude of ${peakAltitude.toFixed(1)} degrees around ${peakLabel}.`,
+    preserveAspectRatio: "none",
+  });
+  const horizonY = y(0);
+  svg.append(svgElement("line", {
+    x1: left,
+    y1: horizonY,
+    x2: right,
+    y2: horizonY,
+    class: "target-altitude-horizon",
+  }));
+
+  const points = samples.map((sample, index) => (
+    `${x(times[index]).toFixed(1)},${y(Number(sample.altitude_degrees)).toFixed(1)}`
+  )).join(" ");
+  svg.append(svgElement("polyline", {
+    points,
+    class: "target-altitude-line-glow",
+  }));
+  svg.append(svgElement("polyline", {
+    points,
+    class: "target-altitude-line",
+  }));
+
+  const peakIndex = altitudes.indexOf(Math.max(...altitudes));
+  svg.append(svgElement("circle", {
+    cx: x(times[peakIndex]).toFixed(1),
+    cy: y(altitudes[peakIndex]).toFixed(1),
+    r: 4,
+    class: "target-altitude-peak",
+  }));
+
+  const startLabel = svgElement("text", {
+    x: left,
+    y: 122,
+    class: "target-altitude-time-label",
+  });
+  startLabel.textContent = samples[0].label || "Start";
+  const endLabel = svgElement("text", {
+    x: right,
+    y: 122,
+    "text-anchor": "end",
+    class: "target-altitude-time-label",
+  });
+  endLabel.textContent = samples.at(-1).label || "End";
+  svg.append(startLabel, endLabel);
+  chart.append(svg);
+};
+
 const renderHostedTonight = (data) => {
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
@@ -868,6 +997,7 @@ const renderHostedTonight = (data) => {
       true,
     );
     renderTargetIllustration("hosted-target-illustration", target);
+    renderTargetGeometry(target);
     setText(
       "hosted-target-exposure",
       displayNumber(settings.exposure_seconds, " sec"),
@@ -878,6 +1008,7 @@ const renderHostedTonight = (data) => {
   } else {
     renderTargetIllustration("hosted-command-target-illustration", null, true);
     renderTargetIllustration("hosted-target-illustration", null);
+    renderTargetGeometry(null);
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
     setText("hosted-target-reason", "No target currently meets the planner requirements.");

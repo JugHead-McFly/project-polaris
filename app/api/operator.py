@@ -33,7 +33,7 @@ ASSET_FILES = (
     WEB_DIRECTORY / "target-art" / "library" / "assets" / "double-cluster.svg",
     WEB_DIRECTORY / "target-art" / "library" / "assets" / "orion-nebula-m42.svg",
     WEB_DIRECTORY / "target-art" / "library" / "assets" / "ring-nebula-m57.svg",
-    WEB_DIRECTORY / "target-art" / "library" / "assets" / "comet.svg",
+    WEB_DIRECTORY / "target-art" / "library" / "assets" / "m78-reflection-nebula.svg",
     WEB_DIRECTORY / "target-art" / "fallbacks" / "deep-sky.svg",
 )
 

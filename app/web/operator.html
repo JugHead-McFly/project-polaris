@@ -190,14 +190,14 @@
           <div>
             <p class="eyebrow">Visual review</p>
             <h1 id="target-art-preview-title">Target artwork in Polaris cards</h1>
-            <p>Compare five library styles at the exact scale and containment used by the live target presentation.</p>
+            <p>Compare six target-card treatments at the exact scale and containment used by the live target presentation.</p>
           </div>
           <a class="account-button target-art-preview-exit" href="/operator">Return to tonight's plan</a>
         </header>
         <p class="target-art-preview-notice" role="note">
           <strong>Artwork preview only.</strong> These examples are not tonight's recommendations and do not change your plan, score, or observing home.
         </p>
-        <div class="target-art-preview-grid" aria-label="Five target artwork examples">
+        <div class="target-art-preview-grid" aria-label="Six target artwork examples">
           <article class="hosted-target target-art-preview-card">
             <div class="hosted-target-heading">
               <div>
@@ -265,19 +265,38 @@
           <article class="hosted-target target-art-preview-card">
             <div class="hosted-target-heading">
               <div>
-                <p class="eyebrow">Small body</p>
-                <strong>Comet</strong>
-                <span>Solar-system example</span>
+                <p class="eyebrow">Reflection nebula</p>
+                <strong>M78</strong>
+                <span>Casper the Friendly Ghost Nebula</span>
               </div>
               <div class="hosted-target-visuals">
-                <div class="hosted-target-illustration is-reference-informed target-art-preview-illustration" role="img" aria-label="Comet vector preview">
-                  <img src="/operator-assets/target-art/library/assets/comet.svg?v=__ASSET_VERSION__" alt="" aria-hidden="true">
+                <div class="hosted-target-illustration is-reference-informed target-art-preview-illustration" role="img" aria-label="M78 reflection nebula vector preview">
+                  <img src="/operator-assets/target-art/library/assets/m78-reflection-nebula.svg?v=__ASSET_VERSION__" alt="" aria-hidden="true">
                 </div>
               </div>
             </div>
-            <p>A condensed coma with separate dust- and ion-tail cues, shown without a decorative wrapper.</p>
+            <p>A cool reflection glow crossed by dark structure, contained at the same scale as the live target art.</p>
+          </article>
+
+          <article class="hosted-target target-art-preview-card">
+            <div class="hosted-target-heading">
+              <div>
+                <p class="eyebrow">Unknown target</p>
+                <strong>Unmatched</strong>
+                <span>Safe generic fallback</span>
+              </div>
+              <div class="hosted-target-visuals">
+                <div class="hosted-target-illustration target-art-preview-illustration" role="img" aria-label="Generic deep-sky fallback vector preview">
+                  <img src="/operator-assets/target-art/fallbacks/deep-sky.svg?v=__ASSET_VERSION__" alt="" aria-hidden="true">
+                </div>
+              </div>
+            </div>
+            <p>Used only when Polaris cannot verify an exact library match; it never substitutes a different named object.</p>
           </article>
         </div>
+        <p class="target-art-preview-geometry-note" role="note">
+          Night-path geometry is intentionally absent here because it depends on a real observing location and date. The live target card adds it only when Polaris has verified altitude samples.
+        </p>
       </section>
 
       <section class="hosted-tonight" id="hosted-tonight-panel" hidden aria-labelledby="hosted-tonight-title">
@@ -383,6 +402,25 @@
               </div>
             </div>
             <p id="hosted-target-reason">Waiting for tonight's target.</p>
+            <div class="hosted-target-geometry" id="hosted-target-geometry" hidden>
+              <div class="hosted-target-geometry-heading">
+                <div>
+                  <p class="eyebrow">Night path</p>
+                  <p id="hosted-target-geometry-metadata"></p>
+                </div>
+                <dl class="hosted-target-geometry-peak">
+                  <div>
+                    <dt>Peak altitude</dt>
+                    <dd id="hosted-target-peak-altitude">—</dd>
+                  </div>
+                  <div>
+                    <dt>Peak time</dt>
+                    <dd id="hosted-target-peak-time">—</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="hosted-target-altitude-chart" id="hosted-target-altitude-chart"></div>
+            </div>
             <div class="hosted-rig-match">
               <p class="eyebrow">Why this rig matches</p>
               <p id="hosted-target-rig-match">Rig match will appear after a target is selected.</p>

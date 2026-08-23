@@ -41,6 +41,19 @@ class TargetReferenceImage(BaseModel):
     cache_status: Optional[str] = None
 
 
+class TargetAltitudeSample(BaseModel):
+    at: str
+    altitude_degrees: float
+    label: str
+
+
+class TargetGeometry(BaseModel):
+    samples: List[TargetAltitudeSample] = Field(default_factory=list)
+    peak_altitude_degrees: Optional[float] = None
+    peak_at: Optional[str] = None
+    peak_label: Optional[str] = None
+
+
 class TargetArtwork(BaseModel):
     slug: Optional[str] = None
     asset_url: str
@@ -83,6 +96,7 @@ class TargetSummary(BaseModel):
     reference_image: Optional[TargetReferenceImage] = None
     artwork: Optional[TargetArtwork] = None
     rig_fit: Optional[RigTargetFitSummary] = None
+    target_geometry: Optional[TargetGeometry] = None
 
     capture_count: int
     session_count: int
