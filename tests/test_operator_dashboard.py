@@ -540,14 +540,39 @@ def test_session_checklist_stays_inside_the_existing_command_card():
     assert 'aria-live="polite"' in html
     assert 'id="hosted-session-steps"' in html
     assert 'id="hosted-session-actions" hidden' in html
+    assert 'id="hosted-session-timeline-link"' in html
+    assert 'aria-controls="hosted-schedule-panel"' in html
+    assert "A session is possible, but recheck live conditions before starting." not in html
+    assert 'id="hosted-session-plan-summary"' not in html
     assert "const renderSessionChecklist = (checklist) =>" in script
     assert "(checklist?.steps || []).slice(0, 3)" in script
     assert "(checklist?.actions || []).slice(0, 2)" in script
     assert "renderSessionChecklist(data.session_checklist)" in script
     assert "renderSessionChecklist(null)" in script
+    assert "const openHostedSchedule = () =>" in script
+    assert 'byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule)' in script
+    assert 'summary.focus({ preventScroll: true })' in script
     assert ".hosted-session-plan" in css
+    assert ".hosted-session-timeline-link" in css
     assert ".hosted-session-steps" in css
     assert "grid-template-columns: repeat(3, minmax(0, 1fr));" in css
+
+
+def test_advisory_timeline_collapses_only_when_no_blocks_exist():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    assert '<details\n          class="panel hosted-schedule-panel"' in html
+    assert 'id="hosted-schedule-panel"' in html
+    assert 'id="hosted-schedule-summary"' in html
+    assert 'id="hosted-schedule-count"' in html
+    assert 'id="hosted-schedule-list"' in html
+    assert 'const timeline = byId("hosted-schedule-panel")' in script
+    assert "timeline.open = blocks.length > 0" in script
+    assert 'byId("hosted-schedule-panel").open = true' in script
+    assert ".hosted-schedule-panel:not([open]) > .hosted-schedule-summary" in css
+    assert ".hosted-schedule-panel[open] .hosted-schedule-toggle::before" in css
 
 
 def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():

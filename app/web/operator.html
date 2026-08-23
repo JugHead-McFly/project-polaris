@@ -379,7 +379,12 @@
             >
               <div class="hosted-session-plan-heading">
                 <p class="eyebrow" id="hosted-session-plan-title">Session plan</p>
-                <p id="hosted-session-plan-summary">Session timing will appear after the plan loads.</p>
+                <button
+                  class="hosted-session-timeline-link"
+                  id="hosted-session-timeline-link"
+                  type="button"
+                  aria-controls="hosted-schedule-panel"
+                >View full Advisory timeline</button>
               </div>
               <ol class="hosted-session-steps" id="hosted-session-steps"></ol>
               <ul class="hosted-session-actions" id="hosted-session-actions" hidden></ul>
@@ -477,18 +482,26 @@
           </div>
         </section>
 
-        <section class="panel hosted-schedule-panel" aria-labelledby="hosted-schedule-title">
-          <div class="panel-heading">
+        <details
+          class="panel hosted-schedule-panel"
+          id="hosted-schedule-panel"
+          aria-labelledby="hosted-schedule-title"
+          open
+        >
+          <summary class="panel-heading hosted-schedule-summary" id="hosted-schedule-summary">
             <div>
               <p class="eyebrow">Advisory timeline</p>
               <h2 id="hosted-schedule-title">Tonight's schedule</h2>
             </div>
-            <span id="hosted-schedule-count">0 blocks</span>
-          </div>
+            <span class="hosted-schedule-summary-meta">
+              <span id="hosted-schedule-count">0 blocks</span>
+              <span class="hosted-schedule-toggle" aria-hidden="true"></span>
+            </span>
+          </summary>
           <div class="hosted-schedule-list" id="hosted-schedule-list">
             <div class="empty-state">Building tonight's schedule…</div>
           </div>
-        </section>
+        </details>
       </section>
 
       <section class="panel hosted-account-panel" id="hosted-account-panel" hidden aria-labelledby="hosted-account-title">

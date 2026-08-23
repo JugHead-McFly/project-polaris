@@ -1241,7 +1241,7 @@ footer {
 
 .hosted-session-plan-heading {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
 }
@@ -1250,16 +1250,22 @@ footer {
   margin: 0;
 }
 
-.hosted-session-plan-heading p:last-child {
-  max-width: 68%;
-  color: #b8cbd0;
-  font-size: 12px;
-  line-height: 1.4;
-  text-align: right;
+.hosted-session-timeline-link {
+  padding: 2px 0;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(82, 214, 199, 0.38);
+  cursor: pointer;
 }
 
-.hosted-session-plan.status-wait .hosted-session-plan-heading p:last-child {
-  color: #f2be67;
+.hosted-session-timeline-link:hover,
+.hosted-session-timeline-link:focus-visible {
+  color: #b9fff3;
+  border-bottom-color: currentColor;
 }
 
 .hosted-session-steps {
@@ -1605,6 +1611,46 @@ footer {
 
 .hosted-schedule-panel {
   padding: 24px;
+}
+
+.hosted-schedule-summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.hosted-schedule-summary::-webkit-details-marker {
+  display: none;
+}
+
+.hosted-schedule-panel:not([open]) > .hosted-schedule-summary {
+  margin-bottom: 0;
+}
+
+.hosted-schedule-summary-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hosted-schedule-toggle {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  color: var(--cyan);
+  border: 1px solid rgba(82, 214, 199, 0.28);
+  border-radius: 50%;
+}
+
+.hosted-schedule-toggle::before {
+  content: "+";
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.hosted-schedule-panel[open] .hosted-schedule-toggle::before {
+  content: "\2212";
 }
 
 .hosted-schedule-list {
@@ -4446,13 +4492,9 @@ footer {
   }
 
   .hosted-session-plan-heading {
-    display: grid;
-    gap: 5px;
-  }
-
-  .hosted-session-plan-heading p:last-child {
-    max-width: none;
-    text-align: left;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
   }
 
   .hosted-session-steps {

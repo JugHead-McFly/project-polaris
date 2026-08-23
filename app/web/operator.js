@@ -365,6 +365,7 @@ const resetHostedPlanDetails = () => {
     "Building tonight's schedule…",
   );
   setText("hosted-schedule-count", "0 blocks");
+  byId("hosted-schedule-panel").open = true;
 };
 
 const setHostedPlanLoading = () => {
@@ -676,8 +677,10 @@ const renderOpportunityScore = (scoreBreakdown) => {
 
 const renderHostedSchedule = (schedule) => {
   const container = byId("hosted-schedule-list");
+  const timeline = byId("hosted-schedule-panel");
   const blocks = schedule?.blocks || [];
   container.replaceChildren();
+  timeline.open = blocks.length > 0;
   setText(
     "hosted-schedule-count",
     `${blocks.length} block${blocks.length === 1 ? "" : "s"}`,
@@ -820,11 +823,6 @@ const renderSessionChecklist = (checklist) => {
   const actions = byId("hosted-session-actions");
   const status = checklist?.status || "loading";
   panel.className = `hosted-session-plan status-${status}`;
-  setText(
-    "hosted-session-plan-summary",
-    checklist?.summary,
-    "Session timing will appear after the plan loads.",
-  );
   steps.replaceChildren();
   actions.replaceChildren();
 
@@ -845,6 +843,19 @@ const renderSessionChecklist = (checklist) => {
     appendTextElement(actions, "li", "", action);
   });
   actions.hidden = actions.children.length === 0;
+};
+
+const openHostedSchedule = () => {
+  const timeline = byId("hosted-schedule-panel");
+  const summary = byId("hosted-schedule-summary");
+  timeline.open = true;
+  summary.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth",
+    block: "start",
+  });
+  summary.focus({ preventScroll: true });
 };
 
 const knownTargetMetadata = (value) => {
@@ -4162,6 +4173,7 @@ byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-use-device-location").addEventListener("click", useDeviceLocation);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
 byId("mobile-refresh-button").addEventListener("click", loadHostedTonight);
+byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule);
 byId("mobile-account-menu-button").addEventListener("click", () => {
   setMobileHeaderMenu(
     byId("mobile-account-menu-button").getAttribute("aria-expanded") !== "true",
