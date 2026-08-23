@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc6309-box-nebula-title ngc6309-box-nebula-desc">
+  <title id="ngc6309-box-nebula-title">NGC 6309 Box Nebula</title>
+  <desc id="ngc6309-box-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact boxy planetary with bright rectangular inner shell and faint lobes.</desc>
+  <defs>
+    <radialGradient id="ngc6309-box-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc6309-box-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc6309-box-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc6309-box-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc6309-box-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc6309-box-nebula-ambient-vignette-mask)">
+    <circle cx="63" cy="211" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="110" cy="18" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="251" cy="231" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="298" cy="38" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="345" cy="109" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="28" cy="180" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="75" cy="251" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="122" cy="58" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="263" cy="271" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="310" cy="78" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="357" cy="149" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="40" cy="220" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="87" cy="27" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="228" cy="240" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="275" cy="47" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="322" cy="118" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="369" cy="189" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="52" cy="260" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="99" cy="67" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="240" cy="280" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="287" cy="87" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="334" cy="158" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="381" cy="229" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="64" cy="36" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="111" cy="107" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M159 116 C197 132 197 162 159 178 C131 157 131 135 159 116Z" fill="#2f8f8a" opacity=".5"/><path d="M243 116 C205 132 205 162 243 178 C271 157 271 135 243 116Z" fill="#9ec9bf" opacity=".45"/><circle cx="201" cy="147" r="2.2" fill="#f3ead2" opacity="0.95"/>
+  </g>
+</svg>

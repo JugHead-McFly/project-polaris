@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="barnards-loop-title barnards-loop-desc">
+  <title id="barnards-loop-title">Barnard's Loop</title>
+  <desc id="barnards-loop-desc">Original Project Polaris vector artwork informed by official NASA imagery: large faint Orion emission arc sweeping around a winter-star field.</desc>
+  <defs>
+    <radialGradient id="barnards-loop-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="barnards-loop-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="barnards-loop-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#barnards-loop-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="barnards-loop-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#barnards-loop-ambient-vignette-mask)">
+    <circle cx="96" cy="24" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="237" cy="237" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="284" cy="44" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="331" cy="115" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="378" cy="186" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="61" cy="257" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="108" cy="64" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="249" cy="277" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="296" cy="84" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="343" cy="155" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="26" cy="226" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="73" cy="33" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="120" cy="104" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="214" cy="246" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="261" cy="53" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="308" cy="124" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="355" cy="195" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="38" cy="266" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="85" cy="73" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="132" cy="144" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="226" cy="22" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="320" cy="164" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="367" cy="235" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="50" cy="42" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="97" cy="113" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="144" cy="184" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="191" cy="255" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M120.1 214.6 A118 88 0 1 1 304.6 107.3" fill="none" stroke="#d49a3a" stroke-width="4" stroke-linecap="round" opacity="0.42"/><circle cx="160" cy="125" r="4" fill="#f3ead2" opacity="0.9"/><circle cx="200" cy="140" r="4" fill="#f3ead2" opacity="0.9"/><circle cx="241" cy="158" r="4" fill="#f3ead2" opacity="0.9"/><circle cx="203" cy="195" r="2.5" fill="#f3ead2" opacity="0.7"/><ellipse cx="205" cy="194" rx="25" ry="13" fill="#2f8f8a" opacity=".16"/>
+  </g>
+</svg>

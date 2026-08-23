@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="heart-nebula-title heart-nebula-desc">
+  <title id="heart-nebula-title">Heart Nebula</title>
+  <desc id="heart-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: heart-shaped emission complex with central cavity and young-star condensations.</desc>
+  <defs>
+    <radialGradient id="heart-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="heart-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="heart-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#heart-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="heart-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#heart-nebula-ambient-vignette-mask)">
+    <circle cx="125" cy="41" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="266" cy="254" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="313" cy="61" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="360" cy="132" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="43" cy="203" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="90" cy="274" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="137" cy="81" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="278" cy="30" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="325" cy="101" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="372" cy="172" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="55" cy="243" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="102" cy="50" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="149" cy="121" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="243" cy="263" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="290" cy="70" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="337" cy="141" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="20" cy="212" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="67" cy="19" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="114" cy="90" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="161" cy="161" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="208" cy="232" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="255" cy="39" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="302" cy="110" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="349" cy="181" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="32" cy="252" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="79" cy="59" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="173" cy="201" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="220" cy="272" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M200 207 C126 160 139 102 183 111 C195 113 200 124 200 124 C200 124 208 111 222 110 C267 106 278 163 200 207Z" fill="#2f8f8a" opacity=".42"/><path d="M173 155 C193 139 216 139 235 155" stroke="#d8caa7" stroke-width="4" opacity=".52" fill="none"/><circle cx="199" cy="153" r="2" fill="#d49a3a" opacity="0.8"/><circle cx="219" cy="137" r="1.8" fill="#d49a3a" opacity="0.7"/><circle cx="178" cy="138" r="1.8" fill="#d49a3a" opacity="0.7"/>
+  </g>
+</svg>

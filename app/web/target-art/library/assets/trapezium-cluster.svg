@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="trapezium-cluster-title trapezium-cluster-desc">
+  <title id="trapezium-cluster-title">Trapezium Cluster</title>
+  <desc id="trapezium-cluster-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact four-star multiple system at the core of Orion.</desc>
+  <defs>
+    <radialGradient id="trapezium-cluster-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="trapezium-cluster-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="trapezium-cluster-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#trapezium-cluster-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="trapezium-cluster-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#trapezium-cluster-ambient-vignette-mask)">
+    <circle cx="304" cy="128" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="351" cy="199" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="34" cy="270" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="81" cy="77" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="128" cy="148" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="222" cy="26" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="316" cy="168" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="363" cy="239" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="46" cy="46" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="93" cy="117" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="140" cy="188" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="187" cy="259" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="234" cy="66" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="281" cy="137" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="328" cy="208" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="375" cy="279" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="58" cy="86" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="105" cy="157" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="152" cy="228" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="199" cy="35" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="293" cy="177" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="340" cy="248" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="23" cy="55" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="70" cy="126" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="117" cy="197" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="164" cy="268" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="305" cy="217" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="352" cy="24" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="35" cy="95" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M178 132 L218 126 L234 166 L190 178 Z" stroke="#9ec9bf" stroke-width="1.5" opacity=".24" fill="none"/><circle cx="178" cy="132" r="4" fill="#f3ead2" opacity="0.95"/><circle cx="218" cy="126" r="3.7" fill="#f3ead2" opacity="0.9"/><circle cx="234" cy="166" r="3.5" fill="#f3ead2" opacity="0.88"/><circle cx="190" cy="178" r="3.5" fill="#f3ead2" opacity="0.88"/><ellipse cx="203" cy="151" rx="54" ry="36" fill="#2f8f8a" opacity=".12"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ring-nebula-m57-title ring-nebula-m57-desc">
+  <title id="ring-nebula-m57-title">M57 Ring Nebula</title>
+  <desc id="ring-nebula-m57-desc">Original Project Polaris vector artwork informed by official NASA imagery: tilted annular shell, blue-green interior, red outer rim, and central white dwarf.</desc>
+  <defs>
+    <radialGradient id="ring-nebula-m57-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ring-nebula-m57-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ring-nebula-m57-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ring-nebula-m57-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ring-nebula-m57-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ring-nebula-m57-ambient-vignette-mask)">
+    <circle cx="379" cy="179" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="62" cy="250" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="109" cy="57" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="203" cy="199" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="250" cy="270" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="297" cy="77" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="344" cy="148" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="27" cy="219" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="74" cy="26" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="121" cy="97" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="215" cy="239" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="262" cy="46" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="309" cy="117" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="356" cy="188" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="39" cy="259" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="86" cy="66" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="227" cy="279" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="321" cy="157" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="368" cy="228" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="51" cy="35" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="98" cy="106" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="192" cy="248" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="239" cy="55" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="286" cy="126" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="333" cy="197" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="380" cy="268" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="63" cy="75" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="110" cy="146" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="66" ry="49" fill="#d49a3a" opacity=".55"/><ellipse cx="200" cy="150" rx="54" ry="39" fill="#9ec9bf" opacity=".8"/><ellipse cx="200" cy="150" rx="31" ry="22" fill="#102a2c" opacity=".9"/><ellipse cx="200" cy="150" rx="76" ry="56" fill="none" stroke="#d8caa7" stroke-width="3" opacity=".38"/><circle cx="200" cy="150" r="2" fill="#f3ead2" opacity="0.9"/><circle cx="232" cy="132" r="1.7" fill="#f3ead2" opacity="0.75"/>
+  </g>
+</svg>

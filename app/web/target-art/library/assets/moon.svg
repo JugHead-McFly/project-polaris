@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="moon-title moon-desc">
+  <title id="moon-title">Moon</title>
+  <desc id="moon-desc">Original Project Polaris vector artwork informed by official NASA imagery: near-side maria pattern, cratered highlands, and offset illumination.</desc>
+  <defs>
+    <radialGradient id="moon-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="moon-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="moon-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#moon-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="moon-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#moon-ambient-vignette-mask)">
+    <circle cx="176" cy="60" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="317" cy="273" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="364" cy="80" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="47" cy="151" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="94" cy="222" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="141" cy="29" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="188" cy="100" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="282" cy="242" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="329" cy="49" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="376" cy="120" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="59" cy="191" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="106" cy="262" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="200" cy="140" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="294" cy="18" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="341" cy="89" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="24" cy="160" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="71" cy="231" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="118" cy="38" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="212" cy="180" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="259" cy="251" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="306" cy="58" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="353" cy="129" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="36" cy="200" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="83" cy="271" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="224" cy="220" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="271" cy="27" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="200" cy="150" r="60" fill="#f3ead2"/><path d="M163 131 C179 115 198 121 204 140 C192 151 177 153 163 131Z" fill="#1f5f60" opacity=".20"/><path d="M211 118 C231 122 244 144 236 166 C217 158 207 139 211 118Z" fill="#1f5f60" opacity=".16"/><ellipse cx="189" cy="181" rx="19" ry="11" fill="#1f5f60" opacity=".15"/><circle cx="221" cy="136" r="6" fill="#1f5f60" opacity="0.22"/><circle cx="175" cy="165" r="4" fill="#1f5f60" opacity="0.2"/><circle cx="213" cy="182" r="5" fill="#1f5f60" opacity="0.16"/><circle cx="191" cy="111" r="3" fill="#1f5f60" opacity="0.18"/>
+  </g>
+</svg>

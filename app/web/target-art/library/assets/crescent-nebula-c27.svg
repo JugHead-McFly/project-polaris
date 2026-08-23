@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="crescent-nebula-c27-title crescent-nebula-c27-desc">
+  <title id="crescent-nebula-c27-title">C27 Crescent Nebula</title>
+  <desc id="crescent-nebula-c27-desc">Original Project Polaris vector artwork informed by official NASA imagery: elliptical wind-blown shell with dense knots, filament network, and thin outer skin.</desc>
+  <defs>
+    <radialGradient id="crescent-nebula-c27-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="crescent-nebula-c27-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="crescent-nebula-c27-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#crescent-nebula-c27-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="crescent-nebula-c27-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#crescent-nebula-c27-ambient-vignette-mask)">
+    <circle cx="360" cy="280" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="43" cy="87" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="90" cy="158" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="184" cy="36" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="278" cy="178" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="325" cy="249" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="372" cy="56" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="55" cy="127" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="102" cy="198" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="149" cy="269" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="196" cy="76" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="290" cy="218" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="337" cy="25" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="20" cy="96" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="67" cy="167" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="114" cy="238" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="161" cy="45" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="208" cy="116" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="302" cy="258" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="349" cy="65" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="32" cy="136" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="79" cy="207" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="126" cy="278" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="220" cy="156" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="314" cy="34" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="361" cy="105" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="44" cy="176" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="91" cy="247" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="78" ry="52" fill="#2f8f8a" opacity=".20"/><path d="M143 176 C152 113 222 91 267 133 C245 124 204 123 176 145 C158 160 151 178 153 196 C148 191 145 184 143 176Z" fill="#9ec9bf" opacity=".48"/><path d="M150 182 C178 136 221 120 259 135 M159 199 C192 167 230 156 270 166" stroke="#d8caa7" stroke-width="3" opacity=".58" fill="none"/><circle cx="188" cy="150" r="2" fill="#d49a3a" opacity="0.75"/><circle cx="215" cy="132" r="2" fill="#d49a3a" opacity="0.7"/><circle cx="238" cy="161" r="1.8" fill="#d49a3a" opacity="0.62"/>
+  </g>
+</svg>

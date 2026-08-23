@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ic5117-planetary-title ic5117-planetary-desc">
+  <title id="ic5117-planetary-title">IC 5117 Planetary Nebula</title>
+  <desc id="ic5117-planetary-desc">Original Project Polaris vector artwork informed by official NASA imagery: tiny compact planetary with bright stellar core and oval haze.</desc>
+  <defs>
+    <radialGradient id="ic5117-planetary-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ic5117-planetary-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ic5117-planetary-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ic5117-planetary-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ic5117-planetary-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ic5117-planetary-ambient-vignette-mask)">
+    <circle cx="132" cy="24" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="273" cy="237" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="320" cy="44" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="367" cy="115" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="50" cy="186" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="97" cy="257" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="144" cy="64" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="285" cy="277" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="332" cy="84" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="379" cy="155" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="62" cy="226" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="109" cy="33" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="156" cy="104" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="250" cy="246" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="297" cy="53" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="344" cy="124" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="27" cy="195" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="74" cy="266" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="121" cy="73" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="168" cy="144" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="262" cy="22" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="309" cy="93" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="356" cy="164" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="39" cy="235" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="86" cy="42" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="180" cy="184" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="227" cy="255" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="201" cy="147" r="52" fill="#2f8f8a" opacity=".18"/><circle cx="201" cy="147" r="42" fill="none" stroke="#d8caa7" stroke-width="5" opacity=".45"/><circle cx="201" cy="147" r="20" fill="#102a2c" opacity=".28"/><circle cx="204" cy="145" r="2" fill="#f3ead2" opacity="0.92"/><circle cx="225" cy="159" r="1.5" fill="#f3ead2" opacity="0.56"/>
+  </g>
+</svg>

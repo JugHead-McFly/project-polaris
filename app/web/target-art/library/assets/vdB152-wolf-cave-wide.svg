@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="vdB152-wolf-cave-wide-title vdB152-wolf-cave-wide-desc">
+  <title id="vdB152-wolf-cave-wide-title">vdB 152 Wolf's Cave Wide</title>
+  <desc id="vdB152-wolf-cave-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide reflection nebula with blue rim and trailing dark dust lane.</desc>
+  <defs>
+    <radialGradient id="vdB152-wolf-cave-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vdB152-wolf-cave-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="vdB152-wolf-cave-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#vdB152-wolf-cave-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="vdB152-wolf-cave-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#vdB152-wolf-cave-wide-ambient-vignette-mask)">
+    <circle cx="25" cy="149" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="72" cy="220" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="119" cy="27" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="213" cy="169" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="260" cy="240" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="307" cy="47" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="354" cy="118" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="37" cy="189" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="84" cy="260" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="131" cy="67" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="225" cy="209" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="272" cy="280" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="319" cy="87" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="366" cy="158" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="49" cy="229" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="96" cy="36" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="237" cy="249" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="284" cy="56" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="331" cy="127" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="378" cy="198" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="61" cy="269" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="108" cy="76" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="249" cy="25" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="296" cy="96" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="343" cy="167" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="26" cy="238" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="73" cy="45" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="120" cy="116" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M162 205 C174 149 208 95 241 123 C216 147 205 185 162 205Z" fill="#9ec9bf" opacity=".32"/><path d="M152 213 C178 168 198 132 236 103" stroke="#102a2c" stroke-width="9" opacity=".52" fill="none"/><circle cx="218" cy="119" r="3" fill="#f3ead2" opacity="0.86"/>
+  </g>
+</svg>

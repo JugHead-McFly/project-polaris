@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="aries-triangle-field-title aries-triangle-field-desc">
+  <title id="aries-triangle-field-title">Aries-Triangulum Field</title>
+  <desc id="aries-triangle-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: autumn field connecting Aries and Triangulum star patterns.</desc>
+  <defs>
+    <radialGradient id="aries-triangle-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aries-triangle-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="aries-triangle-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#aries-triangle-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="aries-triangle-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#aries-triangle-field-ambient-vignette-mask)">
+    <circle cx="66" cy="50" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="113" cy="121" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="207" cy="263" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="254" cy="70" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="301" cy="141" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="348" cy="212" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="31" cy="19" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="78" cy="90" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="172" cy="232" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="219" cy="39" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="266" cy="110" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="313" cy="181" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="360" cy="252" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="43" cy="59" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="90" cy="130" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="184" cy="272" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="278" cy="150" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="325" cy="221" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="372" cy="28" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="55" cy="99" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="102" cy="170" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="149" cy="241" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="196" cy="48" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="290" cy="190" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="337" cy="261" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="20" cy="68" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="67" cy="139" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="114" cy="210" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="161" cy="281" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M122 126 L178 149 L222 196 M229 119 L277 141 L247 181 Z" stroke="#9ec9bf" stroke-width="2" opacity=".3" fill="none"/><circle cx="122" cy="126" r="3.2" fill="#f3ead2" opacity="0.9"/><circle cx="178" cy="149" r="2.8" fill="#f3ead2" opacity="0.82"/><circle cx="222" cy="196" r="2.6" fill="#f3ead2" opacity="0.78"/><circle cx="229" cy="119" r="2.5" fill="#f3ead2" opacity="0.74"/><circle cx="277" cy="141" r="2.8" fill="#f3ead2" opacity="0.82"/><circle cx="247" cy="181" r="2.4" fill="#f3ead2" opacity="0.7"/><circle cx="122" cy="126" r="6" fill="#d49a3a" opacity=".22"/>
+  </g>
+</svg>

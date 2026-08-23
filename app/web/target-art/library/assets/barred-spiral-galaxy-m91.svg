@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="barred-spiral-galaxy-m91-title barred-spiral-galaxy-m91-desc">
+  <title id="barred-spiral-galaxy-m91-title">M91</title>
+  <desc id="barred-spiral-galaxy-m91-desc">Original Project Polaris vector artwork informed by official NASA imagery: barred Virgo spiral with faint outer arms and a compact bright bar-driven core.</desc>
+  <defs>
+    <radialGradient id="barred-spiral-galaxy-m91-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="barred-spiral-galaxy-m91-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="barred-spiral-galaxy-m91-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#barred-spiral-galaxy-m91-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="barred-spiral-galaxy-m91-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#barred-spiral-galaxy-m91-ambient-vignette-mask)">
+    <circle cx="251" cy="227" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="298" cy="34" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="345" cy="105" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="28" cy="176" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="75" cy="247" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="122" cy="54" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="263" cy="267" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="310" cy="74" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="357" cy="145" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="40" cy="216" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="87" cy="23" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="228" cy="236" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="275" cy="43" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="322" cy="114" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="369" cy="185" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="52" cy="256" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="99" cy="63" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="240" cy="276" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="287" cy="83" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="334" cy="154" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="381" cy="225" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="64" cy="32" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="111" cy="103" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="205" cy="245" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="252" cy="52" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="299" cy="123" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="346" cy="194" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="200" cy="150" r="10" fill="#f3ead2" opacity=".78"/><path d="M155 151 L245 149" stroke="#d8caa7" stroke-width="6" opacity=".55" stroke-linecap="round"/><path d="M104.8 122.6 A108 58 0 0 1 292.1 119.7" fill="none" stroke="#9ec9bf" stroke-width="4" stroke-linecap="round" opacity="0.38"/><path d="M285.3 177.2 A100 52 0 0 1 117.0 179.0" fill="none" stroke="#2f8f8a" stroke-width="4" stroke-linecap="round" opacity="0.36"/><path d="M126 130 C160 103 235 108 272 132" stroke="#d8caa7" stroke-width="3" opacity=".28" fill="none"/><circle cx="231" cy="130" r="2.5" fill="#d49a3a" opacity="0.6"/><circle cx="166" cy="174" r="2.2" fill="#d49a3a" opacity="0.55"/>
+  </g>
+</svg>

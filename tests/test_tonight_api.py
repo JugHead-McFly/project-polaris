@@ -180,7 +180,13 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["recommended_target"]["maximum_dark_altitude"] == 81.9
     assert payload["recommended_target"]["average_dark_altitude"] == 58.4
     assert payload["recommended_target"]["usable_dark_hours"] == 7.4
+    assert payload["recommended_target"]["artwork"]["slug"] == "ring-nebula-m57"
+    assert payload["recommended_target"]["artwork"]["match_kind"] == "exact"
+    assert payload["recommended_target"]["artwork"]["asset_url"].startswith(
+        "/operator-assets/target-art/library/assets/ring-nebula-m57.svg?v="
+    )
     assert payload["backup_target"]["object"] == "M27"
+    assert payload["backup_target"]["artwork"]["slug"] == "dumbbell-nebula-m27"
     assert payload["backup_target"]["maximum_dark_altitude"] == 81.9
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497

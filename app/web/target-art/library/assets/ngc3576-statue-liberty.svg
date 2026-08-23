@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc3576-statue-liberty-title ngc3576-statue-liberty-desc">
+  <title id="ngc3576-statue-liberty-title">NGC 3576 Statue of Liberty Nebula</title>
+  <desc id="ngc3576-statue-liberty-desc">Original Project Polaris vector artwork informed by official NASA imagery: bright southern emission nebula with wing-like lobes and dark columns.</desc>
+  <defs>
+    <radialGradient id="ngc3576-statue-liberty-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc3576-statue-liberty-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc3576-statue-liberty-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc3576-statue-liberty-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc3576-statue-liberty-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc3576-statue-liberty-ambient-vignette-mask)">
+    <circle cx="65" cy="93" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="112" cy="164" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="159" cy="235" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="206" cy="42" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="253" cy="113" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="300" cy="184" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="347" cy="255" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="30" cy="62" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="77" cy="133" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="171" cy="275" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="265" cy="153" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="312" cy="224" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="359" cy="31" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="42" cy="102" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="89" cy="173" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="136" cy="244" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="183" cy="51" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="277" cy="193" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="324" cy="264" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="371" cy="71" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="54" cy="142" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="101" cy="213" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="148" cy="20" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="289" cy="233" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="336" cy="40" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="19" cy="111" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="66" cy="182" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="113" cy="253" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="160" cy="60" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M129 189 C139 110 215 75 284 112 C298 164 242 212 179 208 C158 205 141 198 129 189Z" fill="#2f8f8a" opacity=".3"/><path d="M161 175 C197 146 240 144 272 172" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="215" cy="126" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="242" cy="148" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="178" cy="167" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

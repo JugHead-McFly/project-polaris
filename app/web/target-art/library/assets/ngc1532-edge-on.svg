@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1532-edge-on-title ngc1532-edge-on-desc">
+  <title id="ngc1532-edge-on-title">NGC 1532 Edge-on Galaxy</title>
+  <desc id="ngc1532-edge-on-desc">Original Project Polaris vector artwork informed by official NASA imagery: large edge-on spiral with tidal distortion and small companion cue.</desc>
+  <defs>
+    <radialGradient id="ngc1532-edge-on-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1532-edge-on-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1532-edge-on-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1532-edge-on-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1532-edge-on-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1532-edge-on-ambient-vignette-mask)">
+    <circle cx="357" cy="29" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="40" cy="100" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="87" cy="171" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="134" cy="242" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="181" cy="49" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="322" cy="262" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="369" cy="69" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="52" cy="140" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="99" cy="211" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="146" cy="18" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="193" cy="89" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="287" cy="231" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="334" cy="38" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="381" cy="109" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="64" cy="180" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="111" cy="251" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="158" cy="58" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="205" cy="129" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="299" cy="271" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="346" cy="78" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="29" cy="149" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="76" cy="220" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="123" cy="27" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="217" cy="169" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="264" cy="240" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="311" cy="47" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="358" cy="118" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="41" cy="189" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="88" cy="260" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M61 159 C139 131 241 182 325 150" stroke="#9ec9bf" stroke-width="9" opacity=".44" fill="none"/><ellipse cx="193" cy="155" rx="45" ry="22" fill="#d8caa7" opacity=".55"/><path d="M51 156 C131 144 253 146 335 156" stroke="#102a2c" stroke-width="5" opacity=".62" fill="none"/>
+  </g>
+</svg>

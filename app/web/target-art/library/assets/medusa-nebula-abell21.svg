@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="medusa-nebula-abell21-title medusa-nebula-abell21-desc">
+  <title id="medusa-nebula-abell21-title">Abell 21 Medusa Nebula</title>
+  <desc id="medusa-nebula-abell21-desc">Original Project Polaris vector artwork informed by official NASA imagery: large faint crescent planetary nebula with ragged braided arcs and open shell edge.</desc>
+  <defs>
+    <radialGradient id="medusa-nebula-abell21-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="medusa-nebula-abell21-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="medusa-nebula-abell21-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#medusa-nebula-abell21-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="medusa-nebula-abell21-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#medusa-nebula-abell21-ambient-vignette-mask)">
+    <circle cx="26" cy="106" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="73" cy="177" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="120" cy="248" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="167" cy="55" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="214" cy="126" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="308" cy="268" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="355" cy="75" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="38" cy="146" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="85" cy="217" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="132" cy="24" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="226" cy="166" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="273" cy="237" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="320" cy="44" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="367" cy="115" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="50" cy="186" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="97" cy="257" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="144" cy="64" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="238" cy="206" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="285" cy="277" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="332" cy="84" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="379" cy="155" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="62" cy="226" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="109" cy="33" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="250" cy="246" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="297" cy="53" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="344" cy="124" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="27" cy="195" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="74" cy="266" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="121" cy="73" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M156.8 198.5 A88 58 0 1 1 284.9 125.7" fill="none" stroke="#9ec9bf" stroke-width="6" stroke-linecap="round" opacity="0.48"/><path d="M147.4 183.0 A72 45 0 1 1 251.5 120.9" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.42"/><path d="M127.2 186.2 A101 65 0 0 1 219.8 85.2" fill="none" stroke="#d49a3a" stroke-width="3" stroke-linecap="round" opacity="0.3"/><path d="M130 184 C161 160 208 154 253 169" stroke="#2f8f8a" stroke-width="3" opacity=".38" fill="none"/><circle cx="176" cy="143" r="1.6" fill="#f3ead2" opacity="0.6"/><circle cx="218" cy="130" r="1.5" fill="#f3ead2" opacity="0.55"/>
+  </g>
+</svg>

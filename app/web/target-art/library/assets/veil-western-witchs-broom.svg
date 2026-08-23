@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="veil-western-witchs-broom-title veil-western-witchs-broom-desc">
+  <title id="veil-western-witchs-broom-title">Western Veil / Witch's Broom</title>
+  <desc id="veil-western-witchs-broom-desc">Original Project Polaris vector artwork informed by official NASA imagery: thin braided supernova-remnant filaments in a sweeping curved shock front.</desc>
+  <defs>
+    <radialGradient id="veil-western-witchs-broom-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="veil-western-witchs-broom-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="veil-western-witchs-broom-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#veil-western-witchs-broom-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="veil-western-witchs-broom-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#veil-western-witchs-broom-ambient-vignette-mask)">
+    <circle cx="243" cy="255" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="290" cy="62" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="337" cy="133" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="20" cy="204" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="67" cy="275" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="114" cy="82" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="255" cy="31" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="302" cy="102" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="349" cy="173" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="32" cy="244" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="79" cy="51" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="220" cy="264" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="267" cy="71" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="314" cy="142" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="361" cy="213" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="44" cy="20" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="91" cy="91" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="185" cy="233" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="232" cy="40" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="279" cy="111" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="326" cy="182" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="373" cy="253" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="56" cy="60" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="103" cy="131" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="197" cy="273" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="291" cy="151" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="338" cy="222" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M149.2 191.8 A88 48 0 1 1 282.6 135.1" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.5"/><path d="M155.7 180.0 A73 38 0 1 1 261.2 127.6" fill="none" stroke="#d8caa7" stroke-width="3" stroke-linecap="round" opacity="0.42"/><path d="M110.2 180.9 A96 56 0 0 1 205.4 101.2" fill="none" stroke="#d49a3a" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  </g>
+</svg>

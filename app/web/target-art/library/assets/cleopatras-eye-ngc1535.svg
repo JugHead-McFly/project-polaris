@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="cleopatras-eye-ngc1535-title cleopatras-eye-ngc1535-desc">
+  <title id="cleopatras-eye-ngc1535-title">NGC 1535 Cleopatra's Eye</title>
+  <desc id="cleopatras-eye-ngc1535-desc">Original Project Polaris vector artwork informed by official NASA imagery: bright oval planetary nebula with layered inner eye and faint outer shell.</desc>
+  <defs>
+    <radialGradient id="cleopatras-eye-ngc1535-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cleopatras-eye-ngc1535-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="cleopatras-eye-ngc1535-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#cleopatras-eye-ngc1535-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="cleopatras-eye-ngc1535-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#cleopatras-eye-ngc1535-ambient-vignette-mask)">
+    <circle cx="87" cy="243" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="134" cy="50" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="275" cy="263" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="322" cy="70" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="369" cy="141" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="52" cy="212" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="99" cy="19" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="240" cy="232" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="287" cy="39" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="334" cy="110" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="381" cy="181" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="64" cy="252" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="111" cy="59" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="252" cy="272" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="299" cy="79" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="346" cy="150" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="29" cy="221" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="76" cy="28" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="123" cy="99" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="217" cy="241" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="264" cy="48" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="311" cy="119" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="358" cy="190" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="41" cy="261" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="88" cy="68" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="135" cy="139" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="54" ry="44" fill="#9ec9bf" opacity=".52"/><ellipse cx="200" cy="150" rx="32" ry="24" fill="#d8caa7" opacity=".42"/><circle cx="200" cy="150" r="13" fill="#102a2c" opacity=".36"/><circle cx="200" cy="150" r="2" fill="#f3ead2" opacity="0.9"/>
+  </g>
+</svg>

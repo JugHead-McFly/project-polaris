@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ic443-jellyfish-wide-title ic443-jellyfish-wide-desc">
+  <title id="ic443-jellyfish-wide-title">IC 443 Jellyfish Wide</title>
+  <desc id="ic443-jellyfish-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide supernova-remnant treatment with arced jellyfish cap and trailing filaments.</desc>
+  <defs>
+    <radialGradient id="ic443-jellyfish-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ic443-jellyfish-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ic443-jellyfish-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ic443-jellyfish-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ic443-jellyfish-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ic443-jellyfish-wide-ambient-vignette-mask)">
+    <circle cx="166" cy="58" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="307" cy="271" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="354" cy="78" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="37" cy="149" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="84" cy="220" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="131" cy="27" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="178" cy="98" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="272" cy="240" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="319" cy="47" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="366" cy="118" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="49" cy="189" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="96" cy="260" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="143" cy="67" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="190" cy="138" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="284" cy="280" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="331" cy="87" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="378" cy="158" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="61" cy="229" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="108" cy="36" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="202" cy="178" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="249" cy="249" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="296" cy="56" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="343" cy="127" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="26" cy="198" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="73" cy="269" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="120" cy="76" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="214" cy="218" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="261" cy="25" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M108 130 C145 83 228 82 288 123 C253 134 212 141 166 148 C139 152 119 146 108 130Z" fill="#2f8f8a" opacity=".24"/><path d="M109 131 C151 95 229 94 289 124" stroke="#9ec9bf" stroke-width="5" opacity=".48" fill="none"/><path d="M132 153 C143 181 151 203 166 225 M178 148 C181 177 188 200 207 219 M222 140 C231 166 250 185 275 198" stroke="#d8caa7" stroke-width="3" opacity=".42" fill="none"/><path d="M104 141 C145 167 218 161 291 136" stroke="#d49a3a" stroke-width="2" opacity=".28" fill="none"/><circle cx="166" cy="148" r="1.8" fill="#f3ead2" opacity="0.58"/><circle cx="221" cy="141" r="1.6" fill="#f3ead2" opacity="0.52"/>
+  </g>
+</svg>

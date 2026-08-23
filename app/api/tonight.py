@@ -21,6 +21,7 @@ from app.services.hosted_recommendation_service import (
 )
 from app.services.target_service import build_catalog_target_response
 from app.services.target_service import build_target_response
+from app.services.target_art_library_service import resolve_target_artwork
 
 
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
@@ -130,6 +131,11 @@ def _build_legacy_target(
     target["rig_fit"] = _build_rig_fit_summary(
         target["object"],
         rig_profile_key,
+    )
+    target["artwork"] = resolve_target_artwork(
+        target.get("object"),
+        common_name=target.get("common_name"),
+        target_type=target.get("target_type"),
     )
     return target
 

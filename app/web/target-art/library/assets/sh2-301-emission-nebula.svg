@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sh2-301-emission-nebula-title sh2-301-emission-nebula-desc">
+  <title id="sh2-301-emission-nebula-title">Sh2-301 Emission Nebula</title>
+  <desc id="sh2-301-emission-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: Canis Major emission nebula with bright arc and dark interior bite.</desc>
+  <defs>
+    <radialGradient id="sh2-301-emission-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sh2-301-emission-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sh2-301-emission-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sh2-301-emission-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sh2-301-emission-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sh2-301-emission-nebula-ambient-vignette-mask)">
+    <circle cx="288" cy="184" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="335" cy="255" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="18" cy="62" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="65" cy="133" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="112" cy="204" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="159" cy="275" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="300" cy="224" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="347" cy="31" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="30" cy="102" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="77" cy="173" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="124" cy="244" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="171" cy="51" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="312" cy="264" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="359" cy="71" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="42" cy="142" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="89" cy="213" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="136" cy="20" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="277" cy="233" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="324" cy="40" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="371" cy="111" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="54" cy="182" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="101" cy="253" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="148" cy="60" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="289" cy="273" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="336" cy="80" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="19" cy="151" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M129 116 C175 91 243 109 278 153 C246 150 219 161 194 190 C161 177 139 150 129 116Z" fill="#2f8f8a" opacity=".24"/><path d="M147 131 C181 112 232 119 265 151" stroke="#d8caa7" stroke-width="5" opacity=".38" fill="none"/><path d="M168 191 C196 164 230 160 264 181" stroke="#9ec9bf" stroke-width="3" opacity=".26" fill="none"/><path d="M180 129 C191 150 209 157 235 147" stroke="#102a2c" stroke-width="8" opacity=".38" fill="none"/><circle cx="218" cy="138" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="249" cy="157" r="1.8" fill="#d49a3a" opacity="0.58"/><circle cx="171" cy="166" r="1.7" fill="#d49a3a" opacity="0.54"/>
+  </g>
+</svg>

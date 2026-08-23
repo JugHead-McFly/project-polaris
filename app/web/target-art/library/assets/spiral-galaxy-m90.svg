@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="spiral-galaxy-m90-title spiral-galaxy-m90-desc">
+  <title id="spiral-galaxy-m90-title">M90</title>
+  <desc id="spiral-galaxy-m90-desc">Original Project Polaris vector artwork informed by official NASA imagery: large spiral with smooth bright inner disk and faint outer arms.</desc>
+  <defs>
+    <radialGradient id="spiral-galaxy-m90-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spiral-galaxy-m90-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="spiral-galaxy-m90-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#spiral-galaxy-m90-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="spiral-galaxy-m90-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#spiral-galaxy-m90-ambient-vignette-mask)">
+    <circle cx="64" cy="168" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="111" cy="239" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="158" cy="46" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="252" cy="188" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="299" cy="259" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="346" cy="66" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="29" cy="137" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="76" cy="208" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="123" cy="279" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="264" cy="228" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="311" cy="35" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="358" cy="106" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="41" cy="177" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="88" cy="248" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="135" cy="55" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="276" cy="268" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="323" cy="75" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="370" cy="146" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="53" cy="217" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="100" cy="24" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="241" cy="237" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="288" cy="44" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="335" cy="115" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="18" cy="186" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="65" cy="257" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="112" cy="64" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="112" ry="38" fill="url(#spiral-galaxy-m90-glow)" transform="rotate(8 200 150)"/><ellipse cx="200" cy="150" rx="25" ry="15" fill="#f3ead2" opacity=".78"/><path d="M126 136 C168 123 229 130 277 154 M127 169 C172 149 231 159 276 179" stroke="#9ec9bf" stroke-width="4" opacity=".45" fill="none"/><circle cx="236" cy="132" r="2.5" fill="#d49a3a" opacity="0.58"/><circle cx="164" cy="174" r="2.2" fill="#d49a3a" opacity="0.55"/>
+  </g>
+</svg>

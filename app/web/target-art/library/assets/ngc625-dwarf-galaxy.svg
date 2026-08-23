@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc625-dwarf-galaxy-title ngc625-dwarf-galaxy-desc">
+  <title id="ngc625-dwarf-galaxy-title">NGC 625 Dwarf Galaxy</title>
+  <desc id="ngc625-dwarf-galaxy-desc">Original Project Polaris vector artwork informed by official NASA imagery: nearby dwarf irregular with bright central bar and clumpy knots.</desc>
+  <defs>
+    <radialGradient id="ngc625-dwarf-galaxy-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc625-dwarf-galaxy-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc625-dwarf-galaxy-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc625-dwarf-galaxy-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc625-dwarf-galaxy-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc625-dwarf-galaxy-ambient-vignette-mask)">
+    <circle cx="309" cy="229" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="356" cy="36" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="39" cy="107" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="86" cy="178" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="133" cy="249" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="180" cy="56" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="321" cy="269" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="368" cy="76" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="51" cy="147" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="98" cy="218" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="145" cy="25" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="286" cy="238" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="333" cy="45" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="380" cy="116" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="63" cy="187" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="110" cy="258" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="157" cy="65" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="298" cy="278" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="345" cy="85" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="28" cy="156" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="75" cy="227" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="122" cy="34" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="169" cy="105" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="263" cy="247" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="310" cy="54" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="357" cy="125" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="40" cy="196" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M106 152 L144 116 L216 110 L286 142 L252 179 L170 174 Z" fill="#9ec9bf" opacity="0.34"/><path d="M120 146 C170 128 232 131 277 150" stroke="#d8caa7" stroke-width="4" opacity=".36" fill="none"/><circle cx="160" cy="136" r="3" fill="#d49a3a" opacity="0.7"/><circle cx="222" cy="148" r="2.8" fill="#d49a3a" opacity="0.66"/><circle cx="256" cy="132" r="2.2" fill="#d49a3a" opacity="0.55"/>
+  </g>
+</svg>

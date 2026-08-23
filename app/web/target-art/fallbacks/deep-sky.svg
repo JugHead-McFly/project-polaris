@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Generic deep-sky target</title>
+  <desc id="desc">A neutral deep-sky illustration used only when no exact target artwork is available.</desc>
+  <defs><radialGradient id="fade"><stop stop-color="#9ec9bf" stop-opacity=".35"/><stop offset="1" stop-color="#1f5f60" stop-opacity="0"/></radialGradient></defs>
+  <circle cx="200" cy="150" r="112" fill="url(#fade)"/>
+  <g fill="#f3ead2" opacity=".78"><circle cx="135" cy="110" r="3"/><circle cx="217" cy="92" r="2"/><circle cx="272" cy="141" r="4"/><circle cx="183" cy="170" r="5"/><circle cx="120" cy="196" r="2"/><circle cx="250" cy="210" r="3"/></g>
+  <path d="M104 175C151 93 249 92 302 171" fill="none" stroke="#2f8f8a" stroke-width="4" stroke-dasharray="26 12" opacity=".48"/>
+</svg>

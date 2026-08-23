@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="gamma-leonis-double-title gamma-leonis-double-desc">
+  <title id="gamma-leonis-double-title">Gamma Leonis Double Star</title>
+  <desc id="gamma-leonis-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: golden Leo double with bright primary and close companion.</desc>
+  <defs>
+    <radialGradient id="gamma-leonis-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gamma-leonis-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="gamma-leonis-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#gamma-leonis-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="gamma-leonis-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#gamma-leonis-double-ambient-vignette-mask)">
+    <circle cx="67" cy="239" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="114" cy="46" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="255" cy="259" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="302" cy="66" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="349" cy="137" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="32" cy="208" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="79" cy="279" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="267" cy="35" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="314" cy="106" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="361" cy="177" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="44" cy="248" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="91" cy="55" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="232" cy="268" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="279" cy="75" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="326" cy="146" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="373" cy="217" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="56" cy="24" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="103" cy="95" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="197" cy="237" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="244" cy="44" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="291" cy="115" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="338" cy="186" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="21" cy="257" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="68" cy="64" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="115" cy="135" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M174 150 L226 148" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="174" cy="150" r="8.8" fill="#d49a3a" opacity=".9"/><circle cx="226" cy="148" r="6.1" fill="#d8caa7" opacity=".9"/><circle cx="143" cy="119" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="258" cy="178" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="202" cy="106" r="1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

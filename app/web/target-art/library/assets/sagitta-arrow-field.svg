@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sagitta-arrow-field-title sagitta-arrow-field-desc">
+  <title id="sagitta-arrow-field-title">Sagitta Arrow Field</title>
+  <desc id="sagitta-arrow-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact arrow-shaped constellation field with four main stars.</desc>
+  <defs>
+    <radialGradient id="sagitta-arrow-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sagitta-arrow-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sagitta-arrow-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sagitta-arrow-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sagitta-arrow-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sagitta-arrow-field-ambient-vignette-mask)">
+    <circle cx="372" cy="280" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="55" cy="87" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="102" cy="158" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="196" cy="36" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="290" cy="178" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="337" cy="249" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="20" cy="56" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="67" cy="127" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="114" cy="198" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="161" cy="269" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="208" cy="76" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="302" cy="218" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="349" cy="25" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="32" cy="96" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="79" cy="167" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="126" cy="238" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="173" cy="45" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="220" cy="116" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="314" cy="258" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="361" cy="65" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="44" cy="136" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="91" cy="207" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="138" cy="278" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="232" cy="156" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="279" cy="227" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="326" cy="34" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="373" cy="105" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="56" cy="176" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="103" cy="247" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M122 157 L180 133 L252 138 L286 122 M252 138 L235 112 M252 138 L232 165" stroke="#9ec9bf" stroke-width="2" opacity=".34" fill="none"/><circle cx="122" cy="157" r="2.8" fill="#f3ead2" opacity="0.78"/><circle cx="180" cy="133" r="3.1" fill="#f3ead2" opacity="0.86"/><circle cx="252" cy="138" r="3.3" fill="#f3ead2" opacity="0.9"/><circle cx="286" cy="122" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="235" cy="112" r="2.2" fill="#f3ead2" opacity="0.66"/><circle cx="232" cy="165" r="2.1" fill="#f3ead2" opacity="0.64"/>
+  </g>
+</svg>

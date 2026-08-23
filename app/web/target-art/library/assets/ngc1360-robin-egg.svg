@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1360-robin-egg-title ngc1360-robin-egg-desc">
+  <title id="ngc1360-robin-egg-title">NGC 1360 Robin's Egg Nebula</title>
+  <desc id="ngc1360-robin-egg-desc">Original Project Polaris vector artwork informed by official NASA imagery: large elongated planetary shell with bright central star and soft rim.</desc>
+  <defs>
+    <radialGradient id="ngc1360-robin-egg-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1360-robin-egg-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1360-robin-egg-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1360-robin-egg-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1360-robin-egg-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1360-robin-egg-ambient-vignette-mask)">
+    <circle cx="320" cy="188" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="367" cy="259" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="50" cy="66" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="97" cy="137" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="144" cy="208" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="191" cy="279" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="285" cy="157" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="332" cy="228" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="379" cy="35" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="62" cy="106" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="109" cy="177" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="156" cy="248" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="203" cy="55" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="297" cy="197" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="344" cy="268" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="27" cy="75" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="74" cy="146" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="121" cy="217" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="168" cy="24" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="309" cy="237" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="356" cy="44" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="39" cy="115" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="86" cy="186" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="133" cy="257" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="180" cy="64" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="321" cy="277" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="368" cy="84" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="51" cy="155" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="192" cy="147" r="66" fill="#2f8f8a" opacity=".18"/><circle cx="192" cy="147" r="50" fill="none" stroke="#d8caa7" stroke-width="5" opacity=".45"/><circle cx="192" cy="147" r="25" fill="#102a2c" opacity=".28"/><circle cx="195" cy="145" r="2" fill="#f3ead2" opacity="0.92"/><circle cx="216" cy="159" r="1.5" fill="#f3ead2" opacity="0.56"/>
+  </g>
+</svg>

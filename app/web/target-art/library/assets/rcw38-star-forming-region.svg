@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="rcw38-star-forming-region-title rcw38-star-forming-region-desc">
+  <title id="rcw38-star-forming-region-title">RCW 38 Star-forming Region</title>
+  <desc id="rcw38-star-forming-region-desc">Original Project Polaris vector artwork informed by official NASA imagery: embedded cluster nebula with compact bright core and dusty cavities.</desc>
+  <defs>
+    <radialGradient id="rcw38-star-forming-region-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="rcw38-star-forming-region-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="rcw38-star-forming-region-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#rcw38-star-forming-region-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="rcw38-star-forming-region-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#rcw38-star-forming-region-ambient-vignette-mask)">
+    <circle cx="123" cy="127" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="217" cy="269" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="311" cy="147" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="358" cy="218" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="41" cy="25" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="88" cy="96" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="135" cy="167" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="182" cy="238" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="229" cy="45" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="323" cy="187" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="370" cy="258" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="53" cy="65" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="100" cy="136" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="147" cy="207" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="194" cy="278" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="288" cy="156" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="335" cy="227" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="18" cy="34" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="65" cy="105" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="112" cy="176" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="159" cy="247" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="206" cy="54" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="300" cy="196" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="347" cy="267" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="30" cy="74" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="77" cy="145" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="171" cy="23" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M114 192 C124 113 200 78 269 115 C283 167 227 215 164 211 C143 208 126 201 114 192Z" fill="#2f8f8a" opacity=".3"/><path d="M146 178 C182 149 225 147 257 175" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="200" cy="129" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="227" cy="151" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="163" cy="170" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

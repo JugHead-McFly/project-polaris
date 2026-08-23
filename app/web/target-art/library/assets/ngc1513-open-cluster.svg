@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1513-open-cluster-title ngc1513-open-cluster-desc">
+  <title id="ngc1513-open-cluster-title">NGC 1513 Open Cluster</title>
+  <desc id="ngc1513-open-cluster-desc">Original Project Polaris vector artwork informed by official NASA imagery: Perseus open cluster with triangular bright-star frame and faint scatter.</desc>
+  <defs>
+    <radialGradient id="ngc1513-open-cluster-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1513-open-cluster-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1513-open-cluster-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1513-open-cluster-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1513-open-cluster-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1513-open-cluster-ambient-vignette-mask)">
+    <circle cx="325" cy="25" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="372" cy="96" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="55" cy="167" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="102" cy="238" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="149" cy="45" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="290" cy="258" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="337" cy="65" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="20" cy="136" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="67" cy="207" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="114" cy="278" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="161" cy="85" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="302" cy="34" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="349" cy="105" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="32" cy="176" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="79" cy="247" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="126" cy="54" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="173" cy="125" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="267" cy="267" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="314" cy="74" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="361" cy="145" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="44" cy="216" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="91" cy="23" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="185" cy="165" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="232" cy="236" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="279" cy="43" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="326" cy="114" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="373" cy="185" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="56" cy="256" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M146 126 L204 111 L258 141 L236 192 L164 189 Z M204 111 L193 154 L236 192" stroke="#9ec9bf" stroke-width="2" opacity=".23" fill="none"/><circle cx="146" cy="126" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="204" cy="111" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="258" cy="141" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="236" cy="192" r="2.3" fill="#f3ead2" opacity="0.66"/><circle cx="164" cy="189" r="2.3" fill="#f3ead2" opacity="0.66"/><circle cx="193" cy="154" r="2" fill="#f3ead2" opacity="0.6"/><circle cx="221" cy="162" r="1.8" fill="#f3ead2" opacity="0.56"/>
+  </g>
+</svg>

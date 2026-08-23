@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="abell61-planetary-title abell61-planetary-desc">
+  <title id="abell61-planetary-title">Abell 61 Planetary Nebula</title>
+  <desc id="abell61-planetary-desc">Original Project Polaris vector artwork informed by official NASA imagery: faint asymmetric planetary shell with broken ring structure.</desc>
+  <defs>
+    <radialGradient id="abell61-planetary-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="abell61-planetary-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="abell61-planetary-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#abell61-planetary-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="abell61-planetary-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#abell61-planetary-ambient-vignette-mask)">
+    <circle cx="238" cy="122" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="285" cy="193" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="332" cy="264" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="379" cy="71" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="62" cy="142" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="109" cy="213" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="156" cy="20" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="250" cy="162" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="297" cy="233" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="344" cy="40" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="27" cy="111" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="74" cy="182" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="121" cy="253" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="168" cy="60" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="262" cy="202" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="309" cy="273" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="356" cy="80" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="39" cy="151" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="86" cy="222" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="133" cy="29" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="274" cy="242" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="321" cy="49" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="368" cy="120" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="51" cy="191" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="98" cy="262" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="286" cy="18" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="333" cy="89" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="201" cy="149" r="59" fill="#2f8f8a" opacity=".18"/><circle cx="201" cy="149" r="49" fill="none" stroke="#d8caa7" stroke-width="5" opacity=".45"/><circle cx="201" cy="149" r="27" fill="#102a2c" opacity=".28"/><circle cx="204" cy="147" r="2" fill="#f3ead2" opacity="0.92"/><circle cx="225" cy="161" r="1.5" fill="#f3ead2" opacity="0.56"/>
+  </g>
+</svg>

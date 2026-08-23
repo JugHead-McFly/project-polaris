@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1023-lenticular-title ngc1023-lenticular-desc">
+  <title id="ngc1023-lenticular-title">NGC 1023 Lenticular Galaxy</title>
+  <desc id="ngc1023-lenticular-desc">Original Project Polaris vector artwork informed by official NASA imagery: bright lenticular galaxy with elongated lens and compact stellar core.</desc>
+  <defs>
+    <radialGradient id="ngc1023-lenticular-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1023-lenticular-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1023-lenticular-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1023-lenticular-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1023-lenticular-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1023-lenticular-ambient-vignette-mask)">
+    <circle cx="104" cy="112" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="198" cy="254" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="245" cy="61" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="292" cy="132" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="339" cy="203" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="22" cy="274" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="69" cy="81" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="116" cy="152" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="210" cy="30" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="304" cy="172" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="351" cy="243" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="34" cy="50" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="81" cy="121" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="128" cy="192" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="175" cy="263" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="316" cy="212" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="363" cy="19" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="46" cy="90" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="93" cy="161" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="140" cy="232" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="187" cy="39" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="281" cy="181" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="328" cy="252" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="375" cy="59" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="58" cy="130" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="105" cy="201" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="152" cy="272" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="202" cy="144" rx="131" ry="23" fill="#9ec9bf" opacity=".48" transform="rotate(-3.0 202 144)"/><ellipse cx="202" cy="144" rx="35" ry="18" fill="#d8caa7" opacity=".55"/><path d="M60 145 C140 133 262 135 344 145" stroke="#102a2c" stroke-width="5" opacity=".62" fill="none"/>
+  </g>
+</svg>

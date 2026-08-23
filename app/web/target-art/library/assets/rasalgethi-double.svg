@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="rasalgethi-double-title rasalgethi-double-desc">
+  <title id="rasalgethi-double-title">Rasalgethi Double Star</title>
+  <desc id="rasalgethi-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: orange-red giant primary with close pale companion in Hercules.</desc>
+  <defs>
+    <radialGradient id="rasalgethi-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="rasalgethi-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="rasalgethi-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#rasalgethi-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="rasalgethi-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#rasalgethi-double-ambient-vignette-mask)">
+    <circle cx="183" cy="191" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="230" cy="262" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="324" cy="140" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="371" cy="211" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="54" cy="18" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="101" cy="89" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="195" cy="231" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="242" cy="38" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="289" cy="109" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="336" cy="180" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="19" cy="251" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="66" cy="58" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="113" cy="129" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="207" cy="271" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="301" cy="149" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="348" cy="220" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="31" cy="27" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="78" cy="98" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="172" cy="240" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="219" cy="47" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="313" cy="189" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="360" cy="260" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="43" cy="67" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="90" cy="138" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="184" cy="280" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="231" cy="87" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="278" cy="158" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M169 151 L226 149" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="169" cy="151" r="10" fill="#d49a3a" opacity=".88"/><circle cx="226" cy="149" r="5.5" fill="#d8caa7" opacity=".9"/><circle cx="139" cy="118" r="1.2" fill="#f3ead2" opacity="0.44"/><circle cx="257" cy="184" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="205" cy="103" r="1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

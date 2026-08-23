@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc5907-splinter-title ngc5907-splinter-desc">
+  <title id="ngc5907-splinter-title">NGC 5907 Splinter Galaxy</title>
+  <desc id="ngc5907-splinter-desc">Original Project Polaris vector artwork informed by official NASA imagery: very thin edge-on spiral with small bulge and faint halo.</desc>
+  <defs>
+    <radialGradient id="ngc5907-splinter-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc5907-splinter-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc5907-splinter-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc5907-splinter-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc5907-splinter-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc5907-splinter-ambient-vignette-mask)">
+    <circle cx="65" cy="209" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="112" cy="280" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="253" cy="229" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="300" cy="36" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="347" cy="107" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="30" cy="178" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="77" cy="249" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="124" cy="56" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="265" cy="269" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="312" cy="76" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="359" cy="147" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="42" cy="218" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="89" cy="25" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="230" cy="238" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="277" cy="45" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="324" cy="116" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="371" cy="187" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="54" cy="258" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="101" cy="65" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="242" cy="278" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="289" cy="85" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="336" cy="156" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="19" cy="227" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="66" cy="34" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="113" cy="105" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="207" cy="149" rx="129" ry="24" fill="#9ec9bf" opacity=".48" transform="rotate(-4.7 207 149)"/><ellipse cx="207" cy="149" rx="45" ry="20" fill="#d8caa7" opacity=".55"/><path d="M65 150 C145 138 267 140 349 150" stroke="#102a2c" stroke-width="5" opacity=".62" fill="none"/>
+  </g>
+</svg>

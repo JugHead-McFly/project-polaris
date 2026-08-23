@@ -352,18 +352,14 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'setText("hosted-target-fit", "—")' in script
     assert "targetRigMatchLabel(target)" in script
     assert "targetIllustrationKind" in script
-    assert "isM31Target" in script
-    assert "TARGET_ILLUSTRATION_ASSETS" in script
     assert "mappedTargetIllustrationAsset" in script
-    assert "/operator-assets/target-art/m31-andromeda.svg?v=7f624d4c" in script
+    assert "SAFE_TARGET_ART_URL" in script
+    assert "/operator-assets/target-art/fallbacks" in script
+    assert "target?.artwork?.asset_url" in script
     assert "buildTargetIllustrationSvg" in script
     assert 'document.createElement("img")' in script
-    assert 'image.dataset.visualTreatment = "m31-library-v3"' in script
-    assert "M28 75C63 41 159 40 212 68" in script
-    assert "M35 56C75 86 160 92 205 61" in script
-    assert "M45 87C87 65 162 65 196 78" in script
-    assert "M37 92C54 40 91 31" not in script
-    assert "M34 104Q120 28 206 104" not in script
+    assert 'image.dataset.visualTreatment = target?.artwork?.match_kind || "category"' in script
+    assert "genericTargetIllustrationAsset" in script
     assert "parseCachedTargetIllustration" in script
     assert 'svg.querySelector("script, foreignObject, image, use, a, text, title, desc")' in script
     assert "artwork_svg" in script
@@ -388,20 +384,21 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "if (targetVisuals) targetVisuals.hidden = !target;" in script
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
     m31_asset = (
-        operator_api.WEB_DIRECTORY / "target-art" / "m31-andromeda.svg"
+        operator_api.WEB_DIRECTORY
+        / "target-art"
+        / "library"
+        / "assets"
+        / "m31-andromeda.svg"
     ).read_text()
-    assert 'data-visual-treatment="m31-library-v3"' in m31_asset
-    assert 'data-morphology="m31-andromeda-current"' in m31_asset
     assert '<rect width="400" height="300" fill="#102a2c"/>' not in m31_asset
-    assert 'id="m31-edge-fade"' in m31_asset
-    assert 'mask="url(#m31-vignette-mask)"' in m31_asset
+    assert 'id="m31-andromeda-ambient-edge-fade"' in m31_asset
+    assert 'mask="url(#m31-andromeda-ambient-vignette-mask)"' in m31_asset
     assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in m31_asset
     assert "M66.3 128.5 A137 98" not in m31_asset
     assert "M282.5 219.6 A128 91" not in m31_asset
     assert "M113.9 208 A119 84" not in m31_asset
-    assert "<title" not in m31_asset
-    assert "<desc" not in m31_asset
-    assert "NASA" not in m31_asset
+    assert "<title" in m31_asset
+    assert "<desc" in m31_asset
     assert "m31-andromeda.svg" in {asset.name for asset in operator_api.ASSET_FILES}
     assert ".hosted-footer-metadata" in css
     assert ".hosted-command-target-illustration img" in css
@@ -452,8 +449,8 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
 
     # Each command card owns exactly one mount; renderTargetIllustration is
-    # responsible for leaving a null mount empty or adding one cached inline
-    # SVG / mapped SVG image for a real target.
+    # responsible for leaving a null mount empty or adding one approved local
+    # SVG image for a real target.
     assert html.count('id="hosted-command-target-illustration"') == 1
     assert html.count('id="hosted-command-fallback-illustration"') == 1
     assert (
@@ -466,8 +463,8 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     ) in script
     assert "if (!target) {\n    container.replaceChildren();\n    container.hidden = true;" in script
     assert "cachedIllustration || buildTargetIllustrationSvg(target, compact)" in script
-    assert "const mappedAsset = mappedTargetIllustrationAsset(target);" in script
-    assert 'image.dataset.visualTreatment = "m31-library-v3"' in script
+    assert "const approvedAsset = mappedTargetIllustrationAsset(target);" in script
+    assert "target?.artwork?.match_kind" in script
     assert (
         ".hosted-command-fallback-card.has-target-illustration"
         " {\n  padding-right: 78px !important;"
@@ -527,16 +524,20 @@ def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
     for filename, mask_id in preview_assets.items():
         assert filename in bundled_asset_names
         asset_path = (
-            operator_api.WEB_DIRECTORY / "target-art" / "previews" / filename
+            operator_api.WEB_DIRECTORY
+            / "target-art"
+            / "library"
+            / "assets"
+            / filename
         )
         markup = asset_path.read_text()
-        assert 'data-visual-treatment="library-preview-v1"' in markup
         assert mask_id in markup
         assert '<rect width="400" height="300" fill="#102a2c"/>' not in markup
-        assert "<title" not in markup
-        assert "<desc" not in markup
-        assert "NASA" not in markup
-        response = client.get(f"/operator-assets/target-art/previews/{filename}")
+        assert "<title" in markup
+        assert "<desc" in markup
+        response = client.get(
+            f"/operator-assets/target-art/library/assets/{filename}"
+        )
         assert response.status_code == 200
         assert response.headers["content-type"].startswith("image/svg+xml")
 

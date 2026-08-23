@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="theta-aurigae-double-title theta-aurigae-double-desc">
+  <title id="theta-aurigae-double-title">Theta Aurigae Double Star</title>
+  <desc id="theta-aurigae-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: bright white primary with small close companion and Auriga field stars.</desc>
+  <defs>
+    <radialGradient id="theta-aurigae-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="theta-aurigae-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="theta-aurigae-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#theta-aurigae-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="theta-aurigae-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#theta-aurigae-double-ambient-vignette-mask)">
+    <circle cx="101" cy="241" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="148" cy="48" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="289" cy="261" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="336" cy="68" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="19" cy="139" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="66" cy="210" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="113" cy="281" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="301" cy="37" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="348" cy="108" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="31" cy="179" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="78" cy="250" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="125" cy="57" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="266" cy="270" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="313" cy="77" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="360" cy="148" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="43" cy="219" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="90" cy="26" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="137" cy="97" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="231" cy="239" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="278" cy="46" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="325" cy="117" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="372" cy="188" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="55" cy="259" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="102" cy="66" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="149" cy="137" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M169 150 L226 144" stroke="#9ec9bf" stroke-width="1.5" opacity=".23"/><circle cx="169" cy="150" r="9.4" fill="#f3ead2" opacity=".95"/><circle cx="226" cy="144" r="3.8" fill="#9ec9bf" opacity=".86"/><circle cx="137" cy="118" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="261" cy="181" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="205" cy="104" r="1" fill="#f3ead2" opacity="0.38"/><circle cx="232" cy="202" r="1" fill="#f3ead2" opacity="0.36"/>
+  </g>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="m87-elliptical-title m87-elliptical-desc">
+  <title id="m87-elliptical-title">M87</title>
+  <desc id="m87-elliptical-desc">Original Project Polaris vector artwork informed by official NASA imagery: large elliptical glow with compact nucleus and knotted one-sided jet.</desc>
+  <defs>
+    <radialGradient id="m87-elliptical-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="m87-elliptical-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="m87-elliptical-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#m87-elliptical-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="m87-elliptical-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#m87-elliptical-ambient-vignette-mask)">
+    <circle cx="321" cy="145" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="368" cy="216" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="51" cy="23" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="98" cy="94" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="145" cy="165" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="192" cy="236" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="239" cy="43" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="286" cy="114" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="333" cy="185" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="380" cy="256" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="63" cy="63" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="110" cy="134" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="157" cy="205" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="204" cy="276" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="298" cy="154" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="345" cy="225" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="28" cy="32" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="75" cy="103" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="122" cy="174" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="169" cy="245" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="216" cy="52" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="310" cy="194" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="357" cy="265" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="40" cy="72" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="87" cy="143" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="181" cy="21" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="322" cy="234" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="369" cy="41" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="52" cy="112" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="188" cy="151" rx="95" ry="62" fill="url(#m87-elliptical-glow)"/><ellipse cx="181" cy="148" rx="25" ry="18" fill="#f3ead2" opacity=".82"/><path d="M202 153 C226 160 247 170 274 188" stroke="#9ec9bf" stroke-width="5" opacity=".75" fill="none"/><circle cx="223" cy="160" r="3" fill="#f3ead2" opacity="0.85"/><circle cx="242" cy="171" r="4" fill="#f3ead2" opacity="0.7"/><circle cx="263" cy="184" r="3" fill="#f3ead2" opacity="0.62"/>
+  </g>
+</svg>

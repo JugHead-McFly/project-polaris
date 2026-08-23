@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sh2-240-spaghetti-wide-title sh2-240-spaghetti-wide-desc">
+  <title id="sh2-240-spaghetti-wide-title">Sh2-240 Spaghetti Wide</title>
+  <desc id="sh2-240-spaghetti-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide supernova-remnant filaments with tangled faint arcs.</desc>
+  <defs>
+    <radialGradient id="sh2-240-spaghetti-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sh2-240-spaghetti-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sh2-240-spaghetti-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sh2-240-spaghetti-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sh2-240-spaghetti-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sh2-240-spaghetti-wide-ambient-vignette-mask)">
+    <circle cx="370" cy="250" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="53" cy="57" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="100" cy="128" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="194" cy="270" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="288" cy="148" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="335" cy="219" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="18" cy="26" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="65" cy="97" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="112" cy="168" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="159" cy="239" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="206" cy="46" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="300" cy="188" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="347" cy="259" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="30" cy="66" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="77" cy="137" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="171" cy="279" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="218" cy="86" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="312" cy="228" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="359" cy="35" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="42" cy="106" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="89" cy="177" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="136" cy="248" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="183" cy="55" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="230" cy="126" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="324" cy="268" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="371" cy="75" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="54" cy="146" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="101" cy="217" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M145.2 190.8 A88 48 0 1 1 278.6 134.1" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.5"/><path d="M151.7 179.0 A73 38 0 1 1 257.2 126.6" fill="none" stroke="#d8caa7" stroke-width="3" stroke-linecap="round" opacity="0.42"/><path d="M106.2 179.9 A96 56 0 0 1 201.4 100.2" fill="none" stroke="#d49a3a" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  </g>
+</svg>

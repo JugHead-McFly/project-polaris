@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc4414-flocculent-title ngc4414-flocculent-desc">
+  <title id="ngc4414-flocculent-title">NGC 4414 Flocculent Galaxy</title>
+  <desc id="ngc4414-flocculent-desc">Original Project Polaris vector artwork informed by official NASA imagery: flocculent spiral with woolly arms and bright core.</desc>
+  <defs>
+    <radialGradient id="ngc4414-flocculent-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc4414-flocculent-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc4414-flocculent-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc4414-flocculent-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc4414-flocculent-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc4414-flocculent-ambient-vignette-mask)">
+    <circle cx="216" cy="120" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="310" cy="262" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="357" cy="69" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="40" cy="140" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="87" cy="211" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="134" cy="18" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="228" cy="160" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="322" cy="38" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="369" cy="109" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="52" cy="180" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="99" cy="251" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="146" cy="58" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="240" cy="200" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="287" cy="271" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="334" cy="78" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="381" cy="149" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="64" cy="220" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="111" cy="27" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="252" cy="240" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="299" cy="47" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="346" cy="118" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="29" cy="189" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="76" cy="260" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="123" cy="67" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="264" cy="280" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="311" cy="87" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="208" cy="146" r="17" fill="#f3ead2" opacity=".82"/><path d="M105.3 125.2 A109 62 0 0 1 314.8 133.7" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M298.8 162.0 A95 54 0 0 1 122.1 169.1" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M148.1 147.5 A60 37 0 0 1 238.7 114.2" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><circle cx="250" cy="119" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="170" cy="175" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="231" cy="188" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

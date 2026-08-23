@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Generic solar system object</title>
+  <desc id="desc">A stylized solar system object used only when no exact target artwork is available.</desc>
+  <defs><radialGradient id="body" cx="35%" cy="30%"><stop stop-color="#f3ead2"/><stop offset=".55" stop-color="#d49a3a"/><stop offset="1" stop-color="#1f5f60"/></radialGradient></defs>
+  <circle cx="200" cy="150" r="78" fill="url(#body)"/><ellipse cx="200" cy="150" rx="140" ry="34" fill="none" stroke="#9ec9bf" stroke-width="6" opacity=".55" transform="rotate(-12 200 150)"/>
+</svg>

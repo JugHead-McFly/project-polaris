@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="minkowski2-9-butterfly-title minkowski2-9-butterfly-desc">
+  <title id="minkowski2-9-butterfly-title">Minkowski 2-9 Butterfly</title>
+  <desc id="minkowski2-9-butterfly-desc">Original Project Polaris vector artwork informed by official NASA imagery: narrow bipolar planetary with opposing lobes and bright central waist.</desc>
+  <defs>
+    <radialGradient id="minkowski2-9-butterfly-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="minkowski2-9-butterfly-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="minkowski2-9-butterfly-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#minkowski2-9-butterfly-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="minkowski2-9-butterfly-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#minkowski2-9-butterfly-ambient-vignette-mask)">
+    <circle cx="306" cy="274" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="353" cy="81" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="36" cy="152" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="83" cy="223" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="130" cy="30" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="271" cy="243" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="318" cy="50" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="365" cy="121" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="48" cy="192" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="95" cy="263" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="142" cy="70" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="283" cy="19" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="330" cy="90" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="377" cy="161" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="60" cy="232" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="107" cy="39" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="154" cy="110" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="248" cy="252" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="295" cy="59" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="342" cy="130" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="25" cy="201" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="72" cy="272" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="119" cy="79" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="166" cy="150" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="260" cy="28" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="307" cy="99" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="354" cy="170" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="37" cy="241" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M166 121 C204 137 204 167 166 183 C138 162 138 140 166 121Z" fill="#2f8f8a" opacity=".5"/><path d="M250 121 C212 137 212 167 250 183 C278 162 278 140 250 121Z" fill="#9ec9bf" opacity=".45"/><circle cx="208" cy="152" r="2.2" fill="#f3ead2" opacity="0.95"/>
+  </g>
+</svg>

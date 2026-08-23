@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7822-question-mark-title ngc7822-question-mark-desc">
+  <title id="ngc7822-question-mark-title">NGC 7822 Question Mark Nebula</title>
+  <desc id="ngc7822-question-mark-desc">Original Project Polaris vector artwork informed by official NASA imagery: large emission complex with curved question-mark rim and embedded cluster.</desc>
+  <defs>
+    <radialGradient id="ngc7822-question-mark-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7822-question-mark-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7822-question-mark-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7822-question-mark-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7822-question-mark-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7822-question-mark-ambient-vignette-mask)">
+    <circle cx="21" cy="237" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="68" cy="44" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="115" cy="115" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="209" cy="257" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="256" cy="64" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="303" cy="135" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="350" cy="206" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="33" cy="277" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="80" cy="84" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="221" cy="33" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="315" cy="175" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="362" cy="246" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="45" cy="53" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="92" cy="124" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="186" cy="266" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="233" cy="73" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="280" cy="144" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="327" cy="215" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="374" cy="22" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="57" cy="93" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="104" cy="164" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="151" cy="235" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="198" cy="42" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="245" cy="113" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="292" cy="184" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="339" cy="255" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="22" cy="62" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="69" cy="133" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="116" cy="204" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M128 200 C138 121 214 86 283 123 C297 175 241 223 178 219 C157 216 140 209 128 200Z" fill="#2f8f8a" opacity=".3"/><path d="M160 186 C196 157 239 155 271 183" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="214" cy="137" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="241" cy="159" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="177" cy="178" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

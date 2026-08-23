@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="hickson-44-galaxy-group-title hickson-44-galaxy-group-desc">
+  <title id="hickson-44-galaxy-group-title">Hickson 44 Galaxy Group</title>
+  <desc id="hickson-44-galaxy-group-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact Leo galaxy group with mixed spiral and elliptical members arranged in a loose trapezoid.</desc>
+  <defs>
+    <radialGradient id="hickson-44-galaxy-group-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hickson-44-galaxy-group-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="hickson-44-galaxy-group-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#hickson-44-galaxy-group-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="hickson-44-galaxy-group-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#hickson-44-galaxy-group-ambient-vignette-mask)">
+    <circle cx="39" cy="63" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="86" cy="134" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="180" cy="276" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="227" cy="83" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="321" cy="225" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="368" cy="32" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="51" cy="103" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="98" cy="174" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="145" cy="245" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="192" cy="52" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="239" cy="123" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="286" cy="194" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="333" cy="265" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="380" cy="72" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="63" cy="143" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="110" cy="214" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="157" cy="21" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="251" cy="163" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="298" cy="234" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="345" cy="41" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="28" cy="112" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="75" cy="183" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="122" cy="254" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="169" cy="61" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="263" cy="203" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="310" cy="274" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="357" cy="81" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="40" cy="152" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="87" cy="223" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="134" cy="30" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="158" cy="128" rx="34" ry="17" fill="#9ec9bf" opacity=".48"/><ellipse cx="236" cy="126" rx="25" ry="18" fill="url(#hickson-44-galaxy-group-glow)" opacity=".72"/><ellipse cx="174" cy="191" rx="30" ry="14" fill="#d8caa7" opacity=".45"/><ellipse cx="256" cy="188" rx="20" ry="14" fill="#2f8f8a" opacity=".42"/><path d="M158 128 L236 126 L256 188 L174 191 Z" stroke="#9ec9bf" stroke-width="1.5" opacity=".18" fill="none"/>
+  </g>
+</svg>

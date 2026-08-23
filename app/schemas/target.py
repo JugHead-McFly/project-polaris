@@ -41,6 +41,14 @@ class TargetReferenceImage(BaseModel):
     cache_status: Optional[str] = None
 
 
+class TargetArtwork(BaseModel):
+    slug: Optional[str] = None
+    asset_url: str
+    category: str
+    match_kind: str
+    alt: str
+
+
 class RigTargetFitSummary(BaseModel):
     rig_key: str
     rig_label: str
@@ -73,6 +81,7 @@ class TargetSummary(BaseModel):
     object: str
     common_name: Optional[str] = None
     reference_image: Optional[TargetReferenceImage] = None
+    artwork: Optional[TargetArtwork] = None
     rig_fit: Optional[RigTargetFitSummary] = None
 
     capture_count: int

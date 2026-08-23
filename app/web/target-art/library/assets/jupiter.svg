@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="jupiter-title jupiter-desc">
+  <title id="jupiter-title">Jupiter</title>
+  <desc id="jupiter-desc">Original Project Polaris vector artwork informed by official NASA imagery: many alternating belts/zones, turbulent ovals, Great Red Spot analogue, and polar haze.</desc>
+  <defs>
+    <radialGradient id="jupiter-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="jupiter-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="jupiter-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#jupiter-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="jupiter-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#jupiter-ambient-vignette-mask)">
+    <circle cx="60" cy="256" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="107" cy="63" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="248" cy="276" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="295" cy="83" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="342" cy="154" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="25" cy="225" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="72" cy="32" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="119" cy="103" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="213" cy="245" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="260" cy="52" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="307" cy="123" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="354" cy="194" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="37" cy="265" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="84" cy="72" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="225" cy="21" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="272" cy="92" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="319" cy="163" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="366" cy="234" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="49" cy="41" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="96" cy="112" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="190" cy="254" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="237" cy="61" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="284" cy="132" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="331" cy="203" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="378" cy="274" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="61" cy="81" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="108" cy="152" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="74" ry="62" fill="#f3ead2"/><g clip-path="url(#jupiter-disk)"><path d="M132 108 C165 100 202 116 268 103" stroke="#d8caa7" stroke-width="5" opacity="0.8" fill="none"/><path d="M132 124 C165 116 202 132 268 119" stroke="#9ec9bf" stroke-width="7" opacity="0.72" fill="none"/><path d="M132 143 C165 135 202 151 268 138" stroke="#1f5f60" stroke-width="6" opacity="0.5" fill="none"/><path d="M132 158 C165 150 202 166 268 153" stroke="#d8caa7" stroke-width="5" opacity="0.85" fill="none"/><path d="M132 176 C165 168 202 184 268 171" stroke="#2f8f8a" stroke-width="7" opacity="0.62" fill="none"/><path d="M132 193 C165 185 202 201 268 188" stroke="#f3ead2" stroke-width="4" opacity="0.56" fill="none"/><ellipse cx="238" cy="166" rx="17" ry="10" fill="#d49a3a" opacity=".86"/><ellipse cx="238" cy="166" rx="9" ry="5" fill="#d8caa7" opacity=".34"/><circle cx="164" cy="136" r="5" fill="#f3ead2" opacity="0.45"/><circle cx="246" cy="133" r="4" fill="#f3ead2" opacity="0.5"/><circle cx="225" cy="181" r="5" fill="#f3ead2" opacity="0.45"/></g>
+  </g>
+</svg>

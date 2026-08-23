@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Generic star cluster</title>
+  <desc id="desc">A stylized star cluster used only when no exact target artwork is available.</desc>
+  <defs><radialGradient id="fade"><stop offset=".45" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient><mask id="mask"><rect width="400" height="300" fill="url(#fade)"/></mask></defs>
+  <g mask="url(#mask)" fill="#f3ead2">
+    <circle cx="200" cy="150" r="7"/><circle cx="165" cy="132" r="4"/><circle cx="232" cy="127" r="5"/><circle cx="225" cy="174" r="4"/><circle cx="171" cy="178" r="5"/>
+    <circle cx="136" cy="151" r="3"/><circle cx="259" cy="156" r="3"/><circle cx="200" cy="103" r="3"/><circle cx="195" cy="202" r="3"/>
+    <circle cx="105" cy="120" r="2" opacity=".6"/><circle cx="290" cy="112" r="2" opacity=".6"/><circle cx="283" cy="203" r="2" opacity=".6"/><circle cx="115" cy="211" r="2" opacity=".6"/>
+  </g>
+  <circle cx="200" cy="150" r="84" fill="none" stroke="#2f8f8a" stroke-width="2" opacity=".28"/>
+</svg>

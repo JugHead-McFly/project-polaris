@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="tarantula-nebula-30doradus-title tarantula-nebula-30doradus-desc">
+  <title id="tarantula-nebula-30doradus-title">30 Doradus Tarantula Nebula</title>
+  <desc id="tarantula-nebula-30doradus-desc">Original Project Polaris vector artwork informed by official NASA imagery: giant spider-like star-forming complex with a dense central cluster and radiating filament legs.</desc>
+  <defs>
+    <radialGradient id="tarantula-nebula-30doradus-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tarantula-nebula-30doradus-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="tarantula-nebula-30doradus-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#tarantula-nebula-30doradus-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="tarantula-nebula-30doradus-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#tarantula-nebula-30doradus-ambient-vignette-mask)">
+    <circle cx="100" cy="200" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="147" cy="271" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="288" cy="220" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="335" cy="27" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="18" cy="98" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="65" cy="169" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="112" cy="240" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="159" cy="47" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="300" cy="260" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="347" cy="67" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="30" cy="138" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="77" cy="209" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="124" cy="280" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="312" cy="36" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="359" cy="107" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="42" cy="178" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="89" cy="249" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="136" cy="56" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="277" cy="269" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="324" cy="76" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="371" cy="147" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="54" cy="218" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="101" cy="25" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="148" cy="96" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="202" cy="151" rx="44" ry="34" fill="#d8caa7" opacity=".35"/><path d="M202 151 C239.2 145.4 277.5 138.7 318.6 134.7" stroke="#9ec9bf" stroke-width="4" opacity=".48" fill="none"/><path d="M202 151 C236.2 163.2 271.3 178.0 309.2 186.7" stroke="#9ec9bf" stroke-width="3" opacity=".48" fill="none"/><path d="M202 151 C222.5 174.6 243.6 203.2 266.3 220.0" stroke="#9ec9bf" stroke-width="4" opacity=".48" fill="none"/><path d="M202 151 C199.0 178.9 195.9 212.8 192.6 232.7" stroke="#9ec9bf" stroke-width="3" opacity=".48" fill="none"/><path d="M202 151 C175.3 170.9 147.9 195.1 118.4 209.3" stroke="#9ec9bf" stroke-width="4" opacity=".48" fill="none"/><path d="M202 151 C164.2 153.6 125.3 156.7 83.5 158.5" stroke="#9ec9bf" stroke-width="3" opacity=".48" fill="none"/><path d="M202 151 C169.8 136.2 136.7 118.2 101.1 107.6" stroke="#9ec9bf" stroke-width="4" opacity=".48" fill="none"/><path d="M202 151 C188.5 124.8 174.7 93.0 159.8 74.3" stroke="#9ec9bf" stroke-width="3" opacity=".48" fill="none"/><path d="M202 151 C218.1 125.6 234.6 94.8 252.4 76.7" stroke="#9ec9bf" stroke-width="4" opacity=".48" fill="none"/><circle cx="202" cy="151" r="18" fill="#f3ead2" opacity=".58"/><circle cx="196" cy="149" r="2.5" fill="#d49a3a" opacity="0.9"/><circle cx="206" cy="153" r="2.4" fill="#d49a3a" opacity="0.86"/><circle cx="213" cy="143" r="1.9" fill="#d49a3a" opacity="0.74"/><circle cx="188" cy="160" r="1.8" fill="#d49a3a" opacity="0.7"/>
+  </g>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ghost-of-jupiter-c59-title ghost-of-jupiter-c59-desc">
+  <title id="ghost-of-jupiter-c59-title">C59 Ghost of Jupiter</title>
+  <desc id="ghost-of-jupiter-c59-desc">Original Project Polaris vector artwork informed by official NASA imagery: soft blue-green oval planetary shell with nested inner rim and central white dwarf.</desc>
+  <defs>
+    <radialGradient id="ghost-of-jupiter-c59-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ghost-of-jupiter-c59-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ghost-of-jupiter-c59-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ghost-of-jupiter-c59-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ghost-of-jupiter-c59-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ghost-of-jupiter-c59-ambient-vignette-mask)">
+    <circle cx="170" cy="118" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="264" cy="260" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="311" cy="67" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="358" cy="138" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="41" cy="209" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="88" cy="280" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="182" cy="158" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="276" cy="36" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="323" cy="107" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="370" cy="178" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="53" cy="249" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="100" cy="56" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="194" cy="198" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="241" cy="269" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="288" cy="76" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="335" cy="147" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="18" cy="218" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="65" cy="25" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="112" cy="96" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="206" cy="238" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="253" cy="45" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="300" cy="116" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="347" cy="187" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="30" cy="258" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="77" cy="65" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="218" cy="278" r="0.55" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="64" ry="54" fill="#2f8f8a" opacity=".5"/><ellipse cx="200" cy="150" rx="40" ry="34" fill="#d8caa7" opacity=".38"/><ellipse cx="200" cy="150" rx="24" ry="20" fill="#102a2c" opacity=".35"/><circle cx="200" cy="150" r="2" fill="#f3ead2"/><path d="M132.2 129.2 A72 62 0 0 1 266.3 125.9" fill="none" stroke="#9ec9bf" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  </g>
+</svg>

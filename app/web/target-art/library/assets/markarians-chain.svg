@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="markarians-chain-title markarians-chain-desc">
+  <title id="markarians-chain-title">Markarian's Chain</title>
+  <desc id="markarians-chain-desc">Original Project Polaris vector artwork informed by official NASA imagery: curving Virgo cluster chain of ellipticals and lenticular galaxies.</desc>
+  <defs>
+    <radialGradient id="markarians-chain-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="markarians-chain-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="markarians-chain-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#markarians-chain-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="markarians-chain-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#markarians-chain-ambient-vignette-mask)">
+    <circle cx="344" cy="220" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="27" cy="27" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="74" cy="98" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="121" cy="169" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="168" cy="240" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="215" cy="47" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="309" cy="189" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="356" cy="260" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="39" cy="67" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="86" cy="138" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="180" cy="280" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="321" cy="229" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="368" cy="36" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="51" cy="107" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="98" cy="178" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="145" cy="249" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="192" cy="56" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="286" cy="198" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="333" cy="269" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="380" cy="76" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="63" cy="147" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="110" cy="218" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="157" cy="25" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="204" cy="96" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="298" cy="238" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="345" cy="45" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="28" cy="116" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="75" cy="187" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="126" cy="190" rx="18" ry="12" fill="url(#markarians-chain-glow)" opacity=".8"/><ellipse cx="158" cy="169" rx="15" ry="12" fill="url(#markarians-chain-glow)" opacity=".8"/><ellipse cx="191" cy="148" rx="18" ry="13" fill="url(#markarians-chain-glow)" opacity=".8"/><ellipse cx="226" cy="132" rx="16" ry="12" fill="url(#markarians-chain-glow)" opacity=".8"/><ellipse cx="260" cy="116" rx="20" ry="14" fill="url(#markarians-chain-glow)" opacity=".8"/><ellipse cx="291" cy="101" rx="13" ry="10" fill="url(#markarians-chain-glow)" opacity=".8"/><path d="M111 203 C158 164 226 129 304 92" stroke="#9ec9bf" stroke-width="2" opacity=".28" fill="none"/>
+  </g>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7741-barred-spiral-title ngc7741-barred-spiral-desc">
+  <title id="ngc7741-barred-spiral-title">NGC 7741 Barred Spiral</title>
+  <desc id="ngc7741-barred-spiral-desc">Original Project Polaris vector artwork informed by official NASA imagery: barred spiral with rectangular bar and knotty open arms.</desc>
+  <defs>
+    <radialGradient id="ngc7741-barred-spiral-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7741-barred-spiral-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7741-barred-spiral-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7741-barred-spiral-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7741-barred-spiral-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7741-barred-spiral-ambient-vignette-mask)">
+    <circle cx="308" cy="40" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="355" cy="111" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="38" cy="182" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="85" cy="253" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="132" cy="60" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="273" cy="273" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="320" cy="80" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="367" cy="151" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="50" cy="222" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="97" cy="29" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="144" cy="100" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="238" cy="242" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="285" cy="49" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="332" cy="120" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="379" cy="191" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="62" cy="262" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="109" cy="69" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="156" cy="140" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="250" cy="18" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="297" cy="89" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="344" cy="160" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="27" cy="231" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="74" cy="38" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="121" cy="109" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="168" cy="180" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="215" cy="251" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="262" cy="58" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="309" cy="129" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="356" cy="200" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="39" cy="271" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="204" cy="150" r="15" fill="#f3ead2" opacity=".82"/><path d="M146 154 L262 146" stroke="#d8caa7" stroke-width="8" opacity=".62" stroke-linecap="round"/><ellipse cx="204" cy="150" rx="73" ry="37" fill="none" stroke="#d49a3a" stroke-width="3" opacity=".28"/><path d="M108.8 129.2 A101 62 0 0 1 303.0 137.7" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M298.6 167.1 A99 58 0 0 1 114.5 174.8" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M140.1 151.5 A64 37 0 0 1 236.8 118.2" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><circle cx="246" cy="123" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="166" cy="179" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="227" cy="192" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

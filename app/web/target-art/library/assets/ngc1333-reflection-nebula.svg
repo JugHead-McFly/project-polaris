@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1333-reflection-nebula-title ngc1333-reflection-nebula-desc">
+  <title id="ngc1333-reflection-nebula-title">NGC 1333 Reflection Nebula</title>
+  <desc id="ngc1333-reflection-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: blue reflection nebula with dark dust lanes and clustered young stars.</desc>
+  <defs>
+    <radialGradient id="ngc1333-reflection-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1333-reflection-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1333-reflection-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1333-reflection-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1333-reflection-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1333-reflection-nebula-ambient-vignette-mask)">
+    <circle cx="375" cy="119" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="58" cy="190" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="105" cy="261" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="152" cy="68" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="199" cy="139" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="293" cy="281" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="340" cy="88" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="23" cy="159" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="70" cy="230" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="117" cy="37" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="211" cy="179" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="258" cy="250" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="305" cy="57" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="352" cy="128" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="35" cy="199" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="82" cy="270" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="223" cy="219" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="270" cy="26" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="317" cy="97" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="364" cy="168" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="47" cy="239" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="94" cy="46" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="235" cy="259" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="282" cy="66" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="329" cy="137" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="376" cy="208" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="59" cy="279" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="106" cy="86" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M173 208 C185 152 219 98 252 126 C227 150 216 188 173 208Z" fill="#9ec9bf" opacity=".32"/><path d="M163 216 C189 171 209 135 247 106" stroke="#102a2c" stroke-width="9" opacity=".52" fill="none"/><circle cx="229" cy="122" r="3" fill="#f3ead2" opacity="0.86"/>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="simeis147-spaghetti-nebula-title simeis147-spaghetti-nebula-desc">
+  <title id="simeis147-spaghetti-nebula-title">Simeis 147 Spaghetti Nebula</title>
+  <desc id="simeis147-spaghetti-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: large supernova remnant with thin tangled filament arcs.</desc>
+  <defs>
+    <radialGradient id="simeis147-spaghetti-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="simeis147-spaghetti-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="simeis147-spaghetti-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#simeis147-spaghetti-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="simeis147-spaghetti-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#simeis147-spaghetti-nebula-ambient-vignette-mask)">
+    <circle cx="262" cy="154" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="309" cy="225" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="356" cy="32" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="39" cy="103" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="86" cy="174" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="133" cy="245" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="180" cy="52" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="274" cy="194" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="321" cy="265" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="368" cy="72" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="51" cy="143" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="98" cy="214" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="145" cy="21" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="286" cy="234" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="333" cy="41" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="380" cy="112" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="63" cy="183" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="110" cy="254" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="157" cy="61" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="298" cy="274" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="345" cy="81" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="28" cy="152" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="75" cy="223" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="122" cy="30" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="263" cy="243" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="310" cy="50" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="357" cy="121" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M153.2 193.8 A88 48 0 1 1 286.6 137.1" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.5"/><path d="M159.7 182.0 A73 38 0 1 1 265.2 129.6" fill="none" stroke="#d8caa7" stroke-width="3" stroke-linecap="round" opacity="0.42"/><path d="M114.2 182.9 A96 56 0 0 1 209.4 103.2" fill="none" stroke="#d49a3a" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  </g>
+</svg>

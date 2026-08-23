@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sculptor-galaxy-c65-title sculptor-galaxy-c65-desc">
+  <title id="sculptor-galaxy-c65-title">C65 Sculptor Galaxy</title>
+  <desc id="sculptor-galaxy-c65-desc">Original Project Polaris vector artwork informed by official NASA imagery: elongated starburst disk with mottled dust filaments and off-axis bright regions.</desc>
+  <defs>
+    <radialGradient id="sculptor-galaxy-c65-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sculptor-galaxy-c65-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sculptor-galaxy-c65-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sculptor-galaxy-c65-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sculptor-galaxy-c65-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sculptor-galaxy-c65-ambient-vignette-mask)">
+    <circle cx="115" cy="187" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="162" cy="258" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="209" cy="65" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="303" cy="207" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="350" cy="278" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="33" cy="85" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="80" cy="156" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="127" cy="227" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="174" cy="34" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="315" cy="247" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="362" cy="54" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="45" cy="125" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="92" cy="196" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="139" cy="267" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="280" cy="216" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="327" cy="23" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="374" cy="94" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="57" cy="165" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="104" cy="236" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="151" cy="43" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="292" cy="256" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="339" cy="63" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="22" cy="134" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="69" cy="205" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="116" cy="276" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="163" cy="83" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="116" ry="34" fill="url(#sculptor-galaxy-c65-glow)" transform="rotate(-10 200 150)"/><ellipse cx="190" cy="151" rx="31" ry="14" fill="#f3ead2" opacity=".82" transform="rotate(-10 190 151)"/><path d="M91 166 C143 130 232 125 306 139 M104 181 C166 150 234 150 294 166" stroke="#9ec9bf" stroke-width="4" opacity=".48" fill="none"/><path d="M124 155 C173 145 219 151 271 147" stroke="#102a2c" stroke-width="4" opacity=".42" fill="none"/><circle cx="224" cy="138" r="3" fill="#d49a3a" opacity="0.7"/><circle cx="250" cy="151" r="2" fill="#d49a3a" opacity="0.65"/><circle cx="165" cy="161" r="2" fill="#d49a3a" opacity="0.65"/>
+  </g>
+</svg>

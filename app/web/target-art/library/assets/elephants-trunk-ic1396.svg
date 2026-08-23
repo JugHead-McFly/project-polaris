@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="elephants-trunk-ic1396-title elephants-trunk-ic1396-desc">
+  <title id="elephants-trunk-ic1396-title">IC 1396 Elephant's Trunk</title>
+  <desc id="elephants-trunk-ic1396-desc">Original Project Polaris vector artwork informed by official NASA imagery: elongated dark globule projecting into a glowing emission field.</desc>
+  <defs>
+    <radialGradient id="elephants-trunk-ic1396-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="elephants-trunk-ic1396-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="elephants-trunk-ic1396-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#elephants-trunk-ic1396-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="elephants-trunk-ic1396-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#elephants-trunk-ic1396-ambient-vignette-mask)">
+    <circle cx="212" cy="92" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="306" cy="234" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="353" cy="41" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="36" cy="112" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="83" cy="183" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="130" cy="254" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="177" cy="61" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="224" cy="132" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="318" cy="274" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="365" cy="81" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="48" cy="152" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="95" cy="223" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="142" cy="30" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="236" cy="172" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="283" cy="243" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="330" cy="50" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="377" cy="121" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="60" cy="192" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="107" cy="263" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="248" cy="212" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="295" cy="19" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="342" cy="90" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="25" cy="161" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="72" cy="232" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="119" cy="39" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="260" cy="252" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="307" cy="59" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M181 209 C188 174 188 135 171 104 C199 100 226 115 232 143 C238 172 218 189 202 211Z" fill="#102a2c" opacity=".7"/><path d="M132 193 C144 130 202 94 268 121 C287 158 260 205 205 218 C177 223 150 214 132 193Z" fill="#2f8f8a" opacity=".25"/><path d="M190 116 C211 127 219 147 211 169" stroke="#d8caa7" stroke-width="3" opacity=".5" fill="none"/>
+  </g>
+</svg>

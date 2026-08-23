@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="fetus-nebula-ngc7008-title fetus-nebula-ngc7008-desc">
+  <title id="fetus-nebula-ngc7008-title">NGC 7008 Fetus Nebula</title>
+  <desc id="fetus-nebula-ngc7008-desc">Original Project Polaris vector artwork informed by official NASA imagery: irregular bean-shaped planetary nebula with bright knots, folded rim, and asymmetric inner cavity.</desc>
+  <defs>
+    <radialGradient id="fetus-nebula-ngc7008-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fetus-nebula-ngc7008-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="fetus-nebula-ngc7008-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#fetus-nebula-ngc7008-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="fetus-nebula-ngc7008-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#fetus-nebula-ngc7008-ambient-vignette-mask)">
+    <circle cx="84" cy="140" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="178" cy="18" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="272" cy="160" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="319" cy="231" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="366" cy="38" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="49" cy="109" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="96" cy="180" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="143" cy="251" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="190" cy="58" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="284" cy="200" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="331" cy="271" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="378" cy="78" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="61" cy="149" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="108" cy="220" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="155" cy="27" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="296" cy="240" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="343" cy="47" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="26" cy="118" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="73" cy="189" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="120" cy="260" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="167" cy="67" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="308" cy="280" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="355" cy="87" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="38" cy="158" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="85" cy="229" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="132" cy="36" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M149 126 C174 92 235 98 256 136 C283 182 236 217 189 201 C151 195 127 158 149 126Z" fill="#2f8f8a" opacity=".44"/><path d="M180 126 C205 115 232 127 240 153 C224 169 195 168 178 151 C171 141 172 133 180 126Z" fill="#102a2c" opacity=".42"/><path d="M142 166 C178 141 222 141 264 165 M158 196 C188 174 224 175 251 194" stroke="#d8caa7" stroke-width="3" opacity=".45" fill="none"/><circle cx="165" cy="135" r="3" fill="#d49a3a" opacity="0.78"/><circle cx="238" cy="164" r="2.8" fill="#d49a3a" opacity="0.7"/><circle cx="202" cy="196" r="2.2" fill="#d49a3a" opacity="0.62"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc6790-planetary-title ngc6790-planetary-desc">
+  <title id="ngc6790-planetary-title">NGC 6790 Planetary Nebula</title>
+  <desc id="ngc6790-planetary-desc">Original Project Polaris vector artwork informed by official NASA imagery: tiny high-surface-brightness planetary with compact teal disk.</desc>
+  <defs>
+    <radialGradient id="ngc6790-planetary-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc6790-planetary-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc6790-planetary-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc6790-planetary-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc6790-planetary-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc6790-planetary-ambient-vignette-mask)">
+    <circle cx="379" cy="147" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="62" cy="218" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="109" cy="25" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="203" cy="167" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="250" cy="238" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="297" cy="45" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="344" cy="116" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="27" cy="187" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="74" cy="258" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="121" cy="65" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="215" cy="207" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="262" cy="278" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="309" cy="85" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="356" cy="156" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="39" cy="227" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="86" cy="34" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="227" cy="247" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="274" cy="54" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="321" cy="125" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="368" cy="196" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="51" cy="267" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="98" cy="74" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="239" cy="23" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="286" cy="94" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="333" cy="165" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="380" cy="236" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="63" cy="43" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="110" cy="114" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="207" cy="148" rx="28" ry="22" fill="#9ec9bf" opacity=".48"/><ellipse cx="207" cy="148" rx="17" ry="13" fill="#d8caa7" opacity=".36"/><circle cx="207" cy="148" r="3" fill="#f3ead2" opacity=".95"/><ellipse cx="207" cy="148" rx="52" ry="39" fill="none" stroke="#2f8f8a" stroke-width="2" opacity=".14"/><circle cx="241" cy="166" r="1.2" fill="#f3ead2" opacity="0.42"/><circle cx="176" cy="132" r="1.1" fill="#f3ead2" opacity="0.4"/>
+  </g>
+</svg>

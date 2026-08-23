@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="summer-triangle-field-title summer-triangle-field-desc">
+  <title id="summer-triangle-field-title">Summer Triangle Field</title>
+  <desc id="summer-triangle-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: three bright seasonal anchor stars with Northern Cross/Cygnus hint through the center.</desc>
+  <defs>
+    <radialGradient id="summer-triangle-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="summer-triangle-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="summer-triangle-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#summer-triangle-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="summer-triangle-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#summer-triangle-field-ambient-vignette-mask)">
+    <circle cx="347" cy="59" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="30" cy="130" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="77" cy="201" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="124" cy="272" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="171" cy="79" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="312" cy="28" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="359" cy="99" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="42" cy="170" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="89" cy="241" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="136" cy="48" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="183" cy="119" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="277" cy="261" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="324" cy="68" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="371" cy="139" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="54" cy="210" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="101" cy="281" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="195" cy="159" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="289" cy="37" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="336" cy="108" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="19" cy="179" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="66" cy="250" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="113" cy="57" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="207" cy="199" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="254" cy="270" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="301" cy="77" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="348" cy="148" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="31" cy="219" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="78" cy="26" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M128 199 L203 90 L282 191 Z M203 90 L204 178 M170 143 L238 143" stroke="#9ec9bf" stroke-width="2" opacity=".28" fill="none"/><circle cx="128" cy="199" r="4" fill="#f3ead2" opacity="0.95"/><circle cx="203" cy="90" r="4.4" fill="#f3ead2" opacity="0.95"/><circle cx="282" cy="191" r="4" fill="#f3ead2" opacity="0.95"/><circle cx="204" cy="178" r="3" fill="#f3ead2" opacity="0.78"/><circle cx="170" cy="143" r="2.2" fill="#f3ead2" opacity="0.68"/><circle cx="238" cy="143" r="2.2" fill="#f3ead2" opacity="0.68"/><circle cx="204" cy="178" r="2" fill="#d49a3a" opacity="0.75"/>
+  </g>
+</svg>

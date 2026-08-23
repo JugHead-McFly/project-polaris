@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ic410-tadpoles-nebula-title ic410-tadpoles-nebula-desc">
+  <title id="ic410-tadpoles-nebula-title">IC 410 Tadpoles Nebula</title>
+  <desc id="ic410-tadpoles-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: emission nebula with two dark tadpole-shaped globules and embedded cluster.</desc>
+  <defs>
+    <radialGradient id="ic410-tadpoles-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ic410-tadpoles-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ic410-tadpoles-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ic410-tadpoles-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ic410-tadpoles-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ic410-tadpoles-nebula-ambient-vignette-mask)">
+    <circle cx="146" cy="86" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="287" cy="35" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="334" cy="106" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="381" cy="177" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="64" cy="248" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="111" cy="55" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="158" cy="126" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="252" cy="268" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="299" cy="75" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="346" cy="146" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="29" cy="217" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="76" cy="24" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="170" cy="166" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="217" cy="237" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="264" cy="44" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="311" cy="115" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="358" cy="186" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="41" cy="257" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="88" cy="64" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="182" cy="206" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="229" cy="277" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="323" cy="155" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="370" cy="226" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="53" cy="33" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="100" cy="104" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="194" cy="246" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="241" cy="53" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M121 189 C131 110 207 75 276 112 C290 164 234 212 171 208 C150 205 133 198 121 189Z" fill="#2f8f8a" opacity=".3"/><path d="M153 175 C189 146 232 144 264 172" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="207" cy="126" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="234" cy="148" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="170" cy="167" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

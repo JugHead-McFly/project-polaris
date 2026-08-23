@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc2261-hubbles-variable-title ngc2261-hubbles-variable-desc">
+  <title id="ngc2261-hubbles-variable-title">NGC 2261 Hubble's Variable Nebula</title>
+  <desc id="ngc2261-hubbles-variable-desc">Original Project Polaris vector artwork informed by official NASA imagery: fan-shaped reflection nebula with bright stellar point at its apex.</desc>
+  <defs>
+    <radialGradient id="ngc2261-hubbles-variable-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc2261-hubbles-variable-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc2261-hubbles-variable-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc2261-hubbles-variable-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc2261-hubbles-variable-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc2261-hubbles-variable-ambient-vignette-mask)">
+    <circle cx="204" cy="120" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="298" cy="262" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="345" cy="69" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="28" cy="140" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="75" cy="211" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="122" cy="18" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="216" cy="160" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="310" cy="38" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="357" cy="109" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="40" cy="180" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="87" cy="251" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="134" cy="58" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="228" cy="200" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="275" cy="271" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="322" cy="78" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="369" cy="149" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="52" cy="220" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="99" cy="27" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="240" cy="240" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="287" cy="47" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="334" cy="118" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="381" cy="189" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="64" cy="260" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="111" cy="67" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="252" cy="280" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="299" cy="87" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M158 204 C170 148 204 94 237 122 C212 146 201 184 158 204Z" fill="#9ec9bf" opacity=".32"/><path d="M148 212 C174 167 194 131 232 102" stroke="#102a2c" stroke-width="9" opacity=".52" fill="none"/><circle cx="214" cy="118" r="3" fill="#f3ead2" opacity="0.86"/>
+  </g>
+</svg>

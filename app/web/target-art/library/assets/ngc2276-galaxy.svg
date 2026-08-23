@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc2276-galaxy-title ngc2276-galaxy-desc">
+  <title id="ngc2276-galaxy-title">NGC 2276 Galaxy</title>
+  <desc id="ngc2276-galaxy-desc">Original Project Polaris vector artwork informed by official NASA imagery: disturbed spiral with one compressed side and extended patchy arms.</desc>
+  <defs>
+    <radialGradient id="ngc2276-galaxy-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc2276-galaxy-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc2276-galaxy-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc2276-galaxy-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc2276-galaxy-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc2276-galaxy-ambient-vignette-mask)">
+    <circle cx="241" cy="77" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="288" cy="148" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="335" cy="219" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="18" cy="26" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="65" cy="97" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="112" cy="168" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="159" cy="239" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="206" cy="46" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="253" cy="117" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="300" cy="188" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="347" cy="259" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="30" cy="66" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="77" cy="137" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="171" cy="279" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="265" cy="157" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="312" cy="228" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="359" cy="35" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="42" cy="106" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="89" cy="177" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="136" cy="248" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="183" cy="55" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="277" cy="197" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="324" cy="268" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="371" cy="75" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="54" cy="146" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="101" cy="217" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="148" cy="24" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="289" cy="237" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="336" cy="44" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="204" cy="151" r="16" fill="#f3ead2" opacity=".82"/><path d="M107.9 128.6 A102 67 0 0 1 304.0 137.7" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M288.1 167.5 A88 56 0 0 1 124.4 174.9" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M139.1 152.6 A65 38 0 0 1 237.3 118.4" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><circle cx="246" cy="124" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="166" cy="180" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="227" cy="193" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Generic planetary nebula</title>
+  <desc id="desc">A stylized planetary nebula used only when no exact target artwork is available.</desc>
+  <defs><radialGradient id="ring"><stop offset=".42" stop-color="#06141e"/><stop offset=".58" stop-color="#9ec9bf" stop-opacity=".85"/><stop offset=".76" stop-color="#2f8f8a" stop-opacity=".45"/><stop offset="1" stop-color="#1f5f60" stop-opacity="0"/></radialGradient></defs>
+  <ellipse cx="200" cy="150" rx="94" ry="72" fill="url(#ring)"/>
+  <circle cx="200" cy="150" r="5" fill="#f3ead2"/><path d="M150 91C198 58 258 91 276 135" fill="none" stroke="#d49a3a" stroke-width="3" opacity=".45"/>
+</svg>

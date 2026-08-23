@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="fornax-cluster-field-title fornax-cluster-field-desc">
+  <title id="fornax-cluster-field-title">Fornax Cluster Field</title>
+  <desc id="fornax-cluster-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: southern compact galaxy-cluster field with mixed small elliptical and spiral members.</desc>
+  <defs>
+    <radialGradient id="fornax-cluster-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fornax-cluster-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="fornax-cluster-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#fornax-cluster-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="fornax-cluster-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#fornax-cluster-field-ambient-vignette-mask)">
+    <circle cx="36" cy="224" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="83" cy="31" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="224" cy="244" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="271" cy="51" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="318" cy="122" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="365" cy="193" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="48" cy="264" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="95" cy="71" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="236" cy="20" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="283" cy="91" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="330" cy="162" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="377" cy="233" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="60" cy="40" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="107" cy="111" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="201" cy="253" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="248" cy="60" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="295" cy="131" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="342" cy="202" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="25" cy="273" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="72" cy="80" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="119" cy="151" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="213" cy="29" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="260" cy="100" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="307" cy="171" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="354" cy="242" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="37" cy="49" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="84" cy="120" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="145" cy="127" rx="26" ry="16" fill="#d8caa7" opacity="0.5"/><ellipse cx="206" cy="131" rx="20" ry="15" fill="#9ec9bf" opacity="0.45"/><ellipse cx="248" cy="169" rx="28" ry="13" fill="#d8caa7" opacity="0.42"/><ellipse cx="172" cy="184" rx="18" ry="13" fill="#2f8f8a" opacity="0.4"/><ellipse cx="272" cy="115" rx="14" ry="10" fill="#d49a3a" opacity="0.35"/><path d="M128 196 C176 153 238 141 289 110" stroke="#9ec9bf" stroke-width="2" opacity=".18" fill="none"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7331-deer-lick-galaxy-title ngc7331-deer-lick-galaxy-desc">
+  <title id="ngc7331-deer-lick-galaxy-title">NGC 7331 Deer Lick Galaxy</title>
+  <desc id="ngc7331-deer-lick-galaxy-desc">Original Project Polaris vector artwork informed by official NASA imagery: inclined spiral with bright elongated bulge, dust-lane side, and small background companion flecks.</desc>
+  <defs>
+    <radialGradient id="ngc7331-deer-lick-galaxy-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7331-deer-lick-galaxy-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7331-deer-lick-galaxy-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7331-deer-lick-galaxy-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7331-deer-lick-galaxy-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7331-deer-lick-galaxy-ambient-vignette-mask)">
+    <circle cx="345" cy="29" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="28" cy="100" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="75" cy="171" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="122" cy="242" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="169" cy="49" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="310" cy="262" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="357" cy="69" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="40" cy="140" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="87" cy="211" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="134" cy="18" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="181" cy="89" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="322" cy="38" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="369" cy="109" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="52" cy="180" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="99" cy="251" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="146" cy="58" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="193" cy="129" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="287" cy="271" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="334" cy="78" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="381" cy="149" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="64" cy="220" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="111" cy="27" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="205" cy="169" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="252" cy="240" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="299" cy="47" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="346" cy="118" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="29" cy="189" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="76" cy="260" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="104" ry="40" fill="url(#ngc7331-deer-lick-galaxy-glow)" transform="rotate(-12 200 150)"/><ellipse cx="194" cy="150" rx="35" ry="18" fill="#d8caa7" opacity=".58"/><path d="M111 156 C160 139 245 143 292 163" stroke="#102a2c" stroke-width="4" opacity=".42" fill="none"/><circle cx="292" cy="112" r="2" fill="#f3ead2" opacity="0.45"/><circle cx="313" cy="130" r="1.8" fill="#f3ead2" opacity="0.4"/><circle cx="284" cy="179" r="1.6" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

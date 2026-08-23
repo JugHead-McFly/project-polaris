@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="porrima-double-title porrima-double-desc">
+  <title id="porrima-double-title">Porrima Double Star</title>
+  <desc id="porrima-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: close nearly equal pale double in Virgo with sparse field context.</desc>
+  <defs>
+    <radialGradient id="porrima-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="porrima-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="porrima-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#porrima-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="porrima-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#porrima-double-ambient-vignette-mask)">
+    <circle cx="280" cy="96" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="327" cy="167" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="374" cy="238" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="57" cy="45" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="104" cy="116" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="198" cy="258" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="245" cy="65" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="292" cy="136" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="339" cy="207" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="22" cy="278" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="69" cy="85" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="116" cy="156" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="210" cy="34" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="304" cy="176" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="351" cy="247" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="34" cy="54" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="81" cy="125" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="128" cy="196" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="175" cy="267" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="316" cy="216" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="363" cy="23" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="46" cy="94" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="93" cy="165" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="140" cy="236" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="187" cy="43" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="281" cy="185" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="328" cy="256" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="375" cy="63" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M178 150 L223 150" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="178" cy="150" r="6.5" fill="#f3ead2" opacity=".94"/><circle cx="223" cy="150" r="6.2" fill="#d8caa7" opacity=".9"/><circle cx="146" cy="122" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="257" cy="179" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="202" cy="108" r="1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

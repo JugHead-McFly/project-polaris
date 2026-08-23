@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="delta-bootis-double-title delta-bootis-double-desc">
+  <title id="delta-bootis-double-title">Delta Bootis Double Star</title>
+  <desc id="delta-bootis-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide yellow-white double with sparse Bootes field stars.</desc>
+  <defs>
+    <radialGradient id="delta-bootis-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="delta-bootis-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="delta-bootis-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#delta-bootis-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="delta-bootis-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#delta-bootis-double-ambient-vignette-mask)">
+    <circle cx="135" cy="127" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="229" cy="269" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="323" cy="147" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="370" cy="218" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="53" cy="25" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="100" cy="96" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="147" cy="167" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="194" cy="238" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="241" cy="45" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="288" cy="116" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="335" cy="187" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="18" cy="258" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="65" cy="65" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="112" cy="136" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="159" cy="207" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="206" cy="278" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="300" cy="156" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="347" cy="227" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="30" cy="34" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="77" cy="105" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="171" cy="247" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="218" cy="54" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="312" cy="196" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="359" cy="267" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="42" cy="74" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="89" cy="145" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="183" cy="23" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M158 152 L244 147" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="158" cy="152" r="7.4" fill="#f3ead2" opacity=".94"/><circle cx="244" cy="147" r="5.6" fill="#d8caa7" opacity=".88"/><circle cx="126" cy="120" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="199" cy="105" r="1" fill="#f3ead2" opacity="0.38"/><circle cx="280" cy="183" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="222" cy="204" r="1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

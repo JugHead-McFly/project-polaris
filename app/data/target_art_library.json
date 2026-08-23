@@ -1,0 +1,6007 @@
+{
+  "library": "Project Polaris Astronomy Vector Art Library",
+  "version": "1.0.0-initial-1000-target-library",
+  "target_count": 1000,
+  "targets": [
+    {
+      "slug": "mercury",
+      "display_name": "Mercury",
+      "category": "planet",
+      "asset": "assets/mercury.svg"
+    },
+    {
+      "slug": "venus",
+      "display_name": "Venus",
+      "category": "planet",
+      "asset": "assets/venus.svg"
+    },
+    {
+      "slug": "mars",
+      "display_name": "Mars",
+      "category": "planet",
+      "asset": "assets/mars.svg"
+    },
+    {
+      "slug": "jupiter",
+      "display_name": "Jupiter",
+      "category": "planet",
+      "asset": "assets/jupiter.svg"
+    },
+    {
+      "slug": "saturn",
+      "display_name": "Saturn",
+      "category": "planet",
+      "asset": "assets/saturn.svg"
+    },
+    {
+      "slug": "uranus",
+      "display_name": "Uranus",
+      "category": "planet",
+      "asset": "assets/uranus.svg"
+    },
+    {
+      "slug": "neptune",
+      "display_name": "Neptune",
+      "category": "planet",
+      "asset": "assets/neptune.svg"
+    },
+    {
+      "slug": "moon",
+      "display_name": "Moon",
+      "category": "moon",
+      "asset": "assets/moon.svg"
+    },
+    {
+      "slug": "sun",
+      "display_name": "Sun",
+      "category": "star",
+      "asset": "assets/sun.svg"
+    },
+    {
+      "slug": "m31-andromeda",
+      "display_name": "M31 Andromeda Galaxy",
+      "category": "galaxy",
+      "asset": "assets/m31-andromeda.svg"
+    },
+    {
+      "slug": "m33-triangulum",
+      "display_name": "M33 Triangulum Galaxy",
+      "category": "galaxy",
+      "asset": "assets/m33-triangulum.svg"
+    },
+    {
+      "slug": "m51-whirlpool",
+      "display_name": "M51 Whirlpool Galaxy",
+      "category": "galaxy",
+      "asset": "assets/m51-whirlpool.svg"
+    },
+    {
+      "slug": "m87-elliptical",
+      "display_name": "M87",
+      "category": "galaxy",
+      "asset": "assets/m87-elliptical.svg"
+    },
+    {
+      "slug": "orion-nebula-m42",
+      "display_name": "M42 Orion Nebula",
+      "category": "nebula",
+      "asset": "assets/orion-nebula-m42.svg"
+    },
+    {
+      "slug": "ring-nebula-m57",
+      "display_name": "M57 Ring Nebula",
+      "category": "nebula",
+      "asset": "assets/ring-nebula-m57.svg"
+    },
+    {
+      "slug": "dumbbell-nebula-m27",
+      "display_name": "M27 Dumbbell Nebula",
+      "category": "nebula",
+      "asset": "assets/dumbbell-nebula-m27.svg"
+    },
+    {
+      "slug": "crab-nebula-m1",
+      "display_name": "M1 Crab Nebula",
+      "category": "nebula",
+      "asset": "assets/crab-nebula-m1.svg"
+    },
+    {
+      "slug": "pleiades-m45",
+      "display_name": "M45 Pleiades",
+      "category": "open_cluster",
+      "asset": "assets/pleiades-m45.svg"
+    },
+    {
+      "slug": "globular-m13",
+      "display_name": "M13 Hercules Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m13.svg"
+    },
+    {
+      "slug": "double-cluster",
+      "display_name": "Double Cluster",
+      "category": "open_cluster",
+      "asset": "assets/double-cluster.svg"
+    },
+    {
+      "slug": "comet",
+      "display_name": "Comet",
+      "category": "small_body",
+      "asset": "assets/comet.svg"
+    },
+    {
+      "slug": "asteroid",
+      "display_name": "Asteroid",
+      "category": "small_body",
+      "asset": "assets/asteroid.svg"
+    },
+    {
+      "slug": "eagle-nebula-m16",
+      "display_name": "M16 Eagle Nebula",
+      "category": "nebula",
+      "asset": "assets/eagle-nebula-m16.svg"
+    },
+    {
+      "slug": "lagoon-nebula-m8",
+      "display_name": "M8 Lagoon Nebula",
+      "category": "nebula",
+      "asset": "assets/lagoon-nebula-m8.svg"
+    },
+    {
+      "slug": "rosette-nebula",
+      "display_name": "Rosette Nebula",
+      "category": "nebula",
+      "asset": "assets/rosette-nebula.svg"
+    },
+    {
+      "slug": "north-america-nebula",
+      "display_name": "North America Nebula",
+      "category": "nebula",
+      "asset": "assets/north-america-nebula.svg"
+    },
+    {
+      "slug": "veil-nebula",
+      "display_name": "Veil Nebula",
+      "category": "nebula",
+      "asset": "assets/veil-nebula.svg"
+    },
+    {
+      "slug": "helix-nebula-c63",
+      "display_name": "C63 Helix Nebula",
+      "category": "nebula",
+      "asset": "assets/helix-nebula-c63.svg"
+    },
+    {
+      "slug": "sombrero-galaxy-m104",
+      "display_name": "M104 Sombrero Galaxy",
+      "category": "galaxy",
+      "asset": "assets/sombrero-galaxy-m104.svg"
+    },
+    {
+      "slug": "pinwheel-galaxy-m101",
+      "display_name": "M101 Pinwheel Galaxy",
+      "category": "galaxy",
+      "asset": "assets/pinwheel-galaxy-m101.svg"
+    },
+    {
+      "slug": "sculptor-galaxy-c65",
+      "display_name": "C65 Sculptor Galaxy",
+      "category": "galaxy",
+      "asset": "assets/sculptor-galaxy-c65.svg"
+    },
+    {
+      "slug": "omega-centauri",
+      "display_name": "Omega Centauri",
+      "category": "globular_cluster",
+      "asset": "assets/omega-centauri.svg"
+    },
+    {
+      "slug": "beehive-cluster-m44",
+      "display_name": "M44 Beehive Cluster",
+      "category": "open_cluster",
+      "asset": "assets/beehive-cluster-m44.svg"
+    },
+    {
+      "slug": "hyades-cluster",
+      "display_name": "Hyades Cluster",
+      "category": "open_cluster",
+      "asset": "assets/hyades-cluster.svg"
+    },
+    {
+      "slug": "albireo-double-star",
+      "display_name": "Albireo Double Star",
+      "category": "double_star",
+      "asset": "assets/albireo-double-star.svg"
+    },
+    {
+      "slug": "mizar-alcor",
+      "display_name": "Mizar and Alcor",
+      "category": "double_star",
+      "asset": "assets/mizar-alcor.svg"
+    },
+    {
+      "slug": "coathanger-asterism",
+      "display_name": "Coathanger Asterism",
+      "category": "asterism",
+      "asset": "assets/coathanger-asterism.svg"
+    },
+    {
+      "slug": "orion-belt-field",
+      "display_name": "Orion Belt Field",
+      "category": "constellation_field",
+      "asset": "assets/orion-belt-field.svg"
+    },
+    {
+      "slug": "summer-triangle-field",
+      "display_name": "Summer Triangle Field",
+      "category": "constellation_field",
+      "asset": "assets/summer-triangle-field.svg"
+    },
+    {
+      "slug": "big-dipper-field",
+      "display_name": "Big Dipper Field",
+      "category": "constellation_field",
+      "asset": "assets/big-dipper-field.svg"
+    },
+    {
+      "slug": "trifid-nebula-m20",
+      "display_name": "M20 Trifid Nebula",
+      "category": "nebula",
+      "asset": "assets/trifid-nebula-m20.svg"
+    },
+    {
+      "slug": "omega-nebula-m17",
+      "display_name": "M17 Omega/Swan Nebula",
+      "category": "nebula",
+      "asset": "assets/omega-nebula-m17.svg"
+    },
+    {
+      "slug": "bodes-galaxy-m81",
+      "display_name": "M81 Bode's Galaxy",
+      "category": "galaxy",
+      "asset": "assets/bodes-galaxy-m81.svg"
+    },
+    {
+      "slug": "cigar-galaxy-m82",
+      "display_name": "M82 Cigar Galaxy",
+      "category": "galaxy",
+      "asset": "assets/cigar-galaxy-m82.svg"
+    },
+    {
+      "slug": "sunflower-galaxy-m63",
+      "display_name": "M63 Sunflower Galaxy",
+      "category": "galaxy",
+      "asset": "assets/sunflower-galaxy-m63.svg"
+    },
+    {
+      "slug": "black-eye-galaxy-m64",
+      "display_name": "M64 Black Eye Galaxy",
+      "category": "galaxy",
+      "asset": "assets/black-eye-galaxy-m64.svg"
+    },
+    {
+      "slug": "ngc-5195-m51-companion",
+      "display_name": "NGC 5195 Companion",
+      "category": "galaxy",
+      "asset": "assets/ngc-5195-m51-companion.svg"
+    },
+    {
+      "slug": "globular-m3",
+      "display_name": "M3 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m3.svg"
+    },
+    {
+      "slug": "globular-m5",
+      "display_name": "M5 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m5.svg"
+    },
+    {
+      "slug": "open-cluster-m35",
+      "display_name": "M35 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m35.svg"
+    },
+    {
+      "slug": "open-cluster-m37",
+      "display_name": "M37 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m37.svg"
+    },
+    {
+      "slug": "crescent-nebula-c27",
+      "display_name": "C27 Crescent Nebula",
+      "category": "nebula",
+      "asset": "assets/crescent-nebula-c27.svg"
+    },
+    {
+      "slug": "california-nebula-ngc1499",
+      "display_name": "California Nebula",
+      "category": "nebula",
+      "asset": "assets/california-nebula-ngc1499.svg"
+    },
+    {
+      "slug": "crescent-moon",
+      "display_name": "Crescent Moon",
+      "category": "moon_phase",
+      "asset": "assets/crescent-moon.svg"
+    },
+    {
+      "slug": "gibbous-moon",
+      "display_name": "Gibbous Moon",
+      "category": "moon_phase",
+      "asset": "assets/gibbous-moon.svg"
+    },
+    {
+      "slug": "venus-crescent-phase",
+      "display_name": "Venus Crescent Phase",
+      "category": "planet_phase",
+      "asset": "assets/venus-crescent-phase.svg"
+    },
+    {
+      "slug": "owl-nebula-m97",
+      "display_name": "M97 Owl Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/owl-nebula-m97.svg"
+    },
+    {
+      "slug": "ghost-of-jupiter-c59",
+      "display_name": "C59 Ghost of Jupiter",
+      "category": "planetary_nebula",
+      "asset": "assets/ghost-of-jupiter-c59.svg"
+    },
+    {
+      "slug": "blue-snowball-c22",
+      "display_name": "C22 Blue Snowball",
+      "category": "planetary_nebula",
+      "asset": "assets/blue-snowball-c22.svg"
+    },
+    {
+      "slug": "eskimo-nebula-c39",
+      "display_name": "C39 Eskimo Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/eskimo-nebula-c39.svg"
+    },
+    {
+      "slug": "whale-galaxy-c32",
+      "display_name": "C32 Whale Galaxy",
+      "category": "galaxy",
+      "asset": "assets/whale-galaxy-c32.svg"
+    },
+    {
+      "slug": "needle-galaxy-c38",
+      "display_name": "C38 Needle Galaxy",
+      "category": "galaxy",
+      "asset": "assets/needle-galaxy-c38.svg"
+    },
+    {
+      "slug": "leo-triplet",
+      "display_name": "Leo Triplet",
+      "category": "galaxy_group",
+      "asset": "assets/leo-triplet.svg"
+    },
+    {
+      "slug": "markarians-chain",
+      "display_name": "Markarian's Chain",
+      "category": "galaxy_group",
+      "asset": "assets/markarians-chain.svg"
+    },
+    {
+      "slug": "galaxy-m106",
+      "display_name": "M106",
+      "category": "galaxy",
+      "asset": "assets/galaxy-m106.svg"
+    },
+    {
+      "slug": "galaxy-m94",
+      "display_name": "M94",
+      "category": "galaxy",
+      "asset": "assets/galaxy-m94.svg"
+    },
+    {
+      "slug": "horsehead-flame-nebula",
+      "display_name": "Horsehead and Flame",
+      "category": "nebula",
+      "asset": "assets/horsehead-flame-nebula.svg"
+    },
+    {
+      "slug": "barnards-loop",
+      "display_name": "Barnard's Loop",
+      "category": "nebula",
+      "asset": "assets/barnards-loop.svg"
+    },
+    {
+      "slug": "heart-nebula",
+      "display_name": "Heart Nebula",
+      "category": "nebula",
+      "asset": "assets/heart-nebula.svg"
+    },
+    {
+      "slug": "soul-nebula",
+      "display_name": "Soul Nebula",
+      "category": "nebula",
+      "asset": "assets/soul-nebula.svg"
+    },
+    {
+      "slug": "pacman-nebula-ngc281",
+      "display_name": "NGC 281 Pacman Nebula",
+      "category": "nebula",
+      "asset": "assets/pacman-nebula-ngc281.svg"
+    },
+    {
+      "slug": "elephants-trunk-ic1396",
+      "display_name": "IC 1396 Elephant's Trunk",
+      "category": "nebula",
+      "asset": "assets/elephants-trunk-ic1396.svg"
+    },
+    {
+      "slug": "rho-ophiuchi",
+      "display_name": "Rho Ophiuchi",
+      "category": "nebula",
+      "asset": "assets/rho-ophiuchi.svg"
+    },
+    {
+      "slug": "wild-duck-cluster-m11",
+      "display_name": "M11 Wild Duck Cluster",
+      "category": "open_cluster",
+      "asset": "assets/wild-duck-cluster-m11.svg"
+    },
+    {
+      "slug": "open-cluster-m39",
+      "display_name": "M39 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m39.svg"
+    },
+    {
+      "slug": "open-cluster-m52",
+      "display_name": "M52 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m52.svg"
+    },
+    {
+      "slug": "et-cluster-ngc457",
+      "display_name": "NGC 457 ET/Owl Cluster",
+      "category": "open_cluster",
+      "asset": "assets/et-cluster-ngc457.svg"
+    },
+    {
+      "slug": "kembles-cascade",
+      "display_name": "Kemble's Cascade",
+      "category": "asterism",
+      "asset": "assets/kembles-cascade.svg"
+    },
+    {
+      "slug": "jupiter-moons",
+      "display_name": "Jupiter With Moons",
+      "category": "solar_system_scene",
+      "asset": "assets/jupiter-moons.svg"
+    },
+    {
+      "slug": "saturn-ring-tilt",
+      "display_name": "Saturn Ring Tilt",
+      "category": "solar_system_scene",
+      "asset": "assets/saturn-ring-tilt.svg"
+    },
+    {
+      "slug": "elliptical-galaxy-m49",
+      "display_name": "M49",
+      "category": "galaxy",
+      "asset": "assets/elliptical-galaxy-m49.svg"
+    },
+    {
+      "slug": "lenticular-galaxy-m84",
+      "display_name": "M84",
+      "category": "galaxy",
+      "asset": "assets/lenticular-galaxy-m84.svg"
+    },
+    {
+      "slug": "lenticular-galaxy-m86",
+      "display_name": "M86",
+      "category": "galaxy",
+      "asset": "assets/lenticular-galaxy-m86.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m58",
+      "display_name": "M58",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m58.svg"
+    },
+    {
+      "slug": "elliptical-galaxy-m59",
+      "display_name": "M59",
+      "category": "galaxy",
+      "asset": "assets/elliptical-galaxy-m59.svg"
+    },
+    {
+      "slug": "elliptical-galaxy-m60",
+      "display_name": "M60",
+      "category": "galaxy",
+      "asset": "assets/elliptical-galaxy-m60.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m61",
+      "display_name": "M61",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m61.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m74",
+      "display_name": "M74",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m74.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m77",
+      "display_name": "M77",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m77.svg"
+    },
+    {
+      "slug": "southern-pinwheel-m83",
+      "display_name": "M83 Southern Pinwheel",
+      "category": "galaxy",
+      "asset": "assets/southern-pinwheel-m83.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m88",
+      "display_name": "M88",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m88.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m90",
+      "display_name": "M90",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m90.svg"
+    },
+    {
+      "slug": "globular-m2",
+      "display_name": "M2 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m2.svg"
+    },
+    {
+      "slug": "globular-m4",
+      "display_name": "M4 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m4.svg"
+    },
+    {
+      "slug": "globular-m10",
+      "display_name": "M10 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m10.svg"
+    },
+    {
+      "slug": "globular-m12",
+      "display_name": "M12 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m12.svg"
+    },
+    {
+      "slug": "globular-m15",
+      "display_name": "M15 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m15.svg"
+    },
+    {
+      "slug": "globular-m22",
+      "display_name": "M22 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m22.svg"
+    },
+    {
+      "slug": "open-cluster-m6",
+      "display_name": "M6 Butterfly Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m6.svg"
+    },
+    {
+      "slug": "open-cluster-m7",
+      "display_name": "M7 Ptolemy Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m7.svg"
+    },
+    {
+      "slug": "open-cluster-m23",
+      "display_name": "M23 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m23.svg"
+    },
+    {
+      "slug": "open-cluster-m29",
+      "display_name": "M29 Cooling Tower Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m29.svg"
+    },
+    {
+      "slug": "open-cluster-m34",
+      "display_name": "M34 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m34.svg"
+    },
+    {
+      "slug": "open-cluster-m36",
+      "display_name": "M36 Pinwheel Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m36.svg"
+    },
+    {
+      "slug": "open-cluster-m38",
+      "display_name": "M38 Starfish Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m38.svg"
+    },
+    {
+      "slug": "little-dumbbell-m76",
+      "display_name": "M76 Little Dumbbell",
+      "category": "planetary_nebula",
+      "asset": "assets/little-dumbbell-m76.svg"
+    },
+    {
+      "slug": "saturn-nebula-c55",
+      "display_name": "C55 Saturn Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/saturn-nebula-c55.svg"
+    },
+    {
+      "slug": "cat-eye-nebula-c6",
+      "display_name": "C6 Cat's Eye Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/cat-eye-nebula-c6.svg"
+    },
+    {
+      "slug": "butterfly-nebula-ngc6302",
+      "display_name": "NGC 6302 Butterfly Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/butterfly-nebula-ngc6302.svg"
+    },
+    {
+      "slug": "bubble-nebula-ngc7635",
+      "display_name": "Bubble Nebula",
+      "category": "nebula",
+      "asset": "assets/bubble-nebula-ngc7635.svg"
+    },
+    {
+      "slug": "barred-spiral-galaxy-m91",
+      "display_name": "M91",
+      "category": "galaxy",
+      "asset": "assets/barred-spiral-galaxy-m91.svg"
+    },
+    {
+      "slug": "barred-spiral-galaxy-m95",
+      "display_name": "M95",
+      "category": "galaxy",
+      "asset": "assets/barred-spiral-galaxy-m95.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m96",
+      "display_name": "M96",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m96.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m98",
+      "display_name": "M98",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m98.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m99",
+      "display_name": "M99",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m99.svg"
+    },
+    {
+      "slug": "spiral-galaxy-m100",
+      "display_name": "M100",
+      "category": "galaxy",
+      "asset": "assets/spiral-galaxy-m100.svg"
+    },
+    {
+      "slug": "elliptical-galaxy-m105",
+      "display_name": "M105",
+      "category": "galaxy",
+      "asset": "assets/elliptical-galaxy-m105.svg"
+    },
+    {
+      "slug": "edge-on-galaxy-m108",
+      "display_name": "M108",
+      "category": "galaxy",
+      "asset": "assets/edge-on-galaxy-m108.svg"
+    },
+    {
+      "slug": "barred-spiral-galaxy-m109",
+      "display_name": "M109",
+      "category": "galaxy",
+      "asset": "assets/barred-spiral-galaxy-m109.svg"
+    },
+    {
+      "slug": "globular-m28",
+      "display_name": "M28 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m28.svg"
+    },
+    {
+      "slug": "globular-m30",
+      "display_name": "M30 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m30.svg"
+    },
+    {
+      "slug": "globular-m53",
+      "display_name": "M53 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m53.svg"
+    },
+    {
+      "slug": "globular-m54",
+      "display_name": "M54 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m54.svg"
+    },
+    {
+      "slug": "globular-m55",
+      "display_name": "M55 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m55.svg"
+    },
+    {
+      "slug": "globular-m56",
+      "display_name": "M56 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m56.svg"
+    },
+    {
+      "slug": "globular-m62",
+      "display_name": "M62 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m62.svg"
+    },
+    {
+      "slug": "globular-m69",
+      "display_name": "M69 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m69.svg"
+    },
+    {
+      "slug": "globular-m70",
+      "display_name": "M70 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m70.svg"
+    },
+    {
+      "slug": "globular-m71",
+      "display_name": "M71 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m71.svg"
+    },
+    {
+      "slug": "globular-m72",
+      "display_name": "M72 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m72.svg"
+    },
+    {
+      "slug": "globular-m75",
+      "display_name": "M75 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m75.svg"
+    },
+    {
+      "slug": "globular-m79",
+      "display_name": "M79 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m79.svg"
+    },
+    {
+      "slug": "globular-m80",
+      "display_name": "M80 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m80.svg"
+    },
+    {
+      "slug": "globular-m92",
+      "display_name": "M92 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/globular-m92.svg"
+    },
+    {
+      "slug": "open-cluster-m41",
+      "display_name": "M41 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m41.svg"
+    },
+    {
+      "slug": "open-cluster-m46",
+      "display_name": "M46 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m46.svg"
+    },
+    {
+      "slug": "open-cluster-m47",
+      "display_name": "M47 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m47.svg"
+    },
+    {
+      "slug": "open-cluster-m48",
+      "display_name": "M48 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m48.svg"
+    },
+    {
+      "slug": "open-cluster-m50",
+      "display_name": "M50 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m50.svg"
+    },
+    {
+      "slug": "open-cluster-m67",
+      "display_name": "M67 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m67.svg"
+    },
+    {
+      "slug": "open-cluster-m93",
+      "display_name": "M93 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m93.svg"
+    },
+    {
+      "slug": "open-cluster-m103",
+      "display_name": "M103 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/open-cluster-m103.svg"
+    },
+    {
+      "slug": "cleopatras-eye-ngc1535",
+      "display_name": "NGC 1535 Cleopatra's Eye",
+      "category": "planetary_nebula",
+      "asset": "assets/cleopatras-eye-ngc1535.svg"
+    },
+    {
+      "slug": "blinking-planetary-c15",
+      "display_name": "C15 Blinking Planetary",
+      "category": "planetary_nebula",
+      "asset": "assets/blinking-planetary-c15.svg"
+    },
+    {
+      "slug": "ngc7027-planetary",
+      "display_name": "NGC 7027",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7027-planetary.svg"
+    },
+    {
+      "slug": "red-spider-nebula-ngc6537",
+      "display_name": "NGC 6537 Red Spider Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/red-spider-nebula-ngc6537.svg"
+    },
+    {
+      "slug": "retina-nebula-ic4406",
+      "display_name": "IC 4406 Retina Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/retina-nebula-ic4406.svg"
+    },
+    {
+      "slug": "spindle-galaxy-m102-ngc5866",
+      "display_name": "M102 / NGC 5866 Spindle Galaxy",
+      "category": "galaxy",
+      "asset": "assets/spindle-galaxy-m102-ngc5866.svg"
+    },
+    {
+      "slug": "m32-andromeda-satellite",
+      "display_name": "M32 Andromeda Satellite",
+      "category": "galaxy",
+      "asset": "assets/m32-andromeda-satellite.svg"
+    },
+    {
+      "slug": "m110-andromeda-satellite",
+      "display_name": "M110 Andromeda Satellite",
+      "category": "galaxy",
+      "asset": "assets/m110-andromeda-satellite.svg"
+    },
+    {
+      "slug": "cocoon-nebula-ic5146",
+      "display_name": "IC 5146 Cocoon Nebula",
+      "category": "nebula",
+      "asset": "assets/cocoon-nebula-ic5146.svg"
+    },
+    {
+      "slug": "iris-nebula-ngc7023",
+      "display_name": "NGC 7023 Iris Nebula",
+      "category": "nebula",
+      "asset": "assets/iris-nebula-ngc7023.svg"
+    },
+    {
+      "slug": "monkey-head-nebula-ngc2174",
+      "display_name": "NGC 2174 Monkey Head Nebula",
+      "category": "nebula",
+      "asset": "assets/monkey-head-nebula-ngc2174.svg"
+    },
+    {
+      "slug": "christmas-tree-cone-ngc2264",
+      "display_name": "NGC 2264 Christmas Tree / Cone",
+      "category": "nebula",
+      "asset": "assets/christmas-tree-cone-ngc2264.svg"
+    },
+    {
+      "slug": "flaming-star-nebula-ic405",
+      "display_name": "IC 405 Flaming Star Nebula",
+      "category": "nebula",
+      "asset": "assets/flaming-star-nebula-ic405.svg"
+    },
+    {
+      "slug": "tarantula-nebula-30doradus",
+      "display_name": "30 Doradus Tarantula Nebula",
+      "category": "nebula",
+      "asset": "assets/tarantula-nebula-30doradus.svg"
+    },
+    {
+      "slug": "antennae-galaxies-ngc4038-4039",
+      "display_name": "Antennae Galaxies NGC 4038/4039",
+      "category": "galaxy_group",
+      "asset": "assets/antennae-galaxies-ngc4038-4039.svg"
+    },
+    {
+      "slug": "centaurus-a-ngc5128",
+      "display_name": "Centaurus A NGC 5128",
+      "category": "galaxy",
+      "asset": "assets/centaurus-a-ngc5128.svg"
+    },
+    {
+      "slug": "ngc891-edge-on-galaxy",
+      "display_name": "NGC 891 Edge-On Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc891-edge-on-galaxy.svg"
+    },
+    {
+      "slug": "ngc2403-galaxy",
+      "display_name": "NGC 2403 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2403-galaxy.svg"
+    },
+    {
+      "slug": "ngc2903-barred-spiral",
+      "display_name": "NGC 2903 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc2903-barred-spiral.svg"
+    },
+    {
+      "slug": "bug-nebula-ngc6302-alt",
+      "display_name": "NGC 6302 Bug Nebula Detail",
+      "category": "planetary_nebula",
+      "asset": "assets/bug-nebula-ngc6302-alt.svg"
+    },
+    {
+      "slug": "hourglass-nebula-mycn18",
+      "display_name": "MyCn 18 Hourglass Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/hourglass-nebula-mycn18.svg"
+    },
+    {
+      "slug": "southern-ring-nebula-ngc3132",
+      "display_name": "NGC 3132 Southern Ring Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/southern-ring-nebula-ngc3132.svg"
+    },
+    {
+      "slug": "little-ghost-nebula-ngc6369",
+      "display_name": "NGC 6369 Little Ghost Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/little-ghost-nebula-ngc6369.svg"
+    },
+    {
+      "slug": "medusa-nebula-abell21",
+      "display_name": "Abell 21 Medusa Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/medusa-nebula-abell21.svg"
+    },
+    {
+      "slug": "soap-bubble-nebula-pn-g75",
+      "display_name": "Soap Bubble Nebula PN G75.5+1.7",
+      "category": "planetary_nebula",
+      "asset": "assets/soap-bubble-nebula-pn-g75.svg"
+    },
+    {
+      "slug": "fetus-nebula-ngc7008",
+      "display_name": "NGC 7008 Fetus Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/fetus-nebula-ngc7008.svg"
+    },
+    {
+      "slug": "m78-reflection-nebula",
+      "display_name": "M78 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/m78-reflection-nebula.svg"
+    },
+    {
+      "slug": "witch-head-nebula-ic2118",
+      "display_name": "IC 2118 Witch Head Nebula",
+      "category": "nebula",
+      "asset": "assets/witch-head-nebula-ic2118.svg"
+    },
+    {
+      "slug": "pelican-nebula-ic5070",
+      "display_name": "IC 5070 Pelican Nebula",
+      "category": "nebula",
+      "asset": "assets/pelican-nebula-ic5070.svg"
+    },
+    {
+      "slug": "wizard-nebula-ngc7380",
+      "display_name": "NGC 7380 Wizard Nebula",
+      "category": "nebula",
+      "asset": "assets/wizard-nebula-ngc7380.svg"
+    },
+    {
+      "slug": "sh2-101-tulip-nebula",
+      "display_name": "Sh2-101 Tulip Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-101-tulip-nebula.svg"
+    },
+    {
+      "slug": "ngc4565-needle-galaxy",
+      "display_name": "NGC 4565 Needle Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4565-needle-galaxy.svg"
+    },
+    {
+      "slug": "ngc4631-whale-galaxy",
+      "display_name": "NGC 4631 Whale Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4631-whale-galaxy.svg"
+    },
+    {
+      "slug": "ngc6946-fireworks-galaxy",
+      "display_name": "NGC 6946 Fireworks Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc6946-fireworks-galaxy.svg"
+    },
+    {
+      "slug": "ngc7331-deer-lick-galaxy",
+      "display_name": "NGC 7331 Deer Lick Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7331-deer-lick-galaxy.svg"
+    },
+    {
+      "slug": "stephans-quintet",
+      "display_name": "Stephan's Quintet",
+      "category": "galaxy_group",
+      "asset": "assets/stephans-quintet.svg"
+    },
+    {
+      "slug": "hickson-44-galaxy-group",
+      "display_name": "Hickson 44 Galaxy Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson-44-galaxy-group.svg"
+    },
+    {
+      "slug": "ngc6543-outer-halo",
+      "display_name": "NGC 6543 Cat's Eye Outer Halo",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6543-outer-halo.svg"
+    },
+    {
+      "slug": "ngc2392-eskimo-detail",
+      "display_name": "NGC 2392 Eskimo Nebula Detail",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2392-eskimo-detail.svg"
+    },
+    {
+      "slug": "abell39-planetary-nebula",
+      "display_name": "Abell 39 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell39-planetary-nebula.svg"
+    },
+    {
+      "slug": "jonckheere900-planetary",
+      "display_name": "Jonckheere 900 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/jonckheere900-planetary.svg"
+    },
+    {
+      "slug": "ngc1300-barred-spiral",
+      "display_name": "NGC 1300 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc1300-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc1566-spanish-dancer",
+      "display_name": "NGC 1566 Spanish Dancer",
+      "category": "galaxy",
+      "asset": "assets/ngc1566-spanish-dancer.svg"
+    },
+    {
+      "slug": "ngc2841-flocculent-galaxy",
+      "display_name": "NGC 2841 Flocculent Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2841-flocculent-galaxy.svg"
+    },
+    {
+      "slug": "ngc3521-bubble-galaxy",
+      "display_name": "NGC 3521 Bubble Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3521-bubble-galaxy.svg"
+    },
+    {
+      "slug": "ngc772-arp78-galaxy",
+      "display_name": "NGC 772 / Arp 78",
+      "category": "galaxy",
+      "asset": "assets/ngc772-arp78-galaxy.svg"
+    },
+    {
+      "slug": "hoags-object-ring-galaxy",
+      "display_name": "Hoag's Object Ring Galaxy",
+      "category": "galaxy",
+      "asset": "assets/hoags-object-ring-galaxy.svg"
+    },
+    {
+      "slug": "seagull-nebula-ic2177",
+      "display_name": "IC 2177 Seagull Nebula",
+      "category": "nebula",
+      "asset": "assets/seagull-nebula-ic2177.svg"
+    },
+    {
+      "slug": "thors-helmet-ngc2359",
+      "display_name": "NGC 2359 Thor's Helmet",
+      "category": "nebula",
+      "asset": "assets/thors-helmet-ngc2359.svg"
+    },
+    {
+      "slug": "gamma-cygni-nebula-ic1318",
+      "display_name": "IC 1318 Gamma Cygni Nebula",
+      "category": "nebula",
+      "asset": "assets/gamma-cygni-nebula-ic1318.svg"
+    },
+    {
+      "slug": "cave-nebula-sh2-155",
+      "display_name": "Sh2-155 Cave Nebula",
+      "category": "nebula",
+      "asset": "assets/cave-nebula-sh2-155.svg"
+    },
+    {
+      "slug": "m24-sagittarius-star-cloud",
+      "display_name": "M24 Sagittarius Star Cloud",
+      "category": "open_cluster",
+      "asset": "assets/m24-sagittarius-star-cloud.svg"
+    },
+    {
+      "slug": "m25-open-cluster",
+      "display_name": "M25 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/m25-open-cluster.svg"
+    },
+    {
+      "slug": "carolines-rose-ngc7789",
+      "display_name": "NGC 7789 Caroline's Rose",
+      "category": "open_cluster",
+      "asset": "assets/carolines-rose-ngc7789.svg"
+    },
+    {
+      "slug": "ngc752-open-cluster",
+      "display_name": "NGC 752 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc752-open-cluster.svg"
+    },
+    {
+      "slug": "skull-nebula-ngc246",
+      "display_name": "NGC 246 Skull Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/skull-nebula-ngc246.svg"
+    },
+    {
+      "slug": "crystal-ball-nebula-ngc1514",
+      "display_name": "NGC 1514 Crystal Ball Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/crystal-ball-nebula-ngc1514.svg"
+    },
+    {
+      "slug": "m73-asterism",
+      "display_name": "M73 Asterism",
+      "category": "asterism",
+      "asset": "assets/m73-asterism.svg"
+    },
+    {
+      "slug": "m40-double-star",
+      "display_name": "M40 Double Star",
+      "category": "double_star",
+      "asset": "assets/m40-double-star.svg"
+    },
+    {
+      "slug": "winter-hexagon-field",
+      "display_name": "Winter Hexagon Field",
+      "category": "constellation_field",
+      "asset": "assets/winter-hexagon-field.svg"
+    },
+    {
+      "slug": "virgo-cluster-core-field",
+      "display_name": "Virgo Cluster Core Field",
+      "category": "galaxy_group",
+      "asset": "assets/virgo-cluster-core-field.svg"
+    },
+    {
+      "slug": "fornax-cluster-field",
+      "display_name": "Fornax Cluster Field",
+      "category": "galaxy_group",
+      "asset": "assets/fornax-cluster-field.svg"
+    },
+    {
+      "slug": "ngc1365-great-barred-spiral",
+      "display_name": "NGC 1365 Great Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc1365-great-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc1316-fornax-a",
+      "display_name": "NGC 1316 Fornax A",
+      "category": "galaxy",
+      "asset": "assets/ngc1316-fornax-a.svg"
+    },
+    {
+      "slug": "ngc3628-hamburger-galaxy",
+      "display_name": "NGC 3628 Hamburger Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3628-hamburger-galaxy.svg"
+    },
+    {
+      "slug": "ngc3718-warped-galaxy",
+      "display_name": "NGC 3718 Warped Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3718-warped-galaxy.svg"
+    },
+    {
+      "slug": "ngc4216-edge-on-galaxy",
+      "display_name": "NGC 4216 Edge-On Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4216-edge-on-galaxy.svg"
+    },
+    {
+      "slug": "ngc4725-one-arm-galaxy",
+      "display_name": "NGC 4725 One-Arm Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4725-one-arm-galaxy.svg"
+    },
+    {
+      "slug": "ngc5128-radio-lobes-context",
+      "display_name": "Centaurus A Outer Lobes Context",
+      "category": "galaxy",
+      "asset": "assets/ngc5128-radio-lobes-context.svg"
+    },
+    {
+      "slug": "ngc6744-southern-spiral",
+      "display_name": "NGC 6744 Southern Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc6744-southern-spiral.svg"
+    },
+    {
+      "slug": "ngc6822-barnards-galaxy",
+      "display_name": "NGC 6822 Barnard's Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc6822-barnards-galaxy.svg"
+    },
+    {
+      "slug": "ic342-hidden-galaxy",
+      "display_name": "IC 342 Hidden Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ic342-hidden-galaxy.svg"
+    },
+    {
+      "slug": "ngc55-irregular-galaxy",
+      "display_name": "NGC 55 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc55-irregular-galaxy.svg"
+    },
+    {
+      "slug": "ngc300-sculptor-spiral",
+      "display_name": "NGC 300 Sculptor Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc300-sculptor-spiral.svg"
+    },
+    {
+      "slug": "dark-doodad-nebula",
+      "display_name": "Dark Doodad Nebula",
+      "category": "nebula",
+      "asset": "assets/dark-doodad-nebula.svg"
+    },
+    {
+      "slug": "pipe-nebula-barnard59",
+      "display_name": "Pipe Nebula / Barnard 59",
+      "category": "nebula",
+      "asset": "assets/pipe-nebula-barnard59.svg"
+    },
+    {
+      "slug": "snake-nebula-b72",
+      "display_name": "B72 Snake Nebula",
+      "category": "nebula",
+      "asset": "assets/snake-nebula-b72.svg"
+    },
+    {
+      "slug": "vdB152-wolf-cave",
+      "display_name": "vdB 152 Wolf's Cave",
+      "category": "nebula",
+      "asset": "assets/vdB152-wolf-cave.svg"
+    },
+    {
+      "slug": "sh2-129-flying-bat",
+      "display_name": "Sh2-129 Flying Bat Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-129-flying-bat.svg"
+    },
+    {
+      "slug": "ou4-squid-nebula",
+      "display_name": "Ou4 Squid Nebula",
+      "category": "nebula",
+      "asset": "assets/ou4-squid-nebula.svg"
+    },
+    {
+      "slug": "lambda-centauri-nebula-ic2944",
+      "display_name": "IC 2944 Running Chicken Nebula",
+      "category": "nebula",
+      "asset": "assets/lambda-centauri-nebula-ic2944.svg"
+    },
+    {
+      "slug": "rcw49-war-and-peace",
+      "display_name": "RCW 49 War and Peace Nebula",
+      "category": "nebula",
+      "asset": "assets/rcw49-war-and-peace.svg"
+    },
+    {
+      "slug": "ngc6888-crescent-detail",
+      "display_name": "NGC 6888 Crescent Detail",
+      "category": "nebula",
+      "asset": "assets/ngc6888-crescent-detail.svg"
+    },
+    {
+      "slug": "ngc7293-helix-widefield",
+      "display_name": "NGC 7293 Helix Widefield",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7293-helix-widefield.svg"
+    },
+    {
+      "slug": "ngc2438-planetary-m46",
+      "display_name": "NGC 2438 in M46",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2438-planetary-m46.svg"
+    },
+    {
+      "slug": "ngc2371-gemini-nebula",
+      "display_name": "NGC 2371 Gemini Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2371-gemini-nebula.svg"
+    },
+    {
+      "slug": "ngc40-bow-tie-nebula",
+      "display_name": "NGC 40 Bow-Tie Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc40-bow-tie-nebula.svg"
+    },
+    {
+      "slug": "abell78-born-again-pn",
+      "display_name": "Abell 78 Born-Again Planetary",
+      "category": "planetary_nebula",
+      "asset": "assets/abell78-born-again-pn.svg"
+    },
+    {
+      "slug": "m14-globular",
+      "display_name": "M14 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/m14-globular.svg"
+    },
+    {
+      "slug": "m19-globular",
+      "display_name": "M19 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/m19-globular.svg"
+    },
+    {
+      "slug": "m68-globular",
+      "display_name": "M68 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/m68-globular.svg"
+    },
+    {
+      "slug": "m107-globular",
+      "display_name": "M107 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/m107-globular.svg"
+    },
+    {
+      "slug": "ngc1851-globular",
+      "display_name": "NGC 1851 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc1851-globular.svg"
+    },
+    {
+      "slug": "ngc3201-globular",
+      "display_name": "NGC 3201 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc3201-globular.svg"
+    },
+    {
+      "slug": "m18-open-cluster",
+      "display_name": "M18 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/m18-open-cluster.svg"
+    },
+    {
+      "slug": "m21-open-cluster",
+      "display_name": "M21 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/m21-open-cluster.svg"
+    },
+    {
+      "slug": "m26-open-cluster",
+      "display_name": "M26 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/m26-open-cluster.svg"
+    },
+    {
+      "slug": "m73-neighbor-ngc7009-field",
+      "display_name": "Aquarius Planetary Field",
+      "category": "constellation_field",
+      "asset": "assets/m73-neighbor-ngc7009-field.svg"
+    },
+    {
+      "slug": "m85-lenticular-galaxy",
+      "display_name": "M85 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/m85-lenticular-galaxy.svg"
+    },
+    {
+      "slug": "m89-elliptical-galaxy",
+      "display_name": "M89 Elliptical Galaxy",
+      "category": "galaxy",
+      "asset": "assets/m89-elliptical-galaxy.svg"
+    },
+    {
+      "slug": "ngc891-dust-lane-detail",
+      "display_name": "NGC 891 Dust Lane Detail",
+      "category": "galaxy",
+      "asset": "assets/ngc891-dust-lane-detail.svg"
+    },
+    {
+      "slug": "ngc1023-lenticular",
+      "display_name": "NGC 1023 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1023-lenticular.svg"
+    },
+    {
+      "slug": "ngc2683-ufo-galaxy",
+      "display_name": "NGC 2683 UFO Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2683-ufo-galaxy.svg"
+    },
+    {
+      "slug": "ngc3115-spindle-galaxy",
+      "display_name": "NGC 3115 Spindle Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3115-spindle-galaxy.svg"
+    },
+    {
+      "slug": "ngc4449-irregular-galaxy",
+      "display_name": "NGC 4449 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4449-irregular-galaxy.svg"
+    },
+    {
+      "slug": "ngc4656-hockey-stick",
+      "display_name": "NGC 4656 Hockey Stick Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4656-hockey-stick.svg"
+    },
+    {
+      "slug": "ngc5907-splinter-galaxy",
+      "display_name": "NGC 5907 Splinter Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5907-splinter-galaxy.svg"
+    },
+    {
+      "slug": "ngc7479-superman-galaxy",
+      "display_name": "NGC 7479 Superman Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7479-superman-galaxy.svg"
+    },
+    {
+      "slug": "draco-triplet",
+      "display_name": "Draco Triplet",
+      "category": "galaxy_group",
+      "asset": "assets/draco-triplet.svg"
+    },
+    {
+      "slug": "coma-cluster-core-field",
+      "display_name": "Coma Cluster Core Field",
+      "category": "galaxy_group",
+      "asset": "assets/coma-cluster-core-field.svg"
+    },
+    {
+      "slug": "ic434-horsehead-region",
+      "display_name": "IC 434 Horsehead Region",
+      "category": "nebula",
+      "asset": "assets/ic434-horsehead-region.svg"
+    },
+    {
+      "slug": "ngc2024-flame-nebula-detail",
+      "display_name": "NGC 2024 Flame Nebula Detail",
+      "category": "nebula",
+      "asset": "assets/ngc2024-flame-nebula-detail.svg"
+    },
+    {
+      "slug": "ngc1999-reflection-nebula",
+      "display_name": "NGC 1999 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc1999-reflection-nebula.svg"
+    },
+    {
+      "slug": "m43-de-mairans-nebula",
+      "display_name": "M43 De Mairan's Nebula",
+      "category": "nebula",
+      "asset": "assets/m43-de-mairans-nebula.svg"
+    },
+    {
+      "slug": "ngc1491-fossil-footprint",
+      "display_name": "NGC 1491 Fossil Footprint",
+      "category": "nebula",
+      "asset": "assets/ngc1491-fossil-footprint.svg"
+    },
+    {
+      "slug": "ic410-tadpoles-nebula",
+      "display_name": "IC 410 Tadpoles Nebula",
+      "category": "nebula",
+      "asset": "assets/ic410-tadpoles-nebula.svg"
+    },
+    {
+      "slug": "ic417-spider-nebula",
+      "display_name": "IC 417 Spider Nebula",
+      "category": "nebula",
+      "asset": "assets/ic417-spider-nebula.svg"
+    },
+    {
+      "slug": "ngc2261-hubbles-variable",
+      "display_name": "NGC 2261 Hubble's Variable Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc2261-hubbles-variable.svg"
+    },
+    {
+      "slug": "lbn762-dragon-nebula",
+      "display_name": "LBN 762 Dragon Nebula",
+      "category": "nebula",
+      "asset": "assets/lbn762-dragon-nebula.svg"
+    },
+    {
+      "slug": "simeis147-spaghetti-nebula",
+      "display_name": "Simeis 147 Spaghetti Nebula",
+      "category": "nebula",
+      "asset": "assets/simeis147-spaghetti-nebula.svg"
+    },
+    {
+      "slug": "sh2-308-dolphin-head",
+      "display_name": "Sh2-308 Dolphin Head Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-308-dolphin-head.svg"
+    },
+    {
+      "slug": "ngc1360-robin-egg",
+      "display_name": "NGC 1360 Robin's Egg Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc1360-robin-egg.svg"
+    },
+    {
+      "slug": "ngc1501-camel-eye",
+      "display_name": "NGC 1501 Camel's Eye",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc1501-camel-eye.svg"
+    },
+    {
+      "slug": "ngc6210-turtle-nebula",
+      "display_name": "NGC 6210 Turtle Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6210-turtle-nebula.svg"
+    },
+    {
+      "slug": "ngc6572-blue-racquetball",
+      "display_name": "NGC 6572 Blue Racquetball",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6572-blue-racquetball.svg"
+    },
+    {
+      "slug": "ngc7009-saturn-nebula-wide",
+      "display_name": "NGC 7009 Saturn Nebula Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7009-saturn-nebula-wide.svg"
+    },
+    {
+      "slug": "m9-globular",
+      "display_name": "M9 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/m9-globular.svg"
+    },
+    {
+      "slug": "m29-open-cluster-wide",
+      "display_name": "M29 Wide Field",
+      "category": "open_cluster",
+      "asset": "assets/m29-open-cluster-wide.svg"
+    },
+    {
+      "slug": "m16-cluster-only",
+      "display_name": "M16 Cluster Only",
+      "category": "open_cluster",
+      "asset": "assets/m16-cluster-only.svg"
+    },
+    {
+      "slug": "ngc2362-tau-cma-cluster",
+      "display_name": "NGC 2362 Tau Canis Majoris Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2362-tau-cma-cluster.svg"
+    },
+    {
+      "slug": "ngc6633-open-cluster",
+      "display_name": "NGC 6633 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6633-open-cluster.svg"
+    },
+    {
+      "slug": "ic4665-summer-beehive",
+      "display_name": "IC 4665 Summer Beehive",
+      "category": "open_cluster",
+      "asset": "assets/ic4665-summer-beehive.svg"
+    },
+    {
+      "slug": "epsilon-lyrae-double-double",
+      "display_name": "Epsilon Lyrae Double Double",
+      "category": "double_star",
+      "asset": "assets/epsilon-lyrae-double-double.svg"
+    },
+    {
+      "slug": "trapezium-cluster",
+      "display_name": "Trapezium Cluster",
+      "category": "double_star",
+      "asset": "assets/trapezium-cluster.svg"
+    },
+    {
+      "slug": "northern-cross-field",
+      "display_name": "Northern Cross Field",
+      "category": "constellation_field",
+      "asset": "assets/northern-cross-field.svg"
+    },
+    {
+      "slug": "pegasus-square-field",
+      "display_name": "Great Square of Pegasus",
+      "category": "constellation_field",
+      "asset": "assets/pegasus-square-field.svg"
+    },
+    {
+      "slug": "scorpius-hook-field",
+      "display_name": "Scorpius Hook Field",
+      "category": "constellation_field",
+      "asset": "assets/scorpius-hook-field.svg"
+    },
+    {
+      "slug": "ngc4889-coma-giant",
+      "display_name": "NGC 4889 Coma Giant Elliptical",
+      "category": "galaxy",
+      "asset": "assets/ngc4889-coma-giant.svg"
+    },
+    {
+      "slug": "ngc4559-galaxy",
+      "display_name": "NGC 4559 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4559-galaxy.svg"
+    },
+    {
+      "slug": "ngc5005-galaxy",
+      "display_name": "NGC 5005 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5005-galaxy.svg"
+    },
+    {
+      "slug": "ngc5033-galaxy",
+      "display_name": "NGC 5033 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5033-galaxy.svg"
+    },
+    {
+      "slug": "ngc5248-barred-spiral",
+      "display_name": "NGC 5248 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc5248-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc7332-lenticular",
+      "display_name": "NGC 7332 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7332-lenticular.svg"
+    },
+    {
+      "slug": "ngc7814-little-sombrero",
+      "display_name": "NGC 7814 Little Sombrero",
+      "category": "galaxy",
+      "asset": "assets/ngc7814-little-sombrero.svg"
+    },
+    {
+      "slug": "ugc2885-rubins-galaxy",
+      "display_name": "UGC 2885 Rubin's Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ugc2885-rubins-galaxy.svg"
+    },
+    {
+      "slug": "seyferts-sextet",
+      "display_name": "Seyfert's Sextet",
+      "category": "galaxy_group",
+      "asset": "assets/seyferts-sextet.svg"
+    },
+    {
+      "slug": "ngc7331-deer-lick-group",
+      "display_name": "Deer Lick Group",
+      "category": "galaxy_group",
+      "asset": "assets/ngc7331-deer-lick-group.svg"
+    },
+    {
+      "slug": "van-den-bergh1-cassiopeia",
+      "display_name": "vdB 1 Cassiopeia Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/van-den-bergh1-cassiopeia.svg"
+    },
+    {
+      "slug": "ngc1333-reflection-nebula",
+      "display_name": "NGC 1333 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc1333-reflection-nebula.svg"
+    },
+    {
+      "slug": "ngc7129-reflection-nebula",
+      "display_name": "NGC 7129 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc7129-reflection-nebula.svg"
+    },
+    {
+      "slug": "sh2-112-cygnus-nebula",
+      "display_name": "Sh2-112 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-112-cygnus-nebula.svg"
+    },
+    {
+      "slug": "sh2-115-cygnus-nebula",
+      "display_name": "Sh2-115 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-115-cygnus-nebula.svg"
+    },
+    {
+      "slug": "sh2-132-lion-nebula",
+      "display_name": "Sh2-132 Lion Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-132-lion-nebula.svg"
+    },
+    {
+      "slug": "ic1396-widefield",
+      "display_name": "IC 1396 Widefield",
+      "category": "nebula",
+      "asset": "assets/ic1396-widefield.svg"
+    },
+    {
+      "slug": "barnard150-seahorse",
+      "display_name": "Barnard 150 Seahorse Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard150-seahorse.svg"
+    },
+    {
+      "slug": "ldn1251-rotten-fish",
+      "display_name": "LDN 1251 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1251-rotten-fish.svg"
+    },
+    {
+      "slug": "veil-western-witchs-broom",
+      "display_name": "Western Veil / Witch's Broom",
+      "category": "nebula",
+      "asset": "assets/veil-western-witchs-broom.svg"
+    },
+    {
+      "slug": "veil-eastern-network",
+      "display_name": "Eastern Veil Network",
+      "category": "nebula",
+      "asset": "assets/veil-eastern-network.svg"
+    },
+    {
+      "slug": "ngc2467-skull-crossbones",
+      "display_name": "NGC 2467 Skull and Crossbones",
+      "category": "nebula",
+      "asset": "assets/ngc2467-skull-crossbones.svg"
+    },
+    {
+      "slug": "ngc2818-planetary",
+      "display_name": "NGC 2818 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2818-planetary.svg"
+    },
+    {
+      "slug": "ngc3242-ghost-jupiter-wide",
+      "display_name": "NGC 3242 Ghost of Jupiter Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc3242-ghost-jupiter-wide.svg"
+    },
+    {
+      "slug": "ngc6818-little-gem",
+      "display_name": "NGC 6818 Little Gem",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6818-little-gem.svg"
+    },
+    {
+      "slug": "ngc7026-cheeseburger",
+      "display_name": "NGC 7026 Cheeseburger Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7026-cheeseburger.svg"
+    },
+    {
+      "slug": "abell33-diamond-ring",
+      "display_name": "Abell 33 Diamond Ring",
+      "category": "planetary_nebula",
+      "asset": "assets/abell33-diamond-ring.svg"
+    },
+    {
+      "slug": "m6-butterfly-wide",
+      "display_name": "M6 Butterfly Cluster Wide",
+      "category": "open_cluster",
+      "asset": "assets/m6-butterfly-wide.svg"
+    },
+    {
+      "slug": "ngc2158-cluster",
+      "display_name": "NGC 2158 Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2158-cluster.svg"
+    },
+    {
+      "slug": "ngc2420-open-cluster",
+      "display_name": "NGC 2420 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2420-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6940-open-cluster",
+      "display_name": "NGC 6940 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6940-open-cluster.svg"
+    },
+    {
+      "slug": "stock2-muscleman-cluster",
+      "display_name": "Stock 2 Muscleman Cluster",
+      "category": "open_cluster",
+      "asset": "assets/stock2-muscleman-cluster.svg"
+    },
+    {
+      "slug": "ngc5694-globular",
+      "display_name": "NGC 5694 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5694-globular.svg"
+    },
+    {
+      "slug": "ngc5824-globular",
+      "display_name": "NGC 5824 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5824-globular.svg"
+    },
+    {
+      "slug": "ngc5986-globular",
+      "display_name": "NGC 5986 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5986-globular.svg"
+    },
+    {
+      "slug": "brocchis-cluster-coathanger-wide",
+      "display_name": "Brocchi's Cluster Wide",
+      "category": "asterism",
+      "asset": "assets/brocchis-cluster-coathanger-wide.svg"
+    },
+    {
+      "slug": "sagitta-arrow-field",
+      "display_name": "Sagitta Arrow Field",
+      "category": "constellation_field",
+      "asset": "assets/sagitta-arrow-field.svg"
+    },
+    {
+      "slug": "delphinus-diamond-field",
+      "display_name": "Delphinus Diamond Field",
+      "category": "constellation_field",
+      "asset": "assets/delphinus-diamond-field.svg"
+    },
+    {
+      "slug": "aries-triangle-field",
+      "display_name": "Aries-Triangulum Field",
+      "category": "constellation_field",
+      "asset": "assets/aries-triangle-field.svg"
+    },
+    {
+      "slug": "ngc660-polar-ring",
+      "display_name": "NGC 660 Polar Ring Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc660-polar-ring.svg"
+    },
+    {
+      "slug": "ngc925-galaxy",
+      "display_name": "NGC 925 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc925-galaxy.svg"
+    },
+    {
+      "slug": "ngc1055-edge-on",
+      "display_name": "NGC 1055 Edge-on Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1055-edge-on.svg"
+    },
+    {
+      "slug": "ngc7217-ringed-galaxy",
+      "display_name": "NGC 7217 Ringed Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7217-ringed-galaxy.svg"
+    },
+    {
+      "slug": "ngc3079-galaxy",
+      "display_name": "NGC 3079 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3079-galaxy.svg"
+    },
+    {
+      "slug": "ngc3310-starburst",
+      "display_name": "NGC 3310 Starburst Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3310-starburst.svg"
+    },
+    {
+      "slug": "ngc4449-irregular",
+      "display_name": "NGC 4449 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4449-irregular.svg"
+    },
+    {
+      "slug": "ngc6946-fireworks-wide",
+      "display_name": "NGC 6946 Fireworks Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc6946-fireworks-wide.svg"
+    },
+    {
+      "slug": "leo-triplet-wide",
+      "display_name": "Leo Triplet Wide Field",
+      "category": "galaxy_group",
+      "asset": "assets/leo-triplet-wide.svg"
+    },
+    {
+      "slug": "m81-group-wide",
+      "display_name": "M81 Group Wide Field",
+      "category": "galaxy_group",
+      "asset": "assets/m81-group-wide.svg"
+    },
+    {
+      "slug": "ngc7822-question-mark",
+      "display_name": "NGC 7822 Question Mark Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc7822-question-mark.svg"
+    },
+    {
+      "slug": "sh2-101-tulip-wide",
+      "display_name": "Sh2-101 Tulip Wide",
+      "category": "nebula",
+      "asset": "assets/sh2-101-tulip-wide.svg"
+    },
+    {
+      "slug": "sh2-155-cave-wide",
+      "display_name": "Sh2-155 Cave Wide",
+      "category": "nebula",
+      "asset": "assets/sh2-155-cave-wide.svg"
+    },
+    {
+      "slug": "sh2-171-cederblad214",
+      "display_name": "Sh2-171 / Cederblad 214",
+      "category": "nebula",
+      "asset": "assets/sh2-171-cederblad214.svg"
+    },
+    {
+      "slug": "sh2-224-supernova-remnant",
+      "display_name": "Sh2-224 Supernova Remnant",
+      "category": "nebula",
+      "asset": "assets/sh2-224-supernova-remnant.svg"
+    },
+    {
+      "slug": "ic443-jellyfish-wide",
+      "display_name": "IC 443 Jellyfish Wide",
+      "category": "nebula",
+      "asset": "assets/ic443-jellyfish-wide.svg"
+    },
+    {
+      "slug": "molecular-cloud-barnard68",
+      "display_name": "Barnard 68 Dark Globule",
+      "category": "nebula",
+      "asset": "assets/molecular-cloud-barnard68.svg"
+    },
+    {
+      "slug": "ldn1622-boogeyman",
+      "display_name": "LDN 1622 Boogeyman Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1622-boogeyman.svg"
+    },
+    {
+      "slug": "vdB14-camelopardalis",
+      "display_name": "vdB 14 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB14-camelopardalis.svg"
+    },
+    {
+      "slug": "vdB15-camelopardalis",
+      "display_name": "vdB 15 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB15-camelopardalis.svg"
+    },
+    {
+      "slug": "ngc1514-crystal-ball-wide",
+      "display_name": "NGC 1514 Crystal Ball Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc1514-crystal-ball-wide.svg"
+    },
+    {
+      "slug": "ngc2392-eskimo-wide",
+      "display_name": "NGC 2392 Eskimo Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2392-eskimo-wide.svg"
+    },
+    {
+      "slug": "ngc3587-owl-wide",
+      "display_name": "NGC 3587 Owl Nebula Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc3587-owl-wide.svg"
+    },
+    {
+      "slug": "ngc5189-spiral-planetary",
+      "display_name": "NGC 5189 Spiral Planetary",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc5189-spiral-planetary.svg"
+    },
+    {
+      "slug": "ngc6309-box-nebula",
+      "display_name": "NGC 6309 Box Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6309-box-nebula.svg"
+    },
+    {
+      "slug": "ngc6543-cat-eye-wide",
+      "display_name": "NGC 6543 Cat's Eye Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6543-cat-eye-wide.svg"
+    },
+    {
+      "slug": "palomar5-globular",
+      "display_name": "Palomar 5 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar5-globular.svg"
+    },
+    {
+      "slug": "ngc1261-globular",
+      "display_name": "NGC 1261 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc1261-globular.svg"
+    },
+    {
+      "slug": "ngc362-globular",
+      "display_name": "NGC 362 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc362-globular.svg"
+    },
+    {
+      "slug": "ngc2808-globular",
+      "display_name": "NGC 2808 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc2808-globular.svg"
+    },
+    {
+      "slug": "ngc188-open-cluster",
+      "display_name": "NGC 188 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc188-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2244-rosette-cluster",
+      "display_name": "NGC 2244 Rosette Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2244-rosette-cluster.svg"
+    },
+    {
+      "slug": "ngc2301-great-bird",
+      "display_name": "NGC 2301 Great Bird Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2301-great-bird.svg"
+    },
+    {
+      "slug": "ngc2547-open-cluster",
+      "display_name": "NGC 2547 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2547-open-cluster.svg"
+    },
+    {
+      "slug": "ngc3532-wishing-well",
+      "display_name": "NGC 3532 Wishing Well Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc3532-wishing-well.svg"
+    },
+    {
+      "slug": "ngc4755-jewel-box",
+      "display_name": "NGC 4755 Jewel Box Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc4755-jewel-box.svg"
+    },
+    {
+      "slug": "omicron1-cygni-triple",
+      "display_name": "Omicron 1 Cygni Triple",
+      "category": "double_star",
+      "asset": "assets/omicron1-cygni-triple.svg"
+    },
+    {
+      "slug": "gamma-delphini-double",
+      "display_name": "Gamma Delphini Double",
+      "category": "double_star",
+      "asset": "assets/gamma-delphini-double.svg"
+    },
+    {
+      "slug": "cassiopeia-w-field",
+      "display_name": "Cassiopeia W Field",
+      "category": "constellation_field",
+      "asset": "assets/cassiopeia-w-field.svg"
+    },
+    {
+      "slug": "lyra-parallelogram-field",
+      "display_name": "Lyra Parallelogram Field",
+      "category": "constellation_field",
+      "asset": "assets/lyra-parallelogram-field.svg"
+    },
+    {
+      "slug": "ngc2844-lenticular",
+      "display_name": "NGC 2844 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2844-lenticular.svg"
+    },
+    {
+      "slug": "ngc1232-grand-design",
+      "display_name": "NGC 1232 Grand Design Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1232-grand-design.svg"
+    },
+    {
+      "slug": "ngc1961-galaxy",
+      "display_name": "NGC 1961 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1961-galaxy.svg"
+    },
+    {
+      "slug": "ngc2146-starburst",
+      "display_name": "NGC 2146 Starburst Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2146-starburst.svg"
+    },
+    {
+      "slug": "ngc2336-galaxy",
+      "display_name": "NGC 2336 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2336-galaxy.svg"
+    },
+    {
+      "slug": "ngc7741-barred-spiral",
+      "display_name": "NGC 7741 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc7741-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc7742-ring-galaxy",
+      "display_name": "NGC 7742 Ring Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7742-ring-galaxy.svg"
+    },
+    {
+      "slug": "ngc7727-peculiar-galaxy",
+      "display_name": "NGC 7727 Peculiar Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7727-peculiar-galaxy.svg"
+    },
+    {
+      "slug": "ngc5353-5354-group",
+      "display_name": "NGC 5353/5354 Group",
+      "category": "galaxy_group",
+      "asset": "assets/ngc5353-5354-group.svg"
+    },
+    {
+      "slug": "wilds-triplet",
+      "display_name": "Wild's Triplet",
+      "category": "galaxy_group",
+      "asset": "assets/wilds-triplet.svg"
+    },
+    {
+      "slug": "ic59-ic63-ghosts-cassiopeia",
+      "display_name": "IC 59 / IC 63 Ghosts of Cassiopeia",
+      "category": "nebula",
+      "asset": "assets/ic59-ic63-ghosts-cassiopeia.svg"
+    },
+    {
+      "slug": "sh2-54-serpens-nebula",
+      "display_name": "Sh2-54 Serpens Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-54-serpens-nebula.svg"
+    },
+    {
+      "slug": "sh2-86-vulpecula-nebula",
+      "display_name": "Sh2-86 Vulpecula Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-86-vulpecula-nebula.svg"
+    },
+    {
+      "slug": "sh2-119-cygnus-nebula",
+      "display_name": "Sh2-119 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-119-cygnus-nebula.svg"
+    },
+    {
+      "slug": "sh2-170-little-rosette",
+      "display_name": "Sh2-170 Little Rosette",
+      "category": "nebula",
+      "asset": "assets/sh2-170-little-rosette.svg"
+    },
+    {
+      "slug": "sh2-261-lowers-nebula",
+      "display_name": "Sh2-261 Lower's Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-261-lowers-nebula.svg"
+    },
+    {
+      "slug": "vdB141-ghost-nebula",
+      "display_name": "vdB 141 Ghost Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB141-ghost-nebula.svg"
+    },
+    {
+      "slug": "ced201-reflection-nebula",
+      "display_name": "Cederblad 201 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ced201-reflection-nebula.svg"
+    },
+    {
+      "slug": "barnard142-143-e-nebula",
+      "display_name": "Barnard 142/143 E Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard142-143-e-nebula.svg"
+    },
+    {
+      "slug": "ldn673-aquila-rift",
+      "display_name": "LDN 673 Aquila Rift",
+      "category": "nebula",
+      "asset": "assets/ldn673-aquila-rift.svg"
+    },
+    {
+      "slug": "ngc6781-planetary",
+      "display_name": "NGC 6781 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6781-planetary.svg"
+    },
+    {
+      "slug": "ngc6891-planetary",
+      "display_name": "NGC 6891 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6891-planetary.svg"
+    },
+    {
+      "slug": "ngc6905-blue-flash",
+      "display_name": "NGC 6905 Blue Flash Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6905-blue-flash.svg"
+    },
+    {
+      "slug": "ic3568-lemon-slice",
+      "display_name": "IC 3568 Lemon Slice Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic3568-lemon-slice.svg"
+    },
+    {
+      "slug": "ic4593-white-eyed-pea",
+      "display_name": "IC 4593 White Eyed Pea",
+      "category": "planetary_nebula",
+      "asset": "assets/ic4593-white-eyed-pea.svg"
+    },
+    {
+      "slug": "jones1-planetary",
+      "display_name": "Jones 1 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/jones1-planetary.svg"
+    },
+    {
+      "slug": "ngc5286-globular",
+      "display_name": "NGC 5286 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5286-globular.svg"
+    },
+    {
+      "slug": "ngc6388-globular",
+      "display_name": "NGC 6388 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6388-globular.svg"
+    },
+    {
+      "slug": "ngc6441-globular",
+      "display_name": "NGC 6441 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6441-globular.svg"
+    },
+    {
+      "slug": "ngc6752-globular",
+      "display_name": "NGC 6752 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6752-globular.svg"
+    },
+    {
+      "slug": "ngc6231-northern-jewel-box",
+      "display_name": "NGC 6231 Northern Jewel Box",
+      "category": "open_cluster",
+      "asset": "assets/ngc6231-northern-jewel-box.svg"
+    },
+    {
+      "slug": "ngc6281-open-cluster",
+      "display_name": "NGC 6281 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6281-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6603-star-cloud-cluster",
+      "display_name": "NGC 6603 Star Cloud Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6603-star-cloud-cluster.svg"
+    },
+    {
+      "slug": "ngc6709-open-cluster",
+      "display_name": "NGC 6709 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6709-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6811-hole-in-cluster",
+      "display_name": "NGC 6811 Hole in a Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6811-hole-in-cluster.svg"
+    },
+    {
+      "slug": "ngc6819-foxhead-cluster",
+      "display_name": "NGC 6819 Foxhead Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6819-foxhead-cluster.svg"
+    },
+    {
+      "slug": "almach-double",
+      "display_name": "Almach Double Star",
+      "category": "double_star",
+      "asset": "assets/almach-double.svg"
+    },
+    {
+      "slug": "cor-caroli-double",
+      "display_name": "Cor Caroli Double Star",
+      "category": "double_star",
+      "asset": "assets/cor-caroli-double.svg"
+    },
+    {
+      "slug": "cepheus-house-field",
+      "display_name": "Cepheus House Field",
+      "category": "constellation_field",
+      "asset": "assets/cepheus-house-field.svg"
+    },
+    {
+      "slug": "corona-borealis-crown-field",
+      "display_name": "Corona Borealis Crown Field",
+      "category": "constellation_field",
+      "asset": "assets/corona-borealis-crown-field.svg"
+    },
+    {
+      "slug": "ngc247-needle-eye",
+      "display_name": "NGC 247 Needle's Eye Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc247-needle-eye.svg"
+    },
+    {
+      "slug": "ngc628-phantom-galaxy-wide",
+      "display_name": "NGC 628 Phantom Galaxy Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc628-phantom-galaxy-wide.svg"
+    },
+    {
+      "slug": "ngc1512-barred-spiral",
+      "display_name": "NGC 1512 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc1512-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc1808-starburst",
+      "display_name": "NGC 1808 Starburst Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1808-starburst.svg"
+    },
+    {
+      "slug": "ngc2787-lenticular",
+      "display_name": "NGC 2787 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2787-lenticular.svg"
+    },
+    {
+      "slug": "ngc3115-spindle",
+      "display_name": "NGC 3115 Spindle Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3115-spindle.svg"
+    },
+    {
+      "slug": "ngc4666-superwind",
+      "display_name": "NGC 4666 Superwind Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4666-superwind.svg"
+    },
+    {
+      "slug": "ngc5866-spindle-wide",
+      "display_name": "NGC 5866 Spindle Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc5866-spindle-wide.svg"
+    },
+    {
+      "slug": "hickson68-group",
+      "display_name": "Hickson 68 Galaxy Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson68-group.svg"
+    },
+    {
+      "slug": "ngc3718-3729-pair",
+      "display_name": "NGC 3718 / NGC 3729 Pair",
+      "category": "galaxy_group",
+      "asset": "assets/ngc3718-3729-pair.svg"
+    },
+    {
+      "slug": "ic405-flaming-star-wide",
+      "display_name": "IC 405 Flaming Star Wide",
+      "category": "nebula",
+      "asset": "assets/ic405-flaming-star-wide.svg"
+    },
+    {
+      "slug": "ic5146-cocoon-wide",
+      "display_name": "IC 5146 Cocoon Wide",
+      "category": "nebula",
+      "asset": "assets/ic5146-cocoon-wide.svg"
+    },
+    {
+      "slug": "ngc2174-monkey-head-wide",
+      "display_name": "NGC 2174 Monkey Head Wide",
+      "category": "nebula",
+      "asset": "assets/ngc2174-monkey-head-wide.svg"
+    },
+    {
+      "slug": "sh2-124-cocoon-region",
+      "display_name": "Sh2-124 Cygnus Emission Region",
+      "category": "nebula",
+      "asset": "assets/sh2-124-cocoon-region.svg"
+    },
+    {
+      "slug": "sh2-157-lobster-claw",
+      "display_name": "Sh2-157 Lobster Claw Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-157-lobster-claw.svg"
+    },
+    {
+      "slug": "sh2-188-dolphin-nebula",
+      "display_name": "Sh2-188 Dolphin Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-188-dolphin-nebula.svg"
+    },
+    {
+      "slug": "barnard72-snake-nebula-wide",
+      "display_name": "Barnard 72 Snake Nebula Wide",
+      "category": "nebula",
+      "asset": "assets/barnard72-snake-nebula-wide.svg"
+    },
+    {
+      "slug": "barnard86-ink-spot",
+      "display_name": "Barnard 86 Ink Spot",
+      "category": "nebula",
+      "asset": "assets/barnard86-ink-spot.svg"
+    },
+    {
+      "slug": "vdB152-wolf-cave-wide",
+      "display_name": "vdB 152 Wolf's Cave Wide",
+      "category": "nebula",
+      "asset": "assets/vdB152-wolf-cave-wide.svg"
+    },
+    {
+      "slug": "ngc6726-corona-australis",
+      "display_name": "NGC 6726 Corona Australis",
+      "category": "nebula",
+      "asset": "assets/ngc6726-corona-australis.svg"
+    },
+    {
+      "slug": "ngc246-skull-wide",
+      "display_name": "NGC 246 Skull Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc246-skull-wide.svg"
+    },
+    {
+      "slug": "ngc2610-planetary",
+      "display_name": "NGC 2610 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2610-planetary.svg"
+    },
+    {
+      "slug": "ngc2867-planetary",
+      "display_name": "NGC 2867 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2867-planetary.svg"
+    },
+    {
+      "slug": "ngc4361-planetary",
+      "display_name": "NGC 4361 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc4361-planetary.svg"
+    },
+    {
+      "slug": "ngc5882-planetary",
+      "display_name": "NGC 5882 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc5882-planetary.svg"
+    },
+    {
+      "slug": "ngc6153-planetary",
+      "display_name": "NGC 6153 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6153-planetary.svg"
+    },
+    {
+      "slug": "ngc7006-globular",
+      "display_name": "NGC 7006 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc7006-globular.svg"
+    },
+    {
+      "slug": "ngc7089-m2-wide",
+      "display_name": "NGC 7089 / M2 Wide",
+      "category": "globular_cluster",
+      "asset": "assets/ngc7089-m2-wide.svg"
+    },
+    {
+      "slug": "ngc7492-globular",
+      "display_name": "NGC 7492 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc7492-globular.svg"
+    },
+    {
+      "slug": "terzan5-globular",
+      "display_name": "Terzan 5 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan5-globular.svg"
+    },
+    {
+      "slug": "ngc1893-open-cluster",
+      "display_name": "NGC 1893 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1893-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2169-37-cluster",
+      "display_name": "NGC 2169 37 Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2169-37-cluster.svg"
+    },
+    {
+      "slug": "ngc3293-gem-cluster",
+      "display_name": "NGC 3293 Gem Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc3293-gem-cluster.svg"
+    },
+    {
+      "slug": "ngc3766-pearl-cluster",
+      "display_name": "NGC 3766 Pearl Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc3766-pearl-cluster.svg"
+    },
+    {
+      "slug": "ngc6025-open-cluster",
+      "display_name": "NGC 6025 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6025-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7243-open-cluster",
+      "display_name": "NGC 7243 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7243-open-cluster.svg"
+    },
+    {
+      "slug": "rasalgethi-double",
+      "display_name": "Rasalgethi Double Star",
+      "category": "double_star",
+      "asset": "assets/rasalgethi-double.svg"
+    },
+    {
+      "slug": "eta-cassiopeiae-double",
+      "display_name": "Eta Cassiopeiae Double Star",
+      "category": "double_star",
+      "asset": "assets/eta-cassiopeiae-double.svg"
+    },
+    {
+      "slug": "perseus-segment-field",
+      "display_name": "Perseus Segment Field",
+      "category": "constellation_field",
+      "asset": "assets/perseus-segment-field.svg"
+    },
+    {
+      "slug": "bootes-kite-field",
+      "display_name": "Bootes Kite Field",
+      "category": "constellation_field",
+      "asset": "assets/bootes-kite-field.svg"
+    },
+    {
+      "slug": "ngc157-galaxy",
+      "display_name": "NGC 157 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc157-galaxy.svg"
+    },
+    {
+      "slug": "ngc908-galaxy",
+      "display_name": "NGC 908 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc908-galaxy.svg"
+    },
+    {
+      "slug": "ngc1532-edge-on",
+      "display_name": "NGC 1532 Edge-on Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1532-edge-on.svg"
+    },
+    {
+      "slug": "ngc2442-meathook",
+      "display_name": "NGC 2442 Meathook Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2442-meathook.svg"
+    },
+    {
+      "slug": "ngc2997-galaxy",
+      "display_name": "NGC 2997 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2997-galaxy.svg"
+    },
+    {
+      "slug": "ngc3169-galaxy",
+      "display_name": "NGC 3169 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3169-galaxy.svg"
+    },
+    {
+      "slug": "ngc4038-antennae-wide",
+      "display_name": "Antennae Galaxies Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc4038-antennae-wide.svg"
+    },
+    {
+      "slug": "ngc4697-elliptical",
+      "display_name": "NGC 4697 Elliptical Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4697-elliptical.svg"
+    },
+    {
+      "slug": "markarians-chain-wide",
+      "display_name": "Markarian's Chain Wide",
+      "category": "galaxy_group",
+      "asset": "assets/markarians-chain-wide.svg"
+    },
+    {
+      "slug": "ngc80-group",
+      "display_name": "NGC 80 Galaxy Group",
+      "category": "galaxy_group",
+      "asset": "assets/ngc80-group.svg"
+    },
+    {
+      "slug": "ic1848-soul-wide",
+      "display_name": "IC 1848 Soul Nebula Wide",
+      "category": "nebula",
+      "asset": "assets/ic1848-soul-wide.svg"
+    },
+    {
+      "slug": "ic1805-heart-wide",
+      "display_name": "IC 1805 Heart Nebula Wide",
+      "category": "nebula",
+      "asset": "assets/ic1805-heart-wide.svg"
+    },
+    {
+      "slug": "ngc7635-bubble-wide",
+      "display_name": "NGC 7635 Bubble Wide",
+      "category": "nebula",
+      "asset": "assets/ngc7635-bubble-wide.svg"
+    },
+    {
+      "slug": "sh2-199-soul-complex",
+      "display_name": "Sh2-199 Soul Complex",
+      "category": "nebula",
+      "asset": "assets/sh2-199-soul-complex.svg"
+    },
+    {
+      "slug": "sh2-235-emission-nebula",
+      "display_name": "Sh2-235 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-235-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-240-spaghetti-wide",
+      "display_name": "Sh2-240 Spaghetti Wide",
+      "category": "nebula",
+      "asset": "assets/sh2-240-spaghetti-wide.svg"
+    },
+    {
+      "slug": "barnard33-horsehead-close",
+      "display_name": "Barnard 33 Horsehead Close",
+      "category": "nebula",
+      "asset": "assets/barnard33-horsehead-close.svg"
+    },
+    {
+      "slug": "barnard92-black-hole",
+      "display_name": "Barnard 92 Black Hole",
+      "category": "nebula",
+      "asset": "assets/barnard92-black-hole.svg"
+    },
+    {
+      "slug": "vdB31-reflection-nebula",
+      "display_name": "vdB 31 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB31-reflection-nebula.svg"
+    },
+    {
+      "slug": "ngc1333-widefield",
+      "display_name": "NGC 1333 Widefield",
+      "category": "nebula",
+      "asset": "assets/ngc1333-widefield.svg"
+    },
+    {
+      "slug": "abell21-medusa-wide",
+      "display_name": "Abell 21 Medusa Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/abell21-medusa-wide.svg"
+    },
+    {
+      "slug": "abell31-planetary",
+      "display_name": "Abell 31 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell31-planetary.svg"
+    },
+    {
+      "slug": "abell36-planetary",
+      "display_name": "Abell 36 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell36-planetary.svg"
+    },
+    {
+      "slug": "abell61-planetary",
+      "display_name": "Abell 61 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell61-planetary.svg"
+    },
+    {
+      "slug": "ngc6563-planetary",
+      "display_name": "NGC 6563 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6563-planetary.svg"
+    },
+    {
+      "slug": "ngc6741-phantom-streak",
+      "display_name": "NGC 6741 Phantom Streak",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6741-phantom-streak.svg"
+    },
+    {
+      "slug": "ngc4833-globular",
+      "display_name": "NGC 4833 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc4833-globular.svg"
+    },
+    {
+      "slug": "ngc6101-globular",
+      "display_name": "NGC 6101 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6101-globular.svg"
+    },
+    {
+      "slug": "ngc6397-globular",
+      "display_name": "NGC 6397 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6397-globular.svg"
+    },
+    {
+      "slug": "ngc6723-globular",
+      "display_name": "NGC 6723 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6723-globular.svg"
+    },
+    {
+      "slug": "ngc2516-southern-beehive",
+      "display_name": "NGC 2516 Southern Beehive",
+      "category": "open_cluster",
+      "asset": "assets/ngc2516-southern-beehive.svg"
+    },
+    {
+      "slug": "ngc3114-open-cluster",
+      "display_name": "NGC 3114 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc3114-open-cluster.svg"
+    },
+    {
+      "slug": "ngc3228-open-cluster",
+      "display_name": "NGC 3228 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc3228-open-cluster.svg"
+    },
+    {
+      "slug": "ngc4349-open-cluster",
+      "display_name": "NGC 4349 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc4349-open-cluster.svg"
+    },
+    {
+      "slug": "ngc5460-open-cluster",
+      "display_name": "NGC 5460 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc5460-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6638-open-cluster",
+      "display_name": "NGC 6638 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6638-open-cluster.svg"
+    },
+    {
+      "slug": "iota-cassiopeiae-triple",
+      "display_name": "Iota Cassiopeiae Triple",
+      "category": "double_star",
+      "asset": "assets/iota-cassiopeiae-triple.svg"
+    },
+    {
+      "slug": "porrima-double",
+      "display_name": "Porrima Double Star",
+      "category": "double_star",
+      "asset": "assets/porrima-double.svg"
+    },
+    {
+      "slug": "aquila-eagle-field",
+      "display_name": "Aquila Eagle Field",
+      "category": "constellation_field",
+      "asset": "assets/aquila-eagle-field.svg"
+    },
+    {
+      "slug": "gemini-twins-field",
+      "display_name": "Gemini Twins Field",
+      "category": "constellation_field",
+      "asset": "assets/gemini-twins-field.svg"
+    },
+    {
+      "slug": "ngc1309-galaxy",
+      "display_name": "NGC 1309 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1309-galaxy.svg"
+    },
+    {
+      "slug": "ngc2775-flocculent",
+      "display_name": "NGC 2775 Flocculent Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2775-flocculent.svg"
+    },
+    {
+      "slug": "ngc3314-overlapping",
+      "display_name": "NGC 3314 Overlapping Galaxies",
+      "category": "galaxy",
+      "asset": "assets/ngc3314-overlapping.svg"
+    },
+    {
+      "slug": "ngc3982-galaxy",
+      "display_name": "NGC 3982 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3982-galaxy.svg"
+    },
+    {
+      "slug": "ngc4526-lenticular",
+      "display_name": "NGC 4526 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4526-lenticular.svg"
+    },
+    {
+      "slug": "ngc4567-4568-siamese-twins",
+      "display_name": "NGC 4567/4568 Siamese Twins",
+      "category": "galaxy",
+      "asset": "assets/ngc4567-4568-siamese-twins.svg"
+    },
+    {
+      "slug": "ngc5713-galaxy",
+      "display_name": "NGC 5713 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5713-galaxy.svg"
+    },
+    {
+      "slug": "ngc7479-wide",
+      "display_name": "NGC 7479 Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc7479-wide.svg"
+    },
+    {
+      "slug": "arp273-rose-galaxies",
+      "display_name": "Arp 273 Rose Galaxies",
+      "category": "galaxy_group",
+      "asset": "assets/arp273-rose-galaxies.svg"
+    },
+    {
+      "slug": "hickson92-stephans-wide",
+      "display_name": "Stephan's Quintet Wide",
+      "category": "galaxy_group",
+      "asset": "assets/hickson92-stephans-wide.svg"
+    },
+    {
+      "slug": "ngc6357-lobster-nebula",
+      "display_name": "NGC 6357 Lobster Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc6357-lobster-nebula.svg"
+    },
+    {
+      "slug": "ngc6334-cats-paw-wide",
+      "display_name": "NGC 6334 Cat's Paw Wide",
+      "category": "nebula",
+      "asset": "assets/ngc6334-cats-paw-wide.svg"
+    },
+    {
+      "slug": "rcw58-wolf-rayet-bubble",
+      "display_name": "RCW 58 Wolf-Rayet Bubble",
+      "category": "nebula",
+      "asset": "assets/rcw58-wolf-rayet-bubble.svg"
+    },
+    {
+      "slug": "rcw120-bubble-nebula",
+      "display_name": "RCW 120 Bubble Nebula",
+      "category": "nebula",
+      "asset": "assets/rcw120-bubble-nebula.svg"
+    },
+    {
+      "slug": "sh2-27-zeta-ophiuchi",
+      "display_name": "Sh2-27 Zeta Ophiuchi Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-27-zeta-ophiuchi.svg"
+    },
+    {
+      "slug": "sh2-140-cepheus-nebula",
+      "display_name": "Sh2-140 Cepheus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-140-cepheus-nebula.svg"
+    },
+    {
+      "slug": "barnard168-dark-cigar",
+      "display_name": "Barnard 168 Dark Cigar",
+      "category": "nebula",
+      "asset": "assets/barnard168-dark-cigar.svg"
+    },
+    {
+      "slug": "barnard361-dark-nebula",
+      "display_name": "Barnard 361 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard361-dark-nebula.svg"
+    },
+    {
+      "slug": "vdB133-cygnus-reflection",
+      "display_name": "vdB 133 Cygnus Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB133-cygnus-reflection.svg"
+    },
+    {
+      "slug": "ngc7023-iris-wide",
+      "display_name": "NGC 7023 Iris Wide",
+      "category": "nebula",
+      "asset": "assets/ngc7023-iris-wide.svg"
+    },
+    {
+      "slug": "abell70-planetary",
+      "display_name": "Abell 70 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell70-planetary.svg"
+    },
+    {
+      "slug": "abell72-planetary",
+      "display_name": "Abell 72 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell72-planetary.svg"
+    },
+    {
+      "slug": "du1-planetary",
+      "display_name": "Du 1 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/du1-planetary.svg"
+    },
+    {
+      "slug": "minkowski2-9-butterfly",
+      "display_name": "Minkowski 2-9 Butterfly",
+      "category": "planetary_nebula",
+      "asset": "assets/minkowski2-9-butterfly.svg"
+    },
+    {
+      "slug": "ngc1535-cleopatra-wide",
+      "display_name": "NGC 1535 Cleopatra's Eye Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc1535-cleopatra-wide.svg"
+    },
+    {
+      "slug": "ngc6369-little-ghost-wide",
+      "display_name": "NGC 6369 Little Ghost Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6369-little-ghost-wide.svg"
+    },
+    {
+      "slug": "ngc4147-globular",
+      "display_name": "NGC 4147 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc4147-globular.svg"
+    },
+    {
+      "slug": "ngc4372-globular",
+      "display_name": "NGC 4372 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc4372-globular.svg"
+    },
+    {
+      "slug": "ngc5024-m53-wide",
+      "display_name": "NGC 5024 / M53 Wide",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5024-m53-wide.svg"
+    },
+    {
+      "slug": "ngc5897-globular",
+      "display_name": "NGC 5897 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5897-globular.svg"
+    },
+    {
+      "slug": "ngc2360-carolines-cluster",
+      "display_name": "NGC 2360 Caroline's Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2360-carolines-cluster.svg"
+    },
+    {
+      "slug": "ngc2354-open-cluster",
+      "display_name": "NGC 2354 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2354-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2422-m47-wide",
+      "display_name": "NGC 2422 / M47 Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc2422-m47-wide.svg"
+    },
+    {
+      "slug": "ngc2477-open-cluster",
+      "display_name": "NGC 2477 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2477-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2506-open-cluster",
+      "display_name": "NGC 2506 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2506-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7789-carolines-rose-wide",
+      "display_name": "NGC 7789 Caroline's Rose Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc7789-carolines-rose-wide.svg"
+    },
+    {
+      "slug": "castor-multiple",
+      "display_name": "Castor Multiple Star",
+      "category": "double_star",
+      "asset": "assets/castor-multiple.svg"
+    },
+    {
+      "slug": "izar-double",
+      "display_name": "Izar Double Star",
+      "category": "double_star",
+      "asset": "assets/izar-double.svg"
+    },
+    {
+      "slug": "virgo-diamond-field",
+      "display_name": "Virgo Diamond Field",
+      "category": "constellation_field",
+      "asset": "assets/virgo-diamond-field.svg"
+    },
+    {
+      "slug": "hydra-head-field",
+      "display_name": "Hydra Head Field",
+      "category": "constellation_field",
+      "asset": "assets/hydra-head-field.svg"
+    },
+    {
+      "slug": "ngc891-wide",
+      "display_name": "NGC 891 Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc891-wide.svg"
+    },
+    {
+      "slug": "ngc1187-galaxy",
+      "display_name": "NGC 1187 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1187-galaxy.svg"
+    },
+    {
+      "slug": "ngc1637-galaxy",
+      "display_name": "NGC 1637 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1637-galaxy.svg"
+    },
+    {
+      "slug": "ngc3344-galaxy",
+      "display_name": "NGC 3344 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3344-galaxy.svg"
+    },
+    {
+      "slug": "ngc3621-galaxy",
+      "display_name": "NGC 3621 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3621-galaxy.svg"
+    },
+    {
+      "slug": "ngc4414-flocculent",
+      "display_name": "NGC 4414 Flocculent Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4414-flocculent.svg"
+    },
+    {
+      "slug": "ngc4550-lenticular",
+      "display_name": "NGC 4550 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4550-lenticular.svg"
+    },
+    {
+      "slug": "ngc4650a-polar-ring",
+      "display_name": "NGC 4650A Polar Ring Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4650a-polar-ring.svg"
+    },
+    {
+      "slug": "arp81-interacting-pair",
+      "display_name": "Arp 81 Interacting Pair",
+      "category": "galaxy_group",
+      "asset": "assets/arp81-interacting-pair.svg"
+    },
+    {
+      "slug": "ngc7331-quintet-context",
+      "display_name": "NGC 7331 / Stephan's Quintet Context",
+      "category": "galaxy_group",
+      "asset": "assets/ngc7331-quintet-context.svg"
+    },
+    {
+      "slug": "ngc6188-fighting-dragons",
+      "display_name": "NGC 6188 Fighting Dragons",
+      "category": "nebula",
+      "asset": "assets/ngc6188-fighting-dragons.svg"
+    },
+    {
+      "slug": "ngc6164-6165-dragon-egg",
+      "display_name": "NGC 6164/6165 Dragon's Egg",
+      "category": "nebula",
+      "asset": "assets/ngc6164-6165-dragon-egg.svg"
+    },
+    {
+      "slug": "rcw32-gum15",
+      "display_name": "Gum 15 / RCW 32",
+      "category": "nebula",
+      "asset": "assets/rcw32-gum15.svg"
+    },
+    {
+      "slug": "rcw34-emission-nebula",
+      "display_name": "RCW 34 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/rcw34-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-82-little-cocoon",
+      "display_name": "Sh2-82 Little Cocoon",
+      "category": "nebula",
+      "asset": "assets/sh2-82-little-cocoon.svg"
+    },
+    {
+      "slug": "sh2-284-emission-nebula",
+      "display_name": "Sh2-284 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-284-emission-nebula.svg"
+    },
+    {
+      "slug": "barnard59-pipe-bowl",
+      "display_name": "Barnard 59 Pipe Bowl",
+      "category": "nebula",
+      "asset": "assets/barnard59-pipe-bowl.svg"
+    },
+    {
+      "slug": "barnard228-dark-wolf",
+      "display_name": "Barnard 228 Dark Wolf",
+      "category": "nebula",
+      "asset": "assets/barnard228-dark-wolf.svg"
+    },
+    {
+      "slug": "vdB27-reflection-nebula",
+      "display_name": "vdB 27 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB27-reflection-nebula.svg"
+    },
+    {
+      "slug": "ldn1235-shark-nebula",
+      "display_name": "LDN 1235 Shark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1235-shark-nebula.svg"
+    },
+    {
+      "slug": "abell7-planetary",
+      "display_name": "Abell 7 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell7-planetary.svg"
+    },
+    {
+      "slug": "abell12-planetary",
+      "display_name": "Abell 12 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell12-planetary.svg"
+    },
+    {
+      "slug": "abell43-planetary",
+      "display_name": "Abell 43 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell43-planetary.svg"
+    },
+    {
+      "slug": "abell55-planetary",
+      "display_name": "Abell 55 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell55-planetary.svg"
+    },
+    {
+      "slug": "ngc2438-wide",
+      "display_name": "NGC 2438 Wide",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2438-wide.svg"
+    },
+    {
+      "slug": "ngc6778-planetary",
+      "display_name": "NGC 6778 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6778-planetary.svg"
+    },
+    {
+      "slug": "ngc1851-wide",
+      "display_name": "NGC 1851 Wide",
+      "category": "globular_cluster",
+      "asset": "assets/ngc1851-wide.svg"
+    },
+    {
+      "slug": "ngc2298-globular",
+      "display_name": "NGC 2298 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc2298-globular.svg"
+    },
+    {
+      "slug": "ngc5139-omega-wide",
+      "display_name": "Omega Centauri Wide",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5139-omega-wide.svg"
+    },
+    {
+      "slug": "ngc6541-globular",
+      "display_name": "NGC 6541 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6541-globular.svg"
+    },
+    {
+      "slug": "ngc1662-open-cluster",
+      "display_name": "NGC 1662 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1662-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1981-open-cluster",
+      "display_name": "NGC 1981 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1981-open-cluster.svg"
+    },
+    {
+      "slug": "ngc225-sailboat-cluster",
+      "display_name": "NGC 225 Sailboat Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc225-sailboat-cluster.svg"
+    },
+    {
+      "slug": "ngc457-owl-cluster-wide",
+      "display_name": "NGC 457 Owl Cluster Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc457-owl-cluster-wide.svg"
+    },
+    {
+      "slug": "ngc654-open-cluster",
+      "display_name": "NGC 654 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc654-open-cluster.svg"
+    },
+    {
+      "slug": "trumpler14-carina-cluster",
+      "display_name": "Trumpler 14 Carina Cluster",
+      "category": "open_cluster",
+      "asset": "assets/trumpler14-carina-cluster.svg"
+    },
+    {
+      "slug": "61-cygni-double",
+      "display_name": "61 Cygni Double Star",
+      "category": "double_star",
+      "asset": "assets/61-cygni-double.svg"
+    },
+    {
+      "slug": "zeta-lyrae-double",
+      "display_name": "Zeta Lyrae Double Star",
+      "category": "double_star",
+      "asset": "assets/zeta-lyrae-double.svg"
+    },
+    {
+      "slug": "lepus-field",
+      "display_name": "Lepus Field",
+      "category": "constellation_field",
+      "asset": "assets/lepus-field.svg"
+    },
+    {
+      "slug": "canes-venatici-field",
+      "display_name": "Canes Venatici Field",
+      "category": "constellation_field",
+      "asset": "assets/canes-venatici-field.svg"
+    },
+    {
+      "slug": "ngc1672-barred-spiral",
+      "display_name": "NGC 1672 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc1672-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc4535-lost-galaxy",
+      "display_name": "NGC 4535 Lost Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4535-lost-galaxy.svg"
+    },
+    {
+      "slug": "ngc5068-galaxy",
+      "display_name": "NGC 5068 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5068-galaxy.svg"
+    },
+    {
+      "slug": "ngc5247-galaxy",
+      "display_name": "NGC 5247 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5247-galaxy.svg"
+    },
+    {
+      "slug": "ngc5643-galaxy",
+      "display_name": "NGC 5643 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5643-galaxy.svg"
+    },
+    {
+      "slug": "ngc7496-barred-spiral",
+      "display_name": "NGC 7496 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc7496-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc7552-galaxy",
+      "display_name": "NGC 7552 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7552-galaxy.svg"
+    },
+    {
+      "slug": "ngc7793-sculptor-galaxy",
+      "display_name": "NGC 7793 Sculptor Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7793-sculptor-galaxy.svg"
+    },
+    {
+      "slug": "copelands-septet",
+      "display_name": "Copeland's Septet",
+      "category": "galaxy_group",
+      "asset": "assets/copelands-septet.svg"
+    },
+    {
+      "slug": "ngc507-group",
+      "display_name": "NGC 507 Galaxy Group",
+      "category": "galaxy_group",
+      "asset": "assets/ngc507-group.svg"
+    },
+    {
+      "slug": "ngc3576-statue-liberty",
+      "display_name": "NGC 3576 Statue of Liberty Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc3576-statue-liberty.svg"
+    },
+    {
+      "slug": "ngc3603-starburst-nebula",
+      "display_name": "NGC 3603 Starburst Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc3603-starburst-nebula.svg"
+    },
+    {
+      "slug": "rcw38-star-forming-region",
+      "display_name": "RCW 38 Star-forming Region",
+      "category": "nebula",
+      "asset": "assets/rcw38-star-forming-region.svg"
+    },
+    {
+      "slug": "sh2-106-bipolar-nebula",
+      "display_name": "Sh2-106 Bipolar Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-106-bipolar-nebula.svg"
+    },
+    {
+      "slug": "sh2-216-ancient-planetary",
+      "display_name": "Sh2-216 Ancient Planetary",
+      "category": "nebula",
+      "asset": "assets/sh2-216-ancient-planetary.svg"
+    },
+    {
+      "slug": "gum12-vela-remnant",
+      "display_name": "Gum 12 Vela Supernova Remnant",
+      "category": "nebula",
+      "asset": "assets/gum12-vela-remnant.svg"
+    },
+    {
+      "slug": "barnard78-pipe-stem",
+      "display_name": "Barnard 78 Pipe Stem",
+      "category": "nebula",
+      "asset": "assets/barnard78-pipe-stem.svg"
+    },
+    {
+      "slug": "ldn1621-orion-dark",
+      "display_name": "LDN 1621 Orion Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1621-orion-dark.svg"
+    },
+    {
+      "slug": "vdB9-cassiopeia",
+      "display_name": "vdB 9 Cassiopeia Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB9-cassiopeia.svg"
+    },
+    {
+      "slug": "ced51-reflection-nebula",
+      "display_name": "Cederblad 51 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ced51-reflection-nebula.svg"
+    },
+    {
+      "slug": "ic1295-planetary",
+      "display_name": "IC 1295 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic1295-planetary.svg"
+    },
+    {
+      "slug": "ngc7048-planetary",
+      "display_name": "NGC 7048 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7048-planetary.svg"
+    },
+    {
+      "slug": "ngc7139-planetary",
+      "display_name": "NGC 7139 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7139-planetary.svg"
+    },
+    {
+      "slug": "abell46-planetary",
+      "display_name": "Abell 46 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell46-planetary.svg"
+    },
+    {
+      "slug": "abell63-planetary",
+      "display_name": "Abell 63 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell63-planetary.svg"
+    },
+    {
+      "slug": "kronberger61-soccer-ball",
+      "display_name": "Kronberger 61 Soccer Ball",
+      "category": "planetary_nebula",
+      "asset": "assets/kronberger61-soccer-ball.svg"
+    },
+    {
+      "slug": "ngc2419-intergalactic-wanderer",
+      "display_name": "NGC 2419 Intergalactic Wanderer",
+      "category": "globular_cluster",
+      "asset": "assets/ngc2419-intergalactic-wanderer.svg"
+    },
+    {
+      "slug": "ngc5634-globular",
+      "display_name": "NGC 5634 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5634-globular.svg"
+    },
+    {
+      "slug": "ngc6284-globular",
+      "display_name": "NGC 6284 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6284-globular.svg"
+    },
+    {
+      "slug": "ngc6356-globular",
+      "display_name": "NGC 6356 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6356-globular.svg"
+    },
+    {
+      "slug": "ngc1502-open-cluster",
+      "display_name": "NGC 1502 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1502-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1647-open-cluster",
+      "display_name": "NGC 1647 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1647-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1746-open-cluster",
+      "display_name": "NGC 1746 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1746-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2232-open-cluster",
+      "display_name": "NGC 2232 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2232-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2482-open-cluster",
+      "display_name": "NGC 2482 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2482-open-cluster.svg"
+    },
+    {
+      "slug": "ngc5822-open-cluster",
+      "display_name": "NGC 5822 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc5822-open-cluster.svg"
+    },
+    {
+      "slug": "delta-cygni-double",
+      "display_name": "Delta Cygni Double Star",
+      "category": "double_star",
+      "asset": "assets/delta-cygni-double.svg"
+    },
+    {
+      "slug": "gamma-arietis-double",
+      "display_name": "Gamma Arietis Double Star",
+      "category": "double_star",
+      "asset": "assets/gamma-arietis-double.svg"
+    },
+    {
+      "slug": "pisces-circlet-field",
+      "display_name": "Pisces Circlet Field",
+      "category": "constellation_field",
+      "asset": "assets/pisces-circlet-field.svg"
+    },
+    {
+      "slug": "capricornus-triangle-field",
+      "display_name": "Capricornus Triangle Field",
+      "category": "constellation_field",
+      "asset": "assets/capricornus-triangle-field.svg"
+    },
+    {
+      "slug": "ngc45-galaxy",
+      "display_name": "NGC 45 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc45-galaxy.svg"
+    },
+    {
+      "slug": "ngc864-galaxy",
+      "display_name": "NGC 864 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc864-galaxy.svg"
+    },
+    {
+      "slug": "ngc1073-barred-spiral",
+      "display_name": "NGC 1073 Barred Spiral",
+      "category": "galaxy",
+      "asset": "assets/ngc1073-barred-spiral.svg"
+    },
+    {
+      "slug": "ngc1559-galaxy",
+      "display_name": "NGC 1559 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1559-galaxy.svg"
+    },
+    {
+      "slug": "ngc3521-wide",
+      "display_name": "NGC 3521 Wide",
+      "category": "galaxy",
+      "asset": "assets/ngc3521-wide.svg"
+    },
+    {
+      "slug": "ngc3945-lenticular",
+      "display_name": "NGC 3945 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3945-lenticular.svg"
+    },
+    {
+      "slug": "ngc4699-galaxy",
+      "display_name": "NGC 4699 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4699-galaxy.svg"
+    },
+    {
+      "slug": "ngc7424-grand-design",
+      "display_name": "NGC 7424 Grand Design Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7424-grand-design.svg"
+    },
+    {
+      "slug": "hickson61-box-galaxies",
+      "display_name": "Hickson 61 Box Galaxies",
+      "category": "galaxy_group",
+      "asset": "assets/hickson61-box-galaxies.svg"
+    },
+    {
+      "slug": "ngc7232-triplet",
+      "display_name": "NGC 7232 Galaxy Triplet",
+      "category": "galaxy_group",
+      "asset": "assets/ngc7232-triplet.svg"
+    },
+    {
+      "slug": "ngc3324-gabriela-mistral",
+      "display_name": "NGC 3324 Gabriela Mistral Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc3324-gabriela-mistral.svg"
+    },
+    {
+      "slug": "ngc3199-wolf-rayet",
+      "display_name": "NGC 3199 Wolf-Rayet Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc3199-wolf-rayet.svg"
+    },
+    {
+      "slug": "rcw79-bubble-nebula",
+      "display_name": "RCW 79 Bubble Nebula",
+      "category": "nebula",
+      "asset": "assets/rcw79-bubble-nebula.svg"
+    },
+    {
+      "slug": "rcw86-supernova-remnant",
+      "display_name": "RCW 86 Supernova Remnant",
+      "category": "nebula",
+      "asset": "assets/rcw86-supernova-remnant.svg"
+    },
+    {
+      "slug": "sh2-71-planetary-nebula",
+      "display_name": "Sh2-71 Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-71-planetary-nebula.svg"
+    },
+    {
+      "slug": "sh2-88-emission-nebula",
+      "display_name": "Sh2-88 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-88-emission-nebula.svg"
+    },
+    {
+      "slug": "barnard30-lambda-orionis",
+      "display_name": "Barnard 30 Lambda Orionis Dark Cloud",
+      "category": "nebula",
+      "asset": "assets/barnard30-lambda-orionis.svg"
+    },
+    {
+      "slug": "ldn988-cygnus-dark",
+      "display_name": "LDN 988 Cygnus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn988-cygnus-dark.svg"
+    },
+    {
+      "slug": "vdB126-vulpecula",
+      "display_name": "vdB 126 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdB126-vulpecula.svg"
+    },
+    {
+      "slug": "ngc1788-cosmic-bat",
+      "display_name": "NGC 1788 Cosmic Bat",
+      "category": "nebula",
+      "asset": "assets/ngc1788-cosmic-bat.svg"
+    },
+    {
+      "slug": "abell74-planetary",
+      "display_name": "Abell 74 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell74-planetary.svg"
+    },
+    {
+      "slug": "abell79-planetary",
+      "display_name": "Abell 79 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell79-planetary.svg"
+    },
+    {
+      "slug": "he2-437-planetary",
+      "display_name": "Henize 2-437 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/he2-437-planetary.svg"
+    },
+    {
+      "slug": "minkowski1-64-planetary",
+      "display_name": "Minkowski 1-64 Planetary",
+      "category": "planetary_nebula",
+      "asset": "assets/minkowski1-64-planetary.svg"
+    },
+    {
+      "slug": "ngc6058-planetary",
+      "display_name": "NGC 6058 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6058-planetary.svg"
+    },
+    {
+      "slug": "ngc6578-planetary",
+      "display_name": "NGC 6578 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6578-planetary.svg"
+    },
+    {
+      "slug": "ngc6426-globular",
+      "display_name": "NGC 6426 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6426-globular.svg"
+    },
+    {
+      "slug": "ngc6517-globular",
+      "display_name": "NGC 6517 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6517-globular.svg"
+    },
+    {
+      "slug": "ngc6553-globular",
+      "display_name": "NGC 6553 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6553-globular.svg"
+    },
+    {
+      "slug": "ngc6712-globular",
+      "display_name": "NGC 6712 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6712-globular.svg"
+    },
+    {
+      "slug": "ngc2367-open-cluster",
+      "display_name": "NGC 2367 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2367-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2669-open-cluster",
+      "display_name": "NGC 2669 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2669-open-cluster.svg"
+    },
+    {
+      "slug": "ngc3766-wide",
+      "display_name": "NGC 3766 Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc3766-wide.svg"
+    },
+    {
+      "slug": "ngc5662-open-cluster",
+      "display_name": "NGC 5662 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc5662-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6087-snorman-cluster",
+      "display_name": "NGC 6087 S Normae Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6087-snorman-cluster.svg"
+    },
+    {
+      "slug": "ngc6405-m6-wide",
+      "display_name": "NGC 6405 / M6 Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc6405-m6-wide.svg"
+    },
+    {
+      "slug": "mu-cephei-field",
+      "display_name": "Mu Cephei Garnet Star Field",
+      "category": "double_star",
+      "asset": "assets/mu-cephei-field.svg"
+    },
+    {
+      "slug": "nu-draconis-double",
+      "display_name": "Nu Draconis Double Star",
+      "category": "double_star",
+      "asset": "assets/nu-draconis-double.svg"
+    },
+    {
+      "slug": "serpens-caput-field",
+      "display_name": "Serpens Caput Field",
+      "category": "constellation_field",
+      "asset": "assets/serpens-caput-field.svg"
+    },
+    {
+      "slug": "sagittarius-teapot-field",
+      "display_name": "Sagittarius Teapot Field",
+      "category": "constellation_field",
+      "asset": "assets/sagittarius-teapot-field.svg"
+    },
+    {
+      "slug": "ngc1022-barred-galaxy",
+      "display_name": "NGC 1022 Barred Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1022-barred-galaxy.svg"
+    },
+    {
+      "slug": "ngc1964-galaxy",
+      "display_name": "NGC 1964 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1964-galaxy.svg"
+    },
+    {
+      "slug": "ngc2280-galaxy",
+      "display_name": "NGC 2280 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2280-galaxy.svg"
+    },
+    {
+      "slug": "ngc2967-galaxy",
+      "display_name": "NGC 2967 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2967-galaxy.svg"
+    },
+    {
+      "slug": "ngc3166-galaxy",
+      "display_name": "NGC 3166 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3166-galaxy.svg"
+    },
+    {
+      "slug": "ngc3346-galaxy",
+      "display_name": "NGC 3346 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3346-galaxy.svg"
+    },
+    {
+      "slug": "ngc3631-grand-design",
+      "display_name": "NGC 3631 Grand Design Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3631-grand-design.svg"
+    },
+    {
+      "slug": "ngc4030-galaxy",
+      "display_name": "NGC 4030 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4030-galaxy.svg"
+    },
+    {
+      "slug": "hickson40-compact-group",
+      "display_name": "Hickson 40 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson40-compact-group.svg"
+    },
+    {
+      "slug": "hickson90-compact-group",
+      "display_name": "Hickson 90 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson90-compact-group.svg"
+    },
+    {
+      "slug": "ngc2023-reflection-nebula",
+      "display_name": "NGC 2023 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc2023-reflection-nebula.svg"
+    },
+    {
+      "slug": "ngc2071-reflection-nebula",
+      "display_name": "NGC 2071 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc2071-reflection-nebula.svg"
+    },
+    {
+      "slug": "sh2-252-monkey-head-wide",
+      "display_name": "Sh2-252 Monkey Head Wide",
+      "category": "nebula",
+      "asset": "assets/sh2-252-monkey-head-wide.svg"
+    },
+    {
+      "slug": "sh2-301-emission-nebula",
+      "display_name": "Sh2-301 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-301-emission-nebula.svg"
+    },
+    {
+      "slug": "rcw57-emission-nebula",
+      "display_name": "RCW 57 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/rcw57-emission-nebula.svg"
+    },
+    {
+      "slug": "gum19-emission-nebula",
+      "display_name": "Gum 19 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/gum19-emission-nebula.svg"
+    },
+    {
+      "slug": "barnard18-taurus-dark",
+      "display_name": "Barnard 18 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard18-taurus-dark.svg"
+    },
+    {
+      "slug": "ldn1228-cepheus-dark",
+      "display_name": "LDN 1228 Cepheus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1228-cepheus-dark.svg"
+    },
+    {
+      "slug": "vdb17-reflection-nebula",
+      "display_name": "vdB 17 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb17-reflection-nebula.svg"
+    },
+    {
+      "slug": "ic2087-reflection-nebula",
+      "display_name": "IC 2087 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ic2087-reflection-nebula.svg"
+    },
+    {
+      "slug": "ngc6804-planetary",
+      "display_name": "NGC 6804 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6804-planetary.svg"
+    },
+    {
+      "slug": "ngc7354-planetary",
+      "display_name": "NGC 7354 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc7354-planetary.svg"
+    },
+    {
+      "slug": "ngc6751-glowing-eye",
+      "display_name": "NGC 6751 Glowing Eye Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6751-glowing-eye.svg"
+    },
+    {
+      "slug": "ngc6886-planetary",
+      "display_name": "NGC 6886 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6886-planetary.svg"
+    },
+    {
+      "slug": "ic2149-planetary",
+      "display_name": "IC 2149 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic2149-planetary.svg"
+    },
+    {
+      "slug": "ic5217-planetary",
+      "display_name": "IC 5217 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic5217-planetary.svg"
+    },
+    {
+      "slug": "palomar2-globular",
+      "display_name": "Palomar 2 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar2-globular.svg"
+    },
+    {
+      "slug": "palomar3-globular",
+      "display_name": "Palomar 3 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar3-globular.svg"
+    },
+    {
+      "slug": "palomar4-globular",
+      "display_name": "Palomar 4 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar4-globular.svg"
+    },
+    {
+      "slug": "ngc5053-globular",
+      "display_name": "NGC 5053 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc5053-globular.svg"
+    },
+    {
+      "slug": "ngc1245-open-cluster",
+      "display_name": "NGC 1245 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1245-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1907-open-cluster",
+      "display_name": "NGC 1907 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1907-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2194-open-cluster",
+      "display_name": "NGC 2194 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2194-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2355-open-cluster",
+      "display_name": "NGC 2355 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2355-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6939-open-cluster",
+      "display_name": "NGC 6939 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6939-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7128-open-cluster",
+      "display_name": "NGC 7128 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7128-open-cluster.svg"
+    },
+    {
+      "slug": "95-herculis-double",
+      "display_name": "95 Herculis Double Star",
+      "category": "double_star",
+      "asset": "assets/95-herculis-double.svg"
+    },
+    {
+      "slug": "32-eridani-double",
+      "display_name": "32 Eridani Double Star",
+      "category": "double_star",
+      "asset": "assets/32-eridani-double.svg"
+    },
+    {
+      "slug": "auriga-pentagon-field",
+      "display_name": "Auriga Pentagon Field",
+      "category": "constellation_field",
+      "asset": "assets/auriga-pentagon-field.svg"
+    },
+    {
+      "slug": "leo-sickle-field",
+      "display_name": "Leo Sickle Field",
+      "category": "constellation_field",
+      "asset": "assets/leo-sickle-field.svg"
+    },
+    {
+      "slug": "ngc4214-irregular",
+      "display_name": "NGC 4214 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4214-irregular.svg"
+    },
+    {
+      "slug": "ngc4618-one-armed",
+      "display_name": "NGC 4618 One-Armed Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4618-one-armed.svg"
+    },
+    {
+      "slug": "ngc4625-one-armed",
+      "display_name": "NGC 4625 One-Armed Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4625-one-armed.svg"
+    },
+    {
+      "slug": "ngc4244-silver-needle",
+      "display_name": "NGC 4244 Silver Needle Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4244-silver-needle.svg"
+    },
+    {
+      "slug": "ngc5204-irregular",
+      "display_name": "NGC 5204 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5204-irregular.svg"
+    },
+    {
+      "slug": "ngc5474-asymmetric",
+      "display_name": "NGC 5474 Asymmetric Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5474-asymmetric.svg"
+    },
+    {
+      "slug": "ngc5585-galaxy",
+      "display_name": "NGC 5585 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5585-galaxy.svg"
+    },
+    {
+      "slug": "ngc6503-lost-in-space",
+      "display_name": "NGC 6503 Lost in Space Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc6503-lost-in-space.svg"
+    },
+    {
+      "slug": "hickson31-compact-group",
+      "display_name": "Hickson 31 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson31-compact-group.svg"
+    },
+    {
+      "slug": "hickson56-compact-group",
+      "display_name": "Hickson 56 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson56-compact-group.svg"
+    },
+    {
+      "slug": "ic348-reflection-cluster",
+      "display_name": "IC 348 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ic348-reflection-cluster.svg"
+    },
+    {
+      "slug": "m1-92-minkowski-footprint",
+      "display_name": "Minkowski's Footprint M1-92",
+      "category": "nebula",
+      "asset": "assets/m1-92-minkowski-footprint.svg"
+    },
+    {
+      "slug": "sh2-174-ancient-pn",
+      "display_name": "Sh2-174 Ancient Planetary Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-174-ancient-pn.svg"
+    },
+    {
+      "slug": "sh2-280-orion-nebula",
+      "display_name": "Sh2-280 Orion Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-280-orion-nebula.svg"
+    },
+    {
+      "slug": "sh2-292-seagull-head",
+      "display_name": "Sh2-292 Seagull Head",
+      "category": "nebula",
+      "asset": "assets/sh2-292-seagull-head.svg"
+    },
+    {
+      "slug": "vdb47-orion",
+      "display_name": "vdB 47 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb47-orion.svg"
+    },
+    {
+      "slug": "vdb38-orion",
+      "display_name": "vdB 38 Orion Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb38-orion.svg"
+    },
+    {
+      "slug": "barnard22-taurus-dark",
+      "display_name": "Barnard 22 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard22-taurus-dark.svg"
+    },
+    {
+      "slug": "ldn1238-cepheus-dark",
+      "display_name": "LDN 1238 Cepheus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1238-cepheus-dark.svg"
+    },
+    {
+      "slug": "gum48d-emission-nebula",
+      "display_name": "Gum 48d Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/gum48d-emission-nebula.svg"
+    },
+    {
+      "slug": "ngc6742-planetary",
+      "display_name": "NGC 6742 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6742-planetary.svg"
+    },
+    {
+      "slug": "ngc6772-planetary",
+      "display_name": "NGC 6772 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6772-planetary.svg"
+    },
+    {
+      "slug": "ngc6894-planetary",
+      "display_name": "NGC 6894 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6894-planetary.svg"
+    },
+    {
+      "slug": "ngc6807-planetary",
+      "display_name": "NGC 6807 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6807-planetary.svg"
+    },
+    {
+      "slug": "ic2003-planetary",
+      "display_name": "IC 2003 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic2003-planetary.svg"
+    },
+    {
+      "slug": "ic2165-planetary",
+      "display_name": "IC 2165 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic2165-planetary.svg"
+    },
+    {
+      "slug": "palomar7-globular",
+      "display_name": "Palomar 7 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar7-globular.svg"
+    },
+    {
+      "slug": "palomar8-globular",
+      "display_name": "Palomar 8 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar8-globular.svg"
+    },
+    {
+      "slug": "ngc6235-globular",
+      "display_name": "NGC 6235 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6235-globular.svg"
+    },
+    {
+      "slug": "ngc6287-globular",
+      "display_name": "NGC 6287 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6287-globular.svg"
+    },
+    {
+      "slug": "ngc2266-open-cluster",
+      "display_name": "NGC 2266 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2266-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2304-open-cluster",
+      "display_name": "NGC 2304 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2304-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2414-open-cluster",
+      "display_name": "NGC 2414 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2414-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6250-open-cluster",
+      "display_name": "NGC 6250 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6250-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6604-open-cluster",
+      "display_name": "NGC 6604 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6604-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7654-m52-wide",
+      "display_name": "NGC 7654 / M52 Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc7654-m52-wide.svg"
+    },
+    {
+      "slug": "lambda-orionis-double",
+      "display_name": "Lambda Orionis Multiple",
+      "category": "double_star",
+      "asset": "assets/lambda-orionis-double.svg"
+    },
+    {
+      "slug": "sigma-orionis-multiple",
+      "display_name": "Sigma Orionis Multiple",
+      "category": "double_star",
+      "asset": "assets/sigma-orionis-multiple.svg"
+    },
+    {
+      "slug": "taurus-hyades-field",
+      "display_name": "Taurus Hyades Field",
+      "category": "constellation_field",
+      "asset": "assets/taurus-hyades-field.svg"
+    },
+    {
+      "slug": "scutum-star-cloud-field",
+      "display_name": "Scutum Star Cloud Field",
+      "category": "constellation_field",
+      "asset": "assets/scutum-star-cloud-field.svg"
+    },
+    {
+      "slug": "ngc1003-galaxy",
+      "display_name": "NGC 1003 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1003-galaxy.svg"
+    },
+    {
+      "slug": "ngc1058-galaxy",
+      "display_name": "NGC 1058 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1058-galaxy.svg"
+    },
+    {
+      "slug": "ngc1569-starburst",
+      "display_name": "NGC 1569 Starburst Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1569-starburst.svg"
+    },
+    {
+      "slug": "ngc2366-irregular",
+      "display_name": "NGC 2366 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2366-irregular.svg"
+    },
+    {
+      "slug": "ngc2655-lenticular",
+      "display_name": "NGC 2655 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2655-lenticular.svg"
+    },
+    {
+      "slug": "ngc3184-galaxy",
+      "display_name": "NGC 3184 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3184-galaxy.svg"
+    },
+    {
+      "slug": "ngc3893-galaxy",
+      "display_name": "NGC 3893 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3893-galaxy.svg"
+    },
+    {
+      "slug": "ngc4242-galaxy",
+      "display_name": "NGC 4242 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4242-galaxy.svg"
+    },
+    {
+      "slug": "hickson57-copelands-septet-wide",
+      "display_name": "Hickson 57 Copeland's Septet Wide",
+      "category": "galaxy_group",
+      "asset": "assets/hickson57-copelands-septet-wide.svg"
+    },
+    {
+      "slug": "hickson62-compact-group",
+      "display_name": "Hickson 62 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson62-compact-group.svg"
+    },
+    {
+      "slug": "ngc2170-reflection-nebula",
+      "display_name": "NGC 2170 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc2170-reflection-nebula.svg"
+    },
+    {
+      "slug": "sh2-209-emission-nebula",
+      "display_name": "Sh2-209 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-209-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-264-lambda-orionis-ring",
+      "display_name": "Sh2-264 Lambda Orionis Ring",
+      "category": "nebula",
+      "asset": "assets/sh2-264-lambda-orionis-ring.svg"
+    },
+    {
+      "slug": "sh2-282-orion-nebula",
+      "display_name": "Sh2-282 Orion Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-282-orion-nebula.svg"
+    },
+    {
+      "slug": "sh2-297-seagull-wing",
+      "display_name": "Sh2-297 Seagull Wing",
+      "category": "nebula",
+      "asset": "assets/sh2-297-seagull-wing.svg"
+    },
+    {
+      "slug": "rcw108-emission-nebula",
+      "display_name": "RCW 108 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/rcw108-emission-nebula.svg"
+    },
+    {
+      "slug": "barnard7-taurus-dark",
+      "display_name": "Barnard 7 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard7-taurus-dark.svg"
+    },
+    {
+      "slug": "barnard35-lambda-orionis",
+      "display_name": "Barnard 35 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard35-lambda-orionis.svg"
+    },
+    {
+      "slug": "ldn1551-taurus-dark",
+      "display_name": "LDN 1551 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1551-taurus-dark.svg"
+    },
+    {
+      "slug": "vdb64-monoceros",
+      "display_name": "vdB 64 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb64-monoceros.svg"
+    },
+    {
+      "slug": "ngc2022-planetary",
+      "display_name": "NGC 2022 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2022-planetary.svg"
+    },
+    {
+      "slug": "ngc6445-planetary",
+      "display_name": "NGC 6445 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6445-planetary.svg"
+    },
+    {
+      "slug": "ngc6629-planetary",
+      "display_name": "NGC 6629 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6629-planetary.svg"
+    },
+    {
+      "slug": "ngc6852-planetary",
+      "display_name": "NGC 6852 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6852-planetary.svg"
+    },
+    {
+      "slug": "ngc6790-planetary",
+      "display_name": "NGC 6790 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6790-planetary.svg"
+    },
+    {
+      "slug": "ngc6879-planetary",
+      "display_name": "NGC 6879 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6879-planetary.svg"
+    },
+    {
+      "slug": "ngc6355-globular",
+      "display_name": "NGC 6355 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6355-globular.svg"
+    },
+    {
+      "slug": "ngc6401-globular",
+      "display_name": "NGC 6401 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6401-globular.svg"
+    },
+    {
+      "slug": "ngc6440-globular",
+      "display_name": "NGC 6440 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6440-globular.svg"
+    },
+    {
+      "slug": "ngc6642-globular",
+      "display_name": "NGC 6642 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6642-globular.svg"
+    },
+    {
+      "slug": "ngc7044-open-cluster",
+      "display_name": "NGC 7044 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7044-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7142-open-cluster",
+      "display_name": "NGC 7142 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7142-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7209-open-cluster",
+      "display_name": "NGC 7209 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7209-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7296-open-cluster",
+      "display_name": "NGC 7296 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7296-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7788-open-cluster",
+      "display_name": "NGC 7788 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7788-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7790-open-cluster",
+      "display_name": "NGC 7790 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7790-open-cluster.svg"
+    },
+    {
+      "slug": "beta-monocerotis-triple",
+      "display_name": "Beta Monocerotis Triple Star",
+      "category": "double_star",
+      "asset": "assets/beta-monocerotis-triple.svg"
+    },
+    {
+      "slug": "theta-serpentis-double",
+      "display_name": "Theta Serpentis Double Star",
+      "category": "double_star",
+      "asset": "assets/theta-serpentis-double.svg"
+    },
+    {
+      "slug": "hercules-keystone-field",
+      "display_name": "Hercules Keystone Field",
+      "category": "constellation_field",
+      "asset": "assets/hercules-keystone-field.svg"
+    },
+    {
+      "slug": "ophiuchus-field",
+      "display_name": "Ophiuchus Field",
+      "category": "constellation_field",
+      "asset": "assets/ophiuchus-field.svg"
+    },
+    {
+      "slug": "ngc1156-irregular",
+      "display_name": "NGC 1156 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1156-irregular.svg"
+    },
+    {
+      "slug": "ngc1313-topsy-turvy",
+      "display_name": "NGC 1313 Topsy Turvy Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1313-topsy-turvy.svg"
+    },
+    {
+      "slug": "ngc1560-edge-galaxy",
+      "display_name": "NGC 1560 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1560-edge-galaxy.svg"
+    },
+    {
+      "slug": "ngc3239-loony-galaxy",
+      "display_name": "NGC 3239 Loony Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3239-loony-galaxy.svg"
+    },
+    {
+      "slug": "ngc4027-ringtail",
+      "display_name": "NGC 4027 Ringtail Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4027-ringtail.svg"
+    },
+    {
+      "slug": "ngc4062-galaxy",
+      "display_name": "NGC 4062 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4062-galaxy.svg"
+    },
+    {
+      "slug": "ngc4395-seyfert",
+      "display_name": "NGC 4395 Seyfert Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4395-seyfert.svg"
+    },
+    {
+      "slug": "ngc4605-galaxy",
+      "display_name": "NGC 4605 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4605-galaxy.svg"
+    },
+    {
+      "slug": "hickson79-seyfert-sextet",
+      "display_name": "Hickson 79 Seyfert's Sextet Wide",
+      "category": "galaxy_group",
+      "asset": "assets/hickson79-seyfert-sextet.svg"
+    },
+    {
+      "slug": "hickson96-compact-group",
+      "display_name": "Hickson 96 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson96-compact-group.svg"
+    },
+    {
+      "slug": "ngc2068-m78-context",
+      "display_name": "NGC 2068 / M78 Context",
+      "category": "nebula",
+      "asset": "assets/ngc2068-m78-context.svg"
+    },
+    {
+      "slug": "ngc2149-reflection-nebula",
+      "display_name": "NGC 2149 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc2149-reflection-nebula.svg"
+    },
+    {
+      "slug": "sh2-100-cygnus-nebula",
+      "display_name": "Sh2-100 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-100-cygnus-nebula.svg"
+    },
+    {
+      "slug": "sh2-152-cave-neighbor",
+      "display_name": "Sh2-152 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-152-cave-neighbor.svg"
+    },
+    {
+      "slug": "sh2-173-phantom-nebula",
+      "display_name": "Sh2-173 Phantom Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-173-phantom-nebula.svg"
+    },
+    {
+      "slug": "sh2-219-emission-nebula",
+      "display_name": "Sh2-219 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-219-emission-nebula.svg"
+    },
+    {
+      "slug": "barnard34-orion-dark",
+      "display_name": "Barnard 34 Orion Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard34-orion-dark.svg"
+    },
+    {
+      "slug": "barnard37-orion-dark",
+      "display_name": "Barnard 37 Orion Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard37-orion-dark.svg"
+    },
+    {
+      "slug": "ldn1250-cepheus-dark",
+      "display_name": "LDN 1250 Cepheus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1250-cepheus-dark.svg"
+    },
+    {
+      "slug": "vdb87-unicorn-reflection",
+      "display_name": "vdB 87 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb87-unicorn-reflection.svg"
+    },
+    {
+      "slug": "ngc6026-planetary",
+      "display_name": "NGC 6026 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6026-planetary.svg"
+    },
+    {
+      "slug": "ngc6072-planetary",
+      "display_name": "NGC 6072 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6072-planetary.svg"
+    },
+    {
+      "slug": "ic4997-planetary",
+      "display_name": "IC 4997 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic4997-planetary.svg"
+    },
+    {
+      "slug": "ngc6565-planetary",
+      "display_name": "NGC 6565 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6565-planetary.svg"
+    },
+    {
+      "slug": "ngc6567-planetary",
+      "display_name": "NGC 6567 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6567-planetary.svg"
+    },
+    {
+      "slug": "ic4634-planetary",
+      "display_name": "IC 4634 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic4634-planetary.svg"
+    },
+    {
+      "slug": "ngc6717-globular",
+      "display_name": "NGC 6717 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6717-globular.svg"
+    },
+    {
+      "slug": "palomar9-globular",
+      "display_name": "Palomar 9 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar9-globular.svg"
+    },
+    {
+      "slug": "palomar10-globular",
+      "display_name": "Palomar 10 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar10-globular.svg"
+    },
+    {
+      "slug": "palomar11-globular",
+      "display_name": "Palomar 11 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar11-globular.svg"
+    },
+    {
+      "slug": "ngc1342-open-cluster",
+      "display_name": "NGC 1342 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1342-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1528-open-cluster",
+      "display_name": "NGC 1528 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1528-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1664-kite-cluster",
+      "display_name": "NGC 1664 Kite Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1664-kite-cluster.svg"
+    },
+    {
+      "slug": "ngc2129-open-cluster",
+      "display_name": "NGC 2129 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2129-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2251-open-cluster",
+      "display_name": "NGC 2251 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2251-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2302-open-cluster",
+      "display_name": "NGC 2302 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2302-open-cluster.svg"
+    },
+    {
+      "slug": "gamma-leonis-double",
+      "display_name": "Gamma Leonis Double Star",
+      "category": "double_star",
+      "asset": "assets/gamma-leonis-double.svg"
+    },
+    {
+      "slug": "alpha-herculis-double",
+      "display_name": "Alpha Herculis Double Star",
+      "category": "double_star",
+      "asset": "assets/alpha-herculis-double.svg"
+    },
+    {
+      "slug": "crux-cross-field",
+      "display_name": "Crux Southern Cross Field",
+      "category": "constellation_field",
+      "asset": "assets/crux-cross-field.svg"
+    },
+    {
+      "slug": "cygnus-swan-field",
+      "display_name": "Cygnus Swan Field",
+      "category": "constellation_field",
+      "asset": "assets/cygnus-swan-field.svg"
+    },
+    {
+      "slug": "ngc1345-galaxy",
+      "display_name": "NGC 1345 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1345-galaxy.svg"
+    },
+    {
+      "slug": "ngc1800-irregular",
+      "display_name": "NGC 1800 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1800-irregular.svg"
+    },
+    {
+      "slug": "ngc2276-galaxy",
+      "display_name": "NGC 2276 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2276-galaxy.svg"
+    },
+    {
+      "slug": "ngc2500-galaxy",
+      "display_name": "NGC 2500 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2500-galaxy.svg"
+    },
+    {
+      "slug": "ngc2768-lenticular",
+      "display_name": "NGC 2768 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2768-lenticular.svg"
+    },
+    {
+      "slug": "ngc2976-galaxy",
+      "display_name": "NGC 2976 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2976-galaxy.svg"
+    },
+    {
+      "slug": "ngc3077-irregular",
+      "display_name": "NGC 3077 Irregular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3077-irregular.svg"
+    },
+    {
+      "slug": "ngc4490-cocoon-galaxy",
+      "display_name": "NGC 4490 Cocoon Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4490-cocoon-galaxy.svg"
+    },
+    {
+      "slug": "hickson75-compact-group",
+      "display_name": "Hickson 75 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson75-compact-group.svg"
+    },
+    {
+      "slug": "hickson88-compact-group",
+      "display_name": "Hickson 88 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson88-compact-group.svg"
+    },
+    {
+      "slug": "ngc1579-northern-trifid",
+      "display_name": "NGC 1579 Northern Trifid",
+      "category": "nebula",
+      "asset": "assets/ngc1579-northern-trifid.svg"
+    },
+    {
+      "slug": "ngc1931-fly-nebula",
+      "display_name": "NGC 1931 Fly Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc1931-fly-nebula.svg"
+    },
+    {
+      "slug": "sh2-90-vulpecula",
+      "display_name": "Sh2-90 Vulpecula Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-90-vulpecula.svg"
+    },
+    {
+      "slug": "sh2-104-cygnus-bubble",
+      "display_name": "Sh2-104 Cygnus Bubble",
+      "category": "nebula",
+      "asset": "assets/sh2-104-cygnus-bubble.svg"
+    },
+    {
+      "slug": "sh2-135-cepheus",
+      "display_name": "Sh2-135 Cepheus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-135-cepheus.svg"
+    },
+    {
+      "slug": "sh2-187-cassiopeia",
+      "display_name": "Sh2-187 Cassiopeia Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-187-cassiopeia.svg"
+    },
+    {
+      "slug": "barnard44-dark-nebula",
+      "display_name": "Barnard 44 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard44-dark-nebula.svg"
+    },
+    {
+      "slug": "barnard203-taurus-dark",
+      "display_name": "Barnard 203 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard203-taurus-dark.svg"
+    },
+    {
+      "slug": "ldn134-dark-nebula",
+      "display_name": "LDN 134 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn134-dark-nebula.svg"
+    },
+    {
+      "slug": "vdb24-perseus",
+      "display_name": "vdB 24 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb24-perseus.svg"
+    },
+    {
+      "slug": "ic351-planetary",
+      "display_name": "IC 351 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic351-planetary.svg"
+    },
+    {
+      "slug": "ic418-spirograph",
+      "display_name": "IC 418 Spirograph Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic418-spirograph.svg"
+    },
+    {
+      "slug": "ic4663-planetary",
+      "display_name": "IC 4663 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic4663-planetary.svg"
+    },
+    {
+      "slug": "ngc2452-planetary",
+      "display_name": "NGC 2452 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2452-planetary.svg"
+    },
+    {
+      "slug": "ngc2792-planetary",
+      "display_name": "NGC 2792 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2792-planetary.svg"
+    },
+    {
+      "slug": "ngc3211-planetary",
+      "display_name": "NGC 3211 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc3211-planetary.svg"
+    },
+    {
+      "slug": "ngc6544-globular",
+      "display_name": "NGC 6544 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6544-globular.svg"
+    },
+    {
+      "slug": "ngc6558-globular",
+      "display_name": "NGC 6558 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6558-globular.svg"
+    },
+    {
+      "slug": "palomar14-globular",
+      "display_name": "Palomar 14 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar14-globular.svg"
+    },
+    {
+      "slug": "terzan6-globular",
+      "display_name": "Terzan 6 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan6-globular.svg"
+    },
+    {
+      "slug": "ngc1513-open-cluster",
+      "display_name": "NGC 1513 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1513-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1778-open-cluster",
+      "display_name": "NGC 1778 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1778-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1807-open-cluster",
+      "display_name": "NGC 1807 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1807-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1980-iota-orionis",
+      "display_name": "NGC 1980 Iota Orionis Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1980-iota-orionis.svg"
+    },
+    {
+      "slug": "ngc2186-open-cluster",
+      "display_name": "NGC 2186 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2186-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2286-open-cluster",
+      "display_name": "NGC 2286 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2286-open-cluster.svg"
+    },
+    {
+      "slug": "delta-bootis-double",
+      "display_name": "Delta Bootis Double Star",
+      "category": "double_star",
+      "asset": "assets/delta-bootis-double.svg"
+    },
+    {
+      "slug": "kappa-bootis-double",
+      "display_name": "Kappa Bootis Double Star",
+      "category": "double_star",
+      "asset": "assets/kappa-bootis-double.svg"
+    },
+    {
+      "slug": "perseus-alpha-field",
+      "display_name": "Perseus Alpha Field",
+      "category": "constellation_field",
+      "asset": "assets/perseus-alpha-field.svg"
+    },
+    {
+      "slug": "libra-field",
+      "display_name": "Libra Field",
+      "category": "constellation_field",
+      "asset": "assets/libra-field.svg"
+    },
+    {
+      "slug": "ngc337-galaxy",
+      "display_name": "NGC 337 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc337-galaxy.svg"
+    },
+    {
+      "slug": "ngc428-galaxy",
+      "display_name": "NGC 428 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc428-galaxy.svg"
+    },
+    {
+      "slug": "ngc625-dwarf-galaxy",
+      "display_name": "NGC 625 Dwarf Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc625-dwarf-galaxy.svg"
+    },
+    {
+      "slug": "ngc784-galaxy",
+      "display_name": "NGC 784 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc784-galaxy.svg"
+    },
+    {
+      "slug": "ngc1700-elliptical",
+      "display_name": "NGC 1700 Elliptical Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1700-elliptical.svg"
+    },
+    {
+      "slug": "ngc2782-peculiar",
+      "display_name": "NGC 2782 Peculiar Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2782-peculiar.svg"
+    },
+    {
+      "slug": "ngc2859-ringed",
+      "display_name": "NGC 2859 Ringed Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc2859-ringed.svg"
+    },
+    {
+      "slug": "ngc3486-galaxy",
+      "display_name": "NGC 3486 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3486-galaxy.svg"
+    },
+    {
+      "slug": "hickson16-compact-group",
+      "display_name": "Hickson 16 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson16-compact-group.svg"
+    },
+    {
+      "slug": "hickson50-compact-group",
+      "display_name": "Hickson 50 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson50-compact-group.svg"
+    },
+    {
+      "slug": "ngc1624-emission-nebula",
+      "display_name": "NGC 1624 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/ngc1624-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-83-vulpecula",
+      "display_name": "Sh2-83 Vulpecula Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-83-vulpecula.svg"
+    },
+    {
+      "slug": "sh2-91-cygnus-filament",
+      "display_name": "Sh2-91 Cygnus Filament",
+      "category": "nebula",
+      "asset": "assets/sh2-91-cygnus-filament.svg"
+    },
+    {
+      "slug": "sh2-146-cepheus",
+      "display_name": "Sh2-146 Cepheus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-146-cepheus.svg"
+    },
+    {
+      "slug": "sh2-156-cassiopeia",
+      "display_name": "Sh2-156 Cassiopeia Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-156-cassiopeia.svg"
+    },
+    {
+      "slug": "sh2-168-cassiopeia",
+      "display_name": "Sh2-168 Cassiopeia Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-168-cassiopeia.svg"
+    },
+    {
+      "slug": "barnard10-taurus-dark",
+      "display_name": "Barnard 10 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard10-taurus-dark.svg"
+    },
+    {
+      "slug": "barnard14-taurus-dark",
+      "display_name": "Barnard 14 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard14-taurus-dark.svg"
+    },
+    {
+      "slug": "ldn1355-dark-nebula",
+      "display_name": "LDN 1355 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1355-dark-nebula.svg"
+    },
+    {
+      "slug": "vdb4-cassiopeia",
+      "display_name": "vdB 4 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb4-cassiopeia.svg"
+    },
+    {
+      "slug": "ic289-planetary",
+      "display_name": "IC 289 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic289-planetary.svg"
+    },
+    {
+      "slug": "ic5117-planetary",
+      "display_name": "IC 5117 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ic5117-planetary.svg"
+    },
+    {
+      "slug": "ngc2242-planetary",
+      "display_name": "NGC 2242 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc2242-planetary.svg"
+    },
+    {
+      "slug": "ngc6501-planetary",
+      "display_name": "NGC 650-1 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6501-planetary.svg"
+    },
+    {
+      "slug": "ngc6765-planetary",
+      "display_name": "NGC 6765 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6765-planetary.svg"
+    },
+    {
+      "slug": "ngc6842-planetary",
+      "display_name": "NGC 6842 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6842-planetary.svg"
+    },
+    {
+      "slug": "ngc6439-globular",
+      "display_name": "NGC 6439 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6439-globular.svg"
+    },
+    {
+      "slug": "ngc6535-globular",
+      "display_name": "NGC 6535 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6535-globular.svg"
+    },
+    {
+      "slug": "palomar6-globular",
+      "display_name": "Palomar 6 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar6-globular.svg"
+    },
+    {
+      "slug": "terzan2-globular",
+      "display_name": "Terzan 2 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan2-globular.svg"
+    },
+    {
+      "slug": "ngc1193-open-cluster",
+      "display_name": "NGC 1193 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1193-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1605-open-cluster",
+      "display_name": "NGC 1605 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1605-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1912-m38-wide",
+      "display_name": "NGC 1912 / M38 Wide",
+      "category": "open_cluster",
+      "asset": "assets/ngc1912-m38-wide.svg"
+    },
+    {
+      "slug": "ngc2112-open-cluster",
+      "display_name": "NGC 2112 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2112-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2215-open-cluster",
+      "display_name": "NGC 2215 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2215-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2324-open-cluster",
+      "display_name": "NGC 2324 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2324-open-cluster.svg"
+    },
+    {
+      "slug": "pi-aquilae-double",
+      "display_name": "Pi Aquilae Double Star",
+      "category": "double_star",
+      "asset": "assets/pi-aquilae-double.svg"
+    },
+    {
+      "slug": "xi-bootis-double",
+      "display_name": "Xi Bootis Double Star",
+      "category": "double_star",
+      "asset": "assets/xi-bootis-double.svg"
+    },
+    {
+      "slug": "canis-major-field",
+      "display_name": "Canis Major Field",
+      "category": "constellation_field",
+      "asset": "assets/canis-major-field.svg"
+    },
+    {
+      "slug": "ursa-major-bowl-field",
+      "display_name": "Ursa Major Bowl Field",
+      "category": "constellation_field",
+      "asset": "assets/ursa-major-bowl-field.svg"
+    },
+    {
+      "slug": "ngc3003-galaxy",
+      "display_name": "NGC 3003 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3003-galaxy.svg"
+    },
+    {
+      "slug": "ngc3726-galaxy",
+      "display_name": "NGC 3726 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3726-galaxy.svg"
+    },
+    {
+      "slug": "ngc3900-lenticular",
+      "display_name": "NGC 3900 Lenticular Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3900-lenticular.svg"
+    },
+    {
+      "slug": "ngc4088-galaxy",
+      "display_name": "NGC 4088 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4088-galaxy.svg"
+    },
+    {
+      "slug": "ngc4144-galaxy",
+      "display_name": "NGC 4144 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4144-galaxy.svg"
+    },
+    {
+      "slug": "ngc4245-ringed",
+      "display_name": "NGC 4245 Ringed Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4245-ringed.svg"
+    },
+    {
+      "slug": "ngc4314-ringed",
+      "display_name": "NGC 4314 Ringed Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4314-ringed.svg"
+    },
+    {
+      "slug": "ngc4419-galaxy",
+      "display_name": "NGC 4419 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4419-galaxy.svg"
+    },
+    {
+      "slug": "hickson7-compact-group",
+      "display_name": "Hickson 7 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson7-compact-group.svg"
+    },
+    {
+      "slug": "hickson37-compact-group",
+      "display_name": "Hickson 37 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson37-compact-group.svg"
+    },
+    {
+      "slug": "sh2-184-soul-neighbor",
+      "display_name": "Sh2-184 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-184-soul-neighbor.svg"
+    },
+    {
+      "slug": "sh2-205-camelopardalis",
+      "display_name": "Sh2-205 Camelopardalis Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-205-camelopardalis.svg"
+    },
+    {
+      "slug": "sh2-212-emission-nebula",
+      "display_name": "Sh2-212 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-212-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-236-taurus",
+      "display_name": "Sh2-236 Taurus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-236-taurus.svg"
+    },
+    {
+      "slug": "sh2-241-gemini",
+      "display_name": "Sh2-241 Gemini Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-241-gemini.svg"
+    },
+    {
+      "slug": "sh2-254-orion-gemini",
+      "display_name": "Sh2-254 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-254-orion-gemini.svg"
+    },
+    {
+      "slug": "barnard5-perseus-dark",
+      "display_name": "Barnard 5 Perseus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard5-perseus-dark.svg"
+    },
+    {
+      "slug": "barnard213-taurus-dark",
+      "display_name": "Barnard 213 Taurus Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard213-taurus-dark.svg"
+    },
+    {
+      "slug": "ldn1415-dark-nebula",
+      "display_name": "LDN 1415 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn1415-dark-nebula.svg"
+    },
+    {
+      "slug": "vdb6-cassiopeia",
+      "display_name": "vdB 6 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb6-cassiopeia.svg"
+    },
+    {
+      "slug": "abell2-planetary",
+      "display_name": "Abell 2 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell2-planetary.svg"
+    },
+    {
+      "slug": "abell4-planetary",
+      "display_name": "Abell 4 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell4-planetary.svg"
+    },
+    {
+      "slug": "abell6-planetary",
+      "display_name": "Abell 6 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell6-planetary.svg"
+    },
+    {
+      "slug": "abell16-planetary",
+      "display_name": "Abell 16 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell16-planetary.svg"
+    },
+    {
+      "slug": "abell24-planetary",
+      "display_name": "Abell 24 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell24-planetary.svg"
+    },
+    {
+      "slug": "abell26-planetary",
+      "display_name": "Abell 26 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell26-planetary.svg"
+    },
+    {
+      "slug": "ngc6652-globular",
+      "display_name": "NGC 6652 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6652-globular.svg"
+    },
+    {
+      "slug": "ngc6681-globular",
+      "display_name": "NGC 6681 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6681-globular.svg"
+    },
+    {
+      "slug": "palomar15-globular",
+      "display_name": "Palomar 15 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar15-globular.svg"
+    },
+    {
+      "slug": "terzan1-globular",
+      "display_name": "Terzan 1 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan1-globular.svg"
+    },
+    {
+      "slug": "ngc6813-open-cluster",
+      "display_name": "NGC 6813 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6813-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6815-open-cluster",
+      "display_name": "NGC 6815 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6815-open-cluster.svg"
+    },
+    {
+      "slug": "ngc6866-open-cluster",
+      "display_name": "NGC 6866 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc6866-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7086-open-cluster",
+      "display_name": "NGC 7086 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7086-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7039-open-cluster",
+      "display_name": "NGC 7039 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7039-open-cluster.svg"
+    },
+    {
+      "slug": "ngc7082-open-cluster",
+      "display_name": "NGC 7082 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc7082-open-cluster.svg"
+    },
+    {
+      "slug": "mu-bootis-double",
+      "display_name": "Mu Bootis Double Star",
+      "category": "double_star",
+      "asset": "assets/mu-bootis-double.svg"
+    },
+    {
+      "slug": "70-ophiuchi-double",
+      "display_name": "70 Ophiuchi Double Star",
+      "category": "double_star",
+      "asset": "assets/70-ophiuchi-double.svg"
+    },
+    {
+      "slug": "cepheus-field",
+      "display_name": "Cepheus Field",
+      "category": "constellation_field",
+      "asset": "assets/cepheus-field.svg"
+    },
+    {
+      "slug": "draco-lozenge-field",
+      "display_name": "Draco Lozenge Field",
+      "category": "constellation_field",
+      "asset": "assets/draco-lozenge-field.svg"
+    },
+    {
+      "slug": "ngc255-galaxy",
+      "display_name": "NGC 255 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc255-galaxy.svg"
+    },
+    {
+      "slug": "ngc488-galaxy",
+      "display_name": "NGC 488 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc488-galaxy.svg"
+    },
+    {
+      "slug": "ngc210-galaxy",
+      "display_name": "NGC 210 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc210-galaxy.svg"
+    },
+    {
+      "slug": "ngc613-galaxy",
+      "display_name": "NGC 613 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc613-galaxy.svg"
+    },
+    {
+      "slug": "ngc7723-galaxy",
+      "display_name": "NGC 7723 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7723-galaxy.svg"
+    },
+    {
+      "slug": "ngc3504-galaxy",
+      "display_name": "NGC 3504 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3504-galaxy.svg"
+    },
+    {
+      "slug": "ngc1087-galaxy",
+      "display_name": "NGC 1087 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1087-galaxy.svg"
+    },
+    {
+      "slug": "ngc1398-galaxy",
+      "display_name": "NGC 1398 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc1398-galaxy.svg"
+    },
+    {
+      "slug": "ngc3675-galaxy",
+      "display_name": "NGC 3675 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3675-galaxy.svg"
+    },
+    {
+      "slug": "ngc3810-galaxy",
+      "display_name": "NGC 3810 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc3810-galaxy.svg"
+    },
+    {
+      "slug": "ngc4100-galaxy",
+      "display_name": "NGC 4100 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4100-galaxy.svg"
+    },
+    {
+      "slug": "ngc4654-galaxy",
+      "display_name": "NGC 4654 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc4654-galaxy.svg"
+    },
+    {
+      "slug": "ngc5248-galaxy",
+      "display_name": "NGC 5248 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5248-galaxy.svg"
+    },
+    {
+      "slug": "ngc5364-galaxy",
+      "display_name": "NGC 5364 Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5364-galaxy.svg"
+    },
+    {
+      "slug": "ngc5907-splinter",
+      "display_name": "NGC 5907 Splinter Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc5907-splinter.svg"
+    },
+    {
+      "slug": "ngc7727-merger",
+      "display_name": "NGC 7727 Merger Galaxy",
+      "category": "galaxy",
+      "asset": "assets/ngc7727-merger.svg"
+    },
+    {
+      "slug": "hickson10-compact-group",
+      "display_name": "Hickson 10 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson10-compact-group.svg"
+    },
+    {
+      "slug": "hickson23-compact-group",
+      "display_name": "Hickson 23 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson23-compact-group.svg"
+    },
+    {
+      "slug": "hickson32-compact-group",
+      "display_name": "Hickson 32 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson32-compact-group.svg"
+    },
+    {
+      "slug": "hickson51-compact-group",
+      "display_name": "Hickson 51 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson51-compact-group.svg"
+    },
+    {
+      "slug": "hickson82-compact-group",
+      "display_name": "Hickson 82 Compact Group",
+      "category": "galaxy_group",
+      "asset": "assets/hickson82-compact-group.svg"
+    },
+    {
+      "slug": "ngc5846-group",
+      "display_name": "NGC 5846 Group",
+      "category": "galaxy_group",
+      "asset": "assets/ngc5846-group.svg"
+    },
+    {
+      "slug": "sh2-7-scorpion-head",
+      "display_name": "Sh2-7 Scorpion Head Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-7-scorpion-head.svg"
+    },
+    {
+      "slug": "sh2-33-emission-nebula",
+      "display_name": "Sh2-33 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-33-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-68-planetary-field",
+      "display_name": "Sh2-68 Ancient Planetary Field",
+      "category": "nebula",
+      "asset": "assets/sh2-68-planetary-field.svg"
+    },
+    {
+      "slug": "sh2-80-simeis57",
+      "display_name": "Sh2-80 Simeis 57 Propeller Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-80-simeis57.svg"
+    },
+    {
+      "slug": "sh2-92-cygnus",
+      "display_name": "Sh2-92 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-92-cygnus.svg"
+    },
+    {
+      "slug": "sh2-97-emission-nebula",
+      "display_name": "Sh2-97 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-97-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-112-cygnus",
+      "display_name": "Sh2-112 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-112-cygnus.svg"
+    },
+    {
+      "slug": "sh2-117-cygnus",
+      "display_name": "Sh2-117 Cygnus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-117-cygnus.svg"
+    },
+    {
+      "slug": "sh2-128-emission-nebula",
+      "display_name": "Sh2-128 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-128-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-134-cepheus",
+      "display_name": "Sh2-134 Cepheus Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-134-cepheus.svg"
+    },
+    {
+      "slug": "sh2-132-lion-nebula-wide",
+      "display_name": "Sh2-132 Lion Nebula Wide",
+      "category": "nebula",
+      "asset": "assets/sh2-132-lion-nebula-wide.svg"
+    },
+    {
+      "slug": "sh2-136-ghost-nebula-wide",
+      "display_name": "Sh2-136 Ghost Nebula Wide",
+      "category": "nebula",
+      "asset": "assets/sh2-136-ghost-nebula-wide.svg"
+    },
+    {
+      "slug": "sh2-158-emission-nebula",
+      "display_name": "Sh2-158 Emission Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-158-emission-nebula.svg"
+    },
+    {
+      "slug": "sh2-162-bubble-neighbor",
+      "display_name": "Sh2-162 Bubble Neighbor Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-162-bubble-neighbor.svg"
+    },
+    {
+      "slug": "sh2-171-ngc896-region",
+      "display_name": "Sh2-171 NGC 896 Region",
+      "category": "nebula",
+      "asset": "assets/sh2-171-ngc896-region.svg"
+    },
+    {
+      "slug": "sh2-180-cassiopeia",
+      "display_name": "Sh2-180 Cassiopeia Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-180-cassiopeia.svg"
+    },
+    {
+      "slug": "sh2-195-camelopardalis",
+      "display_name": "Sh2-195 Camelopardalis Nebula",
+      "category": "nebula",
+      "asset": "assets/sh2-195-camelopardalis.svg"
+    },
+    {
+      "slug": "barnard47-dark-nebula",
+      "display_name": "Barnard 47 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard47-dark-nebula.svg"
+    },
+    {
+      "slug": "barnard68-dark-nebula",
+      "display_name": "Barnard 68 Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard68-dark-nebula.svg"
+    },
+    {
+      "slug": "barnard142-e-nebula",
+      "display_name": "Barnard 142 E Nebula",
+      "category": "nebula",
+      "asset": "assets/barnard142-e-nebula.svg"
+    },
+    {
+      "slug": "ldn673-aquila-dark",
+      "display_name": "LDN 673 Aquila Dark Nebula",
+      "category": "nebula",
+      "asset": "assets/ldn673-aquila-dark.svg"
+    },
+    {
+      "slug": "vdb16-camelopardalis",
+      "display_name": "vdB 16 Reflection Nebula",
+      "category": "nebula",
+      "asset": "assets/vdb16-camelopardalis.svg"
+    },
+    {
+      "slug": "abell28-planetary",
+      "display_name": "Abell 28 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell28-planetary.svg"
+    },
+    {
+      "slug": "abell30-planetary",
+      "display_name": "Abell 30 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell30-planetary.svg"
+    },
+    {
+      "slug": "abell35-planetary",
+      "display_name": "Abell 35 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell35-planetary.svg"
+    },
+    {
+      "slug": "abell41-planetary",
+      "display_name": "Abell 41 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell41-planetary.svg"
+    },
+    {
+      "slug": "abell39-spherical",
+      "display_name": "Abell 39 Spherical Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell39-spherical.svg"
+    },
+    {
+      "slug": "abell48-planetary",
+      "display_name": "Abell 48 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell48-planetary.svg"
+    },
+    {
+      "slug": "abell53-planetary",
+      "display_name": "Abell 53 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell53-planetary.svg"
+    },
+    {
+      "slug": "abell50-planetary",
+      "display_name": "Abell 50 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell50-planetary.svg"
+    },
+    {
+      "slug": "abell57-planetary",
+      "display_name": "Abell 57 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell57-planetary.svg"
+    },
+    {
+      "slug": "abell65-planetary",
+      "display_name": "Abell 65 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/abell65-planetary.svg"
+    },
+    {
+      "slug": "ngc6881-planetary",
+      "display_name": "NGC 6881 Planetary Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc6881-planetary.svg"
+    },
+    {
+      "slug": "ngc1514-crystal-ball",
+      "display_name": "NGC 1514 Crystal Ball Nebula",
+      "category": "planetary_nebula",
+      "asset": "assets/ngc1514-crystal-ball.svg"
+    },
+    {
+      "slug": "ngc6229-globular",
+      "display_name": "NGC 6229 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6229-globular.svg"
+    },
+    {
+      "slug": "ngc6342-globular",
+      "display_name": "NGC 6342 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6342-globular.svg"
+    },
+    {
+      "slug": "ngc6256-globular",
+      "display_name": "NGC 6256 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/ngc6256-globular.svg"
+    },
+    {
+      "slug": "palomar13-globular",
+      "display_name": "Palomar 13 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar13-globular.svg"
+    },
+    {
+      "slug": "terzan3-globular",
+      "display_name": "Terzan 3 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan3-globular.svg"
+    },
+    {
+      "slug": "palomar12-globular",
+      "display_name": "Palomar 12 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/palomar12-globular.svg"
+    },
+    {
+      "slug": "terzan7-globular",
+      "display_name": "Terzan 7 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan7-globular.svg"
+    },
+    {
+      "slug": "terzan9-globular",
+      "display_name": "Terzan 9 Globular Cluster",
+      "category": "globular_cluster",
+      "asset": "assets/terzan9-globular.svg"
+    },
+    {
+      "slug": "ngc129-open-cluster",
+      "display_name": "NGC 129 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc129-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1545-open-cluster",
+      "display_name": "NGC 1545 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1545-open-cluster.svg"
+    },
+    {
+      "slug": "ngc381-open-cluster",
+      "display_name": "NGC 381 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc381-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1817-open-cluster",
+      "display_name": "NGC 1817 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1817-open-cluster.svg"
+    },
+    {
+      "slug": "ngc637-open-cluster",
+      "display_name": "NGC 637 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc637-open-cluster.svg"
+    },
+    {
+      "slug": "ngc436-open-cluster",
+      "display_name": "NGC 436 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc436-open-cluster.svg"
+    },
+    {
+      "slug": "ngc559-open-cluster",
+      "display_name": "NGC 559 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc559-open-cluster.svg"
+    },
+    {
+      "slug": "ngc2423-open-cluster",
+      "display_name": "NGC 2423 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc2423-open-cluster.svg"
+    },
+    {
+      "slug": "ngc663-open-cluster",
+      "display_name": "NGC 663 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc663-open-cluster.svg"
+    },
+    {
+      "slug": "ngc659-open-cluster",
+      "display_name": "NGC 659 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc659-open-cluster.svg"
+    },
+    {
+      "slug": "ngc1027-open-cluster",
+      "display_name": "NGC 1027 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc1027-open-cluster.svg"
+    },
+    {
+      "slug": "ngc5617-open-cluster",
+      "display_name": "NGC 5617 Open Cluster",
+      "category": "open_cluster",
+      "asset": "assets/ngc5617-open-cluster.svg"
+    },
+    {
+      "slug": "alpha-piscium-double",
+      "display_name": "Alpha Piscium Double Star",
+      "category": "double_star",
+      "asset": "assets/alpha-piscium-double.svg"
+    },
+    {
+      "slug": "zeta-aquarii-double",
+      "display_name": "Zeta Aquarii Double Star",
+      "category": "double_star",
+      "asset": "assets/zeta-aquarii-double.svg"
+    },
+    {
+      "slug": "theta-aurigae-double",
+      "display_name": "Theta Aurigae Double Star",
+      "category": "double_star",
+      "asset": "assets/theta-aurigae-double.svg"
+    },
+    {
+      "slug": "andromeda-chain-field",
+      "display_name": "Andromeda Chain Field",
+      "category": "constellation_field",
+      "asset": "assets/andromeda-chain-field.svg"
+    },
+    {
+      "slug": "aquarius-water-jar-field",
+      "display_name": "Aquarius Water Jar Field",
+      "category": "constellation_field",
+      "asset": "assets/aquarius-water-jar-field.svg"
+    },
+    {
+      "slug": "camelopardalis-field",
+      "display_name": "Camelopardalis Field",
+      "category": "constellation_field",
+      "asset": "assets/camelopardalis-field.svg"
+    }
+  ]
+}

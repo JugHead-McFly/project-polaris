@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc-5195-m51-companion-title ngc-5195-m51-companion-desc">
+  <title id="ngc-5195-m51-companion-title">NGC 5195 Companion</title>
+  <desc id="ngc-5195-m51-companion-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact companion of M51 with dust lanes crossing in front from the Whirlpool interaction.</desc>
+  <defs>
+    <radialGradient id="ngc-5195-m51-companion-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc-5195-m51-companion-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc-5195-m51-companion-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc-5195-m51-companion-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc-5195-m51-companion-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc-5195-m51-companion-ambient-vignette-mask)">
+    <circle cx="215" cy="195" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="262" cy="266" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="309" cy="73" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="356" cy="144" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="39" cy="215" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="86" cy="22" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="227" cy="235" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="274" cy="42" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="321" cy="113" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="368" cy="184" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="51" cy="255" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="98" cy="62" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="239" cy="275" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="286" cy="82" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="333" cy="153" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="380" cy="224" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="63" cy="31" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="110" cy="102" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="204" cy="244" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="251" cy="51" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="298" cy="122" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="345" cy="193" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="28" cy="264" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="75" cy="71" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="122" cy="142" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="216" cy="20" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="263" cy="91" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="310" cy="162" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="204" cy="148" r="33" fill="#d8caa7" opacity=".86"/><circle cx="197" cy="145" r="13" fill="#f3ead2" opacity=".82"/><path d="M154 117 C180 135 219 142 253 132 M160 172 C191 153 227 153 254 168" stroke="#102a2c" stroke-width="5" opacity=".45" fill="none"/><path d="M139 193 C171 156 218 140 274 110" stroke="#9ec9bf" stroke-width="3" opacity=".52" fill="none"/><circle cx="234" cy="128" r="2" fill="#d49a3a" opacity="0.7"/><circle cx="178" cy="167" r="2" fill="#d49a3a" opacity="0.62"/>
+  </g>
+</svg>

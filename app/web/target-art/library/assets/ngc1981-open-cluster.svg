@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1981-open-cluster-title ngc1981-open-cluster-desc">
+  <title id="ngc1981-open-cluster-title">NGC 1981 Open Cluster</title>
+  <desc id="ngc1981-open-cluster-desc">Original Project Polaris vector artwork informed by official NASA imagery: Orion open cluster north of the nebula with loose bright-star scatter.</desc>
+  <defs>
+    <radialGradient id="ngc1981-open-cluster-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1981-open-cluster-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1981-open-cluster-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1981-open-cluster-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1981-open-cluster-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1981-open-cluster-ambient-vignette-mask)">
+    <circle cx="242" cy="34" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="289" cy="105" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="336" cy="176" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="19" cy="247" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="66" cy="54" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="113" cy="125" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="207" cy="267" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="254" cy="74" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="301" cy="145" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="348" cy="216" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="31" cy="23" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="78" cy="94" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="172" cy="236" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="219" cy="43" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="266" cy="114" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="313" cy="185" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="360" cy="256" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="43" cy="63" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="90" cy="134" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="184" cy="276" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="278" cy="154" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="325" cy="225" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="372" cy="32" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="55" cy="103" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="102" cy="174" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="149" cy="245" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="196" cy="52" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="290" cy="194" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="337" cy="265" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M137 171 L171 127 L213 113 L253 155" stroke="#9ec9bf" stroke-width="2" opacity=".2" fill="none"/><circle cx="139" cy="171" r="2.8" fill="#f3ead2" opacity="0.78"/><circle cx="171" cy="127" r="3.1" fill="#f3ead2" opacity="0.84"/><circle cx="213" cy="113" r="2.7" fill="#f3ead2" opacity="0.76"/><circle cx="253" cy="155" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="228" cy="190" r="2.2" fill="#f3ead2" opacity="0.66"/><circle cx="155" cy="200" r="1.8" fill="#f3ead2" opacity="0.58"/>
+  </g>
+</svg>

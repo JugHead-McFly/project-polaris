@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sh2-124-cocoon-region-title sh2-124-cocoon-region-desc">
+  <title id="sh2-124-cocoon-region-title">Sh2-124 Cygnus Emission Region</title>
+  <desc id="sh2-124-cocoon-region-desc">Original Project Polaris vector artwork informed by official NASA imagery: faint emission patch with uneven rim and dark lane structure.</desc>
+  <defs>
+    <radialGradient id="sh2-124-cocoon-region-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sh2-124-cocoon-region-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sh2-124-cocoon-region-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sh2-124-cocoon-region-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sh2-124-cocoon-region-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sh2-124-cocoon-region-ambient-vignette-mask)">
+    <circle cx="244" cy="64" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="291" cy="135" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="338" cy="206" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="21" cy="277" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="68" cy="84" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="115" cy="155" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="209" cy="33" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="256" cy="104" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="303" cy="175" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="350" cy="246" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="33" cy="53" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="80" cy="124" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="174" cy="266" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="268" cy="144" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="315" cy="215" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="362" cy="22" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="45" cy="93" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="92" cy="164" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="139" cy="235" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="186" cy="42" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="280" cy="184" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="327" cy="255" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="374" cy="62" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="57" cy="133" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="104" cy="204" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="151" cy="275" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="292" cy="224" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="339" cy="31" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M123 191 C133 112 209 77 278 114 C292 166 236 214 173 210 C152 207 135 200 123 191Z" fill="#2f8f8a" opacity=".3"/><path d="M155 177 C191 148 234 146 266 174" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="209" cy="128" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="236" cy="150" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="172" cy="169" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

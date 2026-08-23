@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="andromeda-chain-field-title andromeda-chain-field-desc">
+  <title id="andromeda-chain-field-title">Andromeda Chain Field</title>
+  <desc id="andromeda-chain-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: Andromeda constellation chain with Alpheratz anchor and galaxy-region cue.</desc>
+  <defs>
+    <radialGradient id="andromeda-chain-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="andromeda-chain-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="andromeda-chain-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#andromeda-chain-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="andromeda-chain-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#andromeda-chain-field-ambient-vignette-mask)">
+    <circle cx="130" cy="258" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="177" cy="65" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="318" cy="278" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="365" cy="85" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="48" cy="156" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="95" cy="227" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="142" cy="34" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="283" cy="247" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="330" cy="54" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="377" cy="125" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="60" cy="196" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="107" cy="267" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="154" cy="74" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="295" cy="23" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="342" cy="94" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="25" cy="165" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="72" cy="236" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="119" cy="43" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="166" cy="114" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="260" cy="256" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="307" cy="63" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="354" cy="134" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="37" cy="205" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="84" cy="276" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="178" cy="154" r="0.55" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M113 176 L162 145 L210 119 L270 93 M210 119 L246 154 M162 145 L181 193" stroke="#9ec9bf" stroke-width="2" opacity=".33" fill="none"/><circle cx="113" cy="176" r="3.4" fill="#f3ead2" opacity="0.9"/><circle cx="162" cy="145" r="2.8" fill="#f3ead2" opacity="0.8"/><circle cx="210" cy="119" r="2.8" fill="#f3ead2" opacity="0.8"/><circle cx="270" cy="93" r="2.7" fill="#f3ead2" opacity="0.78"/><circle cx="246" cy="154" r="2.2" fill="#f3ead2" opacity="0.64"/><circle cx="181" cy="193" r="2.1" fill="#f3ead2" opacity="0.62"/><ellipse cx="188" cy="154" rx="16" ry="8" fill="#2f8f8a" opacity=".18"/>
+  </g>
+</svg>

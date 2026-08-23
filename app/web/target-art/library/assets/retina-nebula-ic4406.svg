@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="retina-nebula-ic4406-title retina-nebula-ic4406-desc">
+  <title id="retina-nebula-ic4406-title">IC 4406 Retina Nebula</title>
+  <desc id="retina-nebula-ic4406-desc">Original Project Polaris vector artwork informed by official NASA imagery: edge-on planetary nebula with rectangular waist and fine dust-lane ribs.</desc>
+  <defs>
+    <radialGradient id="retina-nebula-ic4406-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="retina-nebula-ic4406-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="retina-nebula-ic4406-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#retina-nebula-ic4406-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="retina-nebula-ic4406-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#retina-nebula-ic4406-ambient-vignette-mask)">
+    <circle cx="203" cy="47" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="297" cy="189" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="344" cy="260" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="27" cy="67" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="74" cy="138" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="121" cy="209" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="168" cy="280" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="215" cy="87" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="309" cy="229" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="356" cy="36" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="39" cy="107" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="86" cy="178" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="133" cy="249" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="180" cy="56" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="227" cy="127" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="321" cy="269" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="368" cy="76" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="51" cy="147" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="98" cy="218" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="145" cy="25" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="239" cy="167" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="286" cy="238" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="333" cy="45" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="380" cy="116" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="63" cy="187" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="110" cy="258" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="157" cy="65" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="251" cy="207" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="298" cy="278" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="74" ry="32" fill="#2f8f8a" opacity=".46"/><rect x="153" y="132" width="94" height="36" rx="10" fill="#d8caa7" opacity=".35"/><path d="M155 143 L245 143 M155 154 L245 154 M155 165 L245 165" stroke="#102a2c" stroke-width="3" opacity=".45"/><circle cx="200" cy="150" r="2" fill="#f3ead2" opacity="0.9"/>
+  </g>
+</svg>

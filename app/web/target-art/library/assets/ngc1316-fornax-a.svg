@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1316-fornax-a-title ngc1316-fornax-a-desc">
+  <title id="ngc1316-fornax-a-title">NGC 1316 Fornax A</title>
+  <desc id="ngc1316-fornax-a-desc">Original Project Polaris vector artwork informed by official NASA imagery: peculiar elliptical with dust patches, shell-like halo, and merger-disturbed core.</desc>
+  <defs>
+    <radialGradient id="ngc1316-fornax-a-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1316-fornax-a-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1316-fornax-a-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1316-fornax-a-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1316-fornax-a-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1316-fornax-a-ambient-vignette-mask)">
+    <circle cx="94" cy="258" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="141" cy="65" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="282" cy="278" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="329" cy="85" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="376" cy="156" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="59" cy="227" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="106" cy="34" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="247" cy="247" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="294" cy="54" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="341" cy="125" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="24" cy="196" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="71" cy="267" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="118" cy="74" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="259" cy="23" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="306" cy="94" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="353" cy="165" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="36" cy="236" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="83" cy="43" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="130" cy="114" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="224" cy="256" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="271" cy="63" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="318" cy="134" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="365" cy="205" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="48" cy="276" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="95" cy="83" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="142" cy="154" r="0.55" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="192" cy="153" rx="104" ry="68" fill="url(#ngc1316-fornax-a-glow)" opacity=".78"/><path d="M124 160 C170 142 219 145 262 163" stroke="#102a2c" stroke-width="7" opacity=".42" fill="none"/><circle cx="214" cy="137" r="2" fill="#d49a3a" opacity="0.52"/><circle cx="161" cy="173" r="1.8" fill="#d49a3a" opacity="0.46"/>
+  </g>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="libra-field-title libra-field-desc">
+  <title id="libra-field-title">Libra Field</title>
+  <desc id="libra-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: Libra quadrilateral field with two bright scale-pan anchors.</desc>
+  <defs>
+    <radialGradient id="libra-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="libra-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="libra-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#libra-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="libra-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#libra-field-ambient-vignette-mask)">
+    <circle cx="222" cy="178" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="269" cy="249" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="316" cy="56" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="363" cy="127" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="46" cy="198" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="93" cy="269" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="234" cy="218" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="281" cy="25" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="328" cy="96" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="375" cy="167" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="58" cy="238" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="105" cy="45" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="246" cy="258" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="293" cy="65" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="340" cy="136" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="23" cy="207" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="70" cy="278" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="117" cy="85" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="258" cy="34" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="305" cy="105" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="352" cy="176" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="35" cy="247" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="82" cy="54" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="223" cy="267" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="270" cy="74" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="317" cy="145" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M143 117 L260 111 L282 192 L165 205 Z M143 117 L165 205 M260 111 L282 192" stroke="#9ec9bf" stroke-width="2" opacity=".31" fill="none"/><circle cx="143" cy="117" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="260" cy="111" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="282" cy="192" r="2.6" fill="#f3ead2" opacity="0.76"/><circle cx="165" cy="205" r="2.6" fill="#f3ead2" opacity="0.76"/><circle cx="204" cy="156" r="1.6" fill="#f3ead2" opacity="0.5"/><path d="M159 141 C183 152 224 151 249 138" stroke="#d49a3a" stroke-width="2" opacity=".18" fill="none"/>
+  </g>
+</svg>

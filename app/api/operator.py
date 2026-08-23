@@ -29,11 +29,12 @@ ASSET_FILES = (
     WEB_DIRECTORY / "operator.js",
     WEB_DIRECTORY / "leaflet.css",
     WEB_DIRECTORY / "leaflet.js",
-    WEB_DIRECTORY / "target-art" / "m31-andromeda.svg",
-    WEB_DIRECTORY / "target-art" / "previews" / "double-cluster.svg",
-    WEB_DIRECTORY / "target-art" / "previews" / "orion-nebula-m42.svg",
-    WEB_DIRECTORY / "target-art" / "previews" / "ring-nebula-m57.svg",
-    WEB_DIRECTORY / "target-art" / "previews" / "comet.svg",
+    WEB_DIRECTORY / "target-art" / "library" / "assets" / "m31-andromeda.svg",
+    WEB_DIRECTORY / "target-art" / "library" / "assets" / "double-cluster.svg",
+    WEB_DIRECTORY / "target-art" / "library" / "assets" / "orion-nebula-m42.svg",
+    WEB_DIRECTORY / "target-art" / "library" / "assets" / "ring-nebula-m57.svg",
+    WEB_DIRECTORY / "target-art" / "library" / "assets" / "comet.svg",
+    WEB_DIRECTORY / "target-art" / "fallbacks" / "deep-sky.svg",
 )
 
 

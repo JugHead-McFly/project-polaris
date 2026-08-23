@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="lepus-field-title lepus-field-desc">
+  <title id="lepus-field-title">Lepus Field</title>
+  <desc id="lepus-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact Lepus rectangle beneath Orion with bright-star outline.</desc>
+  <defs>
+    <radialGradient id="lepus-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lepus-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="lepus-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#lepus-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="lepus-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#lepus-field-ambient-vignette-mask)">
+    <circle cx="81" cy="153" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="175" cy="31" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="269" cy="173" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="316" cy="244" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="363" cy="51" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="46" cy="122" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="93" cy="193" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="140" cy="264" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="281" cy="213" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="328" cy="20" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="375" cy="91" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="58" cy="162" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="105" cy="233" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="152" cy="40" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="293" cy="253" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="340" cy="60" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="23" cy="131" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="70" cy="202" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="117" cy="273" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="305" cy="29" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="352" cy="100" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="35" cy="171" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="82" cy="242" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="129" cy="49" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M150 120 L246 122 L264 184 L159 194 Z M150 120 L159 194" stroke="#9ec9bf" stroke-width="2" opacity=".3" fill="none"/><circle cx="150" cy="120" r="2.8" fill="#f3ead2" opacity="0.8"/><circle cx="246" cy="122" r="2.7" fill="#f3ead2" opacity="0.78"/><circle cx="264" cy="184" r="2.6" fill="#f3ead2" opacity="0.74"/><circle cx="159" cy="194" r="2.6" fill="#f3ead2" opacity="0.74"/><circle cx="202" cy="154" r="1.7" fill="#f3ead2" opacity="0.52"/>
+  </g>
+</svg>

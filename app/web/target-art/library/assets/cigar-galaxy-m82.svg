@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="cigar-galaxy-m82-title cigar-galaxy-m82-desc">
+  <title id="cigar-galaxy-m82-title">M82 Cigar Galaxy</title>
+  <desc id="cigar-galaxy-m82-desc">Original Project Polaris vector artwork informed by official NASA imagery: edge-on starburst disk with dark dust rifts and bipolar outflow plumes.</desc>
+  <defs>
+    <radialGradient id="cigar-galaxy-m82-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cigar-galaxy-m82-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="cigar-galaxy-m82-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#cigar-galaxy-m82-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="cigar-galaxy-m82-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#cigar-galaxy-m82-ambient-vignette-mask)">
+    <circle cx="128" cy="144" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="222" cy="22" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="316" cy="164" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="363" cy="235" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="46" cy="42" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="93" cy="113" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="140" cy="184" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="187" cy="255" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="234" cy="62" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="281" cy="133" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="328" cy="204" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="375" cy="275" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="58" cy="82" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="105" cy="153" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="152" cy="224" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="199" cy="31" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="293" cy="173" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="340" cy="244" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="23" cy="51" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="70" cy="122" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="117" cy="193" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="164" cy="264" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="305" cy="213" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="352" cy="20" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="35" cy="91" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="82" cy="162" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="129" cy="233" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="176" cy="40" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="108" ry="25" fill="#d8caa7" opacity=".6" transform="rotate(-8 200 150)"/><path d="M106 160 C158 134 235 139 298 146" stroke="#102a2c" stroke-width="8" opacity=".52" fill="none"/><path d="M180 145 C166 112 172 92 191 70 M213 153 C236 193 232 216 217 236" stroke="#d49a3a" stroke-width="6" opacity=".5" fill="none"/><path d="M170 145 C151 119 146 101 160 82 M224 154 C249 181 254 205 242 225" stroke="#9ec9bf" stroke-width="4" opacity=".42" fill="none"/><ellipse cx="202" cy="149" rx="34" ry="9" fill="#f3ead2" opacity=".72" transform="rotate(-8 202 149)"/>
+  </g>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="jupiter-moons-title jupiter-moons-desc">
+  <title id="jupiter-moons-title">Jupiter With Moons</title>
+  <desc id="jupiter-moons-desc">Original Project Polaris vector artwork informed by official NASA imagery: banded Jupiter observed with four Galilean moons aligned nearby.</desc>
+  <defs>
+    <radialGradient id="jupiter-moons-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="jupiter-moons-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="jupiter-moons-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#jupiter-moons-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="jupiter-moons-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#jupiter-moons-ambient-vignette-mask)">
+    <circle cx="51" cy="211" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="98" cy="18" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="239" cy="231" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="286" cy="38" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="333" cy="109" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="380" cy="180" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="63" cy="251" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="110" cy="58" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="251" cy="271" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="298" cy="78" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="345" cy="149" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="28" cy="220" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="75" cy="27" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="122" cy="98" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="216" cy="240" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="263" cy="47" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="310" cy="118" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="357" cy="189" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="40" cy="260" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="87" cy="67" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="228" cy="280" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="275" cy="87" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="322" cy="158" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="369" cy="229" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="52" cy="36" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="99" cy="107" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M96 150 L314 150" stroke="#9ec9bf" stroke-width="1.5" opacity=".25"/><circle cx="105" cy="150" r="3" fill="#f3ead2" opacity="0.9"/><circle cx="142" cy="150" r="2.2" fill="#f3ead2" opacity="0.8"/><circle cx="265" cy="150" r="2.5" fill="#f3ead2" opacity="0.85"/><circle cx="306" cy="150" r="3" fill="#f3ead2" opacity="0.9"/><ellipse cx="200" cy="150" rx="48" ry="38" fill="#f3ead2"/><path d="M156 132 C181 126 220 136 244 130 M155 151 C185 158 218 145 246 153 M158 169 C186 165 218 176 242 168" stroke="#2f8f8a" stroke-width="4" opacity=".56" fill="none"/><ellipse cx="223" cy="160" rx="9" ry="5" fill="#d49a3a" opacity=".8"/>
+  </g>
+</svg>

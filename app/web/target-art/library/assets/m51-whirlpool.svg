@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="m51-whirlpool-title m51-whirlpool-desc">
+  <title id="m51-whirlpool-title">M51 Whirlpool Galaxy</title>
+  <desc id="m51-whirlpool-desc">Original Project Polaris vector artwork informed by official NASA imagery: grand-design spiral with companion NGC 5195 tugging one arm.</desc>
+  <defs>
+    <radialGradient id="m51-whirlpool-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="m51-whirlpool-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="m51-whirlpool-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#m51-whirlpool-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="m51-whirlpool-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#m51-whirlpool-ambient-vignette-mask)">
+    <circle cx="292" cy="128" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="339" cy="199" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="22" cy="270" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="69" cy="77" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="116" cy="148" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="210" cy="26" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="304" cy="168" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="351" cy="239" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="34" cy="46" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="81" cy="117" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="128" cy="188" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="175" cy="259" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="222" cy="66" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="316" cy="208" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="363" cy="279" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="46" cy="86" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="93" cy="157" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="140" cy="228" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="187" cy="35" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="281" cy="177" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="328" cy="248" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="375" cy="55" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="58" cy="126" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="105" cy="197" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="152" cy="268" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="293" cy="217" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="340" cy="24" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="23" cy="95" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="181" cy="154" r="18" fill="#f3ead2" opacity=".9"/><path d="M114.1 133.9 A74 47 0 0 1 253.5 144.7" fill="none" stroke="#9ec9bf" stroke-width="6" stroke-linecap="round" opacity="0.75"/><path d="M243.9 168.4 A67 42 0 0 1 119.1 170.0" fill="none" stroke="#2f8f8a" stroke-width="6" stroke-linecap="round" opacity="0.7"/><path d="M138.0 155.1 A43 27 0 0 1 197.3 129.0" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.65"/><circle cx="256" cy="113" r="17" fill="#d8caa7" opacity=".85"/><path d="M222 129 C237 117 248 114 256 113" stroke="#d49a3a" stroke-width="4" opacity=".7" fill="none"/><path d="M165 128 C196 140 211 173 243 188" stroke="#102a2c" stroke-width="4" opacity=".35" fill="none"/>
+  </g>
+</svg>

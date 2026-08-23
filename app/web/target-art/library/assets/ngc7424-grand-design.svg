@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7424-grand-design-title ngc7424-grand-design-desc">
+  <title id="ngc7424-grand-design-title">NGC 7424 Grand Design Galaxy</title>
+  <desc id="ngc7424-grand-design-desc">Original Project Polaris vector artwork informed by official NASA imagery: face-on grand-design spiral with knotty extended arms.</desc>
+  <defs>
+    <radialGradient id="ngc7424-grand-design-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7424-grand-design-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7424-grand-design-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7424-grand-design-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7424-grand-design-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7424-grand-design-ambient-vignette-mask)">
+    <circle cx="46" cy="194" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="93" cy="265" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="234" cy="214" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="281" cy="21" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="328" cy="92" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="375" cy="163" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="58" cy="234" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="105" cy="41" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="246" cy="254" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="293" cy="61" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="340" cy="132" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="23" cy="203" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="70" cy="274" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="117" cy="81" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="258" cy="30" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="305" cy="101" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="352" cy="172" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="35" cy="243" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="82" cy="50" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="223" cy="263" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="270" cy="70" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="317" cy="141" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="364" cy="212" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="47" cy="19" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="94" cy="90" r="0.55" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <circle cx="193" cy="154" r="17" fill="#f3ead2" opacity=".82"/><path d="M96.0 132.6 A103 64 0 0 1 293.9 141.3" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M289.5 171.7 A101 60 0 0 1 101.7 179.6" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M127.1 155.6 A66 39 0 0 1 226.8 120.5" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><circle cx="235" cy="127" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="155" cy="183" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="216" cy="196" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

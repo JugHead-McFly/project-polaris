@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="alpha-piscium-double-title alpha-piscium-double-desc">
+  <title id="alpha-piscium-double-title">Alpha Piscium Double Star</title>
+  <desc id="alpha-piscium-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: close pale double with near-equal components and sparse Pisces field.</desc>
+  <defs>
+    <radialGradient id="alpha-piscium-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="alpha-piscium-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="alpha-piscium-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#alpha-piscium-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="alpha-piscium-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#alpha-piscium-double-ambient-vignette-mask)">
+    <circle cx="43" cy="207" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="90" cy="278" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="231" cy="227" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="278" cy="34" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="325" cy="105" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="372" cy="176" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="55" cy="247" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="102" cy="54" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="243" cy="267" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="290" cy="74" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="337" cy="145" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="20" cy="216" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="67" cy="23" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="114" cy="94" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="208" cy="236" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="255" cy="43" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="302" cy="114" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="349" cy="185" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="32" cy="256" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="79" cy="63" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="220" cy="276" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="267" cy="83" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="314" cy="154" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="361" cy="225" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="44" cy="32" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="91" cy="103" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M181 150 L221 151" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="181" cy="150" r="6.4" fill="#f3ead2" opacity=".95"/><circle cx="221" cy="151" r="6.1" fill="#d8caa7" opacity=".9"/><circle cx="146" cy="121" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="257" cy="179" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="203" cy="107" r="1" fill="#f3ead2" opacity="0.38"/><circle cx="167" cy="196" r="1" fill="#f3ead2" opacity="0.36"/>
+  </g>
+</svg>

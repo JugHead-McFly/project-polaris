@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="orion-nebula-m42-title orion-nebula-m42-desc">
+  <title id="orion-nebula-m42-title">M42 Orion Nebula</title>
+  <desc id="orion-nebula-m42-desc">Original Project Polaris vector artwork informed by official NASA imagery: cavernous winged cloud, dark bay, bright core, and Trapezium-like central stars.</desc>
+  <defs>
+    <radialGradient id="orion-nebula-m42-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orion-nebula-m42-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="orion-nebula-m42-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#orion-nebula-m42-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="orion-nebula-m42-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#orion-nebula-m42-ambient-vignette-mask)">
+    <circle cx="350" cy="162" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="33" cy="233" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="80" cy="40" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="174" cy="182" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="221" cy="253" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="268" cy="60" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="315" cy="131" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="362" cy="202" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="45" cy="273" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="92" cy="80" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="186" cy="222" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="233" cy="29" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="280" cy="100" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="327" cy="171" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="374" cy="242" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="57" cy="49" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="104" cy="120" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="198" cy="262" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="292" cy="140" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="339" cy="211" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="22" cy="18" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="69" cy="89" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="116" cy="160" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="210" cy="38" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="304" cy="180" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="351" cy="251" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="34" cy="58" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="81" cy="129" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M130 178 C145 113 181 105 205 139 C224 103 272 119 268 172 C249 214 178 214 130 178Z" fill="#2f8f8a" opacity=".52"/><path d="M150 157 C178 139 199 143 222 158 C207 182 173 185 150 157Z" fill="#f3ead2" opacity=".48"/><path d="M134 123 C156 151 179 154 197 146 C177 164 152 174 130 178 C125 154 126 137 134 123Z" fill="#102a2c" opacity=".38"/><circle cx="199" cy="153" r="2" fill="#d49a3a" opacity="0.95"/><circle cx="205" cy="157" r="1.7" fill="#d49a3a" opacity="0.9"/><circle cx="195" cy="158" r="1.6" fill="#d49a3a" opacity="0.9"/><circle cx="202" cy="149" r="1.5" fill="#d49a3a" opacity="0.9"/>
+  </g>
+</svg>

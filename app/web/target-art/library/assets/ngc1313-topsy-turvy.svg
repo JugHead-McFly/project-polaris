@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1313-topsy-turvy-title ngc1313-topsy-turvy-desc">
+  <title id="ngc1313-topsy-turvy-title">NGC 1313 Topsy Turvy Galaxy</title>
+  <desc id="ngc1313-topsy-turvy-desc">Original Project Polaris vector artwork informed by official NASA imagery: barred starburst spiral with asymmetric arms and bright star-forming knots.</desc>
+  <defs>
+    <radialGradient id="ngc1313-topsy-turvy-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1313-topsy-turvy-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1313-topsy-turvy-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1313-topsy-turvy-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1313-topsy-turvy-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1313-topsy-turvy-ambient-vignette-mask)">
+    <circle cx="144" cy="172" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="191" cy="243" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="238" cy="50" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="285" cy="121" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="332" cy="192" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="379" cy="263" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="62" cy="70" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="109" cy="141" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="156" cy="212" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="203" cy="19" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="297" cy="161" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="344" cy="232" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="27" cy="39" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="74" cy="110" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="121" cy="181" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="168" cy="252" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="215" cy="59" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="309" cy="201" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="356" cy="272" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="39" cy="79" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="86" cy="150" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="180" cy="28" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="321" cy="241" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="368" cy="48" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="51" cy="119" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="98" cy="190" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="145" cy="261" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="192" cy="68" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <circle cx="203" cy="144" r="15" fill="#f3ead2" opacity=".82"/><path d="M145 148 L261 140" stroke="#d8caa7" stroke-width="8" opacity=".62" stroke-linecap="round"/><ellipse cx="203" cy="144" rx="67" ry="41" fill="none" stroke="#d49a3a" stroke-width="3" opacity=".28"/><path d="M107.8 121.6 A101 67 0 0 1 302.0 130.7" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M291.8 159.4 A93 52 0 0 1 118.9 166.2" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M139.1 145.5 A64 37 0 0 1 235.8 112.2" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><circle cx="245" cy="117" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="165" cy="173" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="226" cy="186" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

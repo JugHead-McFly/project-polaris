@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sh2-101-tulip-nebula-title sh2-101-tulip-nebula-desc">
+  <title id="sh2-101-tulip-nebula-title">Sh2-101 Tulip Nebula</title>
+  <desc id="sh2-101-tulip-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: tulip-shaped emission nebula with cupped rim, dark stem lane, and nearby hot-star knots.</desc>
+  <defs>
+    <radialGradient id="sh2-101-tulip-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sh2-101-tulip-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sh2-101-tulip-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sh2-101-tulip-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sh2-101-tulip-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sh2-101-tulip-nebula-ambient-vignette-mask)">
+    <circle cx="229" cy="225" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="276" cy="32" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="323" cy="103" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="370" cy="174" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="53" cy="245" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="100" cy="52" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="241" cy="265" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="288" cy="72" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="335" cy="143" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="18" cy="214" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="65" cy="21" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="112" cy="92" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="206" cy="234" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="253" cy="41" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="300" cy="112" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="347" cy="183" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="30" cy="254" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="77" cy="61" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="218" cy="274" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="265" cy="81" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="312" cy="152" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="359" cy="223" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="42" cy="30" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="89" cy="101" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="183" cy="243" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="230" cy="50" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="277" cy="121" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="324" cy="192" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M159 194 C135 148 159 106 200 118 C238 103 266 145 241 193 C215 179 184 179 159 194Z" fill="#2f8f8a" opacity=".42"/><path d="M200 118 C197 151 198 181 200 214" stroke="#102a2c" stroke-width="7" opacity=".48"/><path d="M158 144 C184 160 218 160 243 144" stroke="#d8caa7" stroke-width="3" opacity=".42" fill="none"/>
+  </g>
+</svg>

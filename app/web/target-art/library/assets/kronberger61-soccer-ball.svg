@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="kronberger61-soccer-ball-title kronberger61-soccer-ball-desc">
+  <title id="kronberger61-soccer-ball-title">Kronberger 61 Soccer Ball</title>
+  <desc id="kronberger61-soccer-ball-desc">Original Project Polaris vector artwork informed by official NASA imagery: small round planetary with broken shell patches and central star.</desc>
+  <defs>
+    <radialGradient id="kronberger61-soccer-ball-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="kronberger61-soccer-ball-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="kronberger61-soccer-ball-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#kronberger61-soccer-ball-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="kronberger61-soccer-ball-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#kronberger61-soccer-ball-ambient-vignette-mask)">
+    <circle cx="136" cy="84" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="277" cy="33" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="324" cy="104" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="371" cy="175" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="54" cy="246" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="101" cy="53" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="148" cy="124" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="242" cy="266" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="289" cy="73" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="336" cy="144" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="19" cy="215" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="66" cy="22" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="113" cy="93" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="160" cy="164" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="207" cy="235" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="254" cy="42" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="301" cy="113" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="348" cy="184" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="31" cy="255" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="78" cy="62" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="172" cy="204" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="219" cy="275" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="313" cy="153" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="360" cy="224" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="43" cy="31" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="90" cy="102" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="184" cy="244" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="231" cy="51" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="206" cy="146" r="56" fill="#2f8f8a" opacity=".18"/><circle cx="206" cy="146" r="46" fill="none" stroke="#d8caa7" stroke-width="5" opacity=".45"/><circle cx="206" cy="146" r="24" fill="#102a2c" opacity=".28"/><circle cx="209" cy="144" r="2" fill="#f3ead2" opacity="0.92"/><circle cx="230" cy="158" r="1.5" fill="#f3ead2" opacity="0.56"/>
+  </g>
+</svg>

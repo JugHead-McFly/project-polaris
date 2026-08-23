@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7814-little-sombrero-title ngc7814-little-sombrero-desc">
+  <title id="ngc7814-little-sombrero-title">NGC 7814 Little Sombrero</title>
+  <desc id="ngc7814-little-sombrero-desc">Original Project Polaris vector artwork informed by official NASA imagery: edge-on spiral with dominant central bulge and razor-thin dust lane.</desc>
+  <defs>
+    <radialGradient id="ngc7814-little-sombrero-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7814-little-sombrero-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7814-little-sombrero-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7814-little-sombrero-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7814-little-sombrero-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7814-little-sombrero-ambient-vignette-mask)">
+    <circle cx="230" cy="34" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="324" cy="176" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="371" cy="247" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="54" cy="54" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="101" cy="125" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="195" cy="267" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="242" cy="74" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="289" cy="145" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="336" cy="216" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="19" cy="23" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="66" cy="94" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="113" cy="165" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="160" cy="236" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="207" cy="43" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="254" cy="114" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="301" cy="185" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="348" cy="256" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="31" cy="63" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="78" cy="134" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="172" cy="276" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="266" cy="154" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="313" cy="225" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="360" cy="32" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="43" cy="103" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="90" cy="174" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="137" cy="245" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="184" cy="52" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="278" cy="194" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="325" cy="265" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="152" rx="149" ry="19" fill="#9ec9bf" opacity=".48" transform="rotate(1.0 200 152)"/><ellipse cx="200" cy="152" rx="31" ry="24" fill="#d8caa7" opacity=".55"/><path d="M58 153 C138 141 260 143 342 153" stroke="#102a2c" stroke-width="5" opacity=".62" fill="none"/>
+  </g>
+</svg>

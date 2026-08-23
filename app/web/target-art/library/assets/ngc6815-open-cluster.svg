@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc6815-open-cluster-title ngc6815-open-cluster-desc">
+  <title id="ngc6815-open-cluster-title">NGC 6815 Open Cluster</title>
+  <desc id="ngc6815-open-cluster-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact Vulpecula open cluster with triangular bright-star scatter.</desc>
+  <defs>
+    <radialGradient id="ngc6815-open-cluster-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc6815-open-cluster-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc6815-open-cluster-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc6815-open-cluster-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc6815-open-cluster-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc6815-open-cluster-ambient-vignette-mask)">
+    <circle cx="126" cy="82" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="267" cy="31" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="314" cy="102" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="361" cy="173" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="44" cy="244" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="91" cy="51" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="138" cy="122" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="232" cy="264" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="279" cy="71" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="326" cy="142" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="373" cy="213" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="56" cy="20" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="103" cy="91" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="150" cy="162" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="197" cy="233" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="244" cy="40" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="291" cy="111" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="338" cy="182" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="21" cy="253" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="68" cy="60" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="115" cy="131" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="162" cy="202" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="209" cy="273" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="303" cy="151" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="350" cy="222" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="33" cy="29" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="80" cy="100" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="174" cy="242" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="221" cy="49" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M167 123 L205 116 L240 132 L218 162 L198 193 L181 165 Z M205 116 L218 162 L257 184" stroke="#9ec9bf" stroke-width="2" opacity=".23" fill="none"/><circle cx="167" cy="123" r="2.7" fill="#f3ead2" opacity="0.78"/><circle cx="205" cy="116" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="240" cy="132" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="218" cy="162" r="2.3" fill="#f3ead2" opacity="0.68"/><circle cx="181" cy="165" r="2.2" fill="#f3ead2" opacity="0.66"/><circle cx="198" cy="193" r="2.1" fill="#f3ead2" opacity="0.62"/><circle cx="257" cy="184" r="1.8" fill="#f3ead2" opacity="0.56"/>
+  </g>
+</svg>

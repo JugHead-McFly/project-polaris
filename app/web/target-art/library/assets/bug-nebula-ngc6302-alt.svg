@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="bug-nebula-ngc6302-alt-title bug-nebula-ngc6302-alt-desc">
+  <title id="bug-nebula-ngc6302-alt-title">NGC 6302 Bug Nebula Detail</title>
+  <desc id="bug-nebula-ngc6302-alt-desc">Original Project Polaris vector artwork informed by official NASA imagery: non-duplicate close treatment of the Butterfly/Bug Nebula emphasizing dusty waist, asymmetric wing ribs, and compact hot core.</desc>
+  <defs>
+    <radialGradient id="bug-nebula-ngc6302-alt-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bug-nebula-ngc6302-alt-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="bug-nebula-ngc6302-alt-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#bug-nebula-ngc6302-alt-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="bug-nebula-ngc6302-alt-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#bug-nebula-ngc6302-alt-ambient-vignette-mask)">
+    <circle cx="274" cy="38" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="321" cy="109" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="368" cy="180" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="51" cy="251" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="98" cy="58" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="239" cy="271" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="286" cy="78" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="333" cy="149" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="380" cy="220" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="63" cy="27" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="110" cy="98" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="204" cy="240" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="251" cy="47" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="298" cy="118" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="345" cy="189" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="28" cy="260" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="75" cy="67" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="122" cy="138" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="216" cy="280" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="310" cy="158" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="357" cy="229" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="40" cy="36" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="87" cy="107" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="134" cy="178" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="181" cy="249" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="228" cy="56" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="322" cy="198" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="369" cy="269" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M141 105 C181 124 184 169 143 196 C108 167 111 129 141 105Z" fill="#2f8f8a" opacity=".56"/><path d="M259 101 C217 124 216 171 259 199 C294 165 291 125 259 101Z" fill="#9ec9bf" opacity=".5"/><path d="M181 150 L219 150" stroke="#102a2c" stroke-width="9" opacity=".68"/><path d="M141 122 C170 139 173 164 145 187 M259 120 C229 139 229 164 257 188" stroke="#d8caa7" stroke-width="3" opacity=".46" fill="none"/><circle cx="200" cy="150" r="2.5" fill="#f3ead2" opacity="0.95"/>
+  </g>
+</svg>

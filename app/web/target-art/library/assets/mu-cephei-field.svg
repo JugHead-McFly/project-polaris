@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="mu-cephei-field-title mu-cephei-field-desc">
+  <title id="mu-cephei-field-title">Mu Cephei Garnet Star Field</title>
+  <desc id="mu-cephei-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: deep amber supergiant field with nearby pale comparison stars.</desc>
+  <defs>
+    <radialGradient id="mu-cephei-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mu-cephei-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="mu-cephei-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#mu-cephei-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="mu-cephei-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#mu-cephei-field-ambient-vignette-mask)">
+    <circle cx="159" cy="159" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="253" cy="37" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="300" cy="108" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="347" cy="179" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="30" cy="250" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="77" cy="57" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="171" cy="199" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="218" cy="270" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="312" cy="148" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="359" cy="219" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="42" cy="26" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="89" cy="97" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="183" cy="239" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="230" cy="46" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="324" cy="188" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="371" cy="259" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="54" cy="66" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="101" cy="137" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="195" cy="279" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="289" cy="157" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="336" cy="228" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="19" cy="35" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="66" cy="106" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="113" cy="177" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="160" cy="248" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="207" cy="55" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <circle cx="188" cy="150" r="13" fill="#d49a3a" opacity=".94"/><circle cx="188" cy="150" r="23" fill="#d49a3a" opacity=".14"/><path d="M142 111 L188 150 L245 126 M188 150 L263 187" stroke="#9ec9bf" stroke-width="1.5" opacity=".18" fill="none"/><circle cx="142" cy="111" r="1.5" fill="#f3ead2" opacity="0.48"/><circle cx="245" cy="126" r="1.7" fill="#f3ead2" opacity="0.54"/><circle cx="263" cy="187" r="1.4" fill="#f3ead2" opacity="0.46"/><circle cx="157" cy="196" r="1.1" fill="#f3ead2" opacity="0.4"/><circle cx="221" cy="209" r="1.1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sh2-297-seagull-wing-title sh2-297-seagull-wing-desc">
+  <title id="sh2-297-seagull-wing-title">Sh2-297 Seagull Wing</title>
+  <desc id="sh2-297-seagull-wing-desc">Original Project Polaris vector artwork informed by official NASA imagery: faint wing section of the Seagull complex with filamentary rim.</desc>
+  <defs>
+    <radialGradient id="sh2-297-seagull-wing-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sh2-297-seagull-wing-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sh2-297-seagull-wing-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sh2-297-seagull-wing-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sh2-297-seagull-wing-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sh2-297-seagull-wing-ambient-vignette-mask)">
+    <circle cx="89" cy="241" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="136" cy="48" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="277" cy="261" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="324" cy="68" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="371" cy="139" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="54" cy="210" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="101" cy="281" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="289" cy="37" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="336" cy="108" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="19" cy="179" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="66" cy="250" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="113" cy="57" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="254" cy="270" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="301" cy="77" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="348" cy="148" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="31" cy="219" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="78" cy="26" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="125" cy="97" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="219" cy="239" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="266" cy="46" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="313" cy="117" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="360" cy="188" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="43" cy="259" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="90" cy="66" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="137" cy="137" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M74.7 145.2 A122 54 0 0 1 311.3 133.3" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.42"/><path d="M120.0 148.1 A92 38 0 0 1 278.4 130.6" fill="none" stroke="#d8caa7" stroke-width="3" stroke-linecap="round" opacity="0.34"/><path d="M103.3 164.7 A72 30 0 0 1 158.8 129.7" fill="none" stroke="#d49a3a" stroke-width="3" stroke-linecap="round" opacity="0.24"/><path d="M116 164 C166 145 226 139 286 131" stroke="#2f8f8a" stroke-width="5" opacity=".18" fill="none" stroke-linecap="round"/><circle cx="223" cy="142" r="2.2" fill="#f3ead2" opacity="0.68"/><circle cx="257" cy="134" r="1.7" fill="#f3ead2" opacity="0.54"/>
+  </g>
+</svg>

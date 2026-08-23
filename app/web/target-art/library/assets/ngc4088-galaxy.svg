@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc4088-galaxy-title ngc4088-galaxy-desc">
+  <title id="ngc4088-galaxy-title">NGC 4088 Galaxy</title>
+  <desc id="ngc4088-galaxy-desc">Original Project Polaris vector artwork informed by official NASA imagery: distorted spiral with asymmetric arms and bright star-forming knots.</desc>
+  <defs>
+    <radialGradient id="ngc4088-galaxy-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc4088-galaxy-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc4088-galaxy-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc4088-galaxy-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc4088-galaxy-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc4088-galaxy-ambient-vignette-mask)">
+    <circle cx="42" cy="134" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="89" cy="205" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="136" cy="276" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="230" cy="154" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="324" cy="32" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="371" cy="103" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="54" cy="174" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="101" cy="245" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="148" cy="52" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="242" cy="194" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="289" cy="265" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="336" cy="72" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="19" cy="143" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="66" cy="214" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="113" cy="21" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="254" cy="234" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="301" cy="41" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="348" cy="112" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="31" cy="183" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="78" cy="254" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="125" cy="61" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="266" cy="274" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="313" cy="81" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="360" cy="152" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="43" cy="223" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="90" cy="30" r="0.55" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <circle cx="205" cy="152" r="16" fill="#f3ead2" opacity=".82"/><path d="M114.5 130.9 A96 63 0 0 1 299.1 139.5" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M289.1 168.5 A88 56 0 0 1 125.4 175.9" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M146.1 153.7 A59 40 0 0 1 235.2 117.6" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><circle cx="247" cy="125" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="167" cy="181" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="228" cy="194" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

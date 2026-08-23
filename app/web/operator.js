@@ -390,16 +390,11 @@ const hostedPlanFailureMessage = (requestId = "") => {
   return `Polaris could not build tonight's plan. Try Refresh plan once more.${requestNote}`;
 };
 
-let targetIllustrationSequence = 0;
-
-const appendTargetSvgElement = (parent, name, attributes = {}) => {
-  const element = document.createElementNS("http://www.w3.org/2000/svg", name);
-  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
-  parent.append(element);
-  return element;
-};
-
 const targetIllustrationKind = (target) => {
+  const approvedCategory = target?.artwork?.category;
+  if (typeof approvedCategory === "string" && approvedCategory) {
+    return approvedCategory.replaceAll("_", "-");
+  }
   const descriptor = [
     target?.object,
     target?.common_name,
@@ -412,110 +407,35 @@ const targetIllustrationKind = (target) => {
   return "deep-sky";
 };
 
-const isM31Target = (target) => {
-  const identifier = [target?.object, target?.common_name]
-    .filter(Boolean)
-    .join(" ");
-  return /(^|[^a-z0-9])m31([^a-z0-9]|$)/i.test(identifier);
+const TARGET_ART_FALLBACK_ROOT = "/operator-assets/target-art/fallbacks";
+const SAFE_TARGET_ART_URL = /^\/operator-assets\/target-art\/(?:library\/assets|fallbacks)\/[a-z0-9][a-z0-9._-]*\.svg(?:\?v=[a-z0-9._-]+)?$/i;
+
+const mappedTargetIllustrationAsset = (target) => {
+  const candidate = target?.artwork?.asset_url;
+  return typeof candidate === "string" && SAFE_TARGET_ART_URL.test(candidate)
+    ? candidate
+    : null;
 };
 
-const TARGET_ILLUSTRATION_ASSETS = Object.freeze({
-  M31: "/operator-assets/target-art/m31-andromeda.svg?v=7f624d4c",
-});
-
-const mappedTargetIllustrationAsset = (target) => (
-  isM31Target(target) ? TARGET_ILLUSTRATION_ASSETS.M31 : null
-);
-
-const appendTargetStars = (svg) => {
-  const stars = [
-    [18, 29, 0.7], [43, 116, 0.55], [74, 19, 0.45], [105, 126, 0.75],
-    [184, 18, 0.55], [218, 108, 0.65], [228, 47, 0.4],
-  ];
-  stars.forEach(([cx, cy, r]) => {
-    appendTargetSvgElement(svg, "circle", {
-      cx,
-      cy,
-      r,
-      fill: "#f0e4c5",
-      opacity: ".66",
-    });
-  });
-  [[31, 67, 0.55], [117, 22, 0.45], [197, 96, 0.5]].forEach(([cx, cy, r]) => {
-    appendTargetSvgElement(svg, "circle", {
-      cx, cy, r, fill: "#d5a54d", opacity: ".34",
-    });
-  });
+const genericTargetIllustrationAsset = (target) => {
+  const kind = targetIllustrationKind(target);
+  const supported = new Set([
+    "galaxy", "nebula", "cluster", "planetary-nebula", "solar-system", "deep-sky",
+  ]);
+  const fallback = supported.has(kind) ? kind : "deep-sky";
+  return `${TARGET_ART_FALLBACK_ROOT}/${fallback}.svg?v=1`;
 };
 
 const buildTargetIllustrationSvg = (target, _compact = false) => {
   const kind = targetIllustrationKind(target);
-  const mappedAsset = mappedTargetIllustrationAsset(target);
-  if (mappedAsset) {
-    const image = document.createElement("img");
-    image.src = mappedAsset;
-    image.alt = "";
-    image.setAttribute("aria-hidden", "true");
-    image.decoding = "async";
-    image.dataset.kind = kind;
-    image.dataset.visualTreatment = "m31-library-v3";
-    return image;
-  }
-
-  const uniqueId = `target-art-${targetIllustrationSequence += 1}`;
-  const svg = appendTargetSvgElement(document.createDocumentFragment(), "svg", {
-    viewBox: "0 0 240 140",
-    preserveAspectRatio: "xMidYMid meet",
-    "aria-hidden": "true",
-    focusable: "false",
-  });
-  const defs = appendTargetSvgElement(svg, "defs");
-  const glow = appendTargetSvgElement(defs, "radialGradient", { id: `${uniqueId}-glow` });
-  appendTargetSvgElement(glow, "stop", { offset: "0", "stop-color": "#f0e4c5" });
-  appendTargetSvgElement(glow, "stop", { offset: ".32", "stop-color": "#72d8c6", "stop-opacity": ".72" });
-  appendTargetSvgElement(glow, "stop", { offset: "1", "stop-color": "#315f63", "stop-opacity": "0" });
-
-  appendTargetSvgElement(svg, "rect", { width: "240", height: "140", fill: "#06131a" });
-  appendTargetStars(svg);
-  appendTargetSvgElement(svg, "path", {
-    d: "M-8 118C42 104 61 124 104 114S177 97 249 108",
-    fill: "none", stroke: "#315f63", "stroke-width": ".7",
-    "stroke-dasharray": "1 7", opacity: ".44",
-  });
-  const targetMark = appendTargetSvgElement(svg, "g", {
-    transform: "rotate(-17 120 70)",
-  });
-  appendTargetSvgElement(targetMark, "ellipse", {
-    cx: "120", cy: "70", rx: "92", ry: "36",
-    fill: `url(#${uniqueId}-glow)`, opacity: ".72",
-  });
-  appendTargetSvgElement(targetMark, "path", {
-    d: "M28 75C63 41 159 40 212 68", fill: "none", stroke: "#72d8c6",
-    "stroke-width": "3", "stroke-linecap": "round",
-    "stroke-dasharray": "76 10 42 18", opacity: ".68",
-  });
-  appendTargetSvgElement(targetMark, "path", {
-    d: "M35 56C75 86 160 92 205 61", fill: "none", stroke: "#f0e4c5",
-    "stroke-width": "1.8", "stroke-linecap": "round",
-    "stroke-dasharray": "42 13 65 17", opacity: ".52",
-  });
-  appendTargetSvgElement(targetMark, "path", {
-    d: "M45 87C87 65 162 65 196 78", fill: "none", stroke: "#315f63",
-    "stroke-width": "4", "stroke-linecap": "round",
-    "stroke-dasharray": "61 14", opacity: ".56",
-  });
-  appendTargetSvgElement(targetMark, "ellipse", {
-    cx: "120", cy: "70", rx: "25", ry: "9", fill: "#f0e4c5", opacity: ".86",
-  });
-  appendTargetSvgElement(targetMark, "circle", {
-    cx: "178", cy: "58", r: "1.8", fill: "#d5a54d",
-  });
-  appendTargetSvgElement(targetMark, "circle", {
-    cx: "68", cy: "78", r: "1.4", fill: "#d5a54d",
-  });
-
-  svg.dataset.kind = kind;
-  return svg;
+  const image = document.createElement("img");
+  image.src = mappedTargetIllustrationAsset(target) || genericTargetIllustrationAsset(target);
+  image.alt = "";
+  image.setAttribute("aria-hidden", "true");
+  image.decoding = "async";
+  image.dataset.kind = kind;
+  image.dataset.visualTreatment = target?.artwork?.match_kind || "category";
+  return image;
 };
 
 const parseCachedTargetIllustration = (target) => {
@@ -558,21 +478,23 @@ const renderTargetIllustration = (containerId, target, compact = false) => {
   }
 
   container.hidden = false;
-  const cachedIllustration = parseCachedTargetIllustration(target);
+  const approvedAsset = mappedTargetIllustrationAsset(target);
+  const cachedIllustration = approvedAsset ? null : parseCachedTargetIllustration(target);
   container.replaceChildren(
     cachedIllustration || buildTargetIllustrationSvg(target, compact),
   );
-  container.dataset.kind = cachedIllustration
-    ? `nasa-${target.reference_image.artwork_profile || targetIllustrationKind(target)}`
-    : targetIllustrationKind(target);
-  container.classList.toggle("is-reference-informed", Boolean(cachedIllustration));
+  container.dataset.kind = targetIllustrationKind(target);
+  const isExactArt = target?.artwork?.match_kind === "exact";
+  container.classList.toggle(
+    "is-reference-informed",
+    Boolean(cachedIllustration || isExactArt),
+  );
   if (!compact) {
     const name = target?.common_name || target?.object || "deep-sky target";
     container.setAttribute(
       "aria-label",
-      cachedIllustration
-        ? `Illustration of ${name}`
-        : `Abstract illustration of ${name}`,
+      target?.artwork?.alt
+        || (cachedIllustration ? `Illustration of ${name}` : `Abstract illustration of ${name}`),
     );
   }
 };

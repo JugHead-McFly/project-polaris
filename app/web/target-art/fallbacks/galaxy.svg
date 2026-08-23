@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Generic galaxy</title>
+  <desc id="desc">A stylized galaxy used only when no exact target artwork is available.</desc>
+  <defs>
+    <radialGradient id="glow"><stop stop-color="#f3ead2" stop-opacity=".9"/><stop offset=".55" stop-color="#9ec9bf" stop-opacity=".38"/><stop offset="1" stop-color="#1f5f60" stop-opacity="0"/></radialGradient>
+    <radialGradient id="fade"><stop offset=".55" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient>
+    <mask id="mask"><rect width="400" height="300" fill="url(#fade)"/></mask>
+  </defs>
+  <g mask="url(#mask)">
+    <ellipse cx="200" cy="150" rx="138" ry="58" fill="url(#glow)" transform="rotate(-18 200 150)"/>
+    <path d="M74 188C135 94 273 94 332 154" fill="none" stroke="#9ec9bf" stroke-width="7" stroke-linecap="round" opacity=".64"/>
+    <path d="M68 142C139 210 275 201 330 123" fill="none" stroke="#d8caa7" stroke-width="5" stroke-linecap="round" opacity=".58"/>
+    <ellipse cx="200" cy="150" rx="34" ry="18" fill="#f3ead2" opacity=".88" transform="rotate(-18 200 150)"/>
+  </g>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="delta-cygni-double-title delta-cygni-double-desc">
+  <title id="delta-cygni-double-title">Delta Cygni Double Star</title>
+  <desc id="delta-cygni-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: tight bright double with pale companion in Cygnus wing field.</desc>
+  <defs>
+    <radialGradient id="delta-cygni-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="delta-cygni-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="delta-cygni-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#delta-cygni-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="delta-cygni-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#delta-cygni-double-ambient-vignette-mask)">
+    <circle cx="91" cy="271" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="279" cy="27" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="326" cy="98" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="373" cy="169" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="56" cy="240" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="103" cy="47" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="244" cy="260" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="291" cy="67" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="338" cy="138" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="21" cy="209" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="68" cy="280" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="115" cy="87" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="256" cy="36" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="303" cy="107" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="350" cy="178" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="33" cy="249" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="80" cy="56" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="127" cy="127" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="221" cy="269" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="315" cy="147" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="362" cy="218" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="45" cy="25" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="92" cy="96" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="139" cy="167" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="186" cy="238" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M174 150 L226 149" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="174" cy="150" r="7.8" fill="#f3ead2" opacity=".95"/><circle cx="226" cy="149" r="4.5" fill="#9ec9bf" opacity=".86"/><circle cx="141" cy="118" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="260" cy="181" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="204" cy="106" r="1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="draco-lozenge-field-title draco-lozenge-field-desc">
+  <title id="draco-lozenge-field-title">Draco Lozenge Field</title>
+  <desc id="draco-lozenge-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: Draco head lozenge field with compact four-star geometry.</desc>
+  <defs>
+    <radialGradient id="draco-lozenge-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="draco-lozenge-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="draco-lozenge-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#draco-lozenge-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="draco-lozenge-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#draco-lozenge-field-ambient-vignette-mask)">
+    <circle cx="358" cy="218" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="41" cy="25" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="88" cy="96" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="182" cy="238" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="229" cy="45" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="323" cy="187" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="370" cy="258" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="53" cy="65" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="100" cy="136" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="194" cy="278" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="288" cy="156" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="335" cy="227" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="18" cy="34" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="65" cy="105" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="112" cy="176" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="159" cy="247" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="206" cy="54" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="300" cy="196" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="347" cy="267" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="30" cy="74" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="77" cy="145" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="171" cy="23" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="218" cy="94" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="312" cy="236" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="359" cy="43" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="42" cy="114" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="89" cy="185" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M156 112 L222 94 L273 149 L215 194 L151 169 Z M156 112 L215 194 M222 94 L151 169" stroke="#9ec9bf" stroke-width="2" opacity=".34" fill="none"/><circle cx="156" cy="112" r="3.1" fill="#f3ead2" opacity="0.86"/><circle cx="222" cy="94" r="3" fill="#f3ead2" opacity="0.84"/><circle cx="273" cy="149" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="215" cy="194" r="2.8" fill="#f3ead2" opacity="0.8"/><circle cx="151" cy="169" r="2.8" fill="#f3ead2" opacity="0.8"/><circle cx="244" cy="125" r="1.5" fill="#f3ead2" opacity="0.48"/><circle cx="185" cy="146" r="1.4" fill="#f3ead2" opacity="0.46"/><path d="M151 169 C181 184 218 184 273 149" stroke="#d49a3a" stroke-width="2" opacity=".16" fill="none"/>
+  </g>
+</svg>

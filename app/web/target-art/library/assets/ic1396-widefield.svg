@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ic1396-widefield-title ic1396-widefield-desc">
+  <title id="ic1396-widefield-title">IC 1396 Widefield</title>
+  <desc id="ic1396-widefield-desc">Original Project Polaris vector artwork informed by official NASA imagery: large emission complex around a central cluster with dark globule lanes.</desc>
+  <defs>
+    <radialGradient id="ic1396-widefield-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ic1396-widefield-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ic1396-widefield-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ic1396-widefield-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ic1396-widefield-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ic1396-widefield-ambient-vignette-mask)">
+    <circle cx="156" cy="204" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="203" cy="275" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="297" cy="153" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="344" cy="224" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="27" cy="31" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="74" cy="102" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="121" cy="173" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="168" cy="244" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="215" cy="51" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="309" cy="193" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="356" cy="264" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="39" cy="71" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="86" cy="142" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="180" cy="20" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="321" cy="233" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="368" cy="40" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="51" cy="111" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="98" cy="182" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="145" cy="253" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="192" cy="60" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="286" cy="202" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="333" cy="273" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="380" cy="80" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="63" cy="151" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="110" cy="222" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="157" cy="29" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="204" cy="100" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M122 201 C132 122 208 87 277 124 C291 176 235 224 172 220 C151 217 134 210 122 201Z" fill="#2f8f8a" opacity=".3"/><path d="M154 187 C190 158 233 156 265 184" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="208" cy="138" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="235" cy="160" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="171" cy="179" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="black-eye-galaxy-m64-title black-eye-galaxy-m64-desc">
+  <title id="black-eye-galaxy-m64-title">M64 Black Eye Galaxy</title>
+  <desc id="black-eye-galaxy-m64-desc">Original Project Polaris vector artwork informed by official NASA imagery: bright spiral core crossed by a dark asymmetric absorbing dust band.</desc>
+  <defs>
+    <radialGradient id="black-eye-galaxy-m64-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="black-eye-galaxy-m64-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="black-eye-galaxy-m64-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#black-eye-galaxy-m64-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="black-eye-galaxy-m64-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#black-eye-galaxy-m64-ambient-vignette-mask)">
+    <circle cx="186" cy="178" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="233" cy="249" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="280" cy="56" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="327" cy="127" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="374" cy="198" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="57" cy="269" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="104" cy="76" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="198" cy="218" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="245" cy="25" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="292" cy="96" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="339" cy="167" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="22" cy="238" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="69" cy="45" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="116" cy="116" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="210" cy="258" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="257" cy="65" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="304" cy="136" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="351" cy="207" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="34" cy="278" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="81" cy="85" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="222" cy="34" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="316" cy="176" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="363" cy="247" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="46" cy="54" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="93" cy="125" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="187" cy="267" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="234" cy="74" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="281" cy="145" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="75" ry="54" fill="url(#black-eye-galaxy-m64-glow)"/><ellipse cx="200" cy="150" rx="31" ry="21" fill="#f3ead2" opacity=".88"/><path d="M155 139 C177 119 222 120 246 142 C226 139 199 143 175 154 C164 158 156 153 155 139Z" fill="#102a2c" opacity=".72"/><path d="M282.1 157.5 A83 50 0 0 1 138.8 183.8" fill="none" stroke="#9ec9bf" stroke-width="4" stroke-linecap="round" opacity="0.52"/><path d="M130.1 147.5 A70 43 0 0 1 244.4 116.8" fill="none" stroke="#d8caa7" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  </g>
+</svg>

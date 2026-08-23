@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sh2-132-lion-nebula-title sh2-132-lion-nebula-desc">
+  <title id="sh2-132-lion-nebula-title">Sh2-132 Lion Nebula</title>
+  <desc id="sh2-132-lion-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: broad emission nebula with mane-like arcs and central hot-star knots.</desc>
+  <defs>
+    <radialGradient id="sh2-132-lion-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sh2-132-lion-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sh2-132-lion-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sh2-132-lion-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sh2-132-lion-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sh2-132-lion-nebula-ambient-vignette-mask)">
+    <circle cx="127" cy="187" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="174" cy="258" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="221" cy="65" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="315" cy="207" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="362" cy="278" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="45" cy="85" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="92" cy="156" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="139" cy="227" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="186" cy="34" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="280" cy="176" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="327" cy="247" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="374" cy="54" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="57" cy="125" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="104" cy="196" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="151" cy="267" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="292" cy="216" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="339" cy="23" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="22" cy="94" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="69" cy="165" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="116" cy="236" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="163" cy="43" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="304" cy="256" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="351" cy="63" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="34" cy="134" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="81" cy="205" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="128" cy="276" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="175" cy="83" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M116 189 C126 110 202 75 271 112 C285 164 229 212 166 208 C145 205 128 198 116 189Z" fill="#2f8f8a" opacity=".3"/><path d="M148 175 C184 146 227 144 259 172" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="202" cy="126" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="229" cy="148" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="165" cy="167" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

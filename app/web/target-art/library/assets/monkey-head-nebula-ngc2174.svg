@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="monkey-head-nebula-ngc2174-title monkey-head-nebula-ngc2174-desc">
+  <title id="monkey-head-nebula-ngc2174-title">NGC 2174 Monkey Head Nebula</title>
+  <desc id="monkey-head-nebula-ngc2174-desc">Original Project Polaris vector artwork informed by official NASA imagery: rounded emission cloud with carved eye/mouth cavities, ridged rim, and embedded young-star knots.</desc>
+  <defs>
+    <radialGradient id="monkey-head-nebula-ngc2174-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="monkey-head-nebula-ngc2174-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="monkey-head-nebula-ngc2174-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#monkey-head-nebula-ngc2174-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="monkey-head-nebula-ngc2174-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#monkey-head-nebula-ngc2174-ambient-vignette-mask)">
+    <circle cx="377" cy="149" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="60" cy="220" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="107" cy="27" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="201" cy="169" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="248" cy="240" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="295" cy="47" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="342" cy="118" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="25" cy="189" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="72" cy="260" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="119" cy="67" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="213" cy="209" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="260" cy="280" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="307" cy="87" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="354" cy="158" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="37" cy="229" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="84" cy="36" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="225" cy="249" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="272" cy="56" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="319" cy="127" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="366" cy="198" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="49" cy="269" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="96" cy="76" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="237" cy="25" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="284" cy="96" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="331" cy="167" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="378" cy="238" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="61" cy="45" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="108" cy="116" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M128 164 C119 111 170 83 218 102 C264 98 289 133 270 181 C239 219 166 215 128 164Z" fill="#2f8f8a" opacity=".43"/><circle cx="176" cy="139" r="17" fill="#102a2c" opacity=".42"/><path d="M214 134 C238 142 246 164 231 181 C211 172 203 151 214 134Z" fill="#102a2c" opacity=".36"/><path d="M150 190 C181 168 226 168 257 190" stroke="#d8caa7" stroke-width="4" opacity=".45" fill="none"/><circle cx="192" cy="121" r="2.4" fill="#d49a3a" opacity="0.82"/><circle cx="230" cy="122" r="2" fill="#d49a3a" opacity="0.72"/><circle cx="169" cy="174" r="1.8" fill="#d49a3a" opacity="0.65"/>
+  </g>
+</svg>

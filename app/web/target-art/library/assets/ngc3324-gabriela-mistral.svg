@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc3324-gabriela-mistral-title ngc3324-gabriela-mistral-desc">
+  <title id="ngc3324-gabriela-mistral-title">NGC 3324 Gabriela Mistral Nebula</title>
+  <desc id="ngc3324-gabriela-mistral-desc">Original Project Polaris vector artwork informed by official NASA imagery: bright carved emission rim with face-like profile and cluster edge.</desc>
+  <defs>
+    <radialGradient id="ngc3324-gabriela-mistral-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc3324-gabriela-mistral-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc3324-gabriela-mistral-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc3324-gabriela-mistral-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc3324-gabriela-mistral-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc3324-gabriela-mistral-ambient-vignette-mask)">
+    <circle cx="133" cy="245" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="180" cy="52" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="321" cy="265" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="368" cy="72" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="51" cy="143" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="98" cy="214" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="145" cy="21" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="286" cy="234" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="333" cy="41" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="380" cy="112" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="63" cy="183" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="110" cy="254" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="157" cy="61" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="298" cy="274" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="345" cy="81" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="28" cy="152" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="75" cy="223" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="122" cy="30" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="169" cy="101" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="263" cy="243" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="310" cy="50" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="357" cy="121" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="40" cy="192" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="87" cy="263" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="181" cy="141" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M111 189 C130 118 185 88 254 111 C286 134 291 177 262 209 C229 190 200 176 161 184 C140 188 124 192 111 189Z" fill="#2f8f8a" opacity=".27"/><path d="M132 178 C151 143 171 122 203 113 C189 143 195 174 226 205 C190 198 159 188 132 178Z" fill="#102a2c" opacity=".45"/><path d="M123 166 C157 126 209 104 265 125 M141 196 C176 172 220 172 261 202" stroke="#d8caa7" stroke-width="4" opacity=".36" fill="none"/><path d="M176 117 C190 139 212 146 236 132" stroke="#9ec9bf" stroke-width="5" opacity=".34" fill="none"/><circle cx="219" cy="129" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="195" cy="148" r="2.2" fill="#d49a3a" opacity="0.68"/><circle cx="246" cy="166" r="1.8" fill="#d49a3a" opacity="0.58"/>
+  </g>
+</svg>

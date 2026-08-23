@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="butterfly-nebula-ngc6302-title butterfly-nebula-ngc6302-desc">
+  <title id="butterfly-nebula-ngc6302-title">NGC 6302 Butterfly Nebula</title>
+  <desc id="butterfly-nebula-ngc6302-desc">Original Project Polaris vector artwork informed by official NASA imagery: bipolar wing-like planetary nebula with narrow dusty waist.</desc>
+  <defs>
+    <radialGradient id="butterfly-nebula-ngc6302-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="butterfly-nebula-ngc6302-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="butterfly-nebula-ngc6302-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#butterfly-nebula-ngc6302-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="butterfly-nebula-ngc6302-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#butterfly-nebula-ngc6302-ambient-vignette-mask)">
+    <circle cx="193" cy="193" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="240" cy="264" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="287" cy="71" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="334" cy="142" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="381" cy="213" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="64" cy="20" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="111" cy="91" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="205" cy="233" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="252" cy="40" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="299" cy="111" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="346" cy="182" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="29" cy="253" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="76" cy="60" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="217" cy="273" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="311" cy="151" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="358" cy="222" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="41" cy="29" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="88" cy="100" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="182" cy="242" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="229" cy="49" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="323" cy="191" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="370" cy="262" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="53" cy="69" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="100" cy="140" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="194" cy="18" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="241" cy="89" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="288" cy="160" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M135 98 C184 122 186 170 137 205 C104 167 106 127 135 98Z" fill="#2f8f8a" opacity=".55"/><path d="M265 98 C216 122 214 170 263 205 C296 167 294 127 265 98Z" fill="#9ec9bf" opacity=".48"/><path d="M181 150 L219 150" stroke="#102a2c" stroke-width="8" opacity=".62"/><circle cx="200" cy="150" r="2" fill="#f3ead2" opacity="0.95"/>
+  </g>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="rcw34-emission-nebula-title rcw34-emission-nebula-desc">
+  <title id="rcw34-emission-nebula-title">RCW 34 Emission Nebula</title>
+  <desc id="rcw34-emission-nebula-desc">Original Project Polaris vector artwork informed by official NASA imagery: compact red emission nebula with cavity and bright rim.</desc>
+  <defs>
+    <radialGradient id="rcw34-emission-nebula-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="rcw34-emission-nebula-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="rcw34-emission-nebula-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#rcw34-emission-nebula-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="rcw34-emission-nebula-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#rcw34-emission-nebula-ambient-vignette-mask)">
+    <circle cx="84" cy="256" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="131" cy="63" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="272" cy="276" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="319" cy="83" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="366" cy="154" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="49" cy="225" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="96" cy="32" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="237" cy="245" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="284" cy="52" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="331" cy="123" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="378" cy="194" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="61" cy="265" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="108" cy="72" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="249" cy="21" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="296" cy="92" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="343" cy="163" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="26" cy="234" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="73" cy="41" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="120" cy="112" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="214" cy="254" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="261" cy="61" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="308" cy="132" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="355" cy="203" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="38" cy="274" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="85" cy="81" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="132" cy="152" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M119 198 C129 119 205 84 274 121 C288 173 232 221 169 217 C148 214 131 207 119 198Z" fill="#2f8f8a" opacity=".3"/><path d="M151 184 C187 155 230 153 262 181" stroke="#d8caa7" stroke-width="4" opacity=".38" fill="none"/><circle cx="205" cy="135" r="3" fill="#d49a3a" opacity="0.82"/><circle cx="232" cy="157" r="2" fill="#d49a3a" opacity="0.68"/><circle cx="168" cy="176" r="1.8" fill="#d49a3a" opacity="0.6"/>
+  </g>
+</svg>

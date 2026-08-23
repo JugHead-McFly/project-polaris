@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="mizar-alcor-title mizar-alcor-desc">
+  <title id="mizar-alcor-title">Mizar and Alcor</title>
+  <desc id="mizar-alcor-desc">Original Project Polaris vector artwork informed by official NASA imagery: naked-eye double in the Big Dipper handle with close bright pair geometry.</desc>
+  <defs>
+    <radialGradient id="mizar-alcor-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mizar-alcor-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="mizar-alcor-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#mizar-alcor-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="mizar-alcor-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#mizar-alcor-ambient-vignette-mask)">
+    <circle cx="260" cy="272" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="307" cy="79" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="354" cy="150" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="37" cy="221" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="84" cy="28" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="225" cy="241" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="272" cy="48" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="319" cy="119" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="366" cy="190" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="49" cy="261" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="96" cy="68" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="237" cy="281" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="284" cy="88" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="331" cy="159" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="378" cy="230" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="61" cy="37" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="108" cy="108" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="202" cy="250" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="249" cy="57" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="296" cy="128" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="343" cy="199" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="26" cy="270" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="73" cy="77" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="120" cy="148" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="214" cy="26" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="308" cy="168" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="355" cy="239" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M125 176 L174 145 L226 127 L278 110" stroke="#9ec9bf" stroke-width="2" opacity=".28" fill="none"/><circle cx="174" cy="145" r="9" fill="#f3ead2"/><circle cx="190" cy="137" r="3.5" fill="#d8caa7"/><circle cx="226" cy="127" r="5" fill="#f3ead2" opacity=".78"/><circle cx="125" cy="176" r="3" fill="#f3ead2" opacity="0.7"/><circle cx="278" cy="110" r="3" fill="#f3ead2" opacity="0.7"/>
+  </g>
+</svg>

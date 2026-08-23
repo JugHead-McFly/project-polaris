@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="globular-m71-title globular-m71-desc">
+  <title id="globular-m71-title">M71 Globular Cluster</title>
+  <desc id="globular-m71-desc">Original Project Polaris vector artwork informed by official NASA imagery: loose low-concentration globular with open-cluster-like star spread.</desc>
+  <defs>
+    <radialGradient id="globular-m71-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="globular-m71-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="globular-m71-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#globular-m71-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="globular-m71-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#globular-m71-ambient-vignette-mask)">
+    <circle cx="45" cy="269" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="92" cy="76" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="233" cy="25" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="280" cy="96" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="327" cy="167" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="374" cy="238" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="57" cy="45" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="104" cy="116" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="198" cy="258" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="245" cy="65" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="292" cy="136" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="339" cy="207" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="22" cy="278" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="69" cy="85" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="116" cy="156" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="210" cy="34" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="257" cy="105" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="304" cy="176" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="351" cy="247" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="34" cy="54" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="81" cy="125" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="175" cy="267" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="269" cy="145" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="316" cy="216" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="363" cy="23" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="46" cy="94" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="93" cy="165" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="140" cy="236" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="117" ry="71" fill="url(#globular-m71-glow)" opacity=".96" transform="rotate(-12 200 150)"/><ellipse cx="200" cy="150" rx="58" ry="35" fill="#f3ead2" opacity="0.48" transform="rotate(-12 200 150)"/><circle cx="200" cy="150" r="0.9" fill="#f3ead2" opacity="0.4"/><circle cx="187" cy="91" r="1.1400000000000001" fill="#f3ead2" opacity="0.465"/><circle cx="296" cy="178" r="1.3800000000000001" fill="#f3ead2" opacity="0.53"/><circle cx="103" cy="184" r="1.6199999999999999" fill="#f3ead2" opacity="0.595"/><circle cx="207" cy="81" r="1.86" fill="#f3ead2" opacity="0.66"/><circle cx="244" cy="170" r="0.9" fill="#f3ead2" opacity="0.725"/><circle cx="148" cy="160" r="1.1400000000000001" fill="#f3ead2" opacity="0.79"/><circle cx="223" cy="101" r="1.3800000000000001" fill="#f3ead2" opacity="0.4"/><circle cx="251" cy="187" r="1.6199999999999999" fill="#f3ead2" opacity="0.465"/><circle cx="132" cy="154" r="1.86" fill="#f3ead2" opacity="0.53"/><circle cx="211" cy="137" r="0.9" fill="#f3ead2" opacity="0.595"/><circle cx="203" cy="154" r="1.1400000000000001" fill="#f3ead2" opacity="0.66"/><circle cx="88" cy="144" r="1.1" fill="#f3ead2" opacity="0.605"/><circle cx="275" cy="95" r="1.3399999999999999" fill="#f3ead2" opacity="0.67"/><circle cx="238" cy="230" r="1.58" fill="#f3ead2" opacity="0.28"/><circle cx="132" cy="137" r="0.62" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="260" cy="121" r="0.86" fill="#f3ead2" opacity="0.41000000000000003"/><circle cx="205" cy="197" r="1.1" fill="#f3ead2" opacity="0.47500000000000003"/><circle cx="136" cy="128" r="1.3399999999999999" fill="#f3ead2" opacity="0.54"/><circle cx="258" cy="133" r="1.58" fill="#f3ead2" opacity="0.605"/><circle cx="197" cy="165" r="0.62" fill="#f3ead2" opacity="0.67"/><circle cx="163" cy="130" r="0.86" fill="#f3ead2" opacity="0.28"/><circle cx="229" cy="146" r="1.1" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="156" cy="225" r="1.3399999999999999" fill="#f3ead2" opacity="0.41000000000000003"/><circle cx="118" cy="82" r="1.58" fill="#f3ead2" opacity="0.47500000000000003"/><circle cx="272" cy="149" r="0.62" fill="#f3ead2" opacity="0.54"/><circle cx="160" cy="190" r="0.86" fill="#f3ead2" opacity="0.605"/><circle cx="168" cy="107" r="1.1" fill="#f3ead2" opacity="0.67"/><circle cx="305" cy="160" r="1.3399999999999999" fill="#f3ead2" opacity="0.28"/><circle cx="128" cy="196" r="1.58" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="190" cy="121" r="0.62" fill="#f3ead2" opacity="0.41000000000000003"/><circle cx="242" cy="160" r="0.86" fill="#f3ead2" opacity="0.47500000000000003"/><circle cx="172" cy="162" r="1.1" fill="#f3ead2" opacity="0.54"/><circle cx="200" cy="140" r="1.3399999999999999" fill="#f3ead2" opacity="0.605"/><circle cx="323" cy="199" r="1.58" fill="#f3ead2" opacity="0.67"/><circle cx="125" cy="169" r="0.62" fill="#f3ead2" opacity="0.28"/><circle cx="218" cy="95" r="0.86" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="269" cy="193" r="1.1" fill="#f3ead2" opacity="0.41000000000000003"/><circle cx="100" cy="161" r="1.3399999999999999" fill="#f3ead2" opacity="0.47500000000000003"/><circle cx="239" cy="94" r="1.58" fill="#f3ead2" opacity="0.54"/><circle cx="225" cy="174" r="0.62" fill="#f3ead2" opacity="0.605"/><circle cx="156" cy="150" r="0.86" fill="#f3ead2" opacity="0.67"/><circle cx="243" cy="113" r="1.1" fill="#f3ead2" opacity="0.28"/><circle cx="222" cy="186" r="1.3399999999999999" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="158" cy="144" r="1.58" fill="#f3ead2" opacity="0.41000000000000003"/><circle cx="262" cy="116" r="0.62" fill="#f3ead2" opacity="0.47500000000000003"/><circle cx="214" cy="207" r="0.86" fill="#f3ead2" opacity="0.54"/><circle cx="108" cy="124" r="1.1" fill="#f3ead2" opacity="0.605"/><circle cx="290" cy="118" r="1.3399999999999999" fill="#f3ead2" opacity="0.67"/><circle cx="193" cy="228" r="1.58" fill="#f3ead2" opacity="0.28"/><circle cx="148" cy="126" r="0.62" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="265" cy="137" r="0.86" fill="#f3ead2" opacity="0.41000000000000003"/><circle cx="183" cy="189" r="1.1" fill="#f3ead2" opacity="0.47500000000000003"/><circle cx="162" cy="123" r="1.3399999999999999" fill="#f3ead2" opacity="0.54"/><circle cx="245" cy="147" r="1.58" fill="#f3ead2" opacity="0.605"/><circle cx="194" cy="157" r="0.62" fill="#f3ead2" opacity="0.67"/><circle cx="190" cy="139" r="0.86" fill="#f3ead2" opacity="0.28"/><circle cx="313" cy="156" r="1.1" fill="#f3ead2" opacity="0.34500000000000003"/><circle cx="228" cy="126" r="1.8" fill="#9ec9bf" opacity="0.78"/><circle cx="169" cy="168" r="1.6" fill="#9ec9bf" opacity="0.72"/><circle cx="182" cy="122" r="1.8" fill="#d49a3a" opacity="0.75"/><circle cx="236" cy="164" r="1.7" fill="#d49a3a" opacity="0.68"/>
+  </g>
+</svg>

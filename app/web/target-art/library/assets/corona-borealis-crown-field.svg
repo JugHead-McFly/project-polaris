@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="corona-borealis-crown-field-title corona-borealis-crown-field-desc">
+  <title id="corona-borealis-crown-field-title">Corona Borealis Crown Field</title>
+  <desc id="corona-borealis-crown-field-desc">Original Project Polaris vector artwork informed by official NASA imagery: semicircular crown asterism anchored by Alphecca.</desc>
+  <defs>
+    <radialGradient id="corona-borealis-crown-field-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="corona-borealis-crown-field-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="corona-borealis-crown-field-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#corona-borealis-crown-field-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="corona-borealis-crown-field-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#corona-borealis-crown-field-ambient-vignette-mask)">
+    <circle cx="202" cy="90" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="296" cy="232" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="343" cy="39" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="26" cy="110" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="73" cy="181" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="120" cy="252" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="167" cy="59" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="214" cy="130" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="308" cy="272" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="355" cy="79" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="38" cy="150" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="85" cy="221" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="132" cy="28" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="226" cy="170" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="273" cy="241" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="320" cy="48" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="367" cy="119" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="50" cy="190" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="97" cy="261" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="144" cy="68" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="238" cy="210" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="285" cy="281" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="332" cy="88" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="379" cy="159" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="62" cy="230" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="109" cy="37" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="250" cy="250" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="297" cy="57" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M120 178 C148 112 249 105 282 176" stroke="#9ec9bf" stroke-width="2" opacity=".34" fill="none"/><circle cx="120" cy="178" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="145" cy="137" r="2.7" fill="#f3ead2" opacity="0.78"/><circle cx="183" cy="114" r="2.9" fill="#f3ead2" opacity="0.82"/><circle cx="222" cy="113" r="3.4" fill="#f3ead2" opacity="0.92"/><circle cx="257" cy="137" r="2.7" fill="#f3ead2" opacity="0.78"/><circle cx="282" cy="176" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="222" cy="113" r="6" fill="#d49a3a" opacity=".25"/>
+  </g>
+</svg>

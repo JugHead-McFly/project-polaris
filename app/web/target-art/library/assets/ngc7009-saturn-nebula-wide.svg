@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7009-saturn-nebula-wide-title ngc7009-saturn-nebula-wide-desc">
+  <title id="ngc7009-saturn-nebula-wide-title">NGC 7009 Saturn Nebula Wide</title>
+  <desc id="ngc7009-saturn-nebula-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide treatment of Saturn Nebula with bright oval shell and extended ansae.</desc>
+  <defs>
+    <radialGradient id="ngc7009-saturn-nebula-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7009-saturn-nebula-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7009-saturn-nebula-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7009-saturn-nebula-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7009-saturn-nebula-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7009-saturn-nebula-wide-ambient-vignette-mask)">
+    <circle cx="72" cy="256" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="119" cy="63" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="260" cy="276" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="307" cy="83" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="354" cy="154" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="37" cy="225" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="84" cy="32" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="225" cy="245" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="272" cy="52" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="319" cy="123" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="366" cy="194" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="49" cy="265" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="96" cy="72" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="237" cy="21" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="284" cy="92" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="331" cy="163" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="378" cy="234" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="61" cy="41" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="108" cy="112" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="202" cy="254" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="249" cy="61" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="296" cy="132" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="343" cy="203" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="26" cy="274" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="73" cy="81" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="120" cy="152" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M162 122 C200 138 200 168 162 184 C134 163 134 141 162 122Z" fill="#2f8f8a" opacity=".5"/><path d="M246 122 C208 138 208 168 246 184 C274 163 274 141 246 122Z" fill="#9ec9bf" opacity=".45"/><circle cx="204" cy="153" r="2.2" fill="#f3ead2" opacity="0.95"/>
+  </g>
+</svg>

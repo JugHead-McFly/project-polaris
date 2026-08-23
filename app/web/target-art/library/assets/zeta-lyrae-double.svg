@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="zeta-lyrae-double-title zeta-lyrae-double-desc">
+  <title id="zeta-lyrae-double-title">Zeta Lyrae Double Star</title>
+  <desc id="zeta-lyrae-double-desc">Original Project Polaris vector artwork informed by official NASA imagery: close pale double near Vega with sparse Lyra field stars.</desc>
+  <defs>
+    <radialGradient id="zeta-lyrae-double-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="zeta-lyrae-double-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="zeta-lyrae-double-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#zeta-lyrae-double-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="zeta-lyrae-double-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#zeta-lyrae-double-ambient-vignette-mask)">
+    <circle cx="52" cy="136" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="99" cy="207" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="146" cy="278" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="240" cy="156" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="287" cy="227" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="334" cy="34" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="381" cy="105" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="64" cy="176" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="111" cy="247" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="158" cy="54" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="252" cy="196" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="299" cy="267" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="346" cy="74" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="29" cy="145" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="76" cy="216" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="123" cy="23" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="264" cy="236" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="311" cy="43" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="358" cy="114" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="41" cy="185" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="88" cy="256" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="135" cy="63" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="276" cy="276" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="323" cy="83" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="370" cy="154" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="53" cy="225" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="100" cy="32" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M177 150 L224 148" stroke="#9ec9bf" stroke-width="1.5" opacity=".24"/><circle cx="177" cy="150" r="6.2" fill="#f3ead2" opacity=".94"/><circle cx="224" cy="148" r="5.6" fill="#d8caa7" opacity=".9"/><circle cx="145" cy="121" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="256" cy="178" r="1.1" fill="#f3ead2" opacity="0.42"/><circle cx="203" cy="106" r="1" fill="#f3ead2" opacity="0.38"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1961-galaxy-title ngc1961-galaxy-desc">
+  <title id="ngc1961-galaxy-title">NGC 1961 Galaxy</title>
+  <desc id="ngc1961-galaxy-desc">Original Project Polaris vector artwork informed by official NASA imagery: distorted spiral with sweeping asymmetric outer arm and bright core.</desc>
+  <defs>
+    <radialGradient id="ngc1961-galaxy-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1961-galaxy-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1961-galaxy-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1961-galaxy-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1961-galaxy-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1961-galaxy-ambient-vignette-mask)">
+    <circle cx="221" cy="253" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="268" cy="60" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="315" cy="131" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="362" cy="202" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="45" cy="273" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="92" cy="80" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="233" cy="29" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="280" cy="100" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="327" cy="171" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="374" cy="242" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="57" cy="49" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="104" cy="120" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="198" cy="262" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="245" cy="69" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="292" cy="140" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="339" cy="211" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="22" cy="18" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="69" cy="89" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="116" cy="160" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="210" cy="38" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="257" cy="109" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="304" cy="180" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="351" cy="251" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="34" cy="58" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="81" cy="129" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="175" cy="271" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="269" cy="149" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="316" cy="220" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="194" cy="151" r="12" fill="#f3ead2" opacity=".82"/><path d="M136 155 L252 147" stroke="#d8caa7" stroke-width="7" opacity=".62" stroke-linecap="round"/><ellipse cx="194" cy="151" rx="70" ry="38" fill="none" stroke="#d49a3a" stroke-width="3" opacity=".28"/><path d="M107.3 128.2 A92 68 0 0 1 284.2 137.5" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M285.7 167.3 A96 55 0 0 1 107.2 174.5" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M139.0 152.5 A55 36 0 0 1 222.2 120.1" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><path d="M209 135 C262 83 310 92 333 122" stroke="#d8caa7" stroke-width="5" opacity=".52" fill="none"/><circle cx="236" cy="124" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="156" cy="180" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="217" cy="193" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

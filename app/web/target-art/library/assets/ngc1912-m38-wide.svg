@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc1912-m38-wide-title ngc1912-m38-wide-desc">
+  <title id="ngc1912-m38-wide-title">NGC 1912 / M38 Wide</title>
+  <desc id="ngc1912-m38-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide Starfish Cluster treatment with cross-like bright member chains.</desc>
+  <defs>
+    <radialGradient id="ngc1912-m38-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc1912-m38-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc1912-m38-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc1912-m38-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc1912-m38-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc1912-m38-wide-ambient-vignette-mask)">
+    <circle cx="87" cy="211" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="134" cy="18" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="275" cy="231" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="322" cy="38" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="369" cy="109" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="52" cy="180" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="99" cy="251" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="146" cy="58" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="287" cy="271" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="334" cy="78" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="381" cy="149" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="64" cy="220" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="111" cy="27" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="252" cy="240" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="299" cy="47" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="346" cy="118" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="29" cy="189" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="76" cy="260" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="123" cy="67" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="264" cy="280" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="311" cy="87" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="358" cy="158" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="41" cy="229" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="88" cy="36" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="135" cy="107" r="0.75" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M151 115 L200 141 L249 116 M200 105 L200 141 L203 207 M178 187 L200 141 L226 188" stroke="#9ec9bf" stroke-width="2" opacity=".24" fill="none"/><circle cx="151" cy="115" r="2.6" fill="#f3ead2" opacity="0.76"/><circle cx="200" cy="141" r="3" fill="#f3ead2" opacity="0.86"/><circle cx="249" cy="116" r="2.5" fill="#f3ead2" opacity="0.74"/><circle cx="178" cy="187" r="2.4" fill="#f3ead2" opacity="0.7"/><circle cx="226" cy="188" r="2.4" fill="#f3ead2" opacity="0.7"/><circle cx="200" cy="105" r="1.6" fill="#f3ead2" opacity="0.52"/><circle cx="203" cy="207" r="1.6" fill="#f3ead2" opacity="0.52"/>
+  </g>
+</svg>

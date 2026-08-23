@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="hickson50-compact-group-title hickson50-compact-group-desc">
+  <title id="hickson50-compact-group-title">Hickson 50 Compact Group</title>
+  <desc id="hickson50-compact-group-desc">Original Project Polaris vector artwork informed by official NASA imagery: very tight faint compact group with tiny clustered members.</desc>
+  <defs>
+    <radialGradient id="hickson50-compact-group-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hickson50-compact-group-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="hickson50-compact-group-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#hickson50-compact-group-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="hickson50-compact-group-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#hickson50-compact-group-ambient-vignette-mask)">
+    <circle cx="148" cy="84" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="289" cy="33" r="0.75" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="336" cy="104" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="19" cy="175" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="66" cy="246" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="113" cy="53" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="160" cy="124" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="254" cy="266" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="301" cy="73" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="348" cy="144" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="31" cy="215" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="78" cy="22" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="172" cy="164" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="219" cy="235" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="266" cy="42" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="313" cy="113" r="0.75" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="360" cy="184" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="43" cy="255" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="90" cy="62" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="184" cy="204" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="231" cy="275" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="278" cy="82" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="325" cy="153" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="372" cy="224" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="55" cy="31" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="102" cy="102" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="196" cy="244" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="243" cy="51" r="1.25" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="153" cy="128" rx="26" ry="16" fill="#d8caa7" opacity="0.5"/><ellipse cx="214" cy="132" rx="20" ry="15" fill="#9ec9bf" opacity="0.45"/><ellipse cx="256" cy="170" rx="28" ry="13" fill="#d8caa7" opacity="0.42"/><ellipse cx="180" cy="185" rx="18" ry="13" fill="#2f8f8a" opacity="0.4"/><ellipse cx="280" cy="116" rx="14" ry="10" fill="#d49a3a" opacity="0.35"/><path d="M136 197 C184 154 246 142 297 111" stroke="#9ec9bf" stroke-width="2" opacity=".18" fill="none"/>
+  </g>
+</svg>

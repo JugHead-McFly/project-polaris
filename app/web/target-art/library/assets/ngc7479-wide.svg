@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7479-wide-title ngc7479-wide-desc">
+  <title id="ngc7479-wide-title">NGC 7479 Wide</title>
+  <desc id="ngc7479-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide Superman Galaxy treatment with strong bar and sweeping one-sided arm.</desc>
+  <defs>
+    <radialGradient id="ngc7479-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7479-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7479-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7479-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7479-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7479-wide-ambient-vignette-mask)">
+    <circle cx="206" cy="266" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="300" cy="144" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="347" cy="215" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="30" cy="22" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="77" cy="93" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="171" cy="235" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="218" cy="42" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="312" cy="184" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="359" cy="255" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="42" cy="62" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="89" cy="133" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="183" cy="275" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="230" cy="82" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="324" cy="224" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="371" cy="31" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="54" cy="102" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="101" cy="173" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="148" cy="244" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="195" cy="51" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="242" cy="122" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="289" cy="193" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="336" cy="264" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="19" cy="71" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="66" cy="142" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="113" cy="213" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="160" cy="20" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="254" cy="162" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="301" cy="233" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="194" cy="156" r="15" fill="#f3ead2" opacity=".82"/><path d="M136 160 L252 152" stroke="#d8caa7" stroke-width="10" opacity=".62" stroke-linecap="round"/><ellipse cx="194" cy="156" rx="67" ry="39" fill="none" stroke="#d49a3a" stroke-width="3" opacity=".28"/><path d="M93.2 135.2 A107 62 0 0 1 298.9 143.7" fill="none" stroke="#9ec9bf" stroke-width="5" stroke-linecap="round" opacity="0.52"/><path d="M282.8 171.4 A93 52 0 0 1 109.9 178.2" fill="none" stroke="#2f8f8a" stroke-width="5" stroke-linecap="round" opacity="0.48"/><path d="M136.1 157.8 A58 43 0 0 1 223.7 119.1" fill="none" stroke="#d8caa7" stroke-width="4" stroke-linecap="round" opacity="0.45"/><path d="M209 140 C262 88 310 97 333 127" stroke="#d8caa7" stroke-width="5" opacity=".52" fill="none"/><circle cx="236" cy="129" r="3" fill="#d49a3a" opacity="0.68"/><circle cx="156" cy="185" r="2.6" fill="#d49a3a" opacity="0.62"/><circle cx="217" cy="198" r="2.2" fill="#d49a3a" opacity="0.56"/>
+  </g>
+</svg>

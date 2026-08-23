@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ldn1551-taurus-dark-title ldn1551-taurus-dark-desc">
+  <title id="ldn1551-taurus-dark-title">LDN 1551 Taurus Dark Nebula</title>
+  <desc id="ldn1551-taurus-dark-desc">Original Project Polaris vector artwork informed by official NASA imagery: dark star-forming cloud with compact reflection glow and ragged lane.</desc>
+  <defs>
+    <radialGradient id="ldn1551-taurus-dark-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ldn1551-taurus-dark-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ldn1551-taurus-dark-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ldn1551-taurus-dark-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ldn1551-taurus-dark-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ldn1551-taurus-dark-ambient-vignette-mask)">
+    <circle cx="205" cy="45" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="299" cy="187" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="346" cy="258" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="29" cy="65" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="76" cy="136" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="170" cy="278" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="217" cy="85" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="311" cy="227" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="358" cy="34" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="41" cy="105" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="88" cy="176" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="135" cy="247" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="182" cy="54" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="229" cy="125" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="323" cy="267" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="370" cy="74" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="53" cy="145" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="100" cy="216" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="147" cy="23" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="241" cy="165" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="288" cy="236" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="335" cy="43" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="18" cy="114" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="65" cy="185" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="112" cy="256" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="159" cy="63" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="253" cy="205" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="300" cy="276" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="229" cy="195" r="0.7" fill="#f3ead2" opacity="0.32"/><circle cx="266" cy="102" r="0.95" fill="#f3ead2" opacity="0.39"/><circle cx="103" cy="155" r="1.2" fill="#f3ead2" opacity="0.46"/><circle cx="140" cy="208" r="0.7" fill="#f3ead2" opacity="0.53"/><circle cx="177" cy="115" r="0.95" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="214" cy="168" r="1.2" fill="#f3ead2" opacity="0.32"/><circle cx="251" cy="221" r="0.7" fill="#f3ead2" opacity="0.39"/><circle cx="288" cy="128" r="0.95" fill="#f3ead2" opacity="0.46"/><circle cx="125" cy="181" r="1.2" fill="#f3ead2" opacity="0.53"/><circle cx="162" cy="88" r="0.7" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="199" cy="141" r="0.95" fill="#f3ead2" opacity="0.32"/><circle cx="236" cy="194" r="1.2" fill="#f3ead2" opacity="0.39"/><circle cx="273" cy="101" r="0.7" fill="#f3ead2" opacity="0.46"/><circle cx="110" cy="154" r="0.95" fill="#f3ead2" opacity="0.53"/><circle cx="147" cy="207" r="1.2" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="184" cy="114" r="0.7" fill="#f3ead2" opacity="0.32"/><circle cx="221" cy="167" r="0.95" fill="#f3ead2" opacity="0.39"/><circle cx="258" cy="220" r="1.2" fill="#f3ead2" opacity="0.46"/><circle cx="295" cy="127" r="0.7" fill="#f3ead2" opacity="0.53"/><circle cx="132" cy="180" r="0.95" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="169" cy="87" r="1.2" fill="#f3ead2" opacity="0.32"/><circle cx="206" cy="140" r="0.7" fill="#f3ead2" opacity="0.39"/><circle cx="243" cy="193" r="0.95" fill="#f3ead2" opacity="0.46"/><circle cx="280" cy="100" r="1.2" fill="#f3ead2" opacity="0.53"/><circle cx="117" cy="153" r="0.7" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="154" cy="206" r="0.95" fill="#f3ead2" opacity="0.32"/><circle cx="191" cy="113" r="1.2" fill="#f3ead2" opacity="0.39"/><circle cx="228" cy="166" r="0.7" fill="#f3ead2" opacity="0.46"/><circle cx="265" cy="219" r="0.95" fill="#f3ead2" opacity="0.53"/><circle cx="102" cy="126" r="1.2" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="139" cy="179" r="0.7" fill="#f3ead2" opacity="0.32"/><circle cx="176" cy="86" r="0.95" fill="#f3ead2" opacity="0.39"/><circle cx="213" cy="139" r="1.2" fill="#f3ead2" opacity="0.46"/><circle cx="250" cy="192" r="0.7" fill="#f3ead2" opacity="0.53"/><circle cx="287" cy="99" r="0.95" fill="#f3ead2" opacity="0.6000000000000001"/><circle cx="124" cy="152" r="1.2" fill="#f3ead2" opacity="0.32"/><path d="M82 176 C142 144 211 132 316 121" stroke="#102a2c" stroke-width="13" opacity=".72" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

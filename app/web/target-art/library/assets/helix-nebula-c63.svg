@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="helix-nebula-c63-title helix-nebula-c63-desc">
+  <title id="helix-nebula-c63-title">C63 Helix Nebula</title>
+  <desc id="helix-nebula-c63-desc">Original Project Polaris vector artwork informed by official NASA imagery: eye-like planetary nebula with annular shell, spoke filaments, cometary knots, and central star.</desc>
+  <defs>
+    <radialGradient id="helix-nebula-c63-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="helix-nebula-c63-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="helix-nebula-c63-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#helix-nebula-c63-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="helix-nebula-c63-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#helix-nebula-c63-ambient-vignette-mask)">
+    <circle cx="28" cy="136" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="75" cy="207" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="122" cy="278" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="216" cy="156" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="310" cy="34" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="357" cy="105" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="40" cy="176" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="87" cy="247" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="134" cy="54" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="228" cy="196" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="275" cy="267" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="322" cy="74" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="369" cy="145" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="52" cy="216" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="99" cy="23" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="240" cy="236" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="287" cy="43" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="334" cy="114" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="381" cy="185" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="64" cy="256" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="111" cy="63" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="252" cy="276" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="299" cy="83" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="346" cy="154" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="29" cy="225" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="76" cy="32" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="150" rx="78" ry="55" fill="#2f8f8a" opacity=".32"/><ellipse cx="200" cy="150" rx="58" ry="39" fill="#d8caa7" opacity=".48"/><ellipse cx="200" cy="150" rx="32" ry="22" fill="#102a2c" opacity=".82"/><path d="M200 150 L262.0 150.0" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L252.9 173.5" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L228.1 190.1" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L195.1 194.9" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L163.5 186.4" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L142.7 167.2" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L138.8 142.9" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L152.9 120.7" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L180.9 107.2" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L214.6 106.3" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L243.9 118.3" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><path d="M200 150 L260.3 139.6" stroke="#d8caa7" stroke-width="1.5" opacity=".28"/><circle cx="265.0" cy="150.0" r="2" fill="#d49a3a" opacity=".55"/><circle cx="245.3" cy="182.3" r="2" fill="#d49a3a" opacity=".55"/><circle cx="198.1" cy="195.0" r="2" fill="#d49a3a" opacity=".55"/><circle cx="152.1" cy="180.4" r="2" fill="#d49a3a" opacity=".55"/><circle cx="135.1" cy="147.4" r="2" fill="#d49a3a" opacity=".55"/><circle cx="157.5" cy="115.9" r="2" fill="#d49a3a" opacity=".55"/><circle cx="205.7" cy="105.2" r="2" fill="#d49a3a" opacity=".55"/><circle cx="250.4" cy="121.6" r="2" fill="#d49a3a" opacity=".55"/><circle cx="200" cy="150" r="2" fill="#f3ead2" opacity="0.95"/>
+  </g>
+</svg>

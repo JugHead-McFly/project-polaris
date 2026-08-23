@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="draco-triplet-title draco-triplet-desc">
+  <title id="draco-triplet-title">Draco Triplet</title>
+  <desc id="draco-triplet-desc">Original Project Polaris vector artwork informed by official NASA imagery: three-galaxy field with mixed edge-on and tilted spiral members.</desc>
+  <defs>
+    <radialGradient id="draco-triplet-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="draco-triplet-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="draco-triplet-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#draco-triplet-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="draco-triplet-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#draco-triplet-ambient-vignette-mask)">
+    <circle cx="307" cy="231" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="354" cy="38" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="37" cy="109" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="84" cy="180" r="0.55" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="131" cy="251" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="178" cy="58" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="319" cy="271" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="366" cy="78" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="49" cy="149" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="96" cy="220" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="143" cy="27" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="284" cy="240" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="331" cy="47" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="378" cy="118" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="61" cy="189" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="108" cy="260" r="0.55" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="155" cy="67" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="296" cy="280" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="343" cy="87" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="26" cy="158" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="73" cy="229" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="120" cy="36" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="167" cy="107" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="261" cy="249" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="308" cy="56" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="355" cy="127" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="38" cy="198" r="0.95" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="137" cy="124" rx="26" ry="16" fill="#d8caa7" opacity="0.5"/><ellipse cx="198" cy="128" rx="20" ry="15" fill="#9ec9bf" opacity="0.45"/><ellipse cx="240" cy="166" rx="28" ry="13" fill="#d8caa7" opacity="0.42"/><ellipse cx="164" cy="181" rx="18" ry="13" fill="#2f8f8a" opacity="0.4"/><ellipse cx="264" cy="112" rx="14" ry="10" fill="#d49a3a" opacity="0.35"/><path d="M120 193 C168 150 230 138 281 107" stroke="#9ec9bf" stroke-width="2" opacity=".18" fill="none"/>
+  </g>
+</svg>

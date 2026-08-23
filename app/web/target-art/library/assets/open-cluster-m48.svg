@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="open-cluster-m48-title open-cluster-m48-desc">
+  <title id="open-cluster-m48-title">M48 Open Cluster</title>
+  <desc id="open-cluster-m48-desc">Original Project Polaris vector artwork informed by official NASA imagery: broad Hydra open cluster with scattered chains and bright central members.</desc>
+  <defs>
+    <radialGradient id="open-cluster-m48-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="open-cluster-m48-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="open-cluster-m48-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#open-cluster-m48-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="open-cluster-m48-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#open-cluster-m48-ambient-vignette-mask)">
+    <circle cx="306" cy="158" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="353" cy="229" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="36" cy="36" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="83" cy="107" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="130" cy="178" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="177" cy="249" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="224" cy="56" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="318" cy="198" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="365" cy="269" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="48" cy="76" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="95" cy="147" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="142" cy="218" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="189" cy="25" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="283" cy="167" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="330" cy="238" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="377" cy="45" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="60" cy="116" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="107" cy="187" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="154" cy="258" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="201" cy="65" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="295" cy="207" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="342" cy="278" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="25" cy="85" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="72" cy="156" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="119" cy="227" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="166" cy="34" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="307" cy="247" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="354" cy="54" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="37" cy="125" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M145 138 C183 111 226 116 260 146 M153 190 C188 169 225 170 260 191" stroke="#9ec9bf" stroke-width="2" opacity=".18" fill="none"/><circle cx="133" cy="169" r="2.4" fill="#f3ead2" opacity="0.7"/><circle cx="166" cy="130" r="2.8" fill="#f3ead2" opacity="0.78"/><circle cx="199" cy="164" r="3" fill="#f3ead2" opacity="0.82"/><circle cx="233" cy="126" r="2.5" fill="#f3ead2" opacity="0.72"/><circle cx="270" cy="171" r="2.4" fill="#f3ead2" opacity="0.68"/><circle cx="183" cy="205" r="2" fill="#f3ead2" opacity="0.6"/><circle cx="242" cy="203" r="1.8" fill="#f3ead2" opacity="0.58"/>
+  </g>
+</svg>

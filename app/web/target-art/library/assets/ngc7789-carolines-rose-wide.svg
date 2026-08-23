@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc7789-carolines-rose-wide-title ngc7789-carolines-rose-wide-desc">
+  <title id="ngc7789-carolines-rose-wide-title">NGC 7789 Caroline's Rose Wide</title>
+  <desc id="ngc7789-carolines-rose-wide-desc">Original Project Polaris vector artwork informed by official NASA imagery: wide rose-like open-cluster treatment with petal-like star chains.</desc>
+  <defs>
+    <radialGradient id="ngc7789-carolines-rose-wide-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc7789-carolines-rose-wide-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc7789-carolines-rose-wide-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc7789-carolines-rose-wide-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc7789-carolines-rose-wide-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc7789-carolines-rose-wide-ambient-vignette-mask)">
+    <circle cx="290" cy="214" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="337" cy="21" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="20" cy="92" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="67" cy="163" r="1.25" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="114" cy="234" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="161" cy="41" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="302" cy="254" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="349" cy="61" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="32" cy="132" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="79" cy="203" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="126" cy="274" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="314" cy="30" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="361" cy="101" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="44" cy="172" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="91" cy="243" r="1.25" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="138" cy="50" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="279" cy="263" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="326" cy="70" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="373" cy="141" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="56" cy="212" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="103" cy="19" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="150" cy="90" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="244" cy="232" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="291" cy="39" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="338" cy="110" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="21" cy="181" r="0.75" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M200 150 C250.0 150.0 259.7 175.1 217.2 181.2" stroke="#9ec9bf" stroke-width="2" opacity=".22" fill="none"/><path d="M200 150 C224.9 167.3 198.0 198.0 179.2 179.3" stroke="#9ec9bf" stroke-width="2" opacity=".22" fill="none"/><path d="M200 150 C174.8 167.3 138.3 172.7 162.1 148.0" stroke="#9ec9bf" stroke-width="2" opacity=".22" fill="none"/><path d="M200 150 C150.0 149.8 140.6 124.6 183.0 118.7" stroke="#9ec9bf" stroke-width="2" opacity=".22" fill="none"/><path d="M200 150 C175.5 132.6 202.6 102.0 221.1 120.9" stroke="#9ec9bf" stroke-width="2" opacity=".22" fill="none"/><path d="M200 150 C225.6 132.8 262.0 127.7 237.9 152.3" stroke="#9ec9bf" stroke-width="2" opacity=".22" fill="none"/><circle cx="200" cy="150" r="2.2" fill="#f3ead2" opacity="0.72"/><circle cx="169" cy="132" r="1.8" fill="#f3ead2" opacity="0.6"/><circle cx="231" cy="130" r="1.8" fill="#f3ead2" opacity="0.6"/><circle cx="161" cy="173" r="1.7" fill="#f3ead2" opacity="0.58"/><circle cx="239" cy="176" r="1.7" fill="#f3ead2" opacity="0.58"/><circle cx="199" cy="199" r="1.6" fill="#f3ead2" opacity="0.55"/><circle cx="181" cy="156" r="1.4" fill="#f3ead2" opacity="0.52"/><circle cx="219" cy="160" r="1.4" fill="#f3ead2" opacity="0.52"/>
+  </g>
+</svg>

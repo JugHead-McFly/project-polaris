@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="sombrero-galaxy-m104-title sombrero-galaxy-m104-desc">
+  <title id="sombrero-galaxy-m104-title">M104 Sombrero Galaxy</title>
+  <desc id="sombrero-galaxy-m104-desc">Original Project Polaris vector artwork informed by official NASA imagery: nearly edge-on disk, prominent dark equatorial dust lane, broad stellar bulge, and thin halo.</desc>
+  <defs>
+    <radialGradient id="sombrero-galaxy-m104-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sombrero-galaxy-m104-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="sombrero-galaxy-m104-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#sombrero-galaxy-m104-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="sombrero-galaxy-m104-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#sombrero-galaxy-m104-ambient-vignette-mask)">
+    <circle cx="57" cy="153" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="104" cy="224" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="151" cy="31" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="245" cy="173" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="292" cy="244" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="339" cy="51" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="22" cy="122" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="69" cy="193" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="116" cy="264" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="257" cy="213" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="304" cy="20" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="351" cy="91" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="34" cy="162" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="81" cy="233" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="128" cy="40" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="269" cy="253" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="316" cy="60" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="363" cy="131" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="46" cy="202" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="93" cy="273" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="281" cy="29" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="328" cy="100" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="375" cy="171" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="58" cy="242" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="105" cy="49" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="200" cy="148" rx="92" ry="52" fill="url(#sombrero-galaxy-m104-glow)"/><ellipse cx="200" cy="156" rx="126" ry="22" fill="#d8caa7" opacity=".42"/><path d="M78 157 C130 142 263 142 322 157 C263 170 132 171 78 157Z" fill="#102a2c" opacity=".72"/><ellipse cx="200" cy="146" rx="34" ry="22" fill="#f3ead2" opacity=".86"/><path d="M94 160 C143 171 257 172 307 160" stroke="#9ec9bf" stroke-width="3" opacity=".5" fill="none"/>
+  </g>
+</svg>

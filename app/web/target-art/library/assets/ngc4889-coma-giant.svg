@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="ngc4889-coma-giant-title ngc4889-coma-giant-desc">
+  <title id="ngc4889-coma-giant-title">NGC 4889 Coma Giant Elliptical</title>
+  <desc id="ngc4889-coma-giant-desc">Original Project Polaris vector artwork informed by official NASA imagery: giant Coma elliptical with broad smooth halo and compact bright nucleus.</desc>
+  <defs>
+    <radialGradient id="ngc4889-coma-giant-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ngc4889-coma-giant-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="ngc4889-coma-giant-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#ngc4889-coma-giant-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="ngc4889-coma-giant-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#ngc4889-coma-giant-ambient-vignette-mask)">
+    <circle cx="56" cy="196" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="103" cy="267" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="244" cy="216" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="291" cy="23" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="338" cy="94" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="21" cy="165" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="68" cy="236" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="115" cy="43" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="256" cy="256" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="303" cy="63" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="350" cy="134" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="33" cy="205" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="80" cy="276" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="268" cy="32" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="315" cy="103" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="362" cy="174" r="0.55" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="45" cy="245" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="92" cy="52" r="0.95" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="233" cy="265" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="280" cy="72" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="327" cy="143" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="374" cy="214" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="57" cy="21" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="104" cy="92" r="0.95" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <ellipse cx="207" cy="155" rx="94" ry="58" fill="url(#ngc4889-coma-giant-glow)" opacity=".78"/><path d="M139 162 C185 144 234 147 277 165" stroke="#102a2c" stroke-width="7" opacity=".42" fill="none"/><circle cx="229" cy="139" r="2" fill="#d49a3a" opacity="0.52"/><circle cx="176" cy="175" r="1.8" fill="#d49a3a" opacity="0.46"/>
+  </g>
+</svg>

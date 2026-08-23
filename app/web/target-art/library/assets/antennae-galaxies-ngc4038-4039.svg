@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="antennae-galaxies-ngc4038-4039-title antennae-galaxies-ngc4038-4039-desc">
+  <title id="antennae-galaxies-ngc4038-4039-title">Antennae Galaxies NGC 4038/4039</title>
+  <desc id="antennae-galaxies-ngc4038-4039-desc">Original Project Polaris vector artwork informed by official NASA imagery: interacting galaxy pair with two bright cores, crossing tidal bodies, and long antenna-like tidal tails.</desc>
+  <defs>
+    <radialGradient id="antennae-galaxies-ngc4038-4039-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="antennae-galaxies-ngc4038-4039-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="antennae-galaxies-ngc4038-4039-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#antennae-galaxies-ngc4038-4039-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="antennae-galaxies-ngc4038-4039-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#antennae-galaxies-ngc4038-4039-ambient-vignette-mask)">
+    <circle cx="129" cy="217" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="176" cy="24" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="317" cy="237" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="364" cy="44" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="47" cy="115" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="94" cy="186" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="141" cy="257" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="188" cy="64" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="282" cy="206" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="329" cy="277" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="376" cy="84" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="59" cy="155" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="106" cy="226" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="153" cy="33" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="294" cy="246" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="341" cy="53" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="24" cy="124" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="71" cy="195" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="118" cy="266" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="165" cy="73" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="306" cy="22" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="353" cy="93" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="36" cy="164" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="83" cy="235" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="130" cy="42" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="177" cy="113" r="1.25" fill="#f3ead2" opacity="0.51"/>
+  </g>
+  <g>
+    <path d="M159 152 C116 100 102 66 78 42" stroke="#9ec9bf" stroke-width="4" opacity=".5" fill="none"/><path d="M229 151 C278 115 314 91 349 69" stroke="#d8caa7" stroke-width="4" opacity=".48" fill="none"/><ellipse cx="169" cy="153" rx="49" ry="31" fill="#2f8f8a" opacity=".45" transform="rotate(22 169 153)"/><ellipse cx="225" cy="148" rx="48" ry="30" fill="#d8caa7" opacity=".42" transform="rotate(-26 225 148)"/><circle cx="164" cy="149" r="13" fill="#f3ead2" opacity=".78"/><circle cx="227" cy="151" r="12" fill="#f3ead2" opacity=".72"/><path d="M184 139 C198 151 211 156 230 155" stroke="#102a2c" stroke-width="5" opacity=".4" fill="none"/>
+  </g>
+</svg>
