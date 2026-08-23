@@ -116,7 +116,7 @@ def test_refresh_caches_nasa_metadata_and_generated_svg(tmp_path):
     assert reference["artwork_profile"] == "inclined_spiral"
     assert 'preserveAspectRatio="xMidYMid meet"' in reference["artwork_svg"]
     assert 'viewBox="0 0 400 300"' in reference["artwork_svg"]
-    assert 'data-visual-treatment="m31-library-v2"' in reference["artwork_svg"]
+    assert 'data-visual-treatment="m31-library-v3"' in reference["artwork_svg"]
     assert 'data-morphology="m31-andromeda-current"' in reference["artwork_svg"]
     assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in reference["artwork_svg"]
     assert "<title>" not in reference["artwork_svg"]
@@ -246,13 +246,16 @@ def test_unsupported_target_never_uses_a_cache_entry(tmp_path):
     ) is None
 
 
-def test_m31_uses_current_approved_library_asset_without_removed_wrapper():
+def test_m31_uses_current_library_asset_as_a_transparent_vignette():
     svg = _generate_artwork_svg("M31", NASA_TARGET_ART_CATALOG["M31"])
 
-    assert 'data-visual-treatment="m31-library-v2"' in svg
+    assert 'data-visual-treatment="m31-library-v3"' in svg
     assert 'data-morphology="m31-andromeda-current"' in svg
     assert 'viewBox="0 0 400 300"' in svg
-    assert '<rect width="400" height="300" fill="#102a2c"/>' in svg
+    assert '<rect width="400" height="300" fill="#102a2c"/>' not in svg
+    assert 'id="m31-edge-fade"' in svg
+    assert 'id="m31-vignette-mask"' in svg
+    assert 'mask="url(#m31-vignette-mask)"' in svg
     assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in svg
     assert "M91.7 139.1 A111 38 0 0 1 307.8 144.3" in svg
     assert '<ellipse cx="183" cy="146" rx="31" ry="18"' in svg

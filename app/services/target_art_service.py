@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 NASA_IMAGE_SEARCH_URL = "https://images-api.nasa.gov/search"
 NASA_MEDIA_USAGE_URL = "https://www.nasa.gov/nasa-brand-center/images-and-media/"
-TARGET_ART_CACHE_SCHEMA = 6
+TARGET_ART_CACHE_SCHEMA = 7
 TARGET_ART_CACHE_TTL = timedelta(days=30)
 TARGET_ART_CACHE_ROOT = settings.BASE_DIR / ".cache" / "target-art"
 CANONICAL_TARGET_ART_PALETTE = (

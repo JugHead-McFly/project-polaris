@@ -382,7 +382,7 @@ const isM31Target = (target) => {
 };
 
 const TARGET_ILLUSTRATION_ASSETS = Object.freeze({
-  M31: "/operator-assets/target-art/m31-andromeda.svg?v=2f1d3e60",
+  M31: "/operator-assets/target-art/m31-andromeda.svg?v=7f624d4c",
 });
 
 const mappedTargetIllustrationAsset = (target) => (
@@ -420,7 +420,7 @@ const buildTargetIllustrationSvg = (target, _compact = false) => {
     image.setAttribute("aria-hidden", "true");
     image.decoding = "async";
     image.dataset.kind = kind;
-    image.dataset.visualTreatment = "m31-library-v2";
+    image.dataset.visualTreatment = "m31-library-v3";
     return image;
   }
 

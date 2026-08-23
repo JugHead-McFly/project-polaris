@@ -353,10 +353,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "isM31Target" in script
     assert "TARGET_ILLUSTRATION_ASSETS" in script
     assert "mappedTargetIllustrationAsset" in script
-    assert "/operator-assets/target-art/m31-andromeda.svg?v=2f1d3e60" in script
+    assert "/operator-assets/target-art/m31-andromeda.svg?v=7f624d4c" in script
     assert "buildTargetIllustrationSvg" in script
     assert 'document.createElement("img")' in script
-    assert 'image.dataset.visualTreatment = "m31-library-v2"' in script
+    assert 'image.dataset.visualTreatment = "m31-library-v3"' in script
     assert "M28 75C63 41 159 40 212 68" in script
     assert "M35 56C75 86 160 92 205 61" in script
     assert "M45 87C87 65 162 65 196 78" in script
@@ -388,8 +388,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     m31_asset = (
         operator_api.WEB_DIRECTORY / "target-art" / "m31-andromeda.svg"
     ).read_text()
-    assert 'data-visual-treatment="m31-library-v2"' in m31_asset
+    assert 'data-visual-treatment="m31-library-v3"' in m31_asset
     assert 'data-morphology="m31-andromeda-current"' in m31_asset
+    assert '<rect width="400" height="300" fill="#102a2c"/>' not in m31_asset
+    assert 'id="m31-edge-fade"' in m31_asset
+    assert 'mask="url(#m31-vignette-mask)"' in m31_asset
     assert "M87.9 132.1 A124 42 0 0 1 316.5 135.6" in m31_asset
     assert "M66.3 128.5 A137 98" not in m31_asset
     assert "M282.5 219.6 A128 91" not in m31_asset
@@ -462,7 +465,7 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     assert "if (!target) {\n    container.replaceChildren();\n    container.hidden = true;" in script
     assert "cachedIllustration || buildTargetIllustrationSvg(target, compact)" in script
     assert "const mappedAsset = mappedTargetIllustrationAsset(target);" in script
-    assert 'image.dataset.visualTreatment = "m31-library-v2"' in script
+    assert 'image.dataset.visualTreatment = "m31-library-v3"' in script
     assert (
         ".hosted-command-fallback-card.has-target-illustration"
         " {\n  padding-right: 78px !important;"
