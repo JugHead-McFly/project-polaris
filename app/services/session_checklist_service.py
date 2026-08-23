@@ -46,44 +46,12 @@ def _step(
     }
 
 
-def _recommended_filter(block: Dict, target: Optional[Dict]) -> Optional[str]:
-    block_filter = block.get("recommended_filter")
-    if block_filter:
-        return str(block_filter)
-    target_filter = (target or {}).get("recommended_settings", {}).get(
-        "filter_name"
-    )
-    return str(target_filter) if target_filter else None
-
-
-def _session_actions(
-    *,
-    decision: str,
-    block: Dict,
-    target: Optional[Dict],
-    dew_risk: Dict,
-    equatorial_mode_enabled: bool,
-) -> List[str]:
-    actions = []
-    if decision == "Use Caution":
-        actions.append("Recheck live conditions before starting imaging.")
-
+def _session_actions(dew_risk: Dict) -> List[str]:
     if dew_risk.get("level") in {"high", "watch"}:
         action = dew_risk.get("action")
         if action:
-            actions.append(str(action))
-
-    if len(actions) < 2:
-        tracking_mode = "EQ" if equatorial_mode_enabled else "Alt-Az"
-        actions.append(f"Use {tracking_mode} tracking mode tonight.")
-
-    recommended_filter = _recommended_filter(block, target)
-    if len(actions) < 2 and recommended_filter:
-        actions.append(
-            f"Use the {recommended_filter} filter recommended for tonight's target."
-        )
-
-    return actions[:2]
+            return [str(action)]
+    return []
 
 
 def _unavailable_checklist(plan_date: date) -> Dict:
@@ -121,7 +89,6 @@ def build_session_checklist(
     backup_target: Optional[Dict],
     dew_risk: Dict,
     timezone_name: str,
-    equatorial_mode_enabled: bool,
 ) -> Dict:
     """Translate existing plan data into a short operational checklist."""
     try:
@@ -198,7 +165,7 @@ def build_session_checklist(
     target_text = str(target_name) if target_name else "the scheduled target"
     status = "caution" if decision == "Use Caution" else "ready"
     summary = (
-        "A session is possible, but recheck live conditions before starting."
+        "Tonight has a usable scheduled session with cautions."
         if status == "caution"
         else "Tonight has a usable scheduled session."
     )
@@ -228,11 +195,5 @@ def build_session_checklist(
                 plan_date=plan_date,
             ),
         ],
-        "actions": _session_actions(
-            decision=decision,
-            block=first_block,
-            target=recommended_target,
-            dew_risk=dew_risk,
-            equatorial_mode_enabled=equatorial_mode_enabled,
-        ),
+        "actions": _session_actions(dew_risk),
     }

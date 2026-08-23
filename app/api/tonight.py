@@ -412,7 +412,6 @@ def _build_tonight_payload(
             backup_target=backup_target,
             dew_risk=dew_risk,
             timezone_name=observatory.timezone_name,
-            equatorial_mode_enabled=equatorial_mode_enabled,
         ),
         "message": _build_operator_message(schedule),
         "night_plan": _build_legacy_night_plan(

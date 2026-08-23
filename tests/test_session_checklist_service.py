@@ -43,7 +43,6 @@ def _checklist(
     backup_target=None,
     dew_level="low",
     dew_action="No special dew action is indicated.",
-    eq=False,
 ):
     return build_session_checklist(
         schedule=schedule or _schedule(),
@@ -55,12 +54,11 @@ def _checklist(
         backup_target=backup_target,
         dew_risk={"level": dew_level, "action": dew_action},
         timezone_name=TIMEZONE,
-        equatorial_mode_enabled=eq,
     )
 
 
 def test_good_night_uses_real_setup_start_and_stop_times():
-    result = _checklist(eq=True)
+    result = _checklist()
 
     assert result["status"] == "ready"
     assert [step["time_label"] for step in result["steps"]] == [
@@ -71,28 +69,20 @@ def test_good_night_uses_real_setup_start_and_stop_times():
     assert result["steps"][1]["instruction"] == (
         "Begin imaging M31 after setup is complete."
     )
-    assert result["actions"] == [
-        "Use EQ tracking mode tonight.",
-        "Use the Duo-Band filter recommended for tonight's target.",
-    ]
+    assert result["actions"] == []
 
 
-def test_caution_night_prioritizes_recheck_and_dew_action():
+def test_caution_night_keeps_only_exceptional_dew_action():
     dew_action = "Use dew control from the start and check for condensation."
     result = _checklist(
         schedule=_schedule(decision="Use Caution"),
         dew_level="high",
         dew_action=dew_action,
-        eq=True,
     )
 
     assert result["status"] == "caution"
-    assert "recheck live conditions" in result["summary"].lower()
-    assert result["actions"] == [
-        "Recheck live conditions before starting imaging.",
-        dew_action,
-    ]
-    assert len(result["actions"]) == 2
+    assert result["summary"] == "Tonight has a usable scheduled session with cautions."
+    assert result["actions"] == [dew_action]
 
 
 def test_unsuitable_night_waits_and_uses_only_verified_reassess_time():
