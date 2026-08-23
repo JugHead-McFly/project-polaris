@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" data-visual-treatment="library-preview-v1">
+  <defs>
+    <radialGradient id="comet-glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#f3ead2" stop-opacity="0.9"/>
+      <stop offset="52%" stop-color="#9ec9bf" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#1f5f60" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="comet-ambient-edge-fade" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="64%" stop-color="white" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="comet-ambient-vignette-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="300">
+      <rect width="400" height="300" fill="url(#comet-ambient-edge-fade)"/>
+    </mask>
+    <clipPath id="comet-disk"><circle cx="200" cy="150" r="62"/></clipPath>
+  </defs>
+  <g opacity="0.9" mask="url(#comet-ambient-vignette-mask)">
+    <circle cx="189" cy="281" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="283" cy="159" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="330" cy="230" r="0.95" fill="#d49a3a" opacity="0.59"/>
+    <circle cx="377" cy="37" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="60" cy="108" r="0.55" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="107" cy="179" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="154" cy="250" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="201" cy="57" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="295" cy="199" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="342" cy="270" r="0.95" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="25" cy="77" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="72" cy="148" r="0.55" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="119" cy="219" r="0.75" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="166" cy="26" r="0.95" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="213" cy="97" r="1.25" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="307" cy="239" r="0.75" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="354" cy="46" r="0.95" fill="#d49a3a" opacity="0.67"/>
+    <circle cx="37" cy="117" r="1.25" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="84" cy="188" r="0.55" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="131" cy="259" r="0.75" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="178" cy="66" r="0.95" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="225" cy="137" r="1.25" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="319" cy="279" r="0.75" fill="#f3ead2" opacity="0.43"/>
+    <circle cx="366" cy="86" r="0.95" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="49" cy="157" r="1.25" fill="#f3ead2" opacity="0.59"/>
+    <circle cx="96" cy="228" r="0.55" fill="#f3ead2" opacity="0.67"/>
+    <circle cx="143" cy="35" r="0.75" fill="#f3ead2" opacity="0.35"/>
+    <circle cx="237" cy="177" r="1.25" fill="#f3ead2" opacity="0.51"/>
+    <circle cx="284" cy="248" r="0.55" fill="#f3ead2" opacity="0.59"/>
+  </g>
+  <g>
+    <path d="M70 101 C127 112 184 133 239 151 C183 158 129 178 73 209 C111 174 113 136 70 101Z" fill="#2f8f8a" opacity=".32"/><path d="M98 139 C145 141 194 148 241 151" stroke="#f3ead2" stroke-width="4" opacity=".46" fill="none"/><circle cx="246" cy="151" r="22" fill="#f3ead2" opacity=".92"/><circle cx="253" cy="147" r="6" fill="#d49a3a" opacity=".7"/>
+  </g>
+</svg>

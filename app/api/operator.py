@@ -30,6 +30,10 @@ ASSET_FILES = (
     WEB_DIRECTORY / "leaflet.css",
     WEB_DIRECTORY / "leaflet.js",
     WEB_DIRECTORY / "target-art" / "m31-andromeda.svg",
+    WEB_DIRECTORY / "target-art" / "previews" / "double-cluster.svg",
+    WEB_DIRECTORY / "target-art" / "previews" / "orion-nebula-m42.svg",
+    WEB_DIRECTORY / "target-art" / "previews" / "ring-nebula-m57.svg",
+    WEB_DIRECTORY / "target-art" / "previews" / "comet.svg",
 )
 
 

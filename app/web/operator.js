@@ -13,6 +13,7 @@ let hostedRecommendationRunId = null;
 let rigProfiles = [];
 const invitationHash = new URLSearchParams(window.location.hash.slice(1));
 const invitationQuery = new URLSearchParams(window.location.search);
+const targetArtPreviewMode = invitationQuery.get("target-art-preview") === "1";
 let isInvitationFlow = (
   invitationHash.get("type") === "invite" || invitationQuery.get("type") === "invite"
 );
@@ -244,6 +245,8 @@ const useDeviceLocation = () => {
 };
 
 const showHostedAccountLoading = (message = "") => {
+  byId("target-art-preview").hidden = true;
+  document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
   byId("hosted-ready-panel").hidden = true;
@@ -257,6 +260,8 @@ const showHostedAccountLoading = (message = "") => {
 };
 
 const showHostedAccountSetup = (message = "") => {
+  byId("target-art-preview").hidden = true;
+  document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
   byId("hosted-account-retry").hidden = true;
   byId("hosted-tonight-panel").hidden = true;
@@ -267,6 +272,8 @@ const showHostedAccountSetup = (message = "") => {
 };
 
 const showHostedReadyHandoff = () => {
+  byId("target-art-preview").hidden = true;
+  document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
   byId("hosted-account-retry").hidden = true;
   byId("hosted-account-panel").hidden = true;
@@ -276,12 +283,43 @@ const showHostedReadyHandoff = () => {
 };
 
 const showHostedTonight = () => {
+  byId("target-art-preview").hidden = true;
+  document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
   byId("hosted-account-retry").hidden = true;
   byId("hosted-account-panel").hidden = true;
   byId("hosted-ready-panel").hidden = true;
   byId("hosted-tonight-panel").hidden = false;
   setAuthMessage("", "hosted-account-message");
+};
+
+const showTargetArtPreview = () => {
+  byId("hosted-account-loading").hidden = true;
+  byId("hosted-account-retry").hidden = true;
+  byId("hosted-account-panel").hidden = true;
+  byId("hosted-ready-panel").hidden = true;
+  byId("hosted-tonight-panel").hidden = true;
+  byId("target-art-preview").hidden = false;
+  byId("hosted-feedback-panel").hidden = true;
+  document.body.classList.add("target-art-preview-mode");
+  setText("observatory-name", "Artwork preview");
+  setText("hosted-plan-message", "");
+  setText("data-updated", "");
+};
+
+const showStandaloneTargetArtPreview = () => {
+  setHostedShell(false);
+  byId("auth-gate").hidden = true;
+  byId("hosted-account-main").hidden = false;
+  byId("main-content").hidden = true;
+  document.querySelector(".app-nav").hidden = true;
+  byId("account-control").hidden = true;
+  byId("mobile-header-actions").hidden = true;
+  byId("refresh-button").closest(".refresh-control").hidden = true;
+  byId("eq-mode-checkbox").closest(".tracking-mode-control").hidden = true;
+  document.querySelector(".skip-link").href = "#target-art-preview";
+  document.title = "Target Artwork Preview — Project Polaris";
+  showTargetArtPreview();
 };
 
 const resetHostedPlanDetails = () => {
@@ -972,6 +1010,10 @@ const renderHostedTonight = (data) => {
 };
 
 const loadHostedTonight = async () => {
+  if (targetArtPreviewMode) {
+    showTargetArtPreview();
+    return;
+  }
   setHostedRefreshState(true);
   setHostedPlanLoading();
   showHostedTonight();
@@ -1166,8 +1208,8 @@ const handleHostedSession = async (session) => {
     return;
   }
   setHostedShell(true);
-  showHostedAccountLoading();
   setText("account-email", session.user?.email || "Signed in");
+  showHostedAccountLoading();
   try {
     await loadHostedAccount();
   } catch (error) {
@@ -4050,6 +4092,10 @@ byId("hosted-ready-edit-home").addEventListener("click", () => {
 });
 
 const bootApplication = async () => {
+  if (targetArtPreviewMode) {
+    showStandaloneTargetArtPreview();
+    return;
+  }
   if (usesHostedAuth) {
     await initializeHostedAuth();
     return;

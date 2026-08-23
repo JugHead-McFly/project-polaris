@@ -476,6 +476,69 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     assert "renderReferenceAttribution" not in script
 
 
+def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
+    client = TestClient(app)
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    preview_assets = {
+        "double-cluster.svg": "double-cluster-ambient-vignette-mask",
+        "orion-nebula-m42.svg": "orion-nebula-m42-ambient-vignette-mask",
+        "ring-nebula-m57.svg": "ring-nebula-m57-ambient-vignette-mask",
+        "comet.svg": "comet-ambient-vignette-mask",
+    }
+
+    assert 'id="target-art-preview"' in html
+    assert html.count('class="hosted-target target-art-preview-card"') == 5
+    assert "Artwork preview only." in html
+    assert "not tonight's recommendations" in html
+    assert 'href="/operator">Return to tonight\'s plan</a>' in html
+    assert "Double Cluster" in html
+    assert "Andromeda Galaxy" in html
+    assert "Orion Nebula" in html
+    assert "Ring Nebula" in html
+    assert "Solar-system example" in html
+    assert "NASA source" not in html
+    assert "Polaris artwork" not in html
+
+    assert (
+        'const targetArtPreviewMode = invitationQuery.get("target-art-preview") === "1";'
+        in script
+    )
+    assert "const showTargetArtPreview = () =>" in script
+    assert "const showStandaloneTargetArtPreview = () =>" in script
+    assert script.count(
+        "if (targetArtPreviewMode) {\n    showTargetArtPreview();\n    return;\n  }"
+    ) == 1
+    assert (
+        "if (targetArtPreviewMode) {\n"
+        "    showStandaloneTargetArtPreview();\n"
+        "    return;\n"
+        "  }\n"
+        "  if (usesHostedAuth)"
+    ) in script
+    assert "body.target-art-preview-mode .hosted-footer-metadata" in css
+    assert ".target-art-preview-grid" in css
+    assert "grid-template-columns: repeat(2, minmax(0, 1fr));" in css
+
+    bundled_asset_names = {asset.name for asset in operator_api.ASSET_FILES}
+    for filename, mask_id in preview_assets.items():
+        assert filename in bundled_asset_names
+        asset_path = (
+            operator_api.WEB_DIRECTORY / "target-art" / "previews" / filename
+        )
+        markup = asset_path.read_text()
+        assert 'data-visual-treatment="library-preview-v1"' in markup
+        assert mask_id in markup
+        assert '<rect width="400" height="300" fill="#102a2c"/>' not in markup
+        assert "<title" not in markup
+        assert "<desc" not in markup
+        assert "NASA" not in markup
+        response = client.get(f"/operator-assets/target-art/previews/{filename}")
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith("image/svg+xml")
+
+
 def test_operator_dashboard_sets_restrictive_content_policy():
     client = TestClient(app)
     response = client.get("/operator")
