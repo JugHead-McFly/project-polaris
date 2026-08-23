@@ -47,6 +47,14 @@ def _build_operator_message(schedule: Dict) -> str:
         )
 
     reasons = []
+    planned_conditions_used = any(
+        weather.get(field) is not None
+        for field in (
+            "planned_cloud_cover_percent",
+            "planned_humidity_percent",
+            "planned_wind_speed_mph",
+        )
+    )
     cloud_cover = weather.get(
         "planned_cloud_cover_percent",
         weather.get("cloud_cover_percent"),
@@ -78,7 +86,10 @@ def _build_operator_message(schedule: Dict) -> str:
     if not reasons:
         reasons.append(f"the weather rating is {rating}/5")
 
-    return "Do not image: " + ", ".join(reasons) + "."
+    prefix = "Do not image: "
+    if planned_conditions_used:
+        prefix += "forecast near the imaging-window opening indicates "
+    return prefix + ", ".join(reasons) + "."
 
 
 def _build_legacy_target(

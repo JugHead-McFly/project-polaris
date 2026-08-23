@@ -356,7 +356,30 @@ def test_do_not_image_message_uses_planned_start_weather():
         }
     )
 
-    assert message == "Do not image: cloud cover is 98%."
+    assert message == (
+        "Do not image: forecast near the imaging-window opening indicates "
+        "cloud cover is 98%."
+    )
+
+
+def test_do_not_image_message_labels_planned_wind_as_forecast():
+    message = _build_operator_message(
+        {
+            "decision": "Do Not Image",
+            "weather": {
+                "observing_rating": 1,
+                "cloud_cover_percent": 25,
+                "wind_speed_mph": 6,
+                "planned_cloud_cover_percent": 100,
+                "planned_wind_speed_mph": 33.6,
+            },
+        }
+    )
+
+    assert message == (
+        "Do not image: forecast near the imaging-window opening indicates "
+        "cloud cover is 100%, wind is 33.6 mph."
+    )
 
 
 def test_do_not_image_message_names_excessive_heat():
