@@ -799,10 +799,7 @@ const softenAdvisoryNote = (note) => note
 
 const dewAdvisoryNotes = (dewRisk) =>
   dewRisk
-    ? [
-        `Dew: ${dewRisk.label}. ${dewRisk.summary}`,
-        `Dew guidance: ${dewRisk.action}`,
-      ]
+    ? [`Dew: ${dewRisk.label}. ${dewRisk.action}`]
     : [];
 
 const renderHostedTonight = (data) => {

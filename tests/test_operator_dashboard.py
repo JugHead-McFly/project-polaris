@@ -484,11 +484,12 @@ def test_dew_guidance_uses_the_existing_cautions_card():
     caution_end = html.index("</div>", notes_start)
     assert caution_start < notes_start < caution_end
     assert "data.dew_risk" in script
-    assert "Dew guidance:" in script
     assert "dewAdvisoryNotes" in script
     assert "dewRisk.label" in script
-    assert "dewRisk.summary" in script
     assert "dewRisk.action" in script
+    assert "Dew guidance:" not in script
+    assert "dewRisk.summary" not in script
+    assert "? [`Dew: ${dewRisk.label}. ${dewRisk.action}`]" in script
     assert "notes.hidden = visibleNotes.length === 0" in script
     assert "renderNotes(data.schedule.notes, data.dew_risk)" in script
 
