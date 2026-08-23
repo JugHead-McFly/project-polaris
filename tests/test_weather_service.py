@@ -1,3 +1,5 @@
+from datetime import datetime
+from datetime import timezone
 from unittest.mock import MagicMock
 from unittest.mock import patch
 from urllib.error import HTTPError
@@ -8,6 +10,8 @@ import pytest
 from app.core.planning_context import ObservatoryContext
 from app.services.planner_service import _apply_planned_heat_safeguard
 from app.services.planner_service import _context_equipment_label
+from app.services.weather_service import _get_astro_forecast as get_astro_forecast
+from app.services.weather_service import _parse_astro_forecast as parse_astro_forecast
 from app.services.weather_service import get_weather_summary
 from app.services.weather_service import reset_weather_cache
 
@@ -15,8 +19,136 @@ from app.services.weather_service import reset_weather_cache
 @pytest.fixture(autouse=True)
 def clear_weather_cache():
     reset_weather_cache()
-    yield
+    unavailable = {
+        "seeing": None,
+        "seeing_index": None,
+        "seeing_forecast_at": None,
+        "transparency": None,
+        "transparency_index": None,
+        "transparency_forecast_at": None,
+        "hourly_astro_forecast": {},
+        "astro_forecast_provider": None,
+        "astro_forecast_status": "Astronomy forecast unavailable in test.",
+        "astro_forecast_fetched_at": None,
+    }
+    with patch(
+        "app.services.weather_service._get_astro_forecast",
+        return_value=unavailable,
+    ):
+        yield
     reset_weather_cache()
+
+
+def _astro_response_data():
+    return {
+        "init": "2026082300",
+        "dataseries": [
+            {"timepoint": 3, "seeing": 1, "transparency": 2},
+            {"timepoint": 6, "seeing": 4, "transparency": 5},
+            {"timepoint": 9, "seeing": 8, "transparency": 7},
+        ],
+    }
+
+
+def test_astro_request_discloses_only_coordinates_rounded_to_one_decimal():
+    response = MagicMock()
+    response.__enter__.return_value = response
+    response.__exit__.return_value = None
+    observatory = ObservatoryContext(
+        name="Home",
+        latitude=33.25678,
+        longitude=-111.78901,
+        timezone_name="America/Phoenix",
+    )
+
+    with (
+        patch("app.services.weather_service.urlopen", return_value=response) as opened,
+        patch(
+            "app.services.weather_service.json.load",
+            return_value=_astro_response_data(),
+        ),
+    ):
+        result = get_astro_forecast(
+            observatory,
+            datetime(2026, 8, 23, 6, tzinfo=timezone.utc),
+        )
+
+    requested_url = opened.call_args.args[0]
+    assert "lat=33.3" in requested_url
+    assert "lon=-111.8" in requested_url
+    assert "33.25678" not in requested_url
+    assert "-111.78901" not in requested_url
+    assert "product=astro" in requested_url
+    assert "output=json" in requested_url
+    assert result["astro_forecast_provider"] == "7timer-astro"
+
+
+def test_astro_parser_preserves_bins_and_local_forecast_times():
+    observatory = ObservatoryContext(
+        name="Home",
+        latitude=33.3,
+        longitude=-111.8,
+        timezone_name="America/Phoenix",
+    )
+
+    result = parse_astro_forecast(
+        _astro_response_data(),
+        observatory,
+        datetime(2026, 8, 23, 3, tzinfo=timezone.utc),
+    )
+
+    assert result["seeing"] == "Excellent"
+    assert result["seeing_index"] == 1
+    assert result["transparency"] == "Excellent"
+    assert result["transparency_index"] == 2
+    assert result["seeing_forecast_at"] == "2026-08-22 08:00 PM"
+    assert result["hourly_astro_forecast"]["2026-08-22T23:00"] == {
+        "seeing_index": 4,
+        "transparency_index": 5,
+    }
+
+
+def test_astro_parser_rejects_invalid_or_missing_bins():
+    observatory = ObservatoryContext(
+        name="Home",
+        latitude=33.3,
+        longitude=-111.8,
+        timezone_name="America/Phoenix",
+    )
+    result = parse_astro_forecast(
+        {
+            "init": "2026082300",
+            "dataseries": [{"timepoint": 3, "seeing": 0, "transparency": 9}],
+        },
+        observatory,
+        datetime(2026, 8, 23, 3, tzinfo=timezone.utc),
+    )
+
+    assert result["seeing_index"] is None
+    assert result["transparency_index"] is None
+    assert result["astro_forecast_provider"] is None
+
+
+def test_astro_request_failure_remains_explicitly_unavailable():
+    observatory = ObservatoryContext(
+        name="Home",
+        latitude=33.3,
+        longitude=-111.8,
+        timezone_name="America/Phoenix",
+    )
+
+    with patch(
+        "app.services.weather_service.urlopen",
+        side_effect=URLError("rate limited"),
+    ):
+        result = get_astro_forecast(
+            observatory,
+            datetime(2026, 8, 23, 3, tzinfo=timezone.utc),
+        )
+
+    assert result["seeing_index"] is None
+    assert result["transparency_index"] is None
+    assert result["astro_forecast_status"] == "Astronomy forecast unavailable."
 
 
 def test_unavailable_weather_fails_closed():
@@ -304,6 +436,46 @@ def test_planner_uses_cloud_wind_and_humidity_at_the_planned_start():
     assert weather["planned_humidity_percent"] == 85
     assert weather["planned_wind_speed_mph"] == 16
     assert weather["observing_rating"] == 1
+
+
+def test_planner_uses_nearest_astro_point_at_the_planned_start():
+    weather = {
+        "observing_rating": 5,
+        "hourly_astro_forecast": {
+            "2026-07-24T18:00": {
+                "seeing_index": 7,
+                "transparency_index": 6,
+            },
+            "2026-07-24T21:00": {
+                "seeing_index": 3,
+                "transparency_index": 2,
+            },
+        },
+    }
+
+    _apply_planned_heat_safeguard(weather, "2026-07-24 09:13 PM")
+
+    assert weather["planned_seeing_index"] == 3
+    assert weather["planned_transparency_index"] == 2
+    assert weather["planned_seeing_forecast_at"] == "2026-07-24 09:00 PM"
+    assert weather["planned_transparency_forecast_at"] == "2026-07-24 09:00 PM"
+
+
+def test_planner_leaves_astro_unavailable_outside_the_match_window():
+    weather = {
+        "observing_rating": 5,
+        "hourly_astro_forecast": {
+            "2026-07-24T12:00": {
+                "seeing_index": 3,
+                "transparency_index": 2,
+            },
+        },
+    }
+
+    _apply_planned_heat_safeguard(weather, "2026-07-24 09:13 PM")
+
+    assert "planned_seeing_index" not in weather
+    assert "planned_transparency_index" not in weather
 
 
 def test_weather_request_uses_the_planning_observatory_coordinates():

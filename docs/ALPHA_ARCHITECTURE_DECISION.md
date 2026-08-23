@@ -197,6 +197,14 @@ address. The hosted product stores latitude/longitude, elevation, and timezone.
 The onboarding UI must explain why location is required and may offer an
 approximate-location option if testing shows that users prefer it.
 
+Polaris uses the saved planning location for external forecast requests. It
+sends coordinates to Open-Meteo for the general weather forecast. For the
+specialist Seeing and Transparency forecast only, Polaris rounds latitude and
+longitude to 0.1 degrees (about 11 km) before sending them to `www.7timer.info`.
+No account identity is included in that request. The 7Timer result is fetched
+server-side, cached with the weather plan, and used only for those two score
+factors.
+
 Logs, error events, and support exports must not contain:
 
 - access tokens or credentials;

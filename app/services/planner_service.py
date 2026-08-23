@@ -22,6 +22,7 @@ from app.services.astronomy_service import (
 )
 from app.services.imaging_settings_service import apply_tonight_settings
 from app.services.portfolio_service import TARGET_PRIORITY
+from app.services.weather_service import ASTRO_FORECAST_MAX_MATCH_HOURS
 from app.services.weather_service import HEAT_CAUTION_F
 from app.services.weather_service import HEAT_STOP_F
 from app.services.weather_service import calculate_observing_rating
@@ -624,27 +625,86 @@ def _forecast_temperature_for_start(
     }
 
 
+def _astro_forecast_for_start(
+    weather: Dict,
+    scheduled_start: Optional[str],
+) -> Optional[Dict]:
+    """Return the 7Timer ASTRO point nearest a planned local start."""
+    if not scheduled_start:
+        return None
+    try:
+        planned_start = datetime.strptime(
+            scheduled_start,
+            "%Y-%m-%d %I:%M %p",
+        )
+    except ValueError:
+        return None
+
+    candidates = []
+    for time_text, forecast in (
+        weather.get("hourly_astro_forecast") or {}
+    ).items():
+        try:
+            forecast_time = datetime.fromisoformat(time_text)
+        except (TypeError, ValueError):
+            continue
+        candidates.append(
+            (
+                abs(forecast_time - planned_start),
+                forecast_time,
+                forecast,
+            )
+        )
+    if not candidates:
+        return None
+
+    difference, forecast_time, forecast = min(
+        candidates,
+        key=lambda item: item[0],
+    )
+    if difference > timedelta(hours=ASTRO_FORECAST_MAX_MATCH_HOURS):
+        return None
+    return {
+        **forecast,
+        "forecast_time": forecast_time.strftime("%Y-%m-%d %I:%M %p"),
+    }
+
+
 def _apply_planned_heat_safeguard(
     weather: Dict,
     scheduled_start: Optional[str],
 ) -> None:
-    """Adjust the imaging decision from forecast heat, never live heat."""
+    """Apply planned-start weather and astronomy forecast conditions."""
     forecast = _forecast_temperature_for_start(weather, scheduled_start)
+    if forecast is not None:
+        temperature_f = forecast.get("temperature_f")
+        weather["planned_temperature_f"] = temperature_f
+        weather["planned_temperature_at"] = forecast["forecast_time"]
+        for field in (
+            "cloud_cover_percent",
+            "humidity_percent",
+            "dew_point_f",
+            "wind_speed_mph",
+        ):
+            value = forecast.get(field)
+            if value is not None:
+                weather[f"planned_{field}"] = value
+
+    astro_forecast = _astro_forecast_for_start(weather, scheduled_start)
+    if astro_forecast is not None:
+        for field in ("seeing_index", "transparency_index"):
+            value = astro_forecast.get(field)
+            if value is not None:
+                weather[f"planned_{field}"] = value
+        weather["planned_seeing_forecast_at"] = astro_forecast["forecast_time"]
+        weather["planned_transparency_forecast_at"] = astro_forecast[
+            "forecast_time"
+        ]
+
     if forecast is None:
         return
 
     temperature_f = forecast.get("temperature_f")
-    weather["planned_temperature_f"] = temperature_f
-    weather["planned_temperature_at"] = forecast["forecast_time"]
-    for field in (
-        "cloud_cover_percent",
-        "humidity_percent",
-        "dew_point_f",
-        "wind_speed_mph",
-    ):
-        value = forecast.get(field)
-        if value is not None:
-            weather[f"planned_{field}"] = value
 
     rating = weather.get("observing_rating")
     if rating is None:

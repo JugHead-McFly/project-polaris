@@ -46,6 +46,13 @@ def planner_response():
             "cloud_cover_percent": 10,
             "humidity_percent": 25,
             "wind_speed_mph": 4.0,
+            "planned_seeing_index": 4,
+            "planned_seeing_forecast_at": "2026-07-17 09:00 PM",
+            "planned_transparency_index": 3,
+            "planned_transparency_forecast_at": "2026-07-17 09:00 PM",
+            "astro_forecast_provider": "7timer-astro",
+            "astro_forecast_status": "Astronomy forecast connected.",
+            "astro_forecast_fetched_at": "2026-07-17T20:02:00-07:00",
             "observing_rating": 5,
             "status": "Live weather connected.",
         },
@@ -177,11 +184,18 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["backup_target"]["maximum_dark_altitude"] == 81.9
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
-    assert payload["opportunity_score"]["total"] == 75.7
+    assert payload["opportunity_score"]["total"] == 85.7
     assert [
         component["key"]
         for component in payload["opportunity_score"]["components"]
     ] == ["cloud", "night", "moon", "visibility", "seeing", "altitude"]
+    components = {
+        item["key"]: item for item in payload["opportunity_score"]["components"]
+    }
+    assert components["visibility"]["points"] == 7.1
+    assert components["seeing"]["points"] == 2.9
+    assert components["visibility"]["description"].startswith("Good · forecast")
+    assert components["seeing"]["description"].startswith("Good · forecast")
     assert payload["message"].startswith("Conditions currently support imaging")
 
 

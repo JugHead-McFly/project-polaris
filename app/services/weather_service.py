@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from copy import deepcopy
 from threading import RLock
 from time import sleep
@@ -9,6 +9,7 @@ from urllib.error import HTTPError
 from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
+from zoneinfo import ZoneInfo
 
 from app.core.diagnostics import record_service_failure
 from app.core.diagnostics import record_service_success
@@ -28,9 +29,150 @@ WEATHER_RETRY_DELAY_SECONDS = 0.5
 WEATHER_CACHE_TTL_SECONDS = 20 * 60
 WEATHER_STALE_FALLBACK_SECONDS = 6 * 60 * 60
 WEATHERAPI_FORECAST_DAYS = 3
+ASTRO_FORECAST_URL = "https://www.7timer.info/bin/api.pl"
+ASTRO_FORECAST_REQUEST_TIMEOUT_SECONDS = 6
+ASTRO_FORECAST_MAX_MATCH_HOURS = 4
 
 _weather_cache = {}
 _weather_cache_lock = RLock()
+
+
+def _empty_astro_forecast(status: str) -> dict:
+    return {
+        "seeing": None,
+        "seeing_index": None,
+        "seeing_forecast_at": None,
+        "transparency": None,
+        "transparency_index": None,
+        "transparency_forecast_at": None,
+        "hourly_astro_forecast": {},
+        "astro_forecast_provider": None,
+        "astro_forecast_status": status,
+        "astro_forecast_fetched_at": None,
+    }
+
+
+def _astro_quality_label(index: int) -> str:
+    if index <= 2:
+        return "Excellent"
+    if index <= 4:
+        return "Good"
+    if index <= 6:
+        return "Fair"
+    return "Poor"
+
+
+def _parse_astro_forecast(
+    data: dict,
+    context: ObservatoryContext,
+    checked_at: datetime,
+) -> dict:
+    if not isinstance(data, dict):
+        return _empty_astro_forecast("Astronomy forecast response was invalid.")
+    try:
+        initialized_at = datetime.strptime(
+            str(data.get("init")),
+            "%Y%m%d%H",
+        ).replace(tzinfo=timezone.utc)
+        local_timezone = ZoneInfo(context.timezone_name or "UTC")
+    except (TypeError, ValueError, KeyError):
+        return _empty_astro_forecast("Astronomy forecast response was invalid.")
+
+    hourly_astro_forecast = {}
+    for item in data.get("dataseries") or []:
+        if not isinstance(item, dict):
+            continue
+        try:
+            timepoint = float(item.get("timepoint"))
+        except (TypeError, ValueError):
+            continue
+
+        forecast = {}
+        for field in ("seeing", "transparency"):
+            try:
+                index = int(item.get(field))
+            except (TypeError, ValueError):
+                continue
+            if 1 <= index <= 8:
+                forecast[f"{field}_index"] = index
+        if not forecast:
+            continue
+
+        forecast_at = (
+            initialized_at + timedelta(hours=timepoint)
+        ).astimezone(local_timezone).replace(tzinfo=None)
+        hourly_astro_forecast[forecast_at.isoformat(timespec="minutes")] = forecast
+
+    if not hourly_astro_forecast:
+        return _empty_astro_forecast("Astronomy forecast values were unavailable.")
+
+    checked_local = checked_at.astimezone(local_timezone).replace(tzinfo=None)
+
+    current = {}
+    for field in ("seeing", "transparency"):
+        key = f"{field}_index"
+        candidates = []
+        for time_text, forecast in hourly_astro_forecast.items():
+            if key not in forecast:
+                continue
+            forecast_at = datetime.fromisoformat(time_text)
+            candidates.append(
+                (abs(forecast_at - checked_local), forecast_at, forecast[key])
+            )
+        if not candidates:
+            continue
+        difference, forecast_at, index = min(candidates, key=lambda item: item[0])
+        if difference <= timedelta(hours=ASTRO_FORECAST_MAX_MATCH_HOURS):
+            current[key] = index
+            current[f"{field}_forecast_at"] = forecast_at.strftime(
+                "%Y-%m-%d %I:%M %p"
+            )
+
+    if not current:
+        return _empty_astro_forecast("Astronomy forecast did not cover the current period.")
+
+    seeing_index = current.get("seeing_index")
+    transparency_index = current.get("transparency_index")
+    return {
+        "seeing": _astro_quality_label(seeing_index) if seeing_index else None,
+        "seeing_index": seeing_index,
+        "seeing_forecast_at": current.get("seeing_forecast_at"),
+        "transparency": (
+            _astro_quality_label(transparency_index)
+            if transparency_index
+            else None
+        ),
+        "transparency_index": transparency_index,
+        "transparency_forecast_at": current.get("transparency_forecast_at"),
+        "hourly_astro_forecast": hourly_astro_forecast,
+        "astro_forecast_provider": "7timer-astro",
+        "astro_forecast_status": "Astronomy forecast connected.",
+        "astro_forecast_fetched_at": checked_at.isoformat(),
+    }
+
+
+def _get_astro_forecast(
+    context: ObservatoryContext,
+    checked_at: datetime,
+) -> dict:
+    # 7Timer's model is much coarser than a neighborhood. Never disclose the
+    # saved coordinate precision: the user-approved request is rounded to 0.1°.
+    params = {
+        "lat": f"{round(context.latitude, 1):.1f}",
+        "lon": f"{round(context.longitude, 1):.1f}",
+        "product": "astro",
+        "output": "json",
+    }
+    url = ASTRO_FORECAST_URL + "?" + urlencode(params)
+    try:
+        with urlopen(
+            url,
+            timeout=ASTRO_FORECAST_REQUEST_TIMEOUT_SECONDS,
+        ) as response:
+            data = json.load(response)
+    except (URLError, TimeoutError, ValueError):
+        return _empty_astro_forecast("Astronomy forecast unavailable.")
+    return _parse_astro_forecast(data, context, checked_at)
 
 
 def calculate_observing_rating(
@@ -173,8 +315,7 @@ def get_weather_summary(
             # The planner selects the relevant value for the scheduled start.
             "hourly_temperature_f": hourly_temperature_f,
             "hourly_forecast": hourly_forecast,
-            "seeing": None,
-            "transparency": None,
+            **_get_astro_forecast(context, checked_at),
             "observing_rating": rating,
             "status": "Live weather connected.",
             "observed_at": current.get("time"),
@@ -207,6 +348,7 @@ def get_weather_summary(
             checked_at,
         )
         if fallback_weather is not None:
+            fallback_weather.update(_get_astro_forecast(context, checked_at))
             record_service_success(
                 "weather",
                 "Fallback weather data received successfully.",
@@ -229,8 +371,7 @@ def get_weather_summary(
             "wind_speed_mph": None,
             "hourly_temperature_f": {},
             "hourly_forecast": {},
-            "seeing": None,
-            "transparency": None,
+            **_get_astro_forecast(context, checked_at),
             # A missing live forecast must never be interpreted as safe
             # observing conditions by the planner.
             "observing_rating": 0,
@@ -322,8 +463,7 @@ def _get_weatherapi_summary(
         "wind_speed_mph": wind_speed,
         "hourly_temperature_f": hourly_temperature_f,
         "hourly_forecast": hourly_forecast,
-        "seeing": None,
-        "transparency": None,
+        **_empty_astro_forecast("Astronomy forecast not requested yet."),
         "observing_rating": rating,
         "status": "Fallback weather connected via WeatherAPI.com.",
         "observed_at": current.get("last_updated"),

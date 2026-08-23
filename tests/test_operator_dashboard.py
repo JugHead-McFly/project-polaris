@@ -321,6 +321,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "data.opportunity_score" in script
     assert "`Weather pulled ${displayDateTime(weather.fetched_at)}`" in script
     assert "Weather pull time unavailable" in script
+    assert "latitude and longitude are rounded to 0.1°" in html
+    assert "sent to 7Timer.info" in html
     assert (
         "weather.planned_temperature_at || weather.observed_at || weather.fetched_at"
         not in script

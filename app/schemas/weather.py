@@ -17,7 +17,18 @@ class WeatherSummary(BaseModel):
     dew_point_f: Optional[float] = None
     wind_speed_mph: Optional[float] = None
     seeing: Optional[str] = None
+    seeing_index: Optional[int] = None
+    seeing_forecast_at: Optional[str] = None
+    planned_seeing_index: Optional[int] = None
+    planned_seeing_forecast_at: Optional[str] = None
     transparency: Optional[str] = None
+    transparency_index: Optional[int] = None
+    transparency_forecast_at: Optional[str] = None
+    planned_transparency_index: Optional[int] = None
+    planned_transparency_forecast_at: Optional[str] = None
+    astro_forecast_provider: Optional[str] = None
+    astro_forecast_status: Optional[str] = None
+    astro_forecast_fetched_at: Optional[str] = None
     observing_rating: int
     status: str
     observed_at: Optional[str] = None

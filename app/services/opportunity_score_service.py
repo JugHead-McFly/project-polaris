@@ -2,6 +2,28 @@ from datetime import datetime
 from typing import Dict, Optional
 
 
+SEEING_RANGES = {
+    1: "<0.5″",
+    2: "0.5–0.75″",
+    3: "0.75–1.0″",
+    4: "1.0–1.25″",
+    5: "1.25–1.5″",
+    6: "1.5–2.0″",
+    7: "2.0–2.5″",
+    8: ">2.5″",
+}
+TRANSPARENCY_RANGES = {
+    1: "<0.3 mag/airmass",
+    2: "0.3–0.4 mag/airmass",
+    3: "0.4–0.5 mag/airmass",
+    4: "0.5–0.6 mag/airmass",
+    5: "0.6–0.7 mag/airmass",
+    6: "0.7–0.85 mag/airmass",
+    7: "0.85–1.0 mag/airmass",
+    8: ">1.0 mag/airmass",
+}
+
+
 def _clamp(value: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(maximum, value))
 
@@ -47,7 +69,7 @@ def _weather_component(weather: Dict) -> Dict:
             "description": "Cloud, humidity, or wind data is incomplete",
             "points": None,
             "max": 45,
-            "source": "Unavailable",
+            "source": "Future data",
         }
 
     cloud = _clamp(float(cloud), 0, 100)
@@ -141,43 +163,64 @@ def _moon_component(moon: Dict) -> Dict:
     }
 
 
-def _categorical_component(
+def _astro_forecast_component(
     *,
     key: str,
+    field: str,
     label: str,
-    value,
+    weather: Dict,
     maximum: float,
-    mapping: Dict[str, float],
+    ranges: Dict[int, str],
 ) -> Dict:
-    if value is None:
+    value = _planned_or_current(weather, f"{field}_index")
+    forecast_at = _planned_or_current(weather, f"{field}_forecast_at")
+    if value is None or forecast_at is None:
         return {
             "key": key,
             "label": label,
-            "description": f"No live {label.lower()} measure yet",
-            "points": None,
-            "max": maximum,
-            "source": "Future data",
-        }
-
-    category = str(value).strip()
-    points = mapping.get(category.lower())
-    if points is None:
-        return {
-            "key": key,
-            "label": label,
-            "description": f"Unrecognized forecast category: {category}",
+            "description": f"Astronomical {label.lower()} forecast unavailable",
             "points": None,
             "max": maximum,
             "source": "Unavailable",
         }
 
+    try:
+        index = int(value)
+    except (TypeError, ValueError):
+        index = 0
+    if index not in ranges:
+        return {
+            "key": key,
+            "label": label,
+            "description": f"Astronomical {label.lower()} forecast unavailable",
+            "points": None,
+            "max": maximum,
+            "source": "Unavailable",
+        }
+
+    quality = (
+        "Excellent" if index <= 2
+        else "Good" if index <= 4
+        else "Fair" if index <= 6
+        else "Poor"
+    )
+    measure_name = "seeing" if field == "seeing" else "extinction"
     return {
         "key": key,
         "label": label,
-        "description": f"{category} forecast category",
-        "points": points,
+        "description": (
+            f"{quality} · forecast {ranges[index]} {measure_name} "
+            f"near {_display_time(forecast_at)}"
+        ),
+        "points": _points(maximum * (8 - index) / 7, maximum),
         "max": maximum,
-        "source": "Category",
+        "source": "Forecast",
+        "detail_title": f"{label} forecast",
+        "detail": (
+            f"7Timer ASTRO bin {index} of 8 at the forecast point nearest "
+            f"the planned imaging start. Lower {measure_name} is better. "
+            "Cloud, humidity, and wind are scored separately."
+        ),
     }
 
 
@@ -228,19 +271,21 @@ def calculate_opportunity_score(
         _weather_component(weather),
         _darkness_component(darkness),
         _moon_component(moon),
-        _categorical_component(
+        _astro_forecast_component(
             key="visibility",
+            field="transparency",
             label="Transparency",
-            value=weather.get("transparency"),
+            weather=weather,
             maximum=10,
-            mapping={"excellent": 10, "good": 7.5, "fair": 5, "poor": 2.5},
+            ranges=TRANSPARENCY_RANGES,
         ),
-        _categorical_component(
+        _astro_forecast_component(
             key="seeing",
+            field="seeing",
             label="Seeing",
-            value=weather.get("seeing"),
+            weather=weather,
             maximum=5,
-            mapping={"excellent": 5, "good": 3.8, "fair": 2.5, "poor": 1.2},
+            ranges=SEEING_RANGES,
         ),
         _altitude_component(target),
     ]

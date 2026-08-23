@@ -79,13 +79,50 @@ def test_target_altitude_scales_between_twenty_degrees_and_zenith():
         assert component(payload, "altitude")["points"] == points
 
 
-def test_transparency_and_seeing_use_categories_when_available():
-    payload = score(weather={"transparency": "Good", "seeing": "Fair"})
+def test_transparency_and_seeing_scale_from_7timer_bins():
+    transparency_points = [10, 8.6, 7.1, 5.7, 4.3, 2.9, 1.4, 0]
+    seeing_points = [5, 4.3, 3.6, 2.9, 2.1, 1.4, 0.7, 0]
 
-    assert component(payload, "visibility")["points"] == 7.5
-    assert component(payload, "visibility")["source"] == "Category"
-    assert component(payload, "seeing")["points"] == 2.5
-    assert component(payload, "seeing")["source"] == "Category"
+    for index in range(1, 9):
+        payload = score(weather={
+            "planned_transparency_index": index,
+            "planned_transparency_forecast_at": "2026-07-17 09:00 PM",
+            "planned_seeing_index": index,
+            "planned_seeing_forecast_at": "2026-07-17 09:00 PM",
+        })
+
+        visibility = component(payload, "visibility")
+        seeing = component(payload, "seeing")
+        assert visibility["points"] == transparency_points[index - 1]
+        assert visibility["source"] == "Forecast"
+        assert seeing["points"] == seeing_points[index - 1]
+        assert seeing["source"] == "Forecast"
+        assert "near 9:00 PM" in visibility["description"]
+        assert "near 9:00 PM" in seeing["description"]
+
+
+def test_astro_scores_do_not_reuse_cloud_humidity_or_wind():
+    clear = score(weather={
+        "cloud_cover_percent": 0,
+        "humidity_percent": 40,
+        "wind_speed_mph": 2,
+        "seeing_index": 4,
+        "seeing_forecast_at": "2026-07-17 09:00 PM",
+        "transparency_index": 4,
+        "transparency_forecast_at": "2026-07-17 09:00 PM",
+    })
+    difficult = score(weather={
+        "cloud_cover_percent": 100,
+        "humidity_percent": 100,
+        "wind_speed_mph": 20,
+        "seeing_index": 4,
+        "seeing_forecast_at": "2026-07-17 09:00 PM",
+        "transparency_index": 4,
+        "transparency_forecast_at": "2026-07-17 09:00 PM",
+    })
+
+    assert component(clear, "seeing")["points"] == component(difficult, "seeing")["points"]
+    assert component(clear, "visibility")["points"] == component(difficult, "visibility")["points"]
 
 
 def test_missing_inputs_are_explicitly_unavailable_not_assumed_zero():
@@ -106,8 +143,10 @@ def test_total_uses_the_same_rounded_component_values_sent_to_clients():
             "cloud_cover_percent": 0,
             "humidity_percent": 50,
             "wind_speed_mph": 5,
-            "transparency": "Good",
-            "seeing": "Fair",
+            "transparency_index": 3,
+            "transparency_forecast_at": "2026-07-17 09:00 PM",
+            "seeing_index": 4,
+            "seeing_forecast_at": "2026-07-17 09:00 PM",
         },
         moon={"illumination_percent": 50},
         darkness={
