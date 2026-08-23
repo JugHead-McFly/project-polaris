@@ -45,6 +45,17 @@ class OpportunityScore(BaseModel):
     components: List[OpportunityScoreComponent]
 
 
+class DewRiskGuidance(BaseModel):
+    level: str
+    label: str
+    summary: str
+    action: str
+    temperature_f: Optional[float] = None
+    dew_point_f: Optional[float] = None
+    spread_f: Optional[float] = None
+    forecast_at: Optional[str] = None
+
+
 class TonightResponse(BaseModel):
     recommendation_run_id: Optional[UUID] = None
     date: str
@@ -55,6 +66,7 @@ class TonightResponse(BaseModel):
     weather: WeatherSummary
     night_rating: NightRating
     opportunity_score: OpportunityScore
+    dew_risk: DewRiskGuidance
     message: str
     night_plan: NightPlan
     darkness: DarknessSummary

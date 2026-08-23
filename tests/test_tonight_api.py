@@ -46,6 +46,9 @@ def planner_response():
             "cloud_cover_percent": 10,
             "humidity_percent": 25,
             "wind_speed_mph": 4.0,
+            "planned_temperature_f": 66,
+            "planned_dew_point_f": 58,
+            "planned_temperature_at": "2026-07-17 09:00 PM",
             "planned_seeing_index": 4,
             "planned_seeing_forecast_at": "2026-07-17 09:00 PM",
             "planned_transparency_index": 3,
@@ -191,6 +194,9 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
     assert payload["opportunity_score"]["total"] == 85.7
+    assert payload["dew_risk"]["level"] == "low"
+    assert payload["dew_risk"]["spread_f"] == 8.0
+    assert payload["dew_risk"]["action"].startswith("No special dew action")
     assert [
         component["key"]
         for component in payload["opportunity_score"]["components"]

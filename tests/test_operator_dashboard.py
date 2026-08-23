@@ -131,7 +131,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'id="bortle-map-key"' in response.text
     assert 'id="tracked-location-summary"' in response.text
     assert "Bortle not recorded" in script.text
-    assert "list.hidden = decision === \"Proceed\"" in script.text
+    assert "list.hidden = visibleNotes.length === 0" in script.text
     assert 'id="capture-location-map"' in response.text
     assert 'id="candidate-site-map-key"' in response.text
     assert 'id="candidate-site-sort"' in response.text
@@ -473,6 +473,24 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     assert 'id="hosted-reference-image"' not in html
     assert 'id="target-reference-image"' not in html
     assert "renderReferenceAttribution" not in script
+
+
+def test_dew_guidance_uses_the_existing_cautions_card():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+
+    caution_start = html.index('class="hosted-cautions-card"')
+    notes_start = html.index('id="hosted-plan-notes"')
+    caution_end = html.index("</div>", notes_start)
+    assert caution_start < notes_start < caution_end
+    assert "data.dew_risk" in script
+    assert "Dew guidance:" in script
+    assert "dewAdvisoryNotes" in script
+    assert "dewRisk.label" in script
+    assert "dewRisk.summary" in script
+    assert "dewRisk.action" in script
+    assert "notes.hidden = visibleNotes.length === 0" in script
+    assert "renderNotes(data.schedule.notes, data.dew_risk)" in script
 
 
 def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():

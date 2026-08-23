@@ -9,6 +9,7 @@ from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_angular_size
+from app.services.dew_risk_service import assess_dew_risk
 from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
 from app.services.planner_service import get_tonight_plan
@@ -327,6 +328,10 @@ def _build_tonight_payload(
     )
     rig_profile = get_rig_profile(observatory.rig_profile_key or "")
     opportunity_target = recommended_target or backup_target
+    dew_window_target = (
+        planner.get("recommended_target")
+        or planner.get("best_theoretical_target")
+    )
 
     return {
         "date": schedule["date"],
@@ -358,6 +363,19 @@ def _build_tonight_payload(
             moon=planner["moon"],
             darkness=planner["darkness"],
             target=opportunity_target,
+        ),
+        "dew_risk": assess_dew_risk(
+            planner["weather"],
+            planned_start=(
+                dew_window_target.get("recommended_start")
+                if dew_window_target
+                else None
+            ),
+            planned_end=(
+                dew_window_target.get("recommended_end")
+                if dew_window_target
+                else None
+            ),
         ),
         "message": _build_operator_message(schedule),
         "night_plan": _build_legacy_night_plan(

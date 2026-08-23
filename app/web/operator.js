@@ -797,6 +797,14 @@ const softenAdvisoryNote = (note) => note
   )
   .replace(/^do not image:\s*/i, "");
 
+const dewAdvisoryNotes = (dewRisk) =>
+  dewRisk
+    ? [
+        `Dew: ${dewRisk.label}. ${dewRisk.summary}`,
+        `Dew guidance: ${dewRisk.action}`,
+      ]
+    : [];
+
 const renderHostedTonight = (data) => {
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
@@ -906,14 +914,18 @@ const renderHostedTonight = (data) => {
 
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
-  const visibleNotes = (schedule.notes || []).filter(
-    (note) =>
-      note &&
-      note !== data.message &&
-      !note.toLowerCase().startsWith("use caution:") &&
-      note !== "Review live conditions before starting any scheduled block.",
-  ).map(softenAdvisoryNote);
-  notes.hidden = decision === "Proceed" || visibleNotes.length === 0;
+  const visibleNotes = dewAdvisoryNotes(data.dew_risk).concat(
+    (schedule.notes || [])
+      .filter(
+        (note) =>
+          note &&
+          note !== data.message &&
+          !note.toLowerCase().startsWith("use caution:") &&
+          note !== "Review live conditions before starting any scheduled block.",
+      )
+      .map(softenAdvisoryNote),
+  );
+  notes.hidden = visibleNotes.length === 0;
   byId("hosted-cautions-empty").hidden = !notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
   renderHostedSchedule(schedule);
@@ -2366,16 +2378,18 @@ const renderConditions = (data) => {
   );
 };
 
-const renderNotes = (notes, decision) => {
+const renderNotes = (notes, dewRisk) => {
   const list = byId("planner-notes");
   list.replaceChildren();
-  const visibleNotes = (notes || []).filter(
-    (note) =>
-      note &&
-      !note.toLowerCase().startsWith("use caution:") &&
-      note !== "Review live conditions before starting any scheduled block.",
+  const visibleNotes = dewAdvisoryNotes(dewRisk).concat(
+    (notes || []).filter(
+      (note) =>
+        note &&
+        !note.toLowerCase().startsWith("use caution:") &&
+        note !== "Review live conditions before starting any scheduled block.",
+    ),
   );
-  list.hidden = decision === "Proceed" || visibleNotes.length === 0;
+  list.hidden = visibleNotes.length === 0;
 
   if (list.hidden) return;
 
@@ -3788,7 +3802,7 @@ const loadDashboard = async () => {
     renderDecision(data);
     renderSchedule(data.schedule);
     renderConditions(data);
-    renderNotes(data.schedule.notes, data.schedule.decision);
+    renderNotes(data.schedule.notes, data.dew_risk);
     try {
       await loadCandidateSites(data.observatory);
     } catch (error) {
