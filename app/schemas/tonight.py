@@ -56,6 +56,15 @@ class DewRiskGuidance(BaseModel):
     forecast_at: Optional[str] = None
 
 
+class ConditionsTrend(BaseModel):
+    direction: str
+    label: str
+    message: str
+    basis: Optional[str] = None
+    forecast_start: Optional[str] = None
+    forecast_end: Optional[str] = None
+
+
 class TonightResponse(BaseModel):
     recommendation_run_id: Optional[UUID] = None
     date: str
@@ -67,6 +76,7 @@ class TonightResponse(BaseModel):
     night_rating: NightRating
     opportunity_score: OpportunityScore
     dew_risk: DewRiskGuidance
+    conditions_trend: ConditionsTrend
     message: str
     night_plan: NightPlan
     darkness: DarknessSummary

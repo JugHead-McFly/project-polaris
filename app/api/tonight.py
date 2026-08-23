@@ -9,6 +9,7 @@ from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_angular_size
+from app.services.conditions_trend_service import assess_conditions_trend
 from app.services.dew_risk_service import assess_dew_risk
 from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
@@ -365,6 +366,19 @@ def _build_tonight_payload(
             target=opportunity_target,
         ),
         "dew_risk": assess_dew_risk(
+            planner["weather"],
+            planned_start=(
+                dew_window_target.get("recommended_start")
+                if dew_window_target
+                else None
+            ),
+            planned_end=(
+                dew_window_target.get("recommended_end")
+                if dew_window_target
+                else None
+            ),
+        ),
+        "conditions_trend": assess_conditions_trend(
             planner["weather"],
             planned_start=(
                 dew_window_target.get("recommended_start")

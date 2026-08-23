@@ -494,6 +494,25 @@ def test_dew_guidance_uses_the_existing_cautions_card():
     assert "renderNotes(data.schedule.notes, data.dew_risk)" in script
 
 
+def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    hosted_window = html.index('id="hosted-command-window"')
+    hosted_trend = html.index('id="hosted-window-trend"')
+    hosted_weather = html.index('class="hosted-command-weather"')
+    assert hosted_window < hosted_trend < hosted_weather
+    assert 'id="target-window-trend"' in html
+    assert 'aria-live="polite"' in html
+    assert "renderConditionsTrend" in script
+    assert 'renderConditionsTrend("hosted-window-trend", data.conditions_trend)' in script
+    assert 'renderConditionsTrend("target-window-trend", data.conditions_trend)' in script
+    assert ".conditions-trend" in css
+    assert ".conditions-trend.trend-improving" in css
+    assert ".conditions-trend.trend-worsening" in css
+
+
 def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
     client = TestClient(app)
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()

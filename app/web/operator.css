@@ -1209,6 +1209,28 @@ footer {
   color: #c4d5d8;
 }
 
+.conditions-trend {
+  display: block;
+  margin-top: 5px;
+  color: #b8cbd0;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.conditions-trend.trend-improving {
+  color: #75ddc4;
+}
+
+.conditions-trend.trend-worsening {
+  color: #f2be67;
+}
+
+.conditions-trend.trend-unavailable {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .hosted-target {
   grid-area: target;
   background: linear-gradient(145deg, rgba(4, 15, 22, 0.56), rgba(7, 28, 34, 0.34));

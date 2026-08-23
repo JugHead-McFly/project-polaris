@@ -336,6 +336,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-filter", "—");
   setText("hosted-command-window", "—");
   setText("hosted-command-window-label", "Best imaging window");
+  renderConditionsTrend("hosted-window-trend", null);
   setText("hosted-command-target", "—");
   setText("hosted-command-fallback", "—");
   renderTargetIllustration("hosted-command-target-illustration", null, true);
@@ -802,6 +803,15 @@ const dewAdvisoryNotes = (dewRisk) =>
     ? [`Dew: ${dewRisk.label}. ${dewRisk.action}`]
     : [];
 
+const renderConditionsTrend = (elementId, trend) => {
+  const element = byId(elementId);
+  const direction = trend?.direction || "unavailable";
+  element.className = `conditions-trend trend-${direction}`;
+  element.textContent = trend?.message || (
+    "Trend unavailable: check live conditions at the window start."
+  );
+};
+
 const renderHostedTonight = (data) => {
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
@@ -832,6 +842,7 @@ const renderHostedTonight = (data) => {
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
   );
   setText("hosted-target-rig", rigProfileLabel(data.observatory));
+  renderConditionsTrend("hosted-window-trend", data.conditions_trend);
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");
@@ -2166,6 +2177,7 @@ const renderDecision = (data) => {
   const target = recommended || data.backup_target;
   const plannedTemperature = data.weather?.planned_temperature_f;
   const targetForecast = byId("target-forecast");
+  renderConditionsTrend("target-window-trend", data.conditions_trend);
   setText("target-label", recommended ? "Primary target" : "Fallback if conditions improve");
 
   if (!target) {

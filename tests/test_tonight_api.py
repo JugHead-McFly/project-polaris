@@ -197,6 +197,8 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["dew_risk"]["level"] == "low"
     assert payload["dew_risk"]["spread_f"] == 8.0
     assert payload["dew_risk"]["action"].startswith("No special dew action")
+    assert payload["conditions_trend"]["direction"] == "unavailable"
+    assert "check live conditions" in payload["conditions_trend"]["message"]
     assert [
         component["key"]
         for component in payload["opportunity_score"]["components"]
