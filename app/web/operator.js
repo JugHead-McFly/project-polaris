@@ -347,6 +347,7 @@ const resetHostedPlanDetails = () => {
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
   renderSkyQuality(null);
+  renderSessionChecklist(null);
   setText("hosted-weather-updated", "Weather time unavailable");
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
   weatherDiagnostic.hidden = true;
@@ -813,6 +814,39 @@ const renderConditionsTrend = (elementId, trend) => {
   );
 };
 
+const renderSessionChecklist = (checklist) => {
+  const panel = byId("hosted-session-plan");
+  const steps = byId("hosted-session-steps");
+  const actions = byId("hosted-session-actions");
+  const status = checklist?.status || "loading";
+  panel.className = `hosted-session-plan status-${status}`;
+  setText(
+    "hosted-session-plan-summary",
+    checklist?.summary,
+    "Session timing will appear after the plan loads.",
+  );
+  steps.replaceChildren();
+  actions.replaceChildren();
+
+  (checklist?.steps || []).slice(0, 3).forEach((step) => {
+    const item = appendTextElement(steps, "li", "hosted-session-step", "");
+    const heading = appendTextElement(item, "div", "hosted-session-step-heading", "");
+    appendTextElement(heading, "span", "", step.label || "Plan step");
+    appendTextElement(heading, "strong", "", step.time_label || "—");
+    appendTextElement(
+      item,
+      "p",
+      "",
+      step.instruction || "Timing unavailable.",
+    );
+  });
+
+  (checklist?.actions || []).slice(0, 2).forEach((action) => {
+    appendTextElement(actions, "li", "", action);
+  });
+  actions.hidden = actions.children.length === 0;
+};
+
 const knownTargetMetadata = (value) => {
   if (typeof value !== "string") return null;
   const cleaned = value.trim();
@@ -972,6 +1006,7 @@ const renderHostedTonight = (data) => {
   );
   setText("hosted-target-rig", rigProfileLabel(data.observatory));
   renderConditionsTrend("hosted-window-trend", data.conditions_trend);
+  renderSessionChecklist(data.session_checklist);
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");

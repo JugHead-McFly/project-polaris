@@ -218,6 +218,14 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["dew_risk"]["action"].startswith("No special dew action")
     assert payload["conditions_trend"]["direction"] == "unavailable"
     assert "check live conditions" in payload["conditions_trend"]["message"]
+    assert payload["session_checklist"]["status"] == "ready"
+    assert [
+        step["time_label"] for step in payload["session_checklist"]["steps"]
+    ] == ["9:14 PM", "9:19 PM", "11:24 PM"]
+    assert payload["session_checklist"]["actions"] == [
+        "Use Alt-Az tracking mode tonight.",
+        "Use the Duo-Band filter recommended for tonight's target.",
+    ]
     assert [
         component["key"]
         for component in payload["opportunity_score"]["components"]

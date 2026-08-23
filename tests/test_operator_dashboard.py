@@ -527,6 +527,29 @@ def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
     assert ".conditions-trend.trend-worsening" in css
 
 
+def test_session_checklist_stays_inside_the_existing_command_card():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    command_start = html.index('class="hosted-command-board"')
+    checklist_start = html.index('id="hosted-session-plan"')
+    breakdown_start = html.index('class="hosted-score-breakdown-card"')
+    assert command_start < checklist_start < breakdown_start
+    assert 'aria-labelledby="hosted-session-plan-title"' in html
+    assert 'aria-live="polite"' in html
+    assert 'id="hosted-session-steps"' in html
+    assert 'id="hosted-session-actions" hidden' in html
+    assert "const renderSessionChecklist = (checklist) =>" in script
+    assert "(checklist?.steps || []).slice(0, 3)" in script
+    assert "(checklist?.actions || []).slice(0, 2)" in script
+    assert "renderSessionChecklist(data.session_checklist)" in script
+    assert "renderSessionChecklist(null)" in script
+    assert ".hosted-session-plan" in css
+    assert ".hosted-session-steps" in css
+    assert "grid-template-columns: repeat(3, minmax(0, 1fr));" in css
+
+
 def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
     client = TestClient(app)
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()

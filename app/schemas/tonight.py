@@ -65,6 +65,21 @@ class ConditionsTrend(BaseModel):
     forecast_end: Optional[str] = None
 
 
+class SessionChecklistStep(BaseModel):
+    key: str
+    label: str
+    at: Optional[str] = None
+    time_label: Optional[str] = None
+    instruction: str
+
+
+class SessionChecklist(BaseModel):
+    status: str
+    summary: str
+    steps: List[SessionChecklistStep]
+    actions: List[str]
+
+
 class TonightResponse(BaseModel):
     recommendation_run_id: Optional[UUID] = None
     date: str
@@ -77,6 +92,7 @@ class TonightResponse(BaseModel):
     opportunity_score: OpportunityScore
     dew_risk: DewRiskGuidance
     conditions_trend: ConditionsTrend
+    session_checklist: SessionChecklist
     message: str
     night_plan: NightPlan
     darkness: DarknessSummary

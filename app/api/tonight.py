@@ -15,6 +15,7 @@ from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
 from app.services.planner_service import get_tonight_plan
 from app.services.scheduler_service import build_tonight_schedule
+from app.services.session_checklist_service import build_session_checklist
 from app.services.hosted_account_service import get_planning_context
 from app.services.hosted_account_service import get_primary_observatory
 from app.services.hosted_account_service import MissingObservatoryError
@@ -345,6 +346,32 @@ def _build_tonight_payload(
         planner.get("recommended_target")
         or planner.get("best_theoretical_target")
     )
+    dew_risk = assess_dew_risk(
+        planner["weather"],
+        planned_start=(
+            dew_window_target.get("recommended_start")
+            if dew_window_target
+            else None
+        ),
+        planned_end=(
+            dew_window_target.get("recommended_end")
+            if dew_window_target
+            else None
+        ),
+    )
+    conditions_trend = assess_conditions_trend(
+        planner["weather"],
+        planned_start=(
+            dew_window_target.get("recommended_start")
+            if dew_window_target
+            else None
+        ),
+        planned_end=(
+            dew_window_target.get("recommended_end")
+            if dew_window_target
+            else None
+        ),
+    )
 
     return {
         "date": schedule["date"],
@@ -377,31 +404,15 @@ def _build_tonight_payload(
             darkness=planner["darkness"],
             target=opportunity_target,
         ),
-        "dew_risk": assess_dew_risk(
-            planner["weather"],
-            planned_start=(
-                dew_window_target.get("recommended_start")
-                if dew_window_target
-                else None
-            ),
-            planned_end=(
-                dew_window_target.get("recommended_end")
-                if dew_window_target
-                else None
-            ),
-        ),
-        "conditions_trend": assess_conditions_trend(
-            planner["weather"],
-            planned_start=(
-                dew_window_target.get("recommended_start")
-                if dew_window_target
-                else None
-            ),
-            planned_end=(
-                dew_window_target.get("recommended_end")
-                if dew_window_target
-                else None
-            ),
+        "dew_risk": dew_risk,
+        "conditions_trend": conditions_trend,
+        "session_checklist": build_session_checklist(
+            schedule=schedule,
+            recommended_target=recommended_target,
+            backup_target=backup_target,
+            dew_risk=dew_risk,
+            timezone_name=observatory.timezone_name,
+            equatorial_mode_enabled=equatorial_mode_enabled,
         ),
         "message": _build_operator_message(schedule),
         "night_plan": _build_legacy_night_plan(
