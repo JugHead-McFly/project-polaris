@@ -73,7 +73,7 @@ also identified one old capture-free session with an invalid placeholder date.
 That row is harmless to the current dashboard, remains untouched, and is
 tracked as later cleanup rather than a milestone blocker.
 
-On 2026-08-30, all five scenarios and the complete 326-test suite passed.
+On 2026-08-30, all five scenarios and the complete 328-test suite passed.
 
 ## Truth and privacy rules
 
