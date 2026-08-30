@@ -598,6 +598,15 @@ const resetHostedPlanDetails = () => {
   renderConditionsTrend("hosted-window-trend", null);
   setText("hosted-command-target", "—");
   setText("hosted-command-fallback", "—");
+  byId("hosted-decision-blockers").replaceChildren(
+    document.createElement("li"),
+  );
+  byId("hosted-decision-blockers").firstElementChild.textContent =
+    "Waiting for conditions data.";
+  setText(
+    "hosted-decision-recovery",
+    "Polaris will reassess after the forecast loads.",
+  );
   renderTargetIllustration("hosted-command-target-illustration", null, true);
   renderTargetIllustration("hosted-command-fallback-illustration", null, true);
   renderTargetIllustration("hosted-target-illustration", null);
@@ -812,6 +821,8 @@ const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
 
 const opportunityFactorIconPaths = {
   cloud: "M7 18.5h10.5a4 4 0 0 0 .1-8 6 6 0 0 0-11.3 1.1A3.5 3.5 0 0 0 7 18.5Z",
+  humidity: "M12 3.5s5 5.6 5 9.1a5 5 0 0 1-10 0c0-3.5 5-9.1 5-9.1Z",
+  wind: "M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h8",
   night: "M4 19h16M7 16a5 5 0 0 1 10 0M8 5v3M6.5 6.5h3M17 4l.45 1.05L18.5 5.5l-1.05.45L17 7l-.45-1.05L15.5 5.5l1.05-.45L17 4Z",
   moon: "M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7Z",
   visibility: "M2.5 12s3.5-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.5 5.5-9.5 5.5S2.5 12 2.5 12Zm9.5-2.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z",
@@ -837,6 +848,75 @@ const scoreComponentTone = (component) => {
   if (percent >= 0.75) return "strong";
   if (percent >= 0.45) return "mixed";
   return "weak";
+};
+
+const parseWeatherComponentParts = (component) => {
+  const match = (component.description || "").match(
+    /([\d.]+)% cloud · ([\d.]+)% humidity · ([\d.]+) mph wind/,
+  );
+  if (!match) return null;
+  return {
+    cloud: Number(match[1]),
+    humidity: Number(match[2]),
+    wind: Number(match[3]),
+  };
+};
+
+const expandedOpportunityComponents = (components) => {
+  const expanded = [];
+  components.forEach((component) => {
+    if (component.key !== "cloud") {
+      expanded.push(component);
+      return;
+    }
+
+    const parts = parseWeatherComponentParts(component);
+    if (!parts) {
+      expanded.push(component);
+      return;
+    }
+
+    const cloudPoints = parts.cloud >= 100
+      ? 0
+      : Math.round(30 * (1 - parts.cloud / 100) * 10) / 10;
+    const humidityPoints = Math.round(
+      8 * (1 - clampPercent((parts.humidity - 50) * 2) / 100) * 10,
+    ) / 10;
+    const windPoints = Math.round(
+      7 * (1 - clampPercent(((parts.wind - 5) / 15) * 100) / 100) * 10,
+    ) / 10;
+
+    expanded.push(
+      {
+        ...component,
+        key: "cloud",
+        label: "Cloud cover",
+        description: `${displayMeasuredNumber(parts.cloud)}% cloud`,
+        points: cloudPoints,
+        max: 30,
+        source: parts.cloud >= 100 ? "Hard stop" : "Forecast",
+      },
+      {
+        ...component,
+        key: "humidity",
+        label: "Humidity",
+        description: `${displayMeasuredNumber(parts.humidity)}% humidity`,
+        points: parts.cloud >= 100 ? 0 : humidityPoints,
+        max: 8,
+        source: parts.cloud >= 100 ? "Blocked" : "Forecast",
+      },
+      {
+        ...component,
+        key: "wind",
+        label: "Wind",
+        description: `${displayMeasuredNumber(parts.wind)} mph wind`,
+        points: parts.cloud >= 100 ? 0 : windPoints,
+        max: 7,
+        source: parts.cloud >= 100 ? "Blocked" : "Forecast",
+      },
+    );
+  });
+  return expanded;
 };
 
 const appendOpportunityComponent = (container, component) => {
@@ -915,6 +995,7 @@ const renderOpportunityScore = (scoreBreakdown) => {
   if (!scoreBreakdown || !Array.isArray(scoreBreakdown.components)) {
     setText("hosted-opportunity-score", "--");
     setText("hosted-opportunity-label", "Unavailable");
+    reading.classList.remove("is-hard-stop");
     reading.style.setProperty("--opportunity-score", "0%");
     byId("hosted-opportunity-total-bar").style.width = "0%";
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
@@ -925,6 +1006,7 @@ const renderOpportunityScore = (scoreBreakdown) => {
   const opportunityScore = Number.isFinite(Number(scoreBreakdown.total))
     ? Number(scoreBreakdown.total)
     : opportunityComponentScore(components);
+  const hardStopScore = scoreBreakdown.label === "No imaging window";
 
   setText("hosted-opportunity-score", Number(opportunityScore).toFixed(1));
   setText(
@@ -936,10 +1018,11 @@ const renderOpportunityScore = (scoreBreakdown) => {
   } else {
     reading.removeAttribute("title");
   }
+  reading.classList.toggle("is-hard-stop", hardStopScore);
   reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
   byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
 
-  components.forEach((component) => {
+  expandedOpportunityComponents(components).forEach((component) => {
     appendOpportunityComponent(drivers, component);
   });
 
@@ -1116,6 +1199,100 @@ const renderSessionChecklist = (checklist) => {
   actions.hidden = actions.children.length === 0;
 };
 
+const plannedWeatherValue = (weather, key) => (
+  weather?.[`planned_${key}`] ?? weather?.[key] ?? null
+);
+
+const decisionBlockers = (data) => {
+  const weather = data.weather || {};
+  const rating = data.night_rating || {};
+  const score = data.opportunity_score || {};
+  const blockers = [];
+  const cloud = Number(plannedWeatherValue(weather, "cloud_cover_percent"));
+  const wind = Number(plannedWeatherValue(weather, "wind_speed_mph"));
+  const humidity = Number(plannedWeatherValue(weather, "humidity_percent"));
+  const moon = Number(data.moon?.illumination_percent);
+
+  if (Number.isFinite(cloud) && cloud >= 95) {
+    blockers.push(`${displayMeasuredNumber(cloud)}% cloud cover at the imaging-window check.`);
+  } else if (Number.isFinite(cloud) && cloud >= 70) {
+    blockers.push(`${displayMeasuredNumber(cloud)}% cloud cover makes the window unreliable.`);
+  }
+  if (Number.isFinite(wind) && wind >= 18) {
+    blockers.push(`${displayMeasuredNumber(wind)} mph wind is too risky for a stable setup.`);
+  }
+  if (Number.isFinite(humidity) && humidity >= 90) {
+    blockers.push(`${displayMeasuredNumber(humidity)}% humidity raises dew and transparency risk.`);
+  }
+  if (Number.isFinite(moon) && moon >= 85) {
+    blockers.push(`${displayMeasuredNumber(moon)}% Moon illumination reduces contrast.`);
+  }
+  if (rating.quality && ["Very Poor", "Poor"].includes(rating.quality)) {
+    blockers.push(`Sky quality is ${rating.quality.toLowerCase()}.`);
+  }
+  if (score.label === "No imaging window" && blockers.length === 0) {
+    blockers.push("A hard-stop safety or weather rule is active.");
+  }
+  return blockers.slice(0, 3);
+};
+
+const decisionRecoveryText = (data) => {
+  const trend = data.conditions_trend || {};
+  const schedule = data.schedule || {};
+  const fallback = data.backup_target;
+  const cloud = Number(plannedWeatherValue(data.weather || {}, "cloud_cover_percent"));
+  const parts = [];
+
+  if (trend.direction === "improving" && trend.basis) {
+    parts.push(trend.basis.replace(/\.$/, ""));
+  } else if (Number.isFinite(cloud) && cloud >= 95) {
+    parts.push("Cloud cover needs to drop below the unsafe range");
+  } else {
+    parts.push("The hard-stop condition needs to clear");
+  }
+
+  if (fallback?.object) {
+    parts.push(`${fallback.object} remains the fallback target`);
+  }
+  if (schedule.decision === "Do Not Image") {
+    parts.push("Polaris must change the recommendation before setup");
+  }
+  return `${parts.join("; ")}.`;
+};
+
+const renderDecisionSupport = (data) => {
+  const blockers = byId("hosted-decision-blockers");
+  const recovery = byId("hosted-decision-recovery");
+  const decision = data?.schedule?.decision || "Conditions Unknown";
+  blockers.replaceChildren();
+
+  if (decision !== "Do Not Image") {
+    appendTextElement(
+      blockers,
+      "li",
+      "",
+      decision === "Use Caution"
+        ? "Nothing is blocking imaging outright, but one or more factors need attention."
+        : "No hard-stop blockers are active.",
+    );
+    setText(
+      "hosted-decision-recovery",
+      decision === "Use Caution"
+        ? "Review the caution items and live conditions before opening equipment."
+        : "Use the score drivers to decide how ambitious tonight's plan should be.",
+    );
+    return;
+  }
+
+  decisionBlockers(data).forEach((blocker) => {
+    appendTextElement(blockers, "li", "", blocker);
+  });
+  if (!blockers.children.length) {
+    appendTextElement(blockers, "li", "", "Current conditions are unsuitable.");
+  }
+  recovery.textContent = decisionRecoveryText(data);
+};
+
 const openHostedSchedule = () => {
   const timeline = byId("hosted-schedule-panel");
   const summary = byId("hosted-schedule-summary");
@@ -1271,6 +1448,7 @@ const renderHostedTonight = (data) => {
   setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
   setText("hosted-decision", displayedDecisionLabel(decision));
   setText("hosted-decision-message", displayedDecisionMessage(decision, data.message));
+  renderDecisionSupport(data);
 
   const target = data.recommended_target || data.backup_target;
   renderOpportunityScore(data.opportunity_score);

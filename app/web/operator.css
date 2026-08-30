@@ -975,6 +975,19 @@ footer {
   font-weight: 800;
 }
 
+.hosted-recommendation.status-do-not-image .hosted-score-command {
+  border-color: rgba(255, 124, 113, 0.34);
+}
+
+.hosted-opportunity-reading.is-hard-stop {
+  color: #fff3ef;
+  box-shadow: 0 0 34px rgba(255, 124, 113, 0.18);
+}
+
+.hosted-opportunity-reading.is-hard-stop::before {
+  background: conic-gradient(var(--red) var(--opportunity-score), rgba(156, 181, 187, 0.14) 0);
+}
+
 .hosted-opportunity-score span {
   color: var(--cyan);
   font-size: 16px;
@@ -1248,6 +1261,44 @@ footer {
   margin: 10px 0 0 34px;
   color: #bfd0d4;
   font-size: 15px;
+}
+
+.hosted-decision-support {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.hosted-decision-support section {
+  min-width: 0;
+  padding: 12px 14px;
+  background: linear-gradient(145deg, rgba(84, 224, 211, 0.07), rgba(34, 54, 69, 0.14));
+  border: 1px solid rgba(84, 224, 211, 0.16);
+  border-radius: 8px;
+}
+
+.hosted-decision-support .eyebrow {
+  margin: 0 0 8px;
+  font-size: 10px;
+}
+
+.hosted-decision-support ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 16px;
+  color: #d6e5e8;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.hosted-decision-support p:not(.eyebrow) {
+  margin: 0;
+  color: #d6e5e8;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .hosted-plan-notes {
@@ -4503,6 +4554,10 @@ footer {
 
   .hosted-opportunity-reading small {
     font-size: 10px;
+  }
+
+  .hosted-decision-support {
+    grid-template-columns: 1fr;
   }
 
   .auth-gate,

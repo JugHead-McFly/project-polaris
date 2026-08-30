@@ -274,6 +274,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-command-target-illustration"' in html
     assert 'id="hosted-command-fallback"' in html
     assert 'id="hosted-command-fallback-illustration"' in html
+    assert 'id="hosted-decision-blockers"' in html
+    assert 'id="hosted-decision-recovery"' in html
+    assert "Why not tonight" in html
+    assert "What would need to change" in html
     assert 'id="hosted-action-summary"' not in html
     assert 'aria-label="Refresh tonight\'s plan"' in html
     assert '<span class="header-refresh-label">Refresh plan</span>' in html
@@ -335,6 +339,11 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
         not in script
     )
     assert "opportunityComponentScore" in script
+    assert "expandedOpportunityComponents" in script
+    assert "Cloud cover" in script
+    assert "Humidity" in script
+    assert "Wind" in script
+    assert "renderDecisionSupport" in script
     assert "opportunityScoreLabel" in script
     assert "Challenging" in script
     assert "Wait for better conditions" in script
