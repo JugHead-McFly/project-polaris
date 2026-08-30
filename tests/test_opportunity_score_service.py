@@ -1,4 +1,5 @@
 from app.services.opportunity_score_service import calculate_opportunity_score
+from app.services.opportunity_score_service import explain_opportunity_for_decision
 
 
 def component(payload, key):
@@ -157,3 +158,31 @@ def test_total_uses_the_same_rounded_component_values_sent_to_clients():
     )
 
     assert payload["total"] == 85
+    assert payload["label"] == "Excellent"
+
+
+def test_do_not_image_score_label_explains_hard_stop_without_hiding_components():
+    payload = score(
+        weather={
+            "cloud_cover_percent": 100,
+            "humidity_percent": 37,
+            "wind_speed_mph": 11.5,
+            "transparency_index": 2,
+            "transparency_forecast_at": "2026-08-30 08:00 PM",
+            "seeing_index": 3,
+            "seeing_forecast_at": "2026-08-30 08:00 PM",
+        },
+        moon={"illumination_percent": 92.5},
+        darkness={
+            "astronomical_darkness_start": "2026-08-30 08:20 PM",
+            "astronomical_darkness_end": "2026-08-31 04:34 AM",
+        },
+        target={"maximum_dark_altitude": 88.6},
+    )
+
+    explained = explain_opportunity_for_decision(payload, "Do Not Image")
+
+    assert explained["total"] == 50.2
+    assert explained["label"] == "No imaging window"
+    assert "hard stop" in explained["guidance"]
+    assert component(explained, "cloud")["points"] == 12.0

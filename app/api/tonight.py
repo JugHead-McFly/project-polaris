@@ -20,6 +20,7 @@ from app.services.forecast_accuracy_service import (
 )
 from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
+from app.services.opportunity_score_service import explain_opportunity_for_decision
 from app.services.planner_service import get_tonight_plan
 from app.services.scheduler_service import build_tonight_schedule
 from app.services.session_checklist_service import build_session_checklist
@@ -395,6 +396,16 @@ def _build_tonight_payload(
                 observatory_id=hosted_observatory.id,
             )
 
+    opportunity_score = explain_opportunity_for_decision(
+        calculate_opportunity_score(
+            weather=planner["weather"],
+            moon=planner["moon"],
+            darkness=planner["darkness"],
+            target=opportunity_target,
+        ),
+        schedule["decision"],
+    )
+
     return {
         "date": schedule["date"],
         "observatory": {
@@ -420,12 +431,7 @@ def _build_tonight_payload(
             planner["moon"],
             recommended_target,
         ),
-        "opportunity_score": calculate_opportunity_score(
-            weather=planner["weather"],
-            moon=planner["moon"],
-            darkness=planner["darkness"],
-            target=opportunity_target,
-        ),
+        "opportunity_score": opportunity_score,
         "dew_risk": dew_risk,
         "conditions_trend": conditions_trend,
         "forecast_accuracy": forecast_accuracy,

@@ -8,6 +8,7 @@ from app.services.imaging_settings_service import apply_tonight_settings
 from app.services.night_planner_service import build_night_plan
 from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
+from app.services.opportunity_score_service import explain_opportunity_for_decision
 from app.services.scheduler_service import build_tonight_schedule
 
 
@@ -386,6 +387,10 @@ def _evaluate_scenario(scenario: Dict) -> Dict:
         target=candidate,
     )
     message = _build_operator_message(schedule)
+    opportunity = explain_opportunity_for_decision(
+        opportunity,
+        schedule["decision"],
+    )
     actual = {
         "decision": schedule["decision"],
         "block_count": len(schedule["blocks"]),
@@ -395,6 +400,7 @@ def _evaluate_scenario(scenario: Dict) -> Dict:
         ],
         "night_quality": night_rating["quality"],
         "opportunity_score": opportunity["total"],
+        "opportunity_label": opportunity["label"],
         "recommended_exposure_seconds": candidate["advisor"][
             "recommended_sub_exposure_seconds"
         ],

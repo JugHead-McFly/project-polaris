@@ -927,7 +927,15 @@ const renderOpportunityScore = (scoreBreakdown) => {
     : opportunityComponentScore(components);
 
   setText("hosted-opportunity-score", Number(opportunityScore).toFixed(1));
-  setText("hosted-opportunity-label", opportunityScoreLabel(opportunityScore));
+  setText(
+    "hosted-opportunity-label",
+    scoreBreakdown.label || opportunityScoreLabel(opportunityScore),
+  );
+  if (scoreBreakdown.guidance) {
+    reading.setAttribute("title", scoreBreakdown.guidance);
+  } else {
+    reading.removeAttribute("title");
+  }
   reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
   byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
 

@@ -290,4 +290,45 @@ def calculate_opportunity_score(
         _altitude_component(target),
     ]
     total = round(sum(component["points"] or 0 for component in components), 1)
-    return {"total": total, "components": components}
+    return {
+        "total": total,
+        "label": opportunity_score_label(total),
+        "guidance": "Use the score as a planning aid alongside the nightly recommendation.",
+        "components": components,
+    }
+
+
+def opportunity_score_label(score: float) -> str:
+    if score >= 85:
+        return "Excellent"
+    if score >= 70:
+        return "Very good"
+    if score >= 55:
+        return "Usable"
+    if score >= 35:
+        return "Challenging"
+    return "Poor"
+
+
+def explain_opportunity_for_decision(score: Dict, decision: str) -> Dict:
+    adjusted = dict(score)
+    if decision == "Do Not Image":
+        adjusted["label"] = "No imaging window"
+        adjusted["guidance"] = (
+            "The score still shows which ingredients are present, but the "
+            "nightly recommendation is a hard stop because a critical safety "
+            "or weather input failed."
+        )
+    elif decision == "Use Caution":
+        adjusted["label"] = "Caution only"
+        adjusted["guidance"] = (
+            "Some ingredients are usable, but Polaris recommends a live "
+            "conditions check before opening equipment."
+        )
+    else:
+        adjusted["label"] = opportunity_score_label(adjusted["total"])
+        adjusted["guidance"] = (
+            "Conditions support imaging; use the component drivers to choose "
+            "how ambitious tonight's plan should be."
+        )
+    return adjusted

@@ -323,6 +323,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderOpportunityScore" in script
     assert "hosted-opportunity-total-bar" in script
     assert "Number(opportunityScore).toFixed(1)" in script
+    assert "scoreBreakdown.label || opportunityScoreLabel(opportunityScore)" in script
+    assert "scoreBreakdown.guidance" in script
     assert "data.opportunity_score" in script
     assert "`Weather pulled ${displayDateTime(weather.fetched_at)}`" in script
     assert "Weather pull time unavailable" in script

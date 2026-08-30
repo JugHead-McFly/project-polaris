@@ -213,6 +213,8 @@ def test_tonight_preserves_legacy_fields_and_adds_v3_schedule():
     assert payload["night_plan"]["target_sequence"][0]["object"] == "M57"
     assert payload["schedule"]["blocks"][0]["planned_subframes"] == 497
     assert payload["opportunity_score"]["total"] == 85.7
+    assert payload["opportunity_score"]["label"] == "Excellent"
+    assert "Conditions support imaging" in payload["opportunity_score"]["guidance"]
     assert payload["dew_risk"]["level"] == "low"
     assert payload["dew_risk"]["spread_f"] == 8.0
     assert payload["dew_risk"]["action"].startswith("No special dew action")

@@ -31,6 +31,9 @@ def test_named_nightly_scenarios_cover_single_user_decisions():
     assert scenarios["weather_unavailable_fail_safe"]["actual"][
         "block_count"
     ] == 0
+    assert scenarios["documented_monsoon_hold"]["actual"][
+        "opportunity_label"
+    ] == "No imaging window"
 
 
 def test_local_evidence_inventory_is_read_only_and_privacy_safe(tmp_path):

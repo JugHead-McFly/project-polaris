@@ -42,6 +42,8 @@ class OpportunityScoreComponent(BaseModel):
 
 class OpportunityScore(BaseModel):
     total: float
+    label: str
+    guidance: str
     components: List[OpportunityScoreComponent]
 
 
