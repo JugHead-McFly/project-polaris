@@ -75,6 +75,20 @@ def _weather_component(weather: Dict) -> Dict:
     cloud = _clamp(float(cloud), 0, 100)
     humidity = _clamp(float(humidity), 0, 100)
     wind = max(0, float(wind))
+    if cloud >= 100:
+        return {
+            "key": "cloud",
+            "label": "Cloud + stability",
+            "description": (
+                f"{_display_number(cloud)}% cloud · "
+                f"{_display_number(humidity)}% humidity · "
+                f"{_display_number(wind)} mph wind"
+            ),
+            "points": 0,
+            "max": 45,
+            "source": "Hard stop",
+        }
+
     cloud_points = 30 * (1 - cloud / 100)
     humidity_points = 8 * (1 - _clamp((humidity - 50) / 50, 0, 1))
     wind_points = 7 * (1 - _clamp((wind - 5) / 15, 0, 1))

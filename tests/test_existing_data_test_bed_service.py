@@ -17,7 +17,7 @@ def test_named_nightly_scenarios_cover_single_user_decisions():
     scenarios = {scenario["key"]: scenario for scenario in report["scenarios"]}
     assert scenarios["documented_monsoon_hold"]["actual"][
         "opportunity_score"
-    ] == 50.2
+    ] == 38.2
     assert scenarios["clear_eq_nebula"]["actual"][
         "recommended_exposure_seconds"
     ] == 30

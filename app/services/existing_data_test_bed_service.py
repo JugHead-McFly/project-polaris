@@ -148,7 +148,7 @@ def _scenarios() -> List[Dict]:
                 "decision": "Do Not Image",
                 "block_count": 0,
                 "night_quality": "Very Poor",
-                "opportunity_score": 50.2,
+                "opportunity_score": 38.2,
                 "recommended_exposure_seconds": 15,
                 "recommended_filter": "Duo-Band",
             },

@@ -37,6 +37,18 @@ def test_cloud_and_stability_uses_continuous_subweights():
     assert component(worst, "cloud")["points"] == 0
 
 
+def test_full_cloud_cover_zeros_cloud_and_stability_even_when_wind_is_usable():
+    payload = score(weather={
+        "cloud_cover_percent": 100,
+        "humidity_percent": 36,
+        "wind_speed_mph": 11.7,
+    })
+
+    cloud = component(payload, "cloud")
+    assert cloud["points"] == 0
+    assert cloud["source"] == "Hard stop"
+
+
 def test_darkness_scales_to_full_credit_at_eight_hours():
     four_hours = score(darkness={
         "astronomical_darkness_start": "2026-07-17 10:00 PM",
@@ -182,7 +194,7 @@ def test_do_not_image_score_label_explains_hard_stop_without_hiding_components()
 
     explained = explain_opportunity_for_decision(payload, "Do Not Image")
 
-    assert explained["total"] == 50.2
+    assert explained["total"] == 38.2
     assert explained["label"] == "No imaging window"
     assert "hard stop" in explained["guidance"]
-    assert component(explained, "cloud")["points"] == 12.0
+    assert component(explained, "cloud")["points"] == 0

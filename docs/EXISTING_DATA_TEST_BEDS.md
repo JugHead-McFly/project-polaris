@@ -60,7 +60,7 @@ The first V1.11 slice is available as:
 It runs five named scenarios through the real imaging-settings, night-decision,
 schedule, night-rating, Opportunity Score, and operator-message logic:
 
-1. the sanitized documented 50.2 monsoon hold;
+1. the sanitized documented 38.2 monsoon hold;
 2. a clear EQ nebula night using existing M57 history;
 3. a long C20 session split at the DWARF 3 recorded 999-frame limit;
 4. a bright-Moon broadband caution case; and
