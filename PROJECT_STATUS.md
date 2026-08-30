@@ -124,7 +124,7 @@ matrix are recorded in
 
 The first V1.11 existing-data harness is now implemented. It runs five named
 whole-night scenarios through the real settings, decision, schedule, night
-rating, Opportunity Score, and operator-message logic: the documented 50.2
+rating, Opportunity Score, and operator-message logic: the documented 38.2
 monsoon hold, a clear EQ nebula night, a DWARF 3 long session split at the
 recorded 999-frame limit, a bright-Moon broadband caution case, and a
 missing-weather fail-safe. All five pass. Its read-only local inventory also
@@ -133,7 +133,9 @@ verified SQLite integrity and counted 24 captures, 18 targets, 26 sessions,
 filenames, paths, coordinates, or account details. It found one old,
 capture-free session with an invalid placeholder date; the dashboard already
 handles it safely, and the live database was not changed. The expanded full
-suite passes all 326 tests.
+suite passes all 328 tests. The full-cloud scoring correction is deployed on
+Render: 100% cloud cover now gives the whole Cloud + stability component 0
+points instead of preserving humidity or wind credit.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
