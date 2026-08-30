@@ -528,6 +528,66 @@ def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
     assert ".conditions-trend.trend-worsening" in css
 
 
+def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    heading = html.index('class="hosted-tonight-heading"')
+    alerts = html.index('id="hosted-condition-alerts"')
+    recommendation = html.index('id="hosted-recommendation"')
+    assert heading < alerts < recommendation
+    assert 'id="hosted-condition-alerts-button"' in html
+    assert 'id="hosted-condition-alerts-status" role="status" aria-live="polite"' in html
+    assert "Notify me if tonight improves" in html
+    assert "Alerts work only while this page remains open." in html
+
+    assert 'const CONDITION_ALERT_PREFERENCE_KEY = "polaris.conditionAlertsEnabled";' in script
+    assert 'const CONDITION_ALERT_HISTORY_KEY = "polaris.conditionAlertHistory";' in script
+    assert "const CONDITION_ALERT_POLL_INTERVAL_MS = 15 * 60 * 1000" in script
+    assert "const CONDITION_ALERT_COOLDOWN_MS = 2 * 60 * 60 * 1000" in script
+    assert "window.Notification.requestPermission()" in script
+    assert 'byId("hosted-condition-alerts-button").addEventListener("click", toggleConditionAlerts)' in script
+    assert 'window.localStorage.setItem(CONDITION_ALERT_PREFERENCE_KEY, String(enabled))' in script
+    assert 'window.localStorage.setItem(CONDITION_ALERT_HISTORY_KEY, JSON.stringify(history))' in script
+    assert 'button.textContent = hostedConditionAlertsEnabled\n    ? "Turn off alerts"' in script
+    assert 'permission === "denied"' in script
+    assert "Browser alerts are not supported here." in script
+    assert "Alerts are blocked in this browser's site settings." in script
+
+    # Monitoring reads a fresh plan without POSTing a recommendation run.
+    check_start = script.index("const checkConditionAlerts = async () =>")
+    check_end = script.index("const startConditionAlertMonitoring", check_start)
+    check_source = script[check_start:check_end]
+    assert '`/tonight?equatorial_mode_enabled=${eqEnabled}`' in check_source
+    assert '{ cache: "no-store" }' in check_source
+    assert 'method: "POST"' not in check_source
+    assert "if (!hostedConditionAlertsEnabled || !hostedSession || !hostedObservatory) return" in check_source
+
+    # Trigger boundaries require a real target/window and a meaningful change.
+    trigger_start = script.index("const conditionAlertTrigger = (previous, current) =>")
+    trigger_end = script.index("const conditionAlertSignature", trigger_start)
+    trigger_source = script[trigger_start:trigger_end]
+    assert "!current.hasUsablePlan" in trigger_source
+    assert 'previous.decision === "Do Not Image"' in trigger_source
+    assert '["Use Caution", "Proceed"].includes(current.decision)' in trigger_source
+    assert "current.score >= 55" in trigger_source
+    assert 'previous.decision === "Use Caution"' in trigger_source
+    assert 'current.decision === "Proceed"' in trigger_source
+    assert "current.score >= 65" in trigger_source
+    assert "current.score - previous.score >= 15" in trigger_source
+
+    assert "conditionAlertWasRecentlySent(current)" in script
+    assert "sameSignature || withinCooldown" in script
+    assert 'new window.Notification("Polaris: tonight improved"' in script
+    assert 'tag: `polaris-conditions-${state.date}`' in script
+    assert "stopConditionAlertMonitoring()" in script
+    assert ".hosted-condition-alerts" in css
+    assert ".hosted-condition-alerts.has-alert" in css
+    assert ".hosted-condition-alerts.is-blocked" in css
+    assert ".hosted-condition-alerts .account-button" in css
+
+
 def test_session_checklist_stays_inside_the_existing_command_card():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()

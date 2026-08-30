@@ -766,6 +766,49 @@ footer {
   color: var(--muted);
 }
 
+.hosted-condition-alerts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(91, 221, 205, 0.2);
+  border-radius: 7px;
+  background: rgba(8, 32, 40, 0.58);
+}
+
+.hosted-condition-alerts > div {
+  min-width: 0;
+}
+
+.hosted-condition-alerts strong {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.hosted-condition-alerts p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.hosted-condition-alerts.has-alert {
+  border-color: rgba(91, 221, 205, 0.52);
+  background: rgba(24, 78, 78, 0.42);
+}
+
+.hosted-condition-alerts.is-blocked {
+  border-color: rgba(255, 184, 94, 0.34);
+}
+
+.hosted-condition-alerts .account-button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  white-space: nowrap;
+}
+
 .hosted-recommendation {
   position: relative;
   isolation: isolate;
@@ -4480,6 +4523,17 @@ footer {
   .hosted-tonight-heading {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .hosted-condition-alerts {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hosted-condition-alerts .account-button {
+    width: 100%;
+    white-space: normal;
   }
 
   .hosted-recommendation,

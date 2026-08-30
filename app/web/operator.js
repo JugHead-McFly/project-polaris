@@ -5,11 +5,19 @@ const byId = (id) => document.getElementById(id);
 const authConfig = window.POLARIS_AUTH_CONFIG || { mode: "local" };
 const usesHostedAuth = authConfig.mode === "supabase";
 const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";
+const CONDITION_ALERT_PREFERENCE_KEY = "polaris.conditionAlertsEnabled";
+const CONDITION_ALERT_HISTORY_KEY = "polaris.conditionAlertHistory";
+const CONDITION_ALERT_POLL_INTERVAL_MS = 15 * 60 * 1000;
+const CONDITION_ALERT_COOLDOWN_MS = 2 * 60 * 60 * 1000;
 let supabaseClient = null;
 let hostedSession = null;
 let hostedObservatory = null;
 let hostedProfile = null;
 let hostedRecommendationRunId = null;
+let hostedConditionAlertsEnabled = false;
+let hostedConditionAlertBaseline = null;
+let hostedConditionAlertTimer = null;
+let latestHostedTonightData = null;
 let rigProfiles = [];
 const invitationHash = new URLSearchParams(window.location.hash.slice(1));
 const invitationQuery = new URLSearchParams(window.location.search);
@@ -35,6 +43,252 @@ const saveEqModePreference = (enabled) => {
   } catch {
     // The dashboard still works when browser storage is unavailable.
   }
+};
+
+const readConditionAlertPreference = () => {
+  try {
+    return window.localStorage.getItem(CONDITION_ALERT_PREFERENCE_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+
+const saveConditionAlertPreference = (enabled) => {
+  try {
+    window.localStorage.setItem(CONDITION_ALERT_PREFERENCE_KEY, String(enabled));
+  } catch {
+    // Alerts still work for this page session when browser storage is unavailable.
+  }
+};
+
+const readConditionAlertHistory = () => {
+  try {
+    return JSON.parse(window.localStorage.getItem(CONDITION_ALERT_HISTORY_KEY) || "null");
+  } catch {
+    return null;
+  }
+};
+
+const saveConditionAlertHistory = (history) => {
+  try {
+    window.localStorage.setItem(CONDITION_ALERT_HISTORY_KEY, JSON.stringify(history));
+  } catch {
+    // A page-session cooldown still applies through the current baseline.
+  }
+};
+
+const conditionAlertState = (data) => {
+  const decision = data?.schedule?.decision || "Conditions Unknown";
+  const rawScore = data?.opportunity_score?.score;
+  const score = rawScore === null || rawScore === undefined
+    ? null
+    : Number(rawScore);
+  const target = data?.recommended_target || null;
+  const start = target?.recommended_start || null;
+  const end = target?.recommended_end || null;
+  return {
+    date: data?.date || null,
+    decision,
+    score: score !== null && Number.isFinite(score) ? score : null,
+    target: target?.object || null,
+    targetName: target?.common_name || null,
+    start,
+    end,
+    hasUsablePlan: Boolean(target?.object && start && end && decision !== "Do Not Image"),
+  };
+};
+
+const conditionAlertTrigger = (previous, current) => {
+  if (!previous || !current || previous.date !== current.date || !current.hasUsablePlan) {
+    return null;
+  }
+  if (current.score === null) return null;
+
+  if (
+    previous.decision === "Do Not Image"
+    && ["Use Caution", "Proceed"].includes(current.decision)
+    && current.score >= 55
+  ) {
+    return "Tonight now has a usable target and imaging window.";
+  }
+  if (
+    previous.decision === "Use Caution"
+    && current.decision === "Proceed"
+    && current.score >= 65
+  ) {
+    return "Tonight moved from caution to proceed.";
+  }
+  if (
+    previous.score !== null
+    && previous.score < 65
+    && current.score >= 65
+    && current.score - previous.score >= 15
+  ) {
+    return "Tonight's opportunity score improved meaningfully.";
+  }
+  return null;
+};
+
+const conditionAlertSignature = (state) => [
+  state.date,
+  state.decision,
+  state.target,
+  Math.floor((state.score || 0) / 5) * 5,
+  state.start,
+  state.end,
+].join("|");
+
+const conditionAlertWasRecentlySent = (state, now = Date.now()) => {
+  const history = readConditionAlertHistory();
+  if (!history) return false;
+  const sameSignature = history.signature === conditionAlertSignature(state);
+  const withinCooldown = Number.isFinite(Number(history.sentAt))
+    && now - Number(history.sentAt) < CONDITION_ALERT_COOLDOWN_MS;
+  return sameSignature || withinCooldown;
+};
+
+const setConditionAlertStatus = (message, state = "off") => {
+  const panel = byId("hosted-condition-alerts");
+  panel.classList.toggle("has-alert", state === "alert");
+  panel.classList.toggle("is-blocked", state === "blocked");
+  setText("hosted-condition-alerts-status", message);
+};
+
+const stopConditionAlertMonitoring = () => {
+  if (hostedConditionAlertTimer !== null) {
+    window.clearInterval(hostedConditionAlertTimer);
+    hostedConditionAlertTimer = null;
+  }
+};
+
+const conditionAlertMessage = (state) => {
+  const target = state.targetName
+    ? `${state.target} (${state.targetName})`
+    : state.target;
+  return `Conditions improved: Polaris now rates tonight as ${state.decision} with ${target}. Refresh the plan for the latest details.`;
+};
+
+const deliverConditionAlert = (state) => {
+  const message = conditionAlertMessage(state);
+  setConditionAlertStatus(message, "alert");
+  saveConditionAlertHistory({
+    signature: conditionAlertSignature(state),
+    sentAt: Date.now(),
+  });
+
+  if (window.Notification?.permission === "granted") {
+    try {
+      const notification = new window.Notification("Polaris: tonight improved", {
+        body: message,
+        tag: `polaris-conditions-${state.date}`,
+        renotify: false,
+      });
+      notification.onclick = () => {
+        window.focus();
+        byId("hosted-refresh-button").focus();
+        notification.close();
+      };
+    } catch {
+      // The in-app alert remains visible if the browser suppresses a notification.
+    }
+  }
+};
+
+const checkConditionAlerts = async () => {
+  if (!hostedConditionAlertsEnabled || !hostedSession || !hostedObservatory) return;
+  try {
+    const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
+    const response = await apiFetch(
+      `/tonight?equatorial_mode_enabled=${eqEnabled}`,
+      { cache: "no-store" },
+    );
+    if (!response.ok) return;
+    const current = conditionAlertState(await response.json());
+    const trigger = conditionAlertTrigger(hostedConditionAlertBaseline, current);
+    if (trigger && !conditionAlertWasRecentlySent(current)) {
+      deliverConditionAlert(current);
+    }
+    hostedConditionAlertBaseline = current;
+  } catch {
+    // A failed background check should not replace or disrupt the visible plan.
+  }
+};
+
+const startConditionAlertMonitoring = () => {
+  stopConditionAlertMonitoring();
+  hostedConditionAlertBaseline = latestHostedTonightData
+    ? conditionAlertState(latestHostedTonightData)
+    : null;
+  hostedConditionAlertTimer = window.setInterval(
+    checkConditionAlerts,
+    CONDITION_ALERT_POLL_INTERVAL_MS,
+  );
+};
+
+const updateConditionAlertControls = () => {
+  const button = byId("hosted-condition-alerts-button");
+  const supported = "Notification" in window;
+  const permission = supported ? window.Notification.permission : "unsupported";
+  button.disabled = !supported || permission === "denied";
+  button.textContent = hostedConditionAlertsEnabled
+    ? "Turn off alerts"
+    : "Notify me if tonight improves";
+
+  if (!supported) {
+    setConditionAlertStatus("Browser alerts are not supported here.", "blocked");
+  } else if (permission === "denied") {
+    setConditionAlertStatus("Alerts are blocked in this browser's site settings.", "blocked");
+  } else if (hostedConditionAlertsEnabled) {
+    setConditionAlertStatus(
+      "On. Polaris will check every 15 minutes while this page remains open.",
+      "on",
+    );
+  } else {
+    setConditionAlertStatus("Off. Alerts work only while this page remains open.", "off");
+  }
+};
+
+const disableConditionAlerts = () => {
+  hostedConditionAlertsEnabled = false;
+  saveConditionAlertPreference(false);
+  stopConditionAlertMonitoring();
+  updateConditionAlertControls();
+};
+
+const toggleConditionAlerts = async () => {
+  if (hostedConditionAlertsEnabled) {
+    disableConditionAlerts();
+    return;
+  }
+  if (!("Notification" in window) || window.Notification.permission === "denied") {
+    updateConditionAlertControls();
+    return;
+  }
+
+  setConditionAlertStatus("Waiting for browser permission…", "off");
+  const permission = window.Notification.permission === "granted"
+    ? "granted"
+    : await window.Notification.requestPermission();
+  if (permission !== "granted") {
+    disableConditionAlerts();
+    return;
+  }
+
+  hostedConditionAlertsEnabled = true;
+  saveConditionAlertPreference(true);
+  startConditionAlertMonitoring();
+  updateConditionAlertControls();
+};
+
+const initializeConditionAlerts = () => {
+  const supported = "Notification" in window;
+  hostedConditionAlertsEnabled = Boolean(
+    supported
+    && window.Notification.permission === "granted"
+    && readConditionAlertPreference()
+  );
+  if (hostedConditionAlertsEnabled) startConditionAlertMonitoring();
+  updateConditionAlertControls();
 };
 
 const applyEqModePreference = (enabled) => {
@@ -992,6 +1246,10 @@ const renderTargetGeometry = (target) => {
 };
 
 const renderHostedTonight = (data) => {
+  latestHostedTonightData = data;
+  if (hostedConditionAlertsEnabled) {
+    hostedConditionAlertBaseline = conditionAlertState(data);
+  }
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
   const statusClass = `status-${decision.toLowerCase().replaceAll(" ", "-")}`;
@@ -1322,6 +1580,9 @@ const saveHostedAccount = async (event) => {
 const handleHostedSession = async (session) => {
   hostedSession = session;
   if (!session) {
+    stopConditionAlertMonitoring();
+    hostedConditionAlertBaseline = null;
+    latestHostedTonightData = null;
     setHostedShell(false);
     showSignIn();
     setAuthMessage("");
@@ -1332,6 +1593,7 @@ const handleHostedSession = async (session) => {
     return;
   }
   setHostedShell(true);
+  initializeConditionAlerts();
   setText("account-email", session.user?.email || "Signed in");
   showHostedAccountLoading();
   try {
@@ -4178,6 +4440,7 @@ byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-use-device-location").addEventListener("click", useDeviceLocation);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
 byId("mobile-refresh-button").addEventListener("click", loadHostedTonight);
+byId("hosted-condition-alerts-button").addEventListener("click", toggleConditionAlerts);
 byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule);
 byId("mobile-account-menu-button").addEventListener("click", () => {
   setMobileHeaderMenu(
