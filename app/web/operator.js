@@ -608,6 +608,10 @@ const resetHostedPlanDetails = () => {
   renderSkyQuality(null);
   renderSessionChecklist(null);
   setText("hosted-weather-updated", "Weather time unavailable");
+  setText(
+    "hosted-forecast-confidence",
+    "Forecast confidence is still building.",
+  );
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
   weatherDiagnostic.hidden = true;
   weatherDiagnostic.textContent = "";
@@ -1351,6 +1355,13 @@ const renderHostedTonight = (data) => {
       : weather.observed_at
       ? `Observed ${displayDateTime(weather.observed_at)}`
       : "Weather time unavailable",
+  );
+  const forecastAccuracy = data.forecast_accuracy || {};
+  setText(
+    "hosted-forecast-confidence",
+    forecastAccuracy.state === "building"
+      ? `${forecastAccuracy.label}: ${forecastAccuracy.matched_samples} of ${forecastAccuracy.minimum_samples} verified checks.`
+      : forecastAccuracy.message || "Forecast confidence is not available yet.",
   );
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
   const weatherUnavailable =

@@ -80,6 +80,15 @@ class SessionChecklist(BaseModel):
     actions: List[str]
 
 
+class ForecastAccuracySummary(BaseModel):
+    state: str
+    label: str
+    message: str
+    matched_samples: int
+    minimum_samples: int
+    confidence: Optional[str] = None
+
+
 class TonightResponse(BaseModel):
     recommendation_run_id: Optional[UUID] = None
     date: str
@@ -92,6 +101,7 @@ class TonightResponse(BaseModel):
     opportunity_score: OpportunityScore
     dew_risk: DewRiskGuidance
     conditions_trend: ConditionsTrend
+    forecast_accuracy: ForecastAccuracySummary
     session_checklist: SessionChecklist
     message: str
     night_plan: NightPlan

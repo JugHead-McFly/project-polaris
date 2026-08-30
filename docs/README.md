@@ -39,6 +39,8 @@ project-manager notes, not public user documentation.
   and review command.
 - [`ALPHA_PERFORMANCE_BASELINE.md`](ALPHA_PERFORMANCE_BASELINE.md) — internal
   public-endpoint timing baseline; not tester homework.
+- [`FORECAST_ACCURACY_TRACKING.md`](FORECAST_ACCURACY_TRACKING.md) — privacy,
+  retention, matching, and calibration boundaries for forecast history.
 - [`HOSTED_ACCOUNT_REMOVAL.md`](HOSTED_ACCOUNT_REMOVAL.md) — manual hosted
   account/data cleanup runbook.
 

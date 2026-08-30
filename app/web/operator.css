@@ -1236,6 +1236,10 @@ footer {
   font-size: 10px;
 }
 
+.hosted-forecast-confidence {
+  color: #75ddc4;
+}
+
 .hosted-command-weather .sky-quality-stars {
   font-size: 13px;
 }

@@ -152,6 +152,62 @@ class RecommendationRun(Base):
     )
 
 
+class ForecastAccuracySnapshot(Base):
+    __tablename__ = "forecast_accuracy_snapshots"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["observatory_id", "user_id"],
+            ["observatories.id", "observatories.user_id"],
+            name="fk_forecast_accuracy_observatory_owner",
+            ondelete="CASCADE",
+        ),
+        UniqueConstraint(
+            "observatory_id",
+            "user_id",
+            "forecast_for",
+            name="uq_forecast_accuracy_observatory_hour",
+        ),
+        CheckConstraint(
+            "status IN ('pending', 'matched', 'expired')",
+            name="ck_forecast_accuracy_status",
+        ),
+    )
+
+    id = Column(Uuid, primary_key=True, default=uuid4)
+    user_id = Column(
+        Uuid,
+        ForeignKey("profiles.user_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    observatory_id = Column(Uuid, nullable=False, index=True)
+    forecast_for = Column(DateTime(timezone=True), nullable=False, index=True)
+    forecast_created_at = Column(DateTime(timezone=True), nullable=False)
+    forecast_provider = Column(String(40), nullable=True)
+    forecast_temperature_f = Column(Float, nullable=True)
+    forecast_cloud_cover_percent = Column(Float, nullable=True)
+    forecast_humidity_percent = Column(Float, nullable=True)
+    forecast_dew_point_f = Column(Float, nullable=True)
+    forecast_wind_speed_mph = Column(Float, nullable=True)
+    observed_at = Column(DateTime(timezone=True), nullable=True)
+    observed_provider = Column(String(40), nullable=True)
+    observed_temperature_f = Column(Float, nullable=True)
+    observed_cloud_cover_percent = Column(Float, nullable=True)
+    observed_humidity_percent = Column(Float, nullable=True)
+    observed_dew_point_f = Column(Float, nullable=True)
+    observed_wind_speed_mph = Column(Float, nullable=True)
+    status = Column(String(20), nullable=False, default="pending")
+    matched_at = Column(DateTime(timezone=True), nullable=True)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=utc_now)
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        onupdate=utc_now,
+    )
+
+
 class RecommendationFeedback(Base):
     __tablename__ = "recommendation_feedback"
     __table_args__ = (

@@ -1,4 +1,6 @@
 from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from unittest.mock import patch
 from uuid import UUID
 from zoneinfo import ZoneInfo
@@ -15,6 +17,7 @@ from app.core.auth import CurrentUser
 from app.data.targets import TARGETS
 from app.database.database import Base
 from app.models import HostedObservatory
+from app.models import ForecastAccuracySnapshot
 from app.models import Profile
 from app.models import RecommendationFeedback
 from app.models import RecommendationRun
@@ -170,6 +173,56 @@ def test_hosted_plan_requires_an_observing_home():
         engine.dispose()
 
     assert raised.value.status_code == 409
+
+
+def test_hosted_read_only_plan_reports_saved_forecast_history():
+    engine, db = _database()
+    try:
+        profile = Profile(user_id=ALICE_ID)
+        observatory = HostedObservatory(
+            user_id=ALICE_ID,
+            name="Alice Arizona",
+            latitude=33.45,
+            longitude=-112.07,
+            timezone_name="America/Phoenix",
+        )
+        db.add_all([profile, observatory])
+        db.commit()
+        db.refresh(observatory)
+        checked_at = datetime(2026, 7, 26, 18, tzinfo=timezone.utc)
+        db.add(
+            ForecastAccuracySnapshot(
+                user_id=ALICE_ID,
+                observatory_id=observatory.id,
+                forecast_for=checked_at,
+                forecast_created_at=checked_at - timedelta(hours=12),
+                expires_at=checked_at + timedelta(hours=2),
+                observed_at=checked_at,
+                status="matched",
+            )
+        )
+        db.commit()
+
+        with (
+            patch(
+                "app.api.tonight.get_tonight_plan",
+                return_value=_planner_response(),
+            ),
+            patch(
+                "app.api.tonight.build_tonight_schedule",
+                side_effect=lambda plan, timezone_name, **kwargs: _schedule_response(
+                    plan,
+                    "2026-07-26",
+                ),
+            ),
+        ):
+            payload = tonight(current_user=_user(ALICE_ID), db=db)
+    finally:
+        db.close()
+        engine.dispose()
+
+    assert payload["forecast_accuracy"]["matched_samples"] == 1
+    assert payload["forecast_accuracy"]["confidence"] is None
 
 
 def test_hosted_recommendation_is_saved_for_its_owner():

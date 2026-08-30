@@ -1,6 +1,6 @@
 # Polaris Roadmap to Private Alpha and Beta
 
-Last updated: 2026-08-22
+Last updated: 2026-08-30
 
 ## How to read this plan
 
@@ -120,6 +120,10 @@ The hosted alpha must do only a few things well:
    bottom-line "what to do" recommendation. Use current data first; do not
    present new scoring math as calibrated until it has been compared against
    real nights and alpha feedback.
+9. Build forecast trust from evidence rather than claims. Save one minimal,
+   tenant-isolated forecast check per observing home and forecast hour, match
+   only later provider readings near that hour, expire missed checks, retain 90
+   days, and show only a building-history state until calibration is justified.
 
 The v1.7 foundation is complete: two real accounts were isolated successfully,
 the hosted application was deployed, Sentry monitoring and privacy scrubbing

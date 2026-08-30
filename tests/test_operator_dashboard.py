@@ -723,6 +723,20 @@ def test_operator_dashboard_sets_restrictive_content_policy():
     assert f"'nonce-{nonce}'" in policy
 
 
+def test_hosted_weather_summary_shows_honest_forecast_history_state():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    assert 'id="hosted-forecast-confidence"' in html
+    assert 'role="status"' in html
+    assert "Forecast confidence is still building." in html
+    assert "data.forecast_accuracy || {}" in script
+    assert "matched_samples" in script
+    assert "minimum_samples" in script
+    assert ".hosted-forecast-confidence" in css
+
+
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):
     preview = tmp_path / "M57" / "jpg" / "POL-TEST.jpg"
     preview.parent.mkdir(parents=True)

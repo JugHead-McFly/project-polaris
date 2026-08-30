@@ -69,10 +69,11 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "profiles",
         "recommendation_feedback",
         "recommendation_runs",
+        "forecast_accuracy_snapshots",
         "sessions",
     }
     assert "rig_profile_key" in observatory_columns
-    assert revision == "20260819_0006"
+    assert revision == "20260830_0007"
 
 
 def test_postgresql_migration_enables_forced_tenant_rls():
@@ -117,6 +118,7 @@ def test_postgresql_migration_enables_forced_tenant_rls():
         "observatories",
         "recommendation_runs",
         "recommendation_feedback",
+        "forecast_accuracy_snapshots",
     ):
         assert (
             f"alter table {table_name} enable row level security"
@@ -131,12 +133,14 @@ def test_postgresql_migration_enables_forced_tenant_rls():
         "observatories",
         "recommendation_runs",
         "recommendation_feedback",
+        "forecast_accuracy_snapshots",
     ):
         assert (
             f"create policy {table_name}_owner_isolation"
             in generated_sql
         )
     assert "current_setting('app.current_user_id', true)" in generated_sql
+    assert "forecast_accuracy_snapshots_owner_isolation" in generated_sql
     assert "create role polaris_app" in generated_sql
     assert "nobypassrls" in generated_sql
     assert (
@@ -147,3 +151,17 @@ def test_postgresql_migration_enables_forced_tenant_rls():
     )
     assert "from authenticated" in generated_sql
     assert "'grant polaris_app to %i'" in generated_sql
+
+
+def test_tenant_rehearsal_checks_forecast_history_isolation():
+    rehearsal = (
+        Path(__file__).resolve().parents[1]
+        / "scripts"
+        / "verify_postgresql_tenant_isolation.sql"
+    ).read_text(encoding="utf-8").lower()
+
+    assert "insert into forecast_accuracy_snapshots" in rehearsal
+    assert "bob directly read alice forecast history" in rehearsal
+    assert "bob updated alice forecast history" in rehearsal
+    assert "bob deleted alice forecast history" in rehearsal
+    assert "missing identity exposed % forecast history rows" in rehearsal

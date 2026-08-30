@@ -303,6 +303,7 @@ def get_weather_summary(
         )
 
         weather = {
+            "provider": "open-meteo",
             "postal_code": postal_code,
             "temperature_f": temperature_f,
             "cloud_cover_percent": current.get("cloud_cover"),
@@ -363,6 +364,7 @@ def get_weather_summary(
             checked_at=checked_at,
         )
         return {
+            "provider": None,
             "postal_code": postal_code,
             "temperature_f": None,
             "cloud_cover_percent": None,

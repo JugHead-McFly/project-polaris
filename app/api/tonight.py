@@ -11,6 +11,13 @@ from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_angular_size
 from app.services.conditions_trend_service import assess_conditions_trend
 from app.services.dew_risk_service import assess_dew_risk
+from app.services.forecast_accuracy_service import track_forecast_accuracy
+from app.services.forecast_accuracy_service import (
+    forecast_accuracy_summary,
+)
+from app.services.forecast_accuracy_service import (
+    unavailable_forecast_accuracy_summary,
+)
 from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
 from app.services.planner_service import get_tonight_plan
@@ -375,6 +382,18 @@ def _build_tonight_payload(
             else None
         ),
     )
+    forecast_accuracy = unavailable_forecast_accuracy_summary()
+    if current_user.auth_mode != "local":
+        hosted_observatory = get_primary_observatory(
+            db,
+            user_id=current_user.user_id,
+        )
+        if hosted_observatory is not None:
+            forecast_accuracy = forecast_accuracy_summary(
+                db,
+                user_id=current_user.user_id,
+                observatory_id=hosted_observatory.id,
+            )
 
     return {
         "date": schedule["date"],
@@ -409,6 +428,7 @@ def _build_tonight_payload(
         ),
         "dew_risk": dew_risk,
         "conditions_trend": conditions_trend,
+        "forecast_accuracy": forecast_accuracy,
         "session_checklist": build_session_checklist(
             schedule=schedule,
             recommended_target=recommended_target,
@@ -469,6 +489,12 @@ def create_tonight_recommendation(
         user_id=current_user.user_id,
         observatory=observatory,
         payload=payload,
+    )
+    payload["forecast_accuracy"] = track_forecast_accuracy(
+        db,
+        user_id=current_user.user_id,
+        observatory=observatory,
+        weather=payload["weather"],
     )
     payload["recommendation_run_id"] = run.id
     return payload
