@@ -1,6 +1,6 @@
 # Polaris Commercialization and Private-Alpha Plan
 
-Last reviewed: 2026-07-24
+Last reviewed: 2026-08-30
 
 ## Honest assessment
 
@@ -24,6 +24,8 @@ The answer is unknown. It should be tested through behavior, not compliments.
 ## Evidence gates before financial dependence
 
 Do not make career or large-spending decisions based on early interest alone.
+These are future business-expansion gates, not V1.11 or V1.12 development
+gates. They become active only if Doug later resumes external validation.
 Use these gates in sequence:
 
 1. 10–20 active private-alpha users.
@@ -36,20 +38,27 @@ Stronger evidence includes users returning every clear night, reducing the
 number of other tools they check, volunteering for beta, and being disappointed
 when Polaris is unavailable. “Cool idea” is not validation.
 
-## Calendar correction
+## Current scheduling decision
 
-The working private-alpha target is October 1, 2026. From July 23, that is
-about ten weeks—not 30 days. Treat the next 30 days as a discovery and
-productization-design window, then use the remaining time for a deliberately
-small alpha.
+The former October 1, 2026 private-alpha target is retired. Polaris is currently
+a Doug-first single-user product. Development continues without waiting for
+tester replies, cohort behavior, clear weather, new imaging, or a minimum number
+of matched forecast checks.
 
-October 1 is a forcing function, not a public promise. If reliability,
-privacy, or a core workflow is not ready, reduce alpha scope rather than
-shipping an untrustworthy recommendation.
+Existing captures, saved plans, hosted history, known outcomes, and
+privacy-safe deterministic fixtures are the active test beds. External alpha
+returns to the schedule only after Doug explicitly decides it would answer a
+question that the single-user phase cannot answer.
 
 ## Launch order
 
-### 1. Public landing page
+### 1. Single-user web product — current
+
+Improve Doug's nightly decision workflow and verify it against existing data.
+Keep the secure hosted deployment and tenant boundaries healthy, but do not
+make tester operations or public-facing materials current development gates.
+
+### 2. Public landing page — later
 
 Create a simple website before app-store distribution. It should explain the
 problem Polaris solves, show a credible example recommendation, offer a beta
@@ -57,7 +66,7 @@ interest form when demand justifies it, and provide contact/support information.
 Privacy and terms need professional review before handling meaningful user data
 or payments.
 
-### 2. Responsive web alpha
+### 3. Responsive web alpha — deferred
 
 The first user-facing product should run well in a phone, tablet, or desktop
 browser. This allows immediate fixes and avoids App Store review cycles while
@@ -71,7 +80,7 @@ The alpha workflow should be limited to:
 - See a usable imaging window and plain-language rationale.
 - Record whether the recommendation was useful.
 
-### 3. Native mobile apps after workflow validation
+### 4. Native mobile apps after workflow validation
 
 Build or package native iOS and Android experiences only after the responsive
 web flow proves repeat use. Native priorities later include notifications,
@@ -80,11 +89,13 @@ store discovery.
 
 ## Current productization reality
 
-The existing Polaris application is a local FastAPI application with a
-file-backed SQLite database and a single-observatory dashboard. It is a strong
-recommendation-engine foundation, but it is not yet a multi-user hosted product.
+Polaris now has both a local FastAPI/SQLite product and a secure hosted
+FastAPI/PostgreSQL path with Supabase authentication. The hosted foundation has
+passed tenant-isolation, deployment, monitoring, backup, restore, and recovery
+checks. It is retained for Doug's use and for a possible later alpha, but that
+later alpha is not active.
 
-Private alpha requires explicit work for:
+The following alpha foundations already exist and must remain healthy:
 
 - Accounts and authentication.
 - User/observatory tenancy and data isolation.
@@ -95,9 +106,9 @@ Private alpha requires explicit work for:
 - Privacy, data retention, and account-deletion policy.
 - Responsive onboarding and production deployment.
 
-This means “move Polaris online” is not a one-click hosting task. It is a
-separate productization milestone. Its architecture was selected only after an
-audit of what can be safely reused from the current FastAPI planner.
+This means the difficult online foundation is preserved rather than rebuilt.
+Current work should improve the personal product and its test beds instead of
+reopening cohort operations.
 
 ## Architecture direction — accepted for v1.7
 
@@ -111,14 +122,30 @@ The complete decision, security boundary, cost guardrail, alternatives, and
 implementation slices are in
 [`ALPHA_ARCHITECTURE_DECISION.md`](ALPHA_ARCHITECTURE_DECISION.md).
 
-This is an implementation direction, not permission to purchase services or a
-claim that its assumptions have been proven. v1.7 must still exercise
-PostgreSQL tenant isolation, pooled-connection behavior, backup restoration,
-monitoring, and actual operating cost before any external user is invited.
+This direction is not permission to purchase services. The v1.7 foundation has
+now exercised PostgreSQL tenant isolation, restricted runtime access, backup
+restoration, monitoring, and hosted readiness. Preserve those checks during
+single-user development; re-review cost and external-user assumptions before a
+future alpha is resumed.
 
-## 10-week alpha work plan
+## Current single-user work plan
 
-### Weeks 1–2: evidence and architecture
+- Build repeatable regression scenarios from existing captures, saved plans,
+  hosted history, and deterministic fixtures.
+- Improve Tonight, Goals, Portfolio, Quality, and Locations when a change makes
+  Doug's workflow more useful or trustworthy.
+- Let forecast history and any new captures accumulate opportunistically.
+- Keep full automated tests, desktop/mobile visual checks, hosted readiness,
+  backup, and tenant isolation as release gates.
+- Do not require a tester response or a new imaging session to exit V1.11 or
+  V1.12.
+
+## Deferred alpha preparation plan
+
+The original ten-week outline is retained as a future checklist, not an active
+calendar. Its weeks begin only after Doug explicitly resumes external alpha.
+
+### Future weeks 1–2: evidence and architecture review
 
 - Run the customer-discovery sprint.
 - Audit current data ownership, configuration, capture ingestion, and API
@@ -128,7 +155,7 @@ monitoring, and actual operating cost before any external user is invited.
   cost.
 - Reserve a domain only after a provisional name and availability check.
 
-### Weeks 3–6: smallest usable product
+### Future weeks 3–6: smallest external-test product
 
 - Add hosted deployment, authentication, and tenant isolation.
 - Build essential onboarding for location and telescope context.
@@ -136,19 +163,19 @@ monitoring, and actual operating cost before any external user is invited.
 - Add recommendation-feedback capture and operational monitoring.
 - Test with Doug's own workflow before external access.
 
-### Weeks 7–8: alpha reliability
+### Future weeks 7–8: alpha reliability
 
 - Invite 5–10 highly engaged early users.
 - Observe onboarding and recommendation comprehension.
 - Fix reliability, privacy, and confusing-flow failures.
 - Record usage and feedback in the Voice of Customer tracker.
 
-### Weeks 9–10: controlled alpha expansion
+### Future weeks 9–10: controlled alpha expansion
 
 - Expand toward 10–20 users only if early users return and the core flow is
   credible.
-- Decide whether the October 1 alpha is ready, needs a smaller scope, or needs
-  a short delay for a specific reliability concern.
+- Decide whether the optional alpha should expand, remain small, pause, or end
+  based on the exact question it was created to answer.
 
 ## Current cost guardrails
 

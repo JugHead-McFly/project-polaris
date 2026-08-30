@@ -34,7 +34,8 @@ process and creative-screening guardrails. The current family workbook is at
 `output/pdf/Polaris_Naming_Workbook_v1.pdf`.
 
 See [docs/PROJECT_ROADMAP.md](docs/PROJECT_ROADMAP.md) for the current
-high-level path from local v1.6 work through private alpha and closed beta.
+high-level path from the single-user product through optional later alpha and
+closed beta.
 The printable executive roadmap is
 `output/pdf/Project_Polaris_Executive_Roadmap_2026-08-02.pdf`.
 
@@ -114,6 +115,15 @@ Install the development dependencies once:
 Run the complete automated suite:
 
     .venv/bin/python -m pytest
+
+Run the V1.11 nightly-decision test beds and inspect the existing local
+database in read-only mode:
+
+    .venv/bin/python scripts/nightly_test_bed_report.py
+
+The report uses named privacy-safe scenarios alongside aggregate evidence from
+`polaris.db`. It does not read capture pixels or print filenames, paths,
+coordinates, or account details.
 
 ## Capture-library sync
 

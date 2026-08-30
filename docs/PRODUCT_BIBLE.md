@@ -1,6 +1,6 @@
 # Polaris Product Bible
 
-Last updated: 2026-08-02
+Last updated: 2026-08-30
 
 ## Purpose
 
@@ -99,13 +99,35 @@ whole market.
 
 ## Near-term milestone strategy
 
-### Private alpha — working target: October 1, 2026
+### V1.11-V1.12 — single-user product development
+
+Doug is the single active user for the current roadmap. Polaris should keep
+improving from the capture, planning, weather, rig, location, goal, and quality
+data it already has. External tester activity is not a development gate.
+
+Monsoon conditions are also not a gate. Existing captures, saved plans, known
+historical outcomes, and privacy-safe deterministic fixtures are the primary
+test beds. New imaging and matched forecast observations are supplementary
+evidence when they happen, not requirements for progress.
+
+Current question:
+
+> Can Polaris become a dependable personal nightly-intelligence product using
+> the evidence it already has?
+
+See [`EXISTING_DATA_TEST_BEDS.md`](EXISTING_DATA_TEST_BEDS.md) for the test-bed
+and data-handling rules.
+
+### Future private alpha — unscheduled and optional
 
 Goal: 10–20 trusted users. The primary question is:
 
 > Would these users be disappointed if Polaris disappeared?
 
 The alpha should prove the core nightly decision, not present a finished app.
+It begins only after Doug explicitly decides that an outside cohort is needed
+to answer a question the single-user phase cannot answer. The former October 1,
+2026 target is retired and must not be treated as an active deadline.
 
 Minimum experience to validate:
 
@@ -133,7 +155,7 @@ after feature count reaches an arbitrary threshold.
 | Voice of Customer | Learn user problems and language | Starting with the 14-day sprint |
 | Product Bible | Maintain product source of truth | Active |
 | Competitive intelligence | Track capabilities, reviews, pricing, and complaints | Initial review complete; recurring research pending |
-| Beta program | Recruit, support, and learn from testers | Future after discovery |
+| Beta program | Recruit, support, and learn from testers | Future after an explicit decision to resume external validation |
 | Marketing engine | Build trust and audience before launch | Future; public build journal later |
 | Metrics | Measure activation, use, retention, and trust | Define during alpha preparation |
 | Partnerships | Evaluate clubs, creators, and platform relationships | Future |
@@ -172,14 +194,14 @@ not rejections by default; they are parked until evidence changes.
 | Bucket | Meaning |
 | --- | --- |
 | Must Build | Without it, the core beta promise fails or users are predictably disappointed. |
-| Should Build | Clear value, but not essential to validate the alpha. |
+| Should Build | Clear value, but not essential to the current single-user milestone. |
 | Nice to Have | Worth revisiting after core value is proven. |
 | Don't Build | Interesting but outside the mission or harmful to focus. |
 | Parking Lot | Intentionally deferred pending evidence, timing, or capacity. |
 
 ## Current deliberate deferrals
 
-Until discovery or alpha evidence changes the decision, defer:
+Until Doug's use or existing-data test-bed evidence changes the decision, defer:
 
 - Social features and community galleries.
 - Achievement badges.
@@ -197,10 +219,11 @@ Until discovery or alpha evidence changes the decision, defer:
 - Feature requests unrelated to deciding what to image tonight.
 - Broad beginner astronomy education, including how to track stars manually.
 - A target directory/calendar for “when can I see this specific object?” until
-  alpha proves whether search supports the nightly decision rather than
-  distracting from it.
+  single-user evidence shows whether search supports the nightly decision
+  rather than distracting from it.
 - Multiple-target-per-night exploration beyond a short explainable shortlist,
-  unless alpha testers misunderstand or distrust a single best recommendation.
+  unless Doug's use or deterministic scenarios show that one recommendation is
+  confusing or insufficient.
 
 Do not promise artificial intelligence, a paid plan, an App Store date, or an
 official relationship with DwarfLab during early customer research.
@@ -226,8 +249,9 @@ Each recommended target should explain, as data becomes available:
 Use "best candidates based on current inputs" language rather than guaranteed
 success language. Advanced exposure/sub-length guidance based on Bortle, sensor
 characteristics, target, filter, Moon, FoV/focal length, or ADU/FITS analysis is
-a serious roadmap hypothesis, not a private-alpha requirement unless alpha
-evidence shows the core recommendation cannot earn trust without it.
+a serious roadmap hypothesis. Treat it as a current requirement only when
+Doug's existing data or deterministic test beds show that the core
+recommendation cannot earn trust without it.
 
 ## Decision log
 
@@ -240,6 +264,8 @@ evidence shows the core recommendation cannot earn trust without it.
 | 2026-07-23 | Pursue a web-first alpha before native mobile distribution | Validate the core decision workflow with faster iteration and less platform overhead |
 | 2026-08-02 | Position Polaris around explainable recommendation trust rather than generic target listing | Day 8 Facebook feedback named many existing tools and surfaced trust, local weather, horizon, and repeat-use risks |
 | 2026-08-02 | Treat Brynlee's novice walkthrough as reliability and comprehension evidence, not target-market demand proof | One non-astrophotographer reached a plan only after slow loading, auth confusion, temporary unavailable data, and `Plan unavailable / Load failed`; she also asked what core terms meant and requested beginner/search features |
+| 2026-08-30 | Make V1.11 and V1.12 Doug-first single-user milestones; defer external alpha to an optional V1.13 reconsideration | Unreliable tester participation should not control development, and monsoon conditions should not make new imaging a hidden prerequisite |
+| 2026-08-30 | Use existing captures, saved plans, historical outcomes, and deterministic fixtures as primary development test beds | Polaris already has useful evidence; new images and forecast matches can accumulate opportunistically without blocking progress |
 
 ## Weekly product review
 
@@ -248,7 +274,8 @@ Every week:
 1. Review new customer feedback and excitement signals.
 2. Update the Voice of Customer record.
 3. Score new problems and ideas with the Polaris Score.
-4. Re-rank roadmap items and confirm the next highest-value beta action.
+4. Re-rank roadmap items and confirm the next highest-value single-user action.
 5. Place deliberately deferred ideas in the Parking Lot.
-6. Check whether current work moves Polaris toward the private-alpha target.
+6. Check whether current work improves the V1.11 single-user exit test using
+   existing-data test beds.
 7. Record decisions and their supporting evidence here.

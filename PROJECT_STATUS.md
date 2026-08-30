@@ -1,6 +1,6 @@
 # Project Polaris Status
 
-Last updated: 2026-08-22
+Last updated: 2026-08-30
 
 ## Project locations
 
@@ -10,6 +10,16 @@ Last updated: 2026-08-22
 - Application version: `1.6.0` (local product checkpoint)
 - Current release tag: `v1.5.1`
 - Release commit: `77c0234`
+- Current product milestone: `v1.11 — Single-User Nightly Intelligence`
+
+Doug is the single active product user for the current roadmap. External alpha
+recruitment, tester follow-up, and cohort evidence are deferred until an
+explicit later decision. They are not development gates. The secure hosted
+foundation remains in place because it protects Doug's live data and keeps a
+future validation path available without controlling current priorities.
+Monsoon conditions and the availability of new images are also not development
+gates. V1.11 and V1.12 use the existing capture library, saved plans, hosted
+history, known edge cases, and privacy-safe deterministic fixtures as test beds.
 
 The image library is source data, not an application repository. Do not move,
 rename, or rewrite it as part of application changes.
@@ -46,7 +56,7 @@ deployment, Sentry error-monitoring and privacy-scrubbing checks, hosted backup,
 restore into an independent Supabase project, recreated Auth mapping, and
 post-restore tenant-isolation test have all passed.
 
-The active v1.8 slice saves each hosted nightly recommendation for its signed-in
+The completed v1.8 foundation saves each hosted nightly recommendation for its signed-in
 owner with privacy-safe planning provenance. A compact Yes/No usefulness
 response updates only that owner's recommendation. The local single-user
 dashboard remains unchanged. Automated persistence, feedback, and cross-user
@@ -55,9 +65,10 @@ its hosted browser acceptance test: Doug refreshed a hosted plan and recorded a
 saved Yes response. On August 2, 2026, v1.8 gained inline term help for novice
 comprehension, recommendation-trust feedback wording, a privacy-safe aggregate
 alpha metrics report, activation and second-night return rates, a plain-English
-review focus, and a documented weekly alpha review rhythm. The next v1.8 exit
-work is live tester evidence: whether invited users understand the plan, trust
-the reason, save feedback, and return for a second real observing decision.
+review focus, and a documented weekly alpha review rhythm. External tester
+evidence is now deferred. The same privacy-safe history can support Doug's own
+review during single-user development without making outside participation an
+exit requirement.
 
 On August 2, 2026, the first-time hosted onboarding flow was tightened and
 retested with a clean separate account. The setup screen now gives a three-step
@@ -76,20 +87,22 @@ preserves the saved-observatory reassurance, and asks for the safe request ID
 if it repeats; the sign-in screen now tells first-time invitees to use Doug's
 private invitation link and reserves password reset for accounts that already
 chose a password.
-Slow first load remains a watched risk because the private alpha is still on a
-free Render service; the current decision is to set expectations and wait for
-one more real smart-telescope tester before upgrading hosting.
+Slow first load remains a watched risk because the hosted service is still on a
+free Render tier. Monitor it during Doug's use and change hosting only when his
+actual workflow or measured reliability justifies the cost; do not wait for a
+tester to make that decision.
 Doug also caught and retested a hosted refresh privacy issue before the next
 external tester: stale Tonight details could remain visible while a newly
 signed-in account was refreshing. The hosted loading state now clears prior
 target, settings, weather, Moon, schedule, notes, image, and feedback details
 before fetching the next plan, and the fix is deployed on Render.
-The next product gate is inviting the next carefully selected alpha tester and
-using the metrics report plus flight log to decide whether to hold, fix, or
-expand.
+The current product gate is v1.11 single-user value: use existing captures,
+saved plans, forecast checks, rig context, historical outcomes, and
+deterministic scenarios to choose and verify the next concrete improvement.
+Tester recruitment, clear weather, and new imaging are not the next gates.
 
-As of August 22, 2026, V1.9 rig-aware planning is underway for Doug-first
-development while external alpha tester replies remain slow. Hosted observing
+As of August 30, 2026, V1.9 rig-aware planning and the V1.10 Opportunity
+Advisor presentation have reached their hosted checkpoints. Hosted observing
 homes can store a selected smart-telescope rig, the operator setup/edit flow
 loads the protected rig catalog, and Tonight now shows the selected rig plus a
 plain-language target-to-rig match explanation. The first visible use is target
@@ -97,13 +110,30 @@ fit and official-spec confidence, not full SNR modeling. A hosted schema
 readiness guard now checks for the current observatory rig columns so a missing
 manual Supabase migration is caught clearly during startup/readiness instead
 of appearing as a confusing operator-page failure.
-The next UI direction is now captured as V1.10 Opportunity Advisor: use the
-Beaconsfield-style nightly command-card pattern as inspiration for a
-Polaris-native Tonight layout with a large opportunity score, best window,
-recommended and fallback targets, score drivers, rig match, and bottom-line
-guidance. The apparent Beaconsfield scoring weights are recorded as research
-input only; Polaris should validate target-specific opportunity scoring before
-exposing a formula as product truth.
+The Polaris-native Tonight layout now shows a large opportunity score, best
+window, recommended and fallback targets, score drivers, rig match, and
+bottom-line guidance. Forecast-accuracy history is tenant-isolated, retained
+for 90 days, and visible only as a restrained building-history state until real
+calibration is justified. Hosted migration `20260830_0007`, tenant-isolation
+verification, 323 automated tests, desktop/mobile visual checks, Render health,
+sign-in, Tonight, and the visible forecast-confidence state all passed. V1.11
+now continues Doug-first development without waiting for forecast samples,
+outside feedback, or another imaging session. The handling rules and scenario
+matrix are recorded in
+[`EXISTING_DATA_TEST_BEDS.md`](docs/EXISTING_DATA_TEST_BEDS.md).
+
+The first V1.11 existing-data harness is now implemented. It runs five named
+whole-night scenarios through the real settings, decision, schedule, night
+rating, Opportunity Score, and operator-message logic: the documented 50.2
+monsoon hold, a clear EQ nebula night, a DWARF 3 long session split at the
+recorded 999-frame limit, a bright-Moon broadband caution case, and a
+missing-weather fail-safe. All five pass. Its read-only local inventory also
+verified SQLite integrity and counted 24 captures, 18 targets, 26 sessions,
+42.94 integration hours, and 24 version-2 quality analyses without exposing
+filenames, paths, coordinates, or account details. It found one old,
+capture-free session with an invalid placeholder date; the dashboard already
+handles it safely, and the live database was not changed. The expanded full
+suite passes all 326 tests.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
@@ -365,29 +395,22 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Invite one carefully selected smart-telescope alpha tester, using
-   [`PRIVATE_ALPHA_INVITATION.md`](docs/PRIVATE_ALPHA_INVITATION.md) for the
-   one-to-one invitation, support replies, and first-use check-in. Record only
-   alias-level evidence in
-   [`ALPHA_TESTER_FLIGHT_LOG.md`](docs/ALPHA_TESTER_FLIGHT_LOG.md).
-   If the first invite remains quiet, use the one-backup-candidate guidance in
-   [`NEXT_ALPHA_TESTER_PACKET.md`](docs/NEXT_ALPHA_TESTER_PACKET.md) and keep
-   V1.8 to one active tester at a time.
-2. Run the aggregate alpha metrics report before inviting another tester:
-
-       .venv/bin/python scripts/alpha_metrics_report.py --env-file .env.staging
-
-   Compare its Review focus with the flight log. Hold, fix, or expand based on
-   comprehension, trust, feedback saved, and second-night return behavior.
-3. If another tester hits slow first load, sign-in confusion, repeated
-   `Plan unavailable`, or unexplained core terms, pause additional invitations
-   and investigate first-run reliability before adding new product features.
-4. Complete v1.6 Locations Planning: the first foundation adds an opt-in
-   interactive world map, 25/50/100-mile straight-line rings from the selected
-   observatory, and manually saved candidate sites with notes, optional
-   Bortle/reference information, access details, and readiness checks. Sites
-   move between Candidate and Visited lists, and visited sites support personal
-   1–5-star ratings with rating-based sorting. Candidate sites now expose a
+1. Expand the first passing V1.11 nightly-decision harness only when a new
+   product rule or known historical outcome adds distinct coverage. Keep the
+   current five scenarios and read-only local evidence inventory as the baseline.
+2. Use the test beds to identify the highest-value improvement to Doug's
+   Tonight workflow. Prefer stable recommendation behavior, explainable score
+   drivers, useful rig/settings guidance, and honest handling of missing data.
+3. Let forecast history accumulate opportunistically in the background. Keep
+   the visible building-history state and do not claim calibrated confidence
+   until a separate future review defines and validates the measures.
+4. Continue Locations Planning where it improves the single-user product. The
+   first foundation adds an opt-in interactive world map, 25/50/100-mile
+   straight-line rings from the selected observatory, and manually saved
+   candidate sites with notes, optional Bortle/reference information, access
+   details, and readiness checks. Sites move between Candidate and Visited
+   lists, and visited sites support personal 1–5-star ratings with rating-based
+   sorting. Candidate sites now expose a
    readiness summary (`Needs research`, `Partly checked`, or `Ready to visit`)
    and can be sorted by most-ready first. Trusted-research links now open DarkSky
    International's certified-place directory and a light-pollution map only when
@@ -411,14 +434,22 @@ endpoint checks also passed.
    equipment profiles and a separate planetary/lunar quality model next.
    Record Sky Quality Meter (SQM) values with the observing session for
    context, rather than mixing site darkness into an individual capture score.
-6. Before publishing or making the repository public, audit the complete Git
+7. Before publishing or making the repository public, audit the complete Git
    history for previously committed `polaris.db` files or other private
    observatory data. Remove sensitive historical blobs from the public history,
    verify that the live database remains ignored, and preserve the private data
    only in the local installation and encrypted backups.
-7. Before public distribution, replace the hard-coded Doug's Observatory
+8. Before public distribution, replace the hard-coded Doug's Observatory
    location with an installation profile covering observatory name, postal
    code, coordinates, elevation, timezone, and storage location. The operator
    banner already reads the name from the observatory API response.
-8. Keep actual observatory equipment control outside the approved scope. It
+9. Keep actual observatory equipment control outside the approved scope. It
    requires a separate v2 safety and architecture decision.
+
+## Deferred external-alpha work
+
+Do not recruit, follow up with, or wait on alpha testers during V1.11 or V1.12.
+The invitation packet, metrics report, flight log, and support runbooks remain
+available for a possible V1.13 reconsideration. Resume them only after Doug
+explicitly decides that an outside cohort is needed to answer a question the
+single-user test beds cannot answer.

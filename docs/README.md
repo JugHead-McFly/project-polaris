@@ -10,21 +10,28 @@ project-manager notes, not public user documentation.
 
 - [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md) — current implementation
   state, latest product gate, and next planned work.
-- [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md) — executive roadmap from private
-  alpha through beta and launch decision.
+- [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md) — executive roadmap from the
+  single-user product through optional later alpha, beta, and launch decisions.
 - [`LAUNCH_READINESS.md`](LAUNCH_READINESS.md) — product, business, legal, and
   beta readiness checklist.
 - [`PRODUCT_OPERATING_CONTEXT.md`](PRODUCT_OPERATING_CONTEXT.md) — durable
   operating brief for product, research, branding, and review boundaries.
 - [`PRODUCT_BIBLE.md`](PRODUCT_BIBLE.md) — product source of truth and decision
   principles.
+- [`EXISTING_DATA_TEST_BEDS.md`](EXISTING_DATA_TEST_BEDS.md) — active
+  monsoon-season rules for using existing captures, saved plans, hosted history,
+  and deterministic fixtures without waiting for new imaging.
 
-## Private-alpha operator workflow
+## Deferred private-alpha operator workflow
+
+These runbooks are preserved for a possible V1.13 reconsideration. External
+tester recruitment is not active during V1.11 or V1.12 and must not block
+single-user development.
 
 - [`PRIVATE_ALPHA_TEST_PLAN.md`](PRIVATE_ALPHA_TEST_PLAN.md) — main private
   alpha test plan, gates, journey, V1.8 exit criteria, and stop conditions.
-- [`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md) — what Doug does
-  when the next tester says yes.
+- [`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md) — future steps
+  if Doug later approves an optional tester.
 - [`PRIVATE_ALPHA_INVITATION.md`](PRIVATE_ALPHA_INVITATION.md) — invitation,
   first-use check-in, and support reply templates.
 - [`ALPHA_FEEDBACK_CAPTURE_SHEET.md`](ALPHA_FEEDBACK_CAPTURE_SHEET.md) — live
@@ -44,7 +51,7 @@ project-manager notes, not public user documentation.
 - [`HOSTED_ACCOUNT_REMOVAL.md`](HOSTED_ACCOUNT_REMOVAL.md) — manual hosted
   account/data cleanup runbook.
 
-## Hosted alpha infrastructure
+## Secure hosted infrastructure
 
 - [`ALPHA_ARCHITECTURE_DECISION.md`](ALPHA_ARCHITECTURE_DECISION.md) — chosen
   web-first hosted alpha architecture and rejected alternatives.
@@ -75,7 +82,7 @@ project-manager notes, not public user documentation.
 ## Product design and future candidates
 
 - [`ONBOARDING_LOCATION_ENTRY.md`](ONBOARDING_LOCATION_ENTRY.md) — possible
-  city/ZIP location-entry path if coordinates keep blocking testers.
+  city/ZIP location-entry path if coordinates keep blocking the workflow.
 - [`OPPORTUNITY_MODE_CONCEPT.md`](OPPORTUNITY_MODE_CONCEPT.md) — parked concept
   for productive poor-night alternatives.
 - [`C20_EXPOSURE_VALIDATION_PLAN.md`](C20_EXPOSURE_VALIDATION_PLAN.md) —
@@ -100,11 +107,11 @@ project-manager notes, not public user documentation.
 
 ## Rule of thumb
 
-For active V1.9 work, use only these first unless a problem points elsewhere:
+For active V1.11 work, use only these first unless a problem points elsewhere:
 
 1. [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md)
-2. [`RIG_PROFILES.md`](RIG_PROFILES.md)
-3. [`TARGET_OPPORTUNITY_SCORING.md`](TARGET_OPPORTUNITY_SCORING.md)
-4. [`PRIVATE_ALPHA_TEST_PLAN.md`](PRIVATE_ALPHA_TEST_PLAN.md)
-5. [`NEXT_ALPHA_TESTER_PACKET.md`](NEXT_ALPHA_TESTER_PACKET.md)
-6. [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md)
+2. [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md)
+3. [`EXISTING_DATA_TEST_BEDS.md`](EXISTING_DATA_TEST_BEDS.md)
+4. [`TARGET_OPPORTUNITY_SCORING.md`](TARGET_OPPORTUNITY_SCORING.md)
+5. [`FORECAST_ACCURACY_TRACKING.md`](FORECAST_ACCURACY_TRACKING.md)
+6. [`RIG_PROFILES.md`](RIG_PROFILES.md)
