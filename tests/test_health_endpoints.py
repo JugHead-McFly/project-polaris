@@ -3,6 +3,7 @@ import json
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.config import settings
+from app.core.build_info import build_info
 from app.main import live_health
 from app.main import ready_health
 
@@ -22,27 +23,32 @@ class UnavailableDatabase:
 
 
 def test_liveness_reports_the_running_release():
-    assert live_health() == {
-        "status": "alive",
-        "version": settings.VERSION,
-    }
+    payload = live_health()
+
+    assert payload["status"] == "alive"
+    assert payload["version"] == settings.VERSION
+    assert payload["build"]["source"] in {"local", "render"}
+    assert payload["build"]["short_commit"]
 
 
 def test_readiness_passes_when_database_is_reachable():
-    assert ready_health(AvailableDatabase()) == {
-        "status": "ready",
-        "version": settings.VERSION,
-    }
+    payload = ready_health(AvailableDatabase())
+
+    assert payload["status"] == "ready"
+    assert payload["version"] == settings.VERSION
+    assert payload["build"]["source"] in {"local", "render"}
+    assert payload["build"]["short_commit"]
 
 
 def test_production_readiness_checks_hosted_observatory_schema(monkeypatch):
     database = AvailableDatabase()
     monkeypatch.setattr(settings, "ENVIRONMENT", "production")
 
-    assert ready_health(database) == {
-        "status": "ready",
-        "version": settings.VERSION,
-    }
+    payload = ready_health(database)
+
+    assert payload["status"] == "ready"
+    assert payload["version"] == settings.VERSION
+    assert payload["build"]["source"] in {"local", "render"}
     assert database.statements == [
         "SELECT 1",
         "SELECT rig_profile_key FROM observatories LIMIT 1",
@@ -56,5 +62,21 @@ def test_readiness_fails_without_disclosing_database_details():
     assert json.loads(response.body) == {
         "status": "not_ready",
         "version": settings.VERSION,
+        "build": build_info(settings.BASE_DIR),
     }
     assert b"database unavailable" not in response.body
+
+
+def test_build_info_uses_render_runtime_metadata(monkeypatch):
+    monkeypatch.setenv(
+        "RENDER_GIT_COMMIT",
+        "abcdef1234567890abcdef1234567890abcdef12",
+    )
+    monkeypatch.setenv("RENDER_GIT_BRANCH", "develop")
+
+    assert build_info(settings.BASE_DIR) == {
+        "source": "render",
+        "commit": "abcdef1234567890abcdef1234567890abcdef12",
+        "short_commit": "abcdef1",
+        "branch": "develop",
+    }

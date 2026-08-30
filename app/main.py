@@ -49,6 +49,7 @@ from app.api.planner import (
     router as planner_router,
 )
 from app.api.schedule import router as schedule_router
+from app.core.build_info import build_info
 
 
 monitoring_enabled = configure_monitoring()
@@ -257,6 +258,7 @@ def live_health():
     return {
         "status": "alive",
         "version": settings.VERSION,
+        "build": build_info(settings.BASE_DIR),
     }
 
 
@@ -273,11 +275,13 @@ def ready_health(db: Session = Depends(get_db)):
             content={
                 "status": "not_ready",
                 "version": settings.VERSION,
+                "build": build_info(settings.BASE_DIR),
             },
         )
     return {
         "status": "ready",
         "version": settings.VERSION,
+        "build": build_info(settings.BASE_DIR),
     }
 
 
