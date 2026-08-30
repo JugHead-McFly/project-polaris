@@ -133,7 +133,7 @@ verified SQLite integrity and counted 24 captures, 18 targets, 26 sessions,
 filenames, paths, coordinates, or account details. It found one old,
 capture-free session with an invalid placeholder date; the dashboard already
 handles it safely, and the live database was not changed. The expanded full
-suite passes all 328 tests. The full-cloud scoring correction is deployed on
+suite passes all 329 tests. The full-cloud scoring correction is deployed on
 Render: 100% cloud cover now gives the whole Cloud + stability component 0
 points instead of preserving humidity or wind credit.
 
