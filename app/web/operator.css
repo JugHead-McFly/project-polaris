@@ -883,6 +883,7 @@ footer {
 .hosted-command-board {
   grid-area: command;
   display: grid;
+  align-self: start;
   align-content: start;
   gap: 14px;
   background: linear-gradient(150deg, rgba(6, 24, 31, 0.97), rgba(18, 23, 43, 0.96));
@@ -1724,6 +1725,7 @@ footer {
 
 .hosted-setup-card {
   grid-area: setup;
+  align-self: start;
   background: linear-gradient(150deg, rgba(7, 24, 34, 0.64), rgba(24, 28, 50, 0.34));
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
