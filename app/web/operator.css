@@ -2166,9 +2166,9 @@ body.target-art-preview-mode .hosted-feedback-panel {
 .eyebrow {
   margin: 0 0 10px;
   color: var(--cyan);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0.17em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -2190,16 +2190,16 @@ body.target-art-preview-mode .hosted-feedback-panel {
 .hosted-setup-card > .eyebrow::before,
 .hosted-cautions-card > .eyebrow::before {
   display: inline-grid;
-  flex: 0 0 24px;
-  width: 24px;
-  height: 24px;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
   place-items: center;
   color: #061117;
   background: linear-gradient(145deg, #8aeadf, #42bdb3);
   border: 1px solid rgba(208, 255, 248, 0.68);
   border-radius: 50%;
   box-shadow: 0 0 14px rgba(91, 221, 205, 0.24);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 900;
   letter-spacing: 0;
 }
