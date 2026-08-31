@@ -1474,20 +1474,18 @@ const renderTargetProjectContext = (target) => {
   );
 
   const bestQuality = Number(target.best_quality);
-  const averageQuality = Number(target.average_quality);
   setText(
     "hosted-target-quality",
     Number.isFinite(bestQuality)
-      ? `${bestQuality}/100`
+      ? `${bestQuality}%`
       : "No scored captures yet",
   );
 
-  const sessions = Number(target.session_count);
   const captures = Number(target.capture_count);
   setText(
     "hosted-target-history",
-    Number.isFinite(sessions) && Number.isFinite(captures)
-      ? `${sessions}/${captures}`
+    Number.isFinite(captures)
+      ? `${captures}`
       : "No capture history yet",
   );
 };
