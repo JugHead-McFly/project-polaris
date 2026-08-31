@@ -18,6 +18,7 @@ let hostedConditionAlertsEnabled = false;
 let hostedConditionAlertBaseline = null;
 let hostedConditionAlertTimer = null;
 let latestHostedTonightData = null;
+let hostedSecondaryDetailsExpanded = false;
 let rigProfiles = [];
 const invitationHash = new URLSearchParams(window.location.hash.slice(1));
 const invitationQuery = new URLSearchParams(window.location.search);
@@ -620,7 +621,8 @@ const resetHostedPlanDetails = () => {
   setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
   renderSkyQuality(null);
-  renderSessionChecklist(null);
+  renderSessionChecklist(null, "Conditions Unknown");
+  setHardStopDetailsVisibility("Conditions Unknown");
   setText("hosted-weather-updated", "Weather time unavailable");
   setText(
     "hosted-forecast-confidence",
@@ -643,6 +645,7 @@ const resetHostedPlanDetails = () => {
     "Building tonight's schedule…",
   );
   setText("hosted-schedule-count", "0 blocks");
+  byId("hosted-schedule-panel").hidden = false;
   byId("hosted-schedule-panel").open = true;
 };
 
@@ -781,15 +784,6 @@ const renderTargetIllustration = (containerId, target, compact = false) => {
   }
 };
 
-const skyQualityStars = (score) => {
-  if (score === null || score === undefined) return 0;
-  if (score >= 90) return 5;
-  if (score >= 75) return 4;
-  if (score >= 60) return 3;
-  if (score >= 40) return 2;
-  return 1;
-};
-
 const renderSkyQuality = (rating) => {
   const container = byId("hosted-sky-quality");
   container.replaceChildren();
@@ -798,15 +792,7 @@ const renderSkyQuality = (rating) => {
     return;
   }
 
-  const stars = skyQualityStars(rating.score);
-  const text = appendTextElement(
-    container,
-    "span",
-    "sky-quality-stars",
-    "★".repeat(stars) + "☆".repeat(5 - stars),
-  );
-  text.setAttribute("aria-label", `${stars} of 5 stars`);
-  appendTextElement(container, "span", "", ` ${rating.quality}`);
+  appendTextElement(container, "span", "", `Sky outlook: ${rating.quality}`);
   const button = appendTextElement(container, "button", "quality-info-button", "i");
   button.type = "button";
   button.setAttribute("aria-label", "About this sky-quality rating");
@@ -816,9 +802,9 @@ const renderSkyQuality = (rating) => {
       .join(" · ");
     openInfoDialog(
       "Sky quality",
-      `${rating.quality} — ${stars} of 5 stars`,
+      rating.quality,
       "A planning estimate based on cloud cover, humidity, wind, Moon brightness, and the Moon's distance from the selected target. It is not a score of your photographs.",
-      `Current details: ${rating.score}/100${details ? ` · ${details}` : ""}`,
+      details || "No major sky-outlook deductions are active.",
     );
   });
 };
@@ -846,15 +832,18 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   );
   setText(
     "forecast-accuracy-history-count",
-    `${matchedSamples} verified check${matchedSamples === 1 ? "" : "s"}`,
+    `${matchedSamples} verified comparison${matchedSamples === 1 ? "" : "s"}`,
   );
   setText(
     "forecast-accuracy-history-message",
-    data.message || "Polaris is waiting for matched forecast and observed weather.",
+    matchedSamples < minimumSamples
+      ? `${matchedSamples} verified comparison${matchedSamples === 1 ? "" : "s"} collected. Trends begin after ${minimumSamples}.`
+      : data.message || "Polaris is waiting for matched forecast and observed weather.",
   );
 
   const metricsList = byId("forecast-accuracy-metrics");
   metricsList.replaceChildren();
+  metricsList.hidden = matchedSamples < minimumSamples;
   [
     ["Avg. cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, "%")],
     ["Avg. lead time", formatForecastMetric(metrics.average_lead_hours, " hr")],
@@ -873,15 +862,13 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
       Number.isFinite(Number(check.forecast_cloud_cover_percent)) &&
       Number.isFinite(Number(check.observed_cloud_cover_percent)),
   );
-  chart.hidden = !data.has_history_chart || chartChecks.length < 3;
+  chart.hidden = matchedSamples < minimumSamples || !data.has_history_chart || chartChecks.length < 3;
   if (chart.hidden) {
     appendTextElement(
       chart,
       "p",
       "empty-state",
-      matchedSamples
-        ? `Cloud trend needs ${Math.max(0, 3 - chartChecks.length)} more matched checks.`
-        : `Cloud trend starts after ${minimumSamples} verified checks.`,
+      `Cloud trend starts after ${minimumSamples} verified comparisons.`,
     );
     return;
   }
@@ -996,18 +983,18 @@ const expandedOpportunityComponents = (components) => {
         key: "humidity",
         label: "Humidity",
         description: `${displayMeasuredNumber(parts.humidity)}% humidity`,
-        points: parts.cloud >= 100 ? 0 : humidityPoints,
+        points: parts.cloud >= 100 ? null : humidityPoints,
         max: 8,
-        source: parts.cloud >= 100 ? "Blocked" : "Forecast",
+        source: parts.cloud >= 100 ? "Not scored after cloud stop" : "Forecast",
       },
       {
         ...component,
         key: "wind",
         label: "Wind",
         description: `${displayMeasuredNumber(parts.wind)} mph wind`,
-        points: parts.cloud >= 100 ? 0 : windPoints,
+        points: parts.cloud >= 100 ? null : windPoints,
         max: 7,
-        source: parts.cloud >= 100 ? "Blocked" : "Forecast",
+        source: parts.cloud >= 100 ? "Not scored after cloud stop" : "Forecast",
       },
     );
   });
@@ -1126,7 +1113,10 @@ const renderOpportunityScore = (scoreBreakdown) => {
     : opportunityComponentScore(components);
   const hardStopScore = scoreBreakdown.label === "No imaging window";
 
-  setText("hosted-opportunity-score", Number(opportunityScore).toFixed(1));
+  setText(
+    "hosted-opportunity-score",
+    hardStopScore ? "STOP" : Number(opportunityScore).toFixed(1),
+  );
   setText(
     "hosted-opportunity-label",
     scoreBreakdown.label || opportunityScoreLabel(opportunityScore),
@@ -1137,8 +1127,17 @@ const renderOpportunityScore = (scoreBreakdown) => {
     reading.removeAttribute("title");
   }
   reading.classList.toggle("is-hard-stop", hardStopScore);
-  reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
-  renderOpportunityGlance(components);
+  reading.style.setProperty(
+    "--opportunity-score",
+    hardStopScore ? "100%" : `${clampPercent(opportunityScore)}%`,
+  );
+  reading.setAttribute(
+    "aria-label",
+    hardStopScore
+      ? `Hard stop. The underlying planning score before the stop was ${Number(opportunityScore).toFixed(1)}.`
+      : `Opportunity score ${Number(opportunityScore).toFixed(1)}.`,
+  );
+  renderOpportunityGlance(hardStopScore ? [] : components);
 
   expandedOpportunityComponents(components).forEach((component) => {
     appendOpportunityComponent(drivers, component);
@@ -1152,7 +1151,12 @@ const renderHostedSchedule = (schedule) => {
   const timeline = byId("hosted-schedule-panel");
   const blocks = schedule?.blocks || [];
   container.replaceChildren();
+  timeline.hidden = schedule?.decision === "Do Not Image" && blocks.length === 0;
   timeline.open = blocks.length > 0;
+  setText(
+    "hosted-schedule-title",
+    blocks.length ? "Tonight's schedule" : "No session scheduled",
+  );
   setText(
     "hosted-schedule-count",
     `${blocks.length} block${blocks.length === 1 ? "" : "s"}`,
@@ -1289,7 +1293,7 @@ const renderConditionsTrend = (elementId, trend) => {
   );
 };
 
-const renderSessionChecklist = (checklist) => {
+const renderSessionChecklist = (checklist, decision = "Conditions Unknown") => {
   const panel = byId("hosted-session-plan");
   const steps = byId("hosted-session-steps");
   const actions = byId("hosted-session-actions");
@@ -1298,7 +1302,14 @@ const renderSessionChecklist = (checklist) => {
   steps.replaceChildren();
   actions.replaceChildren();
 
-  (checklist?.steps || []).slice(0, 3).forEach((step) => {
+  const hardStop = decision === "Do Not Image";
+  const checklistSteps = hardStop
+    ? (checklist?.steps || []).filter((step) => step.key === "reassess").slice(0, 1)
+    : (checklist?.steps || []).slice(0, 3);
+  setText("hosted-session-plan-title", hardStop ? "Next action" : "Session plan");
+  byId("hosted-session-timeline-link").hidden = hardStop;
+
+  checklistSteps.forEach((step) => {
     const item = appendTextElement(steps, "li", "hosted-session-step", "");
     const heading = appendTextElement(item, "div", "hosted-session-step-heading", "");
     appendTextElement(heading, "span", "", step.label || "Plan step");
@@ -1311,7 +1322,7 @@ const renderSessionChecklist = (checklist) => {
     );
   });
 
-  (checklist?.actions || []).slice(0, 2).forEach((action) => {
+  (hardStop ? [] : (checklist?.actions || []).slice(0, 2)).forEach((action) => {
     appendTextElement(actions, "li", "", action);
   });
   actions.hidden = actions.children.length === 0;
@@ -1323,7 +1334,6 @@ const plannedWeatherValue = (weather, key) => (
 
 const decisionBlockers = (data) => {
   const weather = data.weather || {};
-  const rating = data.night_rating || {};
   const score = data.opportunity_score || {};
   const blockers = [];
   const cloud = Number(plannedWeatherValue(weather, "cloud_cover_percent"));
@@ -1345,9 +1355,6 @@ const decisionBlockers = (data) => {
   if (Number.isFinite(moon) && moon >= 85) {
     blockers.push(`${displayMeasuredNumber(moon)}% Moon illumination reduces contrast.`);
   }
-  if (rating.quality && ["Very Poor", "Poor"].includes(rating.quality)) {
-    blockers.push(`Sky quality is ${rating.quality.toLowerCase()}.`);
-  }
   if (score.label === "No imaging window" && blockers.length === 0) {
     blockers.push("A hard-stop safety or weather rule is active.");
   }
@@ -1356,26 +1363,15 @@ const decisionBlockers = (data) => {
 
 const decisionRecoveryText = (data) => {
   const trend = data.conditions_trend || {};
-  const schedule = data.schedule || {};
-  const fallback = data.backup_target;
   const cloud = Number(plannedWeatherValue(data.weather || {}, "cloud_cover_percent"));
-  const parts = [];
 
-  if (trend.direction === "improving" && trend.basis) {
-    parts.push(trend.basis.replace(/\.$/, ""));
-  } else if (Number.isFinite(cloud) && cloud >= 95) {
-    parts.push("Cloud cover needs to drop below the unsafe range");
-  } else {
-    parts.push("The hard-stop condition needs to clear");
+  if (trend.direction === "improving") {
+    return "The forecast improves later. Recheck at the fallback-window start before setting up.";
   }
-
-  if (fallback?.object) {
-    parts.push(`${fallback.object} remains the fallback target`);
+  if (Number.isFinite(cloud) && cloud >= 95) {
+    return "Cloud cover must leave the hard-stop range before setup is worthwhile.";
   }
-  if (schedule.decision === "Do Not Image") {
-    parts.push("Polaris must change the recommendation before setup");
-  }
-  return `${parts.join("; ")}.`;
+  return "The hard-stop condition must clear before setup is worthwhile.";
 };
 
 const renderDecisionSupport = (data) => {
@@ -1422,6 +1418,32 @@ const openHostedSchedule = () => {
     block: "start",
   });
   summary.focus({ preventScroll: true });
+};
+
+const hardStopSecondaryIds = [
+  "hosted-score-breakdown-card",
+  "hosted-target-card",
+  "hosted-setup-card",
+  "hosted-cautions-card",
+];
+
+const setHardStopDetailsVisibility = (decision, expanded = false) => {
+  const hardStop = decision === "Do Not Image";
+  hostedSecondaryDetailsExpanded = hardStop && expanded;
+  const toggle = byId("hosted-secondary-toggle");
+  toggle.hidden = !hardStop;
+  toggle.setAttribute("aria-expanded", String(hostedSecondaryDetailsExpanded));
+  toggle.textContent = hostedSecondaryDetailsExpanded
+    ? "Hide planning details"
+    : "Show planning details if conditions improve";
+  hardStopSecondaryIds.forEach((id) => {
+    byId(id).hidden = hardStop && !hostedSecondaryDetailsExpanded;
+  });
+};
+
+const toggleHardStopDetails = () => {
+  const decision = latestHostedTonightData?.schedule?.decision || "Conditions Unknown";
+  setHardStopDetailsVisibility(decision, !hostedSecondaryDetailsExpanded);
 };
 
 const knownTargetMetadata = (value) => {
@@ -1639,7 +1661,16 @@ const renderHostedTonight = (data) => {
   );
   setText("hosted-target-rig", rigProfileLabel(data.observatory));
   renderConditionsTrend("hosted-window-trend", data.conditions_trend);
-  renderSessionChecklist(data.session_checklist);
+  renderSessionChecklist(data.session_checklist, decision);
+  setText(
+    "hosted-score-breakdown-title",
+    decision === "Do Not Image" ? "Planning factors" : "Score breakdown",
+  );
+  setText(
+    "hosted-setup-title",
+    decision === "Do Not Image" ? "Setup if conditions improve" : "Recommended setup",
+  );
+  setText("hosted-cautions-title", "What to watch");
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");
@@ -1717,7 +1748,7 @@ const renderHostedTonight = (data) => {
   setText(
     "hosted-forecast-confidence",
     forecastAccuracy.state === "building"
-      ? `${forecastAccuracy.label}: ${forecastAccuracy.matched_samples} of ${forecastAccuracy.minimum_samples} verified checks.`
+      ? `${forecastAccuracy.matched_samples} verified comparison${forecastAccuracy.matched_samples === 1 ? "" : "s"} collected; trends begin after ${forecastAccuracy.minimum_samples}.`
       : forecastAccuracy.message || "Forecast confidence is not available yet.",
   );
   renderForecastAccuracyHistory(forecastAccuracy);
@@ -1746,6 +1777,7 @@ const renderHostedTonight = (data) => {
   byId("hosted-cautions-empty").hidden = !notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
   renderHostedSchedule(schedule);
+  setHardStopDetailsVisibility(decision);
   hostedRecommendationRunId = data.recommendation_run_id || null;
   byId("hosted-feedback-panel").hidden = !hostedRecommendationRunId;
   setText(
@@ -4819,6 +4851,7 @@ byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
 byId("mobile-refresh-button").addEventListener("click", loadHostedTonight);
 byId("hosted-condition-alerts-button").addEventListener("click", toggleConditionAlerts);
 byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule);
+byId("hosted-secondary-toggle").addEventListener("click", toggleHardStopDetails);
 byId("mobile-account-menu-button").addEventListener("click", () => {
   setMobileHeaderMenu(
     byId("mobile-account-menu-button").getAttribute("aria-expanded") !== "true",

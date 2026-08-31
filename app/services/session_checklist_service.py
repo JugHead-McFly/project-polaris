@@ -105,14 +105,8 @@ def build_session_checklist(
         )
         return {
             "status": "wait",
-            "summary": "Do not begin a session while conditions remain unsuitable.",
+            "summary": "Wait for conditions to improve before committing to setup.",
             "steps": [
-                _step(
-                    "setup",
-                    "Set up",
-                    "Do not set up while conditions remain unsuitable.",
-                    plan_date=plan_date,
-                ),
                 _step(
                     "reassess",
                     "Reassess",
@@ -125,16 +119,8 @@ def build_session_checklist(
                     at=reassess_at,
                     plan_date=plan_date,
                 ),
-                _step(
-                    "stop",
-                    "Stop",
-                    "No stop time until a usable session is recommended.",
-                    plan_date=plan_date,
-                ),
             ],
-            "actions": [
-                "Wait and reassess; do not begin imaging while this recommendation remains in effect."
-            ],
+            "actions": [],
         }
 
     blocks = schedule.get("blocks") or []

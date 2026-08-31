@@ -340,7 +340,7 @@
 
           <div class="hosted-command-board">
             <div class="hosted-decision">
-              <p class="eyebrow">Plain-English read</p>
+              <p class="eyebrow">Tonight's recommendation</p>
               <div class="decision-line">
                 <span class="status-light" aria-hidden="true"></span>
                 <h2 id="hosted-decision">Checking conditions…</h2>
@@ -420,41 +420,31 @@
               <ol class="hosted-session-steps" id="hosted-session-steps"></ol>
               <ul class="hosted-session-actions" id="hosted-session-actions" hidden></ul>
             </section>
-            <section
-              class="forecast-accuracy-history"
-              aria-labelledby="forecast-accuracy-history-title"
-            >
-              <div class="forecast-accuracy-heading">
-                <div>
-                  <p class="eyebrow" id="forecast-accuracy-history-title">Forecast accuracy</p>
-                  <strong id="forecast-accuracy-history-label">Building history</strong>
-                </div>
-                <span id="forecast-accuracy-history-count">0 checks</span>
-              </div>
-              <p id="forecast-accuracy-history-message">Polaris is waiting for matched forecast and observed weather.</p>
-              <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics"></dl>
-              <div
-                class="forecast-accuracy-chart"
-                id="forecast-accuracy-chart"
-                aria-label="Recent cloud cover forecast accuracy"
-                hidden
-              ></div>
-            </section>
           </div>
+
+          <button
+            class="hosted-secondary-toggle"
+            id="hosted-secondary-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="hosted-score-breakdown-card hosted-target-card hosted-setup-card hosted-cautions-card"
+            hidden
+          >Show planning details if conditions improve</button>
 
           <section
             class="hosted-score-breakdown-card"
+            id="hosted-score-breakdown-card"
             aria-label="Opportunity score breakdown"
           >
             <div class="hosted-score-breakdown-heading">
-              <p class="eyebrow">Score breakdown</p>
+              <p class="eyebrow" id="hosted-score-breakdown-title">Score breakdown</p>
             </div>
             <div class="hosted-score-components" id="hosted-opportunity-drivers">
               <p>Score factors will appear after conditions load.</p>
             </div>
           </section>
 
-          <div class="hosted-target">
+          <div class="hosted-target" id="hosted-target-card">
             <div class="hosted-target-heading">
               <div>
                 <p class="eyebrow" id="hosted-target-label">Primary target</p>
@@ -514,8 +504,8 @@
             </div>
           </div>
 
-          <div class="hosted-setup-card">
-            <p class="eyebrow">Recommended setup</p>
+          <div class="hosted-setup-card" id="hosted-setup-card">
+            <p class="eyebrow" id="hosted-setup-title">Recommended setup</p>
             <dl class="hosted-target-facts">
               <div>
                 <dt>Rig profile</dt>
@@ -544,8 +534,8 @@
             </dl>
           </div>
 
-          <div class="hosted-cautions-card">
-            <p class="eyebrow">Cautions &amp; adaptations</p>
+          <div class="hosted-cautions-card" id="hosted-cautions-card">
+            <p class="eyebrow" id="hosted-cautions-title">What to watch</p>
             <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
             <p id="hosted-cautions-empty">No special cautions once conditions finish loading.</p>
           </div>
@@ -571,6 +561,27 @@
             <div class="empty-state">Building tonight's schedule…</div>
           </div>
         </details>
+
+        <section
+          class="panel forecast-accuracy-history"
+          aria-labelledby="forecast-accuracy-history-title"
+        >
+          <div class="forecast-accuracy-heading">
+            <div>
+              <p class="eyebrow" id="forecast-accuracy-history-title">Forecast accuracy</p>
+              <strong id="forecast-accuracy-history-label">Building history</strong>
+            </div>
+            <span id="forecast-accuracy-history-count">0 verified comparisons</span>
+          </div>
+          <p id="forecast-accuracy-history-message">Polaris is waiting for matched forecast and observed weather.</p>
+          <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
+          <div
+            class="forecast-accuracy-chart"
+            id="forecast-accuracy-chart"
+            aria-label="Recent cloud cover forecast accuracy"
+            hidden
+          ></div>
+        </section>
       </section>
 
       <section class="panel hosted-account-panel" id="hosted-account-panel" hidden aria-labelledby="hosted-account-title">

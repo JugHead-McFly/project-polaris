@@ -635,11 +635,13 @@ def test_session_checklist_stays_inside_the_existing_command_card():
     assert 'aria-controls="hosted-schedule-panel"' in html
     assert "A session is possible, but recheck live conditions before starting." not in html
     assert 'id="hosted-session-plan-summary"' not in html
-    assert "const renderSessionChecklist = (checklist) =>" in script
+    assert 'const renderSessionChecklist = (checklist, decision = "Conditions Unknown") =>' in script
     assert "(checklist?.steps || []).slice(0, 3)" in script
     assert "(checklist?.actions || []).slice(0, 2)" in script
-    assert "renderSessionChecklist(data.session_checklist)" in script
-    assert "renderSessionChecklist(null)" in script
+    assert "renderSessionChecklist(data.session_checklist, decision)" in script
+    assert 'renderSessionChecklist(null, "Conditions Unknown")' in script
+    assert 'step.key === "reassess"' in script
+    assert 'hardStop ? "Next action" : "Session plan"' in script
     assert "const openHostedSchedule = () =>" in script
     assert 'byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule)' in script
     assert 'summary.focus({ preventScroll: true })' in script
@@ -761,6 +763,7 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert 'id="hosted-forecast-confidence"' in html
     assert 'id="forecast-accuracy-history-title"' in html
     assert 'id="forecast-accuracy-chart"' in html
+    assert 'id="forecast-accuracy-metrics" hidden' in html
     assert 'role="status"' in html
     assert "Forecast confidence is still building." in html
     assert "data.forecast_accuracy || {}" in script
@@ -769,9 +772,45 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "forecast_cloud_cover_percent" in script
     assert "matched_samples" in script
     assert "minimum_samples" in script
+    assert "matchedSamples < minimumSamples" in script
+    assert "verified comparison" in script
     assert ".hosted-forecast-confidence" in css
     assert ".forecast-accuracy-history" in css
     assert ".forecast-accuracy-bar.forecast::before" in css
+
+
+def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    assert "Tonight's recommendation" in html
+    assert 'id="hosted-secondary-toggle"' in html
+    assert "Show planning details if conditions improve" in html
+    assert 'id="hosted-score-breakdown-card"' in html
+    assert 'id="hosted-target-card"' in html
+    assert 'id="hosted-setup-card"' in html
+    assert 'id="hosted-cautions-card"' in html
+    assert 'hardStopScore ? "STOP"' in script
+    assert 'hardStopScore ? "100%"' in script
+    assert 'source: parts.cloud >= 100 ? "Not scored after cloud stop"' in script
+    assert "const setHardStopDetailsVisibility" in script
+    assert 'timeline.hidden = schedule?.decision === "Do Not Image"' in script
+    assert 'byId("hosted-secondary-toggle").addEventListener("click", toggleHardStopDetails)' in script
+    assert ".hosted-secondary-toggle" in css
+    assert ".hosted-opportunity-reading.is-hard-stop #hosted-opportunity-score" in css
+    assert ".hosted-recommendation.status-do-not-image .hosted-command-target-card" in css
+
+
+def test_numbered_card_headers_share_the_same_card_origin():
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    header_rule_start = css.index(".hosted-opportunity-score > .eyebrow,")
+    header_rule_end = css.index(".hosted-opportunity-score > .eyebrow::before", header_rule_start)
+    header_rule = css[header_rule_start:header_rule_end]
+    assert "align-items: center;" in header_rule
+    assert "margin: 0;" in header_rule
+    assert ".hosted-decision {\n    padding: 16px 18px;" not in css
 
 
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):

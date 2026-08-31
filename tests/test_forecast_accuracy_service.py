@@ -150,7 +150,9 @@ def test_missing_weather_creates_no_snapshot_or_match():
 
     assert db.query(ForecastAccuracySnapshot).count() == 0
     assert summary["matched_samples"] == 0
-    assert "Not enough verified history" in summary["message"]
+    assert summary["message"] == (
+        "0 verified forecast comparisons collected. Trends begin after 5."
+    )
 
 
 def test_observation_outside_boundary_does_not_match():

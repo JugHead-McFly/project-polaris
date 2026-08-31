@@ -816,6 +816,7 @@ footer {
   grid-template-columns: minmax(380px, 0.86fr) minmax(560px, 1.14fr);
   grid-template-areas:
     "score command"
+    "toggle toggle"
     "breakdown breakdown"
     "target setup"
     "cautions cautions";
@@ -890,6 +891,11 @@ footer {
   gap: 14px;
   background: linear-gradient(150deg, rgba(6, 24, 31, 0.97), rgba(18, 23, 43, 0.96));
   border: 1px solid rgba(91, 221, 205, 0.24);
+}
+
+.hosted-recommendation.status-do-not-image .hosted-score-command,
+.hosted-recommendation.status-do-not-image .hosted-command-board {
+  align-self: start;
 }
 
 .hosted-decision {
@@ -978,6 +984,11 @@ footer {
   box-shadow: 0 0 34px rgba(255, 124, 113, 0.18);
 }
 
+.hosted-opportunity-reading.is-hard-stop #hosted-opportunity-score {
+  font-size: clamp(26px, 3vw, 34px);
+  letter-spacing: 0.04em;
+}
+
 .hosted-opportunity-reading.is-hard-stop::before {
   background: conic-gradient(var(--red) var(--opportunity-score), rgba(156, 181, 187, 0.14) 0);
 }
@@ -1020,14 +1031,13 @@ footer {
 }
 
 .hosted-opportunity-glance dt {
-  overflow: hidden;
   color: var(--muted);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  text-overflow: ellipsis;
+  line-height: 1.2;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .hosted-opportunity-glance dd {
@@ -1057,6 +1067,37 @@ footer {
     rgba(5, 17, 27, 0.64);
   border-top: 1px solid rgba(91, 221, 205, 0.2);
   border-bottom: 1px solid rgba(91, 221, 205, 0.12);
+}
+
+.hosted-secondary-toggle {
+  grid-area: toggle;
+  justify-self: center;
+  min-height: 42px;
+  padding: 9px 16px;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  background: rgba(12, 38, 46, 0.72);
+  border: 1px solid rgba(91, 221, 205, 0.32);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.hosted-secondary-toggle:hover,
+.hosted-secondary-toggle:focus-visible {
+  color: #c8fff7;
+  border-color: rgba(91, 221, 205, 0.68);
+}
+
+.hosted-recommendation.status-do-not-image .hosted-command-summary {
+  grid-template-columns: 1fr;
+}
+
+.hosted-recommendation.status-do-not-image .hosted-command-target-card,
+.hosted-recommendation.status-do-not-image .hosted-command-fallback-card,
+.hosted-recommendation.status-do-not-image .hosted-sky-quality {
+  display: none;
 }
 
 .hosted-score-breakdown-heading {
@@ -1392,9 +1433,7 @@ footer {
 .forecast-accuracy-history {
   display: grid;
   gap: 10px;
-  margin-top: 4px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(91, 221, 205, 0.18);
+  padding: 18px 22px;
 }
 
 .forecast-accuracy-heading {
@@ -2329,6 +2368,7 @@ body.target-art-preview-mode .hosted-feedback-panel {
   display: flex;
   align-items: center;
   gap: 14px;
+  margin: 0;
   color: var(--cyan);
   font-size: clamp(16px, 1.45vw, 22px);
   line-height: 1.1;
@@ -4475,10 +4515,6 @@ footer {
     gap: 10px;
   }
 
-  .hosted-decision {
-    padding: 16px 18px;
-  }
-
   .hosted-command-summary div {
     padding: 12px;
   }
@@ -4499,6 +4535,7 @@ footer {
     grid-template-areas:
       "score"
       "command"
+      "toggle"
       "breakdown"
       "target"
       "setup"

@@ -94,18 +94,10 @@ def test_unsuitable_night_waits_and_uses_only_verified_reassess_time():
     )
 
     assert result["status"] == "wait"
-    assert [step["label"] for step in result["steps"]] == [
-        "Set up",
-        "Reassess",
-        "Stop",
-    ]
-    assert result["steps"][0]["at"] is None
-    assert result["steps"][1]["time_label"] == "9:00 PM"
-    assert "image only if Polaris changes" in result["steps"][1]["instruction"]
-    assert result["steps"][2]["at"] is None
-    assert result["actions"] == [
-        "Wait and reassess; do not begin imaging while this recommendation remains in effect."
-    ]
+    assert [step["label"] for step in result["steps"]] == ["Reassess"]
+    assert result["steps"][0]["time_label"] == "9:00 PM"
+    assert "image only if Polaris changes" in result["steps"][0]["instruction"]
+    assert result["actions"] == []
 
 
 def test_no_target_and_no_blocks_does_not_create_session_timing():

@@ -256,9 +256,9 @@ def forecast_accuracy_summary(
     remaining = max(0, MINIMUM_CONFIDENCE_SAMPLES - matched_count)
     if remaining:
         message = (
-            "Not enough verified history yet. "
-            f"{matched_count} of {MINIMUM_CONFIDENCE_SAMPLES} forecast "
-            "checks matched."
+            f"{matched_count} verified forecast comparison"
+            f"{'s' if matched_count != 1 else ''} collected. Trends begin "
+            f"after {MINIMUM_CONFIDENCE_SAMPLES}."
         )
     else:
         message = (
