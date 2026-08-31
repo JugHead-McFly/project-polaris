@@ -223,6 +223,8 @@ def test_hosted_read_only_plan_reports_saved_forecast_history():
 
     assert payload["forecast_accuracy"]["matched_samples"] == 1
     assert payload["forecast_accuracy"]["confidence"] is None
+    assert payload["forecast_accuracy"]["has_history_chart"] is False
+    assert len(payload["forecast_accuracy"]["recent_checks"]) == 1
 
 
 def test_hosted_recommendation_is_saved_for_its_owner():

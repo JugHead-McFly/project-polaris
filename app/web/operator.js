@@ -626,6 +626,7 @@ const resetHostedPlanDetails = () => {
     "hosted-forecast-confidence",
     "Forecast confidence is still building.",
   );
+  renderForecastAccuracyHistory(null);
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
   weatherDiagnostic.hidden = true;
   weatherDiagnostic.textContent = "";
@@ -818,6 +819,95 @@ const renderSkyQuality = (rating) => {
       `${rating.quality} — ${stars} of 5 stars`,
       "A planning estimate based on cloud cover, humidity, wind, Moon brightness, and the Moon's distance from the selected target. It is not a score of your photographs.",
       `Current details: ${rating.score}/100${details ? ` · ${details}` : ""}`,
+    );
+  });
+};
+
+const formatForecastMetric = (value, suffix = "") => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "Not enough data";
+  return `${number}${suffix}`;
+};
+
+const renderForecastAccuracyHistory = (forecastAccuracy) => {
+  const data = forecastAccuracy || {};
+  const matchedSamples = Number(data.matched_samples || 0);
+  const minimumSamples = Number(data.minimum_samples || 5);
+  const metrics = data.metrics || {};
+  const recentChecks = Array.isArray(data.recent_checks)
+    ? data.recent_checks
+    : [];
+
+  setText(
+    "forecast-accuracy-history-label",
+    data.state === "ready_for_calibration"
+      ? "Ready for calibration"
+      : "Building history",
+  );
+  setText(
+    "forecast-accuracy-history-count",
+    `${matchedSamples} verified check${matchedSamples === 1 ? "" : "s"}`,
+  );
+  setText(
+    "forecast-accuracy-history-message",
+    data.message || "Polaris is waiting for matched forecast and observed weather.",
+  );
+
+  const metricsList = byId("forecast-accuracy-metrics");
+  metricsList.replaceChildren();
+  [
+    ["Avg. cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, "%")],
+    ["Avg. lead time", formatForecastMetric(metrics.average_lead_hours, " hr")],
+    ["Avg. temp miss", formatForecastMetric(metrics.average_temperature_error_f, "°F")],
+    ["Avg. wind miss", formatForecastMetric(metrics.average_wind_error_mph, " mph")],
+  ].forEach(([label, value]) => {
+    const item = appendTextElement(metricsList, "div", "", "");
+    appendTextElement(item, "dt", "", label);
+    appendTextElement(item, "dd", "", value);
+  });
+
+  const chart = byId("forecast-accuracy-chart");
+  chart.replaceChildren();
+  const chartChecks = recentChecks.filter(
+    (check) =>
+      Number.isFinite(Number(check.forecast_cloud_cover_percent)) &&
+      Number.isFinite(Number(check.observed_cloud_cover_percent)),
+  );
+  chart.hidden = !data.has_history_chart || chartChecks.length < 3;
+  if (chart.hidden) {
+    appendTextElement(
+      chart,
+      "p",
+      "empty-state",
+      matchedSamples
+        ? `Cloud trend needs ${Math.max(0, 3 - chartChecks.length)} more matched checks.`
+        : `Cloud trend starts after ${minimumSamples} verified checks.`,
+    );
+    return;
+  }
+
+  chartChecks.forEach((check) => {
+    const row = appendTextElement(chart, "div", "forecast-accuracy-row", "");
+    appendTextElement(
+      row,
+      "span",
+      "forecast-accuracy-date",
+      displayDateTime(check.forecast_for),
+    );
+    const bars = appendTextElement(row, "span", "forecast-accuracy-bars", "");
+    [
+      ["Forecast", check.forecast_cloud_cover_percent, "forecast"],
+      ["Observed", check.observed_cloud_cover_percent, "observed"],
+    ].forEach(([label, percent, kind]) => {
+      const bar = appendTextElement(bars, "span", `forecast-accuracy-bar ${kind}`, "");
+      bar.style.setProperty("--forecast-bar-width", `${Math.max(0, Math.min(100, Number(percent)))}%`);
+      bar.setAttribute("aria-label", `${label} cloud cover ${percent}%`);
+    });
+    appendTextElement(
+      row,
+      "strong",
+      "",
+      `${check.cloud_error_percent}% miss`,
     );
   });
 };
@@ -1025,7 +1115,6 @@ const renderOpportunityScore = (scoreBreakdown) => {
     setText("hosted-opportunity-label", "Unavailable");
     reading.classList.remove("is-hard-stop");
     reading.style.setProperty("--opportunity-score", "0%");
-    byId("hosted-opportunity-total-bar").style.width = "0%";
     renderOpportunityGlance([]);
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
     return null;
@@ -1049,7 +1138,6 @@ const renderOpportunityScore = (scoreBreakdown) => {
   }
   reading.classList.toggle("is-hard-stop", hardStopScore);
   reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
-  byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
   renderOpportunityGlance(components);
 
   expandedOpportunityComponents(components).forEach((component) => {
@@ -1632,6 +1720,7 @@ const renderHostedTonight = (data) => {
       ? `${forecastAccuracy.label}: ${forecastAccuracy.matched_samples} of ${forecastAccuracy.minimum_samples} verified checks.`
       : forecastAccuracy.message || "Forecast confidence is not available yet.",
   );
+  renderForecastAccuracyHistory(forecastAccuracy);
   const weatherDiagnostic = byId("hosted-weather-diagnostic");
   const weatherUnavailable =
     weather.status && weather.status.toLowerCase().includes("unavailable");

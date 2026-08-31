@@ -2,6 +2,7 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 from typing import Dict
+from typing import List
 from typing import Optional
 from uuid import UUID
 from zoneinfo import ZoneInfo
@@ -24,6 +25,13 @@ TRACKED_FIELDS = (
     "dew_point_f",
     "wind_speed_mph",
 )
+RECENT_HISTORY_LIMIT = 8
+
+
+def _round(value: Optional[float], digits: int = 1) -> Optional[float]:
+    if value is None:
+        return None
+    return round(float(value), digits)
 
 
 def _as_utc(value: Optional[datetime]) -> datetime:
@@ -234,15 +242,17 @@ def forecast_accuracy_summary(
     user_id: UUID,
     observatory_id,
 ) -> Dict:
-    matched_count = (
+    matched_snapshots = (
         db.query(ForecastAccuracySnapshot)
         .filter(
             ForecastAccuracySnapshot.user_id == user_id,
             ForecastAccuracySnapshot.observatory_id == observatory_id,
             ForecastAccuracySnapshot.status == "matched",
         )
-        .count()
+        .order_by(ForecastAccuracySnapshot.forecast_for.desc())
+        .all()
     )
+    matched_count = len(matched_snapshots)
     remaining = max(0, MINIMUM_CONFIDENCE_SAMPLES - matched_count)
     if remaining:
         message = (
@@ -256,6 +266,8 @@ def forecast_accuracy_summary(
             "confidence rating. Polaris is not using them in tonight's "
             "score yet."
         )
+    recent_checks = _recent_checks(matched_snapshots)
+    metrics = _accuracy_metrics(matched_snapshots)
     return {
         "state": "building" if remaining else "ready_for_calibration",
         "label": "Building forecast confidence",
@@ -263,7 +275,96 @@ def forecast_accuracy_summary(
         "matched_samples": matched_count,
         "minimum_samples": MINIMUM_CONFIDENCE_SAMPLES,
         "confidence": None,
+        "metrics": metrics,
+        "recent_checks": recent_checks,
+        "has_history_chart": len(recent_checks) >= 3,
     }
+
+
+def _field_error(snapshot: ForecastAccuracySnapshot, field: str) -> Optional[float]:
+    forecast = getattr(snapshot, f"forecast_{field}")
+    observed = getattr(snapshot, f"observed_{field}")
+    if forecast is None or observed is None:
+        return None
+    return abs(float(forecast) - float(observed))
+
+
+def _average(values: List[float]) -> Optional[float]:
+    if not values:
+        return None
+    return sum(values) / len(values)
+
+
+def _hours_between(start: datetime, end: datetime) -> Optional[float]:
+    if start is None or end is None:
+        return None
+    return max(0, (_as_utc(end) - _as_utc(start)).total_seconds() / 3600)
+
+
+def _accuracy_metrics(snapshots: List[ForecastAccuracySnapshot]) -> Dict:
+    cloud_errors = [
+        value
+        for snapshot in snapshots
+        if (value := _field_error(snapshot, "cloud_cover_percent")) is not None
+    ]
+    temperature_errors = [
+        value
+        for snapshot in snapshots
+        if (value := _field_error(snapshot, "temperature_f")) is not None
+    ]
+    wind_errors = [
+        value
+        for snapshot in snapshots
+        if (value := _field_error(snapshot, "wind_speed_mph")) is not None
+    ]
+    lead_hours = [
+        value
+        for snapshot in snapshots
+        if (
+            value := _hours_between(
+                snapshot.forecast_created_at,
+                snapshot.forecast_for,
+            )
+        )
+        is not None
+    ]
+    return {
+        "average_cloud_error_percent": _round(_average(cloud_errors), 0),
+        "average_temperature_error_f": _round(_average(temperature_errors), 1),
+        "average_wind_error_mph": _round(_average(wind_errors), 1),
+        "average_lead_hours": _round(_average(lead_hours), 1),
+    }
+
+
+def _recent_checks(snapshots: List[ForecastAccuracySnapshot]) -> List[Dict]:
+    checks = []
+    for snapshot in reversed(snapshots[:RECENT_HISTORY_LIMIT]):
+        cloud_error = _field_error(snapshot, "cloud_cover_percent")
+        lead_hours = _hours_between(
+            snapshot.forecast_created_at,
+            snapshot.forecast_for,
+        )
+        checks.append(
+            {
+                "forecast_for": _as_utc(snapshot.forecast_for).isoformat(),
+                "observed_at": (
+                    _as_utc(snapshot.observed_at).isoformat()
+                    if snapshot.observed_at
+                    else None
+                ),
+                "forecast_cloud_cover_percent": _round(
+                    snapshot.forecast_cloud_cover_percent,
+                    0,
+                ),
+                "observed_cloud_cover_percent": _round(
+                    snapshot.observed_cloud_cover_percent,
+                    0,
+                ),
+                "cloud_error_percent": _round(cloud_error, 0),
+                "lead_hours": _round(lead_hours, 1),
+            }
+        )
+    return checks
 
 
 def track_forecast_accuracy(
@@ -311,4 +412,7 @@ def unavailable_forecast_accuracy_summary() -> Dict:
         "matched_samples": 0,
         "minimum_samples": MINIMUM_CONFIDENCE_SAMPLES,
         "confidence": None,
+        "metrics": {},
+        "recent_checks": [],
+        "has_history_chart": False,
     }

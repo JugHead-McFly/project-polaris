@@ -333,7 +333,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderOpportunityScore" in script
     assert "renderOpportunityGlance" in script
     assert "appendOpportunityGlanceItem" in script
-    assert "hosted-opportunity-total-bar" in script
+    assert "hosted-opportunity-total-bar" not in html
+    assert "hosted-opportunity-total-bar" not in script
+    assert "hosted-total-score-bar" not in html
     assert "Number(opportunityScore).toFixed(1)" in script
     assert "scoreBreakdown.label || opportunityScoreLabel(opportunityScore)" in script
     assert "scoreBreakdown.guidance" in script
@@ -438,6 +440,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "m31-andromeda.svg" in {asset.name for asset in operator_api.ASSET_FILES}
     assert ".hosted-footer-metadata" in css
     assert ".hosted-opportunity-glance" in css
+    assert "font-size: clamp(16px, 1.45vw, 22px)" in css
+    assert "flex: 0 0 clamp(42px, 3.7vw, 54px)" in css
     assert ".hosted-command-target-illustration img" in css
     assert ".hosted-target-illustration img" in css
     assert ".hosted-command-target-card.has-target-illustration" in css
@@ -755,12 +759,19 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
 
     assert 'id="hosted-forecast-confidence"' in html
+    assert 'id="forecast-accuracy-history-title"' in html
+    assert 'id="forecast-accuracy-chart"' in html
     assert 'role="status"' in html
     assert "Forecast confidence is still building." in html
     assert "data.forecast_accuracy || {}" in script
+    assert "renderForecastAccuracyHistory" in script
+    assert "average_cloud_error_percent" in script
+    assert "forecast_cloud_cover_percent" in script
     assert "matched_samples" in script
     assert "minimum_samples" in script
     assert ".hosted-forecast-confidence" in css
+    assert ".forecast-accuracy-history" in css
+    assert ".forecast-accuracy-bar.forecast::before" in css
 
 
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):

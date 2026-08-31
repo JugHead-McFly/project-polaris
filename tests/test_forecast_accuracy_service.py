@@ -121,6 +121,21 @@ def test_matches_near_observation_without_fabricating_values():
     assert snapshot.observed_dew_point_f is None
     assert summary["matched_samples"] == 1
     assert summary["confidence"] is None
+    assert summary["metrics"]["average_cloud_error_percent"] == 11
+    assert summary["metrics"]["average_temperature_error_f"] == 3
+    assert summary["metrics"]["average_wind_error_mph"] == 2
+    assert summary["metrics"]["average_lead_hours"] == 9
+    assert summary["recent_checks"] == [
+        {
+            "forecast_for": "2026-08-31T03:00:00+00:00",
+            "observed_at": "2026-08-31T03:00:00+00:00",
+            "forecast_cloud_cover_percent": 20,
+            "observed_cloud_cover_percent": 31,
+            "cloud_error_percent": 11,
+            "lead_hours": 9,
+        }
+    ]
+    assert summary["has_history_chart"] is False
 
 
 def test_missing_weather_creates_no_snapshot_or_match():
@@ -271,6 +286,8 @@ def test_enough_matches_still_does_not_claim_confidence():
                 forecast_created_at=forecast_for - timedelta(hours=12),
                 expires_at=forecast_for + timedelta(hours=2),
                 observed_at=forecast_for,
+                forecast_cloud_cover_percent=offset * 10,
+                observed_cloud_cover_percent=offset * 10 + 5,
                 status="matched",
             )
         )
@@ -287,4 +304,7 @@ def test_enough_matches_still_does_not_claim_confidence():
     assert summary["state"] == "ready_for_calibration"
     assert summary["matched_samples"] == 5
     assert summary["confidence"] is None
+    assert summary["metrics"]["average_cloud_error_percent"] == 5
+    assert len(summary["recent_checks"]) == 5
+    assert summary["has_history_chart"] is True
     assert "not using them in tonight's score" in summary["message"]

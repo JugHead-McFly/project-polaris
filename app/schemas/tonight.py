@@ -1,7 +1,7 @@
 from typing import List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.schemas.darkness import DarknessSummary
 from app.schemas.moon import MoonSummary
@@ -89,6 +89,9 @@ class ForecastAccuracySummary(BaseModel):
     matched_samples: int
     minimum_samples: int
     confidence: Optional[str] = None
+    metrics: dict = Field(default_factory=dict)
+    recent_checks: List[dict] = Field(default_factory=list)
+    has_history_chart: bool = False
 
 
 class TonightResponse(BaseModel):
