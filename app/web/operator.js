@@ -1457,7 +1457,9 @@ const renderTargetProjectContext = (target) => {
   setText(
     "hosted-target-progress",
     hasProgress
-      ? `${displayHours(currentHours)} / ${displayHours(goalHours)}${Number.isFinite(progressPercent) ? ` · ${progressPercent}%` : ""}`
+      ? Number.isFinite(progressPercent)
+        ? `${progressPercent}%`
+        : `${Math.round((currentHours / goalHours) * 100)}%`
       : "No integration goal yet",
   );
 
@@ -1467,7 +1469,7 @@ const renderTargetProjectContext = (target) => {
     Number.isFinite(remainingHours)
       ? remainingHours <= 0
         ? "Goal reached"
-        : `${displayHours(remainingHours)} left`
+        : displayHours(remainingHours)
       : "Goal status unavailable",
   );
 
@@ -1476,7 +1478,7 @@ const renderTargetProjectContext = (target) => {
   setText(
     "hosted-target-quality",
     Number.isFinite(bestQuality)
-      ? `Best ${bestQuality}/100${Number.isFinite(averageQuality) ? ` · Avg ${averageQuality}/100` : ""}`
+      ? `${bestQuality}/100`
       : "No scored captures yet",
   );
 
@@ -1485,7 +1487,7 @@ const renderTargetProjectContext = (target) => {
   setText(
     "hosted-target-history",
     Number.isFinite(sessions) && Number.isFinite(captures)
-      ? `${sessions} session${sessions === 1 ? "" : "s"} · ${captures} capture${captures === 1 ? "" : "s"}`
+      ? `${sessions}/${captures}`
       : "No capture history yet",
   );
 };
