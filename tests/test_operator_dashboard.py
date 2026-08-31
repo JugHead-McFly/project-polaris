@@ -803,6 +803,7 @@ def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
     assert 'source: parts.cloud >= 100 ? "Not scored after cloud stop"' in script
     assert "const setHardStopDetailsVisibility" in script
     assert 'support.hidden = decision !== "Do Not Image"' in script
+    assert "return blockers.slice(0, 1);" in script
     assert '"hosted-target-card",\n  "hosted-setup-card",' in script
     assert 'timeline.hidden = schedule?.decision === "Do Not Image"' in script
     assert 'byId("hosted-secondary-toggle").addEventListener("click", toggleHardStopDetails)' in script

@@ -1285,7 +1285,7 @@ const decisionBlockers = (data) => {
   if (score.label === "No imaging window" && blockers.length === 0) {
     blockers.push("A hard-stop safety or weather rule is active.");
   }
-  return blockers.slice(0, 3);
+  return blockers.slice(0, 1);
 };
 
 const decisionRecoveryText = (data) => {
