@@ -22,7 +22,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert response.headers["content-type"].startswith("text/html")
     assert response.headers["cache-control"] == "no-store"
     assert ".hosted-recommendation.status-loading #hosted-opportunity-score" in stylesheet.text
-    assert "font-size: clamp(42px, 4vw, 44px);" in stylesheet.text
+    assert "font-size: clamp(52px, 5vw, 64px);" in stylesheet.text
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text
@@ -261,10 +261,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Opportunity score" in html
     assert 'id="hosted-opportunity-score"' in html
     assert '<small>/100</small>' not in html
-    assert 'id="hosted-opportunity-glance"' in html
     assert 'id="hosted-opportunity-drivers"' in html
-    assert 'class="hosted-score-breakdown-card"' in html
-    assert 'aria-label="Opportunity score breakdown"' in html
+    assert 'id="hosted-opportunity-glance"' not in html
+    assert 'class="hosted-score-breakdown-card"' not in html
     assert "How tonight earns points" not in html
     assert "Continuous inputs scale proportionally" not in html
     assert 'id="hosted-darkness-window"' not in html
@@ -303,7 +302,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-target-altitude-chart"' in html
     assert 'id="hosted-target-peak-altitude"' in html
     assert 'id="hosted-target-peak-time"' in html
-    assert 'id="hosted-weather-diagnostic"' in html
+    assert 'id="hosted-weather-diagnostic"' not in html
     assert "Sign out" in html
     assert (
         html.index('id="hosted-plan-message"')
@@ -331,8 +330,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderOpportunityScore" in script
-    assert "renderOpportunityGlance" in script
-    assert "appendOpportunityGlanceItem" in script
+    assert "renderOpportunityGlance" not in script
+    assert 'row.style.setProperty("--score-fill"' in script
+    assert "(component.points / component.max) * 100" in script
     assert "hosted-opportunity-total-bar" not in html
     assert "hosted-opportunity-total-bar" not in script
     assert "hosted-total-score-bar" not in html
@@ -439,7 +439,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "<desc" in m31_asset
     assert "m31-andromeda.svg" in {asset.name for asset in operator_api.ASSET_FILES}
     assert ".hosted-footer-metadata" in css
-    assert ".hosted-opportunity-glance" in css
+    assert ".hosted-score-component::before" in css
     assert "font-size: clamp(16px, 1.45vw, 22px)" in css
     assert "flex: 0 0 clamp(42px, 3.7vw, 54px)" in css
     assert ".hosted-command-target-illustration img" in css
@@ -459,7 +459,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "rigProfileLabel(data.observatory)" in script
     assert "targetFitLabel(target)" in script
     assert "profile?.label || observatory.telescope_model || observatory.rig_profile_key" in script
-    assert 'setText("hosted-weather-summary", "—")' in script
+    assert 'setText("hosted-weather-summary", "—")' not in script
     assert 'notes.replaceChildren()' in script
     assert "Building tonight's schedule…" in script
     assert "displayedTargetSettings" in script
@@ -471,10 +471,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "const isFirstObservingHome = !hostedObservatory" in script
     assert 'byId("hosted-ready-continue").addEventListener("click", loadHostedTonight)' in script
     assert "firstScheduledBlock.recommended_sub_exposure_seconds" in script
-    assert "renderSkyQuality" in script
-    assert "hosted-weather-diagnostic" in script
-    assert 'includes("unavailable")' in script
-    assert "Sky quality" in script
+    assert "renderSkyQuality" not in script
+    assert "hosted-weather-diagnostic" not in script
     assert "hostedPlanFailureMessage" in script
     assert "send Doug request ID" in script
     assert "This is a planning refresh problem, not a telescope-control action." in script
@@ -520,14 +518,16 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     assert "renderReferenceAttribution" not in script
 
 
-def test_dew_guidance_uses_the_existing_cautions_card():
+def test_dew_guidance_is_part_of_recommended_setup():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
 
-    caution_start = html.index('class="hosted-cautions-card"')
+    setup_start = html.index('id="hosted-setup-card"')
+    caution_start = html.index('class="hosted-setup-cautions"')
     notes_start = html.index('id="hosted-plan-notes"')
-    caution_end = html.index("</div>", notes_start)
-    assert caution_start < notes_start < caution_end
+    setup_end = html.index("</div>", notes_start)
+    assert setup_start < caution_start < notes_start < setup_end
+    assert 'class="hosted-cautions-card"' not in html
     assert "data.dew_risk" in script
     assert "dewAdvisoryNotes" in script
     assert "dewRisk.label" in script
@@ -546,8 +546,9 @@ def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
 
     hosted_window = html.index('id="hosted-command-window"')
     hosted_trend = html.index('id="hosted-window-trend"')
-    hosted_weather = html.index('class="hosted-command-weather"')
-    assert hosted_window < hosted_trend < hosted_weather
+    hosted_target = html.index('class="hosted-command-target-card"')
+    assert hosted_window < hosted_trend < hosted_target
+    assert 'class="hosted-command-weather"' not in html
     assert 'id="target-window-trend"' in html
     assert 'aria-live="polite"' in html
     assert "renderConditionsTrend" in script
@@ -625,23 +626,24 @@ def test_session_checklist_stays_inside_the_existing_command_card():
 
     command_start = html.index('class="hosted-command-board"')
     checklist_start = html.index('id="hosted-session-plan"')
-    breakdown_start = html.index('class="hosted-score-breakdown-card"')
-    assert command_start < checklist_start < breakdown_start
+    target_start = html.index('id="hosted-target-card"')
+    assert command_start < checklist_start < target_start
     assert 'aria-labelledby="hosted-session-plan-title"' in html
     assert 'aria-live="polite"' in html
     assert 'id="hosted-session-steps"' in html
-    assert 'id="hosted-session-actions" hidden' in html
+    assert 'id="hosted-session-actions"' not in html
     assert 'id="hosted-session-timeline-link"' in html
     assert 'aria-controls="hosted-schedule-panel"' in html
     assert "A session is possible, but recheck live conditions before starting." not in html
     assert 'id="hosted-session-plan-summary"' not in html
     assert 'const renderSessionChecklist = (checklist, decision = "Conditions Unknown") =>' in script
     assert "(checklist?.steps || []).slice(0, 3)" in script
-    assert "(checklist?.actions || []).slice(0, 2)" in script
+    assert "(checklist?.actions || []).slice(0, 2)" not in script
     assert "renderSessionChecklist(data.session_checklist, decision)" in script
     assert 'renderSessionChecklist(null, "Conditions Unknown")' in script
     assert 'step.key === "reassess"' in script
     assert 'hardStop ? "Next action" : "Session plan"' in script
+    assert 'step.instruction || "Timing unavailable."' not in script
     assert "const openHostedSchedule = () =>" in script
     assert 'byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule)' in script
     assert 'summary.focus({ preventScroll: true })' in script
@@ -661,11 +663,16 @@ def test_advisory_timeline_collapses_only_when_no_blocks_exist():
     assert 'id="hosted-schedule-summary"' in html
     assert 'id="hosted-schedule-count"' in html
     assert 'id="hosted-schedule-list"' in html
+    assert 'class="eyebrow hosted-schedule-label"' in html
     assert 'const timeline = byId("hosted-schedule-panel")' in script
     assert "timeline.open = blocks.length > 0" in script
     assert 'byId("hosted-schedule-panel").open = true' in script
     assert ".hosted-schedule-panel:not([open]) > .hosted-schedule-summary" in css
     assert ".hosted-schedule-panel[open] .hosted-schedule-toggle::before" in css
+    assert '.hosted-schedule-label::before' in css
+    assert 'content: "05";' in css
+    assert 'font-size: 24px;' in css
+    assert 'appendTextElement(body, "p", "", block.reason)' not in script
 
 
 def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
@@ -760,12 +767,12 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
 
-    assert 'id="hosted-forecast-confidence"' in html
+    assert 'id="hosted-forecast-confidence"' not in html
     assert 'id="forecast-accuracy-history-title"' in html
     assert 'id="forecast-accuracy-chart"' in html
     assert 'id="forecast-accuracy-metrics" hidden' in html
     assert 'role="status"' in html
-    assert "Forecast confidence is still building." in html
+    assert "Forecast confidence is still building." not in html
     assert "data.forecast_accuracy || {}" in script
     assert "renderForecastAccuracyHistory" in script
     assert "average_cloud_error_percent" in script
@@ -774,7 +781,7 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "minimum_samples" in script
     assert "matchedSamples < minimumSamples" in script
     assert "verified comparison" in script
-    assert ".hosted-forecast-confidence" in css
+    assert ".hosted-forecast-confidence" not in css
     assert ".forecast-accuracy-history" in css
     assert ".forecast-accuracy-bar.forecast::before" in css
 
@@ -787,14 +794,16 @@ def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
     assert "Tonight's recommendation" in html
     assert 'id="hosted-secondary-toggle"' in html
     assert "Show planning details if conditions improve" in html
-    assert 'id="hosted-score-breakdown-card"' in html
+    assert 'id="hosted-score-breakdown-card"' not in html
     assert 'id="hosted-target-card"' in html
     assert 'id="hosted-setup-card"' in html
-    assert 'id="hosted-cautions-card"' in html
+    assert 'id="hosted-cautions-card"' not in html
     assert 'hardStopScore ? "STOP"' in script
     assert 'hardStopScore ? "100%"' in script
     assert 'source: parts.cloud >= 100 ? "Not scored after cloud stop"' in script
     assert "const setHardStopDetailsVisibility" in script
+    assert 'support.hidden = decision !== "Do Not Image"' in script
+    assert '"hosted-target-card",\n  "hosted-setup-card",' in script
     assert 'timeline.hidden = schedule?.decision === "Do Not Image"' in script
     assert 'byId("hosted-secondary-toggle").addEventListener("click", toggleHardStopDetails)' in script
     assert ".hosted-secondary-toggle" in css
@@ -811,6 +820,9 @@ def test_numbered_card_headers_share_the_same_card_origin():
     assert "align-items: center;" in header_rule
     assert "margin: 0;" in header_rule
     assert ".hosted-decision {\n    padding: 16px 18px;" not in css
+    assert '.hosted-target-heading .eyebrow::before { content: "03"; }' in css
+    assert '.hosted-setup-card > .eyebrow::before { content: "04"; }' in css
+    assert '.hosted-schedule-label::before' in css
 
 
 def test_operator_preview_is_limited_to_a_capture_preview(tmp_path, monkeypatch):

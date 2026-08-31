@@ -609,6 +609,7 @@ const resetHostedPlanDetails = () => {
   );
   byId("hosted-decision-blockers").firstElementChild.textContent =
     "Waiting for conditions data.";
+  byId("hosted-decision-support").hidden = true;
   setText(
     "hosted-decision-recovery",
     "Polaris will reassess after the forecast loads.",
@@ -618,20 +619,10 @@ const resetHostedPlanDetails = () => {
   renderTargetIllustration("hosted-target-illustration", null);
   renderTargetGeometry(null);
   setText("hosted-target-tracking", "—");
-  setText("hosted-weather-summary", "—");
   renderOpportunityScore(null);
-  renderSkyQuality(null);
   renderSessionChecklist(null, "Conditions Unknown");
   setHardStopDetailsVisibility("Conditions Unknown");
-  setText("hosted-weather-updated", "Weather time unavailable");
-  setText(
-    "hosted-forecast-confidence",
-    "Forecast confidence is still building.",
-  );
   renderForecastAccuracyHistory(null);
-  const weatherDiagnostic = byId("hosted-weather-diagnostic");
-  weatherDiagnostic.hidden = true;
-  weatherDiagnostic.textContent = "";
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
   notes.hidden = true;
@@ -782,31 +773,6 @@ const renderTargetIllustration = (containerId, target, compact = false) => {
         || (cachedIllustration ? `Illustration of ${name}` : `Abstract illustration of ${name}`),
     );
   }
-};
-
-const renderSkyQuality = (rating) => {
-  const container = byId("hosted-sky-quality");
-  container.replaceChildren();
-  if (!rating || rating.quality === "Unavailable") {
-    container.textContent = "Sky quality unavailable";
-    return;
-  }
-
-  appendTextElement(container, "span", "", `Sky outlook: ${rating.quality}`);
-  const button = appendTextElement(container, "button", "quality-info-button", "i");
-  button.type = "button";
-  button.setAttribute("aria-label", "About this sky-quality rating");
-  button.addEventListener("click", () => {
-    const details = (rating.deductions || [])
-      .map((deduction) => `${deduction.label}: −${displayMeasuredNumber(deduction.points)} points`)
-      .join(" · ");
-    openInfoDialog(
-      "Sky quality",
-      rating.quality,
-      "A planning estimate based on cloud cover, humidity, wind, Moon brightness, and the Moon's distance from the selected target. It is not a score of your photographs.",
-      details || "No major sky-outlook deductions are active.",
-    );
-  });
 };
 
 const formatForecastMetric = (value, suffix = "") => {
@@ -1046,43 +1012,22 @@ const appendOpportunityComponent = (container, component) => {
       ? `— / ${component.max}`
       : `${displayMeasuredNumber(component.points)} / ${component.max}`,
   );
-  const bar = appendTextElement(row, "div", "hosted-score-bar", "");
-  bar.setAttribute("aria-hidden", "true");
-  const fill = appendTextElement(bar, "span", "", "");
-  if (component.points === null || component.points === undefined) {
-    fill.style.width = "0%";
-  } else {
-    fill.style.width = `${clampPercent((component.points / component.max) * 100)}%`;
-  }
+  const earnedPercent = component.points === null || component.points === undefined
+    ? 0
+    : clampPercent((component.points / component.max) * 100);
+  row.style.setProperty("--score-fill", `${earnedPercent}%`);
+  row.setAttribute(
+    "aria-label",
+    component.points === null || component.points === undefined
+      ? `${component.label}: not scored.`
+      : `${component.label}: ${displayMeasuredNumber(component.points)} of ${component.max} points, ${Math.round(earnedPercent)} percent earned.`,
+  );
 };
 
 const opportunityComponentScore = (components) => components.reduce(
   (total, component) => total + (Number(component.points) || 0),
   0,
 );
-
-const appendOpportunityGlanceItem = (container, label, value) => {
-  const item = document.createElement("div");
-  appendTextElement(item, "dt", "", label);
-  appendTextElement(item, "dd", "", value);
-  container.appendChild(item);
-};
-
-const renderOpportunityGlance = (components) => {
-  const container = byId("hosted-opportunity-glance");
-  container.replaceChildren();
-  const visibleComponents = expandedOpportunityComponents(components)
-    .filter((component) => component.points !== null && component.points !== undefined)
-    .slice(0, 4);
-  container.hidden = visibleComponents.length === 0;
-  visibleComponents.forEach((component) => {
-    appendOpportunityGlanceItem(
-      container,
-      component.label,
-      `${displayMeasuredNumber(component.points)} / ${component.max}`,
-    );
-  });
-};
 
 const opportunityScoreLabel = (score) => {
   if (score >= 85) return "Excellent";
@@ -1102,7 +1047,6 @@ const renderOpportunityScore = (scoreBreakdown) => {
     setText("hosted-opportunity-label", "Unavailable");
     reading.classList.remove("is-hard-stop");
     reading.style.setProperty("--opportunity-score", "0%");
-    renderOpportunityGlance([]);
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
     return null;
   }
@@ -1137,8 +1081,6 @@ const renderOpportunityScore = (scoreBreakdown) => {
       ? `Hard stop. The underlying planning score before the stop was ${Number(opportunityScore).toFixed(1)}.`
       : `Opportunity score ${Number(opportunityScore).toFixed(1)}.`,
   );
-  renderOpportunityGlance(hardStopScore ? [] : components);
-
   expandedOpportunityComponents(components).forEach((component) => {
     appendOpportunityComponent(drivers, component);
   });
@@ -1195,8 +1137,6 @@ const renderHostedSchedule = (schedule) => {
       `${block.object || "Unknown target"}${runLabel}`,
     );
     appendTextElement(identity, "span", "", block.common_name || "");
-    if (block.reason) appendTextElement(body, "p", "", block.reason);
-
     const settings = appendTextElement(body, "div", "hosted-schedule-settings", "");
     equipmentChips(block).forEach((chip) => {
       const element = appendTextElement(settings, "span", "", chip.label);
@@ -1296,11 +1236,9 @@ const renderConditionsTrend = (elementId, trend) => {
 const renderSessionChecklist = (checklist, decision = "Conditions Unknown") => {
   const panel = byId("hosted-session-plan");
   const steps = byId("hosted-session-steps");
-  const actions = byId("hosted-session-actions");
   const status = checklist?.status || "loading";
   panel.className = `hosted-session-plan status-${status}`;
   steps.replaceChildren();
-  actions.replaceChildren();
 
   const hardStop = decision === "Do Not Image";
   const checklistSteps = hardStop
@@ -1314,18 +1252,7 @@ const renderSessionChecklist = (checklist, decision = "Conditions Unknown") => {
     const heading = appendTextElement(item, "div", "hosted-session-step-heading", "");
     appendTextElement(heading, "span", "", step.label || "Plan step");
     appendTextElement(heading, "strong", "", step.time_label || "—");
-    appendTextElement(
-      item,
-      "p",
-      "",
-      step.instruction || "Timing unavailable.",
-    );
   });
-
-  (hardStop ? [] : (checklist?.actions || []).slice(0, 2)).forEach((action) => {
-    appendTextElement(actions, "li", "", action);
-  });
-  actions.hidden = actions.children.length === 0;
 };
 
 const plannedWeatherValue = (weather, key) => (
@@ -1375,26 +1302,14 @@ const decisionRecoveryText = (data) => {
 };
 
 const renderDecisionSupport = (data) => {
+  const support = byId("hosted-decision-support");
   const blockers = byId("hosted-decision-blockers");
   const recovery = byId("hosted-decision-recovery");
   const decision = data?.schedule?.decision || "Conditions Unknown";
   blockers.replaceChildren();
+  support.hidden = decision !== "Do Not Image";
 
   if (decision !== "Do Not Image") {
-    appendTextElement(
-      blockers,
-      "li",
-      "",
-      decision === "Use Caution"
-        ? "Nothing is blocking imaging outright, but one or more factors need attention."
-        : "No hard-stop blockers are active.",
-    );
-    setText(
-      "hosted-decision-recovery",
-      decision === "Use Caution"
-        ? "Review the caution items and live conditions before opening equipment."
-        : "Use the score drivers to decide how ambitious tonight's plan should be.",
-    );
     return;
   }
 
@@ -1421,10 +1336,8 @@ const openHostedSchedule = () => {
 };
 
 const hardStopSecondaryIds = [
-  "hosted-score-breakdown-card",
   "hosted-target-card",
   "hosted-setup-card",
-  "hosted-cautions-card",
 ];
 
 const setHardStopDetailsVisibility = (decision, expanded = false) => {
@@ -1663,14 +1576,9 @@ const renderHostedTonight = (data) => {
   renderConditionsTrend("hosted-window-trend", data.conditions_trend);
   renderSessionChecklist(data.session_checklist, decision);
   setText(
-    "hosted-score-breakdown-title",
-    decision === "Do Not Image" ? "Planning factors" : "Score breakdown",
-  );
-  setText(
     "hosted-setup-title",
     decision === "Do Not Image" ? "Setup if conditions improve" : "Recommended setup",
   );
-  setText("hosted-cautions-title", "What to watch");
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");
@@ -1725,40 +1633,8 @@ const renderHostedTonight = (data) => {
   }
 
   const weather = data.weather || {};
-  renderSkyQuality(data.night_rating);
-  setText(
-    "hosted-weather-summary",
-    `${displayNumber(
-      weather.planned_cloud_cover_percent ?? weather.cloud_cover_percent,
-      "% clouds",
-    )} · ${displayNumber(
-      weather.planned_wind_speed_mph ?? weather.wind_speed_mph,
-      " mph wind",
-    )}`,
-  );
-  setText(
-    "hosted-weather-updated",
-    weather.planned_temperature_at
-      ? `Forecast for ${displayDateTime(weather.planned_temperature_at)}`
-      : weather.observed_at
-      ? `Observed ${displayDateTime(weather.observed_at)}`
-      : "Weather time unavailable",
-  );
   const forecastAccuracy = data.forecast_accuracy || {};
-  setText(
-    "hosted-forecast-confidence",
-    forecastAccuracy.state === "building"
-      ? `${forecastAccuracy.matched_samples} verified comparison${forecastAccuracy.matched_samples === 1 ? "" : "s"} collected; trends begin after ${forecastAccuracy.minimum_samples}.`
-      : forecastAccuracy.message || "Forecast confidence is not available yet.",
-  );
   renderForecastAccuracyHistory(forecastAccuracy);
-  const weatherDiagnostic = byId("hosted-weather-diagnostic");
-  const weatherUnavailable =
-    weather.status && weather.status.toLowerCase().includes("unavailable");
-  weatherDiagnostic.hidden = !weatherUnavailable;
-  weatherDiagnostic.textContent = weatherUnavailable
-    ? weather.status
-    : "";
 
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();

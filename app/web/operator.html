@@ -334,7 +334,9 @@
                 </div>
                 <span id="hosted-opportunity-label">Building score</span>
               </div>
-              <dl class="hosted-opportunity-glance" id="hosted-opportunity-glance" hidden></dl>
+              <div class="hosted-score-components" id="hosted-opportunity-drivers">
+                <p>Score factors will appear after conditions load.</p>
+              </div>
             </div>
           </div>
 
@@ -370,18 +372,6 @@
                   id="hosted-window-trend"
                   aria-live="polite"
                 >Trend loading…</dd>
-                <dd class="hosted-command-weather">
-                  <span id="hosted-weather-summary">Conditions loading…</span>
-                  <span class="hosted-sky-quality" id="hosted-sky-quality">Sky quality unavailable</span>
-                  <span id="hosted-weather-updated">Weather time unavailable</span>
-                  <span
-                    class="hosted-forecast-confidence"
-                    id="hosted-forecast-confidence"
-                    role="status"
-                    aria-live="polite"
-                  >Forecast confidence is still building.</span>
-                  <span class="hosted-weather-diagnostic" id="hosted-weather-diagnostic" hidden></span>
-                </dd>
               </div>
               <div class="hosted-command-target-card">
                 <dt>Best target</dt>
@@ -418,7 +408,6 @@
                 >View full Advisory timeline</button>
               </div>
               <ol class="hosted-session-steps" id="hosted-session-steps"></ol>
-              <ul class="hosted-session-actions" id="hosted-session-actions" hidden></ul>
             </section>
           </div>
 
@@ -427,22 +416,9 @@
             id="hosted-secondary-toggle"
             type="button"
             aria-expanded="false"
-            aria-controls="hosted-score-breakdown-card hosted-target-card hosted-setup-card hosted-cautions-card"
+            aria-controls="hosted-target-card hosted-setup-card"
             hidden
           >Show planning details if conditions improve</button>
-
-          <section
-            class="hosted-score-breakdown-card"
-            id="hosted-score-breakdown-card"
-            aria-label="Opportunity score breakdown"
-          >
-            <div class="hosted-score-breakdown-heading">
-              <p class="eyebrow" id="hosted-score-breakdown-title">Score breakdown</p>
-            </div>
-            <div class="hosted-score-components" id="hosted-opportunity-drivers">
-              <p>Score factors will appear after conditions load.</p>
-            </div>
-          </section>
 
           <div class="hosted-target" id="hosted-target-card">
             <div class="hosted-target-heading">
@@ -532,12 +508,11 @@
                 <dd id="hosted-target-tracking">—</dd>
               </div>
             </dl>
-          </div>
-
-          <div class="hosted-cautions-card" id="hosted-cautions-card">
-            <p class="eyebrow" id="hosted-cautions-title">What to watch</p>
-            <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
-            <p id="hosted-cautions-empty">No special cautions once conditions finish loading.</p>
+            <section class="hosted-setup-cautions" aria-labelledby="hosted-cautions-title">
+              <p class="eyebrow" id="hosted-cautions-title">What to watch</p>
+              <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
+              <p id="hosted-cautions-empty">No special cautions for this setup.</p>
+            </section>
           </div>
         </section>
 
@@ -549,7 +524,7 @@
         >
           <summary class="panel-heading hosted-schedule-summary" id="hosted-schedule-summary">
             <div>
-              <p class="eyebrow">Advisory timeline</p>
+              <p class="eyebrow hosted-schedule-label">Advisory timeline</p>
               <h2 id="hosted-schedule-title">Tonight's schedule</h2>
             </div>
             <span class="hosted-schedule-summary-meta">
