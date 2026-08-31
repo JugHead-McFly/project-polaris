@@ -590,6 +590,11 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-rig-match", "Rig match will appear after a target is selected.");
   setText("hosted-target-rig", "—");
   setText("hosted-target-fit", "—");
+  byId("hosted-target-project").hidden = true;
+  setText("hosted-target-progress", "—");
+  setText("hosted-target-remaining", "—");
+  setText("hosted-target-quality", "—");
+  setText("hosted-target-history", "—");
   setText("hosted-target-exposure", "—");
   setText("hosted-target-gain", "—");
   setText("hosted-target-filter", "—");
@@ -1434,6 +1439,57 @@ const renderTargetGeometry = (target) => {
   chart.append(svg);
 };
 
+const renderTargetProjectContext = (target) => {
+  const container = byId("hosted-target-project");
+  container.hidden = !target;
+  if (!target) {
+    setText("hosted-target-progress", "—");
+    setText("hosted-target-remaining", "—");
+    setText("hosted-target-quality", "—");
+    setText("hosted-target-history", "—");
+    return;
+  }
+
+  const currentHours = Number(target.current_hours);
+  const goalHours = Number(target.goal_hours);
+  const progressPercent = Number(target.progress_percent);
+  const hasProgress = Number.isFinite(currentHours) && Number.isFinite(goalHours);
+  setText(
+    "hosted-target-progress",
+    hasProgress
+      ? `${displayHours(currentHours)} / ${displayHours(goalHours)}${Number.isFinite(progressPercent) ? ` · ${progressPercent}%` : ""}`
+      : "No integration goal yet",
+  );
+
+  const remainingHours = Number(target.remaining_hours);
+  setText(
+    "hosted-target-remaining",
+    Number.isFinite(remainingHours)
+      ? remainingHours <= 0
+        ? "Goal reached"
+        : `${displayHours(remainingHours)} left`
+      : "Goal status unavailable",
+  );
+
+  const bestQuality = Number(target.best_quality);
+  const averageQuality = Number(target.average_quality);
+  setText(
+    "hosted-target-quality",
+    Number.isFinite(bestQuality)
+      ? `Best ${bestQuality}/100${Number.isFinite(averageQuality) ? ` · Avg ${averageQuality}/100` : ""}`
+      : "No scored captures yet",
+  );
+
+  const sessions = Number(target.session_count);
+  const captures = Number(target.capture_count);
+  setText(
+    "hosted-target-history",
+    Number.isFinite(sessions) && Number.isFinite(captures)
+      ? `${sessions} session${sessions === 1 ? "" : "s"} · ${captures} capture${captures === 1 ? "" : "s"}`
+      : "No capture history yet",
+  );
+};
+
 const renderHostedTonight = (data) => {
   latestHostedTonightData = data;
   if (hostedConditionAlertsEnabled) {
@@ -1496,6 +1552,7 @@ const renderHostedTonight = (data) => {
       true,
     );
     renderTargetIllustration("hosted-target-illustration", target);
+    renderTargetProjectContext(target);
     renderTargetGeometry(target);
     setText(
       "hosted-target-exposure",
@@ -1507,6 +1564,7 @@ const renderHostedTonight = (data) => {
   } else {
     renderTargetIllustration("hosted-command-target-illustration", null, true);
     renderTargetIllustration("hosted-target-illustration", null);
+    renderTargetProjectContext(null);
     renderTargetGeometry(null);
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
@@ -1994,6 +2052,14 @@ const setText = (id, value, fallback = "—") => {
 const displayNumber = (value, suffix = "") => {
   if (value === null || value === undefined) return "—";
   return `${value}${suffix}`;
+};
+
+const displayHours = (value) => {
+  if (value === null || value === undefined) return "—";
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return displayNumber(value, " hr");
+  const rounded = numeric >= 10 ? numeric.toFixed(1) : numeric.toFixed(2);
+  return `${rounded.replace(/\.?0+$/, "")} hr`;
 };
 
 const displayMeasuredNumber = (value) => {

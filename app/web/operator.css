@@ -1513,6 +1513,35 @@ footer {
   color: #b4c7cc;
 }
 
+.hosted-target-project {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.hosted-target-project div {
+  min-width: 0;
+  padding: 11px 12px;
+  background: rgba(3, 14, 22, 0.4);
+  border: 1px solid rgba(91, 221, 205, 0.16);
+  border-radius: 8px;
+}
+
+.hosted-target-project dt {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hosted-target-project dd {
+  margin: 5px 0 0;
+  color: #e6f3f2;
+  font-size: 13px;
+  font-weight: 750;
+}
+
 .hosted-target-geometry {
   margin-top: 18px;
   padding: 16px 0 12px;
@@ -4346,6 +4375,10 @@ footer {
   }
 
   .target-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hosted-target-project {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

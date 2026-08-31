@@ -293,6 +293,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Target fit" in html
     assert 'id="hosted-target-rig-match"' in html
     assert "Why this rig matches" in html
+    assert 'id="hosted-target-project"' in html
+    assert "Project progress" in html
+    assert "Remaining goal" in html
+    assert "Capture quality" in html
     assert 'id="hosted-target-geometry"' in html
     assert 'id="hosted-target-altitude-chart"' in html
     assert 'id="hosted-target-peak-altitude"' in html
@@ -369,6 +373,10 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "targetRigMatchLabel(target)" in script
     assert "renderTargetGeometry(target)" in script
     assert "renderTargetGeometry(null)" in script
+    assert "renderTargetProjectContext(target)" in script
+    assert "displayHours(currentHours)" in script
+    assert "Goal reached" in script
+    assert "No scored captures yet" in script
     assert "knownTargetMetadata(target.constellation)" in script
     assert "knownTargetMetadata(target.target_type)" in script
     assert "target.target_geometry" in script
@@ -430,6 +438,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert ".hosted-command-fallback-card.has-target-illustration" in css
     assert ".hosted-target-heading:not(.has-target-illustration)" in css
     assert ".hosted-target-geometry" in css
+    assert ".hosted-target-project" in css
     assert ".target-altitude-line" in css
     assert ".target-altitude-peak" in css
     assert ".hosted-reference-image" not in css
