@@ -1,6 +1,6 @@
 # Project Polaris Status
 
-Last updated: 2026-08-30
+Last updated: 2026-08-31
 
 ## Project locations
 
@@ -10,7 +10,7 @@ Last updated: 2026-08-30
 - Application version: `1.6.0` (local product checkpoint)
 - Current release tag: `v1.5.1`
 - Release commit: `77c0234`
-- Current product milestone: `v1.11 — Single-User Nightly Intelligence`
+- Current product milestone: `v1.12 — Single-User Product Checkpoint`
 
 Doug is the single active product user for the current roadmap. External alpha
 recruitment, tester follow-up, and cohort evidence are deferred until an
@@ -96,10 +96,10 @@ external tester: stale Tonight details could remain visible while a newly
 signed-in account was refreshing. The hosted loading state now clears prior
 target, settings, weather, Moon, schedule, notes, image, and feedback details
 before fetching the next plan, and the fix is deployed on Render.
-The current product gate is v1.11 single-user value: use existing captures,
-saved plans, forecast checks, rig context, historical outcomes, and
-deterministic scenarios to choose and verify the next concrete improvement.
-Tester recruitment, clear weather, and new imaging are not the next gates.
+The completed v1.11 gate established single-user nightly intelligence from
+existing captures, saved plans, forecast checks, rig context, historical
+outcomes, and deterministic scenarios. Tester recruitment, clear weather, and
+new imaging are not gates for the next milestone.
 
 As of August 30, 2026, V1.9 rig-aware planning and the V1.10 Opportunity
 Advisor presentation have reached their hosted checkpoints. Hosted observing
@@ -122,7 +122,7 @@ outside feedback, or another imaging session. The handling rules and scenario
 matrix are recorded in
 [`EXISTING_DATA_TEST_BEDS.md`](docs/EXISTING_DATA_TEST_BEDS.md).
 
-The first V1.11 existing-data harness is now implemented. It runs five named
+V1.11 is complete as of August 31, 2026. The existing-data harness runs five named
 whole-night scenarios through the real settings, decision, schedule, night
 rating, Opportunity Score, and operator-message logic: the documented 38.2
 monsoon hold, a clear EQ nebula night, a DWARF 3 long session split at the
@@ -136,6 +136,9 @@ handles it safely, and the live database was not changed. The expanded full
 suite passes all 329 tests. The full-cloud scoring correction is deployed on
 Render: 100% cloud cover now gives the whole Cloud + stability component 0
 points instead of preserving humidity or wind credit.
+The hosted UI also explains hard-stop nights with split cloud, humidity, and
+wind rows plus plain-English blocker and recovery guidance. Render, GitHub,
+and local `develop` are aligned at commit `d4f55e8`.
 
 Version 1.4 expands `GET /system` with read-only runtime diagnostics:
 
@@ -397,7 +400,7 @@ endpoint checks also passed.
 
 ## Next planned work
 
-1. Expand the first passing V1.11 nightly-decision harness only when a new
+1. Expand the completed V1.11 nightly-decision harness only when a new
    product rule or known historical outcome adds distinct coverage. Keep the
    current five scenarios and read-only local evidence inventory as the baseline.
 2. Use the test beds to identify the highest-value improvement to Doug's

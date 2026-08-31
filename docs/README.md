@@ -18,7 +18,7 @@ project-manager notes, not public user documentation.
   operating brief for product, research, branding, and review boundaries.
 - [`PRODUCT_BIBLE.md`](PRODUCT_BIBLE.md) — product source of truth and decision
   principles.
-- [`EXISTING_DATA_TEST_BEDS.md`](EXISTING_DATA_TEST_BEDS.md) — active
+- [`EXISTING_DATA_TEST_BEDS.md`](EXISTING_DATA_TEST_BEDS.md) — baseline
   monsoon-season rules for using existing captures, saved plans, hosted history,
   and deterministic fixtures without waiting for new imaging.
 
@@ -107,7 +107,7 @@ single-user development.
 
 ## Rule of thumb
 
-For active V1.11 work, use only these first unless a problem points elsewhere:
+For active V1.12 work, use only these first unless a problem points elsewhere:
 
 1. [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md)
 2. [`../PROJECT_STATUS.md`](../PROJECT_STATUS.md)

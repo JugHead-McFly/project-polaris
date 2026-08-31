@@ -31,8 +31,8 @@ what to do and more time under the sky.
 | **v1.8 — Feedback + scoring foundation** | Foundation complete Aug. 2 | Preserve privacy-safe recommendation and usefulness history for Doug's own review now and possible external validation later | Passed internally: aggregate metrics, review focus, trust-oriented feedback prompts, and tenant isolation exist. Live-tester criteria are deferred rather than an active exit gate. |
 | **v1.9 — Exposure and reliability logic** | Substantially complete by late August | Improve recommendation trust where weather, Moon, tracking mode, heat, rig limits, and 999-frame limits affect the actual plan | Doug sees conservative, explainable settings and no known critical planning or safety contradiction |
 | **v1.10 — Opportunity Advisor UI + scoring investigation** | Complete Aug. 30 | Turn Tonight into a compact, at-a-glance opportunity card while validating score components before exposing them as product promises | Passed locally and hosted: Tonight explains the realistic opportunity, best target, fallback, score drivers, rig match, and forecast-history state without implying false certainty |
-| **v1.11 — Single-User Nightly Intelligence** | Active | Improve recommendations from existing weather, forecast, rig, location, and capture evidence using repeatable historical and synthetic test beds | Known scenarios produce stable, explainable results; Doug can review the hosted Tonight flow without a new capture or clear night being required |
-| **v1.12 — Single-User Product Checkpoint** | After v1.11 | Consolidate the strongest nightly, portfolio, goal, quality, and location workflows into a dependable personal product | Polaris is useful and internally verified against existing data; neither outside participation nor additional imaging is required |
+| **v1.11 — Single-User Nightly Intelligence** | Complete Aug. 31 | Improve recommendations from existing weather, forecast, rig, location, and capture evidence using repeatable historical and synthetic test beds | Passed: five existing-data nightly scenarios, explainable hard stops, full-cloud zero weather scoring, hosted bad-night guidance, and Render/local alignment |
+| **v1.12 — Single-User Product Checkpoint** | Active | Consolidate the strongest nightly, portfolio, goal, quality, and location workflows into a dependable personal product | Polaris is useful and internally verified against existing data; neither outside participation nor additional imaging is required |
 | **v1.13 — Optional private-alpha reconsideration** | Future; only after Doug explicitly chooses to resume it | Decide whether a small external cohort would answer a question that single-user use cannot answer | A written go/no-go decision names the exact question, support burden, privacy gate, and smallest useful cohort before any invitation is sent |
 | **v2.0 — Closed beta decision** | Only after a later alpha produces useful evidence | Decide whether to expand, narrow scope, extend validation, or keep Polaris personal | Decision is based on observed value, trust, support burden, and willingness-to-pay evidence, not feature count |
 | **Public-launch decision** | Future | Decide whether to launch, narrow the audience, extend beta, or stop | Launch only when repeat use and trust are proven by behavior |
@@ -49,7 +49,7 @@ not be the primary way Doug has to carry the project in his head.
 | **Teach Polaris to Make Smart Suggestions** | It weighs tradeoffs and explains a realistic target recommendation. | Largely complete locally; quality scoring and goal refinement remain active work. |
 | **Help Users Plan Their Night** | It turns a recommendation into a practical imaging window and sequence. | Largely complete locally through Planner V3. |
 | **Build Mission Control** | A person can see the meaningful state of their observing work in one understandable place. | Largely complete locally; the hosted single-user product now carries the Tonight loop. |
-| **Deepen the Personal Product** | Existing captures and saved planning evidence make recommendations, goals, quality guidance, and planning more useful over time. | Active in v1.11; this is the current product-development focus. |
+| **Deepen the Personal Product** | Existing captures and saved planning evidence make recommendations, goals, quality guidance, and planning more useful over time. | Active in v1.12; this is the current product-development focus. |
 | **Invite the First Explorers** | Real smart-telescope users try the hosted core workflow and teach us what single-user use cannot. | Deferred until v1.13 and only resumed by an explicit decision from Doug. |
 | **Launch Polaris** | A public product earns continued investment through repeat use and trust. | Future; only after alpha and closed-beta evidence. |
 
@@ -148,7 +148,7 @@ browser presents a phone-friendly recommendation, target settings, conditions,
 and advisory timeline. Recommendation runs are saved with tenant ownership and
 privacy-safe planning provenance, and the user can record a simple Yes/No
 usefulness response. Automated checks cover persistence and cross-user
-isolation. External cohort analysis is deferred. During v1.11, existing saved
+isolation. External cohort analysis is deferred. During v1.12, existing saved
 plans, captures, feedback, forecast checks, and deterministic scenarios support
 Doug's own review without becoming a reason to pause development.
 
