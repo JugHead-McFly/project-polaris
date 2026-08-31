@@ -260,6 +260,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Your imaging plan" in html
     assert "Opportunity score" in html
     assert 'id="hosted-opportunity-score"' in html
+    assert '<small>/100</small>' not in html
+    assert 'id="hosted-opportunity-glance"' in html
     assert 'id="hosted-opportunity-drivers"' in html
     assert 'class="hosted-score-breakdown-card"' in html
     assert 'aria-label="Opportunity score breakdown"' in html
@@ -329,6 +331,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
     assert "renderOpportunityScore" in script
+    assert "renderOpportunityGlance" in script
+    assert "appendOpportunityGlanceItem" in script
     assert "hosted-opportunity-total-bar" in script
     assert "Number(opportunityScore).toFixed(1)" in script
     assert "scoreBreakdown.label || opportunityScoreLabel(opportunityScore)" in script
@@ -433,6 +437,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "<desc" in m31_asset
     assert "m31-andromeda.svg" in {asset.name for asset in operator_api.ASSET_FILES}
     assert ".hosted-footer-metadata" in css
+    assert ".hosted-opportunity-glance" in css
     assert ".hosted-command-target-illustration img" in css
     assert ".hosted-target-illustration img" in css
     assert ".hosted-command-target-card.has-target-illustration" in css

@@ -984,6 +984,29 @@ const opportunityComponentScore = (components) => components.reduce(
   0,
 );
 
+const appendOpportunityGlanceItem = (container, label, value) => {
+  const item = document.createElement("div");
+  appendTextElement(item, "dt", "", label);
+  appendTextElement(item, "dd", "", value);
+  container.appendChild(item);
+};
+
+const renderOpportunityGlance = (components) => {
+  const container = byId("hosted-opportunity-glance");
+  container.replaceChildren();
+  const visibleComponents = expandedOpportunityComponents(components)
+    .filter((component) => component.points !== null && component.points !== undefined)
+    .slice(0, 4);
+  container.hidden = visibleComponents.length === 0;
+  visibleComponents.forEach((component) => {
+    appendOpportunityGlanceItem(
+      container,
+      component.label,
+      `${displayMeasuredNumber(component.points)} / ${component.max}`,
+    );
+  });
+};
+
 const opportunityScoreLabel = (score) => {
   if (score >= 85) return "Excellent";
   if (score >= 70) return "Very good";
@@ -1003,6 +1026,7 @@ const renderOpportunityScore = (scoreBreakdown) => {
     reading.classList.remove("is-hard-stop");
     reading.style.setProperty("--opportunity-score", "0%");
     byId("hosted-opportunity-total-bar").style.width = "0%";
+    renderOpportunityGlance([]);
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
     return null;
   }
@@ -1026,6 +1050,7 @@ const renderOpportunityScore = (scoreBreakdown) => {
   reading.classList.toggle("is-hard-stop", hardStopScore);
   reading.style.setProperty("--opportunity-score", `${clampPercent(opportunityScore)}%`);
   byId("hosted-opportunity-total-bar").style.width = `${clampPercent(opportunityScore)}%`;
+  renderOpportunityGlance(components);
 
   expandedOpportunityComponents(components).forEach((component) => {
     appendOpportunityComponent(drivers, component);
