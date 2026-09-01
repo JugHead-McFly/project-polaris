@@ -28,3 +28,44 @@ services:
         sync: false
       - key: POLARIS_SUPABASE_PUBLISHABLE_KEY
         sync: false
+
+  - type: cron
+    name: project-polaris-forecast-accuracy
+    runtime: python
+    plan: 0.5c-512mb
+    region: oregon
+    branch: develop
+    autoDeployTrigger: "commit"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/collect_forecast_accuracy.py
+    schedule: "17 * * * *"
+    envVars:
+      - key: POLARIS_ENVIRONMENT
+        value: production
+      - key: POLARIS_AUTH_MODE
+        value: supabase
+      - key: POLARIS_SUPABASE_AUDIENCE
+        value: authenticated
+      - key: POLARIS_REQUIRE_LOCAL_CAPTURE_LIBRARY
+        value: "false"
+      - key: POLARIS_LOG_LEVEL
+        value: INFO
+      - key: POLARIS_SENTRY_ALLOW_TRANSMISSION
+        value: "false"
+      - key: POLARIS_DATABASE_URL
+        fromService:
+          type: web
+          name: project-polaris-private-alpha
+          envVarKey: POLARIS_DATABASE_URL
+      - key: POLARIS_SUPABASE_URL
+        fromService:
+          type: web
+          name: project-polaris-private-alpha
+          envVarKey: POLARIS_SUPABASE_URL
+      - key: POLARIS_SUPABASE_PUBLISHABLE_KEY
+        fromService:
+          type: web
+          name: project-polaris-private-alpha
+          envVarKey: POLARIS_SUPABASE_PUBLISHABLE_KEY
+      - key: POLARIS_FORECAST_ACCURACY_USER_IDS
+        sync: false

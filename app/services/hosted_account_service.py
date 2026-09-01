@@ -35,6 +35,13 @@ def get_planning_context(
             "Add an observing home before requesting tonight's plan."
         )
 
+    return planning_context_from_observatory(observatory)
+
+
+def planning_context_from_observatory(
+    observatory: HostedObservatory,
+) -> ObservatoryContext:
+    """Convert a persisted hosted observatory into planner input."""
     return ObservatoryContext(
         name=observatory.name,
         latitude=observatory.latitude,

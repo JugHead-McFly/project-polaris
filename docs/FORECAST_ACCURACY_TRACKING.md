@@ -1,6 +1,6 @@
 # Forecast Accuracy Tracking
 
-Status: first privacy-safe collection phase  
+Status: automated private-alpha collection phase
 Audience: Doug, product review, and operations
 
 ## Purpose
@@ -27,6 +27,12 @@ When Polaris later receives a real provider reading within 75 minutes of that
 forecast hour, it stores the equivalent observed values and marks the check as
 matched. A single reading matches only the nearest eligible forecast hour.
 
+The hosted private alpha runs the same planning and matching path at minute 17
+of every hour. The collector processes only user UUIDs in the private
+`POLARIS_FORECAST_ACCURACY_USER_IDS` Render environment allowlist. Each UUID
+receives a separate tenant-scoped database session, so the existing forced Row
+Level Security policy remains active throughout collection.
+
 ## Privacy boundary
 
 Accuracy rows are owned by the signed-in user and protected by the same forced
@@ -44,13 +50,26 @@ production migration is accepted.
 - No row is created without a real future forecast hour and at least one
   forecast value.
 - A forecast is never treated as observed data.
-- If the user does not reopen Polaris near the forecast hour, the pending check
-  expires instead of being guessed.
+- If both the scheduled collector and a user refresh miss the matching window,
+  the pending check expires instead of being guessed.
 - Repeated refreshes update one pending row for the same observing home and
   forecast hour rather than increasing the sample count.
 - Times are converted from the observing home's named time zone to UTC before
   matching, including overnight and international date boundaries.
 - History older than 90 days is deleted during normal tracking work.
+
+## Operations
+
+Render runs `python scripts/collect_forecast_accuracy.py` hourly. A successful
+run prints aggregate tenant counts only; it does not print UUIDs, coordinates,
+or weather values. Any configured-tenant failure makes the command exit with a
+failure status so Render can surface it operationally.
+
+Adding an alpha account to automated collection requires adding its UUID to
+the cron service's comma-separated
+`POLARIS_FORECAST_ACCURACY_USER_IDS` environment variable. Removing a UUID
+stops future scheduled collection but does not alter existing history or the
+90-day retention rule.
 
 ## User-facing state
 
