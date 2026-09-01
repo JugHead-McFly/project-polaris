@@ -882,9 +882,9 @@ footer {
 
 .hosted-command-board {
   grid-area: command;
-  display: grid;
-  align-self: start;
-  align-content: start;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
   gap: 14px;
   background: linear-gradient(150deg, rgba(6, 24, 31, 0.97), rgba(18, 23, 43, 0.96));
   border: 1px solid rgba(91, 221, 205, 0.24);
@@ -892,7 +892,7 @@ footer {
 
 .hosted-recommendation.status-do-not-image .hosted-score-command,
 .hosted-recommendation.status-do-not-image .hosted-command-board {
-  align-self: start;
+  align-self: stretch;
 }
 
 .hosted-decision {
@@ -1295,7 +1295,7 @@ footer {
 .hosted-session-plan {
   display: grid;
   gap: 12px;
-  margin-top: 4px;
+  margin-top: auto;
   padding-top: 14px;
   border-top: 1px solid rgba(91, 221, 205, 0.18);
 }

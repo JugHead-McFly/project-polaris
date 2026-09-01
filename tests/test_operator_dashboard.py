@@ -23,6 +23,19 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert response.headers["cache-control"] == "no-store"
     assert ".hosted-recommendation.status-loading #hosted-opportunity-score" in stylesheet.text
     assert "font-size: clamp(52px, 5vw, 64px);" in stylesheet.text
+    assert (
+        ".hosted-command-board {\n"
+        "  grid-area: command;\n"
+        "  display: flex;\n"
+        "  flex-direction: column;\n"
+        "  align-self: stretch;"
+    ) in stylesheet.text
+    assert (
+        ".hosted-session-plan {\n"
+        "  display: grid;\n"
+        "  gap: 12px;\n"
+        "  margin-top: auto;"
+    ) in stylesheet.text
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text
