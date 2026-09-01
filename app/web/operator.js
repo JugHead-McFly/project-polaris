@@ -1386,6 +1386,7 @@ const setHardStopDetailsVisibility = (decision, expanded = false) => {
   const hardStop = decision === "Do Not Image";
   hostedSecondaryDetailsExpanded = hardStop && expanded;
   const toggle = byId("hosted-secondary-toggle");
+  byId("hosted-recommendation").classList.toggle("has-secondary-toggle", hardStop);
   toggle.hidden = !hardStop;
   toggle.setAttribute("aria-expanded", String(hostedSecondaryDetailsExpanded));
   toggle.textContent = hostedSecondaryDetailsExpanded
