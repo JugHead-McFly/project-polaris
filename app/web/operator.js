@@ -352,6 +352,17 @@ const setMobileHeaderMenu = (open) => {
   );
 };
 
+const alignHostedNavigation = () => {
+  const hostedPath = window.location.pathname.replace(/\/$/, "") || "/operator";
+  if (hostedPath !== "/operator") {
+    window.history.replaceState({}, "", "/operator");
+  }
+  document.title = "Project Polaris — Night Operations";
+  const skipLink = document.querySelector(".skip-link");
+  skipLink.href = "#hosted-tonight-panel";
+  skipLink.textContent = "Skip to tonight's plan";
+};
+
 const setHostedShell = (signedIn) => {
   byId("auth-gate").hidden = signedIn;
   byId("hosted-account-main").hidden = !signedIn;
@@ -364,6 +375,7 @@ const setHostedShell = (signedIn) => {
   byId("eq-mode-checkbox").closest(".tracking-mode-control").hidden = signedIn;
   document.querySelector(".readonly-badge").hidden = signedIn;
   if (!signedIn) setMobileHeaderMenu(false);
+  if (signedIn) alignHostedNavigation();
 };
 
 const showPasswordSetup = () => {

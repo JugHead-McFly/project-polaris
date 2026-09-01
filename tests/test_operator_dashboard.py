@@ -100,6 +100,9 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";' in script.text
     assert "window.localStorage.getItem(EQ_MODE_PREFERENCE_KEY)" in script.text
     assert "window.localStorage.setItem(EQ_MODE_PREFERENCE_KEY, String(enabled))" in script.text
+    assert 'window.history.replaceState({}, "", "/operator")' in script.text
+    assert 'skipLink.href = "#hosted-tonight-panel"' in script.text
+    assert 'document.title = "Project Polaris — Night Operations"' in script.text
     assert 'byId("eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'apiFetch("/system"' in script.text
