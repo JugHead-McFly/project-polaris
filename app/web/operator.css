@@ -766,6 +766,30 @@ footer {
   color: var(--muted);
 }
 
+.hosted-forecast-history-link {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+  padding-bottom: 5px;
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(91, 221, 205, 0.34);
+}
+
+.hosted-forecast-history-link:hover,
+.hosted-forecast-history-link:focus-visible {
+  color: #b9fff3;
+  border-bottom-color: currentColor;
+}
+
+.hosted-forecast-history-link strong {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
 .hosted-condition-alerts {
   display: flex;
   align-items: center;
@@ -1333,6 +1357,7 @@ footer {
   display: grid;
   gap: 10px;
   padding: 18px 22px;
+  scroll-margin-top: 20px;
 }
 
 .forecast-accuracy-heading {
@@ -1366,6 +1391,48 @@ footer {
   color: #bfd0d4;
   font-size: 13px;
   line-height: 1.45;
+}
+
+.forecast-accuracy-recent {
+  display: grid;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.forecast-accuracy-recent .eyebrow {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.forecast-accuracy-recent ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-recent li {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.75fr) minmax(240px, 1.25fr) minmax(150px, auto);
+  align-items: center;
+  gap: 14px;
+  padding: 9px 0;
+  color: #bfd0d4;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-recent li strong {
+  color: #eaf4f5;
+  font-size: 11px;
+}
+
+.forecast-accuracy-check-meta {
+  color: #75ddc4;
+  font-weight: 800;
+  text-align: right;
 }
 
 .forecast-accuracy-metrics {
@@ -4682,6 +4749,20 @@ footer {
   .hosted-tonight-heading {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .hosted-forecast-history-link {
+    align-self: flex-start;
+    justify-items: start;
+  }
+
+  .forecast-accuracy-recent li {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .forecast-accuracy-check-meta {
+    text-align: left;
   }
 
   .hosted-condition-alerts {

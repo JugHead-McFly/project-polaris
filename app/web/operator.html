@@ -306,6 +306,10 @@
             <h1 id="hosted-tonight-title">Your imaging plan</h1>
             <p id="hosted-tonight-date">Building tonight's recommendation…</p>
           </div>
+          <a class="hosted-forecast-history-link" href="#forecast-accuracy-history">
+            <span>Forecast history</span>
+            <strong id="forecast-accuracy-link-count">0 checks</strong>
+          </a>
         </div>
 
         <section
@@ -539,6 +543,7 @@
 
         <section
           class="panel forecast-accuracy-history"
+          id="forecast-accuracy-history"
           aria-labelledby="forecast-accuracy-history-title"
         >
           <div class="forecast-accuracy-heading">
@@ -549,6 +554,15 @@
             <span id="forecast-accuracy-history-count">0 verified comparisons</span>
           </div>
           <p id="forecast-accuracy-history-message">Polaris is waiting for matched forecast and observed weather.</p>
+          <section
+            class="forecast-accuracy-recent"
+            id="forecast-accuracy-recent"
+            aria-labelledby="forecast-accuracy-recent-title"
+            hidden
+          >
+            <p class="eyebrow" id="forecast-accuracy-recent-title">Recent verified checks</p>
+            <ol id="forecast-accuracy-recent-list"></ol>
+          </section>
           <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
           <div
             class="forecast-accuracy-chart"

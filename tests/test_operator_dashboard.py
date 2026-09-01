@@ -782,6 +782,10 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
 
     assert 'id="hosted-forecast-confidence"' not in html
     assert 'id="forecast-accuracy-history-title"' in html
+    assert 'href="#forecast-accuracy-history"' in html
+    assert 'id="forecast-accuracy-link-count"' in html
+    assert 'id="forecast-accuracy-recent-list"' in html
+    assert "Recent verified checks" in html
     assert 'id="forecast-accuracy-chart"' in html
     assert 'id="forecast-accuracy-metrics" hidden' in html
     assert 'role="status"' in html
@@ -794,7 +798,10 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "minimum_samples" in script
     assert "matchedSamples < minimumSamples" in script
     assert "verified comparison" in script
+    assert 'formatForecastMetric(check.cloud_error_percent, "-point miss")' in script
     assert ".hosted-forecast-confidence" not in css
+    assert ".hosted-forecast-history-link" in css
+    assert ".forecast-accuracy-recent" in css
     assert ".forecast-accuracy-history" in css
     assert ".forecast-accuracy-bar.forecast::before" in css
 

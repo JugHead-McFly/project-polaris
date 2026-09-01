@@ -801,6 +801,10 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     `${matchedSamples} verified comparison${matchedSamples === 1 ? "" : "s"}`,
   );
   setText(
+    "forecast-accuracy-link-count",
+    `${matchedSamples} check${matchedSamples === 1 ? "" : "s"}`,
+  );
+  setText(
     "forecast-accuracy-history-message",
     matchedSamples < minimumSamples
       ? `${matchedSamples} verified comparison${matchedSamples === 1 ? "" : "s"} collected. Trends begin after ${minimumSamples}.`
@@ -811,7 +815,7 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   metricsList.replaceChildren();
   metricsList.hidden = matchedSamples < minimumSamples;
   [
-    ["Avg. cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, "%")],
+    ["Avg. cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, " pts")],
     ["Avg. lead time", formatForecastMetric(metrics.average_lead_hours, " hr")],
     ["Avg. temp miss", formatForecastMetric(metrics.average_temperature_error_f, "°F")],
     ["Avg. wind miss", formatForecastMetric(metrics.average_wind_error_mph, " mph")],
@@ -819,6 +823,32 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     const item = appendTextElement(metricsList, "div", "", "");
     appendTextElement(item, "dt", "", label);
     appendTextElement(item, "dd", "", value);
+  });
+
+  const recent = byId("forecast-accuracy-recent");
+  const recentList = byId("forecast-accuracy-recent-list");
+  recentList.replaceChildren();
+  recent.hidden = recentChecks.length === 0;
+  [...recentChecks].reverse().forEach((check) => {
+    const item = appendTextElement(recentList, "li", "", "");
+    appendTextElement(
+      item,
+      "strong",
+      "",
+      displayDateTime(check.forecast_for),
+    );
+    appendTextElement(
+      item,
+      "span",
+      "",
+      `Cloud forecast ${formatForecastMetric(check.forecast_cloud_cover_percent, "%")} · observed ${formatForecastMetric(check.observed_cloud_cover_percent, "%")}`,
+    );
+    appendTextElement(
+      item,
+      "span",
+      "forecast-accuracy-check-meta",
+      `${formatForecastMetric(check.cloud_error_percent, "-point miss")} · ${formatForecastMetric(check.lead_hours, " hr lead")}`,
+    );
   });
 
   const chart = byId("forecast-accuracy-chart");
@@ -860,7 +890,7 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
       row,
       "strong",
       "",
-      `${check.cloud_error_percent}% miss`,
+      `${check.cloud_error_percent}-point miss`,
     );
   });
 };
