@@ -1361,14 +1361,14 @@ footer {
 
 .forecast-accuracy-history {
   display: grid;
-  gap: 10px;
-  padding: 18px 22px;
+  gap: 16px;
+  padding: 24px;
   scroll-margin-top: 20px;
 }
 
 .forecast-accuracy-heading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 14px;
 }
@@ -1379,8 +1379,34 @@ footer {
   margin: 0;
 }
 
+.forecast-accuracy-heading .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: clamp(16px, 1.45vw, 22px);
+  line-height: 1.1;
+}
+
+.forecast-accuracy-heading .eyebrow::before {
+  display: inline-grid;
+  flex: 0 0 clamp(42px, 3.7vw, 54px);
+  width: clamp(42px, 3.7vw, 54px);
+  height: clamp(42px, 3.7vw, 54px);
+  place-items: center;
+  color: #061117;
+  background: linear-gradient(145deg, #8aeadf, #42bdb3);
+  border: 1px solid rgba(208, 255, 248, 0.68);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(91, 221, 205, 0.28);
+  content: "06";
+  font-size: clamp(16px, 1.35vw, 20px);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
 .forecast-accuracy-heading strong {
   display: block;
+  margin: 8px 0 0 calc(clamp(42px, 3.7vw, 54px) + 14px);
   color: #eaf4f5;
   font-size: 16px;
   line-height: 1.25;
@@ -1393,6 +1419,19 @@ footer {
   font-weight: 800;
 }
 
+.forecast-accuracy-guidance {
+  display: grid;
+  gap: 5px;
+  padding: 14px 16px;
+  background: rgba(91, 221, 205, 0.05);
+  border-left: 3px solid rgba(91, 221, 205, 0.52);
+}
+
+.forecast-accuracy-guidance strong {
+  color: #eaf4f5;
+  font-size: 16px;
+}
+
 .forecast-accuracy-history p {
   color: #bfd0d4;
   font-size: 13px;
@@ -1401,8 +1440,8 @@ footer {
 
 .forecast-accuracy-recent {
   display: grid;
-  gap: 6px;
-  padding-top: 4px;
+  gap: 8px;
+  padding-top: 2px;
 }
 
 .forecast-accuracy-recent .eyebrow {
@@ -1444,16 +1483,19 @@ footer {
 .forecast-accuracy-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
   margin: 0;
+  border-top: 1px solid rgba(153, 202, 207, 0.14);
+  border-bottom: 1px solid rgba(153, 202, 207, 0.14);
 }
 
 .forecast-accuracy-metrics div {
   min-width: 0;
-  padding: 10px;
-  background: rgba(10, 19, 25, 0.34);
-  border: 1px solid rgba(153, 202, 207, 0.14);
-  border-radius: 8px;
+  padding: 13px 14px;
+  border-left: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-metrics div:first-child {
+  border-left: 0;
 }
 
 .forecast-accuracy-metrics dt {
@@ -1468,8 +1510,66 @@ footer {
 .forecast-accuracy-metrics dd {
   margin: 0;
   color: #eaf4f5;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
+}
+
+.forecast-accuracy-lead-note {
+  color: var(--muted) !important;
+  font-size: 11px !important;
+}
+
+.forecast-accuracy-visual {
+  display: grid;
+  gap: 12px;
+  padding: 16px 0 4px;
+  border-top: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-visual-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.forecast-accuracy-visual-heading .eyebrow {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.forecast-accuracy-visual-heading strong {
+  font-size: 15px;
+}
+
+.forecast-accuracy-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.forecast-accuracy-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.forecast-accuracy-legend i {
+  display: block;
+  width: 18px;
+  height: 3px;
+  border-radius: 3px;
+}
+
+.forecast-accuracy-legend i.forecast {
+  background: #75ddc4;
+}
+
+.forecast-accuracy-legend i.observed {
+  background: #f2be67;
 }
 
 .forecast-accuracy-chart {
@@ -4805,6 +4905,20 @@ footer {
 
   .forecast-accuracy-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .forecast-accuracy-metrics div:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .forecast-accuracy-metrics div:nth-child(n + 3) {
+    border-top: 1px solid rgba(153, 202, 207, 0.14);
+  }
+
+  .forecast-accuracy-visual-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .forecast-accuracy-row {

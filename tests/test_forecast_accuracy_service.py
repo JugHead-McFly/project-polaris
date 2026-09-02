@@ -309,4 +309,7 @@ def test_enough_matches_still_does_not_claim_confidence():
     assert summary["metrics"]["average_cloud_error_percent"] == 5
     assert len(summary["recent_checks"]) == 5
     assert summary["has_history_chart"] is True
-    assert "not using them in tonight's score" in summary["message"]
+    assert summary["message"] == (
+        "5 verified comparisons show an early pattern. This is not a "
+        "confidence rating and does not affect tonight's score."
+    )

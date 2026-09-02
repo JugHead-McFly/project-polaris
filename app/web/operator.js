@@ -787,11 +787,14 @@ const renderTargetIllustration = (containerId, target, compact = false) => {
   }
 };
 
-const formatForecastMetric = (value, suffix = "") => {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return "Not enough data";
-  return `${number}${suffix}`;
-};
+const hasForecastMetric = (value) => value !== null
+  && value !== undefined
+  && value !== ""
+  && Number.isFinite(Number(value));
+
+const formatForecastMetric = (value, suffix = "") => (
+  hasForecastMetric(value) ? `${Number(value)}${suffix}` : "Not enough data"
+);
 
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
   const data = forecastAccuracy || {};
@@ -801,11 +804,14 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   const recentChecks = Array.isArray(data.recent_checks)
     ? data.recent_checks
     : [];
+  const remainingSamples = Math.max(0, minimumSamples - matchedSamples);
+  const averageCloudError = metrics.average_cloud_error_percent;
+  const hasAverageCloudError = hasForecastMetric(averageCloudError);
 
   setText(
     "forecast-accuracy-history-label",
     data.state === "ready_for_calibration"
-      ? "Ready for calibration"
+      ? "Early pattern available"
       : "Building history",
   );
   setText(
@@ -815,6 +821,16 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   setText(
     "forecast-accuracy-link-count",
     `${matchedSamples} check${matchedSamples === 1 ? "" : "s"}`,
+  );
+  setText(
+    "forecast-accuracy-insight",
+    matchedSamples === 0
+      ? "Waiting for the first verified comparison."
+      : remainingSamples > 0
+        ? `${remainingSamples} more verified check${remainingSamples === 1 ? "" : "s"} before the first pattern.`
+        : hasAverageCloudError
+          ? `Cloud forecasts have differed by an average of ${averageCloudError} points.`
+          : `${matchedSamples} verified checks are available for review.`,
   );
   setText(
     "forecast-accuracy-history-message",
@@ -827,8 +843,8 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   metricsList.replaceChildren();
   metricsList.hidden = matchedSamples < minimumSamples;
   [
+    ["Verified checks", matchedSamples],
     ["Avg. cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, " pts")],
-    ["Avg. lead time", formatForecastMetric(metrics.average_lead_hours, " hr")],
     ["Avg. temp miss", formatForecastMetric(metrics.average_temperature_error_f, "°F")],
     ["Avg. wind miss", formatForecastMetric(metrics.average_wind_error_mph, " mph")],
   ].forEach(([label, value]) => {
@@ -836,6 +852,14 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     appendTextElement(item, "dt", "", label);
     appendTextElement(item, "dd", "", value);
   });
+
+  const leadNote = byId("forecast-accuracy-lead-note");
+  const averageLeadHours = metrics.average_lead_hours;
+  const hasAverageLeadHours = hasForecastMetric(averageLeadHours);
+  leadNote.hidden = matchedSamples < minimumSamples || !hasAverageLeadHours;
+  leadNote.textContent = leadNote.hidden
+    ? ""
+    : `Latest saved forecasts were captured an average of ${averageLeadHours} hours before their observing hour. This does not compare separate forecast horizons.`;
 
   const recent = byId("forecast-accuracy-recent");
   const recentList = byId("forecast-accuracy-recent-list");
@@ -864,22 +888,17 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   });
 
   const chart = byId("forecast-accuracy-chart");
+  const visual = byId("forecast-accuracy-visual");
   chart.replaceChildren();
   const chartChecks = recentChecks.filter(
     (check) =>
-      Number.isFinite(Number(check.forecast_cloud_cover_percent)) &&
-      Number.isFinite(Number(check.observed_cloud_cover_percent)),
+      hasForecastMetric(check.forecast_cloud_cover_percent)
+      && hasForecastMetric(check.observed_cloud_cover_percent),
   );
-  chart.hidden = matchedSamples < minimumSamples || !data.has_history_chart || chartChecks.length < 3;
-  if (chart.hidden) {
-    appendTextElement(
-      chart,
-      "p",
-      "empty-state",
-      `Cloud trend starts after ${minimumSamples} verified comparisons.`,
-    );
-    return;
-  }
+  visual.hidden = matchedSamples < minimumSamples
+    || !data.has_history_chart
+    || chartChecks.length < 3;
+  if (visual.hidden) return;
 
   chartChecks.forEach((check) => {
     const row = appendTextElement(chart, "div", "forecast-accuracy-row", "");

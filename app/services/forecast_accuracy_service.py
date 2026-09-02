@@ -262,9 +262,9 @@ def forecast_accuracy_summary(
         )
     else:
         message = (
-            "Enough checks have been collected for a future calibrated "
-            "confidence rating. Polaris is not using them in tonight's "
-            "score yet."
+            f"{matched_count} verified comparisons show an early pattern. "
+            "This is not a confidence rating and does not affect tonight's "
+            "score."
         )
     recent_checks = _recent_checks(matched_snapshots)
     metrics = _accuracy_metrics(matched_snapshots)

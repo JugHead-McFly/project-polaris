@@ -553,7 +553,34 @@
             </div>
             <span id="forecast-accuracy-history-count">0 verified comparisons</span>
           </div>
-          <p id="forecast-accuracy-history-message">Polaris is waiting for matched forecast and observed weather.</p>
+          <div class="forecast-accuracy-guidance">
+            <strong id="forecast-accuracy-insight">Waiting for the first verified comparison.</strong>
+            <p id="forecast-accuracy-history-message">Polaris is waiting for matched forecast and observed weather.</p>
+          </div>
+          <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
+          <p class="forecast-accuracy-lead-note" id="forecast-accuracy-lead-note" hidden></p>
+          <section
+            class="forecast-accuracy-visual"
+            id="forecast-accuracy-visual"
+            aria-labelledby="forecast-accuracy-chart-title"
+            hidden
+          >
+            <div class="forecast-accuracy-visual-heading">
+              <div>
+                <p class="eyebrow" id="forecast-accuracy-chart-title">Cloud cover over time</p>
+                <strong>Forecast vs. observed</strong>
+              </div>
+              <div class="forecast-accuracy-legend" aria-hidden="true">
+                <span><i class="forecast"></i>Forecast</span>
+                <span><i class="observed"></i>Observed</span>
+              </div>
+            </div>
+            <div
+              class="forecast-accuracy-chart"
+              id="forecast-accuracy-chart"
+              aria-label="Recent cloud cover forecast compared with observed cloud cover"
+            ></div>
+          </section>
           <section
             class="forecast-accuracy-recent"
             id="forecast-accuracy-recent"
@@ -563,13 +590,6 @@
             <p class="eyebrow" id="forecast-accuracy-recent-title">Recent verified checks</p>
             <ol id="forecast-accuracy-recent-list"></ol>
           </section>
-          <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
-          <div
-            class="forecast-accuracy-chart"
-            id="forecast-accuracy-chart"
-            aria-label="Recent cloud cover forecast accuracy"
-            hidden
-          ></div>
         </section>
       </section>
 

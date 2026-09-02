@@ -73,11 +73,18 @@ stops future scheduled collection but does not alter existing history or the
 
 ## User-facing state
 
-Tonight shows a compact **Building forecast confidence** line inside the
-existing weather summary. A matched-check count is visible, but Polaris does
-not publish an accuracy percentage or confidence grade. Five matched checks
-only establish that a future calibration review can begin; they do not prove a
-confidence level.
+Tonight shows a numbered **Forecast Accuracy** evidence section. Before five
+matches, it reports how many verified checks remain before the first pattern
+can be shown and lists the available matched checks. At five matches, it can
+show average cloud, temperature, and wind misses plus a cloud
+forecast-versus-observed history chart. The latest-saved forecast lead time is
+identified explicitly and is not presented as a comparison between forecast
+horizons.
+
+Polaris does not publish an accuracy percentage or confidence grade. Five
+matched checks only establish that an early pattern can be reviewed; they do
+not prove a confidence level and do not change tonight's Opportunity Score or
+recommendation.
 
 ## Future calibration gate
 
