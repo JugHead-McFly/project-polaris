@@ -165,11 +165,16 @@ class ForecastAccuracySnapshot(Base):
             "observatory_id",
             "user_id",
             "forecast_for",
-            name="uq_forecast_accuracy_observatory_hour",
+            "forecast_lead_hour",
+            name="uq_forecast_accuracy_observatory_hour_lead",
         ),
         CheckConstraint(
             "status IN ('pending', 'matched', 'expired')",
             name="ck_forecast_accuracy_status",
+        ),
+        CheckConstraint(
+            "forecast_lead_hour >= 0",
+            name="ck_forecast_accuracy_lead_hour",
         ),
     )
 
@@ -183,6 +188,12 @@ class ForecastAccuracySnapshot(Base):
     observatory_id = Column(Uuid, nullable=False, index=True)
     forecast_for = Column(DateTime(timezone=True), nullable=False, index=True)
     forecast_created_at = Column(DateTime(timezone=True), nullable=False)
+    forecast_lead_hour = Column(
+        Integer,
+        nullable=False,
+        default=0,
+        server_default="0",
+    )
     forecast_provider = Column(String(40), nullable=True)
     forecast_temperature_f = Column(Float, nullable=True)
     forecast_cloud_cover_percent = Column(Float, nullable=True)

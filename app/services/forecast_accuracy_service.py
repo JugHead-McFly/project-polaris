@@ -1,6 +1,7 @@
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
+import math
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -26,6 +27,13 @@ TRACKED_FIELDS = (
     "wind_speed_mph",
 )
 RECENT_HISTORY_LIMIT = 8
+MINIMUM_HORIZON_SAMPLES = 5
+HORIZON_BUCKETS = (
+    ("0_6", "0-6 hr", 0, 6),
+    ("6_12", "6-12 hr", 6, 12),
+    ("12_24", "12-24 hr", 12, 24),
+    ("24_plus", "24+ hr", 24, None),
+)
 
 
 def _round(value: Optional[float], digits: int = 1) -> Optional[float]:
@@ -143,17 +151,21 @@ def _match_nearest_observation(
         .all()
     )
     if candidates:
-        snapshot = min(
+        nearest = min(
             candidates,
             key=lambda item: abs(
                 _as_utc(item.forecast_for) - observed_at
             ),
         )
-        snapshot.observed_at = observed_at
-        snapshot.observed_provider = _provider_name(weather)
-        _set_observed_values(snapshot, weather)
-        snapshot.status = "matched"
-        snapshot.matched_at = checked_at
+        nearest_forecast_for = _as_utc(nearest.forecast_for)
+        for snapshot in candidates:
+            if _as_utc(snapshot.forecast_for) != nearest_forecast_for:
+                continue
+            snapshot.observed_at = observed_at
+            snapshot.observed_provider = _provider_name(weather)
+            _set_observed_values(snapshot, weather)
+            snapshot.status = "matched"
+            snapshot.matched_at = checked_at
 
     _expire_old_pending(
         db,
@@ -182,37 +194,38 @@ def _capture_planned_forecast(
     ):
         return
 
+    forecast_created_at = _parse_provider_time(
+        weather.get("fetched_at"),
+        observatory.timezone_name,
+    ) or checked_at
+    lead_hours = max(
+        0,
+        (forecast_for - _as_utc(forecast_created_at)).total_seconds() / 3600,
+    )
+    lead_hour = int(math.ceil(lead_hours))
     snapshot = (
         db.query(ForecastAccuracySnapshot)
         .filter(
             ForecastAccuracySnapshot.user_id == user_id,
             ForecastAccuracySnapshot.observatory_id == observatory.id,
             ForecastAccuracySnapshot.forecast_for == forecast_for,
+            ForecastAccuracySnapshot.forecast_lead_hour == lead_hour,
         )
         .one_or_none()
     )
-    if snapshot is not None and snapshot.status != "pending":
+    if snapshot is not None:
         return
 
-    forecast_created_at = _parse_provider_time(
-        weather.get("fetched_at"),
-        observatory.timezone_name,
-    ) or checked_at
-    if snapshot is None:
-        snapshot = ForecastAccuracySnapshot(
-            user_id=user_id,
-            observatory_id=observatory.id,
-            forecast_for=forecast_for,
-            forecast_created_at=forecast_created_at,
-            expires_at=forecast_for + timedelta(hours=FORECAST_EXPIRY_HOURS),
-            status="pending",
-        )
-        db.add(snapshot)
-    else:
-        snapshot.forecast_created_at = forecast_created_at
-        snapshot.expires_at = forecast_for + timedelta(
-            hours=FORECAST_EXPIRY_HOURS
-        )
+    snapshot = ForecastAccuracySnapshot(
+        user_id=user_id,
+        observatory_id=observatory.id,
+        forecast_for=forecast_for,
+        forecast_created_at=forecast_created_at,
+        forecast_lead_hour=lead_hour,
+        expires_at=forecast_for + timedelta(hours=FORECAST_EXPIRY_HOURS),
+        status="pending",
+    )
+    db.add(snapshot)
     snapshot.forecast_provider = _provider_name(weather)
     _set_forecast_values(snapshot, weather)
 
@@ -252,7 +265,8 @@ def forecast_accuracy_summary(
         .order_by(ForecastAccuracySnapshot.forecast_for.desc())
         .all()
     )
-    matched_count = len(matched_snapshots)
+    latest_snapshots = _latest_forecast_snapshots(matched_snapshots)
+    matched_count = len(latest_snapshots)
     remaining = max(0, MINIMUM_CONFIDENCE_SAMPLES - matched_count)
     if remaining:
         message = (
@@ -266,18 +280,24 @@ def forecast_accuracy_summary(
             "This is not a confidence rating and does not affect tonight's "
             "score."
         )
-    recent_checks = _recent_checks(matched_snapshots)
-    metrics = _accuracy_metrics(matched_snapshots)
+    recent_checks = _recent_checks(latest_snapshots)
+    metrics = _accuracy_metrics(latest_snapshots)
+    horizon_buckets = _horizon_metrics(matched_snapshots)
     return {
         "state": "building" if remaining else "ready_for_calibration",
         "label": "Building forecast confidence",
         "message": message,
         "matched_samples": matched_count,
+        "revision_count": len(matched_snapshots),
         "minimum_samples": MINIMUM_CONFIDENCE_SAMPLES,
         "confidence": None,
         "metrics": metrics,
         "recent_checks": recent_checks,
         "has_history_chart": len(recent_checks) >= 3,
+        "horizon_buckets": horizon_buckets,
+        "has_horizon_analysis": sum(
+            1 for bucket in horizon_buckets if bucket["ready"]
+        ) >= 2,
     }
 
 
@@ -299,6 +319,83 @@ def _hours_between(start: datetime, end: datetime) -> Optional[float]:
     if start is None or end is None:
         return None
     return max(0, (_as_utc(end) - _as_utc(start)).total_seconds() / 3600)
+
+
+def _latest_forecast_snapshots(
+    snapshots: List[ForecastAccuracySnapshot],
+) -> List[ForecastAccuracySnapshot]:
+    latest_by_hour = {}
+    for snapshot in snapshots:
+        forecast_for = _as_utc(snapshot.forecast_for)
+        current = latest_by_hour.get(forecast_for)
+        if current is None or _as_utc(snapshot.forecast_created_at) > _as_utc(
+            current.forecast_created_at
+        ):
+            latest_by_hour[forecast_for] = snapshot
+    return sorted(
+        latest_by_hour.values(),
+        key=lambda item: _as_utc(item.forecast_for),
+        reverse=True,
+    )
+
+
+def _horizon_bucket_key(lead_hours: float) -> str:
+    for key, _label, minimum, maximum in HORIZON_BUCKETS:
+        above_minimum = (
+            lead_hours >= minimum if minimum == 0 else lead_hours > minimum
+        )
+        if above_minimum and (maximum is None or lead_hours <= maximum):
+            return key
+    return HORIZON_BUCKETS[-1][0]
+
+
+def _horizon_metrics(
+    snapshots: List[ForecastAccuracySnapshot],
+) -> List[Dict]:
+    representatives = {}
+    for snapshot in snapshots:
+        lead_hours = _hours_between(
+            snapshot.forecast_created_at,
+            snapshot.forecast_for,
+        )
+        cloud_error = _field_error(snapshot, "cloud_cover_percent")
+        if lead_hours is None or cloud_error is None:
+            continue
+        bucket_key = _horizon_bucket_key(lead_hours)
+        representative_key = (
+            bucket_key,
+            _as_utc(snapshot.forecast_for),
+        )
+        current = representatives.get(representative_key)
+        if current is None or lead_hours > current[0]:
+            representatives[representative_key] = (
+                lead_hours,
+                cloud_error,
+            )
+
+    summaries = []
+    for key, label, _minimum, _maximum in HORIZON_BUCKETS:
+        errors = [
+            cloud_error
+            for (bucket_key, _forecast_for), (_lead, cloud_error)
+            in representatives.items()
+            if bucket_key == key
+        ]
+        sample_count = len(errors)
+        summaries.append(
+            {
+                "key": key,
+                "label": label,
+                "matched_samples": sample_count,
+                "minimum_samples": MINIMUM_HORIZON_SAMPLES,
+                "average_cloud_error_percent": _round(
+                    _average(errors),
+                    0,
+                ),
+                "ready": sample_count >= MINIMUM_HORIZON_SAMPLES,
+            }
+        )
+    return summaries
 
 
 def _accuracy_metrics(snapshots: List[ForecastAccuracySnapshot]) -> Dict:
@@ -410,9 +507,12 @@ def unavailable_forecast_accuracy_summary() -> Dict:
         "label": "Forecast confidence unavailable",
         "message": "Signed-in forecast history is needed to build confidence.",
         "matched_samples": 0,
+        "revision_count": 0,
         "minimum_samples": MINIMUM_CONFIDENCE_SAMPLES,
         "confidence": None,
         "metrics": {},
         "recent_checks": [],
         "has_history_chart": False,
+        "horizon_buckets": [],
+        "has_horizon_analysis": False,
     }

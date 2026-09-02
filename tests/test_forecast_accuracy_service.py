@@ -61,7 +61,7 @@ def _forecast_weather(**overrides):
     return weather
 
 
-def test_saves_one_minimal_snapshot_per_observatory_forecast_hour():
+def test_saves_one_snapshot_per_observatory_forecast_lead_hour():
     db, observatory = _database()
     checked_at = datetime(2026, 8, 30, 18, tzinfo=timezone.utc)
 
@@ -82,11 +82,70 @@ def test_saves_one_minimal_snapshot_per_observatory_forecast_hour():
 
     snapshots = db.query(ForecastAccuracySnapshot).all()
     assert len(snapshots) == 1
-    assert snapshots[0].forecast_cloud_cover_percent == 24
+    assert snapshots[0].forecast_cloud_cover_percent == 20
+    assert snapshots[0].forecast_lead_hour == 9
     assert snapshots[0].forecast_provider == "open-meteo"
     assert snapshots[0].status == "pending"
     assert first["state"] == "building"
     assert first["confidence"] is None
+
+
+def test_preserves_horizons_without_double_counting_observing_hour():
+    db, observatory = _database()
+    forecast_for = datetime(2026, 8, 31, 3, tzinfo=timezone.utc)
+    track_forecast_accuracy(
+        db,
+        user_id=USER_ID,
+        observatory=observatory,
+        weather=_forecast_weather(),
+        checked_at=datetime(2026, 8, 30, 18, tzinfo=timezone.utc),
+    )
+    track_forecast_accuracy(
+        db,
+        user_id=USER_ID,
+        observatory=observatory,
+        weather=_forecast_weather(
+            fetched_at="2026-08-30T20:00:00+00:00",
+            planned_cloud_cover_percent=40,
+        ),
+        checked_at=datetime(2026, 8, 30, 20, tzinfo=timezone.utc),
+    )
+
+    summary = track_forecast_accuracy(
+        db,
+        user_id=USER_ID,
+        observatory=observatory,
+        weather=_forecast_weather(
+            fetched_at="2026-08-31T03:20:00+00:00",
+            observed_at="2026-08-30T20:00",
+            cloud_cover_percent=31,
+            planned_temperature_at=None,
+        ),
+        checked_at=datetime(2026, 8, 31, 3, 20, tzinfo=timezone.utc),
+    )
+
+    snapshots = (
+        db.query(ForecastAccuracySnapshot)
+        .order_by(ForecastAccuracySnapshot.forecast_lead_hour.desc())
+        .all()
+    )
+    assert [snapshot.forecast_for.replace(tzinfo=timezone.utc) for snapshot in snapshots] == [
+        forecast_for,
+        forecast_for,
+    ]
+    assert [snapshot.forecast_lead_hour for snapshot in snapshots] == [9, 7]
+    assert [snapshot.status for snapshot in snapshots] == ["matched", "matched"]
+    assert summary["matched_samples"] == 1
+    assert summary["revision_count"] == 2
+    assert summary["recent_checks"][0]["forecast_cloud_cover_percent"] == 40
+    horizon = next(
+        bucket
+        for bucket in summary["horizon_buckets"]
+        if bucket["key"] == "6_12"
+    )
+    assert horizon["matched_samples"] == 1
+    assert horizon["average_cloud_error_percent"] == 11
+    assert horizon["ready"] is False
 
 
 def test_matches_near_observation_without_fabricating_values():
@@ -313,3 +372,47 @@ def test_enough_matches_still_does_not_claim_confidence():
         "5 verified comparisons show an early pattern. This is not a "
         "confidence rating and does not affect tonight's score."
     )
+
+
+def test_horizon_evidence_uses_one_revision_per_forecast_hour_and_bucket():
+    db, observatory = _database()
+    checked_at = datetime(2026, 8, 30, 18, tzinfo=timezone.utc)
+    for offset in range(5):
+        forecast_for = checked_at - timedelta(days=offset)
+        for lead_hour, error in ((5, 5), (10, 15)):
+            db.add(
+                ForecastAccuracySnapshot(
+                    user_id=USER_ID,
+                    observatory_id=observatory.id,
+                    forecast_for=forecast_for,
+                    forecast_created_at=forecast_for - timedelta(
+                        hours=lead_hour
+                    ),
+                    forecast_lead_hour=lead_hour,
+                    expires_at=forecast_for + timedelta(hours=2),
+                    observed_at=forecast_for,
+                    forecast_cloud_cover_percent=20,
+                    observed_cloud_cover_percent=20 + error,
+                    status="matched",
+                )
+            )
+    db.commit()
+
+    summary = track_forecast_accuracy(
+        db,
+        user_id=USER_ID,
+        observatory=observatory,
+        weather={"status": "Weather unavailable"},
+        checked_at=checked_at,
+    )
+
+    assert summary["matched_samples"] == 5
+    assert summary["revision_count"] == 10
+    horizons = {bucket["key"]: bucket for bucket in summary["horizon_buckets"]}
+    assert horizons["0_6"]["matched_samples"] == 5
+    assert horizons["0_6"]["average_cloud_error_percent"] == 5
+    assert horizons["0_6"]["ready"] is True
+    assert horizons["6_12"]["matched_samples"] == 5
+    assert horizons["6_12"]["average_cloud_error_percent"] == 15
+    assert horizons["6_12"]["ready"] is True
+    assert summary["has_horizon_analysis"] is True

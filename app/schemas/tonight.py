@@ -88,10 +88,13 @@ class ForecastAccuracySummary(BaseModel):
     message: str
     matched_samples: int
     minimum_samples: int
+    revision_count: int = 0
     confidence: Optional[str] = None
     metrics: dict = Field(default_factory=dict)
     recent_checks: List[dict] = Field(default_factory=list)
     has_history_chart: bool = False
+    horizon_buckets: List[dict] = Field(default_factory=list)
+    has_horizon_analysis: bool = False
 
 
 class TonightResponse(BaseModel):

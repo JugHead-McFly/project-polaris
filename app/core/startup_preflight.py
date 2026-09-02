@@ -22,12 +22,16 @@ LOCAL_REQUIRED_DATABASE_TABLES = {
     "sessions",
 }
 HOSTED_REQUIRED_DATABASE_TABLES = {
+    "forecast_accuracy_snapshots",
     "observatories",
     "profiles",
     "recommendation_feedback",
     "recommendation_runs",
 }
 HOSTED_REQUIRED_DATABASE_COLUMNS = {
+    "forecast_accuracy_snapshots": {
+        "forecast_lead_hour",
+    },
     "observatories": {
         "rig_profile_key",
         "telescope_model",

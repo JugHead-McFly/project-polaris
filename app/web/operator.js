@@ -804,6 +804,9 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   const recentChecks = Array.isArray(data.recent_checks)
     ? data.recent_checks
     : [];
+  const horizonBuckets = Array.isArray(data.horizon_buckets)
+    ? data.horizon_buckets
+    : [];
   const remainingSamples = Math.max(0, minimumSamples - matchedSamples);
   const averageCloudError = metrics.average_cloud_error_percent;
   const hasAverageCloudError = hasForecastMetric(averageCloudError);
@@ -860,6 +863,34 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   leadNote.textContent = leadNote.hidden
     ? ""
     : `Latest saved forecasts were captured an average of ${averageLeadHours} hours before their observing hour. This does not compare separate forecast horizons.`;
+
+  const horizons = byId("forecast-accuracy-horizons");
+  const horizonList = byId("forecast-accuracy-horizon-list");
+  const readyHorizons = horizonBuckets.filter(
+    (bucket) => bucket.ready
+      && hasForecastMetric(bucket.average_cloud_error_percent),
+  );
+  horizonList.replaceChildren();
+  horizons.hidden = !data.has_horizon_analysis || readyHorizons.length < 2;
+  if (!horizons.hidden) {
+    readyHorizons.forEach((bucket) => {
+      const item = appendTextElement(horizonList, "div", "", "");
+      appendTextElement(item, "dt", "", bucket.label);
+      const value = appendTextElement(item, "dd", "", "");
+      appendTextElement(
+        value,
+        "strong",
+        "",
+        `${bucket.average_cloud_error_percent} pt average miss`,
+      );
+      appendTextElement(
+        value,
+        "span",
+        "",
+        `${bucket.matched_samples} verified checks`,
+      );
+    });
+  }
 
   const recent = byId("forecast-accuracy-recent");
   const recentList = byId("forecast-accuracy-recent-list");

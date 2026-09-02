@@ -13,8 +13,10 @@ decision.
 
 ## What is stored
 
-For one observing home and one forecast hour, Polaris stores the latest
-available forecast values for:
+For one observing home and one forecast hour, Polaris stores at most one
+forecast revision per whole lead hour. This preserves how the forecast changed
+as the observing hour approached without creating a new row for every page
+refresh. Each revision contains:
 
 - temperature;
 - cloud cover;
@@ -24,8 +26,10 @@ available forecast values for:
 - the existing provider name and timestamps.
 
 When Polaris later receives a real provider reading within 75 minutes of that
-forecast hour, it stores the equivalent observed values and marks the check as
-matched. A single reading matches only the nearest eligible forecast hour.
+forecast hour, it stores the equivalent observed values on every retained
+revision for the nearest eligible forecast hour. The user-facing verified-check
+count still counts that observing hour once; retained revisions are used only
+for lead-time analysis.
 
 The hosted private alpha runs the same planning and matching path at minute 17
 of every hour. The collector processes only user UUIDs in the private
@@ -52,8 +56,9 @@ production migration is accepted.
 - A forecast is never treated as observed data.
 - If both the scheduled collector and a user refresh miss the matching window,
   the pending check expires instead of being guessed.
-- Repeated refreshes update one pending row for the same observing home and
-  forecast hour rather than increasing the sample count.
+- Repeated refreshes within the same whole lead hour reuse one pending row.
+  Forecasts retained in different lead hours do not increase the user-facing
+  verified-night count.
 - Times are converted from the observing home's named time zone to UTC before
   matching, including overnight and international date boundaries.
 - History older than 90 days is deleted during normal tracking work.
@@ -78,8 +83,9 @@ matches, it reports how many verified checks remain before the first pattern
 can be shown and lists the available matched checks. At five matches, it can
 show average cloud, temperature, and wind misses plus a cloud
 forecast-versus-observed history chart. The latest-saved forecast lead time is
-identified explicitly and is not presented as a comparison between forecast
-horizons.
+identified explicitly. Once at least two lead-time ranges each contain five
+verified checks, Polaris can compare their average cloud misses without
+publishing a confidence grade.
 
 Polaris does not publish an accuracy percentage or confidence grade. Five
 matched checks only establish that an early pattern can be reviewed; they do
@@ -94,5 +100,9 @@ Before Polaris shows a confidence rating, product review must define and test:
 2. how cloud, humidity, wind, temperature, and provider changes are weighted;
 3. the minimum sample size for each observing home and season; and
 4. how stale or systematically missing observations affect the result.
+
+Transparency and seeing are not included in accuracy history yet because the
+current collection path has forecast values but no defensible observed values
+for those signals.
 
 Until then, the stored evidence is diagnostic only.

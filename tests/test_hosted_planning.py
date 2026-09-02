@@ -222,8 +222,11 @@ def test_hosted_read_only_plan_reports_saved_forecast_history():
         engine.dispose()
 
     assert payload["forecast_accuracy"]["matched_samples"] == 1
+    assert payload["forecast_accuracy"]["revision_count"] == 1
     assert payload["forecast_accuracy"]["confidence"] is None
     assert payload["forecast_accuracy"]["has_history_chart"] is False
+    assert payload["forecast_accuracy"]["has_horizon_analysis"] is False
+    assert len(payload["forecast_accuracy"]["horizon_buckets"]) == 4
     assert len(payload["forecast_accuracy"]["recent_checks"]) == 1
 
 

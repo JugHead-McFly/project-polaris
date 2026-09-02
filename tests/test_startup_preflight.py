@@ -46,6 +46,7 @@ def test_hosted_runtime_requires_tenant_schema():
     assert required_database_tables("production") == {
         "capture_analyses",
         "captures",
+        "forecast_accuracy_snapshots",
         "observatories",
         "profiles",
         "recommendation_feedback",
@@ -54,6 +55,9 @@ def test_hosted_runtime_requires_tenant_schema():
     }
     assert required_database_columns("local") == {}
     assert required_database_columns("production") == {
+        "forecast_accuracy_snapshots": {
+            "forecast_lead_hour",
+        },
         "observatories": {
             "rig_profile_key",
             "telescope_model",
@@ -68,6 +72,7 @@ def test_hosted_runtime_requires_current_observatory_columns(tmp_path):
     )
     connection = sqlite3.connect(database_file)
     for table_name in (
+        "forecast_accuracy_snapshots",
         "observatories",
         "profiles",
         "recommendation_feedback",
@@ -93,6 +98,10 @@ def test_hosted_runtime_requires_current_observatory_columns(tmp_path):
     assert "observatories.rig_profile_key" in failures["database"]["message"]
     assert "observatories.telescope_model" in failures["database"]["message"]
     assert "observatories.tracking_preference" in failures["database"]["message"]
+    assert (
+        "forecast_accuracy_snapshots.forecast_lead_hour"
+        in failures["database"]["message"]
+    )
 
 
 def test_valid_startup_configuration_is_ready(tmp_path):

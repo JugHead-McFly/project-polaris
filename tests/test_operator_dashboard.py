@@ -792,6 +792,8 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert 'id="forecast-accuracy-chart"' in html
     assert 'id="forecast-accuracy-insight"' in html
     assert 'id="forecast-accuracy-lead-note" hidden' in html
+    assert 'id="forecast-accuracy-horizons"' in html
+    assert 'id="forecast-accuracy-horizon-list"' in html
     assert 'id="forecast-accuracy-visual"' in html
     assert "Forecast vs. observed" in html
     assert 'id="forecast-accuracy-metrics" hidden' in html
@@ -802,6 +804,8 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "const hasForecastMetric" in script
     assert 'value !== null' in script
     assert "average_cloud_error_percent" in script
+    assert "horizon_buckets" in script
+    assert "has_horizon_analysis" in script
     assert "forecast_cloud_cover_percent" in script
     assert "matched_samples" in script
     assert "minimum_samples" in script
@@ -816,6 +820,7 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert ".forecast-accuracy-history" in css
     assert 'content: "06";' in css
     assert ".forecast-accuracy-legend" in css
+    assert ".forecast-accuracy-horizons" in css
     assert ".forecast-accuracy-bar.forecast::before" in css
 
 

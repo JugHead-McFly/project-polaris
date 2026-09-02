@@ -1519,6 +1519,73 @@ footer {
   font-size: 11px !important;
 }
 
+.forecast-accuracy-horizons {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(240px, 1.2fr);
+  gap: 8px 24px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(153, 202, 207, 0.14);
+  border-bottom: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-horizons .eyebrow {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.forecast-accuracy-horizons > div > strong {
+  font-size: 15px;
+}
+
+.forecast-accuracy-horizons > p {
+  align-self: end;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: right;
+}
+
+.forecast-accuracy-horizons dl {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 6px 0 0;
+  border-top: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-horizons dl div {
+  min-width: 0;
+  padding: 12px 14px 0;
+  border-left: 1px solid rgba(153, 202, 207, 0.14);
+}
+
+.forecast-accuracy-horizons dl div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.forecast-accuracy-horizons dt {
+  margin-bottom: 5px;
+  color: var(--cyan);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.forecast-accuracy-horizons dd {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+}
+
+.forecast-accuracy-horizons dd strong {
+  font-size: 13px;
+}
+
+.forecast-accuracy-horizons dd span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .forecast-accuracy-visual {
   display: grid;
   gap: 12px;
@@ -4919,6 +4986,25 @@ footer {
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
+  }
+
+  .forecast-accuracy-horizons {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-accuracy-horizons > p {
+    text-align: left;
+  }
+
+  .forecast-accuracy-horizons dl {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-accuracy-horizons dl div,
+  .forecast-accuracy-horizons dl div:first-child {
+    padding: 10px 0;
+    border-top: 1px solid rgba(153, 202, 207, 0.14);
+    border-left: 0;
   }
 
   .forecast-accuracy-row {
