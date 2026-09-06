@@ -231,9 +231,12 @@ const updateConditionAlertControls = () => {
   const supported = "Notification" in window;
   const permission = supported ? window.Notification.permission : "unsupported";
   button.disabled = !supported || permission === "denied";
-  button.textContent = hostedConditionAlertsEnabled
-    ? "Turn off alerts"
-    : "Notify me if tonight improves";
+  button.classList.toggle("is-on", hostedConditionAlertsEnabled);
+  button.setAttribute("aria-checked", String(hostedConditionAlertsEnabled));
+  setText(
+    "hosted-condition-alerts-state",
+    hostedConditionAlertsEnabled ? "On" : "Off",
+  );
 
   if (!supported) {
     setConditionAlertStatus("Browser alerts are not supported here.", "blocked");

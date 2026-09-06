@@ -585,6 +585,9 @@ def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
     recommendation = html.index('id="hosted-recommendation"')
     assert heading < alerts < recommendation
     assert 'id="hosted-condition-alerts-button"' in html
+    assert 'role="switch"' in html
+    assert 'aria-checked="false"' in html
+    assert 'id="hosted-condition-alerts-state">Off</span>' in html
     assert 'id="hosted-condition-alerts-status" role="status" aria-live="polite"' in html
     assert "Notify me if tonight improves" in html
     assert "Alerts work only while this page remains open." in html
@@ -597,7 +600,9 @@ def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
     assert 'byId("hosted-condition-alerts-button").addEventListener("click", toggleConditionAlerts)' in script
     assert 'window.localStorage.setItem(CONDITION_ALERT_PREFERENCE_KEY, String(enabled))' in script
     assert 'window.localStorage.setItem(CONDITION_ALERT_HISTORY_KEY, JSON.stringify(history))' in script
-    assert 'button.textContent = hostedConditionAlertsEnabled\n    ? "Turn off alerts"' in script
+    assert 'button.classList.toggle("is-on", hostedConditionAlertsEnabled)' in script
+    assert 'button.setAttribute("aria-checked", String(hostedConditionAlertsEnabled))' in script
+    assert 'hostedConditionAlertsEnabled ? "On" : "Off"' in script
     assert 'permission === "denied"' in script
     assert "Browser alerts are not supported here." in script
     assert "Alerts are blocked in this browser's site settings." in script
@@ -633,6 +638,10 @@ def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
     assert ".hosted-condition-alerts.has-alert" in css
     assert ".hosted-condition-alerts.is-blocked" in css
     assert ".hosted-condition-alerts .account-button" in css
+    assert ".condition-alerts-toggle-track::after" in css
+    assert ".hosted-condition-alerts .condition-alerts-toggle.is-on" in css
+    assert ".hosted-condition-alerts .condition-alerts-toggle:disabled" in css
+    assert ".condition-alerts-toggle.is-on .condition-alerts-toggle-track::after" in css
 
 
 def test_session_checklist_stays_inside_the_existing_command_card():

@@ -323,8 +323,18 @@
               Off. Alerts work only while this page remains open.
             </p>
           </div>
-          <button class="account-button" id="hosted-condition-alerts-button" type="button">
-            Notify me if tonight improves
+          <button
+            class="account-button condition-alerts-toggle"
+            id="hosted-condition-alerts-button"
+            type="button"
+            role="switch"
+            aria-checked="false"
+          >
+            <span>Notify me if tonight improves</span>
+            <span class="condition-alerts-toggle-control" aria-hidden="true">
+              <span class="condition-alerts-toggle-track"></span>
+              <span id="hosted-condition-alerts-state">Off</span>
+            </span>
           </button>
         </section>
 
