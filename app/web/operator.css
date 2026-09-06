@@ -4661,6 +4661,15 @@ footer {
       "setup";
   }
 
+  .hosted-recommendation.has-secondary-toggle {
+    grid-template-areas:
+      "score"
+      "command"
+      "toggle"
+      "target"
+      "setup";
+  }
+
   .hosted-command-board,
   .hosted-target,
   .hosted-setup-card {

@@ -852,6 +852,23 @@ def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
     assert ".hosted-recommendation.status-do-not-image .hosted-command-target-card" in css
 
 
+def test_hard_stop_cards_keep_single_column_order_on_narrow_screens():
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+
+    mobile_start = css.index("@media (max-width: 1040px)")
+    mobile_end = css.index("@media (max-width: 680px)", mobile_start)
+    mobile_css = css[mobile_start:mobile_end]
+    assert ".hosted-recommendation.has-secondary-toggle" in mobile_css
+    assert (
+        'grid-template-areas:\n'
+        '      "score"\n'
+        '      "command"\n'
+        '      "toggle"\n'
+        '      "target"\n'
+        '      "setup";'
+    ) in mobile_css
+
+
 def test_numbered_card_headers_share_the_same_card_origin():
     css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
 
