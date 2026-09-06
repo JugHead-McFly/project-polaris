@@ -796,17 +796,17 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert 'id="forecast-accuracy-history-title"' in html
     assert 'href="#forecast-accuracy-history"' in html
     assert 'id="forecast-accuracy-link-count"' in html
-    assert 'id="forecast-accuracy-recent-list"' in html
-    assert "Recent verified checks" in html
+    assert 'id="forecast-accuracy-recent-list"' not in html
+    assert "Recent verified checks" not in html
     assert 'id="forecast-accuracy-chart"' in html
     assert 'id="forecast-accuracy-insight"' in html
-    assert 'id="forecast-accuracy-lead-note" hidden' in html
+    assert 'id="forecast-accuracy-lead-note"' not in html
     assert 'id="forecast-accuracy-horizons"' in html
     assert 'id="forecast-accuracy-horizon-list"' in html
     assert 'id="forecast-accuracy-visual"' in html
     assert "Forecast vs. observed" in html
     assert 'id="forecast-accuracy-metrics" hidden' in html
-    assert 'role="status"' in html
+    assert 'class="forecast-accuracy-guidance" role="status" aria-live="polite"' in html
     assert "Forecast confidence is still building." not in html
     assert "data.forecast_accuracy || {}" in script
     assert "renderForecastAccuracyHistory" in script
@@ -819,18 +819,20 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "matched_samples" in script
     assert "minimum_samples" in script
     assert "matchedSamples < minimumSamples" in script
-    assert '"Early pattern available"' in script
-    assert "This does not compare separate forecast horizons." in script
-    assert "verified comparison" in script
-    assert 'formatForecastMetric(check.cloud_error_percent, "-point miss")' in script
+    assert '"Early signal"' in script
+    assert '"Avg. lead", formatForecastMetric(metrics.average_lead_hours, " hr")' in script
+    assert "Early evidence; not used in tonight's score." in script
+    assert 'class: `forecast-accuracy-line ${kind}`' in script
+    assert '`${chartChecks.length} cloud-cover forecasts compared with observed cloud cover.`' in script
     assert ".hosted-forecast-confidence" not in css
     assert ".hosted-forecast-history-link" in css
-    assert ".forecast-accuracy-recent" in css
+    assert ".forecast-accuracy-recent" not in css
     assert ".forecast-accuracy-history" in css
     assert 'content: "06";' in css
     assert ".forecast-accuracy-legend" in css
     assert ".forecast-accuracy-horizons" in css
-    assert ".forecast-accuracy-bar.forecast::before" in css
+    assert ".forecast-accuracy-line.forecast" in css
+    assert ".forecast-accuracy-point.observed" in css
 
 
 def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():

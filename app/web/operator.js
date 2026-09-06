@@ -817,12 +817,12 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   setText(
     "forecast-accuracy-history-label",
     data.state === "ready_for_calibration"
-      ? "Early pattern available"
-      : "Building history",
+      ? "Early signal"
+      : "Collecting checks",
   );
   setText(
     "forecast-accuracy-history-count",
-    `${matchedSamples} verified comparison${matchedSamples === 1 ? "" : "s"}`,
+    `${matchedSamples} check${matchedSamples === 1 ? "" : "s"}`,
   );
   setText(
     "forecast-accuracy-link-count",
@@ -833,39 +833,33 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     matchedSamples === 0
       ? "Waiting for the first verified comparison."
       : remainingSamples > 0
-        ? `${remainingSamples} more verified check${remainingSamples === 1 ? "" : "s"} before the first pattern.`
+        ? `${remainingSamples} more check${remainingSamples === 1 ? "" : "s"} before an early trend.`
         : hasAverageCloudError
-          ? `Cloud forecasts have differed by an average of ${averageCloudError} points.`
-          : `${matchedSamples} verified checks are available for review.`,
+          ? `Cloud forecasts miss by ${averageCloudError} points on average.`
+          : `${matchedSamples} checks are ready to review.`,
   );
   setText(
     "forecast-accuracy-history-message",
-    matchedSamples < minimumSamples
-      ? `${matchedSamples} verified comparison${matchedSamples === 1 ? "" : "s"} collected. Trends begin after ${minimumSamples}.`
-      : data.message || "Polaris is waiting for matched forecast and observed weather.",
+    matchedSamples === 0
+      ? "Forecast and observed weather are matched automatically."
+      : matchedSamples < minimumSamples
+        ? `${matchedSamples} of ${minimumSamples} checks collected.`
+        : "Early evidence; not used in tonight's score.",
   );
 
   const metricsList = byId("forecast-accuracy-metrics");
   metricsList.replaceChildren();
   metricsList.hidden = matchedSamples < minimumSamples;
   [
-    ["Verified checks", matchedSamples],
-    ["Avg. cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, " pts")],
-    ["Avg. temp miss", formatForecastMetric(metrics.average_temperature_error_f, "°F")],
-    ["Avg. wind miss", formatForecastMetric(metrics.average_wind_error_mph, " mph")],
+    ["Cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, " pts")],
+    ["Temp miss", formatForecastMetric(metrics.average_temperature_error_f, "°F")],
+    ["Wind miss", formatForecastMetric(metrics.average_wind_error_mph, " mph")],
+    ["Avg. lead", formatForecastMetric(metrics.average_lead_hours, " hr")],
   ].forEach(([label, value]) => {
     const item = appendTextElement(metricsList, "div", "", "");
     appendTextElement(item, "dt", "", label);
     appendTextElement(item, "dd", "", value);
   });
-
-  const leadNote = byId("forecast-accuracy-lead-note");
-  const averageLeadHours = metrics.average_lead_hours;
-  const hasAverageLeadHours = hasForecastMetric(averageLeadHours);
-  leadNote.hidden = matchedSamples < minimumSamples || !hasAverageLeadHours;
-  leadNote.textContent = leadNote.hidden
-    ? ""
-    : `Latest saved forecasts were captured an average of ${averageLeadHours} hours before their observing hour. This does not compare separate forecast horizons.`;
 
   const horizons = byId("forecast-accuracy-horizons");
   const horizonList = byId("forecast-accuracy-horizon-list");
@@ -895,32 +889,6 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     });
   }
 
-  const recent = byId("forecast-accuracy-recent");
-  const recentList = byId("forecast-accuracy-recent-list");
-  recentList.replaceChildren();
-  recent.hidden = recentChecks.length === 0;
-  [...recentChecks].reverse().forEach((check) => {
-    const item = appendTextElement(recentList, "li", "", "");
-    appendTextElement(
-      item,
-      "strong",
-      "",
-      displayDateTime(check.forecast_for),
-    );
-    appendTextElement(
-      item,
-      "span",
-      "",
-      `Cloud forecast ${formatForecastMetric(check.forecast_cloud_cover_percent, "%")} · observed ${formatForecastMetric(check.observed_cloud_cover_percent, "%")}`,
-    );
-    appendTextElement(
-      item,
-      "span",
-      "forecast-accuracy-check-meta",
-      `${formatForecastMetric(check.cloud_error_percent, "-point miss")} · ${formatForecastMetric(check.lead_hours, " hr lead")}`,
-    );
-  });
-
   const chart = byId("forecast-accuracy-chart");
   const visual = byId("forecast-accuracy-visual");
   chart.replaceChildren();
@@ -934,30 +902,88 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     || chartChecks.length < 3;
   if (visual.hidden) return;
 
-  chartChecks.forEach((check) => {
-    const row = appendTextElement(chart, "div", "forecast-accuracy-row", "");
-    appendTextElement(
-      row,
-      "span",
-      "forecast-accuracy-date",
-      displayDateTime(check.forecast_for),
-    );
-    const bars = appendTextElement(row, "span", "forecast-accuracy-bars", "");
-    [
-      ["Forecast", check.forecast_cloud_cover_percent, "forecast"],
-      ["Observed", check.observed_cloud_cover_percent, "observed"],
-    ].forEach(([label, percent, kind]) => {
-      const bar = appendTextElement(bars, "span", `forecast-accuracy-bar ${kind}`, "");
-      bar.style.setProperty("--forecast-bar-width", `${Math.max(0, Math.min(100, Number(percent)))}%`);
-      bar.setAttribute("aria-label", `${label} cloud cover ${percent}%`);
-    });
-    appendTextElement(
-      row,
-      "strong",
-      "",
-      `${check.cloud_error_percent}-point miss`,
-    );
+  const width = Math.max(300, Math.round(chart.getBoundingClientRect().width || 720));
+  const height = 184;
+  const left = 38;
+  const right = width - 12;
+  const top = 12;
+  const bottom = height - 30;
+  const x = (index) => left + (
+    index / Math.max(1, chartChecks.length - 1)
+  ) * (right - left);
+  const y = (value) => bottom - (
+    Math.max(0, Math.min(100, Number(value))) / 100
+  ) * (bottom - top);
+  const svg = svgElement("svg", {
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": `${chartChecks.length} cloud-cover forecasts compared with observed cloud cover.`,
   });
+
+  [0, 50, 100].forEach((percent) => {
+    const gridY = y(percent);
+    svg.append(svgElement("line", {
+      x1: left,
+      y1: gridY,
+      x2: right,
+      y2: gridY,
+      class: "forecast-accuracy-grid-line",
+    }));
+    const label = svgElement("text", {
+      x: left - 7,
+      y: gridY + 3,
+      "text-anchor": "end",
+      class: "forecast-accuracy-axis-label",
+    });
+    label.textContent = `${percent}%`;
+    svg.append(label);
+  });
+
+  [
+    ["forecast", "Forecast", "forecast_cloud_cover_percent"],
+    ["observed", "Observed", "observed_cloud_cover_percent"],
+  ].forEach(([kind, label, field]) => {
+    svg.append(svgElement("polyline", {
+      points: chartChecks.map((check, index) => (
+        `${x(index).toFixed(1)},${y(check[field]).toFixed(1)}`
+      )).join(" "),
+      class: `forecast-accuracy-line ${kind}`,
+    }));
+    chartChecks.forEach((check, index) => {
+      const point = svgElement("circle", {
+        cx: x(index).toFixed(1),
+        cy: y(check[field]).toFixed(1),
+        r: 4,
+        class: `forecast-accuracy-point ${kind}`,
+      });
+      const pointTitle = svgElement("title");
+      pointTitle.textContent = `${displayDateTime(check.forecast_for)}: ${label} ${check[field]}% cloud cover; ${check.cloud_error_percent} point miss.`;
+      point.append(pointTitle);
+      svg.append(point);
+    });
+  });
+
+  [...new Set([0, Math.floor((chartChecks.length - 1) / 2), chartChecks.length - 1])]
+    .forEach((index) => {
+      const label = svgElement("text", {
+        x: x(index).toFixed(1),
+        y: height - 8,
+        "text-anchor": (
+          index === 0
+            ? "start"
+            : index === chartChecks.length - 1
+              ? "end"
+              : "middle"
+        ),
+        class: "forecast-accuracy-date-label",
+      });
+      label.textContent = new Intl.DateTimeFormat([], {
+        month: "short",
+        day: "numeric",
+      }).format(new Date(chartChecks[index].forecast_for));
+      svg.append(label);
+    });
+  chart.append(svg);
 };
 
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));

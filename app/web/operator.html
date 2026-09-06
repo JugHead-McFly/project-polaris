@@ -557,18 +557,15 @@
           aria-labelledby="forecast-accuracy-history-title"
         >
           <div class="forecast-accuracy-heading">
-            <div>
-              <p class="eyebrow" id="forecast-accuracy-history-title">Forecast accuracy</p>
-              <strong id="forecast-accuracy-history-label">Building history</strong>
-            </div>
+            <p class="eyebrow" id="forecast-accuracy-history-title">Forecast accuracy</p>
             <span id="forecast-accuracy-history-count">0 verified comparisons</span>
           </div>
-          <div class="forecast-accuracy-guidance">
+          <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
+            <span id="forecast-accuracy-history-label">Collecting checks</span>
             <strong id="forecast-accuracy-insight">Waiting for the first verified comparison.</strong>
-            <p id="forecast-accuracy-history-message">Polaris is waiting for matched forecast and observed weather.</p>
+            <p id="forecast-accuracy-history-message">Forecast and observed weather are matched automatically.</p>
           </div>
           <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
-          <p class="forecast-accuracy-lead-note" id="forecast-accuracy-lead-note" hidden></p>
           <section
             class="forecast-accuracy-horizons"
             id="forecast-accuracy-horizons"
@@ -603,15 +600,6 @@
               id="forecast-accuracy-chart"
               aria-label="Recent cloud cover forecast compared with observed cloud cover"
             ></div>
-          </section>
-          <section
-            class="forecast-accuracy-recent"
-            id="forecast-accuracy-recent"
-            aria-labelledby="forecast-accuracy-recent-title"
-            hidden
-          >
-            <p class="eyebrow" id="forecast-accuracy-recent-title">Recent verified checks</p>
-            <ol id="forecast-accuracy-recent-list"></ol>
           </section>
         </section>
       </section>
