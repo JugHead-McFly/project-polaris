@@ -309,6 +309,14 @@ def _field_error(snapshot: ForecastAccuracySnapshot, field: str) -> Optional[flo
     return abs(float(forecast) - float(observed))
 
 
+def _field_bias(snapshot: ForecastAccuracySnapshot, field: str) -> Optional[float]:
+    forecast = getattr(snapshot, f"forecast_{field}")
+    observed = getattr(snapshot, f"observed_{field}")
+    if forecast is None or observed is None:
+        return None
+    return float(observed) - float(forecast)
+
+
 def _average(values: List[float]) -> Optional[float]:
     if not values:
         return None
@@ -404,6 +412,11 @@ def _accuracy_metrics(snapshots: List[ForecastAccuracySnapshot]) -> Dict:
         for snapshot in snapshots
         if (value := _field_error(snapshot, "cloud_cover_percent")) is not None
     ]
+    cloud_biases = [
+        value
+        for snapshot in snapshots
+        if (value := _field_bias(snapshot, "cloud_cover_percent")) is not None
+    ]
     temperature_errors = [
         value
         for snapshot in snapshots
@@ -427,6 +440,7 @@ def _accuracy_metrics(snapshots: List[ForecastAccuracySnapshot]) -> Dict:
     ]
     return {
         "average_cloud_error_percent": _round(_average(cloud_errors), 0),
+        "average_cloud_bias_percent": _round(_average(cloud_biases), 0),
         "average_temperature_error_f": _round(_average(temperature_errors), 1),
         "average_wind_error_mph": _round(_average(wind_errors), 1),
         "average_lead_hours": _round(_average(lead_hours), 1),

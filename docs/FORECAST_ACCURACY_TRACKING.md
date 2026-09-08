@@ -80,10 +80,10 @@ stops future scheduled collection but does not alter existing history or the
 
 Tonight shows a numbered **Forecast Accuracy** evidence section. Before five
 matches, it reports how many verified checks remain before the first pattern
-can be shown and lists the available matched checks. At five matches, it can
-show average cloud, temperature, and wind misses plus a cloud
-forecast-versus-observed history chart. The latest-saved forecast lead time is
-identified explicitly. Once at least two lead-time ranges each contain five
+can be shown. At five matches, it summarizes whether observed skies have been
+cloudier or clearer than forecast, shows average cloud, temperature, and wind
+misses plus average forecast lead time, and plots cloud forecasts against
+observed cloud cover. Once at least two lead-time ranges each contain five
 verified checks, Polaris can compare their average cloud misses without
 publishing a confidence grade.
 

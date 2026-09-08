@@ -181,6 +181,7 @@ def test_matches_near_observation_without_fabricating_values():
     assert summary["matched_samples"] == 1
     assert summary["confidence"] is None
     assert summary["metrics"]["average_cloud_error_percent"] == 11
+    assert summary["metrics"]["average_cloud_bias_percent"] == 11
     assert summary["metrics"]["average_temperature_error_f"] == 3
     assert summary["metrics"]["average_wind_error_mph"] == 2
     assert summary["metrics"]["average_lead_hours"] == 9
@@ -366,6 +367,7 @@ def test_enough_matches_still_does_not_claim_confidence():
     assert summary["matched_samples"] == 5
     assert summary["confidence"] is None
     assert summary["metrics"]["average_cloud_error_percent"] == 5
+    assert summary["metrics"]["average_cloud_bias_percent"] == 5
     assert len(summary["recent_checks"]) == 5
     assert summary["has_history_chart"] is True
     assert summary["message"] == (

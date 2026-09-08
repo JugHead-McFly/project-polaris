@@ -799,6 +799,18 @@ const formatForecastMetric = (value, suffix = "") => (
   hasForecastMetric(value) ? `${Number(value)}${suffix}` : "Not enough data"
 );
 
+const cloudBiasInsight = (bias) => {
+  if (!hasForecastMetric(bias)) return null;
+  const roundedBias = Math.round(Number(bias));
+  if (roundedBias > 0) {
+    return `Observed skies were ${roundedBias} points cloudier than forecast on average.`;
+  }
+  if (roundedBias < 0) {
+    return `Observed skies were ${Math.abs(roundedBias)} points clearer than forecast on average.`;
+  }
+  return "Observed cloud cover matched the forecast on average.";
+};
+
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
   const data = forecastAccuracy || {};
   const matchedSamples = Number(data.matched_samples || 0);
@@ -813,6 +825,7 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   const remainingSamples = Math.max(0, minimumSamples - matchedSamples);
   const averageCloudError = metrics.average_cloud_error_percent;
   const hasAverageCloudError = hasForecastMetric(averageCloudError);
+  const biasInsight = cloudBiasInsight(metrics.average_cloud_bias_percent);
 
   setText(
     "forecast-accuracy-history-label",
@@ -834,8 +847,10 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
       ? "Waiting for the first verified comparison."
       : remainingSamples > 0
         ? `${remainingSamples} more check${remainingSamples === 1 ? "" : "s"} before an early trend.`
-        : hasAverageCloudError
-          ? `Cloud forecasts miss by ${averageCloudError} points on average.`
+        : biasInsight
+          ? biasInsight
+          : hasAverageCloudError
+            ? `Cloud forecasts miss by ${averageCloudError} points on average.`
           : `${matchedSamples} checks are ready to review.`,
   );
   setText(

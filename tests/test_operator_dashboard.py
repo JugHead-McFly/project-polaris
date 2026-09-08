@@ -813,6 +813,10 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "const hasForecastMetric" in script
     assert 'value !== null' in script
     assert "average_cloud_error_percent" in script
+    assert "average_cloud_bias_percent" in script
+    assert "const cloudBiasInsight" in script
+    assert "points cloudier than forecast on average" in script
+    assert "points clearer than forecast on average" in script
     assert "horizon_buckets" in script
     assert "has_horizon_analysis" in script
     assert "forecast_cloud_cover_percent" in script
