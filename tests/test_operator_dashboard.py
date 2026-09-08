@@ -36,6 +36,15 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
         "  gap: 12px;\n"
         "  margin-top: auto;"
     ) in stylesheet.text
+    desktop_styles = stylesheet.text.split("@media (min-width: 1041px)", 1)[1].split(
+        "@media (max-width: 1040px)", 1
+    )[0]
+    assert (
+        ".hosted-recommendation:not(.status-do-not-image) "
+        ".hosted-command-summary"
+    ) in desktop_styles
+    assert "grid-template-columns: 1fr;" in desktop_styles
+    assert "grid-template-rows: repeat(3, minmax(92px, 1fr));" in desktop_styles
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text

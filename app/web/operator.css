@@ -4675,7 +4675,15 @@ footer {
     gap: 10px;
   }
 
-  .hosted-command-summary div {
+  .hosted-recommendation:not(.status-do-not-image) .hosted-command-summary {
+    flex: 1;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, minmax(92px, 1fr));
+  }
+
+  .hosted-recommendation:not(.status-do-not-image) .hosted-command-summary div {
+    display: grid;
+    align-content: center;
     padding: 12px;
   }
 
