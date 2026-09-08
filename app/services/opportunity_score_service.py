@@ -334,10 +334,11 @@ def explain_opportunity_for_decision(score: Dict, decision: str) -> Dict:
             "or weather input failed."
         )
     elif decision == "Use Caution":
-        adjusted["label"] = "Caution only"
+        adjusted["label"] = opportunity_score_label(adjusted["total"])
         adjusted["guidance"] = (
-            "Some ingredients are usable, but Polaris recommends a live "
-            "conditions check before opening equipment."
+            "The score describes the underlying imaging opportunity, but "
+            "Polaris still recommends reviewing the caution before opening "
+            "equipment."
         )
     else:
         adjusted["label"] = opportunity_score_label(adjusted["total"])

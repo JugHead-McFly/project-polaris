@@ -198,3 +198,19 @@ def test_do_not_image_score_label_explains_hard_stop_without_hiding_components()
     assert explained["label"] == "No imaging window"
     assert "hard stop" in explained["guidance"]
     assert component(explained, "cloud")["points"] == 0
+
+
+def test_use_caution_preserves_the_underlying_score_label():
+    explained = explain_opportunity_for_decision(
+        {
+            "total": 92.0,
+            "label": "Excellent",
+            "guidance": "Use the score as a planning aid.",
+            "components": [],
+        },
+        "Use Caution",
+    )
+
+    assert explained["total"] == 92.0
+    assert explained["label"] == "Excellent"
+    assert "reviewing the caution" in explained["guidance"]

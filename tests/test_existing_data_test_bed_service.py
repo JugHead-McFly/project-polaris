@@ -28,6 +28,9 @@ def test_named_nightly_scenarios_cover_single_user_decisions():
     assert scenarios["bright_moon_broadband_caution"]["actual"][
         "recommended_filter"
     ] == "Astro"
+    assert scenarios["bright_moon_broadband_caution"]["actual"][
+        "opportunity_label"
+    ] == "Usable"
     assert scenarios["weather_unavailable_fail_safe"]["actual"][
         "block_count"
     ] == 0
