@@ -45,6 +45,12 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     ) in desktop_styles
     assert "grid-template-columns: 1fr;" in desktop_styles
     assert "grid-template-rows: repeat(3, minmax(92px, 1fr));" in desktop_styles
+    assert ".hosted-command-summary dd" in desktop_styles
+    assert "font-size: 18px;" in desktop_styles
+    assert "padding-right: 166px !important;" in desktop_styles
+    assert "width: 128px;" in desktop_styles
+    assert "height: 84px;" in desktop_styles
+    assert "transform: translateY(-50%);" in desktop_styles
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
     assert "__ASSET_VERSION__" not in response.text
