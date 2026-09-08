@@ -47,9 +47,10 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "grid-template-rows: repeat(3, minmax(92px, 1fr));" in desktop_styles
     assert ".hosted-command-summary dd" in desktop_styles
     assert "font-size: 18px;" in desktop_styles
-    assert "padding-right: 166px !important;" in desktop_styles
-    assert "width: 128px;" in desktop_styles
-    assert "height: 84px;" in desktop_styles
+    assert "padding-right: 204px !important;" in desktop_styles
+    assert "width: 164px;" in desktop_styles
+    assert "height: 108px;" in desktop_styles
+    assert "opacity: 1;" in desktop_styles
     assert "transform: translateY(-50%);" in desktop_styles
     assert "/operator-assets/operator.css?v=" in response.text
     assert "/operator-assets/operator.js?v=" in response.text
@@ -541,7 +542,7 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
     assert "target?.artwork?.match_kind" in script
     assert (
         ".hosted-command-fallback-card.has-target-illustration"
-        " {\n  padding-right: 78px !important;"
+        " {\n  padding-right: 106px !important;"
     ) in css
 
     assert 'id="hosted-reference-image"' not in html
@@ -830,6 +831,9 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     assert "average_cloud_error_percent" in script
     assert "average_cloud_bias_percent" in script
     assert "const cloudBiasInsight" in script
+    assert "const smoothSvgPath" in script
+    assert 'svgElement("path"' in script
+    assert "d: smoothSvgPath(trendPoints)" in script
     assert "points cloudier than forecast on average" in script
     assert "points clearer than forecast on average" in script
     assert "horizon_buckets" in script

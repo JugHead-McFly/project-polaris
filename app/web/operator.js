@@ -799,6 +799,26 @@ const formatForecastMetric = (value, suffix = "") => (
   hasForecastMetric(value) ? `${Number(value)}${suffix}` : "Not enough data"
 );
 
+const smoothSvgPath = (points) => {
+  if (points.length === 0) return "";
+  if (points.length === 1) return `M ${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
+  return points.reduce((path, point, index) => {
+    if (index === 0) return `M ${point[0].toFixed(1)} ${point[1].toFixed(1)}`;
+    const previous = points[index - 1];
+    const beforePrevious = points[index - 2] || previous;
+    const next = points[index + 1] || point;
+    const controlOne = [
+      previous[0] + (point[0] - beforePrevious[0]) / 6,
+      previous[1] + (point[1] - beforePrevious[1]) / 6,
+    ];
+    const controlTwo = [
+      point[0] - (next[0] - previous[0]) / 6,
+      point[1] - (next[1] - previous[1]) / 6,
+    ];
+    return `${path} C ${controlOne[0].toFixed(1)} ${controlOne[1].toFixed(1)}, ${controlTwo[0].toFixed(1)} ${controlTwo[1].toFixed(1)}, ${point[0].toFixed(1)} ${point[1].toFixed(1)}`;
+  }, "");
+};
+
 const cloudBiasInsight = (bias) => {
   if (!hasForecastMetric(bias)) return null;
   const roundedBias = Math.round(Number(bias));
@@ -958,10 +978,9 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     ["forecast", "Forecast", "forecast_cloud_cover_percent"],
     ["observed", "Observed", "observed_cloud_cover_percent"],
   ].forEach(([kind, label, field]) => {
-    svg.append(svgElement("polyline", {
-      points: chartChecks.map((check, index) => (
-        `${x(index).toFixed(1)},${y(check[field]).toFixed(1)}`
-      )).join(" "),
+    const trendPoints = chartChecks.map((check, index) => [x(index), y(check[field])]);
+    svg.append(svgElement("path", {
+      d: smoothSvgPath(trendPoints),
       class: `forecast-accuracy-line ${kind}`,
     }));
     chartChecks.forEach((check, index) => {

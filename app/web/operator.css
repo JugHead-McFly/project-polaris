@@ -1292,21 +1292,21 @@ footer {
 
 .hosted-command-target-card.has-target-illustration,
 .hosted-command-fallback-card.has-target-illustration {
-  padding-right: 78px !important;
+  padding-right: 106px !important;
 }
 
 .hosted-command-target-illustration {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  width: 64px;
-  height: 42px;
-  padding: 4px 5px;
+  width: 88px;
+  height: 58px;
+  padding: 5px 6px;
   overflow: hidden;
-  border: 1px solid rgba(91, 221, 205, 0.18);
+  border: 1px solid rgba(91, 221, 205, 0.3);
   border-radius: 10px 3px 9px 5px;
-  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.18);
-  opacity: 0.74;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.26);
+  opacity: 0.96;
   pointer-events: none;
 }
 
@@ -4699,18 +4699,18 @@ footer {
     .hosted-command-target-card.has-target-illustration,
   .hosted-recommendation:not(.status-do-not-image)
     .hosted-command-fallback-card.has-target-illustration {
-    padding-right: 166px !important;
+    padding-right: 204px !important;
   }
 
   .hosted-recommendation:not(.status-do-not-image)
     .hosted-command-target-illustration {
     top: 50%;
-    right: 18px;
+    right: 20px;
     bottom: auto;
-    width: 128px;
-    height: 84px;
-    padding: 7px 8px;
-    opacity: 0.9;
+    width: 164px;
+    height: 108px;
+    padding: 8px 9px;
+    opacity: 1;
     transform: translateY(-50%);
   }
 
