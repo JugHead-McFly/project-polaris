@@ -1,6 +1,27 @@
 # Project Polaris Status
 
-Last updated: 2026-08-31
+Last updated: 2026-09-09
+
+## Current checkpoint: September 9 visual review
+
+- Reviewed the signed-in Render operator page at desktop and 390px phone width.
+  Refreshing the old open tab loaded the September 9 plan with 10 verified checks.
+- Desktop recommendation artwork is larger and vertically centered. Phone cards
+  stack without the previously reported overlapping panels; no horizontal page
+  overflow was measured at 390px. The alerts switch displays an explicit ON state.
+- Forecast curves retain visible measured points and are readable on a fresh
+  phone-width load. Found and fixed a resize defect: the chart retained its original
+  drawing width after a viewport change, flattening the plot and shrinking labels.
+  A container resize observer now redraws from the same saved accuracy payload.
+- Baseline: 340 Python tests passed; nightly test beds passed 5/5. The added
+  JavaScript regression test covers changed, unchanged, hidden, and restored widths.
+- Remaining product-review items: the generic caution sentence does not immediately
+  identify the heat concern; the target-fit explanation says "Why this rig matches"
+  even when the target is too large for one frame. These are not graphical fixes
+  and were not changed during this review.
+- Review used Chrome phone-width emulation, not a physical iPhone/Safari test.
+  Older dated sections below are historical context, not the latest test/deploy state.
+
 
 ## Project locations
 

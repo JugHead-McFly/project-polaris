@@ -831,7 +831,10 @@ const cloudBiasInsight = (bias) => {
   return "Observed cloud cover matched the forecast on average.";
 };
 
+let latestForecastAccuracy = null;
+
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
+  latestForecastAccuracy = forecastAccuracy;
   const data = forecastAccuracy || {};
   const matchedSamples = Number(data.matched_samples || 0);
   const minimumSamples = Number(data.minimum_samples || 5);
@@ -4935,5 +4938,19 @@ const bootApplication = async () => {
   }
   runDashboardLoad();
 };
+
+// Recalculate chart coordinates when its container changes width, including rotation.
+const accuracyChart = byId("forecast-accuracy-chart");
+if (accuracyChart && typeof ResizeObserver !== "undefined") {
+  let previousChartWidth = 0;
+  const accuracyChartObserver = new ResizeObserver(([entry]) => {
+    const width = Math.round(entry.contentRect.width);
+    if (width > 0 && width !== previousChartWidth) {
+      previousChartWidth = width;
+      if (latestForecastAccuracy) renderForecastAccuracyHistory(latestForecastAccuracy);
+    }
+  });
+  accuracyChartObserver.observe(accuracyChart);
+}
 
 bootApplication();
