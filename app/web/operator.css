@@ -207,32 +207,11 @@ footer {
 }
 
 .brand-mark {
-  position: relative;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(82, 214, 199, 0.6);
-  border-radius: 50%;
-  box-shadow: 0 0 28px rgba(82, 214, 199, 0.2);
-}
-
-.brand-mark::before,
-.brand-mark::after {
-  position: absolute;
-  content: "";
-}
-
-.brand-mark::before {
-  inset: 7px;
-  border: 1px solid var(--cyan);
-  border-radius: 50%;
-}
-
-.brand-mark::after {
-  top: 15px;
-  left: 2px;
-  width: 28px;
-  border-top: 2px solid var(--cyan);
-  transform: rotate(-28deg);
+  display: block;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  object-fit: contain;
 }
 
 .brand strong,

@@ -25,6 +25,7 @@ DASHBOARD_FILE = (
 )
 WEB_DIRECTORY = DASHBOARD_FILE.parent
 ASSET_FILES = (
+    WEB_DIRECTORY / "polaris-north-star.png",
     WEB_DIRECTORY / "operator.css",
     WEB_DIRECTORY / "operator.js",
     WEB_DIRECTORY / "leaflet.css",

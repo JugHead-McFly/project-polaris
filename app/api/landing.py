@@ -14,7 +14,10 @@ LANDING_STYLESHEET = WEB_DIRECTORY / "landing.css"
 
 
 def _landing_html() -> str:
-    asset_version = LANDING_STYLESHEET.stat().st_mtime_ns
+    asset_version = max(
+        LANDING_STYLESHEET.stat().st_mtime_ns,
+        (WEB_DIRECTORY / "polaris-north-star.png").stat().st_mtime_ns,
+    )
     return (
         LANDING_FILE.read_text(encoding="utf-8")
         .replace("__ASSET_VERSION__", str(asset_version))

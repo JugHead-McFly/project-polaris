@@ -62,10 +62,7 @@ a { color: inherit; }
 .brand strong, .brand small { display: block; }
 .brand strong { font-size: 16px; }
 .brand small { color: var(--muted); font-size: 12px; }
-.brand-mark { position: relative; width: 37px; height: 37px; border: 1px solid rgba(82, 214, 199, 0.75); border-radius: 50%; box-shadow: 0 0 28px rgba(82, 214, 199, 0.2); }
-.brand-mark::before, .brand-mark::after { position: absolute; top: 17px; left: 4px; width: 27px; height: 1px; background: var(--cyan); content: ""; transform: rotate(-28deg); }
-.brand-mark::after { transform: rotate(28deg); opacity: .6; }
-.brand-mark span { position: absolute; top: 13px; left: 14px; width: 8px; height: 8px; border: 1px solid var(--cyan); border-radius: 50%; background: var(--bg); }
+.brand-mark { display: block; width: 48px; height: 48px; flex: 0 0 48px; object-fit: contain; }
 .sign-in-link { color: var(--muted); font-size: 14px; font-weight: 750; text-underline-offset: 4px; }
 
 .hero {
