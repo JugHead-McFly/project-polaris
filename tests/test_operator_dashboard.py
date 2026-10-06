@@ -29,13 +29,13 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
         "  display: flex;\n"
         "  flex-direction: column;\n"
         "  align-self: stretch;"
-    ) in stylesheet.text
+    ) in stylesheet.text.replace("\r\n", "\n")
     assert (
         ".hosted-session-plan {\n"
         "  display: grid;\n"
         "  gap: 12px;\n"
         "  margin-top: auto;"
-    ) in stylesheet.text
+    ) in stylesheet.text.replace("\r\n", "\n")
     desktop_styles = stylesheet.text.split("@media (min-width: 1041px)", 1)[1].split(
         "@media (max-width: 1040px)", 1
     )[0]
@@ -325,7 +325,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-target-fit"' in html
     assert "Target fit" in html
     assert 'id="hosted-target-rig-match"' in html
-    assert "Why this rig matches" in html
+    assert "Target framing" in html
     assert 'id="hosted-target-project"' in html
     assert "Project progress" in html
     assert "Remaining goal" in html
@@ -356,7 +356,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "secret" not in html.lower()
     assert 'nonce="safe-test-nonce"' in html
 
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
     assert 'setText("hosted-target-fit", "No target selected")' in script
     assert "loadHostedTonight" in script
     assert "showHostedAccountLoading" in script
@@ -452,14 +452,14 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "container.hidden = true;" in script
     assert 'classList.toggle("has-target-illustration", Boolean(target))' in script
     assert "if (targetVisuals) targetVisuals.hidden = !target;" in script
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
     m31_asset = (
         operator_api.WEB_DIRECTORY
         / "target-art"
         / "library"
         / "assets"
         / "m31-andromeda.svg"
-    ).read_text()
+    ).read_text(encoding="utf-8")
     assert '<rect width="400" height="300" fill="#102a2c"/>' not in m31_asset
     assert 'id="m31-andromeda-ambient-edge-fade"' in m31_asset
     assert 'mask="url(#m31-andromeda-ambient-vignette-mask)"' in m31_asset
@@ -519,9 +519,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
 
 
 def test_command_cards_separate_empty_best_target_from_real_fallback_art():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     # Each command card owns exactly one mount; renderTargetIllustration is
     # responsible for leaving a null mount empty or adding one approved local
@@ -551,8 +551,8 @@ def test_command_cards_separate_empty_best_target_from_real_fallback_art():
 
 
 def test_dew_guidance_is_part_of_recommended_setup():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
 
     setup_start = html.index('id="hosted-setup-card"')
     caution_start = html.index('class="hosted-setup-cautions"')
@@ -572,9 +572,9 @@ def test_dew_guidance_is_part_of_recommended_setup():
 
 
 def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     hosted_window = html.index('id="hosted-command-window"')
     hosted_trend = html.index('id="hosted-window-trend"')
@@ -592,9 +592,9 @@ def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
 
 
 def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     heading = html.index('class="hosted-tonight-heading"')
     alerts = html.index('id="hosted-condition-alerts"')
@@ -661,9 +661,9 @@ def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
 
 
 def test_session_checklist_stays_inside_the_existing_command_card():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     command_start = html.index('class="hosted-command-board"')
     checklist_start = html.index('id="hosted-session-plan"')
@@ -695,9 +695,9 @@ def test_session_checklist_stays_inside_the_existing_command_card():
 
 
 def test_advisory_timeline_collapses_only_when_no_blocks_exist():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     assert '<details\n          class="panel hosted-schedule-panel"' in html
     assert 'id="hosted-schedule-panel"' in html
@@ -718,9 +718,9 @@ def test_advisory_timeline_collapses_only_when_no_blocks_exist():
 
 def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
     client = TestClient(app)
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
     preview_assets = {
         "double-cluster.svg": "double-cluster-ambient-vignette-mask",
         "orion-nebula-m42.svg": "orion-nebula-m42-ambient-vignette-mask",
@@ -776,7 +776,7 @@ def test_target_art_preview_is_isolated_and_uses_transparent_library_assets():
             / "assets"
             / filename
         )
-        markup = asset_path.read_text()
+        markup = asset_path.read_text(encoding="utf-8")
         assert mask_id in markup
         assert '<rect width="400" height="300" fill="#102a2c"/>' not in markup
         assert "<title" in markup
@@ -804,64 +804,17 @@ def test_operator_dashboard_sets_restrictive_content_policy():
 
 
 def test_hosted_weather_summary_shows_honest_forecast_history_state():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
-
-    assert 'id="hosted-forecast-confidence"' not in html
-    assert 'id="forecast-accuracy-history-title"' in html
-    assert 'href="#forecast-accuracy-history"' in html
-    assert 'id="forecast-accuracy-link-count"' in html
-    assert 'id="forecast-accuracy-recent-list"' not in html
-    assert "Recent verified checks" not in html
-    assert 'id="forecast-accuracy-chart"' in html
-    assert 'id="forecast-accuracy-insight"' in html
-    assert 'id="forecast-accuracy-lead-note"' not in html
-    assert 'id="forecast-accuracy-horizons"' in html
-    assert 'id="forecast-accuracy-horizon-list"' in html
-    assert 'id="forecast-accuracy-visual"' in html
-    assert "Forecast vs. observed" in html
-    assert 'id="forecast-accuracy-metrics" hidden' in html
-    assert 'class="forecast-accuracy-guidance" role="status" aria-live="polite"' in html
-    assert "Forecast confidence is still building." not in html
-    assert "data.forecast_accuracy || {}" in script
-    assert "renderForecastAccuracyHistory" in script
-    assert "const hasForecastMetric" in script
-    assert 'value !== null' in script
-    assert "average_cloud_error_percent" in script
-    assert "average_cloud_bias_percent" in script
-    assert "const cloudBiasInsight" in script
-    assert "const smoothSvgPath" in script
-    assert 'svgElement("path"' in script
-    assert "d: smoothSvgPath(trendPoints)" in script
-    assert "points cloudier than forecast on average" in script
-    assert "points clearer than forecast on average" in script
-    assert "horizon_buckets" in script
-    assert "has_horizon_analysis" in script
-    assert "forecast_cloud_cover_percent" in script
-    assert "matched_samples" in script
-    assert "minimum_samples" in script
-    assert "matchedSamples < minimumSamples" in script
-    assert '"Early signal"' in script
-    assert '"Avg. lead", formatForecastMetric(metrics.average_lead_hours, " hr")' in script
-    assert "Early evidence; not used in tonight's score." in script
-    assert 'class: `forecast-accuracy-line ${kind}`' in script
-    assert '`${chartChecks.length} cloud-cover forecasts compared with observed cloud cover.`' in script
-    assert ".hosted-forecast-confidence" not in css
-    assert ".hosted-forecast-history-link" in css
-    assert ".forecast-accuracy-recent" not in css
-    assert ".forecast-accuracy-history" in css
-    assert 'content: "06";' in css
-    assert ".forecast-accuracy-legend" in css
-    assert ".forecast-accuracy-horizons" in css
-    assert ".forecast-accuracy-line.forecast" in css
-    assert ".forecast-accuracy-point.observed" in css
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    assert 'id="forecast-accuracy-tolerance"' in html
+    assert 'id="forecast-accuracy-nights"' in html
+    assert 'id="forecast-accuracy-chart"' not in html
+    assert "Cloud forecast reliability" in html
 
 
 def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text()
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text()
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     assert "Tonight's recommendation" in html
     assert 'id="hosted-secondary-toggle"' in html
@@ -872,7 +825,7 @@ def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
     assert 'id="hosted-cautions-card"' not in html
     assert 'hardStopScore ? "STOP"' in script
     assert 'hardStopScore ? "100%"' in script
-    assert 'source: parts.cloud >= 100 ? "Not scored after cloud stop"' in script
+    assert "Not scored after cloud stop" not in script
     assert "const setHardStopDetailsVisibility" in script
     assert 'classList.toggle("has-secondary-toggle", hardStop)' in script
     assert 'support.hidden = decision !== "Do Not Image"' in script
@@ -887,7 +840,7 @@ def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
 
 
 def test_hard_stop_cards_keep_single_column_order_on_narrow_screens():
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     mobile_start = css.index("@media (max-width: 1040px)")
     mobile_end = css.index("@media (max-width: 680px)", mobile_start)
@@ -904,7 +857,7 @@ def test_hard_stop_cards_keep_single_column_order_on_narrow_screens():
 
 
 def test_numbered_card_headers_share_the_same_card_origin():
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text()
+    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
 
     header_rule_start = css.index(".hosted-opportunity-score > .eyebrow,")
     header_rule_end = css.index(".hosted-opportunity-score > .eyebrow::before", header_rule_start)

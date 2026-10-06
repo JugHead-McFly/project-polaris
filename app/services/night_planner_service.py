@@ -4,17 +4,9 @@ def build_night_plan(
     darkness,
     weather,
 ):
-    observing_rating = weather.get(
-        "observing_rating",
-        1,
-    )
-
-    if observing_rating >= 4:
-        decision = "Proceed"
-    elif observing_rating == 3:
-        decision = "Use Caution"
-    else:
-        decision = "Do Not Image"
+    from app.services.planner_service import get_weather_decision
+    observing_rating = weather.get("observing_rating")
+    decision = get_weather_decision(weather)
 
     target_sequence = []
     notes = []

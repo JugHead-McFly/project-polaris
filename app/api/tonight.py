@@ -33,6 +33,7 @@ from app.services.hosted_recommendation_service import (
 from app.services.target_service import build_catalog_target_response
 from app.services.target_service import build_target_response
 from app.services.target_art_library_service import resolve_target_artwork
+from app.services.weather_service import HEAT_CAUTION_F, HEAT_STOP_F
 
 
 router = APIRouter(prefix="/tonight", tags=["Tonight"])
@@ -50,6 +51,28 @@ def _build_operator_message(schedule: Dict) -> str:
         )
 
     if decision == "Use Caution":
+        temperature_f = weather.get("planned_temperature_f")
+        if temperature_f is not None and temperature_f >= HEAT_CAUTION_F:
+            return (
+                f"Use caution: heat is a concern. Forecast temperature near "
+                f"the planned start is {temperature_f:g}°F. "
+                "Let the telescope cool, avoid charging while imaging, "
+                "and verify live conditions before starting."
+            )
+        sources = weather.get("planned_cloud_forecast_sources") or []
+        cloud = weather.get("planned_cloud_cover_percent", weather.get("cloud_cover_percent"))
+        if cloud is not None and (cloud >= 25 or len(sources) < 2
+                                 or (weather.get("planned_cloud_forecast_spread") or 0) >= 30):
+            readings = "; ".join(
+                f"{s['provider']}: {s['cloud_cover_percent']:g}%"
+                for s in sources
+            )
+            return (
+                f"Check the sky before starting: forecast cloud cover near the start is {cloud:g}%. "
+                + (f"Source forecasts: {readings}. " if readings else "")
+                + "Your capture plan is available. If the target is clear and equipment conditions are safe, "
+                "take a short test capture and reassess; do not cancel solely on this cloud forecast."
+            )
         return (
             f"Use caution: the imaging-start weather rating is {rating}/5. "
             "Verify live conditions before opening the observatory."
@@ -86,7 +109,7 @@ def _build_operator_message(schedule: Dict) -> str:
         reasons.append(f"humidity is {humidity}%")
     if wind_speed is not None and wind_speed >= 15:
         reasons.append(f"wind is {wind_speed:g} mph")
-    if temperature_f is not None and temperature_f >= 105:
+    if temperature_f is not None and temperature_f >= HEAT_STOP_F:
         reasons.append(
             f"forecast temperature near the planned start is "
             f"{temperature_f:g}°F, above Polaris's "
@@ -236,6 +259,13 @@ def _build_rig_match_summary(
         "M97": "a compact planetary nebula",
     }
     target_description = common_target_names.get(target, "tonight's target")
+
+    if fit_label == "Too large":
+        return (
+            f"{target_name} is too large for one frame with {rig_label}. "
+            f"{fit_reason} The planned window does not mean the whole target "
+            "fits; expect a cropped view or choose a smaller target."
+        )
 
     if target_width is None or target_height is None:
         return (

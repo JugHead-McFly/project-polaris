@@ -799,229 +799,72 @@ const formatForecastMetric = (value, suffix = "") => (
   hasForecastMetric(value) ? `${Number(value)}${suffix}` : "Not enough data"
 );
 
-const smoothSvgPath = (points) => {
-  if (points.length === 0) return "";
-  if (points.length === 1) return `M ${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
-  return points.reduce((path, point, index) => {
-    if (index === 0) return `M ${point[0].toFixed(1)} ${point[1].toFixed(1)}`;
-    const previous = points[index - 1];
-    const beforePrevious = points[index - 2] || previous;
-    const next = points[index + 1] || point;
-    const controlOne = [
-      previous[0] + (point[0] - beforePrevious[0]) / 6,
-      previous[1] + (point[1] - beforePrevious[1]) / 6,
-    ];
-    const controlTwo = [
-      point[0] - (next[0] - previous[0]) / 6,
-      point[1] - (next[1] - previous[1]) / 6,
-    ];
-    return `${path} C ${controlOne[0].toFixed(1)} ${controlOne[1].toFixed(1)}, ${controlTwo[0].toFixed(1)} ${controlTwo[1].toFixed(1)}, ${point[0].toFixed(1)} ${point[1].toFixed(1)}`;
-  }, "");
-};
-
-const cloudBiasInsight = (bias) => {
-  if (!hasForecastMetric(bias)) return null;
-  const roundedBias = Math.round(Number(bias));
-  if (roundedBias > 0) {
-    return `Observed skies were ${roundedBias} points cloudier than forecast on average.`;
-  }
-  if (roundedBias < 0) {
-    return `Observed skies were ${Math.abs(roundedBias)} points clearer than forecast on average.`;
-  }
-  return "Observed cloud cover matched the forecast on average.";
-};
-
 let latestForecastAccuracy = null;
 
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
   latestForecastAccuracy = forecastAccuracy;
-  const data = forecastAccuracy || {};
-  const matchedSamples = Number(data.matched_samples || 0);
-  const minimumSamples = Number(data.minimum_samples || 5);
-  const metrics = data.metrics || {};
-  const recentChecks = Array.isArray(data.recent_checks)
-    ? data.recent_checks
-    : [];
-  const horizonBuckets = Array.isArray(data.horizon_buckets)
-    ? data.horizon_buckets
-    : [];
-  const remainingSamples = Math.max(0, minimumSamples - matchedSamples);
-  const averageCloudError = metrics.average_cloud_error_percent;
-  const hasAverageCloudError = hasForecastMetric(averageCloudError);
-  const biasInsight = cloudBiasInsight(metrics.average_cloud_bias_percent);
-
-  setText(
-    "forecast-accuracy-history-label",
-    data.state === "ready_for_calibration"
-      ? "Early signal"
-      : "Collecting checks",
-  );
-  setText(
-    "forecast-accuracy-history-count",
-    `${matchedSamples} check${matchedSamples === 1 ? "" : "s"}`,
-  );
-  setText(
-    "forecast-accuracy-link-count",
-    `${matchedSamples} check${matchedSamples === 1 ? "" : "s"}`,
-  );
-  setText(
-    "forecast-accuracy-insight",
-    matchedSamples === 0
-      ? "Waiting for the first verified comparison."
-      : remainingSamples > 0
-        ? `${remainingSamples} more check${remainingSamples === 1 ? "" : "s"} before an early trend.`
-        : biasInsight
-          ? biasInsight
-          : hasAverageCloudError
-            ? `Cloud forecasts miss by ${averageCloudError} points on average.`
-          : `${matchedSamples} checks are ready to review.`,
-  );
-  setText(
-    "forecast-accuracy-history-message",
-    matchedSamples === 0
-      ? "Forecast and observed weather are matched automatically."
-      : matchedSamples < minimumSamples
-        ? `${matchedSamples} of ${minimumSamples} checks collected.`
-        : "Early evidence; not used in tonight's score.",
-  );
-
-  const metricsList = byId("forecast-accuracy-metrics");
-  metricsList.replaceChildren();
-  metricsList.hidden = matchedSamples < minimumSamples;
+  const data = forecastAccuracy?.satellite_reliability || {};
+  const nights = Array.isArray(data.nights) ? data.nights : [];
+  const checks = nights.flatMap((night) => night.checks);
+  const tolerance = Number(byId("forecast-accuracy-tolerance").value);
+  const within = checks.filter((check) => check.absolute_difference <= tolerance).length;
+  const count = checks.length;
+  const number = (value) => hasForecastMetric(value)
+    ? Number(Number(value).toFixed(1)).toString() : "—";
+  const dateTime = (value) => new Intl.DateTimeFormat([], {
+    timeZone: data.timezone || "UTC", month: "short", day: "numeric",
+    hour: "numeric", minute: "2-digit",
+  }).format(new Date(value));
+  setText("forecast-accuracy-history-count", `${nights.length} nights · ${count} checks`);
+  setText("forecast-accuracy-link-count", `${count} satellite checks`);
+  setText("forecast-accuracy-history-label", "Satellite comparison");
+  setText("forecast-accuracy-insight", count ? `${within} of ${count} checks within ${tolerance} points` : "Waiting for satellite comparisons");
+  setText("forecast-accuracy-history-message", "Historical checks at saved target times—not whole-night averages. This is not a probability for tonight.");
+  const metrics = byId("forecast-accuracy-metrics");
+  metrics.replaceChildren();
+  metrics.hidden = !count;
   [
-    ["Cloud miss", formatForecastMetric(metrics.average_cloud_error_percent, " pts")],
-    ["Temp miss", formatForecastMetric(metrics.average_temperature_error_f, "°F")],
-    ["Wind miss", formatForecastMetric(metrics.average_wind_error_mph, " mph")],
-    ["Avg. lead", formatForecastMetric(metrics.average_lead_hours, " hr")],
+    ["Average difference", `${number(data.average_absolute_difference)} points`],
+    ["Reference", "NOAA satellite estimate"],
   ].forEach(([label, value]) => {
-    const item = appendTextElement(metricsList, "div", "", "");
+    const item = appendTextElement(metrics, "div", "", "");
     appendTextElement(item, "dt", "", label);
     appendTextElement(item, "dd", "", value);
   });
-
-  const horizons = byId("forecast-accuracy-horizons");
-  const horizonList = byId("forecast-accuracy-horizon-list");
-  const readyHorizons = horizonBuckets.filter(
-    (bucket) => bucket.ready
-      && hasForecastMetric(bucket.average_cloud_error_percent),
-  );
-  horizonList.replaceChildren();
-  horizons.hidden = !data.has_horizon_analysis || readyHorizons.length < 2;
-  if (!horizons.hidden) {
-    readyHorizons.forEach((bucket) => {
-      const item = appendTextElement(horizonList, "div", "", "");
-      appendTextElement(item, "dt", "", bucket.label);
-      const value = appendTextElement(item, "dd", "", "");
-      appendTextElement(
-        value,
-        "strong",
-        "",
-        `${bucket.average_cloud_error_percent} pt average miss`,
-      );
-      appendTextElement(
-        value,
-        "span",
-        "",
-        `${bucket.matched_samples} verified checks`,
-      );
-    });
-  }
-
-  const chart = byId("forecast-accuracy-chart");
-  const visual = byId("forecast-accuracy-visual");
-  chart.replaceChildren();
-  const chartChecks = recentChecks.filter(
-    (check) =>
-      hasForecastMetric(check.forecast_cloud_cover_percent)
-      && hasForecastMetric(check.observed_cloud_cover_percent),
-  );
-  visual.hidden = matchedSamples < minimumSamples
-    || !data.has_history_chart
-    || chartChecks.length < 3;
-  if (visual.hidden) return;
-
-  const width = Math.max(300, Math.round(chart.getBoundingClientRect().width || 720));
-  const height = 184;
-  const left = 38;
-  const right = width - 12;
-  const top = 12;
-  const bottom = height - 30;
-  const x = (index) => left + (
-    index / Math.max(1, chartChecks.length - 1)
-  ) * (right - left);
-  const y = (value) => bottom - (
-    Math.max(0, Math.min(100, Number(value))) / 100
-  ) * (bottom - top);
-  const svg = svgElement("svg", {
-    viewBox: `0 0 ${width} ${height}`,
-    role: "img",
-    "aria-label": `${chartChecks.length} cloud-cover forecasts compared with observed cloud cover.`,
-  });
-
-  [0, 50, 100].forEach((percent) => {
-    const gridY = y(percent);
-    svg.append(svgElement("line", {
-      x1: left,
-      y1: gridY,
-      x2: right,
-      y2: gridY,
-      class: "forecast-accuracy-grid-line",
-    }));
-    const label = svgElement("text", {
-      x: left - 7,
-      y: gridY + 3,
-      "text-anchor": "end",
-      class: "forecast-accuracy-axis-label",
-    });
-    label.textContent = `${percent}%`;
-    svg.append(label);
-  });
-
-  [
-    ["forecast", "Forecast", "forecast_cloud_cover_percent"],
-    ["observed", "Observed", "observed_cloud_cover_percent"],
-  ].forEach(([kind, label, field]) => {
-    const trendPoints = chartChecks.map((check, index) => [x(index), y(check[field])]);
-    svg.append(svgElement("path", {
-      d: smoothSvgPath(trendPoints),
-      class: `forecast-accuracy-line ${kind}`,
-    }));
-    chartChecks.forEach((check, index) => {
-      const point = svgElement("circle", {
-        cx: x(index).toFixed(1),
-        cy: y(check[field]).toFixed(1),
-        r: 4,
-        class: `forecast-accuracy-point ${kind}`,
+  const list = byId("forecast-accuracy-nights");
+  const expanded = new Set(Array.from(list.querySelectorAll("details[open]")).map((item) => item.dataset.evening));
+  list.replaceChildren();
+  nights.forEach((night) => {
+    const details = document.createElement("details");
+    details.className = "forecast-reliability-night";
+    details.dataset.evening = night.evening;
+    details.open = expanded.has(night.evening);
+    const summary = document.createElement("summary");
+    const date = new Intl.DateTimeFormat([], { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(`${night.evening}T12:00:00Z`));
+    appendTextElement(summary, "span", "", date);
+    const matched = night.checks.filter((check) => check.absolute_difference <= tolerance).length;
+    appendTextElement(summary, "span", "forecast-reliability-result", `${matched}/${night.checks.length} within tolerance`);
+    details.append(summary);
+    night.checks.forEach((check) => {
+      const content = appendTextElement(details, "div", "forecast-reliability-check", "");
+      appendTextElement(content, "strong", "", `Target: ${dateTime(check.forecast_for)}`);
+      const values = appendTextElement(content, "dl", "forecast-accuracy-metrics", "");
+      [
+        ["Forecast clouds", `${number(check.forecast_cloud_cover_percent)}%`],
+        ["Satellite clouds", `${number(check.satellite_cloud_cover_percent)}%`],
+        ["Difference", `${number(check.absolute_difference)} points`],
+      ].forEach(([label, value]) => {
+        const item = appendTextElement(values, "div", "", "");
+        appendTextElement(item, "dt", "", label);
+        appendTextElement(item, "dd", "", value);
       });
-      const pointTitle = svgElement("title");
-      pointTitle.textContent = `${displayDateTime(check.forecast_for)}: ${label} ${check[field]}% cloud cover; ${check.cloud_error_percent} point miss.`;
-      point.append(pointTitle);
-      svg.append(point);
+      appendTextElement(content, "p", "", `Forecast saved ${dateTime(check.forecast_created_at)} (${number(check.lead_hours)} hours ahead). Satellite scan ${dateTime(check.satellite_at)}. Times: ${data.timezone || "UTC"}.`);
+      appendTextElement(content, "p", "", `Satellite estimate covers a ${number(check.radius_km)} km radius; ${number(check.good_pixel_fraction * 100)}% of pixels passed quality checks. It is not a direct measurement of the sky at the telescope.`);
     });
+    list.append(details);
   });
-
-  [...new Set([0, Math.floor((chartChecks.length - 1) / 2), chartChecks.length - 1])]
-    .forEach((index) => {
-      const label = svgElement("text", {
-        x: x(index).toFixed(1),
-        y: height - 8,
-        "text-anchor": (
-          index === 0
-            ? "start"
-            : index === chartChecks.length - 1
-              ? "end"
-              : "middle"
-        ),
-        class: "forecast-accuracy-date-label",
-      });
-      label.textContent = new Intl.DateTimeFormat([], {
-        month: "short",
-        day: "numeric",
-      }).format(new Date(chartChecks[index].forecast_for));
-      svg.append(label);
-    });
-  chart.append(svg);
 };
+
 
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
 
@@ -1100,25 +943,25 @@ const expandedOpportunityComponents = (components) => {
         description: `${displayMeasuredNumber(parts.cloud)}% cloud`,
         points: cloudPoints,
         max: 30,
-        source: parts.cloud >= 100 ? "Hard stop" : "Forecast",
+        source: "Forecast",
       },
       {
         ...component,
         key: "humidity",
         label: "Humidity",
         description: `${displayMeasuredNumber(parts.humidity)}% humidity`,
-        points: parts.cloud >= 100 ? null : humidityPoints,
+        points: humidityPoints,
         max: 8,
-        source: parts.cloud >= 100 ? "Not scored after cloud stop" : "Forecast",
+        source: "Forecast",
       },
       {
         ...component,
         key: "wind",
         label: "Wind",
         description: `${displayMeasuredNumber(parts.wind)} mph wind`,
-        points: parts.cloud >= 100 ? null : windPoints,
+        points: windPoints,
         max: 7,
-        source: parts.cloud >= 100 ? "Not scored after cloud stop" : "Forecast",
+        source: "Forecast",
       },
     );
   });
@@ -1354,7 +1197,7 @@ const displayedDecisionLabel = (decision) => {
 
 const displayedDecisionMessage = (decision, message) => {
   if (decision === "Use Caution") {
-    return "Conditions are usable, but one or more factors need attention before imaging.";
+    return message || "Conditions are usable, but one or more factors need attention before imaging.";
   }
   if (decision !== "Do Not Image") return message || "Recommendation available.";
 
@@ -1819,6 +1662,17 @@ const renderHostedTonight = (data) => {
     "hosted-plan-message",
     `Plan refreshed ${new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.`,
   );
+  const cloudSources = weather.planned_cloud_forecast_sources || [];
+  const cloudReadings = cloudSources.map(source =>
+    `${source.provider}: ${Math.round(source.cloud_cover_percent)}%`).join(" / ");
+  const cloudWindow = weather.cloud_dark_window || {};
+  const nightCloud = cloudWindow.average_cloud_cover_percent;
+  setText("cloud-source-summary", [
+    cloudReadings ? `Clouds at start — ${cloudReadings}.` : "Cloud comparison unavailable at start.",
+    cloudSources.length > 1 ? `Average ${Math.round(weather.planned_cloud_cover_percent)}%; source spread ${Math.round(weather.planned_cloud_forecast_spread)} percentage points.` : "Only one or no forecast source covers the start.",
+    nightCloud != null ? `Astronomical-darkness average: ${Math.round(nightCloud)}% cloud (${Math.round(cloudWindow.multi_source_coverage_percent)}% of the window has both sources).` : "Full-night cloud average unavailable: incomplete hourly coverage.",
+    "Source agreement is not a guarantee. Check the sky before skipping the night.",
+  ].join(" "));
   setText(
     "data-updated",
     weather.fetched_at
@@ -4939,18 +4793,8 @@ const bootApplication = async () => {
   runDashboardLoad();
 };
 
-// Recalculate chart coordinates when its container changes width, including rotation.
-const accuracyChart = byId("forecast-accuracy-chart");
-if (accuracyChart && typeof ResizeObserver !== "undefined") {
-  let previousChartWidth = 0;
-  const accuracyChartObserver = new ResizeObserver(([entry]) => {
-    const width = Math.round(entry.contentRect.width);
-    if (width > 0 && width !== previousChartWidth) {
-      previousChartWidth = width;
-      if (latestForecastAccuracy) renderForecastAccuracyHistory(latestForecastAccuracy);
-    }
-  });
-  accuracyChartObserver.observe(accuracyChart);
-}
+byId("forecast-accuracy-tolerance").addEventListener("change", () => {
+  renderForecastAccuracyHistory(latestForecastAccuracy);
+});
 
 bootApplication();

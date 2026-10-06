@@ -207,6 +207,8 @@ class ForecastAccuracySnapshot(Base):
     observed_humidity_percent = Column(Float, nullable=True)
     observed_dew_point_f = Column(Float, nullable=True)
     observed_wind_speed_mph = Column(Float, nullable=True)
+    # Independent cloud reference; keep legacy multi-variable observations intact.
+    satellite_cloud_observation = Column(JSON, nullable=True)
     status = Column(String(20), nullable=False, default="pending")
     matched_at = Column(DateTime(timezone=True), nullable=True)
     expires_at = Column(DateTime(timezone=True), nullable=False)

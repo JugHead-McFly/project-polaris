@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from math import isfinite
 from typing import Dict, List, Optional, Tuple
 
 
@@ -24,7 +25,8 @@ def _number(value) -> Optional[float]:
     if value is None or isinstance(value, bool):
         return None
     try:
-        return float(value)
+        number = float(value)
+        return number if isfinite(number) else None
     except (TypeError, ValueError):
         return None
 

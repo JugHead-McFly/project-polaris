@@ -103,7 +103,7 @@ def _scenarios() -> List[Dict]:
     return [
         {
             "key": "documented_monsoon_hold",
-            "name": "Documented monsoon hold",
+            "name": "Cloud forecast retains capture opportunity",
             "provenance": (
                 "Sanitized inputs from the hosted plan verified on 2026-08-30; "
                 "private location details are omitted."
@@ -112,7 +112,7 @@ def _scenarios() -> List[Dict]:
             "timezone_name": "America/Phoenix",
             "rig_profile_key": "dwarf-mini",
             "equatorial_mode_enabled": True,
-            "schedule_target": False,
+            "schedule_target": True,
             "weather": {
                 "observing_rating": 1,
                 "planned_cloud_cover_percent": 100,
@@ -133,6 +133,7 @@ def _scenarios() -> List[Dict]:
             },
             "target": {
                 "object": "M57",
+                "remaining_seconds": 3600,
                 "planner_score": 120,
                 "start": "2026-08-30 08:20 PM",
                 "end": "2026-08-31 02:35 AM",
@@ -145,14 +146,14 @@ def _scenarios() -> List[Dict]:
                 "filter": "Duo-Band",
             },
             "expected": {
-                "decision": "Do Not Image",
-                "block_count": 0,
+                "decision": "Use Caution",
+                "block_count": 1,
                 "night_quality": "Very Poor",
-                "opportunity_score": 38.2,
+                "opportunity_score": 50.2,
                 "recommended_exposure_seconds": 15,
                 "recommended_filter": "Duo-Band",
             },
-            "message_contains": "cloud cover is 100%",
+            "message_contains": "do not cancel solely",
         },
         {
             "key": "clear_eq_nebula",
@@ -316,7 +317,7 @@ def _scenarios() -> List[Dict]:
                 "recommended_exposure_seconds": 15,
                 "recommended_filter": "Astro",
             },
-            "message_contains": "Use caution",
+            "message_contains": "Check the sky",
         },
         {
             "key": "weather_unavailable_fail_safe",

@@ -226,7 +226,8 @@ def _capture_planned_forecast(
         status="pending",
     )
     db.add(snapshot)
-    snapshot.forecast_provider = _provider_name(weather)
+    sources = weather.get("planned_cloud_forecast_sources") or []
+    snapshot.forecast_provider = ("cloud-blend-v1" if len(sources) > 1 else _provider_name(weather))
     _set_forecast_values(snapshot, weather)
 
 
@@ -283,6 +284,10 @@ def forecast_accuracy_summary(
     recent_checks = _recent_checks(latest_snapshots)
     metrics = _accuracy_metrics(latest_snapshots)
     horizon_buckets = _horizon_metrics(matched_snapshots)
+    observatory = db.query(HostedObservatory).filter(
+        HostedObservatory.id == observatory_id,
+        HostedObservatory.user_id == user_id,
+    ).first()
     return {
         "state": "building" if remaining else "ready_for_calibration",
         "label": "Building forecast confidence",
@@ -291,6 +296,10 @@ def forecast_accuracy_summary(
         "revision_count": len(matched_snapshots),
         "minimum_samples": MINIMUM_CONFIDENCE_SAMPLES,
         "confidence": None,
+        "satellite_reliability": _satellite_reliability(
+            latest_snapshots,
+            observatory.timezone_name if observatory else "UTC",
+        ),
         "metrics": metrics,
         "recent_checks": recent_checks,
         "has_history_chart": len(recent_checks) >= 3,
@@ -298,6 +307,59 @@ def forecast_accuracy_summary(
         "has_horizon_analysis": sum(
             1 for bucket in horizon_buckets if bucket["ready"]
         ) >= 2,
+    }
+
+
+def _satellite_reliability(snapshots, timezone_name):
+    """One latest pre-target forecast per time; never blend model references."""
+    nights = {}
+    checks = []
+    for snapshot in snapshots:
+        reference = snapshot.satellite_cloud_observation
+        if not isinstance(reference, dict) or reference.get("status") != "usable":
+            continue
+        try:
+            forecast = float(snapshot.forecast_cloud_cover_percent)
+            satellite = float(reference["cloud_cover_percent"])
+            coverage = float(reference["good_pixel_fraction"])
+            target = _as_utc(snapshot.forecast_for)
+            reference_target = datetime.fromisoformat(reference["forecast_for"])
+            scan = datetime.fromisoformat(reference["scan_midpoint"])
+            if reference_target.tzinfo is None or scan.tzinfo is None:
+                continue
+            offset = (scan - target).total_seconds()
+            if (reference_target != target or abs(offset) > 180
+                    or not all(math.isfinite(v) for v in (forecast, satellite, coverage))
+                    or not 0 <= forecast <= 100 or not 0 <= satellite <= 100
+                    or not .9 <= coverage <= 1
+                    or _as_utc(snapshot.forecast_created_at) >= target):
+                continue
+        except (TypeError, ValueError, KeyError):
+            continue
+        local = target.astimezone(ZoneInfo(timezone_name))
+        evening = (local - timedelta(hours=12)).date().isoformat()
+        check = {
+            "forecast_for": target.isoformat(),
+            "forecast_created_at": _as_utc(snapshot.forecast_created_at).isoformat(),
+            "satellite_at": scan.isoformat(),
+            "forecast_cloud_cover_percent": forecast,
+            "satellite_cloud_cover_percent": satellite,
+            "absolute_difference": abs(satellite - forecast),
+            "lead_hours": _hours_between(snapshot.forecast_created_at, target),
+            "good_pixel_fraction": coverage,
+            "radius_km": reference.get("radius_km"),
+        }
+        checks.append(check)
+        nights.setdefault(evening, []).append(check)
+    return {
+        "timezone": timezone_name,
+        "comparison_kind": "historical_target_times",
+        "check_count": len(checks),
+        "average_absolute_difference": _average([c["absolute_difference"] for c in checks]),
+        "nights": [
+            {"evening": evening, "checks": sorted(values, key=lambda c: c["forecast_for"])}
+            for evening, values in sorted(nights.items(), reverse=True)
+        ],
     }
 
 

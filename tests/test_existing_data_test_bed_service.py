@@ -17,7 +17,7 @@ def test_named_nightly_scenarios_cover_single_user_decisions():
     scenarios = {scenario["key"]: scenario for scenario in report["scenarios"]}
     assert scenarios["documented_monsoon_hold"]["actual"][
         "opportunity_score"
-    ] == 38.2
+    ] == 50.2
     assert scenarios["clear_eq_nebula"]["actual"][
         "recommended_exposure_seconds"
     ] == 30
@@ -36,7 +36,7 @@ def test_named_nightly_scenarios_cover_single_user_decisions():
     ] == 0
     assert scenarios["documented_monsoon_hold"]["actual"][
         "opportunity_label"
-    ] == "No imaging window"
+    ] == "Challenging"
 
 
 def test_local_evidence_inventory_is_read_only_and_privacy_safe(tmp_path):
@@ -98,6 +98,6 @@ def test_text_report_is_plain_english_and_flags_existing_date_cleanup(tmp_path):
     )
 
     assert "5 of 5 nightly scenarios passed" in text
-    assert "Documented monsoon hold: Do Not Image" in text
+    assert "Cloud forecast retains capture opportunity: Use Caution" in text
     assert "1 session date value(s) need cleanup" in text
     assert text.endswith("Overall: READY")

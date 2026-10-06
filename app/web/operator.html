@@ -365,6 +365,7 @@
               <p id="hosted-decision-message">
                 Comparing weather, darkness, Moon conditions, and target visibility.
               </p>
+              <details class="cloud-source-details"><summary>Compare cloud forecasts</summary><p id="cloud-source-summary"></p></details>
               <div class="hosted-decision-support" id="hosted-decision-support">
                 <section aria-labelledby="hosted-blockers-title">
                   <p class="eyebrow" id="hosted-blockers-title">Why not tonight</p>
@@ -490,7 +491,7 @@
               <div class="hosted-target-altitude-chart" id="hosted-target-altitude-chart"></div>
             </div>
             <div class="hosted-rig-match">
-              <p class="eyebrow">Why this rig matches</p>
+              <p class="eyebrow">Target framing</p>
               <p id="hosted-target-rig-match">Rig match will appear after a target is selected.</p>
             </div>
           </div>
@@ -558,50 +559,24 @@
           aria-labelledby="forecast-accuracy-history-title"
         >
           <div class="forecast-accuracy-heading">
-            <p class="eyebrow" id="forecast-accuracy-history-title">Forecast accuracy</p>
-            <span id="forecast-accuracy-history-count">0 verified comparisons</span>
+            <p class="eyebrow" id="forecast-accuracy-history-title">Cloud forecast reliability</p>
+            <span id="forecast-accuracy-history-count">0 satellite comparisons</span>
           </div>
           <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
             <span id="forecast-accuracy-history-label">Collecting checks</span>
-            <strong id="forecast-accuracy-insight">Waiting for the first verified comparison.</strong>
-            <p id="forecast-accuracy-history-message">Forecast and observed weather are matched automatically.</p>
+            <strong id="forecast-accuracy-insight">Waiting for satellite comparisons.</strong>
+            <p id="forecast-accuracy-history-message">Satellite estimates will be compared with saved forecasts.</p>
           </div>
           <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
-          <section
-            class="forecast-accuracy-horizons"
-            id="forecast-accuracy-horizons"
-            aria-labelledby="forecast-accuracy-horizons-title"
-            hidden
-          >
-            <div>
-              <p class="eyebrow" id="forecast-accuracy-horizons-title">Accuracy by forecast lead</p>
-              <strong>How far ahead was the forecast?</strong>
-            </div>
-            <p>Lower average cloud miss means the forecast was closer to the observed sky.</p>
-            <dl id="forecast-accuracy-horizon-list"></dl>
-          </section>
-          <section
-            class="forecast-accuracy-visual"
-            id="forecast-accuracy-visual"
-            aria-labelledby="forecast-accuracy-chart-title"
-            hidden
-          >
-            <div class="forecast-accuracy-visual-heading">
-              <div>
-                <p class="eyebrow" id="forecast-accuracy-chart-title">Cloud cover over time</p>
-                <strong>Forecast vs. observed</strong>
-              </div>
-              <div class="forecast-accuracy-legend" aria-hidden="true">
-                <span><i class="forecast"></i>Forecast</span>
-                <span><i class="observed"></i>Observed</span>
-              </div>
-            </div>
-            <div
-              class="forecast-accuracy-chart"
-              id="forecast-accuracy-chart"
-              aria-label="Recent cloud cover forecast compared with observed cloud cover"
-            ></div>
-          </section>
+          <label class="forecast-reliability-tolerance" for="forecast-accuracy-tolerance">
+            Comparison tolerance
+            <select id="forecast-accuracy-tolerance">
+              <option value="10">Within 10 percentage points</option>
+              <option value="20">Within 20 percentage points</option>
+              <option value="30">Within 30 percentage points</option>
+            </select>
+          </label>
+          <div id="forecast-accuracy-nights"></div>
         </section>
       </section>
 

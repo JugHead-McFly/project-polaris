@@ -598,6 +598,17 @@ def get_weather_decision(weather: Dict) -> str:
 
     if observing_rating is None:
         return "Conditions Unknown"
+    temperature = weather.get("planned_temperature_f")
+    if temperature is not None and temperature >= HEAT_STOP_F:
+        return "Do Not Image"
+    cloud = weather.get("planned_cloud_cover_percent", weather.get("cloud_cover_percent"))
+    sources = weather.get("planned_cloud_forecast_sources")
+    if (cloud is not None and cloud >= 25
+            or (weather.get("planned_cloud_forecast_spread") or 0) >= 30
+            or sources is not None and len(sources) < 2
+            or "cached weather" in weather.get("status", "").lower()):
+        # Forecast clouds affect opportunity, not an equipment-safety veto.
+        return "Use Caution"
     if observing_rating >= 4:
         return "Proceed"
     if observing_rating == 3:
@@ -644,10 +655,12 @@ def _forecast_temperature_for_start(
     if not candidates:
         return None
 
-    _difference, forecast_time, conditions = min(
+    difference, forecast_time, conditions = min(
         candidates,
         key=lambda item: item[0],
     )
+    if difference > timedelta(minutes=60):
+        return None
     return {
         **conditions,
         "forecast_time": forecast_time.strftime("%Y-%m-%d %I:%M %p"),
@@ -709,6 +722,9 @@ def _apply_planned_heat_safeguard(
         temperature_f = forecast.get("temperature_f")
         weather["planned_temperature_f"] = temperature_f
         weather["planned_temperature_at"] = forecast["forecast_time"]
+        if "cloud_forecast_sources" in forecast:
+            weather["planned_cloud_forecast_sources"] = forecast["cloud_forecast_sources"]
+            weather["planned_cloud_forecast_spread"] = forecast.get("cloud_forecast_spread", 0)
         for field in (
             "cloud_cover_percent",
             "humidity_percent",
@@ -783,6 +799,8 @@ def get_tonight_plan(
     _sunset, dark_start, dark_end = get_darkness_window_datetimes(
         observatory=context
     )
+    from app.services.cloud_forecast_service import summarize_dark_window
+    weather["cloud_dark_window"] = summarize_dark_window(weather, dark_start, dark_end)
 
     plans = []
     notes = []

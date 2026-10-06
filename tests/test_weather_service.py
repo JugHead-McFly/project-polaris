@@ -31,7 +31,7 @@ def clear_weather_cache():
         "astro_forecast_status": "Astronomy forecast unavailable in test.",
         "astro_forecast_fetched_at": None,
     }
-    with patch(
+    with patch("app.services.cloud_forecast_service.get_nws_clouds", return_value={"intervals": [], "updated_at": None, "status": "unavailable"}), patch(
         "app.services.weather_service._get_astro_forecast",
         return_value=unavailable,
     ):
@@ -313,7 +313,7 @@ def test_weatherapi_fallback_is_used_when_configured():
     assert weather["status"] == "Fallback weather connected via WeatherAPI.com."
     assert weather["observing_rating"] == 5
     assert weather["cloud_cover_percent"] == 10
-    assert weather["hourly_forecast"]["2026-07-24T21:00"] == {
+    assert {k: v for k, v in weather["hourly_forecast"]["2026-07-24T21:00"].items() if not k.startswith("cloud_forecast_")} == {
         "temperature_f": 72.4,
         "humidity_percent": 42,
         "dew_point_f": 52.0,
@@ -373,7 +373,7 @@ def test_hourly_forecast_is_available_for_the_planner():
 
     assert weather["observing_rating"] == 5
     assert weather["hourly_temperature_f"] == {"2026-07-24T22:00": 105}
-    assert weather["hourly_forecast"]["2026-07-24T22:00"] == {
+    assert {k: v for k, v in weather["hourly_forecast"]["2026-07-24T22:00"].items() if not k.startswith("cloud_forecast_")} == {
         "temperature_f": 105,
         "humidity_percent": 42,
         "dew_point_f": 55,

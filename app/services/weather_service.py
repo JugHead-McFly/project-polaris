@@ -15,6 +15,7 @@ from app.core.diagnostics import record_service_failure
 from app.core.diagnostics import record_service_success
 from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
+from app.services.cloud_forecast_service import blend_cloud_forecasts
 
 
 # DWARFLAB documents a 45°C / 113°F high-temperature charging cutoff for
@@ -322,6 +323,7 @@ def get_weather_summary(
             "observed_at": current.get("time"),
             "fetched_at": checked_at.isoformat(),
         }
+        blend_cloud_forecasts(weather, context, checked_at)
         _store_cached_weather(cache_key, weather, checked_at)
         return weather
 
@@ -350,6 +352,7 @@ def get_weather_summary(
         )
         if fallback_weather is not None:
             fallback_weather.update(_get_astro_forecast(context, checked_at))
+            blend_cloud_forecasts(fallback_weather, context, checked_at)
             record_service_success(
                 "weather",
                 "Fallback weather data received successfully.",

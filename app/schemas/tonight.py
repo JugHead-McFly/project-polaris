@@ -95,6 +95,7 @@ class ForecastAccuracySummary(BaseModel):
     has_history_chart: bool = False
     horizon_buckets: List[dict] = Field(default_factory=list)
     has_horizon_analysis: bool = False
+    satellite_reliability: dict = Field(default_factory=dict)
 
 
 class TonightResponse(BaseModel):

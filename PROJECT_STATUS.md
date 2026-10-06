@@ -1,8 +1,73 @@
 # Project Polaris Status
 
-Last updated: 2026-09-09
+Last updated: 2026-10-06
 
-## Current checkpoint: September 9 visual review
+## October 6 deployment candidate
+
+Doug authorized pushing the September weather/reliability work to GitHub and
+Render. The candidate combines Open-Meteo (or WeatherAPI fallback) with NWS
+hourly cloud forecasts, displays source disagreement and the darkness-window
+mean, retains capture plans under forecast-cloud caution, and preserves the
+planned heat stop. Tile 06 uses satellite references with collapsible nightly
+point checks; it does not claim calibrated confidence or full-night validation.
+
+Full Python regression suite and the decision-message JavaScript test passed
+October 6; dependency checks passed. Remote develop matched the pre-release
+local HEAD cbdeafc. Production deployment remains pending the hosted backup and
+migration gate in docs/RENDER_DEPLOYMENT.md. Revision 20260912_0009 adds one
+nullable JSON reference column; production must receive it before the new code.
+No migration-owner credentials are committed. No release tag is requested.
+
+Historical satellite backfill was performed in development only. Production
+may show no satellite checks until references are imported or collected there.
+Unattended nightly satellite validation remains unfinished.
+
+The DWARF auto-detection/NAS transfer tool is a separate installed application
+maintained in the sibling Dwarf File Ingestion project. Its authoritative
+September 13 handoff records the organized NAS archive and source-verification
+workflow; the website importer alone is not the complete ingestion system.
+
+## Previous checkpoint: September 12 Windows development setup
+
+- Operating clarification from Doug: the active product is the signed-in
+  Render/Supabase app. Restoring the legacy SQLite database and FITS library is
+  not a prerequisite for continuing that hosted product. The missing-library
+  startup results below apply only to the default legacy local mode.
+- The isolated Polaris Development Supabase project is configured with a
+  restricted runtime login. Schema migration, tenant isolation, local startup,
+  sign-in, observing-home setup, and plan loading have passed. See
+  [Windows development](docs/WINDOWS_DEVELOPMENT.md) for startup instructions.
+- Local Windows checkout started from `develop` commit `cbdeafc`, including
+  the September 12 transparent North Star branding update.
+- Installed an isolated Python 3.11.16 environment and project development
+  dependencies. See [Windows development](docs/WINDOWS_DEVELOPMENT.md).
+- Fresh full suite: 340 Python tests passed. Fixed test-only Windows UTF-8
+  and line-ending assumptions, and isolated the version endpoint test from
+  the operator database. Dependency deprecation warnings and an unavailable
+  Astropy user cache were non-fatal; temporary downloads were used.
+- All five deterministic nightly scenarios passed; the chart-resize JavaScript
+  regression passed. The nightly report still returns `NEEDS ATTENTION` because
+  the private local database is absent, not because a scenario failed.
+- Local personal-dashboard startup remains blocked by the missing database and
+  capture library. Git checkout did not migrate private data or configuration.
+- Local fixes now name forecast heat in the main caution explanation and retain
+  that explanation in the dashboard. Target framing uses a neutral heading and
+  explicitly warns when the target exceeds one frame. Targeted validation:
+  56 Python tests and two JavaScript tests passed. No push or deployment performed.
+- Trend parsing now rejects non-finite weather numbers (`NaN` and infinity)
+  instead of allowing them into condition scores. Regression coverage exercises
+  cloud, humidity, and wind, including numeric and string provider values.
+- Follow-up readiness check: GitHub `develop`, local HEAD, and Render's reported
+  build all match `cbdeafccc54ff27df17a484a03886f54cb03e85e`. Both `/health/live`
+  and `/health/ready` returned HTTP 200, version `1.6.0`, branch `develop`, and
+  that commit. This verifies the reported deployment and platform readiness,
+  not a fresh signed-in browser walkthrough or cron execution.
+- `pip check` found no dependency conflicts. Doug confirmed the private database
+  and library remain on the original computer. A zero-byte database placeholder
+  created during the initial test run was removed; no personal database was
+  restored or modified. Local startup still requires the verified data transfer.
+
+## Previous checkpoint: September 9 visual review
 
 - Reviewed the signed-in Render operator page at desktop and 390px phone width.
   Refreshing the old open tab loaded the September 9 plan with 10 verified checks.

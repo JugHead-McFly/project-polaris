@@ -95,7 +95,9 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "forecast_for",
         "forecast_lead_hour",
     }
-    assert revision == "20260901_0008"
+    assert "satellite_cloud_observation" in forecast_columns
+    assert forecast_columns["satellite_cloud_observation"]["nullable"]
+    assert revision == "20260912_0009"
 
 
 def test_forecast_horizon_migration_backfills_existing_snapshot(tmp_path: Path):

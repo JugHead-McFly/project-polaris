@@ -1,8 +1,22 @@
 from app.services.conditions_trend_service import assess_conditions_trend
+import pytest
 
 
 START = "2026-08-23 09:00 PM"
 END = "2026-08-23 11:00 PM"
+
+
+@pytest.mark.parametrize("field", ["cloud_cover_percent", "humidity_percent", "wind_speed_mph"])
+@pytest.mark.parametrize("invalid", [float("nan"), float("inf"), float("-inf"), "NaN", "Infinity"])
+def test_nonfinite_weather_does_not_produce_a_trend(field, invalid):
+    weather = _weather(
+        ("2026-08-23T21:00", 60, 70, 8),
+        ("2026-08-23T23:00", 30, 60, 5),
+    )
+    weather["hourly_forecast"]["2026-08-23T23:00"][field] = invalid
+    result = assess_conditions_trend(weather, planned_start=START, planned_end=END)
+    assert result["direction"] == "unavailable"
+    assert result["basis"] is None
 
 
 def _weather(*points):

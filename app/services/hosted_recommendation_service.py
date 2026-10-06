@@ -89,6 +89,14 @@ def create_recommendation_run(
         },
         input_provenance={
             "weather_status": weather.get("status"),
+            "cloud_blend_method": "equal_weight_available_sources_v1",
+            "planned_cloud_forecast_sources": weather.get("planned_cloud_forecast_sources"),
+            "cloud_dark_window": weather.get("cloud_dark_window"),
+            "hourly_cloud_forecasts": {
+                timestamp: {key: row.get(key) for key in
+                    ("cloud_cover_percent", "cloud_forecast_sources", "cloud_forecast_spread")}
+                for timestamp, row in weather.get("hourly_forecast", {}).items()
+            },
             "weather_observed_at": weather.get("observed_at"),
             "moon_illumination_percent": payload["moon"].get(
                 "illumination_percent"

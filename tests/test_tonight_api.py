@@ -1,9 +1,11 @@
 from unittest.mock import patch
+import pytest
 
 from fastapi.testclient import TestClient
 
 from app.main import app
 from app.api.tonight import _build_operator_message
+from app.api.tonight import _build_rig_match_summary
 from app.core.planning_context import ObservatoryContext
 from app.services.night_rating_service import calculate_night_rating
 
@@ -13,6 +15,29 @@ class FakeDatabase:
 
     def close(self):
         self.closed = True
+
+
+@pytest.mark.parametrize("temperature, names_heat", [(None, False), (94, False), (95, True), (104, True)])
+def test_caution_names_planned_heat_not_live_heat(temperature, names_heat):
+    message = _build_operator_message({
+        "decision": "Use Caution",
+        "weather": {"observing_rating": 3, "temperature_f": 110,
+                    "planned_temperature_f": temperature},
+    })
+    assert ("heat is a concern" in message) is names_heat
+    if names_heat:
+        assert f"{temperature}°F" in message
+
+
+def test_oversized_target_summary_leads_with_framing_limit():
+    message = _build_rig_match_summary(
+        target_name="M31", rig_label="Test rig", target_width=180,
+        target_height=60, fit_label="Too large",
+        fit_reason="The target exceeds the field of view.",
+    )
+    assert message.startswith("M31 is too large for one frame with Test rig.")
+    assert "cropped view" in message
+    assert "because" not in message
 
 
 def planner_target(name, score):

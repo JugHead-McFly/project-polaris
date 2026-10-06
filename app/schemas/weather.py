@@ -9,7 +9,11 @@ class WeatherSummary(BaseModel):
     temperature_f: Optional[float] = None
     planned_temperature_f: Optional[float] = None
     planned_temperature_at: Optional[str] = None
-    planned_cloud_cover_percent: Optional[int] = None
+    planned_cloud_cover_percent: Optional[float] = None
+    planned_cloud_forecast_sources: Optional[list[dict]] = None
+    planned_cloud_forecast_spread: Optional[float] = None
+    cloud_forecast_status: Optional[str] = None
+    cloud_dark_window: Optional[dict] = None
     planned_humidity_percent: Optional[int] = None
     planned_dew_point_f: Optional[float] = None
     planned_wind_speed_mph: Optional[float] = None

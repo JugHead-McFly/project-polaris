@@ -91,6 +91,9 @@ not copy those sources into its database or treat them as access guarantees.
 
 ## Run
 
+For PowerShell setup and verification, see
+[Windows local development](docs/WINDOWS_DEVELOPMENT.md).
+
 Activate the virtual environment:
 
     source .venv/bin/activate
