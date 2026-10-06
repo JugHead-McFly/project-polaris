@@ -306,6 +306,15 @@
             <p class="eyebrow">Tonight at <span id="hosted-tonight-observatory">your observatory</span></p>
             <h1 id="hosted-tonight-title">Your imaging plan</h1>
             <p id="hosted-tonight-date">Building tonight's recommendation…</p>
+            <details id="hosted-library-history">
+              <summary>Imaging progress: <span id="hosted-library-summary">Not synced yet</span></summary>
+              <p id="hosted-library-basis"></p>
+              <p id="hosted-library-sync-time"></p>
+              <div id="hosted-library-targets"></div>
+              <button type="button" id="hosted-library-pair">Connect NAS importer</button>
+              <button type="button" id="hosted-library-revoke">Disconnect NAS importer</button>
+              <p id="hosted-library-message" role="status"></p>
+            </details>
           </div>
           <a class="hosted-forecast-history-link" href="#forecast-accuracy-history">
             <span>Forecast history</span>

@@ -7,3 +7,5 @@ from .hosted import ForecastAccuracySnapshot
 from .hosted import Profile
 from .hosted import RecommendationFeedback
 from .hosted import RecommendationRun
+
+from .capture_history import HostedCaptureSession, LibrarySyncCredential

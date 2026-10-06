@@ -1,3 +1,4 @@
+from app.services.capture_history_service import library_summary, progress_map
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -32,4 +33,5 @@ def get_schedule_for_tonight(
         db,
         observatory=observatory,
         use_capture_history=current_user.auth_mode == "local",
+        capture_progress=(progress_map(library_summary(db, current_user.user_id)) if current_user.auth_mode != "local" else None),
     )

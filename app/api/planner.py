@@ -1,3 +1,4 @@
+from app.services.capture_history_service import library_summary, progress_map
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -41,5 +42,6 @@ def get_planner_for_tonight(
         db=db,
         observatory=observatory,
         use_capture_history=current_user.auth_mode == "local",
+        capture_progress=(progress_map(library_summary(db, current_user.user_id)) if current_user.auth_mode != "local" else None),
         equatorial_mode_enabled=equatorial_mode_enabled,
     )

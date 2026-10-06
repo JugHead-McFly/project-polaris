@@ -1540,7 +1540,19 @@ const renderTargetProjectContext = (target) => {
   );
 };
 
+const renderLibraryHistory = (history) => {
+  setText("hosted-library-summary", history?.session_count ? `${history.session_count} sessions` : "Not synced yet");
+  setText("hosted-library-basis", history?.basis || "Connect your NAS importer to include recorded imaging time in target selection.");
+  setText("hosted-library-sync-time", history?.last_synced_at ? `Last synced: ${new Date(history.last_synced_at).toLocaleString()}` : "No completed sync yet.");
+  const container = byId("hosted-library-targets");
+  container.replaceChildren();
+  for (const target of history?.targets || []) {
+    appendTextElement(container, "p", "", `${target.object}: ${target.hours} h recorded / ${target.goal_hours} h goal; ${target.remaining_hours ? `${target.remaining_hours} h remaining` : "goal reached"}`);
+  }
+};
+
 const renderHostedTonight = (data) => {
+  renderLibraryHistory(data.capture_history);
   latestHostedTonightData = data;
   if (hostedConditionAlertsEnabled) {
     hostedConditionAlertBaseline = conditionAlertState(data);
@@ -4798,3 +4810,25 @@ byId("forecast-accuracy-tolerance").addEventListener("change", () => {
 });
 
 bootApplication();
+
+byId("hosted-library-pair").addEventListener("click", async () => {
+  const button = byId("hosted-library-pair");
+  button.disabled = true;
+  try {
+    const response = await apiFetch("/capture-history/pair", {method: "POST"});
+    if (!response.ok) throw new Error("Could not connect the importer.");
+    const blob = new Blob([JSON.stringify(await response.json())], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url; anchor.download = "polaris-library-pairing.json"; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    setText("hosted-library-message", "Pairing file downloaded. Import it into the NAS sync tool on this PC. Creating a new pairing replaces the previous connection.");
+  } catch (error) { setText("hosted-library-message", error.message); }
+  finally { button.disabled = false; }
+});
+byId("hosted-library-revoke").addEventListener("click", async () => {
+  try {
+    const response = await apiFetch("/capture-history/pair", {method: "DELETE"});
+    setText("hosted-library-message", response.ok ? "Importer disconnected. Recorded session history is preserved." : "Could not disconnect the importer.");
+  } catch (error) { setText("hosted-library-message", "Could not disconnect the importer."); }
+});

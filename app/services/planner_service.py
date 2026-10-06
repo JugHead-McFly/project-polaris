@@ -1,3 +1,4 @@
+from app.services.capture_history_service import history_advice
 from datetime import datetime, timedelta
 from typing import Dict, Iterable, List, Optional
 
@@ -398,6 +399,7 @@ def build_target_plan(
     dark_end: datetime,
     observatory: Optional[ObservatoryContext] = None,
     use_capture_history: bool = True,
+    capture_progress: Optional[Dict] = None,
 ) -> Dict:
     advisor = (
         get_exposure_advice(
@@ -405,7 +407,7 @@ def build_target_plan(
             object_name=object_name,
         )
         if use_capture_history
-        else get_catalog_exposure_advice(object_name)
+        else history_advice(object_name, capture_progress)
     )
 
     midpoint = dark_start + (dark_end - dark_start) / 2
@@ -786,6 +788,7 @@ def get_tonight_plan(
     *,
     target_names: Optional[Iterable[str]] = None,
     use_capture_history: bool = True,
+    capture_progress: Optional[Dict] = None,
     equatorial_mode_enabled: bool = False,
 ) -> Dict:
     context = use_observatory_context(observatory)
@@ -827,6 +830,7 @@ def get_tonight_plan(
                     dark_end=dark_end,
                     observatory=context,
                     use_capture_history=use_capture_history,
+                    capture_progress=capture_progress,
                 )
             )
         except ValueError:

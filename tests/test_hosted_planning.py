@@ -127,6 +127,7 @@ def test_hosted_plans_use_each_users_own_observatory():
             observatory,
             use_capture_history,
             equatorial_mode_enabled=False,
+            capture_progress=None,
         ):
             observed_contexts.append(
                 (observatory, use_capture_history)

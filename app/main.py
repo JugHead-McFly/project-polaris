@@ -13,6 +13,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from app.api.capture_history import router as capture_history_router
 from app.api.advisor import router as advisor_router
 from app.api.auth import router as auth_router
 from app.api.captures import router as capture_router
@@ -245,6 +246,7 @@ app.include_router(
     dependencies=protected_api_dependencies,
 )
 app.include_router(auth_router)
+app.include_router(capture_history_router)
 app.include_router(
     hosted_account_router,
     dependencies=protected_api_dependencies,

@@ -1,3 +1,5 @@
+from app.services.capture_history_service import library_summary, progress_map
+from app.services.portfolio_service import build_portfolio_target
 from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -144,6 +146,11 @@ def _build_legacy_target(
             planner_target["advisor"]["object"]
         )
     )
+    if not use_capture_history:
+        advisor = planner_target["advisor"]
+        target.update(build_portfolio_target(target["object"], advisor["current_integration_hours"]))
+        target["total_integration_seconds"] = advisor["current_integration_seconds"]
+        target["total_integration_hours"] = advisor["current_integration_hours"]
     target.update(
         {
             "observable": planner_target["observable"],
@@ -358,11 +365,13 @@ def _build_tonight_payload(
         ) from error
 
     use_capture_history = current_user.auth_mode == "local"
+    history = library_summary(db, current_user.user_id) if not use_capture_history else None
     planner = get_tonight_plan(
         db,
         observatory=observatory,
         use_capture_history=use_capture_history,
         equatorial_mode_enabled=equatorial_mode_enabled,
+        capture_progress=progress_map(history) if history else None,
     )
     schedule = build_tonight_schedule(
         planner,
@@ -472,6 +481,7 @@ def _build_tonight_payload(
             dew_risk=dew_risk,
             timezone_name=observatory.timezone_name,
         ),
+        "capture_history": history,
         "message": _build_operator_message(schedule),
         "night_plan": _build_legacy_night_plan(
             schedule,

@@ -659,6 +659,7 @@ def get_tonight_schedule(
     observatory: Optional[ObservatoryContext] = None,
     *,
     use_capture_history: bool = True,
+    capture_progress: Optional[Dict] = None,
 ) -> Dict:
     context = use_observatory_context(observatory)
     return build_tonight_schedule(
@@ -666,6 +667,7 @@ def get_tonight_schedule(
             db,
             observatory=context,
             use_capture_history=use_capture_history,
+            capture_progress=capture_progress,
         ),
         timezone_name=context.timezone_name,
     )

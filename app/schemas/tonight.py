@@ -112,6 +112,7 @@ class TonightResponse(BaseModel):
     conditions_trend: ConditionsTrend
     forecast_accuracy: ForecastAccuracySummary
     session_checklist: SessionChecklist
+    capture_history: Optional[dict] = None
     message: str
     night_plan: NightPlan
     darkness: DarknessSummary

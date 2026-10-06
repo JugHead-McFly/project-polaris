@@ -77,6 +77,8 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "candidate_sites",
         "capture_analyses",
         "captures",
+        "capture_history",
+        "library_sync_credentials",
         "observatories",
         "profiles",
         "recommendation_feedback",
@@ -97,7 +99,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
     }
     assert "satellite_cloud_observation" in forecast_columns
     assert forecast_columns["satellite_cloud_observation"]["nullable"]
-    assert revision == "20260912_0009"
+    assert revision == "20261006_0010"
 
 
 def test_forecast_horizon_migration_backfills_existing_snapshot(tmp_path: Path):
@@ -226,6 +228,8 @@ def test_postgresql_migration_enables_forced_tenant_rls():
         "sessions",
         "candidate_sites",
         "captures",
+        "capture_history",
+        "library_sync_credentials",
         "capture_analyses",
         "profiles",
         "observatories",
