@@ -815,11 +815,14 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     timeZone: data.timezone || "UTC", month: "short", day: "numeric",
     hour: "numeric", minute: "2-digit",
   }).format(new Date(value));
-  setText("forecast-accuracy-history-count", `${nights.length} nights · ${count} checks`);
-  setText("forecast-accuracy-link-count", `${count} satellite checks`);
+  const saved = Number(forecastAccuracy?.saved_forecast_count || 0);
+  const pending = Number(forecastAccuracy?.pending_satellite_count || 0);
+  const future = Number(forecastAccuracy?.future_forecast_count || 0);
+  setText("forecast-accuracy-history-count", `${saved} saved forecasts · ${count} satellite checks · ${nights.length} nights`);
+  setText("forecast-accuracy-link-count", `${saved} saved · ${count} compared`);
   setText("forecast-accuracy-history-label", "Satellite comparison");
-  setText("forecast-accuracy-insight", count ? `${within} of ${count} checks within ${tolerance} points` : "Waiting for satellite comparisons");
-  setText("forecast-accuracy-history-message", "Historical checks at saved target times—not whole-night averages. This is not a probability for tonight.");
+  setText("forecast-accuracy-insight", count ? `${within} of ${count} checks within ${tolerance} points` : saved ? "Forecast history saved; satellite comparisons pending" : "No forecasts saved for this observing home yet");
+  setText("forecast-accuracy-history-message", `History is shared across devices for your account and observing home. ${pending} past forecasts await satellite retrieval; ${future} future forecasts await their target time. Comparisons are at saved target times, not whole-night averages or a probability for tonight.`);
   const metrics = byId("forecast-accuracy-metrics");
   metrics.replaceChildren();
   metrics.hidden = !count;

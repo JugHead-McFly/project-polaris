@@ -256,16 +256,23 @@ def forecast_accuracy_summary(
     user_id: UUID,
     observatory_id,
 ) -> Dict:
-    matched_snapshots = (
+    all_snapshots = (
         db.query(ForecastAccuracySnapshot)
         .filter(
             ForecastAccuracySnapshot.user_id == user_id,
             ForecastAccuracySnapshot.observatory_id == observatory_id,
-            ForecastAccuracySnapshot.status == "matched",
         )
         .order_by(ForecastAccuracySnapshot.forecast_for.desc())
         .all()
     )
+    matched_snapshots = [row for row in all_snapshots if row.status == "matched"]
+    saved_snapshots = _latest_forecast_snapshots(all_snapshots)
+    # Satellite evidence is independent of the legacy model-observation match.
+    # An expired model match must not hide a valid satellite reference.
+    satellite_snapshots = _latest_forecast_snapshots([
+        row for row in all_snapshots
+        if _as_utc(row.forecast_created_at) < _as_utc(row.forecast_for)
+    ])
     latest_snapshots = _latest_forecast_snapshots(matched_snapshots)
     matched_count = len(latest_snapshots)
     remaining = max(0, MINIMUM_CONFIDENCE_SAMPLES - matched_count)
@@ -296,8 +303,19 @@ def forecast_accuracy_summary(
         "revision_count": len(matched_snapshots),
         "minimum_samples": MINIMUM_CONFIDENCE_SAMPLES,
         "confidence": None,
+        "saved_forecast_count": len(saved_snapshots),
+        "saved_revision_count": len(all_snapshots),
+        "pending_satellite_count": sum(
+            row.satellite_cloud_observation is None
+            and _as_utc(row.forecast_for) < datetime.now(timezone.utc)
+            for row in satellite_snapshots
+        ),
+        "future_forecast_count": sum(
+            _as_utc(row.forecast_for) >= datetime.now(timezone.utc)
+            for row in saved_snapshots
+        ),
         "satellite_reliability": _satellite_reliability(
-            latest_snapshots,
+            satellite_snapshots,
             observatory.timezone_name if observatory else "UTC",
         ),
         "metrics": metrics,

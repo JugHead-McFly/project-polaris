@@ -96,6 +96,10 @@ class ForecastAccuracySummary(BaseModel):
     horizon_buckets: List[dict] = Field(default_factory=list)
     has_horizon_analysis: bool = False
     satellite_reliability: dict = Field(default_factory=dict)
+    saved_forecast_count: int = 0
+    saved_revision_count: int = 0
+    pending_satellite_count: int = 0
+    future_forecast_count: int = 0
 
 
 class TonightResponse(BaseModel):

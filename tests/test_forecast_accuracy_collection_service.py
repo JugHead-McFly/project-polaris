@@ -66,6 +66,11 @@ def test_collector_uses_one_tenant_scoped_session_per_configured_user(
         return {}
 
     monkeypatch.setattr(
+        forecast_accuracy_collection_service, "collect_satellite_references",
+        lambda *args, **kwargs: {"retry_targets": 0},
+    )
+
+    monkeypatch.setattr(
         forecast_accuracy_collection_service,
         "get_primary_observatory",
         recording_get_primary_observatory,

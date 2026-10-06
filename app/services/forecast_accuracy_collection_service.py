@@ -15,6 +15,7 @@ from app.services.hosted_account_service import (
     planning_context_from_observatory,
 )
 from app.services.planner_service import get_tonight_plan
+from app.services.satellite_cloud_service import collect_satellite_references
 
 
 LOGGER = logging.getLogger(__name__)
@@ -56,6 +57,12 @@ def collect_forecast_accuracy(
                 observatory=observatory,
                 weather=planner["weather"],
             )
+            satellite_report = collect_satellite_references(
+                db, user_id=user_id, observatory=observatory,
+            )
+            LOGGER.info("Satellite collection: %s", satellite_report)
+            if satellite_report["retry_targets"]:
+                report["failed_tenants"] += 1
             report["processed_tenants"] += 1
         except Exception:
             db.rollback()

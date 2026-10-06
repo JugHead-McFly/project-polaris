@@ -22,6 +22,8 @@ kiwisolver==1.4.7
 lazy-loader==0.5
 matplotlib==3.9.4
 networkx==3.2.1
+netCDF4==1.7.4
+cftime==1.6.5
 numpy==1.26.4
 packaging==26.2
 pandas==2.3.3
