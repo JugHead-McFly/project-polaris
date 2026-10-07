@@ -4,6 +4,22 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
+test('target card distinguishes unassessed quality and synced sessions from zero', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
+  const code = source.slice(source.indexOf('const renderTargetProjectContext ='), source.indexOf('const renderLibraryHistory ='));
+  const labels = {};
+  const render = vm.runInNewContext(code + '\nrenderTargetProjectContext;', {
+    setText: (id, value) => labels[id] = value,
+    byId: () => ({}), displayHours: value => `${value} hr`,
+  });
+  render({best_quality: null, capture_count: 0, session_count: 2, current_hours: 3.11, goal_hours: 5, remaining_hours: 1.89});
+  assert.equal(labels['hosted-target-quality'], 'Not assessed');
+  assert.equal(labels['hosted-target-history'], '2 sessions');
+  render({best_quality: 0, capture_count: 1});
+  assert.equal(labels['hosted-target-quality'], '0%');
+  assert.equal(labels['hosted-target-history'], '1 capture');
+});
+
 test('hosted progress shows imported time and completed goal without inventing quality', () => {
   const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
   const code = source.slice(source.indexOf('const renderLibraryHistory ='), source.indexOf('const renderHostedTonight ='));

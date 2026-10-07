@@ -588,6 +588,20 @@ def build_schedule_blocks(
     return scheduled_blocks
 
 
+def _plan_end_reason(blocks, candidates):
+    if not blocks:
+        return None
+    last = blocks[-1]
+    candidate = next((item for item in candidates if item and item["advisor"]["object"] == last["object"]), None)
+    if candidate is None:
+        return "End of selected plan; this is not a weather cutoff."
+    remaining = _remaining_imaging_minutes(candidate)
+    planned = sum(block["imaging_minutes"] for block in blocks if block["object"] == last["object"])
+    if remaining is not None and planned >= remaining:
+        return f"{last['object']}'s remaining integration goal is allocated. No further blocks are selected; this is not a weather cutoff."
+    return "End of selected plan. Additional dark time may remain; check target visibility and current conditions before extending it."
+
+
 def build_tonight_schedule(
     planner: Dict,
     timezone_name: str = TIMEZONE,
@@ -598,6 +612,7 @@ def build_tonight_schedule(
     fallback = planner.get("best_theoretical_target")
     notes = list(planner["notes"])
     blocks = []
+    candidates = [planner.get("recommended_target"), *planner["alternatives"]]
 
     if decision == "Do Not Image":
         notes.append(
@@ -605,7 +620,6 @@ def build_tonight_schedule(
             "while the weather decision is Do Not Image."
         )
     else:
-        candidates = [planner.get("recommended_target"), *planner["alternatives"]]
         blocks = build_schedule_blocks(
             candidates,
             timezone_name=timezone_name,
@@ -644,6 +658,7 @@ def build_tonight_schedule(
         "blocks": blocks,
         "allocated_minutes": allocated_minutes,
         "unscheduled_dark_minutes": unscheduled_dark_minutes,
+        "end_reason": _plan_end_reason(blocks, candidates),
         "weather": planner["weather"],
         "moon": planner["moon"],
         "darkness": planner["darkness"],

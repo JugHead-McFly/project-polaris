@@ -598,6 +598,8 @@ const showStandaloneTargetArtPreview = () => {
 };
 
 const resetHostedPlanDetails = () => {
+  setText("hosted-plan-end-reason", "");
+  byId("hosted-plan-end-reason").hidden = true;
   setText("hosted-tonight-date", "Building tonight's recommendation…");
   setText("hosted-target-label", "Primary target");
   setText("hosted-target-name", "—");
@@ -1363,7 +1365,7 @@ const renderSessionChecklist = (checklist, decision = "Conditions Unknown") => {
   checklistSteps.forEach((step) => {
     const item = appendTextElement(steps, "li", "hosted-session-step", "");
     const heading = appendTextElement(item, "div", "hosted-session-step-heading", "");
-    appendTextElement(heading, "span", "", step.label || "Plan step");
+    appendTextElement(heading, "span", "", step.key === "stop" ? "Plan ends" : step.label || "Plan step");
     appendTextElement(heading, "strong", "", step.time_label || "—");
   });
 };
@@ -1638,16 +1640,18 @@ const renderTargetProjectContext = (target) => {
   const bestQuality = Number(target.best_quality);
   setText(
     "hosted-target-quality",
-    Number.isFinite(bestQuality)
+    target.best_quality != null && Number.isFinite(bestQuality)
       ? `${bestQuality}%`
-      : "No scored captures yet",
+      : "Not assessed",
   );
 
   const captures = Number(target.capture_count);
   setText(
     "hosted-target-history",
-    Number.isFinite(captures)
-      ? `${captures}`
+    target.session_count != null
+      ? `${target.session_count} session${target.session_count === 1 ? "" : "s"}`
+      : Number.isFinite(captures)
+      ? `${captures} capture${captures === 1 ? "" : "s"}`
       : "No capture history yet",
   );
 };
@@ -1779,6 +1783,8 @@ const renderHostedTonight = (data) => {
   byId("hosted-cautions-empty").hidden = !notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
   renderHostedSchedule(schedule);
+  setText("hosted-plan-end-reason", schedule.end_reason || "");
+  byId("hosted-plan-end-reason").hidden = !schedule.end_reason || decision === "Do Not Image";
   setHardStopDetailsVisibility(decision);
   hostedRecommendationRunId = data.recommendation_run_id || null;
   byId("hosted-feedback-panel").hidden = !hostedRecommendationRunId;

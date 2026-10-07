@@ -608,6 +608,7 @@ def get_weather_decision(weather: Dict) -> str:
     if (cloud is not None and cloud >= 25
             or (weather.get("planned_cloud_forecast_spread") or 0) >= 30
             or sources is not None and len(sources) < 2
+            or weather.get("cache_status") == "stale"
             or "cached weather" in weather.get("status", "").lower()):
         # Forecast clouds affect opportunity, not an equipment-safety veto.
         return "Use Caution"
@@ -902,6 +903,8 @@ def get_tonight_plan(
 
     elif decision == "Use Caution":
         notes.append(
+            "Use caution: live weather could not be refreshed; verify current conditions before starting."
+            if weather.get("cache_status") == "stale" or "cached weather" in weather.get("status", "").lower() else
             f"Use caution: the imaging-start weather rating is "
             f"{weather.get('observing_rating')}/5. Verify live conditions "
             "before opening the observatory."

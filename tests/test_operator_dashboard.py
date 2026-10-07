@@ -415,7 +415,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Math.round((currentHours / goalHours) * 100)" in script
     assert "displayHours(remainingHours)" in script
     assert "Goal reached" in script
-    assert "No scored captures yet" in script
+    assert "Not assessed" in script
     assert "knownTargetMetadata(target.constellation)" in script
     assert "knownTargetMetadata(target.target_type)" in script
     assert "target.target_geometry" in script

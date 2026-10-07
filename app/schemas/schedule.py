@@ -42,6 +42,7 @@ class TonightScheduleResponse(BaseModel):
     blocks: List[ScheduledImagingBlock]
     allocated_minutes: int
     unscheduled_dark_minutes: int
+    end_reason: Optional[str] = None
     weather: WeatherSummary
     moon: MoonSummary
     darkness: DarknessSummary

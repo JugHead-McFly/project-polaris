@@ -9,6 +9,7 @@ from app.core.auth import CurrentUser
 from app.core.auth import get_current_user
 from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
+from app.schemas.capture_history import normalize_target
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_angular_size
 from app.services.conditions_trend_service import assess_conditions_trend
@@ -60,6 +61,12 @@ def _build_operator_message(schedule: Dict) -> str:
                 f"the planned start is {temperature_f:g}°F. "
                 "Let the telescope cool, avoid charging while imaging, "
                 "and verify live conditions before starting."
+            )
+        if weather.get("cache_status") == "stale" or "cached weather" in weather.get("status", "").lower():
+            return (
+                "Live weather could not be refreshed; this plan uses an older forecast. "
+                "Check current conditions before starting. The opportunity score describes "
+                "the saved forecast, not its freshness."
             )
         sources = weather.get("planned_cloud_forecast_sources") or []
         cloud = weather.get("planned_cloud_cover_percent", weather.get("cloud_cover_percent"))
@@ -132,6 +139,7 @@ def _build_legacy_target(
     *,
     use_capture_history: bool = True,
     rig_profile_key: Optional[str] = None,
+    capture_progress: Optional[Dict] = None,
 ) -> Optional[Dict]:
     if planner_target is None:
         return None
@@ -151,6 +159,9 @@ def _build_legacy_target(
         target.update(build_portfolio_target(target["object"], advisor["current_integration_hours"]))
         target["total_integration_seconds"] = advisor["current_integration_seconds"]
         target["total_integration_hours"] = advisor["current_integration_hours"]
+        entry = (capture_progress or {}).get(normalize_target(target["object"]))
+        target["session_count"] = entry["sessions"] if entry else 0
+        target["best_quality"] = None
     target.update(
         {
             "observable": planner_target["observable"],
@@ -383,12 +394,14 @@ def _build_tonight_payload(
         planner.get("recommended_target"),
         use_capture_history=use_capture_history,
         rig_profile_key=observatory.rig_profile_key,
+        capture_progress=progress_map(history) if history else None,
     )
     backup_target = _build_legacy_target(
         db,
         _select_backup_plan(planner),
         use_capture_history=use_capture_history,
         rig_profile_key=observatory.rig_profile_key,
+        capture_progress=progress_map(history) if history else None,
     )
     rig_profile = get_rig_profile(observatory.rig_profile_key or "")
     opportunity_target = recommended_target or backup_target
