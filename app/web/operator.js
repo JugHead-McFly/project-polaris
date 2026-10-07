@@ -367,6 +367,7 @@ const alignHostedNavigation = () => {
 };
 
 const setHostedShell = (signedIn) => {
+  if (!signedIn) window.PolarisObstructionEditor?.resetAll();
   byId("auth-gate").hidden = signedIn;
   byId("hosted-account-main").hidden = !signedIn;
   byId("main-content").hidden = signedIn;
@@ -2052,6 +2053,9 @@ const initializeHostedAuth = async () => {
   // Register immediately: Supabase emits PASSWORD_RECOVERY while it restores
   // the session embedded in a password-reset link.
   supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (hostedSession?.user?.id !== session?.user?.id) {
+      window.PolarisObstructionEditor?.resetAll();
+    }
     hostedSession = session;
     if (event === "PASSWORD_RECOVERY") {
       isPasswordRecoveryFlow = true;
@@ -4912,6 +4916,7 @@ byId("hosted-ready-edit-home").addEventListener("click", () => {
 });
 
 const bootApplication = async () => {
+  window.PolarisObstructionEditor?.mountAll(document, apiFetch);
   if (targetArtPreviewMode) {
     showStandaloneTargetArtPreview();
     return;

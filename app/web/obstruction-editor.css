@@ -1,0 +1,48 @@
+.obstruction-editor { margin: 1.4rem 0; border: 1px solid #42616d; border-radius: 18px; background: #0d202a; color: #e4eef2; }
+.obstruction-editor summary { padding: 1.1rem 1.25rem; cursor: pointer; font-weight: 700; font-size: 1.1rem; }
+.obstruction-editor summary span { display: inline-block; margin-left: .7rem; font-size: .85rem; font-weight: 400; color: #a7c3cf; }
+.obstruction-body { padding: 0 1.25rem 1.25rem; max-width: 1100px; }
+.obstruction-body h2 { font-size: 1.6rem; margin: .2rem 0 .8rem; }
+.obstruction-body p { line-height: 1.55; }
+.obstruction-kicker { color: #79d4c3; text-transform: uppercase; font-size: .75rem; letter-spacing: .08em; }
+.obstruction-notice { background: #162f3d; border-left: 3px solid #77cdbc; padding: .8rem 1rem; border-radius: 5px; }
+.obstruction-body fieldset { min-width: 0; border: 1px solid #3d5966; border-radius: 12px; margin: 1.3rem 0; padding: 1rem; }
+.obstruction-body legend { padding: 0 .4rem; font-weight: 700; }
+.obstruction-body legend small { font-weight: 400; }
+.obstruction-row { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)) auto; gap: .7rem; align-items: end; margin: .7rem 0; }
+.obstruction-row:has(input[data-key="start_azimuth_degrees"]) { grid-template-columns: repeat(4,minmax(0,1fr)) auto; }
+.obstruction-body label { display: flex; flex-direction: column; gap: .4rem; font-size: .9rem; }
+.obstruction-body input[type="number"] { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; border: 1px solid #65838e; border-radius: 7px; background: #071720; color: #f0f5f8; font: inherit; padding: .55rem .7rem; }
+.obstruction-body button, .obstruction-import { box-sizing: border-box; min-height: 44px; border: 1px solid #65838e; border-radius: 8px; background: #183644; color: #f0f5f8; font: inherit; font-weight: 600; padding: .6rem .85rem; cursor: pointer; }
+.obstruction-body button:hover { background: #254c5d; }
+.obstruction-body :focus-visible { outline: 3px solid #a8efe0; outline-offset: 3px; }
+.obstruction-body button:disabled { opacity: .65; cursor: wait; }
+.obstruction-actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: .8rem 0; }
+.obstruction-body .obstruction-import { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: .6rem; max-width: 100%; }
+.obstruction-import input { max-width: 100%; width: 210px; color: #d3e2e9; font-size: .8rem; }
+.obstruction-controls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; align-items: center; }
+.obstruction-body .obstruction-confirm { flex-direction: row; align-items: flex-start; background: #162e3c; border-radius: 8px; padding: 1rem; line-height: 1.5; }
+.obstruction-confirm input { flex: 0 0 auto; width: 22px; height: 22px; margin-top: .2rem; accent-color: #83dec9; }
+.obstruction-body .obstruction-preview-button { background: #80d5c1; color: #09202a; }
+.obstruction-body [data-status] { padding: .85rem; background: #132e3b; border-radius: 8px; font-weight: 600; overflow-wrap: anywhere; }
+.obstruction-chart { min-width: 0; max-width: 100%; overflow-x: auto; }
+.obstruction-chart svg { display: block; width: 100%; height: auto; background: #081a24; border-radius: 10px; }
+.obstruction-chart text { fill: #c1d8e3; font: 13px sans-serif; }
+.obs-grid { stroke: #264552; }
+.obs-horizon { fill: #557568; opacity: .65; }
+.obs-roof { fill: #bf865c; opacity: .7; }
+.obs-measured { fill: none; stroke: #80d5c1; stroke-width: 2; }
+.obs-floor { stroke: #e5c886; stroke-width: 2; stroke-dasharray: 8 5; }
+.obs-clear { fill: #abf5d8; stroke: #092129; stroke-width: 2; }
+.obs-blocked { fill: #ffbbb0; stroke: #092129; stroke-width: 2; }
+.obstruction-chart p, .obstruction-limits { color: #b7cdd7; font-size: .85rem; }
+@media (max-width: 650px) {
+  .obstruction-body { padding: 0 .75rem .8rem; }
+  .obstruction-editor summary span { display: block; margin: .3rem 0 0 1rem; }
+  .obstruction-row, .obstruction-row:has(input[data-key="start_azimuth_degrees"]), .obstruction-controls { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .obstruction-row > button { grid-column: 1 / -1; justify-self: start; }
+  .obstruction-controls > p { grid-column: 1 / -1; }
+  .obstruction-body fieldset { padding: .75rem; }
+  .obstruction-chart svg { min-width: 600px; }
+}
+@media (prefers-reduced-motion: reduce) { .obstruction-editor * { scroll-behavior: auto; } }

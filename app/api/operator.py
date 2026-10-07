@@ -28,6 +28,8 @@ ASSET_FILES = (
     WEB_DIRECTORY / "polaris-north-star.png",
     WEB_DIRECTORY / "operator.css",
     WEB_DIRECTORY / "operator.js",
+    WEB_DIRECTORY / "obstruction-editor.js",
+    WEB_DIRECTORY / "obstruction-editor.css",
     WEB_DIRECTORY / "leaflet.css",
     WEB_DIRECTORY / "leaflet.js",
     WEB_DIRECTORY / "target-art" / "library" / "assets" / "m31-andromeda.svg",

@@ -1,0 +1,76 @@
+{
+  "profile": {
+    "complete_coverage": true,
+    "horizon": [
+      {
+        "azimuth_degrees": 0.0,
+        "altitude_degrees": 15.0
+      },
+      {
+        "azimuth_degrees": 90.0,
+        "altitude_degrees": 35.0
+      },
+      {
+        "azimuth_degrees": 180.0,
+        "altitude_degrees": 10.0
+      },
+      {
+        "azimuth_degrees": 270.0,
+        "altitude_degrees": 25.0
+      }
+    ],
+    "sectors": [
+      {
+        "start_azimuth_degrees": 350.0,
+        "end_azimuth_degrees": 20.0,
+        "minimum_altitude_degrees": 60.0,
+        "maximum_altitude_degrees": 90.0
+      }
+    ],
+    "clearance_degrees": 1.0
+  },
+  "horizon": [
+    {
+      "azimuth_degrees": 0.0,
+      "altitude_degrees": 15.0
+    },
+    {
+      "azimuth_degrees": 90.0,
+      "altitude_degrees": 35.0
+    },
+    {
+      "azimuth_degrees": 180.0,
+      "altitude_degrees": 10.0
+    },
+    {
+      "azimuth_degrees": 270.0,
+      "altitude_degrees": 25.0
+    },
+    {
+      "azimuth_degrees": 360.0,
+      "altitude_degrees": 15.0
+    }
+  ],
+  "sectors": [
+    {
+      "start": 350.0,
+      "end": 360,
+      "low": 59.0,
+      "high": 90
+    },
+    {
+      "start": 0,
+      "end": 20.0,
+      "low": 59.0,
+      "high": 90
+    }
+  ],
+  "minimum_altitude_degrees": 20.0,
+  "probe": {
+    "azimuth_degrees": 0.0,
+    "altitude_degrees": 45.0,
+    "clear": true,
+    "reason": null
+  },
+  "applied_to_tonight": false
+}

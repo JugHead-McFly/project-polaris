@@ -9,3 +9,5 @@ __pycache__/
 .cache/
 *.fits
 polaris.db
+
+node_modules/

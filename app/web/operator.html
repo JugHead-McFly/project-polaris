@@ -15,6 +15,8 @@
     <script nonce="__SCRIPT_NONCE__">window.POLARIS_AUTH_CONFIG = __POLARIS_AUTH_CONFIG__;</script>
     <script defer src="/operator-assets/leaflet.js"></script>
     __SUPABASE_CLIENT_SCRIPT__
+    <link rel="stylesheet" href="/operator-assets/obstruction-editor.css?v=__ASSET_VERSION__">
+    <script defer src="/operator-assets/obstruction-editor.js?v=__ASSET_VERSION__"></script>
     <script defer src="/operator-assets/operator.js?v=__ASSET_VERSION__"></script>
   </head>
   <body>
@@ -739,6 +741,7 @@
           </div>
           <p class="auth-message" id="hosted-account-message" role="status" aria-live="polite"></p>
         </form>
+        <div data-obstruction-editor></div>
       </section>
 
       <section
@@ -1072,6 +1075,7 @@
           <h1>Potential observing sites</h1>
           <p>Save places you want to explore without replacing your observatory or sharing a home address.</p>
         </header>
+        <div data-obstruction-editor></div>
         <section class="panel candidate-sites-panel" aria-labelledby="candidate-sites-title">
           <div class="panel-heading">
             <div>
