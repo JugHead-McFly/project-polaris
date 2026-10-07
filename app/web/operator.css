@@ -1419,6 +1419,7 @@ footer {
 
 .forecast-accuracy-heading {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
@@ -1467,7 +1468,7 @@ footer {
 
 .forecast-accuracy-guidance {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: baseline;
   gap: 4px 12px;
   padding: 13px 14px;
@@ -1477,7 +1478,6 @@ footer {
 }
 
 .forecast-accuracy-guidance > span {
-  grid-row: 1 / span 2;
   align-self: stretch;
   padding: 4px 10px 4px 0;
   color: #7ce1d4;
@@ -1485,7 +1485,6 @@ footer {
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border-right: 2px solid rgba(91, 221, 205, 0.5);
 }
 
 .forecast-accuracy-guidance strong {
@@ -1650,6 +1649,7 @@ footer {
 }
 
 .forecast-accuracy-visual {
+  margin: 0;
   display: grid;
   gap: 10px;
   padding: 13px 14px;
@@ -1660,6 +1660,7 @@ footer {
 
 .forecast-accuracy-visual-heading {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 18px;
@@ -1676,6 +1677,7 @@ footer {
 }
 
 .forecast-accuracy-legend {
+  flex-wrap: wrap;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -1711,7 +1713,7 @@ footer {
 .forecast-accuracy-chart svg {
   display: block;
   width: 100%;
-  height: 184px;
+  height: 260px;
 }
 
 .forecast-accuracy-grid-line {
@@ -1741,7 +1743,14 @@ footer {
 
 .forecast-accuracy-line.observed {
   stroke: #f2be67;
+  stroke-dasharray: 6 4;
 }
+
+.forecast-accuracy-point { cursor: pointer; }
+.forecast-accuracy-point:focus { outline: none; stroke: white; stroke-width: 3; }
+.forecast-chart-caption, .forecast-chart-selection { color: var(--muted); font-size: 12px; }
+.forecast-chart-selection { min-height: 2.6em; }
+.forecast-history-details > summary { cursor: pointer; padding: 12px 0; color: var(--accent); }
 
 .forecast-accuracy-point {
   stroke: #07161e;

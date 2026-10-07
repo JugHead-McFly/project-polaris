@@ -571,6 +571,18 @@
             <p class="eyebrow" id="forecast-accuracy-history-title">Cloud forecast reliability</p>
             <span id="forecast-accuracy-history-count">0 satellite comparisons</span>
           </div>
+          <figure class="forecast-accuracy-visual" id="forecast-accuracy-visual" hidden>
+            <figcaption class="forecast-accuracy-visual-heading">
+              <strong>Forecast vs. satellite cloud cover</strong>
+              <div class="forecast-accuracy-legend">
+                <span><i class="forecast"></i>Forecast</span>
+                <span><i class="observed"></i>Satellite estimate</span>
+              </div>
+            </figcaption>
+            <div class="forecast-accuracy-chart" id="forecast-accuracy-chart"></div>
+            <p class="forecast-chart-caption">Lower means clearer skies. Each point is a saved forecast time, not a whole-night average. Select a point for its values.</p>
+            <p id="forecast-chart-selection" class="forecast-chart-selection" role="status" aria-live="polite"></p>
+          </figure>
           <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
             <span id="forecast-accuracy-history-label">Collecting checks</span>
             <strong id="forecast-accuracy-insight">Waiting for satellite comparisons.</strong>
@@ -585,7 +597,10 @@
               <option value="30">Within 30 percentage points</option>
             </select>
           </label>
-          <div id="forecast-accuracy-nights"></div>
+          <details class="forecast-history-details" id="forecast-history-details">
+            <summary>View nightly details</summary>
+            <div id="forecast-accuracy-nights"></div>
+          </details>
         </section>
       </section>
 

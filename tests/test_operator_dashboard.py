@@ -807,7 +807,8 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     assert 'id="forecast-accuracy-tolerance"' in html
     assert 'id="forecast-accuracy-nights"' in html
-    assert 'id="forecast-accuracy-chart"' not in html
+    assert 'id="forecast-accuracy-chart"' in html
+    assert '<details class="forecast-history-details"' in html
     assert "Cloud forecast reliability" in html
 
 

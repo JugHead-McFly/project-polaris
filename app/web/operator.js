@@ -801,6 +801,64 @@ const formatForecastMetric = (value, suffix = "") => (
 
 let latestForecastAccuracy = null;
 
+const renderForecastComparisonChart = (checks, timezone) => {
+  const chart = byId("forecast-accuracy-chart");
+  chart.replaceChildren();
+  byId("forecast-accuracy-visual").hidden = !checks.length;
+  setText("forecast-chart-selection", "");
+  if (!checks.length) return;
+  const points = [...checks].sort((a, b) => Date.parse(a.forecast_for) - Date.parse(b.forecast_for));
+  const width = Math.max(280, chart.clientWidth || 720);
+  const height = 260;
+  const left = 44, right = width - 16, top = 16, bottom = height - 38;
+  const first = Date.parse(points[0].forecast_for);
+  const last = Date.parse(points[points.length - 1].forecast_for);
+  const x = (point) => first === last ? (left + right) / 2 : left + (Date.parse(point.forecast_for) - first) / (last - first) * (right - left);
+  const y = (value) => bottom - value / 100 * (bottom - top);
+  const svgNode = (name, attributes, text) => {
+    const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+  const svg = svgNode("svg", { viewBox: `0 0 ${width} ${height}`, role: "group", "aria-label": `Cloud cover comparison for ${points.length} saved forecast times. Forecast is solid green; satellite is dashed gold. Vertical scale is zero to 100 percent.` });
+  [0, 25, 50, 75, 100].forEach((value) => {
+    svg.append(svgNode("line", { x1: left, x2: right, y1: y(value), y2: y(value), class: "forecast-accuracy-grid-line" }));
+    svg.append(svgNode("text", { x: left - 8, y: y(value) + 4, "text-anchor": "end", class: "forecast-accuracy-axis-label" }, `${value}%`));
+  });
+  const date = new Intl.DateTimeFormat([], { timeZone: timezone || "UTC", month: "short", day: "numeric" });
+  const fullDate = new Intl.DateTimeFormat([], { timeZone: timezone || "UTC", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+  const tickCount = first === last ? 1 : Math.min(5, Math.max(2, Math.floor((right - left) / 85)));
+  for (let i = 0; i < tickCount; i += 1) {
+    const fraction = tickCount === 1 ? .5 : i / (tickCount - 1);
+    svg.append(svgNode("text", { x: left + fraction * (right - left), y: bottom + 24, "text-anchor": i === 0 && tickCount > 1 ? "start" : i === tickCount - 1 && tickCount > 1 ? "end" : "middle", class: "forecast-accuracy-date-label" }, date.format(new Date(first + fraction * (last - first)))));
+  }
+  const describe = (point) => `${fullDate.format(new Date(point.forecast_for))} (${timezone || "UTC"}): forecast ${Number(point.forecast_cloud_cover_percent.toFixed(1))}%, satellite ${Number(point.satellite_cloud_cover_percent.toFixed(1))}% — difference ${Number(point.absolute_difference.toFixed(1))} percentage points.`;
+  [["forecast_cloud_cover_percent", "forecast"], ["satellite_cloud_cover_percent", "observed"]].forEach(([field, style]) => {
+    // Break lines across missing nights; never imply measurements in a data gap.
+    let path = "";
+    points.forEach((point, index) => {
+      const gap = index === 0 || Date.parse(point.forecast_for) - Date.parse(points[index - 1].forecast_for) > 36 * 3600 * 1000;
+      path += `${gap ? "M" : "L"}${x(point)},${y(point[field])} `;
+    });
+    svg.append(svgNode("path", { d: path, class: `forecast-accuracy-line ${style}` }));
+    points.forEach((point) => {
+      const label = describe(point);
+      const dot = svgNode("circle", { cx: x(point), cy: y(point[field]), r: 4, tabindex: 0, role: "button", "aria-label": label, class: `forecast-accuracy-point ${style}` });
+      dot.append(svgNode("title", {}, label));
+      const select = () => setText("forecast-chart-selection", label);
+      dot.addEventListener("click", select);
+      dot.addEventListener("focus", select);
+      dot.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(); }
+      });
+      svg.append(dot);
+    });
+  });
+  chart.append(svg);
+  setText("forecast-chart-selection", `Latest — ${describe(points[points.length - 1])}`);
+};
+
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
   latestForecastAccuracy = forecastAccuracy;
   if (!forecastAccuracy) {
@@ -812,11 +870,13 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     byId("forecast-accuracy-metrics").replaceChildren();
     byId("forecast-accuracy-metrics").hidden = true;
     byId("forecast-accuracy-nights").replaceChildren();
+    renderForecastComparisonChart([], "UTC");
     return;
   }
   const data = forecastAccuracy?.satellite_reliability || {};
   const nights = Array.isArray(data.nights) ? data.nights : [];
   const checks = nights.flatMap((night) => night.checks);
+  renderForecastComparisonChart(checks, data.timezone);
   const tolerance = Number(byId("forecast-accuracy-tolerance").value);
   const within = checks.filter((check) => check.absolute_difference <= tolerance).length;
   const count = checks.length;
@@ -833,7 +893,7 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
   setText("forecast-accuracy-link-count", `${saved} saved · ${count} compared`);
   setText("forecast-accuracy-history-label", "Satellite comparison");
   setText("forecast-accuracy-insight", count ? `${within} of ${count} checks within ${tolerance} points` : saved ? "Forecast history saved; satellite comparisons pending" : "No forecasts saved for this observing home yet");
-  setText("forecast-accuracy-history-message", `History is shared across devices for your account and observing home. ${pending} past forecasts await satellite retrieval; ${future} future forecasts await their target time. Comparisons are at saved target times, not whole-night averages or a probability for tonight.`);
+  setText("forecast-accuracy-history-message", `Shared across your devices. ${pending} awaiting satellite data · ${future} future forecasts. Historical differences are not a probability for tonight.`);
   const metrics = byId("forecast-accuracy-metrics");
   metrics.replaceChildren();
   metrics.hidden = !count;
@@ -4822,6 +4882,17 @@ const bootApplication = async () => {
 byId("forecast-accuracy-tolerance").addEventListener("change", () => {
   renderForecastAccuracyHistory(latestForecastAccuracy);
 });
+
+const accuracyChart = byId("forecast-accuracy-chart");
+let accuracyChartWidth = 0;
+if (typeof ResizeObserver !== "undefined") {
+  new ResizeObserver(([entry]) => {
+    const width = Math.round(entry.contentRect.width);
+    if (width <= 0 || width === accuracyChartWidth) return;
+    accuracyChartWidth = width;
+    if (latestForecastAccuracy) renderForecastAccuracyHistory(latestForecastAccuracy);
+  }).observe(accuracyChart);
+}
 
 bootApplication();
 
