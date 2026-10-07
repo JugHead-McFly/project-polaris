@@ -9,6 +9,7 @@ History remains keyed by authenticated user and observing-home ID in PostgreSQL,
 with tenant RLS unchanged. It is never keyed by browser or device. The summary now
 shows saved target times, pending references and future forecasts separately from
 usable satellite comparisons. Forecast revisions do not inflate the check count.
+Loading a new plan displays a loading state rather than a false zero-history count.
 
 The existing hourly Render collector now attaches NOAA GOES-18 ACMC references to
 past forecasts, including a bounded historical catch-up (48 target times per

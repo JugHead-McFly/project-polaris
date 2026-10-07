@@ -803,6 +803,17 @@ let latestForecastAccuracy = null;
 
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
   latestForecastAccuracy = forecastAccuracy;
+  if (!forecastAccuracy) {
+    setText("forecast-accuracy-history-count", "Loading history…");
+    setText("forecast-accuracy-link-count", "Loading…");
+    setText("forecast-accuracy-history-label", "Satellite comparison");
+    setText("forecast-accuracy-insight", "Loading your saved forecast history…");
+    setText("forecast-accuracy-history-message", "Retrieving history for your account and observing home.");
+    byId("forecast-accuracy-metrics").replaceChildren();
+    byId("forecast-accuracy-metrics").hidden = true;
+    byId("forecast-accuracy-nights").replaceChildren();
+    return;
+  }
   const data = forecastAccuracy?.satellite_reliability || {};
   const nights = Array.isArray(data.nights) ? data.nights : [];
   const checks = nights.flatMap((night) => night.checks);
