@@ -1,6 +1,8 @@
 from app.services.capture_history_service import history_advice
 from datetime import datetime, timedelta
+import math
 from typing import Dict, Iterable, List, Optional
+from zoneinfo import ZoneInfo
 
 from sqlalchemy.orm import Session
 
@@ -14,6 +16,7 @@ from app.services.advisor_service import get_exposure_advice
 from app.services.astronomy_service import (
     get_altitude_at,
     get_altitudes_at,
+    get_horizontal_positions_at,
     get_darkness_info,
     get_darkness_window_datetimes,
     get_moon_info,
@@ -22,6 +25,10 @@ from app.services.astronomy_service import (
     get_transit_time,
 )
 from app.services.imaging_settings_service import apply_tonight_settings
+from app.services.obstruction_service import (
+    evaluate_profile_visibility,
+    profile_sample_times,
+)
 from app.services.portfolio_service import TARGET_PRIORITY
 from app.services.weather_service import ASTRO_FORECAST_MAX_MATCH_HOURS
 from app.services.weather_service import HEAT_CAUTION_F
@@ -140,6 +147,10 @@ def get_dark_visibility(
     additional_sample_times: Optional[List[datetime]] = None,
     observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
+    context = use_observatory_context(observatory)
+    if context.obstruction_profile is not None:
+        return _get_obstruction_visibility(object_name, dark_start, dark_end, context)
+
     sample_times = generate_sample_times(
         dark_start=dark_start,
         dark_end=dark_end,
@@ -260,6 +271,64 @@ def get_dark_visibility(
         "recommended_start_datetime": recommended_start,
         "recommended_end_datetime": recommended_end,
         "target_geometry": target_geometry,
+    }
+
+
+def _get_obstruction_visibility(object_name, dark_start, dark_end, context):
+    if dark_start.utcoffset() is None or dark_end.utcoffset() is None:
+        raise ValueError("Obstruction planning requires timezone-aware datetimes")
+    site_timezone = ZoneInfo(context.timezone_name)
+    dark_start = dark_start.astimezone(site_timezone)
+    dark_end = dark_end.astimezone(site_timezone)
+    times = profile_sample_times(dark_start, dark_end)
+    positions = get_horizontal_positions_at(object_name, times, observatory=context)
+    windows, reasons = evaluate_profile_visibility(
+        context.obstruction_profile, times, positions, MINIMUM_ALTITUDE_DEGREES,
+    )
+    longest = max(windows, key=lambda window: window[1] - window[0], default=None)
+    start, end = longest if longest else (None, None)
+    minutes = int((end - start).total_seconds() / 60) if longest else 0
+    valid = [(at, position) for at, position in zip(times, positions)
+             if position is not None and all(math.isfinite(value) for value in position)]
+    selected = [(at, position) for at, position in valid
+                if longest and start <= at <= end]
+    altitudes = [position[1] for _, position in selected or valid]
+    peak = max(valid, key=lambda sample: sample[1][1], default=None)
+
+    def label(at):
+        value = at.strftime("%I:%M %p").lstrip("0")
+        return value + (" next day" if at.date() > dark_start.date() else "")
+
+    geometry = None if peak is None else {
+        "samples": [{"at": at.isoformat(), "altitude_degrees": round(position[1], 1),
+                     "azimuth_degrees": round(position[0], 1), "label": label(at)}
+                    for at, position in valid],
+        "peak_altitude_degrees": round(peak[1][1], 1),
+        "peak_at": peak[0].isoformat(),
+        "peak_label": label(peak[0]),
+    }
+    explanation = (
+        "User-supplied obstruction profile applied; only the longest contiguous "
+        "clear window is recommended. One-minute target-center sampling with a "
+        f"{context.obstruction_profile.clearance_degrees:g}° clearance margin "
+        "is advisory and does not guarantee the full image frame is clear."
+    )
+    if reasons:
+        explanation += " Excluded intervals: " + "; ".join(reasons) + "."
+    if minutes < MINIMUM_USABLE_DARK_MINUTES:
+        explanation += " No continuous clear window meets the 45-minute planning minimum."
+    return {
+        "known_position": bool(valid),
+        "usable_dark_minutes": minutes,
+        "usable_dark_hours": round(minutes / 60, 2),
+        "maximum_dark_altitude": round(max(altitudes), 1) if altitudes else None,
+        "average_dark_altitude": round(sum(altitudes) / len(altitudes), 1) if altitudes else None,
+        "recommended_start_datetime": start,
+        "recommended_end_datetime": end,
+        "target_geometry": geometry,
+        "obstruction_explanation": explanation,
+        "obstruction_windows": [(left.isoformat(), right.isoformat()) for left, right in windows],
+        "obstruction_exclusion_reasons": reasons,
     }
 
 def get_altitude_score(
@@ -549,6 +618,9 @@ def build_target_plan(
         moon_warning=moon_warning,
     )
 
+    if visibility.get("obstruction_explanation"):
+        selection_reason += " " + visibility["obstruction_explanation"]
+
     return {
         "advisor": advisor,
         "planner_score": round(score, 1),
@@ -793,6 +865,10 @@ def get_tonight_plan(
     equatorial_mode_enabled: bool = False,
 ) -> Dict:
     context = use_observatory_context(observatory)
+    visibility_requirement = (
+        "continuously above the minimum altitude and clear of the supplied obstructions"
+        if context.obstruction_profile is not None else "above the minimum altitude"
+    )
     weather = get_weather_summary(
         context.postal_code or "",
         observatory=context,
@@ -836,6 +912,14 @@ def get_tonight_plan(
             )
         except ValueError:
             continue
+
+    if context.obstruction_profile is not None:
+        notes.append(
+            "User-supplied local obstructions applied in addition to the 20° imaging "
+            "floor. Only the longest contiguous sampled clear window per target is used; "
+            "target-center clearance does not guarantee an unobstructed image frame."
+        )
+        notes.extend(plan["selection_reason"] for plan in plans if not plan["observable"])
 
     plans.sort(
         key=lambda plan: plan["planner_score"],
@@ -968,8 +1052,8 @@ def get_tonight_plan(
         else:
             notes.append(
                 "No cataloged target has at least "
-                f"{MINIMUM_USABLE_DARK_MINUTES} minutes above the minimum "
-                "altitude during astronomical darkness."
+                f"{MINIMUM_USABLE_DARK_MINUTES} minutes {visibility_requirement} "
+                "during astronomical darkness."
             )
 
     elif best_theoretical_target is not None:
@@ -978,8 +1062,8 @@ def get_tonight_plan(
     else:
         notes.append(
             "No cataloged target has at least "
-            f"{MINIMUM_USABLE_DARK_MINUTES} minutes above the minimum "
-            "altitude during astronomical darkness."
+            f"{MINIMUM_USABLE_DARK_MINUTES} minutes {visibility_requirement} "
+            "during astronomical darkness."
         )
 
     unknown_position_targets = [

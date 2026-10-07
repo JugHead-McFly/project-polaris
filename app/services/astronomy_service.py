@@ -729,3 +729,48 @@ def get_darkness_info(
             )
         ),
     }
+
+
+def get_horizontal_positions_at(
+    target_name: str,
+    observation_datetimes: list,
+    observatory: Optional[ObservatoryContext] = None,
+) -> list:
+    """Unrounded true-north azimuth/altitude pairs for obstruction comparisons."""
+    if not observation_datetimes:
+        return []
+    normalized_name = target_name.strip().upper()
+    moving_target = (normalized_name in SOLAR_SYSTEM_TARGETS
+                     or is_ephemeris_target(normalized_name))
+    if not moving_target:
+        coordinate = get_target_coordinate(normalized_name)
+        if coordinate is None:
+            return [None] * len(observation_datetimes)
+        frame = AltAz(
+            obstime=Time([normalize_datetime(at, observatory).astimezone(timezone.utc)
+                          for at in observation_datetimes]),
+            location=_get_location(observatory),
+        )
+        horizontal = coordinate.transform_to(frame)
+        return list(zip(horizontal.az.deg.tolist(), horizontal.alt.deg.tolist()))
+
+    if is_ephemeris_target(normalized_name):
+        coordinates = get_ephemeris_coordinates(
+            target_name=normalized_name,
+            observation_times=observation_datetimes,
+            observatory=observatory,
+        )
+    else:
+        coordinates = [get_target_coordinate_at(normalized_name, at, observatory)
+                       for at in observation_datetimes]
+    positions = []
+    for coordinate, at in zip(coordinates, observation_datetimes):
+        if coordinate is None:
+            positions.append(None)
+        else:
+            horizontal = coordinate.transform_to(AltAz(
+                obstime=to_astropy_time(at, observatory),
+                location=_get_location(observatory),
+            ))
+            positions.append((float(horizontal.az.deg), float(horizontal.alt.deg)))
+    return positions

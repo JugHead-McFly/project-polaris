@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from app.core.obstruction_profile import ObstructionProfile
 from app.core.observatory import DEFAULT_POSTAL_CODE
 from app.core.observatory import ELEVATION_METERS
 from app.core.observatory import LATITUDE
@@ -22,6 +23,15 @@ class ObservatoryContext:
     bortle_class: Optional[int] = None
     rig_profile_key: Optional[str] = None
     coordinates_are_approximate: bool = False
+    # Prototype only: caller must attach a survey for this exact observing setup.
+    # Never persisted or inferred from a different account/site.
+    obstruction_profile: Optional[ObstructionProfile] = None
+
+    def __post_init__(self):
+        if self.obstruction_profile is not None and not isinstance(
+            self.obstruction_profile, ObstructionProfile
+        ):
+            raise TypeError("Validate obstruction_profile with ObstructionProfile first")
 
 
 LOCAL_OBSERVATORY_CONTEXT = ObservatoryContext(
