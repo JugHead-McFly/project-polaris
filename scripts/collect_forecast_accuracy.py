@@ -4,6 +4,7 @@
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from uuid import UUID
 
@@ -39,7 +40,28 @@ def main() -> None:
     except ValueError as error:
         raise SystemExit(str(error)) from error
 
-    report = collect_forecast_accuracy(user_ids)
+    from app.database.database import SessionLocal, TENANT_SESSION_KEY
+    from app.services.hosted_account_service import get_primary_observatory
+    from app.services.nightly_forecast_service import collect_nightly
+    report = {"nightly": [], "failed_tenants": 0}
+    for user_id in user_ids:
+        with SessionLocal() as db:
+            db.info[TENANT_SESSION_KEY] = user_id
+            try:
+                home = get_primary_observatory(db, user_id=user_id)
+                if home:
+                    report["nightly"].append(collect_nightly(db, user_id=user_id, observatory=home))
+            except Exception:
+                db.rollback()
+                import logging
+                logging.exception("Nightly collection failed for configured tenant")
+                report["failed_tenants"] += 1
+    # Retain the old individual-time history on its hourly cadence. Nightly
+    # snapshot capture runs first and does not require building a target plan.
+    if 15 <= datetime.now(timezone.utc).minute < 20:
+        legacy = collect_forecast_accuracy(user_ids)
+        report["legacy"] = legacy
+        report["failed_tenants"] += legacy["failed_tenants"]
     print(json.dumps(report, sort_keys=True))
     if report["failed_tenants"]:
         raise SystemExit(1)

@@ -48,7 +48,7 @@ def test_render_blueprint_prompts_for_secrets_instead_of_storing_them():
     )
 
 
-def test_render_blueprint_schedules_hourly_forecast_collection():
+def test_render_blueprint_schedules_nightly_snapshot_checks_every_five_minutes():
     blueprint = yaml.safe_load(
         (PROJECT_ROOT / "render.yaml").read_text()
     )
@@ -63,7 +63,7 @@ def test_render_blueprint_schedules_hourly_forecast_collection():
     assert cron["plan"] == "0.5c-512mb"
     assert cron["branch"] == "develop"
     assert cron["autoDeployTrigger"] == "commit"
-    assert cron["schedule"] == "17 * * * *"
+    assert cron["schedule"] == "*/5 * * * *"
     assert cron["startCommand"] == (
         "python scripts/collect_forecast_accuracy.py"
     )

@@ -9,3 +9,4 @@ from .hosted import RecommendationFeedback
 from .hosted import RecommendationRun
 
 from .capture_history import HostedCaptureSession, LibrarySyncCredential
+from .nightly_forecast import NightlyForecast

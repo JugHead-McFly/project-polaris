@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.models import ForecastAccuracySnapshot
 from app.models import HostedObservatory
+from app.services.nightly_forecast_service import nightly_summary
 
 
 RETENTION_DAYS = 90
@@ -297,6 +298,7 @@ def forecast_accuracy_summary(
     ).first()
     return {
         "state": "building" if remaining else "ready_for_calibration",
+        "nightly": nightly_summary(db, user_id=user_id, observatory_id=observatory_id),
         "label": "Building forecast confidence",
         "message": message,
         "matched_samples": matched_count,

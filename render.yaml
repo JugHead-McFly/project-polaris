@@ -38,7 +38,7 @@ services:
     autoDeployTrigger: "commit"
     buildCommand: pip install -r requirements.txt
     startCommand: python scripts/collect_forecast_accuracy.py
-    schedule: "17 * * * *"
+    schedule: "*/5 * * * *"
     envVars:
       - key: POLARIS_ENVIRONMENT
         value: production

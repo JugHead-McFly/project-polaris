@@ -871,6 +871,8 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     byId("forecast-accuracy-metrics").hidden = true;
     byId("forecast-accuracy-nights").replaceChildren();
     renderForecastComparisonChart([], "UTC");
+    byId("nightly-confidence-summary").replaceChildren();
+    byId("nightly-confidence-nights").replaceChildren();
     return;
   }
   const data = forecastAccuracy?.satellite_reliability || {};
@@ -937,8 +939,40 @@ const renderForecastAccuracyHistory = (forecastAccuracy) => {
     });
     list.append(details);
   });
+  renderNightlyConfidence(forecastAccuracy);
 };
 
+
+const renderNightlyConfidence = (data) => {
+  const nightly = data?.nightly || {};
+  const groups = nightly.horizons || [];
+  const group = (name) => groups.find(item => item.horizon === name) || {count: 0};
+  const afternoon = group("afternoon"), dusk = group("dusk");
+  const threshold = nightly.review_after || 30;
+  setText("forecast-accuracy-history-label", groups.some(item => item.review_ready) ? "Early forecast track record" : "Building forecast confidence");
+  const progress = item => item.review_ready ? `${item.within_10} of ${item.count} within 10 points` : `${item.count}/${threshold} nights`;
+  setText("forecast-accuracy-insight", `Afternoon: ${progress(afternoon)} · Dusk: ${progress(dusk)}`);
+  setText("forecast-accuracy-history-count", `${nightly.completed_nights || 0} nights observed`);
+  setText("forecast-accuracy-link-count", `${afternoon.count} afternoon · ${dusk.count} dusk`);
+  setText("forecast-accuracy-history-message", "Comparing whole-night cloud forecasts with satellite estimates. Collected automatically, whether you image or not.");
+  const summary = byId("nightly-confidence-summary");
+  summary.replaceChildren();
+  groups.forEach(item => {
+    const title = item.horizon === "afternoon" ? "Six hours before darkness" : "At dusk";
+    const article = appendTextElement(summary, "div", "forecast-reliability-check", "");
+    appendTextElement(article, "strong", "", title);
+    appendTextElement(article, "p", "", item.count ? `${item.within_10} of ${item.count} nights within 10 cloud-cover points. Forecast averaged ${Math.abs(item.bias).toFixed(1)} points ${item.bias >= 0 ? "cloudier" : "clearer"} than the satellite estimate.` : "Waiting for comparable nights.");
+    appendTextElement(article, "p", "", `${item.missed_clear || 0} missed clear nights · ${item.unexpected_cloud || 0} unexpectedly cloudy nights. For these diagnostics, “clear” means a nightly average at or below ${nightly.clear_threshold || 20}% cloud cover. This does not decide whether to image.`);
+  });
+  const nights = byId("nightly-confidence-nights");
+  nights.replaceChildren();
+  (nightly.nights || []).forEach(night => {
+    const entry = appendTextElement(nights, "details", "forecast-reliability-night", "");
+    const value = v => v === null || v === undefined ? "Pending" : `${Number(v.toFixed(1))}%`;
+    appendTextElement(entry, "summary", "", `${night.night} · ${night.horizon === "afternoon" ? "Afternoon" : "Dusk"} · ${night.comparable ? `Forecast ${value(night.forecast)} → Satellite ${value(night.observed)}` : night.status.replaceAll("_", " ")}`);
+    appendTextElement(entry, "p", "", `Forecast ${value(night.forecast)}; satellite ${value(night.observed)}. Satellite coverage ${(night.coverage * 100).toFixed(1)}%.${night.comparable ? " Included in this track record." : " Not yet eligible for this track record."}`);
+  });
+};
 
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
 

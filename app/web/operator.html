@@ -569,8 +569,21 @@
         >
           <div class="forecast-accuracy-heading">
             <p class="eyebrow" id="forecast-accuracy-history-title">Cloud forecast reliability</p>
-            <span id="forecast-accuracy-history-count">0 satellite comparisons</span>
+            <span id="forecast-accuracy-history-count">Loading history…</span>
           </div>
+          <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
+            <span id="forecast-accuracy-history-label">Nightly track record</span>
+            <strong id="forecast-accuracy-insight">Building forecast confidence</strong>
+            <p id="forecast-accuracy-history-message">Satellite estimates will be compared with saved forecasts.</p>
+          </div>
+          <details class="forecast-history-details" id="nightly-confidence-details">
+            <summary>View history</summary>
+            <p class="forecast-chart-caption">Afternoon and dusk forecasts are kept separate. Review begins at 30 comparable nights per group, not a guaranteed confidence level. A night needs at least 90% satellite coverage, with no gap over 30 minutes.</p>
+            <div id="nightly-confidence-summary"></div>
+            <div id="nightly-confidence-nights"></div>
+            <details class="forecast-history-details">
+              <summary>Earlier individual-time checks</summary>
+              <p class="forecast-chart-caption">These older checks are not whole-night averages and do not count toward the nightly track record.</p>
           <figure class="forecast-accuracy-visual" id="forecast-accuracy-visual" hidden>
             <figcaption class="forecast-accuracy-visual-heading">
               <strong>Forecast vs. satellite cloud cover</strong>
@@ -583,11 +596,6 @@
             <p class="forecast-chart-caption">Lower means clearer skies. Each point is a saved forecast time, not a whole-night average. Select a point for its values.</p>
             <p id="forecast-chart-selection" class="forecast-chart-selection" role="status" aria-live="polite"></p>
           </figure>
-          <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
-            <span id="forecast-accuracy-history-label">Collecting checks</span>
-            <strong id="forecast-accuracy-insight">Waiting for satellite comparisons.</strong>
-            <p id="forecast-accuracy-history-message">Satellite estimates will be compared with saved forecasts.</p>
-          </div>
           <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
           <label class="forecast-reliability-tolerance" for="forecast-accuracy-tolerance">
             Comparison tolerance
@@ -600,6 +608,8 @@
           <details class="forecast-history-details" id="forecast-history-details">
             <summary>View nightly details</summary>
             <div id="forecast-accuracy-nights"></div>
+          </details>
+            </details>
           </details>
         </section>
       </section>
