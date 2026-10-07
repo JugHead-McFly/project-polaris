@@ -12,6 +12,8 @@ try {
     if($LASTEXITCODE){throw 'Archive tests build failed'}
     & $compiler /nologo /target:exe /out:CalibrationTests.exe @backend CalibrationTests.cs
     if($LASTEXITCODE){throw 'Calibration tests build failed'}
+    & $compiler /nologo /target:exe /out:ThumbnailTests.exe @backend ThumbnailTests.cs
+    if($LASTEXITCODE){throw 'Thumbnail tests build failed'}
     & $compiler /nologo /target:exe /out:OnConnectTests.exe /define:UI_OFFLINE_FIXTURE /main:OnConnectTests /win32icon:polaris-taskbar.ico /reference:System.Drawing.dll /reference:System.Windows.Forms.dll @ui UiStubs.cs OnConnectTests.cs
     if($LASTEXITCODE){throw 'UI tests build failed'}
     & $compiler /nologo /target:exe /out:ReportTests.exe /main:ReportTests /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Web.Extensions.dll @backend @ui ArchivePublisher.cs ReportTests.cs

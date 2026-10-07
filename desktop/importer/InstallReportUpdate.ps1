@@ -2,11 +2,11 @@ $ErrorActionPreference = 'Stop'
 $runtime = 'G:\Polaris_Runtime\StandaloneOnConnect-Calibration-20261006'
 $target = Join-Path $runtime 'PolarisStandalone.exe'
 $candidate = Join-Path $PSScriptRoot 'PolarisStandalone.exe'
-$expected = 'C8791AA603991B144AAFF038102B482764D79F164D4E3025EDF2BECD4F106709'
+$expected = '3E15A3884DB27172B83981FA5C7145518EABFE4342FAECBA307FC184A5647849'
 if ((Get-FileHash $candidate).Hash -ne $expected) { throw 'Build differs from tested candidate' }
 $task = Get-ScheduledTask -TaskName 'Project Polaris Standalone Inbox Watcher'
 if ($task.Actions.Execute -ne $target) { throw 'Unexpected installed task target' }
-$backup = Join-Path $runtime 'PolarisStandalone-before-report-20261007.exe.bak'
+$backup = Join-Path $runtime 'PolarisStandalone-before-thumbnail-skip-20261007.exe.bak'
 if (Test-Path -LiteralPath $backup) { throw 'Update already staged; inspect before replay' }
 $processes = @(Get-Process PolarisStandalone -ErrorAction SilentlyContinue)
 if ($processes.Count -gt 1) { throw 'Multiple importer processes; cannot safely update' }
@@ -49,3 +49,4 @@ try {
 } finally { $lock.Dispose() }
 # Do not launch: a connected telescope would trigger another import automatically.
 [pscustomobject]@{Installed=$target;Backup=$backup;Hash=$expected;RestartRequired=$true;TaskAndEnrollmentUnchanged=$true} | ConvertTo-Json
+

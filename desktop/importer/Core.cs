@@ -174,6 +174,8 @@ namespace PolarisStandalone
                                 throw new RoutineDeferredException("Recognized temporary source filename retained; not copied or verified.");
                             if (length == 0 && RootSpotlightFile(item.Relative))
                                 throw new RoutineDeferredException("Ordinary zero-length root .Spotlight-V100 housekeeping retained; not copied or verified.");
+                            if (length == 0 && NativeThumbnail(item.Relative))
+                                throw new RoutineDeferredException("Empty preview thumbnail retained on DWARF; no image data to copy. Raw exposures are handled separately.");
                             if (length == 0) throw new IOException("Zero-length source held as incomplete.");
                             intent = new Receipt { Operation = "intent", Id = Guid.NewGuid().ToString("N"), Key = key,
                                 Source = receiptSource, Destination = dst, Relative = item.Relative, Length = length, SourceTicks = ticks,
@@ -423,6 +425,14 @@ namespace PolarisStandalone
         {
             string[] parts = relative.Split(new char[] { '\\', '/' });
             return parts.Length > 1 && String.Equals(parts[0], ".Spotlight-V100", StringComparison.OrdinalIgnoreCase);
+        }
+        private static bool NativeThumbnail(string relative)
+        {
+            string[] parts = relative.Split(new char[] { '\\', '/' });
+            if (parts.Length != 4 || parts[0] != "Astronomy" || parts[2] != "Thumbnail") return false;
+            if (!System.Text.RegularExpressions.Regex.IsMatch(parts[1], @"^DWARF_RAW_(TELE|WIDE)_.+_EXP_[^_]+_GAIN_[^_]+_\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d{3}$")) return false;
+            string extension = Path.GetExtension(parts[3]);
+            return extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".png", StringComparison.OrdinalIgnoreCase);
         }
         private static string StreamHash(Stream stream, CancellationToken cancellation)
         {

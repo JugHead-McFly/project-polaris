@@ -18,3 +18,5 @@ installation. It preserves enrollment and scheduled-task/shortcut settings. It d
 not restart the detector because a connected telescope would trigger another run.
 Reopen Polaris when ready for the next import. No files on the DWARF or NAS are
 modified by this update.
+
+Confirmed zero-byte JPEG/PNG previews directly inside a native capture session's Thumbnail folder are routine deferrals. Exclusive source-handle, identity, active-capture, destination and receipt checks still precede this exception. Empty FITS and other unknown empty files remain blocking. The deferred thumbnail is retained, not copied, verified, or admitted to source cleanup. A later nonempty thumbnail is copied normally. ThumbnailTests covers this boundary.
