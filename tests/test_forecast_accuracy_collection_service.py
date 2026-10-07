@@ -133,3 +133,22 @@ def test_parse_user_ids_requires_valid_deduplicated_allowlist():
         parse_user_ids("not-a-uuid")
 
     assert "comma-separated list of UUIDs" in str(error.value)
+
+
+def test_cli_skips_an_owner_when_a_second_worker_already_holds_the_lock(monkeypatch, capsys):
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+    from datetime import datetime, timezone
+    from app.database import database
+    from app.services import nightly_forecast_service
+    from scripts import collect_forecast_accuracy as cli
+
+    factory = _session_factory()
+    monkeypatch.setenv(cli.USER_IDS_ENV, str(ALICE_ID))
+    monkeypatch.setattr(database, "SessionLocal", factory)
+    connection = SimpleNamespace(execute=lambda *args, **kw: SimpleNamespace(scalar_one=lambda: False))
+    monkeypatch.setattr(database, "engine", SimpleNamespace(dialect=SimpleNamespace(name="postgresql"), connect=lambda: nullcontext(connection)))
+    monkeypatch.setattr(cli, "datetime", SimpleNamespace(now=lambda *args: datetime(2026, 10, 6, 12, 10, tzinfo=timezone.utc)))
+    monkeypatch.setattr(nightly_forecast_service, "collect_nightly", lambda *args, **kw: pytest.fail("Overlapping collector must not write"))
+    cli.main()
+    assert '"skipped_already_running": 1' in capsys.readouterr().out

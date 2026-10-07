@@ -58,6 +58,9 @@ Apply the migration before deploying the new API. Render's cron schedule must be
 `*/5 * * * *`; the legacy point collector still runs once per hour at :15. Nightly
 capture runs before that slower legacy planner. New accounts need addition to the
 existing explicit `POLARIS_FORECAST_ACCURACY_USER_IDS` allowlist.
+Each owner is serialized by a transaction-scoped PostgreSQL advisory lock on a
+dedicated connection. An overlapping manual/scheduled invocation skips that owner
+instead of overwriting a snapshot or a partially completed observation batch.
 
 Tests cover immutable snapshots, late/missed fetches, clipped weighting, gaps and
 duplicate scans, bounded retries/resumption, owner separation and source cohorts.

@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
+from contextlib import ExitStack
 from pathlib import Path
 from uuid import UUID
 
@@ -40,14 +41,26 @@ def main() -> None:
     except ValueError as error:
         raise SystemExit(str(error)) from error
 
-    from app.database.database import SessionLocal, TENANT_SESSION_KEY
+    from app.database.database import SessionLocal, TENANT_SESSION_KEY, engine
+    from sqlalchemy import text
     from app.services.hosted_account_service import get_primary_observatory
     from app.services.nightly_forecast_service import collect_nightly
     report = {"nightly": [], "failed_tenants": 0}
     for user_id in user_ids:
-        with SessionLocal() as db:
+        with ExitStack() as locks, SessionLocal() as db:
             db.info[TENANT_SESSION_KEY] = user_id
             try:
+                if engine.dialect.name == "postgresql":
+                    # Hold a dedicated transaction while the collector commits
+                    # resumable samples on its own connection. A manual run can
+                    # overlap a scheduled run; only one may write this owner.
+                    connection = locks.enter_context(engine.connect())
+                    acquired = connection.execute(text(
+                        "SELECT pg_try_advisory_xact_lock(20261006, hashtext(:owner))"
+                    ), {"owner": str(user_id)}).scalar_one()
+                    if not acquired:
+                        report["nightly"].append({"skipped_already_running": 1})
+                        continue
                 home = get_primary_observatory(db, user_id=user_id)
                 if home:
                     report["nightly"].append(collect_nightly(db, user_id=user_id, observatory=home))
