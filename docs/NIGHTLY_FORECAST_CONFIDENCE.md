@@ -1,9 +1,28 @@
 # Nightly forecast track record
 
-The compact card shows separate afternoon and dusk sample counts. The historical
+The collapsed card shows a neutral clock icon and **Learning**. Tap/click or use
+the keyboard to open evidence, including separate afternoon and dusk counts.
+Loading is distinct from Learning. Reaching 30 nights does not promote the badge
+to Reliable: a reviewed calibration policy is still required. The historical
 individual-time checks and graph remain under View history; they do not count as
 nightly forecast evidence. No confidence probability or recommendation penalty is
 derived from this pilot.
+
+## Archive audit — 2026-10-06
+
+Verified with read-only production queries for the operator account: 397 saved
+recommendation runs, of which 22 contained `hourly_cloud_forecasts`. All 22 were
+saved on October 6, from 15:44 to 18:16 Arizona time, and referenced that night's
+19:26–05:03 darkness window. Zero referenced completed nights at audit time.
+Therefore no previous whole-night comparison can be recovered from this archive
+yet. No historical records were changed or deleted.
+
+The legacy forecast-accuracy table stores individual target times and their
+forecast revisions, not a full hourly trajectory. The weather service's full
+forecast cache is in memory and is not a durable historical archive. More recent
+recommendation provenance does retain hourly cloud values; this corrects any
+blanket claim that full forecasts were never saved. Today's recommendation runs
+are not substitutes for snapshots at the prescribed six-hour and dusk horizons.
 
 ## Collection and evidence
 

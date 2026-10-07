@@ -318,7 +318,7 @@
           </div>
           <a class="hosted-forecast-history-link" href="#forecast-accuracy-history">
             <span>Forecast history</span>
-            <strong id="forecast-accuracy-link-count">0 checks</strong>
+            <strong id="forecast-accuracy-link-count">Loading…</strong>
           </a>
         </div>
 
@@ -567,17 +567,21 @@
           id="forecast-accuracy-history"
           aria-labelledby="forecast-accuracy-history-title"
         >
-          <div class="forecast-accuracy-heading">
-            <p class="eyebrow" id="forecast-accuracy-history-title">Cloud forecast reliability</p>
-            <span id="forecast-accuracy-history-count">Loading history…</span>
-          </div>
+          <details class="forecast-history-details confidence-disclosure" id="nightly-confidence-details">
+            <summary aria-label="Cloud forecast reliability — view evidence">
+              <span id="forecast-accuracy-history-title">Forecast reliability</span>
+              <span class="confidence-badge" role="status" aria-live="polite">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                <span id="forecast-confidence-state">Loading…</span>
+              </span>
+              <span class="confidence-chevron" aria-hidden="true">⌄</span>
+            </summary>
+          <span id="forecast-accuracy-history-count">Loading history…</span>
           <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
             <span id="forecast-accuracy-history-label">Nightly track record</span>
             <strong id="forecast-accuracy-insight">Building forecast confidence</strong>
             <p id="forecast-accuracy-history-message">Satellite estimates will be compared with saved forecasts.</p>
           </div>
-          <details class="forecast-history-details" id="nightly-confidence-details">
-            <summary>View history</summary>
             <p class="forecast-chart-caption">Afternoon and dusk forecasts are kept separate. Review begins at 30 comparable nights per group, not a guaranteed confidence level. A night needs at least 90% satellite coverage, with no gap over 30 minutes.</p>
             <div id="nightly-confidence-summary"></div>
             <div id="nightly-confidence-nights"></div>

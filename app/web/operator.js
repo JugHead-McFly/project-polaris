@@ -862,6 +862,7 @@ const renderForecastComparisonChart = (checks, timezone) => {
 const renderForecastAccuracyHistory = (forecastAccuracy) => {
   latestForecastAccuracy = forecastAccuracy;
   if (!forecastAccuracy) {
+    setText("forecast-confidence-state", "Loading…");
     setText("forecast-accuracy-history-count", "Loading history…");
     setText("forecast-accuracy-link-count", "Loading…");
     setText("forecast-accuracy-history-label", "Satellite comparison");
@@ -949,11 +950,14 @@ const renderNightlyConfidence = (data) => {
   const group = (name) => groups.find(item => item.horizon === name) || {count: 0};
   const afternoon = group("afternoon"), dusk = group("dusk");
   const threshold = nightly.review_after || 30;
+  // A sample-count milestone is not evidence of reliability. Keep the neutral
+  // badge until a reviewed calibration policy exists, including at 30+ nights.
+  setText("forecast-confidence-state", "Learning");
   setText("forecast-accuracy-history-label", groups.some(item => item.review_ready) ? "Early forecast track record" : "Building forecast confidence");
   const progress = item => item.review_ready ? `${item.within_10} of ${item.count} within 10 points` : `${item.count}/${threshold} nights`;
   setText("forecast-accuracy-insight", `Afternoon: ${progress(afternoon)} · Dusk: ${progress(dusk)}`);
   setText("forecast-accuracy-history-count", `${nightly.completed_nights || 0} nights observed`);
-  setText("forecast-accuracy-link-count", `${afternoon.count} afternoon · ${dusk.count} dusk`);
+  setText("forecast-accuracy-link-count", "Learning");
   setText("forecast-accuracy-history-message", "Comparing whole-night cloud forecasts with satellite estimates. Collected automatically, whether you image or not.");
   const summary = byId("nightly-confidence-summary");
   summary.replaceChildren();

@@ -1417,6 +1417,29 @@ footer {
     linear-gradient(145deg, rgba(8, 30, 39, 0.96), rgba(11, 24, 40, 0.96));
 }
 
+/* Keep evidence one tap away without asking the user to decode statistics. */
+.forecast-accuracy-history .confidence-disclosure > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  list-style: none;
+  color: var(--text);
+  padding: 0;
+}
+.confidence-disclosure > summary::-webkit-details-marker { display: none; }
+.confidence-disclosure > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 5px;
+}
+.confidence-disclosure > summary > :first-child { margin-right: auto; font-weight: 700; }
+.confidence-badge { display: inline-flex; align-items: center; gap: 7px; color: #c5cdd4; font-size: 14px; }
+.confidence-badge svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.confidence-chevron { color: #c5cdd4; transition: transform .15s; }
+.confidence-disclosure[open] > summary .confidence-chevron { transform: rotate(180deg); }
+.confidence-disclosure[open] > summary { margin-bottom: 12px; }
+
 .forecast-accuracy-heading {
   display: flex;
   flex-wrap: wrap;
