@@ -23,8 +23,8 @@ class ObservatoryContext:
     bortle_class: Optional[int] = None
     rig_profile_key: Optional[str] = None
     coordinates_are_approximate: bool = False
-    # Prototype only: caller must attach a survey for this exact observing setup.
-    # Never persisted or inferred from a different account/site.
+    # Immutable request snapshot; saved surveys must resolve owner/home/revision
+    # before attachment. Never infer geometry from another account or setup.
     obstruction_profile: Optional[ObstructionProfile] = None
 
     def __post_init__(self):

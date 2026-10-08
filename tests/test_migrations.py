@@ -80,6 +80,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "capture_history",
         "library_sync_credentials",
         "nightly_forecasts",
+        "obstruction_spots",
         "observatories",
         "profiles",
         "recommendation_feedback",
@@ -100,7 +101,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
     }
     assert "satellite_cloud_observation" in forecast_columns
     assert forecast_columns["satellite_cloud_observation"]["nullable"]
-    assert revision == "20261006_0011"
+    assert revision == "20261008_0012"
 
 
 def test_forecast_horizon_migration_backfills_existing_snapshot(tmp_path: Path):
@@ -232,6 +233,7 @@ def test_postgresql_migration_enables_forced_tenant_rls():
         "capture_history",
         "library_sync_credentials",
         "nightly_forecasts",
+        "obstruction_spots",
         "capture_analyses",
         "profiles",
         "observatories",
@@ -289,3 +291,17 @@ def test_tenant_rehearsal_checks_forecast_history_isolation():
     assert "bob updated alice forecast history" in rehearsal
     assert "bob deleted alice forecast history" in rehearsal
     assert "missing identity exposed % forecast history rows" in rehearsal
+
+
+def test_obstruction_spot_migration_can_roll_back_and_reapply(tmp_path):
+    environment = os.environ.copy()
+    database_path = tmp_path / 'obstruction-migration.db'
+    environment['POLARIS_DATABASE_URL'] = f'sqlite:///{database_path}'
+    environment['POLARIS_ENVIRONMENT'] = 'test'
+    for command in [('upgrade', 'head'), ('downgrade', '20261006_0011'), ('upgrade', 'head')]:
+        result = subprocess.run([sys.executable, '-m', 'alembic', *command],
+            cwd=Path(__file__).resolve().parents[1], env=environment, capture_output=True, text=True)
+        assert result.returncode == 0, result.stderr
+        engine = create_engine(f'sqlite:///{database_path}')
+        assert ('obstruction_spots' in inspect(engine).get_table_names()) == (command[0] == 'upgrade')
+        engine.dispose()

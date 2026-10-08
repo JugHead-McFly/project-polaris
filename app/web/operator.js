@@ -11,6 +11,8 @@ const CONDITION_ALERT_POLL_INTERVAL_MS = 15 * 60 * 1000;
 const CONDITION_ALERT_COOLDOWN_MS = 2 * 60 * 60 * 1000;
 let supabaseClient = null;
 let hostedSession = null;
+let obstructionSpots = null;
+let hostedPlanRequest = 0;
 let hostedObservatory = null;
 let hostedProfile = null;
 let hostedRecommendationRunId = null;
@@ -196,15 +198,19 @@ const deliverConditionAlert = (state) => {
 };
 
 const checkConditionAlerts = async () => {
+  const spotVersion = obstructionSpots?.version;
+  const userId = hostedSession?.user?.id;
   if (!hostedConditionAlertsEnabled || !hostedSession || !hostedObservatory) return;
   try {
     const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
     const response = await apiFetch(
-      `/tonight?equatorial_mode_enabled=${eqEnabled}`,
+      `/tonight?equatorial_mode_enabled=${eqEnabled}${obstructionSpots?.params() || ""}`,
       { cache: "no-store" },
     );
     if (!response.ok) return;
-    const current = conditionAlertState(await response.json());
+    const data = await response.json();
+    if (spotVersion !== obstructionSpots?.version || userId !== hostedSession?.user?.id) return;
+    const current = conditionAlertState(data);
     const trigger = conditionAlertTrigger(hostedConditionAlertBaseline, current);
     if (trigger && !conditionAlertWasRecentlySent(current)) {
       deliverConditionAlert(current);
@@ -367,6 +373,7 @@ const alignHostedNavigation = () => {
 };
 
 const setHostedShell = (signedIn) => {
+  if (!signedIn) { obstructionSpots?.reset(); hostedPlanRequest++; }
   if (!signedIn) window.PolarisObstructionEditor?.resetAll();
   byId("auth-gate").hidden = signedIn;
   byId("hosted-account-main").hidden = !signedIn;
@@ -1813,6 +1820,10 @@ const renderHostedTonight = (data) => {
 };
 
 const loadHostedTonight = async () => {
+  const requestId = ++hostedPlanRequest;
+  const spotVersion = obstructionSpots?.version;
+  const userId = hostedSession?.user?.id;
+  const current = () => requestId === hostedPlanRequest && spotVersion === obstructionSpots?.version && userId === hostedSession?.user?.id;
   if (targetArtPreviewMode) {
     showTargetArtPreview();
     return;
@@ -1824,21 +1835,26 @@ const loadHostedTonight = async () => {
   try {
     const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
     const response = await apiFetch(
-      `/tonight?equatorial_mode_enabled=${eqEnabled}`,
+      `/tonight?equatorial_mode_enabled=${eqEnabled}${obstructionSpots?.params() || ""}`,
       {
         method: "POST",
         cache: "no-store",
       },
     );
-    if (response.status === 409) {
-      showHostedAccountSetup("Add an observing home before building tonight's plan.");
-      return;
+    if (!current()) return;
+    if (response.status === 409 || response.status === 422) {
+      const error = await response.json();
+      throw new Error(typeof error.detail === "string" ? error.detail : "Review the selected setup spot or choose Off.");
     }
     if (!response.ok) {
       throw new Error(hostedPlanFailureMessage(response.headers.get("X-Request-ID") || ""));
     }
-    renderHostedTonight(await response.json());
+    const data = await response.json();
+    if (!current()) return;
+    renderHostedTonight(data);
+    obstructionSpots?.applied(data.obstruction);
   } catch (error) {
+    if (!current()) return;
     byId("hosted-recommendation").className = "hosted-recommendation status-error";
     setText("hosted-decision", "Plan unavailable");
     setText("hosted-decision-message", error.message);
@@ -1846,7 +1862,7 @@ const loadHostedTonight = async () => {
     renderHostedSchedule({ decision: "Plan unavailable", blocks: [] });
     setText("hosted-plan-message", "Try Refresh plan again. If it fails twice, send Doug the request ID and a screenshot.");
   } finally {
-    setHostedRefreshState(false);
+    if (current()) setHostedRefreshState(false);
   }
 };
 
@@ -1912,6 +1928,7 @@ const loadHostedAccount = async () => {
   const observatories = await observatoryResponse.json();
   hostedObservatory = observatories[0] || null;
   hostedProfile = profile;
+  await obstructionSpots?.setHome(hostedObservatory?.id || null);
   updateHostedAccountForm(profile, hostedObservatory);
   setText(
     "observatory-name",
@@ -1979,6 +1996,7 @@ const saveHostedAccount = async (event) => {
       throw new Error("Polaris could not save your observing location. Check the values and try again.");
     }
     hostedObservatory = await observatoryResponse.json();
+    await obstructionSpots?.setHome(hostedObservatory.id);
     hostedProfile = await profileResponse.json();
     setText("hosted-account-state", "Observing home saved");
     setText(
@@ -2055,6 +2073,8 @@ const initializeHostedAuth = async () => {
   supabaseClient.auth.onAuthStateChange((event, session) => {
     if (hostedSession?.user?.id !== session?.user?.id) {
       window.PolarisObstructionEditor?.resetAll();
+      obstructionSpots?.reset();
+      hostedPlanRequest++;
     }
     hostedSession = session;
     if (event === "PASSWORD_RECOVERY") {
@@ -4663,7 +4683,7 @@ const loadDashboard = async () => {
 
   const eqEnabled = byId("eq-mode-checkbox").checked;
   const [planResult, systemResult, dashboardResult] = await Promise.allSettled([
-    apiFetch(`/tonight?equatorial_mode_enabled=${eqEnabled}`, { cache: "no-store" }).then((response) => {
+    apiFetch(`/tonight?equatorial_mode_enabled=${eqEnabled}${obstructionSpots?.params() || ""}`, { cache: "no-store" }).then((response) => {
       if (!response.ok) throw new Error(`Tonight endpoint returned ${response.status}.`);
       return response.json();
     }),
@@ -4917,6 +4937,14 @@ byId("hosted-ready-edit-home").addEventListener("click", () => {
 
 const bootApplication = async () => {
   window.PolarisObstructionEditor?.mountAll(document, apiFetch);
+  obstructionSpots = window.PolarisObstructionSpots?.mount(document, apiFetch, () => {
+    hostedPlanRequest++;
+    hostedConditionAlertBaseline = null;
+    latestHostedTonightData = null;
+    setHostedRefreshState(false);
+    setHostedPlanLoading();
+    setText("hosted-decision-message", "Setup selection changed. Refresh plan to calculate with the displayed selection.");
+  });
   if (targetArtPreviewMode) {
     showStandaloneTargetArtPreview();
     return;

@@ -1,4 +1,4 @@
-"""Request-local, manually measured geometry; not a photographic calibration."""
+"""Validated immutable obstruction geometry; not a photographic calibration."""
 from bisect import bisect_right
 from typing import Annotated, Tuple
 

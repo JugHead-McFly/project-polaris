@@ -274,7 +274,10 @@
       finally { if (stamp === revision || !controller) event.target.value = ""; }
     });
     reset();
-    return {reset, isDirty: () => dirty};
+    const handle = {reset, isDirty: () => dirty, readDraft: draft,
+      loadDraft(profile) { if (dirty && !global.confirm("Replace this draft with the saved survey?")) return false; populate(validateDraft(profile), "Saved survey — review this exact setup and reconfirm coverage."); dirty = true; return true; }};
+    container.obstructionEditor = handle;
+    return handle;
   }
   const api = {validateDraft, parseImport, exportDraft, example, markup, drawChart, mount,
     mountAll(root, request) { root.querySelectorAll("[data-obstruction-editor]").forEach((element, i) => instances.push(mount(element, request, i))); },

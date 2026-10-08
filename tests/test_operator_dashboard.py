@@ -627,7 +627,7 @@ def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
     check_start = script.index("const checkConditionAlerts = async () =>")
     check_end = script.index("const startConditionAlertMonitoring", check_start)
     check_source = script[check_start:check_end]
-    assert '`/tonight?equatorial_mode_enabled=${eqEnabled}`' in check_source
+    assert '`/tonight?equatorial_mode_enabled=${eqEnabled}${obstructionSpots?.params() || ""}`' in check_source
     assert '{ cache: "no-store" }' in check_source
     assert 'method: "POST"' not in check_source
     assert "if (!hostedConditionAlertsEnabled || !hostedSession || !hostedObservatory) return" in check_source

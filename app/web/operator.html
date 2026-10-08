@@ -17,6 +17,7 @@
     __SUPABASE_CLIENT_SCRIPT__
     <link rel="stylesheet" href="/operator-assets/obstruction-editor.css?v=__ASSET_VERSION__">
     <script defer src="/operator-assets/obstruction-editor.js?v=__ASSET_VERSION__"></script>
+    <script defer src="/operator-assets/obstruction-spots.js?v=__ASSET_VERSION__"></script>
     <script defer src="/operator-assets/operator.js?v=__ASSET_VERSION__"></script>
   </head>
   <body>
@@ -166,6 +167,11 @@
     </nav>
 
     <main class="hosted-account-main" id="hosted-account-main" hidden>
+      <section class="panel" id="tonight-obstruction-controls" hidden>
+        <label for="tonight-obstruction-spot">Local obstructions for Tonight</label>
+        <select id="tonight-obstruction-spot"><option value="">Off — local obstructions not checked</option></select>
+        <p id="tonight-obstruction-status" role="status" aria-live="polite">Off. Existing planning limits still apply.</p>
+      </section>
       <section
         class="panel hosted-account-loading"
         id="hosted-account-loading"
@@ -742,6 +748,7 @@
           <p class="auth-message" id="hosted-account-message" role="status" aria-live="polite"></p>
         </form>
         <div data-obstruction-editor></div>
+        <div id="saved-obstruction-spots" hidden></div>
       </section>
 
       <section

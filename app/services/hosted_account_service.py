@@ -156,17 +156,20 @@ def update_observatory(
     observatory_id: UUID,
     update: ObservatoryUpdate,
 ) -> Optional[HostedObservatory]:
-    observatory = get_observatory(
-        db,
-        user_id=user_id,
-        observatory_id=observatory_id,
-    )
+    observatory = (db.query(HostedObservatory)
+        .filter_by(id=observatory_id, user_id=user_id).with_for_update().one_or_none())
     if observatory is None:
         return None
 
-    for field_name, value in update.model_dump(
-        exclude_unset=True
-    ).items():
+    changes = update.model_dump(exclude_unset=True)
+    geometry_fields = {"latitude", "longitude", "elevation_m", "timezone_name", "rig_profile_key"}
+    if any(key in geometry_fields and getattr(observatory, key) != value for key, value in changes.items()):
+        from app.models.obstruction_spot import ObstructionSpot
+        # Invalidate permanently until explicit re-review, even if coordinates revert.
+        db.query(ObstructionSpot).filter_by(user_id=user_id, observatory_id=observatory_id).update(
+            {ObstructionSpot.home_binding: {}, ObstructionSpot.revision: ObstructionSpot.revision + 1},
+            synchronize_session=False)
+    for field_name, value in changes.items():
         setattr(observatory, field_name, value)
     db.commit()
     db.refresh(observatory)

@@ -1,3 +1,8 @@
+from fastapi import Response
+from dataclasses import replace
+from uuid import UUID
+from app.services.obstruction_spot_service import resolve_spot, reject, owned_home
+from app.services.hosted_account_service import planning_context_from_observatory
 from app.services.capture_history_service import library_summary, progress_map
 from app.services.portfolio_service import build_portfolio_target
 from typing import Dict, Optional
@@ -363,6 +368,8 @@ def _build_tonight_payload(
     db: Session,
     *,
     equatorial_mode_enabled: bool = False,
+    obstruction_spot_id: UUID | None = None,
+    obstruction_revision: int | None = None,
 ):
     try:
         observatory = get_planning_context(
@@ -374,6 +381,16 @@ def _build_tonight_payload(
             status_code=409,
             detail=str(error),
         ) from error
+
+    obstruction = {"mode": "off"}
+    if (obstruction_spot_id is None) != (obstruction_revision is None):
+        reject(422, "Choose a spot and its revision together, or explicitly choose Off.")
+    if obstruction_spot_id is not None:
+        if current_user.auth_mode == "local":
+            reject(409, "Saved setup spots currently require a hosted observing home.")
+        home = get_primary_observatory(db, user_id=current_user.user_id)
+        profile, obstruction = resolve_spot(db, current_user, home, obstruction_spot_id, obstruction_revision)
+        observatory = replace(planning_context_from_observatory(home), obstruction_profile=profile)
 
     use_capture_history = current_user.auth_mode == "local"
     history = library_summary(db, current_user.user_id) if not use_capture_history else None
@@ -437,10 +454,8 @@ def _build_tonight_payload(
     )
     forecast_accuracy = unavailable_forecast_accuracy_summary()
     if current_user.auth_mode != "local":
-        hosted_observatory = get_primary_observatory(
-            db,
-            user_id=current_user.user_id,
-        )
+        hosted_observatory = (home if obstruction_spot_id is not None else get_primary_observatory(
+            db, user_id=current_user.user_id))
         if hosted_observatory is not None:
             forecast_accuracy = forecast_accuracy_summary(
                 db,
@@ -460,6 +475,7 @@ def _build_tonight_payload(
 
     return {
         "date": schedule["date"],
+        "obstruction": obstruction,
         "observatory": {
             "name": observatory.name,
             "postal_code": observatory.postal_code,
@@ -507,35 +523,49 @@ def _build_tonight_payload(
 
 @router.get("", response_model=TonightResponse)
 def tonight(
+    response: Response = None,
     equatorial_mode_enabled: bool = False,
+    obstruction_spot_id: UUID | None = None,
+    obstruction_revision: int | None = None,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_tenant_db),
 ):
+    if response is not None:
+        response.headers["Cache-Control"] = "no-store"
     return _build_tonight_payload(
         current_user,
         db,
         equatorial_mode_enabled=equatorial_mode_enabled,
+        obstruction_spot_id=obstruction_spot_id,
+        obstruction_revision=obstruction_revision,
     )
 
 
 @router.post("", response_model=TonightResponse)
 def create_tonight_recommendation(
+    response: Response = None,
     equatorial_mode_enabled: bool = False,
+    obstruction_spot_id: UUID | None = None,
+    obstruction_revision: int | None = None,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_tenant_db),
 ):
+    if response is not None:
+        response.headers["Cache-Control"] = "no-store"
     payload = _build_tonight_payload(
         current_user,
         db,
         equatorial_mode_enabled=equatorial_mode_enabled,
+        obstruction_spot_id=obstruction_spot_id,
+        obstruction_revision=obstruction_revision,
     )
     if current_user.auth_mode == "local":
         return payload
 
-    observatory = get_primary_observatory(
-        db,
-        user_id=current_user.user_id,
-    )
+    applied = payload.get("obstruction", {})
+    observatory = (owned_home(db, current_user, UUID(applied["observatory_id"]))
+                   if applied.get("mode") == "applied" else get_primary_observatory(
+                       db, user_id=current_user.user_id))
     if observatory is None:
         raise HTTPException(
             status_code=409,

@@ -88,6 +88,7 @@ def create_recommendation_run(
             ),
         },
         input_provenance={
+            "obstruction": payload.get("obstruction", {"mode": "off"}),
             "capture_history": {key: value for key, value in (payload.get("capture_history") or {}).items() if key != "last_synced_at"},
             "weather_status": weather.get("status"),
             "cloud_blend_method": "equal_weight_available_sources_v1",

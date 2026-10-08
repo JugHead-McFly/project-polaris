@@ -39,9 +39,7 @@ def _invalid_constant(_value):
     raise ValueError("Non-finite JSON number")
 
 
-@router.post("/preview")
-async def preview(request: Request, response: Response):
-    response.headers["Cache-Control"] = "no-store"
+async def read_bounded_model(request: Request, model):
     if request.headers.get("content-type", "").split(";")[0].strip() != "application/json":
         raise _reject(415, "Use a JSON profile and target-center direction.")
     body = bytearray()
@@ -51,7 +49,7 @@ async def preview(request: Request, response: Response):
         body.extend(chunk)
     try:
         data = json.loads(body, object_pairs_hook=_unique_object, parse_constant=_invalid_constant)
-        payload = PreviewRequest.model_validate(data)
+        payload = model.model_validate(data)
     except ValidationError as error:
         # Never echo submitted profile values in validation responses.
         raise _reject(422, [{"loc": item["loc"], "msg": item["msg"]}
@@ -59,6 +57,13 @@ async def preview(request: Request, response: Response):
     except (ValueError, UnicodeError, RecursionError) as error:
         raise _reject(422, "Use valid JSON with unique fields and finite numbers.") from error
 
+    return payload
+
+
+@router.post("/preview")
+async def preview(request: Request, response: Response):
+    response.headers["Cache-Control"] = "no-store"
+    payload = await read_bounded_model(request, PreviewRequest)
     profile = payload.profile
     probe = payload.probe
     position = (probe.azimuth_degrees, probe.altitude_degrees)
