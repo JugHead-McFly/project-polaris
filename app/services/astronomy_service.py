@@ -613,6 +613,16 @@ def get_moon_warning(
     )
 
 
+def get_sun_altitude_at(
+    observation_datetime: datetime,
+    observatory: Optional[ObservatoryContext] = None,
+) -> float:
+    """Unrounded geometric solar altitude, using the nightly darkness calculation."""
+    return float(_get_observer(observatory).sun_altaz(
+        to_astropy_time(observation_datetime, observatory=observatory)
+    ).alt.deg)
+
+
 def get_darkness_window_datetimes(
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,

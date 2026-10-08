@@ -92,3 +92,37 @@ test('home response invalidates a skyline import started while home was loading'
   assert.equal(h.q('[data-lat]').value,'40');assert.equal(h.q('.sky-silhouette'),null);
  }finally{h.close();}
 });
+
+test('selected-time reasons distinguish floor, darkness, partial landscape and uncertainty',()=>{
+ const conditions={minimum_imaging_altitude_degrees:20,darkness_state:'astronomical_darkness'};
+ const target={...fixture.targets[0],imaging_altitude_state:'at_or_above_minimum'};
+ const above=api.selectedTimeReason(target,api.demo(),conditions);
+ assert.match(above,/Meets 20° imaging floor/);assert.match(above,/Astronomical darkness/);
+ assert.match(above,/Above supplied skyline; overhead clearance unknown/);
+ assert.match(above,/synthetic outline/);assert.match(above,/Weather not evaluated/);
+ const blocked=api.selectedTimeReason({...target,altitude_degrees:10,imaging_altitude_state:'below_minimum'},
+   {...api.demo(),source:'user_approximate'}, {...conditions,darkness_state:'not_astronomical_darkness'});
+ assert.match(blocked,/Below 20° imaging floor/);assert.match(blocked,/Outside astronomical darkness/);
+ assert.match(blocked,/At\/below supplied skyline/);assert.match(blocked,/approximate outline/);
+ const unknown=api.selectedTimeReason({...target,azimuth_degrees:180},api.demo(),{});
+ assert.match(unknown,/Skyline unknown/);assert.match(unknown,/Darkness unavailable/);
+ const missing=api.selectedTimeReason({status:'unavailable'},api.empty(),conditions);
+ assert.match(missing,/Position unavailable/);assert.match(missing,/Imaging altitude unavailable/);
+});
+
+test('inspector uses current skyline and labels selected instant and site; input changes invalidate facts',async()=>{
+ const result={...fixture,location:{latitude:33,longitude:-112,elevation_meters:250,timezone_name:'America/Phoenix'},
+   at_local:'2026-10-07T17:00:00-07:00',selected_time_conditions:{minimum_imaging_altitude_degrees:20,darkness_state:'not_astronomical_darkness'},
+   targets:[{...fixture.targets[0],imaging_altitude_state:'at_or_above_minimum'}]};
+ const h=harness(async url=>response(url.endsWith('catalog')?catalog:result));try{
+  h.open();await flush();h.q('[data-demo]').click();await flush();
+  assert.match(h.q('[data-time-label]').textContent,/2026-10-07T17:00:00-07:00.*America\/Phoenix.*33° latitude, -112° east, 250 m/);
+  assert.match(h.q('[data-results]').textContent,/synthetic outline/);
+  h.q('[data-clear]').click();assert.match(h.q('[data-results]').textContent,/Skyline unknown/);
+  for(const [selector,value] of [['[data-zone]','UTC'],['[data-time]','2026-10-08T05:00'],['[data-lat]','34']]){
+   h.input(selector,value);assert.equal(h.q('[data-results]').children.length,0);
+   assert.match(h.q('[data-time-label]').textContent,/Inputs changed/);
+   h.q('[data-calculate]').click();await flush();assert.equal(h.q('[data-results]').children.length,1);
+  }
+ }finally{h.close();}
+});
