@@ -23,3 +23,25 @@ Automated tests cover real calculation reuse and changes with location/time, UTC
 ## Offline review artifact
 
 The accompanying ZIP includes complete source changes, a patch against the base commit, validation logs, and `preview/index.html`. Extract the ZIP and open that file in a desktop browser. Its controls select three fictional sites and nine hourly snapshots on 8 October 2026, generated with the real backend calculation for M31, M57, M13 and Jupiter. It makes no network requests. The application feature supports arbitrary validated inputs; the offline preview deliberately supports only its precomputed choices. Physical-phone file viewing remains unverified.
+
+## Selected-time inspector
+
+The per-target result explains the existing 20° imaging floor at the selected
+instant and whether the Sun is at or below −18° (astronomical darkness). The
+solar calculation uses the same geometric Astroplan method as nightly darkness;
+target positions reuse the fixed-target and time-specific planet calculations.
+These are instantaneous facts, not a duration or a new Tonight recommendation.
+Unavailable solar calculations stay unknown. Weather is explicitly not evaluated.
+
+Landscape reasoning remains client-side against the current displayed skyline.
+It distinguishes at/below the outline, above the outline with unknown overhead
+clearance, and unknown gaps. Synthetic, approximate, and user-declared measured
+sources retain their uncertainty labels. Meeting the altitude floor and darkness
+criteria does not establish full-frame or overhead clearance, weather suitability,
+or a usable observing interval. UTC/local timestamps, display timezone, coordinates
+and elevation identify the calculation; editing time, zone or site invalidates it.
+
+Review found no ranking-before-visibility truncation: all catalog targets are
+planned before the observable shortlist is selected. A synthetic regression keeps
+a last-listed, low-score, sole observable target eligible even when earlier targets
+have higher scores. The existing best-plus-five scheduling shortlist remains unchanged.

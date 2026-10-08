@@ -14,7 +14,8 @@ from app.core.auth import CurrentUser, get_current_user
 from app.core.planning_context import ObservatoryContext
 from app.data.targets import TARGETS, SOLAR_SYSTEM_TARGETS
 from app.database.database import get_tenant_db
-from app.services.astronomy_service import get_horizontal_positions_at
+from app.services.astronomy_service import get_horizontal_positions_at, get_sun_altitude_at
+from app.services.planner_service import MINIMUM_ALTITUDE_DEGREES
 from app.services.hosted_account_service import get_planning_context, MissingObservatoryError
 
 router = APIRouter(prefix="/sky-view", tags=["Read-only sky view"])
@@ -75,6 +76,14 @@ class SkyViewRequest(BaseModel):
 def calculate_view(payload: SkyViewRequest):
     instant = payload.at.astimezone(timezone.utc)
     context = ObservatoryContext(name="Sky-view input", **payload.location.model_dump())
+    try:
+        sun_altitude = get_sun_altitude_at(instant, observatory=context)
+        if not math.isfinite(sun_altitude):
+            sun_altitude = None
+    except (ValueError, TypeError, RuntimeError):
+        sun_altitude = None
+    darkness = ("unavailable" if sun_altitude is None else
+                "astronomical_darkness" if sun_altitude <= -18 else "not_astronomical_darkness")
     rows = []
     for name in payload.targets:
         try:
@@ -93,9 +102,21 @@ def calculate_view(payload: SkyViewRequest):
         rows.append({"id": name, "name": CATALOG[name],
                      "status": "below_horizon" if altitude < 0 else "above_horizon",
                      "azimuth_degrees": azimuth, "altitude_degrees": altitude})
+    for row in rows:
+        altitude = row["altitude_degrees"]
+        row["imaging_altitude_state"] = (
+            "unavailable" if altitude is None else
+            "at_or_above_minimum" if altitude >= MINIMUM_ALTITUDE_DEGREES else "below_minimum"
+        )
     return {"at_utc": instant.isoformat(),
             "at_local": instant.astimezone(ZoneInfo(context.timezone_name)).isoformat(),
             "location": payload.location.model_dump(), "targets": rows,
+            "selected_time_conditions": {
+                "sun_altitude_degrees": sun_altitude,
+                "darkness_state": darkness,
+                "minimum_imaging_altitude_degrees": MINIMUM_ALTITUDE_DEGREES,
+                "weather_state": "not_evaluated",
+            },
             "coordinate_system": "true-north azimuth clockwise; geometric elevation above level",
             "applied_to_tonight": False,
             "limits": "Calculated target centers, not full-frame or imaging suitability. No refraction or photographic calibration. Landscape confidence is independent."}
