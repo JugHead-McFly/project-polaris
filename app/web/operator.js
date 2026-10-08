@@ -332,6 +332,7 @@ const updateHostedEqModeAvailability = () => {
 };
 
 const rememberEqModePreference = (event) => {
+  window.PolarisFieldPlan?.clear();
   const enabled = event.target.checked;
   saveEqModePreference(enabled);
   applyEqModePreference(enabled);
@@ -373,7 +374,7 @@ const alignHostedNavigation = () => {
 };
 
 const setHostedShell = (signedIn) => {
-  if (!signedIn) { obstructionSpots?.reset(); hostedPlanRequest++; }
+  if (!signedIn) { window.PolarisFieldPlan?.clear(); obstructionSpots?.reset(); hostedPlanRequest++; }
   if (!signedIn) {
     window.PolarisObstructionEditor?.resetAll();
     window.PolarisSkyView?.resetAll();
@@ -546,6 +547,7 @@ const showHostedAccountLoading = (message = "") => {
 };
 
 const showHostedAccountSetup = (message = "") => {
+  window.PolarisFieldPlan?.clear();
   byId("target-art-preview").hidden = true;
   document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
@@ -669,6 +671,7 @@ const resetHostedPlanDetails = () => {
 };
 
 const setHostedPlanLoading = () => {
+  window.PolarisFieldPlan?.clear();
   const card = byId("hosted-recommendation");
   card.className = "hosted-recommendation status-loading";
   setText("hosted-decision", "Checking conditions…");
@@ -1834,6 +1837,7 @@ const loadHostedTonight = async () => {
   setHostedRefreshState(true);
   setHostedPlanLoading();
   showHostedTonight();
+  const fieldVersion = window.PolarisFieldPlan?.version;
 
   try {
     const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
@@ -1855,6 +1859,7 @@ const loadHostedTonight = async () => {
     const data = await response.json();
     if (!current()) return;
     renderHostedTonight(data);
+    if (fieldVersion === window.PolarisFieldPlan?.version) window.PolarisFieldPlan?.set(data.field_plan);
     obstructionSpots?.applied(data.obstruction);
   } catch (error) {
     if (!current()) return;
@@ -2075,6 +2080,7 @@ const initializeHostedAuth = async () => {
   // the session embedded in a password-reset link.
   supabaseClient.auth.onAuthStateChange((event, session) => {
     if (hostedSession?.user?.id !== session?.user?.id) {
+      window.PolarisFieldPlan?.clear();
       window.PolarisObstructionEditor?.resetAll();
       window.PolarisSkyView?.resetAll();
       obstructionSpots?.reset();
@@ -4940,6 +4946,7 @@ byId("hosted-ready-edit-home").addEventListener("click", () => {
 });
 
 const bootApplication = async () => {
+  window.PolarisFieldPlan?.mount(document);
   window.PolarisObstructionEditor?.mountAll(document, apiFetch);
   window.PolarisSkyView?.mountAll(document, apiFetch);
   obstructionSpots = window.PolarisObstructionSpots?.mount(document, apiFetch, () => {

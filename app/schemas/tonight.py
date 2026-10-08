@@ -104,6 +104,7 @@ class ForecastAccuracySummary(BaseModel):
 
 
 class TonightResponse(BaseModel):
+    field_plan: Optional[dict] = None
     obstruction: dict = Field(default_factory=lambda: {"mode": "off"})
     recommendation_run_id: Optional[UUID] = None
     date: str

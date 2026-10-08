@@ -1,0 +1,500 @@
+{
+  "field_plan": {
+    "text": "POLARIS FIELD PLAN\nSnapshot generated UTC: 2026-07-17T20:00:00+00:00\nSnapshot: 8542af11cec7ce3a\nNight reference: 2026-07-17 (site-local sunset date)\nSite: Synthetic site\nTimezone: America/Phoenix\nRig: Unknown\nDecision: Proceed\nPlan run: Unknown\nLocal obstructions: Off \u2014 local obstructions are not applied\nAdvisory snapshot only. Recheck Polaris and live conditions before imaging. Downloads do not update automatically.\nEQ alignment confirmed for this calculation: False\nSchedule calculation date (site local): 2026-07-17\nAstronomical darkness (site local): 2026-07-17 09:14 PM \u2192 2026-07-18 03:51 AM (America/Phoenix)\n\nM57 \u2014 setup and capture (run 1/1)\n2026-07-17 09:14 PM \u2192 2026-07-17 11:24 PM (America/Phoenix)\nSetup: 5 min; imaging: 125 min\nExposure: 15 s; gain: 100.0; filter: Duo-Band\nSettings source: best_capture; confidence: Unknown\nReason: Highest-ranked observable target.\n\n",
+    "calendar": "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Polaris//Field Plan//EN\r\nCALSCALE:GREGORIAN\r\nBEGIN:VEVENT\r\nUID:8542af11cec7ce3ad84a32ce11e5e2104e4038f0feff9ef6a08ca546b6789952-0@pola\r\n ris.invalid\r\nDTSTAMP:20260717T200000Z\r\nDTSTART:20260718T041400Z\r\nDTEND:20260718T062400Z\r\nSUMMARY:Polaris: M57 \u2014 setup and capture (run 1/1)\r\nDESCRIPTION:Night reference: 2026-07-17 (site-local sunset date)\\nSite: Syn\r\n thetic site\\nTimezone: America/Phoenix\\nRig: Unknown\\nDecision: Proceed\\nP\r\n lan run: Unknown\\nLocal obstructions: Off \u2014 local obstructions are not a\r\n pplied\\nAdvisory snapshot only. Recheck Polaris and live conditions before\r\n  imaging. Downloads do not update automatically.\\nEQ alignment confirmed f\r\n or this calculation: False\\nSchedule calculation date (site local): 2026-0\r\n 7-17\\nAstronomical darkness (site local): 2026-07-17 09:14 PM \u2192 2026-07-\r\n 18 03:51 AM (America/Phoenix)\\nSnapshot: 8542af11cec7ce3a\\nM57 \u2014 setup a\r\n nd capture (run 1/1)\\n2026-07-17 09:14 PM \u2192 2026-07-17 11:24 PM (America\r\n /Phoenix)\\nSetup: 5 min\\; imaging: 125 min\\nExposure: 15 s\\; gain: 100.0\\;\r\n  filter: Duo-Band\\nSettings source: best_capture\\; confidence: Unknown\\nRe\r\n ason: Highest-ranked observable target.\r\nSTATUS:TENTATIVE\r\nTRANSP:TRANSPARENT\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n",
+    "night": "2026-07-17",
+    "snapshot_id": "8542af11cec7ce3ad84a32ce11e5e2104e4038f0feff9ef6a08ca546b6789952",
+    "generated_at": "2026-07-17T20:00:00+00:00",
+    "unavailable_reason": null
+  },
+  "obstruction": {
+    "mode": "off"
+  },
+  "recommendation_run_id": null,
+  "date": "2026-07-17",
+  "observatory": {
+    "name": "Synthetic site",
+    "postal_code": null,
+    "timezone": "America/Phoenix",
+    "latitude": 0,
+    "longitude": 0,
+    "elevation_meters": 380.0,
+    "rig_profile_key": null,
+    "rig_profile_label": null
+  },
+  "recommended_target": {
+    "object": "M57",
+    "common_name": null,
+    "reference_image": null,
+    "artwork": {
+      "slug": "ring-nebula-m57",
+      "asset_url": "/operator-assets/target-art/library/assets/ring-nebula-m57.svg?v=1.0.0-initial-1000-target-library",
+      "category": "nebula",
+      "match_kind": "exact",
+      "alt": "Polaris illustration of M57"
+    },
+    "rig_fit": null,
+    "target_geometry": {
+      "samples": [
+        {
+          "at": "2026-07-17T21:14:00-07:00",
+          "altitude_degrees": 42.0,
+          "label": "9:14 PM"
+        },
+        {
+          "at": "2026-07-17T23:29:00-07:00",
+          "altitude_degrees": 81.9,
+          "label": "11:29 PM"
+        }
+      ],
+      "peak_altitude_degrees": 81.9,
+      "peak_at": "2026-07-17T23:29:00-07:00",
+      "peak_label": "11:29 PM"
+    },
+    "capture_count": 1,
+    "session_count": 1,
+    "total_integration_seconds": 3600,
+    "total_integration_hours": 1.0,
+    "best_quality": 90,
+    "average_quality": 90.0,
+    "latest_capture": "2026-07-01T04:00:00Z",
+    "recommended_settings": {
+      "source": "best_capture",
+      "polaris_id": "POLARIS-M57",
+      "exposure_seconds": 15,
+      "gain": 100.0,
+      "filter_name": "Duo-Band"
+    },
+    "constellation": "Unknown",
+    "target_type": "Unknown",
+    "difficulty": "Unknown",
+    "recommended_filter": "Unknown",
+    "recommended_exposure": {
+      "exposure_seconds": 15,
+      "gain": 60,
+      "goal_subframes": 960
+    },
+    "season_score": 5,
+    "science_priority": 0,
+    "readiness_score": 110,
+    "status": "In Progress",
+    "best_window": "Unknown",
+    "progress_percent": 25.0,
+    "portfolio_level": "Bronze",
+    "next_action": "Continue imaging",
+    "current_hours": 1.0,
+    "goal_hours": 4.0,
+    "goal_tier": "detailed",
+    "goal_source": "Polaris target-class starter",
+    "goal_options": [],
+    "goal_factors": [],
+    "remaining_hours": 3.0,
+    "estimated_nights_remaining": 0.8,
+    "observable": true,
+    "current_altitude": 55.0,
+    "altitude_at_dark_midpoint": 64.2,
+    "maximum_dark_altitude": 81.9,
+    "average_dark_altitude": 58.4,
+    "usable_dark_minutes": 444,
+    "usable_dark_hours": 7.4,
+    "transit_time": "2026-07-17 11:30 PM",
+    "moon_warning": "None",
+    "recommended_start": "2026-07-17 09:14 PM",
+    "recommended_end": "2026-07-18 01:00 AM",
+    "moon_separation_degrees": 80.0,
+    "reason": "M57 is the best available target.",
+    "captures": []
+  },
+  "backup_target": {
+    "object": "M27",
+    "common_name": null,
+    "reference_image": null,
+    "artwork": {
+      "slug": "dumbbell-nebula-m27",
+      "asset_url": "/operator-assets/target-art/library/assets/dumbbell-nebula-m27.svg?v=1.0.0-initial-1000-target-library",
+      "category": "nebula",
+      "match_kind": "exact",
+      "alt": "Polaris illustration of M27"
+    },
+    "rig_fit": null,
+    "target_geometry": {
+      "samples": [
+        {
+          "at": "2026-07-17T21:14:00-07:00",
+          "altitude_degrees": 42.0,
+          "label": "9:14 PM"
+        },
+        {
+          "at": "2026-07-17T23:29:00-07:00",
+          "altitude_degrees": 81.9,
+          "label": "11:29 PM"
+        }
+      ],
+      "peak_altitude_degrees": 81.9,
+      "peak_at": "2026-07-17T23:29:00-07:00",
+      "peak_label": "11:29 PM"
+    },
+    "capture_count": 1,
+    "session_count": 1,
+    "total_integration_seconds": 3600,
+    "total_integration_hours": 1.0,
+    "best_quality": 90,
+    "average_quality": 90.0,
+    "latest_capture": "2026-07-01T04:00:00Z",
+    "recommended_settings": {
+      "source": "best_capture",
+      "polaris_id": "POLARIS-M27",
+      "exposure_seconds": 15,
+      "gain": 100.0,
+      "filter_name": "Duo-Band"
+    },
+    "constellation": "Unknown",
+    "target_type": "Unknown",
+    "difficulty": "Unknown",
+    "recommended_filter": "Unknown",
+    "recommended_exposure": {
+      "exposure_seconds": 15,
+      "gain": 60,
+      "goal_subframes": 960
+    },
+    "season_score": 5,
+    "science_priority": 0,
+    "readiness_score": 110,
+    "status": "In Progress",
+    "best_window": "Unknown",
+    "progress_percent": 25.0,
+    "portfolio_level": "Bronze",
+    "next_action": "Continue imaging",
+    "current_hours": 1.0,
+    "goal_hours": 4.0,
+    "goal_tier": "detailed",
+    "goal_source": "Polaris target-class starter",
+    "goal_options": [],
+    "goal_factors": [],
+    "remaining_hours": 3.0,
+    "estimated_nights_remaining": 0.8,
+    "observable": true,
+    "current_altitude": 55.0,
+    "altitude_at_dark_midpoint": 64.2,
+    "maximum_dark_altitude": 81.9,
+    "average_dark_altitude": 58.4,
+    "usable_dark_minutes": 444,
+    "usable_dark_hours": 7.4,
+    "transit_time": "2026-07-17 11:30 PM",
+    "moon_warning": "None",
+    "recommended_start": "2026-07-17 09:14 PM",
+    "recommended_end": "2026-07-18 01:00 AM",
+    "moon_separation_degrees": 80.0,
+    "reason": "M27 is the best available target.",
+    "captures": []
+  },
+  "moon": {
+    "illumination_percent": 15.0,
+    "phase_name": null,
+    "altitude_degrees": 9.5,
+    "above_horizon": true,
+    "next_moonrise": "2026-07-18 10:16 AM",
+    "next_moonset": "2026-07-17 09:57 PM"
+  },
+  "weather": {
+    "provider": null,
+    "postal_code": "85297",
+    "temperature_f": null,
+    "planned_temperature_f": 66.0,
+    "planned_temperature_at": "2026-07-17 09:00 PM",
+    "planned_cloud_cover_percent": null,
+    "planned_cloud_forecast_sources": null,
+    "planned_cloud_forecast_spread": null,
+    "cloud_forecast_status": null,
+    "cloud_dark_window": null,
+    "planned_humidity_percent": null,
+    "planned_dew_point_f": 58.0,
+    "planned_wind_speed_mph": null,
+    "cloud_cover_percent": 10,
+    "humidity_percent": 25,
+    "dew_point_f": null,
+    "wind_speed_mph": 4.0,
+    "seeing": null,
+    "seeing_index": null,
+    "seeing_forecast_at": null,
+    "planned_seeing_index": 4,
+    "planned_seeing_forecast_at": "2026-07-17 09:00 PM",
+    "transparency": null,
+    "transparency_index": null,
+    "transparency_forecast_at": null,
+    "planned_transparency_index": 3,
+    "planned_transparency_forecast_at": "2026-07-17 09:00 PM",
+    "astro_forecast_provider": "7timer-astro",
+    "astro_forecast_status": "Astronomy forecast connected.",
+    "astro_forecast_fetched_at": "2026-07-17T20:02:00-07:00",
+    "observing_rating": 5,
+    "status": "Live weather connected.",
+    "observed_at": null,
+    "fetched_at": null
+  },
+  "night_rating": {
+    "score": 93,
+    "quality": "Excellent",
+    "deductions": [
+      {
+        "label": "Cloud cover",
+        "points": 5.0
+      },
+      {
+        "label": "Moon illumination",
+        "points": 2.2
+      }
+    ]
+  },
+  "opportunity_score": {
+    "total": 85.7,
+    "label": "Excellent",
+    "guidance": "Conditions support imaging; use the component drivers to choose how ambitious tonight's plan should be.",
+    "components": [
+      {
+        "key": "cloud",
+        "label": "Cloud + stability",
+        "description": "10% cloud \u00b7 25% humidity \u00b7 4 mph wind",
+        "points": 42.0,
+        "max": 45.0,
+        "source": "Proportional",
+        "detail_title": null,
+        "detail": null
+      },
+      {
+        "key": "night",
+        "label": "Astronomical darkness",
+        "description": "6.6 dark hours \u00b7 full credit at 8 hours",
+        "points": 16.5,
+        "max": 20.0,
+        "source": "Proportional",
+        "detail_title": "Astronomical darkness window",
+        "detail": "Astronomical darkness runs from 9:14 PM to 3:51 AM (6.6 hours)."
+      },
+      {
+        "key": "moon",
+        "label": "Moon interference",
+        "description": "15% illuminated \u00b7 lower is better",
+        "points": 12.8,
+        "max": 15.0,
+        "source": "Proportional",
+        "detail_title": "Moon status",
+        "detail": "Moon \u00b7 15% illuminated. Above the horizon now; sets 9:57 PM."
+      },
+      {
+        "key": "visibility",
+        "label": "Transparency",
+        "description": "Good \u00b7 forecast 0.4\u20130.5 mag/airmass extinction near 9:00 PM",
+        "points": 7.1,
+        "max": 10.0,
+        "source": "Forecast",
+        "detail_title": "Transparency forecast",
+        "detail": "7Timer ASTRO bin 3 of 8 at the forecast point nearest the planned imaging start. Lower extinction is better. Cloud, humidity, and wind are scored separately."
+      },
+      {
+        "key": "seeing",
+        "label": "Seeing",
+        "description": "Good \u00b7 forecast 1.0\u20131.25\u2033 seeing near 9:00 PM",
+        "points": 2.9,
+        "max": 5.0,
+        "source": "Forecast",
+        "detail_title": "Seeing forecast",
+        "detail": "7Timer ASTRO bin 4 of 8 at the forecast point nearest the planned imaging start. Lower seeing is better. Cloud, humidity, and wind are scored separately."
+      },
+      {
+        "key": "altitude",
+        "label": "Target altitude",
+        "description": "81.9\u00b0 peak altitude \u00b7 20\u00b0\u201390\u00b0 scale",
+        "points": 4.4,
+        "max": 5.0,
+        "source": "Proportional",
+        "detail_title": null,
+        "detail": null
+      }
+    ]
+  },
+  "dew_risk": {
+    "level": "low",
+    "label": "Low dew risk",
+    "summary": "Forecast air stays at least about 8\u00b0F above the dew point during the planned window.",
+    "action": "No special dew action is indicated; continue to monitor local conditions.",
+    "temperature_f": 66.0,
+    "dew_point_f": 58.0,
+    "spread_f": 8.0,
+    "forecast_at": "2026-07-17 09:00 PM"
+  },
+  "conditions_trend": {
+    "direction": "unavailable",
+    "label": "Trend unavailable",
+    "message": "Trend unavailable: check live conditions at the window start.",
+    "basis": null,
+    "forecast_start": null,
+    "forecast_end": null
+  },
+  "forecast_accuracy": {
+    "state": "unavailable",
+    "label": "Forecast confidence unavailable",
+    "message": "Signed-in forecast history is needed to build confidence.",
+    "matched_samples": 0,
+    "minimum_samples": 5,
+    "revision_count": 0,
+    "confidence": null,
+    "metrics": {},
+    "recent_checks": [],
+    "has_history_chart": false,
+    "horizon_buckets": [],
+    "has_horizon_analysis": false,
+    "satellite_reliability": {},
+    "nightly": {},
+    "saved_forecast_count": 0,
+    "saved_revision_count": 0,
+    "pending_satellite_count": 0,
+    "future_forecast_count": 0
+  },
+  "session_checklist": {
+    "status": "ready",
+    "summary": "Tonight has a usable scheduled session.",
+    "steps": [
+      {
+        "key": "setup",
+        "label": "Set up",
+        "at": "2026-07-17 09:14 PM",
+        "time_label": "9:14 PM",
+        "instruction": "Prepare M57 and complete the scheduled setup."
+      },
+      {
+        "key": "start",
+        "label": "Start imaging",
+        "at": "2026-07-17 09:19 PM",
+        "time_label": "9:19 PM",
+        "instruction": "Begin imaging M57 after setup is complete."
+      },
+      {
+        "key": "stop",
+        "label": "Stop",
+        "at": "2026-07-17 11:24 PM",
+        "time_label": "11:24 PM",
+        "instruction": "End tonight's final scheduled block."
+      }
+    ],
+    "actions": []
+  },
+  "capture_history": null,
+  "message": "Conditions currently support imaging. Review the advisory timeline before starting.",
+  "night_plan": {
+    "decision": "Proceed",
+    "overall_rating": 5,
+    "start_imaging": "2026-07-17 09:14 PM",
+    "shutdown_time": "2026-07-18 03:51 AM",
+    "target_sequence": [
+      {
+        "object": "M57",
+        "start": "2026-07-17 09:14 PM",
+        "end": "2026-07-17 11:24 PM",
+        "reason": "Highest-ranked observable target."
+      }
+    ],
+    "backup_option": {
+      "object": "M27",
+      "start": "2026-07-17 09:14 PM",
+      "end": "2026-07-18 01:00 AM",
+      "reason": "M27 is the best available target."
+    },
+    "notes": []
+  },
+  "darkness": {
+    "sunset": "2026-07-17 07:31 PM",
+    "astronomical_darkness_start": "2026-07-17 09:14 PM",
+    "astronomical_darkness_end": "2026-07-18 03:51 AM"
+  },
+  "schedule": {
+    "date": "2026-07-17",
+    "decision": "Proceed",
+    "advisory_only": true,
+    "blocks": [
+      {
+        "object": "M57",
+        "common_name": null,
+        "start": "2026-07-17 09:14 PM",
+        "end": "2026-07-17 11:24 PM",
+        "duration_minutes": 130,
+        "setup_minutes": 5,
+        "imaging_minutes": 125,
+        "planner_score": 149.6,
+        "reason": "Highest-ranked observable target.",
+        "recommended_sub_exposure_seconds": 15,
+        "recommended_gain": 100.0,
+        "recommended_filter": "Duo-Band",
+        "recommendation_source": "best_capture",
+        "settings_confidence": null,
+        "settings_reasons": [],
+        "settings_adjustments": [],
+        "planned_subframes": 497,
+        "total_planned_subframes": null,
+        "subframe_runs": [],
+        "frame_limit": null,
+        "frame_limit_label": null,
+        "frame_limit_reason": null,
+        "run_number": 1,
+        "total_runs": 1,
+        "setup_changes": [
+          "Slew to and center M57"
+        ]
+      }
+    ],
+    "allocated_minutes": 130,
+    "unscheduled_dark_minutes": 267,
+    "end_reason": null,
+    "weather": {
+      "provider": null,
+      "postal_code": "85297",
+      "temperature_f": null,
+      "planned_temperature_f": 66.0,
+      "planned_temperature_at": "2026-07-17 09:00 PM",
+      "planned_cloud_cover_percent": null,
+      "planned_cloud_forecast_sources": null,
+      "planned_cloud_forecast_spread": null,
+      "cloud_forecast_status": null,
+      "cloud_dark_window": null,
+      "planned_humidity_percent": null,
+      "planned_dew_point_f": 58.0,
+      "planned_wind_speed_mph": null,
+      "cloud_cover_percent": 10,
+      "humidity_percent": 25,
+      "dew_point_f": null,
+      "wind_speed_mph": 4.0,
+      "seeing": null,
+      "seeing_index": null,
+      "seeing_forecast_at": null,
+      "planned_seeing_index": 4,
+      "planned_seeing_forecast_at": "2026-07-17 09:00 PM",
+      "transparency": null,
+      "transparency_index": null,
+      "transparency_forecast_at": null,
+      "planned_transparency_index": 3,
+      "planned_transparency_forecast_at": "2026-07-17 09:00 PM",
+      "astro_forecast_provider": "7timer-astro",
+      "astro_forecast_status": "Astronomy forecast connected.",
+      "astro_forecast_fetched_at": "2026-07-17T20:02:00-07:00",
+      "observing_rating": 5,
+      "status": "Live weather connected.",
+      "observed_at": null,
+      "fetched_at": null
+    },
+    "moon": {
+      "illumination_percent": 15.0,
+      "phase_name": null,
+      "altitude_degrees": 9.5,
+      "above_horizon": true,
+      "next_moonrise": "2026-07-18 10:16 AM",
+      "next_moonset": "2026-07-17 09:57 PM"
+    },
+    "darkness": {
+      "sunset": "2026-07-17 07:31 PM",
+      "astronomical_darkness_start": "2026-07-17 09:14 PM",
+      "astronomical_darkness_end": "2026-07-18 03:51 AM"
+    },
+    "notes": [],
+    "fallback_target": "M57"
+  }
+}
