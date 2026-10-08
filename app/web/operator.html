@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/operator-assets/obstruction-editor.css?v=__ASSET_VERSION__">
     <script defer src="/operator-assets/obstruction-editor.js?v=__ASSET_VERSION__"></script>
     <script defer src="/operator-assets/obstruction-spots.js?v=__ASSET_VERSION__"></script>
+    <script defer src="/operator-assets/field-plan.js?v=__ASSET_VERSION__"></script>
     <script defer src="/operator-assets/sky-view.js?v=__ASSET_VERSION__"></script>
     <link rel="stylesheet" href="/operator-assets/sky-view.css?v=__ASSET_VERSION__">
     <script defer src="/operator-assets/operator.js?v=__ASSET_VERSION__"></script>
@@ -311,6 +312,14 @@
       </section>
 
       <section class="hosted-tonight" id="hosted-tonight-panel" hidden aria-labelledby="hosted-tonight-title">
+        <div data-field-plan>
+          <p>Keep a copy of this plan. Files contain site and setup names; review before sharing.</p>
+          <div class="hosted-form-actions">
+            <button class="account-button" type="button" data-field-text disabled>Download field plan (.txt)</button>
+            <button class="account-button" type="button" data-field-calendar disabled>Download calendar (.ics)</button>
+          </div>
+          <p data-field-status role="status" aria-live="polite">Refresh the plan to download its current scheduled blocks.</p>
+        </div>
         <div class="hosted-tonight-heading">
           <div>
             <p class="eyebrow">Tonight at <span id="hosted-tonight-observatory">your observatory</span></p>

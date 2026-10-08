@@ -1,3 +1,4 @@
+from app.services.field_plan_service import build_field_plan
 from fastapi import Response
 from dataclasses import replace
 from uuid import UUID
@@ -532,13 +533,15 @@ def tonight(
 ):
     if response is not None:
         response.headers["Cache-Control"] = "no-store"
-    return _build_tonight_payload(
+    payload = _build_tonight_payload(
         current_user,
         db,
         equatorial_mode_enabled=equatorial_mode_enabled,
         obstruction_spot_id=obstruction_spot_id,
         obstruction_revision=obstruction_revision,
     )
+    payload["field_plan"] = build_field_plan(payload, equatorial_mode_enabled=equatorial_mode_enabled)
+    return payload
 
 
 @router.post("", response_model=TonightResponse)
@@ -560,6 +563,7 @@ def create_tonight_recommendation(
         obstruction_revision=obstruction_revision,
     )
     if current_user.auth_mode == "local":
+        payload["field_plan"] = build_field_plan(payload, equatorial_mode_enabled=equatorial_mode_enabled)
         return payload
 
     applied = payload.get("obstruction", {})
@@ -586,4 +590,5 @@ def create_tonight_recommendation(
         weather=payload["weather"],
     )
     payload["recommendation_run_id"] = run.id
+    payload["field_plan"] = build_field_plan(payload, equatorial_mode_enabled=equatorial_mode_enabled)
     return payload
