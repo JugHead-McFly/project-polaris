@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Photo references · Polaris</title>
+<link rel="stylesheet" href="photo-reference.css"><script defer src="photo-reference.js"></script>
+</head>
+<body><main>
+<p class="eyebrow">Polaris · local prototype</p><h1>Start with the north you know.</h1>
+<p class="intro">Mark a landmark you know is toward <strong>true north</strong>. Keep level separate. These are your reference notes—not a calibrated obstruction map.</p>
+<div class="notice"><strong>Not calibrated · Not used by Tonight</strong><p>Projection, angular scale, camera tilt and unseen coverage remain unknown. One reference—even north plus level—does not determine them.</p></div>
+<p>Your image stays in this browser tab. There are no uploads or background saves. Export a reference draft to keep your notes; retain the original image separately. Reloading or closing the tab clears the working copy.</p>
+<nav aria-label="Return to Polaris"><p>Opened from Sky view or Local obstructions? Switch back to that browser tab to keep this photo draft here. <a href="/operator" target="_blank" rel="noopener">Open Polaris in another tab</a> if needed.</p></nav>
+<p>Photo reference notes and angular skyline points are separate. Use independently known direction/height measurements or an explicitly approximate angular sketch in Sky view. No photo markers, measured-elevation notes or image pixels are transferred to the grid or Tonight.</p>
+<button id="open-workspace" type="button">Open photo workspace</button>
+<p id="outside-status" role="status">No image loaded.</p>
+<dialog id="workspace" aria-labelledby="workspace-title">
+<header><div><p class="eyebrow">Original-photo reference notes</p><h2 id="workspace-title">Point out what you know</h2></div><button id="close-workspace" type="button">Close workspace</button></header>
+<p>Closing this workspace keeps the draft in this tab. It does not save it to your account.</p>
+<div class="actions"><label class="file">Choose image<input id="photo-file" type="file" accept="image/jpeg,image/png,image/webp"></label><label class="file">Import reference draft<input id="draft-file" type="file" accept="application/json,.json"></label><button id="export-draft" type="button">Export references (no image)</button><button id="clear-draft" type="button">Clear this draft</button></div>
+<p class="hint">JPEG, PNG or WebP, up to 25 MiB. For HEIC, use a locally converted JPEG and keep that exact file with the draft. No automatic EXIF or lens calibration is performed.</p>
+<p id="reference-status" role="status" aria-live="polite">Choose an image to begin.</p>
+<div class="layout"><section aria-label="Image reference workspace">
+<div class="modes" role="group" aria-label="Type of reference to mark"><button type="button" data-kind="true_north" aria-pressed="true">Mark true north (0°)</button><button type="button" data-kind="level" aria-pressed="false">Mark known level (0° elevation)</button><button type="button" data-kind="measured_elevation" aria-pressed="false">Mark measured elevation</button><button type="button" data-kind="landmark" aria-pressed="false">Mark another landmark</button></div>
+<p id="mode-help">Tap the visible landmark that you know lies toward true north. Its elevation is unknown.</p>
+<fieldset id="measurement-entry" hidden><legend>Approximate elevation reference</legend>
+<label>Elevation above level (°; −90 to 90)<input id="measured-degrees" type="number" min="-90" max="90" step="any" inputmode="decimal"></label>
+<label>Measurement source, readings and aiming notes<textarea id="measurement-provenance" maxlength="300" placeholder="Describe how you measured this point; include repeated readings if useful"></textarea></label>
+<label><input id="measurement-same-setup" type="checkbox"> Measured from the same telescope position and height as this photo.</label>
+<p class="hint">Record only the point you aimed at. Absolute sensor accuracy and aiming error remain unknown. If setup position or height is unconfirmed, this reference is conditional. This is separate from true north and does not calibrate angular scale.</p></fieldset>
+<div id="photo-stage" aria-label="Loaded photo and reference markers"><img id="reference-photo" alt="Your local reference photo" hidden draggable="false"><div id="marker-layer"></div><p id="photo-placeholder">Your image will appear here. Polaris will not guess where north is.</p></div>
+<button id="add-center" type="button" disabled>Place selected reference at image center</button>
+<p class="hint">Tap to place a point. Drag a marker to adjust it, or focus it and use arrow keys (Shift for larger moves). Center placement provides a keyboard starting point. Points do not define a horizontal or vertical calibration line.</p>
+</section><aside>
+<h3>Review your references</h3><p id="geometry-status">No references. Angular geometry is unknown.</p>
+<label>Image source (your description)<select id="source-kind"><option value="unknown">Unknown / not specified</option><option value="original_photo">Original camera photo</option><option value="panorama">Stitched panorama</option><option value="illustration">Illustration / synthetic example</option></select></label>
+<label>Setup notes<textarea id="setup-notes" maxlength="300" placeholder="For example: scope height, exact setup spot, how you identified north"></textarea></label>
+<ol id="reference-list"></ol>
+<p class="notice">Zero here means an axis reference: <strong>north = azimuth 0°</strong>; <strong>level = elevation 0°</strong>. Neither sets the other axis. Photo edges are not known directions. No 180° span or uniform degrees-per-pixel is assumed.</p>
+</aside></div>
+</dialog></main></body></html>

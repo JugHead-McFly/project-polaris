@@ -95,6 +95,7 @@
       <p class="obstruction-kicker">Optional · Draft only</p><h2>Map the sky you can see</h2>
       <p>Add measured house, tree, and roof limits from the telescope's exact setup position.</p>
       <p class="obstruction-notice">This preview does not change Tonight's plan. Export a copy to keep your draft; reloading or signing out clears it. No photos or device sensors are used.</p>
+      <p><a href="/operator-assets/photo-reference.html" target="_blank" rel="noopener">Open local photo reference workspace</a> — mark known references in a separate tab. Photo notes do not supply angular skyline points or change Tonight.</p>
       <div class="obstruction-actions"><button type="button" data-action="example">Load synthetic example</button>
         <label class="obstruction-import">Import JSON<input type="file" accept=".json,application/json" data-file></label>
         <button type="button" data-action="export">Export draft</button><button type="button" data-action="reset">Clear draft</button></div>
