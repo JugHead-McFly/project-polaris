@@ -374,7 +374,10 @@ const alignHostedNavigation = () => {
 
 const setHostedShell = (signedIn) => {
   if (!signedIn) { obstructionSpots?.reset(); hostedPlanRequest++; }
-  if (!signedIn) window.PolarisObstructionEditor?.resetAll();
+  if (!signedIn) {
+    window.PolarisObstructionEditor?.resetAll();
+    window.PolarisSkyView?.resetAll();
+  }
   byId("auth-gate").hidden = signedIn;
   byId("hosted-account-main").hidden = !signedIn;
   byId("main-content").hidden = signedIn;
@@ -2073,6 +2076,7 @@ const initializeHostedAuth = async () => {
   supabaseClient.auth.onAuthStateChange((event, session) => {
     if (hostedSession?.user?.id !== session?.user?.id) {
       window.PolarisObstructionEditor?.resetAll();
+      window.PolarisSkyView?.resetAll();
       obstructionSpots?.reset();
       hostedPlanRequest++;
     }
@@ -4937,6 +4941,7 @@ byId("hosted-ready-edit-home").addEventListener("click", () => {
 
 const bootApplication = async () => {
   window.PolarisObstructionEditor?.mountAll(document, apiFetch);
+  window.PolarisSkyView?.mountAll(document, apiFetch);
   obstructionSpots = window.PolarisObstructionSpots?.mount(document, apiFetch, () => {
     hostedPlanRequest++;
     hostedConditionAlertBaseline = null;

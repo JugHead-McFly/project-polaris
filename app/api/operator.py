@@ -30,6 +30,8 @@ ASSET_FILES = (
     WEB_DIRECTORY / "operator.js",
     WEB_DIRECTORY / "obstruction-editor.js",
     WEB_DIRECTORY / "obstruction-spots.js",
+    WEB_DIRECTORY / "sky-view.js",
+    WEB_DIRECTORY / "sky-view.css",
     WEB_DIRECTORY / "obstruction-editor.css",
     WEB_DIRECTORY / "leaflet.css",
     WEB_DIRECTORY / "leaflet.js",

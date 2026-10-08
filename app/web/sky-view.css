@@ -1,0 +1,9 @@
+.sky-view { margin:1rem 0; border:1px solid #557582; border-radius:14px; background:#0d1d2c; color:#e5f0f2; }
+.sky-view summary { cursor:pointer; padding:1rem; font-weight:700; }.sky-view summary span { font-size:.8rem; color:#b6cbd2; }
+.sky-body { padding:0 1rem 1rem; }.sky-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:.7rem; }
+.sky-view label { display:block; }.sky-view input:not([type=checkbox]),.sky-view button { min-height:44px; padding:.5rem; background:#172f41; border:1px solid #7696a5; border-radius:6px; color:inherit; font:inherit; max-width:100%; }
+.sky-fields input { width:100%; box-sizing:border-box; }.sky-actions { display:flex; gap:.5rem; flex-wrap:wrap; margin:1rem 0; }.sky-view button { cursor:pointer; }
+.sky-target-picker { max-height:180px; overflow:auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.5rem; }.sky-target-picker label { padding:.4rem; }.sky-target-picker input { width:20px; height:20px; vertical-align:middle; }
+.sky-chart { overflow-x:auto; background:#112b49; border:1px solid #6c8797; border-radius:8px; }.sky-chart svg { display:block; width:1560px; height:390px; max-width:none; }
+.sky-unknown { fill:#9cabc0; fill-opacity:.16; }.sky-silhouette { fill:#000; stroke:#d3dce3; stroke-width:1.5; }.sky-grid { stroke:#b7d1e5; stroke-opacity:.3; stroke-width:1; }.sky-tick { fill:#b9d3e2; font:11px system-ui; }.sky-cardinal { fill:#e7f4ff; font:16px system-ui; font-weight:700; }.sky-target { fill:#fff2aa; stroke:#fff; stroke-width:1; }.sky-blocked { fill:#ff9c64; }.sky-target-label { fill:#fff2aa; font:13px system-ui; }.sky-draft-line { fill:none; stroke:#ffcc66; stroke-width:2; stroke-dasharray:5 4; }.sky-draft-point { fill:#ffcc66; }
+.sky-legend { color:#c6d5dd; font-size:.9rem; }.sky-view :focus-visible { outline:3px solid #99e8d5; outline-offset:2px; }

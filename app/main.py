@@ -26,6 +26,7 @@ from app.api.objects import router as objects_router
 from app.api.operator import router as operator_router
 from app.api.obstructions import router as obstruction_router
 from app.api.obstruction_spots import router as obstruction_spots_router
+from app.api.sky_view import router as sky_view_router
 from app.api.portfolio import router as portfolio_router
 from app.api.recommendations import router as recommendations_router
 from app.api.rig_profiles import router as rig_profiles_router
@@ -217,6 +218,7 @@ app.include_router(
 app.include_router(operator_router)
 app.include_router(obstruction_router, dependencies=protected_api_dependencies)
 app.include_router(obstruction_spots_router, dependencies=protected_api_dependencies)
+app.include_router(sky_view_router, dependencies=protected_api_dependencies)
 app.include_router(
     portfolio_router,
     dependencies=protected_api_dependencies,
