@@ -42,6 +42,7 @@ def import_manifest(db, user_id, manifest):
 
 
 def library_summary(db, user_id):
+    from app.services.legacy_capture_service import legacy_summary
     rows = db.scalars(select(HostedCaptureSession).where(HostedCaptureSession.user_id == user_id)).all()
     totals = {}
     for row in rows:
@@ -60,7 +61,7 @@ def library_summary(db, user_id):
                         "progress_percent": progress["progress_percent"]})
     return {"basis": "Verified raw exposures; excludes failed frames, calibration and duplicate stacks. Quality has not been graded.",
             "session_count": len(rows), "last_synced_at": credential.last_synced_at if credential else None,
-            "targets": targets}
+            "targets": targets, "legacy": legacy_summary(db, user_id)}
 
 
 def progress_map(summary):

@@ -4,6 +4,27 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
+test('older records stay collapsed and separate from verified hours', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
+  const code = source.slice(source.indexOf('const renderLibraryHistory ='), source.indexOf('const renderHostedTonight ='));
+  const labels = {}, children = [];
+  const container = {replaceChildren: () => children.length = 0, appendChild: el => children.push(el)};
+  const context = {setText: (id,value) => labels[id] = value, byId: () => container,
+    document: {createElement: tag => ({tag, open: false, children: []})},
+    appendTextElement: (parent,tag,_class,text) => (parent === container ? children : parent.children).push({tag,text})};
+  const render = vm.runInNewContext(code + '\nrenderLibraryHistory;',context);
+  render({session_count:3, targets:[{object:'M31',hours:9.67,goal_hours:8,remaining_hours:0}],
+    legacy:{record_count:20,basis:'Older stacks; no verified credit.',targets:[{object:'M31',record_count:1}]}});
+  assert.equal(labels['hosted-library-summary'],'3 sessions');
+  assert.match(children[0].text,/9.67 h recorded/);
+  assert.equal(children[1].tag,'details');
+  assert.equal(children[1].open,false);
+  assert.equal(children[1].children[0].text,'20 older capture records');
+  assert.equal(children[1].children[2].text,'M31: 1 older record');
+  render(null);
+  assert.equal(children.length,0);
+});
+
 test('target card distinguishes unassessed quality and synced sessions from zero', () => {
   const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
   const code = source.slice(source.indexOf('const renderTargetProjectContext ='), source.indexOf('const renderLibraryHistory ='));

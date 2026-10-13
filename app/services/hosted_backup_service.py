@@ -1,12 +1,13 @@
 import hashlib
 import json
-from datetime import datetime
+from datetime import date, datetime
 from datetime import timezone
 from typing import Dict
 from typing import List
 from uuid import UUID
 
 from sqlalchemy import DateTime
+from sqlalchemy import Date
 from sqlalchemy import Uuid
 from sqlalchemy.orm import Session
 
@@ -14,16 +15,27 @@ from app.models import HostedObservatory
 from app.models import Profile
 from app.models import RecommendationFeedback
 from app.models import RecommendationRun
+from app.models import HostedCaptureSession, LegacyCapture, ForecastAccuracySnapshot, NightlyForecast
 
 
 BACKUP_FORMAT = "polaris-hosted-tenant"
-BACKUP_FORMAT_VERSION = 1
-BACKUP_MODELS = (
+BACKUP_FORMAT_VERSION = 2
+V1_BACKUP_MODELS = (
     ("profiles", Profile),
     ("observatories", HostedObservatory),
     ("recommendation_runs", RecommendationRun),
     ("recommendation_feedback", RecommendationFeedback),
 )
+BACKUP_MODELS = V1_BACKUP_MODELS + (
+    ("forecast_accuracy_snapshots", ForecastAccuracySnapshot),
+    ("nightly_forecasts", NightlyForecast),
+    ("capture_history", HostedCaptureSession),
+    ("legacy_capture_history", LegacyCapture),
+)
+
+
+def _models(version):
+    return V1_BACKUP_MODELS if version == 1 else BACKUP_MODELS
 
 
 class HostedBackupError(RuntimeError):
@@ -33,7 +45,7 @@ class HostedBackupError(RuntimeError):
 def _serialize(value):
     if isinstance(value, UUID):
         return str(value)
-    if isinstance(value, datetime):
+    if isinstance(value, (date, datetime)):
         return value.isoformat()
     return value
 
@@ -69,7 +81,7 @@ def export_hosted_tenant(
     user_id: UUID,
     exported_at: datetime = None,
 ) -> Dict:
-    """Create a complete, tenant-scoped hosted-data export document."""
+    """Export tenant application data; excludes auth users and sync credentials."""
     tables = {}
     for table_name, model in BACKUP_MODELS:
         rows = (
@@ -96,11 +108,11 @@ def export_hosted_tenant(
 def verify_hosted_tenant_export(document: Dict) -> Dict:
     """Validate ownership, relationships, and checksum without restoring."""
     errors: List[str] = []
-    expected_tables = {name for name, _ in BACKUP_MODELS}
+    expected_tables = {name for name, _ in _models(document.get("format_version"))}
 
     if document.get("format") != BACKUP_FORMAT:
         errors.append("Backup format is not recognized.")
-    if document.get("format_version") != BACKUP_FORMAT_VERSION:
+    if document.get("format_version") not in (1, BACKUP_FORMAT_VERSION):
         errors.append("Backup format version is not supported.")
 
     try:
@@ -153,13 +165,15 @@ def verify_hosted_tenant_export(document: Dict) -> Dict:
         for record in tables.get("recommendation_runs", [])
         if isinstance(record, dict)
     }
-    for record in tables.get("recommendation_runs", []):
+    for record in (tables.get("recommendation_runs", [])
+                   + tables.get("forecast_accuracy_snapshots", [])
+                   + tables.get("nightly_forecasts", [])):
         if (
             isinstance(record, dict)
             and record.get("observatory_id") not in observatory_ids
         ):
             errors.append(
-                "A recommendation run references a missing observatory."
+                "A hosted record references a missing observatory."
             )
     for record in tables.get("recommendation_feedback", []):
         if not isinstance(record, dict):
@@ -196,6 +210,8 @@ def _deserialize_record(model, record: Dict) -> Dict:
             value = UUID(value)
         elif value is not None and isinstance(column.type, DateTime):
             value = datetime.fromisoformat(value)
+        elif value is not None and isinstance(column.type, Date):
+            value = date.fromisoformat(value)
         values[column.name] = value
     return values
 
@@ -223,7 +239,7 @@ def restore_hosted_tenant(
         )
 
     try:
-        for table_name, model in BACKUP_MODELS:
+        for table_name, model in _models(document["format_version"]):
             for record in document["tables"][table_name]:
                 values = _deserialize_record(model, record)
                 if "user_id" in values:

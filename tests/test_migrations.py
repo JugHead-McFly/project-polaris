@@ -78,6 +78,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
         "capture_analyses",
         "captures",
         "capture_history",
+        "legacy_capture_history",
         "library_sync_credentials",
         "nightly_forecasts",
         "observatories",
@@ -100,7 +101,7 @@ def test_migrations_build_clean_database(tmp_path: Path):
     }
     assert "satellite_cloud_observation" in forecast_columns
     assert forecast_columns["satellite_cloud_observation"]["nullable"]
-    assert revision == "20261006_0011"
+    assert revision == "20261013_0012"
 
 
 def test_forecast_horizon_migration_backfills_existing_snapshot(tmp_path: Path):

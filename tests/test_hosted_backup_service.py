@@ -103,6 +103,10 @@ def test_export_is_tenant_scoped_and_restores_to_empty_database():
             "observatories": 1,
             "recommendation_runs": 1,
             "recommendation_feedback": 1,
+            "forecast_accuracy_snapshots": 0,
+            "nightly_forecasts": 0,
+            "capture_history": 0,
+            "legacy_capture_history": 0,
         }
         assert document["tables"]["profiles"][0]["user_id"] == str(
             ALICE_ID

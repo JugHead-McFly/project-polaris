@@ -1665,6 +1665,15 @@ const renderLibraryHistory = (history) => {
   for (const target of history?.targets || []) {
     appendTextElement(container, "p", "", `${target.object}: ${target.hours} h recorded / ${target.goal_hours} h goal; ${target.remaining_hours ? `${target.remaining_hours} h remaining` : "goal reached"}`);
   }
+  if (history?.legacy?.record_count) {
+    const legacy = document.createElement("details");
+    appendTextElement(legacy, "summary", "", `${history.legacy.record_count} older capture records`);
+    appendTextElement(legacy, "p", "", history.legacy.basis);
+    for (const target of history.legacy.targets || []) {
+      appendTextElement(legacy, "p", "", `${target.object}: ${target.record_count} older record${target.record_count === 1 ? "" : "s"}`);
+    }
+    container.appendChild(legacy);
+  }
 };
 
 const renderHostedTonight = (data) => {
