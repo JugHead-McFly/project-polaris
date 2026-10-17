@@ -38,9 +38,9 @@ from app.core.planner_config import (
 )
 
 
-MINIMUM_ALTITUDE_DEGREES = 20.0
+MINIMUM_ALTITUDE_DEGREES = 35.0
 SAMPLE_INTERVAL_MINUTES = 15
-MINIMUM_USABLE_DARK_MINUTES = 45
+MINIMUM_USABLE_DARK_MINUTES = 30
 
 
 def _context_equipment_label(context: ObservatoryContext) -> str:
@@ -224,7 +224,33 @@ def get_dark_visibility(
             "target_geometry": target_geometry,
         }
 
-    longest_run = find_longest_usable_run(usable_samples)
+    # Refine only threshold crossings to one-minute sampling. This preserves
+    # efficient coarse sky curves without ending a run fifteen minutes early.
+    refinements = []
+    for (left, low), (right, high) in zip(altitude_samples, altitude_samples[1:]):
+        if (low >= MINIMUM_ALTITUDE_DEGREES) == (high >= MINIMUM_ALTITUDE_DEGREES):
+            continue
+        at = left.astimezone(timezone.utc) + timedelta(minutes=1)
+        while at < right.astimezone(timezone.utc):
+            refinements.append(at.astimezone(dark_start.tzinfo))
+            at += timedelta(minutes=1)
+    if refinements:
+        refined_altitudes = get_altitudes_at(target_name=object_name,
+            observation_datetimes=refinements, observatory=observatory)
+        altitude_samples.extend(zip(refinements, refined_altitudes))
+        altitude_samples.sort(key=lambda sample: sample[0].astimezone(timezone.utc))
+    runs = []
+    current_run = []
+    for sample in altitude_samples:
+        if sample[1] is not None and math.isfinite(sample[1]) and sample[1] >= MINIMUM_ALTITUDE_DEGREES:
+            current_run.append(sample)
+        elif current_run:
+            runs.append(current_run)
+            current_run = []
+    if current_run:
+        runs.append(current_run)
+    longest_run = max(runs, key=lambda run: (run[-1][0].astimezone(timezone.utc)
+                      - run[0][0].astimezone(timezone.utc)).total_seconds(), default=[])
 
     if not longest_run:
         return {
@@ -245,11 +271,6 @@ def get_dark_visibility(
     # Stop at the last verified clear sample, not the next (possibly below-floor)
     # sample. Preserve every disjoint clear interval for the scheduler.
     recommended_end = longest_run[-1][0]
-    runs = []
-    for sample in usable_samples:
-        if not runs or sample[0].astimezone(timezone.utc) - runs[-1][-1][0].astimezone(timezone.utc) > timedelta(minutes=SAMPLE_INTERVAL_MINUTES + 1):
-            runs.append([])
-        runs[-1].append(sample)
     usable_minutes = int(
         (recommended_end.astimezone(timezone.utc) - recommended_start.astimezone(timezone.utc)).total_seconds() / 60
     )
@@ -459,7 +480,8 @@ def build_target_plan(
 
     observable = (
         visibility["known_position"]
-        and usable_dark_minutes >= MINIMUM_USABLE_DARK_MINUTES
+        and (usable_dark_minutes >= MINIMUM_USABLE_DARK_MINUTES
+             or 0 < advisor["remaining_seconds"] <= max(usable_dark_minutes - 5, 0) * 60)
     )
 
     confidence_score = (

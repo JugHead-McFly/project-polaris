@@ -5328,8 +5328,8 @@ footer {
 #hosted-tonight-panel .hosted-setup-cautions { margin: 0; padding: 0; border: 0; }
 #hosted-tonight-panel .hosted-plan-notes { margin: 6px 0 0; font-size: 13px; }
 #hosted-tonight-panel .hosted-schedule-panel { padding: 18px 20px; }
-#hosted-tonight-panel .hosted-schedule-list { gap: 0; }
-#hosted-tonight-panel .hosted-schedule-block { grid-template-columns: 190px minmax(0, 1fr); gap: 20px; padding: 16px 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: none; }
+#hosted-tonight-panel .hosted-schedule-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+#hosted-tonight-panel .hosted-schedule-block { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 16px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(135deg, #102531, #091723); scroll-margin-top: 16px; }
 #hosted-tonight-panel .hosted-schedule-time strong { font-size: 15px; white-space: nowrap; }
 #hosted-tonight-panel .hosted-schedule-time span { font-size: 12px; color: var(--muted); }
 #hosted-tonight-panel .hosted-schedule-identity { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
@@ -5339,7 +5339,30 @@ footer {
 .schedule-action { margin: 5px 0; font-size: 12px; color: var(--muted); }
 .schedule-details summary { padding: 7px 0 0; font-size: 12px; }
 .schedule-details p { font-size: 13px; color: var(--muted); }
-.schedule-pause { margin: 0; padding: 12px 0; border-top: 1px dashed var(--line); color: var(--muted); font-size: 13px; }
+.schedule-pause { grid-column: 1 / -1; margin: 0; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
+.schedule-pause summary { cursor: pointer; }
+.schedule-pause p { margin: 8px 0 0; }
+.schedule-policy { font-size: 12px; color: var(--muted); margin: 8px 0 12px; }
+.night-axis-labels { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 11px; margin-bottom: 6px; }
+.night-axis-track { position: relative; height: 34px; background: repeating-linear-gradient(135deg,#13212a 0 6px,#0a1720 6px 12px); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.night-axis-segment { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; white-space: nowrap; color: var(--text); background: #23534f; border-right: 2px solid var(--bg); font-size: 11px; text-decoration: none; }
+.night-axis-segment:nth-child(even) { background: #294758; }
+.night-axis-segment.is-mosaic { background: #544529; }
+.night-axis-segment:focus-visible { outline: 2px solid white; outline-offset: -3px; }
+.schedule-card-visual { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+.schedule-card-art { width: 90px; height: 74px; flex: 0 0 90px; overflow: hidden; border-radius: 8px; }
+.schedule-card-art svg,.schedule-card-art img { width: 100%; height: 100%; object-fit: contain; }
+.schedule-mini-sky { flex: 1; min-width: 0; margin: 0; }
+.schedule-mini-sky svg { width: 100%; max-height: 92px; display: block; }
+#hosted-tonight-panel .hosted-schedule-time { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+#hosted-tonight-panel .hosted-schedule-settings { padding: 7px 9px; background: rgba(91,221,205,.06); border-radius: 6px; }
+#hosted-tonight-panel .hosted-command-board { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(240px,1fr); align-items: start; padding: 16px 20px; gap: 8px 24px; }
+#hosted-tonight-panel .hosted-setup-cautions { grid-column: 1 / -1; }
+#hosted-tonight-panel .hosted-setup-cautions .eyebrow { display: none; }
+.observing-weather-strip { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); margin: 0; gap: 10px; }
+.observing-weather-strip div { padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(0,0,0,.13); }
+.observing-weather-strip dt { color: var(--muted); font-size: 11px; }
+.observing-weather-strip dd { margin: 2px 0 0; font-size: 18px; font-weight: 600; }
 .mosaic-label { color: var(--amber); font-size: 13px; }
 .site-header .header-actions, .site-header .account-control, .site-header .header-session-actions, .site-header .header-identity-row { min-width: 0; }
 .site-header .header-session-actions { flex-wrap: wrap; }
@@ -5361,6 +5384,13 @@ footer {
   .site-header .account-email { max-width: 100%; white-space: normal; overflow: visible; }
   .site-header .header-primary-actions { display: flex; flex-wrap: wrap; justify-content: flex-start; }
   #hosted-tonight-panel .hosted-schedule-block { grid-template-columns: 1fr; gap: 8px; }
+  #hosted-tonight-panel .hosted-schedule-list { grid-template-columns: minmax(0,1fr); }
+  #hosted-tonight-panel .hosted-command-board { grid-template-columns: minmax(0,1fr); padding: 14px; }
+  #hosted-tonight-panel .hosted-schedule-panel { padding: 14px; }
+  .observing-weather-strip { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 5px; }
+  .observing-weather-strip div { padding: 6px; }
+  .observing-weather-strip dt { font-size: 10px; }
+  .observing-weather-strip dd { font-size: 14px; }
   #hosted-tonight-panel .hosted-schedule-time { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
   .compact-target-details { grid-template-columns: 1fr; }
   #hosted-tonight-panel .hosted-target-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -383,6 +383,7 @@ const resetHostedPlanDetails = () => {
   setHardStopDetailsVisibility("Conditions Unknown");
   renderForecastAccuracyHistory(null);
   const notes = byId("hosted-plan-notes");
+  byId("hosted-weather-strip").replaceChildren();
   notes.replaceChildren();
   notes.hidden = true;
   byId("hosted-cautions-empty").hidden = false;
@@ -948,11 +949,63 @@ const renderOpportunityScore = (scoreBreakdown) => {
   return opportunityScore;
 };
 
+// One common darkness axis; cards below retain chronological DOM order.
+const renderNightAxis = (schedule) => {
+  const host = byId("night-plan-axis");
+  host.replaceChildren();
+  const blocks = schedule?.blocks || [];
+  const darkness = schedule?.darkness || {};
+  const start = Date.parse(darkness.astronomical_darkness_start_at);
+  const end = Date.parse(darkness.astronomical_darkness_end_at);
+  host.hidden = !blocks.length || !Number.isFinite(start) || !Number.isFinite(end) || end <= start;
+  if (host.hidden) return;
+  const labels = appendTextElement(host, "div", "night-axis-labels", "");
+  appendTextElement(labels, "span", "", shortTime(darkness.astronomical_darkness_start || blocks[0].start));
+  appendTextElement(labels, "span", "", "Astronomical darkness");
+  appendTextElement(labels, "span", "", shortTime(darkness.astronomical_darkness_end || blocks.at(-1).end));
+  const track = appendTextElement(host, "div", "night-axis-track", "");
+  blocks.forEach((block, index) => {
+    const a = Date.parse(block.start_at), b = Date.parse(block.end_at);
+    if (!Number.isFinite(a) || !Number.isFinite(b) || b <= a) return;
+    const part = appendTextElement(track, "a", "night-axis-segment", block.object);
+    part.href = `#scheduled-target-${index}`;
+    part.style.left = `${Math.max(0, (a-start)/(end-start)*100)}%`;
+    part.style.width = `${Math.max(0, (Math.min(b,end)-Math.max(a,start))/(end-start)*100)}%`;
+    part.classList.toggle("is-mosaic", Boolean(block.mosaic_required));
+    part.title = `${block.object}: ${shortTime(block.start)} – ${shortTime(block.end)}${block.mosaic_required ? " · manual mosaic opportunity" : ""}`;
+    part.setAttribute("aria-label", part.title);
+  });
+};
+
+const appendScheduleSky = (parent, block) => {
+  const samples = (block.target_geometry?.samples || []).filter(sample =>
+    sample.altitude_degrees != null && Number.isFinite(Number(sample.altitude_degrees)) && Number.isFinite(Date.parse(sample.at)));
+  if (samples.length < 2) return;
+  const first = Date.parse(samples[0].at), last = Date.parse(samples.at(-1).at);
+  if (last <= first) return;
+  const figure = appendTextElement(parent, "figure", "schedule-mini-sky", "");
+  const x = at => 8 + (Date.parse(at)-first)/(last-first)*204;
+  const y = altitude => 65 - Math.max(0, Math.min(90, Number(altitude))) / 90*58;
+  const svg = svgElement("svg", {viewBox:"0 0 220 84", role:"img", "aria-label":`${block.object} altitude during this night; dashed line marks 35 degrees; shading marks the scheduled interval`});
+  const a = Math.max(first, Date.parse(block.start_at)), b = Math.min(last, Date.parse(block.end_at));
+  if (b>a) svg.append(svgElement("rect", {x:x(new Date(a).toISOString()), y:3, width:(b-a)/(last-first)*204, height:64, fill:"rgba(91,221,205,.12)"}));
+  svg.append(svgElement("line", {x1:8,x2:212,y1:y(35),y2:y(35),stroke:"#f3c66f","stroke-dasharray":"3 3"}));
+  svg.append(svgElement("polyline", {points:samples.map(sample=>`${x(sample.at)},${y(sample.altitude_degrees)}`).join(" "),fill:"none",stroke:"#5bddcd","stroke-width":2}));
+  const label = svgElement("text", {x:8,y:81,fill:"#9bafb4","font-size":10});
+  label.textContent = "Night path · 35° floor";
+  svg.append(label); figure.append(svg);
+};
+
 const renderHostedSchedule = (schedule) => {
   const container = byId("hosted-schedule-list");
   const timeline = byId("hosted-schedule-panel");
   const blocks = schedule?.blocks || [];
   container.replaceChildren();
+  renderNightAxis(schedule);
+  const distinctCount = new Set(blocks.map(block => block.object)).size;
+  setText("schedule-policy", distinctCount > 4
+    ? `${distinctCount} targets selected to use available windows; 3–4 is a preference, not a cutoff.`
+    : "Best target first · Stay until goal, 35° limit or dawn");
   timeline.hidden = schedule?.decision === "Do Not Image" && blocks.length === 0;
   timeline.open = blocks.length > 0;
   setText(
@@ -961,7 +1014,7 @@ const renderHostedSchedule = (schedule) => {
   );
   setText(
     "hosted-schedule-count",
-    `${blocks.length} block${blocks.length === 1 ? "" : "s"}`,
+    `${distinctCount} target${distinctCount === 1 ? "" : "s"}`,
   );
 
   if (!blocks.length) {
@@ -979,8 +1032,12 @@ const renderHostedSchedule = (schedule) => {
     return;
   }
 
-  const appendPause = (start, end) => appendTextElement(container, "p", "schedule-pause",
-    `${shortTime(start)} – ${shortTime(end)} · No capture scheduled`);
+  const appendPause = (start, end) => {
+    const pause = appendTextElement(container, "details", "schedule-pause", "");
+    appendTextElement(pause, "summary", "", `${shortTime(start)} - ${shortTime(end)} · No capture scheduled`);
+    const gap = (schedule.gaps || []).find(item => item.start === start && item.end === end);
+    appendTextElement(pause, "p", "", gap?.reason || "No suitable unfinished target fits this interval under the visibility and integration-goal constraints.");
+  };
   (schedule.gaps || []).filter(gap => gap.minutes >= 1 && gap.end === blocks[0].start)
     .forEach(gap => appendPause(gap.start, gap.end));
   blocks.forEach((block, index) => {
@@ -991,11 +1048,17 @@ const renderHostedSchedule = (schedule) => {
       appendPause(previous.end, block.start);
     }
     const card = appendTextElement(container, "article", "hosted-schedule-block", "");
+    card.id = `scheduled-target-${index}`;
     const time = appendTextElement(card, "div", "hosted-schedule-time", "");
     appendTextElement(time, "strong", "", `${shortTime(block.start)} – ${shortTime(block.end)}`);
     appendTextElement(time, "span", "", durationLabel(block.duration_minutes));
     time.title = `${block.start} – ${block.end}`;
     const body = appendTextElement(card, "div", "hosted-schedule-body", "");
+    const visual = appendTextElement(body, "div", "schedule-card-visual", "");
+    const art = appendTextElement(visual, "div", "schedule-card-art", "");
+    art.id = `scheduled-art-${index}`;
+    renderTargetIllustration(art.id, block, true);
+    appendScheduleSky(visual, block);
     const identity = appendTextElement(body, "div", "hosted-schedule-identity", "");
     const runLabel = block.total_runs > 1 ? ` · Run ${block.run_number}/${block.total_runs}` : "";
     appendTextElement(identity, "strong", "", `${block.object || "Unknown target"}${runLabel}`);
@@ -1423,7 +1486,7 @@ const renderHostedTonight = (data) => {
   byId("hosted-recommendation").className = `hosted-recommendation ${statusClass}`;
   setText("hosted-tonight-observatory", data.observatory?.name, "your observatory");
   setText("observatory-name", data.observatory?.name, "Your observatory");
-  setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
+  setText("hosted-tonight-date", [`Plan for ${displayDate(data.date)}`, data.observatory?.rig_profile_label, data.observatory?.timezone].filter(Boolean).join(" · "));
   setText("hosted-decision", displayedDecisionLabel(decision));
   setText("hosted-decision-message", compactConditionMessage(data));
   setText("hosted-decision-detail", displayedDecisionMessage(decision, data.message));
@@ -1489,6 +1552,19 @@ const renderHostedTonight = (data) => {
 
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
+  const weatherStrip = byId("hosted-weather-strip");
+  weatherStrip.replaceChildren();
+  const weatherCells = [
+    ["Cloud at start", displayNumber(weather.planned_cloud_cover_percent ?? weather.cloud_cover_percent, "%")],
+    ["Temperature", displayNumber(weather.planned_temperature_f ?? weather.temperature_f, "°F")],
+    ["Wind", displayNumber(weather.planned_wind_speed_mph ?? weather.wind_speed_mph, " mph")],
+    ["Moon lit", displayNumber(data.moon?.illumination_percent, "%")],
+  ];
+  weatherCells.forEach(([label, value]) => {
+    const cell = appendTextElement(weatherStrip, "div", "", "");
+    appendTextElement(cell, "dt", "", label);
+    appendTextElement(cell, "dd", "", value);
+  });
   const plannerNotes = (schedule.notes || []).filter(note => note && !/unallocated|remain unallocated/i.test(note));
   const visibleNotes = [];
   if (["watch", "high"].includes(data.dew_risk?.level)) visibleNotes.push(`Dew: ${data.dew_risk.action || "Use dew control and check the lens."}`);
