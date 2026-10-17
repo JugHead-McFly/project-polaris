@@ -85,6 +85,8 @@ def test_full_night_collection_resumes_is_owned_and_records_distinct_horizons():
     result = run(db, home, END+timedelta(hours=1), satellite_fetch=satellite)
     assert result["satellite_samples"] == 24
     assert result["completed_nights"] == 1
+    assert result["processed_nights"] == 1
+    assert result["inadequate_nights"] == 0
     assert run(db, home, END+timedelta(hours=2), satellite_fetch=lambda *a: pytest.fail("repeat download"))["satellite_samples"] == 0
     summary = nightly_summary(db, user_id=home.user_id, observatory_id=home.id)
     afternoon, dusk = summary["horizons"]
@@ -93,6 +95,25 @@ def test_full_night_collection_resumes_is_owned_and_records_distinct_horizons():
     assert dusk["missed_clear"] == 0
     assert not afternoon["review_ready"]
     assert nightly_summary(db, user_id=uuid4(), observatory_id=home.id)["completed_nights"] == 0
+
+
+def test_exhausted_satellite_retries_are_processed_not_usable_completed_nights():
+    db, home = setup()
+    run(db, home, START-timedelta(hours=6, minutes=5))
+    run(db, home, START-timedelta(minutes=5))
+    def unavailable(*args):
+        raise ValueError("Synthetic missing satellite data")
+    for attempt in range(3):
+        report = run(db, home, END+timedelta(hours=1, minutes=attempt*5), satellite_fetch=unavailable)
+        assert report["satellite_failed_attempts"] == 24
+        assert report["completed_nights"] == 0
+    assert report["processed_nights"] == 1
+    assert report["inadequate_nights"] == 1
+    summary = nightly_summary(db, user_id=home.user_id, observatory_id=home.id)
+    assert summary["completed_nights"] == 0
+    assert all(item["count"] == 0 and not item["review_ready"] for item in summary["horizons"])
+    report = run(db, home, END+timedelta(hours=2), satellite_fetch=lambda *args: pytest.fail("retry budget exhausted"))
+    assert report["satellite_failed_attempts"] == report["processed_nights"] == 0
 
 
 def test_missing_duplicate_and_low_quality_samples_do_not_inflate_coverage():

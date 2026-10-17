@@ -5,18 +5,11 @@ const byId = (id) => document.getElementById(id);
 const authConfig = window.POLARIS_AUTH_CONFIG || { mode: "local" };
 const usesHostedAuth = authConfig.mode === "supabase";
 const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";
-const CONDITION_ALERT_PREFERENCE_KEY = "polaris.conditionAlertsEnabled";
-const CONDITION_ALERT_HISTORY_KEY = "polaris.conditionAlertHistory";
-const CONDITION_ALERT_POLL_INTERVAL_MS = 15 * 60 * 1000;
-const CONDITION_ALERT_COOLDOWN_MS = 2 * 60 * 60 * 1000;
 let supabaseClient = null;
 let hostedSession = null;
 let hostedObservatory = null;
 let hostedProfile = null;
 let hostedRecommendationRunId = null;
-let hostedConditionAlertsEnabled = false;
-let hostedConditionAlertBaseline = null;
-let hostedConditionAlertTimer = null;
 let latestHostedTonightData = null;
 let hostedSecondaryDetailsExpanded = false;
 let rigProfiles = [];
@@ -44,255 +37,6 @@ const saveEqModePreference = (enabled) => {
   } catch {
     // The dashboard still works when browser storage is unavailable.
   }
-};
-
-const readConditionAlertPreference = () => {
-  try {
-    return window.localStorage.getItem(CONDITION_ALERT_PREFERENCE_KEY) === "true";
-  } catch {
-    return false;
-  }
-};
-
-const saveConditionAlertPreference = (enabled) => {
-  try {
-    window.localStorage.setItem(CONDITION_ALERT_PREFERENCE_KEY, String(enabled));
-  } catch {
-    // Alerts still work for this page session when browser storage is unavailable.
-  }
-};
-
-const readConditionAlertHistory = () => {
-  try {
-    return JSON.parse(window.localStorage.getItem(CONDITION_ALERT_HISTORY_KEY) || "null");
-  } catch {
-    return null;
-  }
-};
-
-const saveConditionAlertHistory = (history) => {
-  try {
-    window.localStorage.setItem(CONDITION_ALERT_HISTORY_KEY, JSON.stringify(history));
-  } catch {
-    // A page-session cooldown still applies through the current baseline.
-  }
-};
-
-const conditionAlertState = (data) => {
-  const decision = data?.schedule?.decision || "Conditions Unknown";
-  const rawScore = data?.opportunity_score?.score;
-  const score = rawScore === null || rawScore === undefined
-    ? null
-    : Number(rawScore);
-  const target = data?.recommended_target || null;
-  const start = target?.recommended_start || null;
-  const end = target?.recommended_end || null;
-  return {
-    date: data?.date || null,
-    decision,
-    score: score !== null && Number.isFinite(score) ? score : null,
-    target: target?.object || null,
-    targetName: target?.common_name || null,
-    start,
-    end,
-    hasUsablePlan: Boolean(target?.object && start && end && decision !== "Do Not Image"),
-  };
-};
-
-const conditionAlertTrigger = (previous, current) => {
-  if (!previous || !current || previous.date !== current.date || !current.hasUsablePlan) {
-    return null;
-  }
-  if (current.score === null) return null;
-
-  if (
-    previous.decision === "Do Not Image"
-    && ["Use Caution", "Proceed"].includes(current.decision)
-    && current.score >= 55
-  ) {
-    return "Tonight now has a usable target and imaging window.";
-  }
-  if (
-    previous.decision === "Use Caution"
-    && current.decision === "Proceed"
-    && current.score >= 65
-  ) {
-    return "Tonight moved from caution to proceed.";
-  }
-  if (
-    previous.score !== null
-    && previous.score < 65
-    && current.score >= 65
-    && current.score - previous.score >= 15
-  ) {
-    return "Tonight's opportunity score improved meaningfully.";
-  }
-  return null;
-};
-
-const conditionAlertSignature = (state) => [
-  state.date,
-  state.decision,
-  state.target,
-  Math.floor((state.score || 0) / 5) * 5,
-  state.start,
-  state.end,
-].join("|");
-
-const conditionAlertWasRecentlySent = (state, now = Date.now()) => {
-  const history = readConditionAlertHistory();
-  if (!history) return false;
-  const sameSignature = history.signature === conditionAlertSignature(state);
-  const withinCooldown = Number.isFinite(Number(history.sentAt))
-    && now - Number(history.sentAt) < CONDITION_ALERT_COOLDOWN_MS;
-  return sameSignature || withinCooldown;
-};
-
-const setConditionAlertStatus = (message, state = "off") => {
-  const panel = byId("hosted-condition-alerts");
-  panel.classList.toggle("has-alert", state === "alert");
-  panel.classList.toggle("is-blocked", state === "blocked");
-  setText("hosted-condition-alerts-status", message);
-};
-
-const stopConditionAlertMonitoring = () => {
-  if (hostedConditionAlertTimer !== null) {
-    window.clearInterval(hostedConditionAlertTimer);
-    hostedConditionAlertTimer = null;
-  }
-};
-
-const conditionAlertMessage = (state) => {
-  const target = state.targetName
-    ? `${state.target} (${state.targetName})`
-    : state.target;
-  return `Conditions improved: Polaris now rates tonight as ${state.decision} with ${target}. Refresh the plan for the latest details.`;
-};
-
-const deliverConditionAlert = (state) => {
-  const message = conditionAlertMessage(state);
-  setConditionAlertStatus(message, "alert");
-  saveConditionAlertHistory({
-    signature: conditionAlertSignature(state),
-    sentAt: Date.now(),
-  });
-
-  if (window.Notification?.permission === "granted") {
-    try {
-      const notification = new window.Notification("Polaris: tonight improved", {
-        body: message,
-        tag: `polaris-conditions-${state.date}`,
-        renotify: false,
-      });
-      notification.onclick = () => {
-        window.focus();
-        byId("hosted-refresh-button").focus();
-        notification.close();
-      };
-    } catch {
-      // The in-app alert remains visible if the browser suppresses a notification.
-    }
-  }
-};
-
-const checkConditionAlerts = async () => {
-  if (!hostedConditionAlertsEnabled || !hostedSession || !hostedObservatory) return;
-  try {
-    const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
-    const response = await apiFetch(
-      `/tonight?equatorial_mode_enabled=${eqEnabled}`,
-      { cache: "no-store" },
-    );
-    if (!response.ok) return;
-    const current = conditionAlertState(await response.json());
-    const trigger = conditionAlertTrigger(hostedConditionAlertBaseline, current);
-    if (trigger && !conditionAlertWasRecentlySent(current)) {
-      deliverConditionAlert(current);
-    }
-    hostedConditionAlertBaseline = current;
-  } catch {
-    // A failed background check should not replace or disrupt the visible plan.
-  }
-};
-
-const startConditionAlertMonitoring = () => {
-  stopConditionAlertMonitoring();
-  hostedConditionAlertBaseline = latestHostedTonightData
-    ? conditionAlertState(latestHostedTonightData)
-    : null;
-  hostedConditionAlertTimer = window.setInterval(
-    checkConditionAlerts,
-    CONDITION_ALERT_POLL_INTERVAL_MS,
-  );
-};
-
-const updateConditionAlertControls = () => {
-  const button = byId("hosted-condition-alerts-button");
-  const supported = "Notification" in window;
-  const permission = supported ? window.Notification.permission : "unsupported";
-  button.disabled = !supported || permission === "denied";
-  button.classList.toggle("is-on", hostedConditionAlertsEnabled);
-  button.setAttribute("aria-checked", String(hostedConditionAlertsEnabled));
-  setText(
-    "hosted-condition-alerts-state",
-    hostedConditionAlertsEnabled ? "On" : "Off",
-  );
-
-  if (!supported) {
-    setConditionAlertStatus("Browser alerts are not supported here.", "blocked");
-  } else if (permission === "denied") {
-    setConditionAlertStatus("Alerts are blocked in this browser's site settings.", "blocked");
-  } else if (hostedConditionAlertsEnabled) {
-    setConditionAlertStatus(
-      "On. Polaris will check every 15 minutes while this page remains open.",
-      "on",
-    );
-  } else {
-    setConditionAlertStatus("Off. Alerts work only while this page remains open.", "off");
-  }
-};
-
-const disableConditionAlerts = () => {
-  hostedConditionAlertsEnabled = false;
-  saveConditionAlertPreference(false);
-  stopConditionAlertMonitoring();
-  updateConditionAlertControls();
-};
-
-const toggleConditionAlerts = async () => {
-  if (hostedConditionAlertsEnabled) {
-    disableConditionAlerts();
-    return;
-  }
-  if (!("Notification" in window) || window.Notification.permission === "denied") {
-    updateConditionAlertControls();
-    return;
-  }
-
-  setConditionAlertStatus("Waiting for browser permission…", "off");
-  const permission = window.Notification.permission === "granted"
-    ? "granted"
-    : await window.Notification.requestPermission();
-  if (permission !== "granted") {
-    disableConditionAlerts();
-    return;
-  }
-
-  hostedConditionAlertsEnabled = true;
-  saveConditionAlertPreference(true);
-  startConditionAlertMonitoring();
-  updateConditionAlertControls();
-};
-
-const initializeConditionAlerts = () => {
-  const supported = "Notification" in window;
-  hostedConditionAlertsEnabled = Boolean(
-    supported
-    && window.Notification.permission === "granted"
-    && readConditionAlertPreference()
-  );
-  if (hostedConditionAlertsEnabled) startConditionAlertMonitoring();
-  updateConditionAlertControls();
 };
 
 const applyEqModePreference = (enabled) => {
@@ -598,8 +342,7 @@ const showStandaloneTargetArtPreview = () => {
 };
 
 const resetHostedPlanDetails = () => {
-  setText("hosted-plan-end-reason", "");
-  byId("hosted-plan-end-reason").hidden = true;
+
   setText("hosted-tonight-date", "Building tonight's recommendation…");
   setText("hosted-target-label", "Primary target");
   setText("hosted-target-name", "—");
@@ -616,11 +359,11 @@ const resetHostedPlanDetails = () => {
   setText("hosted-target-exposure", "—");
   setText("hosted-target-gain", "—");
   setText("hosted-target-filter", "—");
-  setText("hosted-command-window", "—");
-  setText("hosted-command-window-label", "Best imaging window");
-  renderConditionsTrend("hosted-window-trend", null);
-  setText("hosted-command-target", "—");
-  setText("hosted-command-fallback", "—");
+
+
+
+
+
   byId("hosted-decision-blockers").replaceChildren(
     document.createElement("li"),
   );
@@ -631,13 +374,12 @@ const resetHostedPlanDetails = () => {
     "hosted-decision-recovery",
     "Polaris will reassess after the forecast loads.",
   );
-  renderTargetIllustration("hosted-command-target-illustration", null, true);
-  renderTargetIllustration("hosted-command-fallback-illustration", null, true);
+
+
   renderTargetIllustration("hosted-target-illustration", null);
   renderTargetGeometry(null);
   setText("hosted-target-tracking", "—");
   renderOpportunityScore(null);
-  renderSessionChecklist(null, "Conditions Unknown");
   setHardStopDetailsVisibility("Conditions Unknown");
   renderForecastAccuracyHistory(null);
   const notes = byId("hosted-plan-notes");
@@ -952,15 +694,18 @@ const renderNightlyConfidence = (data) => {
   const group = (name) => groups.find(item => item.horizon === name) || {count: 0};
   const afternoon = group("afternoon"), dusk = group("dusk");
   const threshold = nightly.review_after || 30;
-  // A sample-count milestone is not evidence of reliability. Keep the neutral
-  // badge until a reviewed calibration policy exists, including at 30+ nights.
-  setText("forecast-confidence-state", "Learning");
-  setText("forecast-accuracy-history-label", groups.some(item => item.review_ready) ? "Early forecast track record" : "Building forecast confidence");
+  // Reaching the evidence threshold enables review, not a calibrated reliability claim.
+  const reviewReady = groups.some(item => item.review_ready);
+  const evidenceState = reviewReady ? "Review ready" : "Collecting";
+  setText("forecast-confidence-state", evidenceState);
+  setText("forecast-accuracy-history-label", reviewReady ? "Early forecast track record" : "Building forecast confidence");
   const progress = item => item.review_ready ? `${item.within_10} of ${item.count} within 10 points` : `${item.count}/${threshold} nights`;
   setText("forecast-accuracy-insight", `Afternoon: ${progress(afternoon)} · Dusk: ${progress(dusk)}`);
   setText("forecast-accuracy-history-count", `${nightly.completed_nights || 0} nights observed`);
-  setText("forecast-accuracy-link-count", "Learning");
-  setText("forecast-accuracy-history-message", "Comparing whole-night cloud forecasts with satellite estimates. Collected automatically, whether you image or not.");
+  setText("forecast-accuracy-link-count", evidenceState);
+  setText("forecast-accuracy-history-message", reviewReady
+    ? "At least one forecast horizon has enough comparable nights for review. This is not a calibrated reliability rating."
+    : "Accumulating comparable whole-night cloud forecasts and satellite estimates. Collection is independent of imaging sessions; elapsed days alone do not qualify.");
   const summary = byId("nightly-confidence-summary");
   summary.replaceChildren();
   groups.forEach(item => {
@@ -1234,43 +979,49 @@ const renderHostedSchedule = (schedule) => {
     return;
   }
 
-  blocks.forEach((block) => {
+  const appendPause = (start, end) => appendTextElement(container, "p", "schedule-pause",
+    `${shortTime(start)} – ${shortTime(end)} · No capture scheduled`);
+  (schedule.gaps || []).filter(gap => gap.minutes >= 1 && gap.end === blocks[0].start)
+    .forEach(gap => appendPause(gap.start, gap.end));
+  blocks.forEach((block, index) => {
+    const previous = blocks[index - 1];
+    const pauseMinutes = previous && block.start_at && previous.end_at
+      ? (Date.parse(block.start_at) - Date.parse(previous.end_at)) / 60000 : 0;
+    if (pauseMinutes >= 1) {
+      appendPause(previous.end, block.start);
+    }
     const card = appendTextElement(container, "article", "hosted-schedule-block", "");
     const time = appendTextElement(card, "div", "hosted-schedule-time", "");
-    appendTextElement(time, "strong", "", shortTime(block.start));
-    appendTextElement(time, "span", "", `to ${shortTime(block.end)}`);
-
+    appendTextElement(time, "strong", "", `${shortTime(block.start)} – ${shortTime(block.end)}`);
+    appendTextElement(time, "span", "", durationLabel(block.duration_minutes));
+    time.title = `${block.start} – ${block.end}`;
     const body = appendTextElement(card, "div", "hosted-schedule-body", "");
     const identity = appendTextElement(body, "div", "hosted-schedule-identity", "");
-    const runLabel = block.total_runs > 1
-      ? ` · Run ${block.run_number} of ${block.total_runs}`
-      : "";
-    appendTextElement(
-      identity,
-      "strong",
-      "",
-      `${block.object || "Unknown target"}${runLabel}`,
-    );
+    const runLabel = block.total_runs > 1 ? ` · Run ${block.run_number}/${block.total_runs}` : "";
+    appendTextElement(identity, "strong", "", `${block.object || "Unknown target"}${runLabel}`);
     appendTextElement(identity, "span", "", block.common_name || "");
     const settings = appendTextElement(body, "div", "hosted-schedule-settings", "");
-    equipmentChips(block).forEach((chip) => {
-      const element = appendTextElement(settings, "span", "", chip.label);
-      if (chip.title) element.title = chip.title;
-      if (chip.filterValue) appendFilterInfoButton(element, chip.filterValue);
-    });
-    appendSettingsInfoButton(settings, block);
+    if (block.mosaic_required) {
+      appendTextElement(settings, "strong", "mosaic-label", "Mosaic candidate · setup required");
+      appendTextElement(body, "p", "schedule-action", "Confirm mosaic layout and capture plan before starting.");
+    } else {
+      const chips = equipmentChips(block).filter(chip => !/ min (imaging|setup)$/.test(chip.label));
+      appendTextElement(settings, "span", "capture-setting-line", chips.map(chip => chip.label).join(" · ") || "Verify capture settings");
+      if (block.setup_minutes) appendTextElement(body, "p", "schedule-action", `${Math.round(block.setup_minutes)} min setup included`);
+    }
+    const details = appendTextElement(body, "details", "compact-disclosure schedule-details", "");
+    appendTextElement(details, "summary", "", "Setup & details");
+    if (block.mosaic_note) appendTextElement(details, "p", "", block.mosaic_note);
+    (block.setup_changes || []).forEach(change => appendTextElement(details, "p", "", change));
+    appendTextElement(details, "p", "", block.reason || "Review live conditions before starting.");
+    if (!block.mosaic_required) appendSettingsInfoButton(details, block);
   });
-  (schedule?.gaps || []).forEach((gap) => {
-    appendTextElement(
-      container,
-      "p",
-      "empty-state",
-      `Unallocated ${shortTime(gap.start)} to ${shortTime(gap.end)} (${gap.minutes} minutes): ${gap.reason}`,
-    );
-  });
+  (schedule.gaps || []).filter(gap => gap.minutes >= 1 && gap.start === blocks[blocks.length - 1].end)
+    .forEach(gap => appendPause(gap.start, gap.end));
 };
 
 const displayedTargetSettings = (target, schedule) => {
+  if (target?.mosaic_required) return {};
   const settings = { ...(target?.recommended_settings || {}) };
   const firstScheduledBlock = (schedule?.blocks || []).find(
     (block) => block.object === target?.object,
@@ -1335,6 +1086,20 @@ const displayedDecisionMessage = (decision, message) => {
   return `${sentence} Save the setup time and reassess if conditions improve.`;
 };
 
+const compactConditionMessage = (data) => {
+  const decision = data.schedule?.decision;
+  if (decision === "Do Not Image" || decision === "Plan unavailable") return displayedDecisionMessage(decision, data.message);
+  const weather = data.weather || {};
+  const items = [];
+  for (const [key, suffix] of [["cloud_cover_percent", "% cloud"], ["wind_speed_mph", " mph wind"], ["temperature_f", "°F"]]) {
+    const value = weather[`planned_${key}`] ?? weather[key];
+    if (value != null && Number.isFinite(Number(value))) items.push(`${Math.round(value)}${suffix}`);
+  }
+  if (weather.cache_status === "stale") items.push("Forecast is stale");
+  if (decision === "Conditions Unknown") items.push("Conditions unverified");
+  return `${items.join(" · ") || "Forecast unavailable"}. Check live conditions before starting.`;
+};
+
 const softenAdvisoryNote = (note) => note
   .replace(
     /while the weather decision is Do Not Image/gi,
@@ -1354,28 +1119,6 @@ const renderConditionsTrend = (elementId, trend) => {
   element.textContent = trend?.message || (
     "Trend unavailable: check live conditions at the window start."
   );
-};
-
-const renderSessionChecklist = (checklist, decision = "Conditions Unknown") => {
-  const panel = byId("hosted-session-plan");
-  const steps = byId("hosted-session-steps");
-  const status = checklist?.status || "loading";
-  panel.className = `hosted-session-plan status-${status}`;
-  steps.replaceChildren();
-
-  const hardStop = decision === "Do Not Image";
-  const checklistSteps = hardStop
-    ? (checklist?.steps || []).filter((step) => step.key === "reassess").slice(0, 1)
-    : (checklist?.steps || []).slice(0, 3);
-  setText("hosted-session-plan-title", hardStop ? "Next action" : "Session plan");
-  byId("hosted-session-timeline-link").hidden = hardStop;
-
-  checklistSteps.forEach((step) => {
-    const item = appendTextElement(steps, "li", "hosted-session-step", "");
-    const heading = appendTextElement(item, "div", "hosted-session-step-heading", "");
-    appendTextElement(heading, "span", "", step.key === "stop" ? "Plan ends" : step.label || "Plan step");
-    appendTextElement(heading, "strong", "", step.time_label || "—");
-  });
 };
 
 const plannedWeatherValue = (weather, key) => (
@@ -1443,19 +1186,6 @@ const renderDecisionSupport = (data) => {
     appendTextElement(blockers, "li", "", "Current conditions are unsuitable.");
   }
   recovery.textContent = decisionRecoveryText(data);
-};
-
-const openHostedSchedule = () => {
-  const timeline = byId("hosted-schedule-panel");
-  const summary = byId("hosted-schedule-summary");
-  timeline.open = true;
-  summary.scrollIntoView({
-    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? "auto"
-      : "smooth",
-    block: "start",
-  });
-  summary.focus({ preventScroll: true });
 };
 
 const hardStopSecondaryIds = [
@@ -1687,9 +1417,6 @@ const renderLibraryHistory = (history) => {
 const renderHostedTonight = (data) => {
   renderLibraryHistory(data.capture_history);
   latestHostedTonightData = data;
-  if (hostedConditionAlertsEnabled) {
-    hostedConditionAlertBaseline = conditionAlertState(data);
-  }
   const schedule = data.schedule || {};
   const decision = schedule.decision || "Conditions Unknown";
   const statusClass = `status-${decision.toLowerCase().replaceAll(" ", "-")}`;
@@ -1698,33 +1425,23 @@ const renderHostedTonight = (data) => {
   setText("observatory-name", data.observatory?.name, "Your observatory");
   setText("hosted-tonight-date", `Plan for ${displayDate(data.date)}`);
   setText("hosted-decision", displayedDecisionLabel(decision));
-  setText("hosted-decision-message", displayedDecisionMessage(decision, data.message));
+  setText("hosted-decision-message", compactConditionMessage(data));
+  setText("hosted-decision-detail", displayedDecisionMessage(decision, data.message));
   renderDecisionSupport(data);
 
   const target = data.recommended_target || data.backup_target;
   renderOpportunityScore(data.opportunity_score);
-  const fallbackTarget = data.backup_target?.object === data.recommended_target?.object
-    ? null
-    : data.backup_target;
-  setText(
-    "hosted-command-fallback",
-    fallbackTarget ? shortTargetName(fallbackTarget) : "No alternate ranked",
-  );
-  renderTargetIllustration(
-    "hosted-command-fallback-illustration",
-    fallbackTarget,
-    true,
-  );
+
+
   setText(
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
   );
   setText("hosted-target-rig", rigProfileLabel(data.observatory));
-  renderConditionsTrend("hosted-window-trend", data.conditions_trend);
-  renderSessionChecklist(data.session_checklist, decision);
+
   setText(
     "hosted-setup-title",
-    decision === "Do Not Image" ? "Setup if conditions improve" : "Recommended setup",
+    target?.mosaic_required ? "Mosaic setup required" : decision === "Do Not Image" ? "Setup if conditions improve" : "Recommended setup",
   );
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
@@ -1732,24 +1449,11 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-common-name", target.common_name, "");
     setText("hosted-target-reason", target.reason, "Planner recommendation available.");
     setText("hosted-target-rig-match", targetRigMatchLabel(target));
-    setText("hosted-target-fit", targetFitLabel(target));
-    setText(
-      "hosted-command-window-label",
-      data.recommended_target ? "Best imaging window" : "If conditions improve",
-    );
-    setText(
-      "hosted-command-window",
-      targetWindowLabel(target.recommended_start, target.recommended_end),
-    );
-    setText(
-      "hosted-command-target",
-      data.recommended_target?.object || "None recommended",
-    );
-    renderTargetIllustration(
-      "hosted-command-target-illustration",
-      data.recommended_target || null,
-      true,
-    );
+    setText("hosted-target-fit", target.mosaic_required ? "Mosaic candidate" : targetFitLabel(target));
+
+
+
+
     renderTargetIllustration("hosted-target-illustration", target);
     renderTargetProjectContext(target);
     renderTargetGeometry(target);
@@ -1761,7 +1465,7 @@ const renderHostedTonight = (data) => {
     renderFilterValue("hosted-target-filter", settings.filter_name, false);
     setText("hosted-target-tracking", hostedTrackingModeLabel());
   } else {
-    renderTargetIllustration("hosted-command-target-illustration", null, true);
+
     renderTargetIllustration("hosted-target-illustration", null);
     renderTargetProjectContext(null);
     renderTargetGeometry(null);
@@ -1774,9 +1478,9 @@ const renderHostedTonight = (data) => {
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);
     setText("hosted-target-tracking", null);
-    setText("hosted-command-window", "No usable window");
-    setText("hosted-command-target", "None recommended");
-    setText("hosted-command-fallback", "No alternate ranked");
+
+
+
   }
 
   const weather = data.weather || {};
@@ -1785,23 +1489,20 @@ const renderHostedTonight = (data) => {
 
   const notes = byId("hosted-plan-notes");
   notes.replaceChildren();
-  const visibleNotes = dewAdvisoryNotes(data.dew_risk).concat(
-    (schedule.notes || [])
-      .filter(
-        (note) =>
-          note &&
-          note !== data.message &&
-          !note.toLowerCase().startsWith("use caution:") &&
-          note !== "Review live conditions before starting any scheduled block.",
-      )
-      .map(softenAdvisoryNote),
-  );
+  const plannerNotes = (schedule.notes || []).filter(note => note && !/unallocated|remain unallocated/i.test(note));
+  const visibleNotes = [];
+  if (["watch", "high"].includes(data.dew_risk?.level)) visibleNotes.push(`Dew: ${data.dew_risk.action || "Use dew control and check the lens."}`);
+  if (plannerNotes.some(note => /obstructions.*not modeled/i.test(note))) visibleNotes.push("Local obstructions are not modeled. Check the sky path.");
+  if ((schedule.blocks || []).some(block => block.mosaic_required)) visibleNotes.push("Mosaic candidates need a confirmed layout and capture plan.");
+  if ((schedule.blocks || []).some(block => !block.mosaic_required && (block.recommended_sub_exposure_seconds == null || block.recommended_gain == null))) visibleNotes.push("Some capture settings are unknown. Verify them before starting.");
   notes.hidden = visibleNotes.length === 0;
   byId("hosted-cautions-empty").hidden = !notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
+  const detailNotes = byId("hosted-plan-details-notes");
+  detailNotes.replaceChildren();
+  renderAdvisoryNotes(detailNotes, plannerNotes.filter(note => note !== data.message).map(softenAdvisoryNote));
   renderHostedSchedule(schedule);
-  setText("hosted-plan-end-reason", schedule.end_reason || "");
-  byId("hosted-plan-end-reason").hidden = !schedule.end_reason || decision === "Do Not Image";
+
   setHardStopDetailsVisibility(decision);
   hostedRecommendationRunId = data.recommendation_run_id || null;
   byId("hosted-feedback-panel").hidden = !hostedRecommendationRunId;
@@ -2017,8 +1718,6 @@ const saveHostedAccount = async (event) => {
 const handleHostedSession = async (session) => {
   hostedSession = session;
   if (!session) {
-    stopConditionAlertMonitoring();
-    hostedConditionAlertBaseline = null;
     latestHostedTonightData = null;
     setHostedShell(false);
     showSignIn();
@@ -2030,7 +1729,6 @@ const handleHostedSession = async (session) => {
     return;
   }
   setHostedShell(true);
-  initializeConditionAlerts();
   setText("account-email", session.user?.email || "Signed in");
   showHostedAccountLoading();
   try {
@@ -2461,18 +2159,21 @@ const bortleLabel = (bortleClass) => {
 
 const shortTime = (value) => {
   if (!value) return "—";
-  const match = value.match(/(\d{1,2}:\d{2}(?::\d{2})? [AP]M)$/);
-  return match ? match[1] : value;
+  const match = value.match(/(\d{1,2}):(\d{2})(?::(\d{2}))? ([AP]M)$/);
+  if (!match) return value;
+  const hour = Number(match[1]) % 12 + (match[4] === "PM" ? 12 : 0);
+  const minutes = Math.round((hour * 3600 + Number(match[2]) * 60 + Number(match[3] || 0)) / 60) % 1440;
+  const displayHour = Math.floor(minutes / 60);
+  return `${String(displayHour % 12 || 12).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")} ${displayHour < 12 ? "AM" : "PM"}`;
 };
 
 const durationLabel = (minutes) => {
-  if (minutes === null || minutes === undefined) return "—";
-  const seconds = Math.round(minutes * 60);
-  const parts = [];
-  if (seconds >= 3600) parts.push(`${Math.floor(seconds / 3600)} hr`);
-  if (Math.floor(seconds % 3600 / 60)) parts.push(`${Math.floor(seconds % 3600 / 60)} min`);
-  if (seconds % 60) parts.push(`${seconds % 60} sec`);
-  return parts.join(" ") || "0 min";
+  if (minutes === null || minutes === undefined || !Number.isFinite(Number(minutes))) return "-";
+  const rounded = Math.max(0, Math.round(Number(minutes)));
+  if (minutes > 0 && rounded === 0) return "<1 min";
+  const hours = Math.floor(rounded / 60);
+  const remaining = rounded % 60;
+  return [hours ? `${hours} hr` : "", remaining || !hours ? `${remaining} min` : ""].filter(Boolean).join(" ");
 };
 
 const uptimeLabel = (seconds) => {
@@ -3141,7 +2842,7 @@ const equipmentChips = (block) => {
       chips.push({ label: `${block.planned_subframes} frames` });
     }
   }
-  chips.push({ label: `${block.imaging_minutes} min imaging` });
+  chips.push({ label: `${Math.round(block.imaging_minutes)} min imaging` });
   if (block.setup_minutes) chips.push({ label: `${block.setup_minutes} min setup` });
   return chips;
 };
@@ -4886,8 +4587,6 @@ byId("hosted-account-form").addEventListener("submit", saveHostedAccount);
 byId("hosted-use-device-location").addEventListener("click", useDeviceLocation);
 byId("hosted-refresh-button").addEventListener("click", loadHostedTonight);
 byId("mobile-refresh-button").addEventListener("click", loadHostedTonight);
-byId("hosted-condition-alerts-button").addEventListener("click", toggleConditionAlerts);
-byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule);
 byId("hosted-secondary-toggle").addEventListener("click", toggleHardStopDetails);
 byId("mobile-account-menu-button").addEventListener("click", () => {
   setMobileHeaderMenu(

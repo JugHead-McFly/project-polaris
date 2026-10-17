@@ -130,6 +130,16 @@ def build_session_checklist(
 
     first_block = blocks[0]
     last_block = blocks[-1]
+    if first_block.get("mosaic_required"):
+        from app.services.mosaic_service import MOSAIC_NOTE
+        return {"status": "caution", "summary": "Manual mosaic planning is required before imaging.",
+                "steps": [_step("mosaic", "Plan mosaic manually", MOSAIC_NOTE,
+                                at=_parse_schedule_time(first_block.get("start_at") or first_block.get("start"), timezone_name),
+                                plan_date=plan_date),
+                          _step("stop", "Opportunity ends", "Finish within the scheduled visibility window; mosaic completion is not predicted.",
+                                at=_parse_schedule_time(first_block.get("end_at") or first_block.get("end"), timezone_name),
+                                plan_date=plan_date)],
+                "actions": _session_actions(dew_risk)}
     setup_at = _parse_schedule_time(first_block.get("start_at") or first_block.get("start"), timezone_name)
     stop_at = _parse_schedule_time(last_block.get("end_at") or last_block.get("end"), timezone_name)
     setup_minutes = first_block.get("setup_minutes")
@@ -156,6 +166,12 @@ def build_session_checklist(
         if status == "caution"
         else "Tonight has a usable scheduled session."
     )
+    actions = _session_actions(dew_risk)
+    if any(block.get("mosaic_required") for block in blocks):
+        from app.services.mosaic_service import MOSAIC_NOTE
+        actions.append(MOSAIC_NOTE)
+        status = "caution"
+        summary += " Later mosaic opportunities require manual planning."
     return {
         "status": status,
         "summary": summary,
@@ -182,5 +198,5 @@ def build_session_checklist(
                 plan_date=plan_date,
             ),
         ],
-        "actions": _session_actions(dew_risk),
+        "actions": actions,
     }

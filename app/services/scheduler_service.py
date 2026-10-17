@@ -11,6 +11,7 @@ from app.core.planning_context import use_observatory_context
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_common_name
 from app.services.planner_service import get_tonight_plan
+from app.services.mosaic_service import MOSAIC_NOTE
 
 
 SCHEDULE_TIME_FORMAT = "%Y-%m-%d %I:%M %p"
@@ -89,6 +90,11 @@ def _candidate_windows(
 
 def _advisor_settings(candidate: Dict) -> Dict:
     advisor = candidate.get("advisor", {})
+    if candidate.get("mosaic_required"):
+        return {"sub_exposure_seconds": None, "gain": None, "filter": None,
+                "source": "manual_mosaic", "additional_subframes": None,
+                "confidence_label": "Manual mosaic planning required", "reasons": [MOSAIC_NOTE],
+                "setup_guidance": [MOSAIC_NOTE], "adjustments": []}
     return {
         "sub_exposure_seconds": advisor.get(
             "recommended_sub_exposure_seconds"
@@ -359,6 +365,10 @@ def _dwarf_run_blocks(
 def _remaining_imaging_minutes(candidate: Dict) -> Optional[float]:
     advisor = candidate.get("advisor", {})
     remaining_seconds = advisor.get("remaining_seconds")
+    if candidate.get("mosaic_required"):
+        # Preserve completed-goal exclusions, but do not translate a positive
+        # single-frame goal into an invented multi-panel integration budget.
+        return 0 if remaining_seconds is not None and remaining_seconds <= 0 else None
 
     settings = _advisor_settings(candidate)
     budgets = [max(remaining_seconds, 0)] if remaining_seconds is not None else []
@@ -601,6 +611,25 @@ def build_schedule_blocks(
             imaging_minutes=imaging_minutes,
         )
 
+        if block["candidate"].get("mosaic_required"):
+            scheduled_blocks.append({
+                "object": block["object"], "common_name": get_target_common_name(block["object"]),
+                "start": _format_schedule_time(block["start_datetime"], timezone_name=timezone_name),
+                "end": _format_schedule_time(block["end_datetime"], timezone_name=timezone_name),
+                "start_at": block["start_datetime"].isoformat(), "end_at": block["end_datetime"].isoformat(),
+                "duration_minutes": duration_minutes, "setup_minutes": 0, "imaging_minutes": 0,
+                "planner_score": block["planner_score"], "reason": MOSAIC_NOTE,
+                "mosaic_required": True, "mosaic_note": MOSAIC_NOTE,
+                "opportunity_only": True, "opportunity_minutes": duration_minutes,
+                "recommended_sub_exposure_seconds": None, "recommended_gain": None,
+                "recommended_filter": None, "recommendation_source": "manual_mosaic",
+                "settings_confidence": "Manual mosaic planning required", "settings_reasons": [MOSAIC_NOTE],
+                "planned_subframes": None, "total_planned_subframes": None, "subframe_runs": [],
+                "setup_changes": [MOSAIC_NOTE],
+            })
+            previous_candidate = block["candidate"]
+            continue
+
         scheduled_blocks.extend(
             _dwarf_run_blocks(
                 block=block,
@@ -704,6 +733,8 @@ def build_tonight_schedule(
         unscheduled_dark_minutes = max(_darkness_minutes(planner["darkness"], timezone_name) - allocated_minutes, 0)
     if gaps and decision != "Do Not Image":
         notes.append(f"{unscheduled_dark_minutes} dark minutes remain unallocated under the current target, visibility, goal and minimum-block constraints.")
+    if any(block.get("mosaic_required") for block in blocks):
+        notes.append("Allocated time includes manual mosaic visibility opportunities, not confirmed imaging or setup durations. " + MOSAIC_NOTE)
     end_reason = _plan_end_reason(blocks, candidates)
     if blocks and dark_end is not None and datetime.fromisoformat(blocks[-1]["end_at"]) >= dark_end:
         end_reason = "Plan reaches the end of astronomical darkness."

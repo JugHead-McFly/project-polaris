@@ -195,15 +195,60 @@ def test_explicit_empty_target_selection_stays_empty():
     assert plan["schedule_candidates"] == []
 
 
-def test_known_rig_rejects_target_that_cannot_fit_single_frame():
+@pytest.mark.parametrize("name", ["M31", "C 20"])
+def test_known_rig_retains_oversized_target_as_manual_mosaic(name):
     from app.core.planning_context import ObservatoryContext
     from app.services.planner_service import get_tonight_plan
     context = ObservatoryContext("test", 0, 0, "UTC", rig_profile_key="dwarf-mini")
-    with workflow(), patch("app.services.planner_service.build_target_plan") as build:
-        plan = get_tonight_plan(None, context, target_names=["M31"], use_capture_history=False)
-    build.assert_not_called()
-    assert plan["schedule_candidates"] == []
-    assert any("single-frame" in note for note in plan["notes"])
+    with workflow():
+        plan = get_tonight_plan(None, context, target_names=[name], use_capture_history=False)
+    selected = plan["schedule_candidates"][0]
+    assert selected["advisor"]["object"] == name
+    assert selected["mosaic_required"] is True
+    assert selected["advisor"]["recommended_sub_exposure_seconds"] is None
+    schedule = build_tonight_schedule(plan, timezone_name="UTC", rig_profile_key="dwarf-mini")
+    assert schedule["allocated_minutes"] == 480
+    assert schedule["unscheduled_dark_minutes"] == 0
+    for block in schedule["blocks"]:
+        assert block["opportunity_only"] is True
+        assert block["imaging_minutes"] == 0
+        assert block["planned_subframes"] is None
+        assert block["recommended_sub_exposure_seconds"] is None
+        assert "manually" in block["mosaic_note"]
+
+
+def test_completed_mosaic_goal_is_not_used_as_filler():
+    selected = target("M31", START, END, remaining_seconds=0)
+    selected["mosaic_required"] = True
+    assert build_schedule_blocks([selected], timezone_name="UTC") == []
+
+
+def test_mosaic_opportunity_keeps_visibility_gap_and_manual_checklist():
+    from app.services.session_checklist_service import build_session_checklist
+    selected = target("M31", START, END, remaining_seconds=3600)
+    selected["mosaic_required"] = True
+    selected["schedule_windows"] = [
+        {"start": START.isoformat(), "end": (START+timedelta(hours=2)).isoformat()},
+        {"start": (END-timedelta(hours=2)).isoformat(), "end": END.isoformat()}]
+    schedule = build_tonight_schedule({"decision": "Proceed", "notes": [], "recommended_target": selected,
+        "alternatives": [], "weather": {}, "moon": {}, "darkness": {
+            "astronomical_darkness_start": START.isoformat(), "astronomical_darkness_end": END.isoformat()}}, "UTC")
+    assert schedule["allocated_minutes"] == 240
+    assert schedule["unscheduled_dark_minutes"] == 240
+    checklist = build_session_checklist(schedule=schedule, recommended_target=None, backup_target=None,
+                                        dew_risk={}, timezone_name="UTC")
+    assert checklist["status"] == "caution"
+    assert checklist["steps"][0]["key"] == "mosaic"
+    assert all(step["key"] != "start" for step in checklist["steps"])
+
+
+def test_hosted_mosaic_fields_survive_response_validation():
+    with workflow() as flow, patch("app.services.planner_service.TARGETS", ["M31"]), TestClient(flow.app) as client:
+        plan = flow.plan(client)
+    assert plan["recommended_target"]["mosaic_required"] is True
+    assert plan["recommended_target"]["recommended_exposure"] is None
+    assert plan["schedule"]["blocks"][0]["opportunity_only"] is True
+    assert plan["schedule"]["blocks"][0]["opportunity_minutes"] == 480
 
 
 @pytest.mark.parametrize("latitude,month", [(89, 6), (-89, 12), (89, 12)])

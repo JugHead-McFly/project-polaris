@@ -301,12 +301,12 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-darkness-window"' not in html
     assert 'id="hosted-moon-summary"' not in html
     assert 'id="hosted-moon-context"' not in html
-    assert 'id="hosted-command-window"' in html
-    assert 'id="hosted-command-window-label"' in html
-    assert 'id="hosted-command-target"' in html
-    assert 'id="hosted-command-target-illustration"' in html
-    assert 'id="hosted-command-fallback"' in html
-    assert 'id="hosted-command-fallback-illustration"' in html
+    assert 'id="hosted-command-window"' not in html
+    assert 'id="hosted-command-window-label"' not in html
+    assert 'id="hosted-command-target"' not in html
+    assert 'id="hosted-command-target-illustration"' not in html
+    assert 'id="hosted-command-fallback"' not in html
+    assert 'id="hosted-command-fallback-illustration"' not in html
     assert 'id="hosted-decision-blockers"' in html
     assert 'id="hosted-decision-recovery"' in html
     assert "Why not tonight" in html
@@ -325,7 +325,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'id="hosted-target-fit"' in html
     assert "Target fit" in html
     assert 'id="hosted-target-rig-match"' in html
-    assert "Target framing" in html
+    assert "Framing details" in html
     assert 'id="hosted-target-project"' in html
     assert "Project progress" in html
     assert "Remaining goal" in html
@@ -444,8 +444,6 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'return "nebula"' in script
     assert 'return "cluster"' in script
     assert 'return "deep-sky"' in script
-    assert 'renderTargetIllustration("hosted-command-target-illustration"' in script
-    assert 'renderTargetIllustration("hosted-command-fallback-illustration"' in script
     assert 'renderTargetIllustration("hosted-target-illustration"' in script
     assert "if (!target)" in script
     assert "container.replaceChildren();" in script
@@ -518,180 +516,51 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Personalized nightly recommendations are the next hosted Polaris milestone." not in script
 
 
-def test_command_cards_separate_empty_best_target_from_real_fallback_art():
+def test_target_art_remains_in_details_without_duplicate_command_cards():
+    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
+    assert html.count('id="hosted-target-illustration"') == 1
+    assert 'id="hosted-command-target-illustration"' not in html
+    assert 'id="hosted-command-fallback-illustration"' not in html
+    assert html.index('id="hosted-schedule-panel"') < html.index('id="compact-planning-details"') < html.index('id="hosted-target-card"')
+
+
+def test_essential_cautions_remain_visible_before_timeline():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
-
-    # Each command card owns exactly one mount; renderTargetIllustration is
-    # responsible for leaving a null mount empty or adding one approved local
-    # SVG image for a real target.
-    assert html.count('id="hosted-command-target-illustration"') == 1
-    assert html.count('id="hosted-command-fallback-illustration"') == 1
-    assert (
-        '"hosted-command-target-illustration",\n'
-        "      data.recommended_target || null,"
-    ) in script
-    assert (
-        '"hosted-command-fallback-illustration",\n'
-        "    fallbackTarget,"
-    ) in script
-    assert "if (!target) {\n    container.replaceChildren();\n    container.hidden = true;" in script
-    assert "cachedIllustration || buildTargetIllustrationSvg(target, compact)" in script
-    assert "const approvedAsset = mappedTargetIllustrationAsset(target);" in script
-    assert "target?.artwork?.match_kind" in script
-    assert (
-        ".hosted-command-fallback-card.has-target-illustration"
-        " {\n  padding-right: 106px !important;"
-    ) in css
-
-    assert 'id="hosted-reference-image"' not in html
-    assert 'id="target-reference-image"' not in html
-    assert "renderReferenceAttribution" not in script
+    assert html.index('id="hosted-plan-notes"') < html.index('id="hosted-schedule-panel"')
+    assert '["watch", "high"].includes(data.dew_risk?.level)' in script
+    assert 'Local obstructions are not modeled. Check the sky path.' in script
+    assert '!/unallocated|remain unallocated/i.test(note)' in script
+    assert 'id="hosted-plan-details-notes"' in html
 
 
-def test_dew_guidance_is_part_of_recommended_setup():
+def test_conditions_explanations_are_available_without_duplicate_window():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
-
-    setup_start = html.index('id="hosted-setup-card"')
-    caution_start = html.index('class="hosted-setup-cautions"')
-    notes_start = html.index('id="hosted-plan-notes"')
-    setup_end = html.index("</div>", notes_start)
-    assert setup_start < caution_start < notes_start < setup_end
-    assert 'class="hosted-cautions-card"' not in html
-    assert "data.dew_risk" in script
-    assert "dewAdvisoryNotes" in script
-    assert "dewRisk.label" in script
-    assert "dewRisk.action" in script
-    assert "Dew guidance:" not in script
-    assert "dewRisk.summary" not in script
-    assert "? [`Dew: ${dewRisk.label}. ${dewRisk.action}`]" in script
-    assert "notes.hidden = visibleNotes.length === 0" in script
-    assert "renderNotes(data.schedule.notes, data.dew_risk)" in script
-
-
-def test_conditions_trend_is_a_small_cue_beside_the_imaging_window():
-    html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
-    script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
-
-    hosted_window = html.index('id="hosted-command-window"')
-    hosted_trend = html.index('id="hosted-window-trend"')
-    hosted_target = html.index('class="hosted-command-target-card"')
-    assert hosted_window < hosted_trend < hosted_target
-    assert 'class="hosted-command-weather"' not in html
-    assert 'id="target-window-trend"' in html
-    assert 'aria-live="polite"' in html
-    assert "renderConditionsTrend" in script
-    assert 'renderConditionsTrend("hosted-window-trend", data.conditions_trend)' in script
+    assert 'id="hosted-command-window"' not in html
+    assert 'id="hosted-decision-detail"' in html
+    assert 'id="target-window-trend"' in html  # Existing local-mode display.
     assert 'renderConditionsTrend("target-window-trend", data.conditions_trend)' in script
-    assert ".conditions-trend" in css
-    assert ".conditions-trend.trend-improving" in css
-    assert ".conditions-trend.trend-worsening" in css
 
 
-def test_condition_alerts_are_opt_in_conservative_and_page_open_only():
+def test_removed_page_alerts_have_no_polling_or_notification_handlers():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
-
-    heading = html.index('class="hosted-tonight-heading"')
-    alerts = html.index('id="hosted-condition-alerts"')
-    recommendation = html.index('id="hosted-recommendation"')
-    assert heading < alerts < recommendation
-    assert 'id="hosted-condition-alerts-button"' in html
-    assert 'role="switch"' in html
-    assert 'aria-checked="false"' in html
-    assert 'id="hosted-condition-alerts-state">Off</span>' in html
-    assert 'id="hosted-condition-alerts-status" role="status" aria-live="polite"' in html
-    assert "Notify me if tonight improves" in html
-    assert "Alerts work only while this page remains open." in html
-
-    assert 'const CONDITION_ALERT_PREFERENCE_KEY = "polaris.conditionAlertsEnabled";' in script
-    assert 'const CONDITION_ALERT_HISTORY_KEY = "polaris.conditionAlertHistory";' in script
-    assert "const CONDITION_ALERT_POLL_INTERVAL_MS = 15 * 60 * 1000" in script
-    assert "const CONDITION_ALERT_COOLDOWN_MS = 2 * 60 * 60 * 1000" in script
-    assert "window.Notification.requestPermission()" in script
-    assert 'byId("hosted-condition-alerts-button").addEventListener("click", toggleConditionAlerts)' in script
-    assert 'window.localStorage.setItem(CONDITION_ALERT_PREFERENCE_KEY, String(enabled))' in script
-    assert 'window.localStorage.setItem(CONDITION_ALERT_HISTORY_KEY, JSON.stringify(history))' in script
-    assert 'button.classList.toggle("is-on", hostedConditionAlertsEnabled)' in script
-    assert 'button.setAttribute("aria-checked", String(hostedConditionAlertsEnabled))' in script
-    assert 'hostedConditionAlertsEnabled ? "On" : "Off"' in script
-    assert 'permission === "denied"' in script
-    assert "Browser alerts are not supported here." in script
-    assert "Alerts are blocked in this browser's site settings." in script
-
-    # Monitoring reads a fresh plan without POSTing a recommendation run.
-    check_start = script.index("const checkConditionAlerts = async () =>")
-    check_end = script.index("const startConditionAlertMonitoring", check_start)
-    check_source = script[check_start:check_end]
-    assert '`/tonight?equatorial_mode_enabled=${eqEnabled}`' in check_source
-    assert '{ cache: "no-store" }' in check_source
-    assert 'method: "POST"' not in check_source
-    assert "if (!hostedConditionAlertsEnabled || !hostedSession || !hostedObservatory) return" in check_source
-
-    # Trigger boundaries require a real target/window and a meaningful change.
-    trigger_start = script.index("const conditionAlertTrigger = (previous, current) =>")
-    trigger_end = script.index("const conditionAlertSignature", trigger_start)
-    trigger_source = script[trigger_start:trigger_end]
-    assert "!current.hasUsablePlan" in trigger_source
-    assert 'previous.decision === "Do Not Image"' in trigger_source
-    assert '["Use Caution", "Proceed"].includes(current.decision)' in trigger_source
-    assert "current.score >= 55" in trigger_source
-    assert 'previous.decision === "Use Caution"' in trigger_source
-    assert 'current.decision === "Proceed"' in trigger_source
-    assert "current.score >= 65" in trigger_source
-    assert "current.score - previous.score >= 15" in trigger_source
-
-    assert "conditionAlertWasRecentlySent(current)" in script
-    assert "sameSignature || withinCooldown" in script
-    assert 'new window.Notification("Polaris: tonight improved"' in script
-    assert 'tag: `polaris-conditions-${state.date}`' in script
-    assert "stopConditionAlertMonitoring()" in script
-    assert ".hosted-condition-alerts" in css
-    assert ".hosted-condition-alerts.has-alert" in css
-    assert ".hosted-condition-alerts.is-blocked" in css
-    assert ".hosted-condition-alerts .account-button" in css
-    assert ".condition-alerts-toggle-track::after" in css
-    assert ".hosted-condition-alerts .condition-alerts-toggle.is-on" in css
-    assert ".hosted-condition-alerts .condition-alerts-toggle:disabled" in css
-    assert ".condition-alerts-toggle.is-on .condition-alerts-toggle-track::after" in css
+    assert 'hosted-condition-alerts' not in html
+    assert 'Notify me if tonight improves' not in html
+    for removed in ['CONDITION_ALERT_', 'hostedConditionAlert', 'window.Notification', 'checkConditionAlerts', 'initializeConditionAlerts']:
+        assert removed not in script
 
 
-def test_session_checklist_stays_inside_the_existing_command_card():
+def test_timeline_is_the_only_hosted_schedule_display():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
-    css = (operator_api.WEB_DIRECTORY / "operator.css").read_text(encoding="utf-8")
-
-    command_start = html.index('class="hosted-command-board"')
-    checklist_start = html.index('id="hosted-session-plan"')
-    target_start = html.index('id="hosted-target-card"')
-    assert command_start < checklist_start < target_start
-    assert 'aria-labelledby="hosted-session-plan-title"' in html
-    assert 'aria-live="polite"' in html
-    assert 'id="hosted-session-steps"' in html
-    assert 'id="hosted-session-actions"' not in html
-    assert 'id="hosted-session-timeline-link"' in html
-    assert 'aria-controls="hosted-schedule-panel"' in html
-    assert "A session is possible, but recheck live conditions before starting." not in html
-    assert 'id="hosted-session-plan-summary"' not in html
-    assert 'const renderSessionChecklist = (checklist, decision = "Conditions Unknown") =>' in script
-    assert "(checklist?.steps || []).slice(0, 3)" in script
-    assert "(checklist?.actions || []).slice(0, 2)" not in script
-    assert "renderSessionChecklist(data.session_checklist, decision)" in script
-    assert 'renderSessionChecklist(null, "Conditions Unknown")' in script
-    assert 'step.key === "reassess"' in script
-    assert 'hardStop ? "Next action" : "Session plan"' in script
-    assert 'step.instruction || "Timing unavailable."' not in script
-    assert "const openHostedSchedule = () =>" in script
-    assert 'byId("hosted-session-timeline-link").addEventListener("click", openHostedSchedule)' in script
-    assert 'summary.focus({ preventScroll: true })' in script
-    assert ".hosted-session-plan" in css
-    assert ".hosted-session-timeline-link" in css
-    assert ".hosted-session-steps" in css
-    assert "grid-template-columns: repeat(3, minmax(0, 1fr));" in css
+    for removed in ['hosted-session-plan', 'hosted-session-steps', 'hosted-session-timeline-link', 'hosted-command-window']:
+        assert f'id="{removed}"' not in html
+        assert f'byId("{removed}")' not in script
+    assert 'renderSessionChecklist' not in script
+    assert 'id="hosted-schedule-panel"' in html
+    assert 'No capture scheduled' in script
 
 
 def test_advisory_timeline_collapses_only_when_no_blocks_exist():

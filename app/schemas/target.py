@@ -94,6 +94,8 @@ class TargetCaptureSummary(BaseModel):
 
 
 class TargetSummary(BaseModel):
+    mosaic_required: bool = False
+    mosaic_note: Optional[str] = None
     object: str
     common_name: Optional[str] = None
     reference_image: Optional[TargetReferenceImage] = None
@@ -117,7 +119,7 @@ class TargetSummary(BaseModel):
     target_type: str
     difficulty: str
     recommended_filter: str
-    recommended_exposure: RecommendedExposure
+    recommended_exposure: Optional[RecommendedExposure] = None
 
     season_score: int
     science_priority: int

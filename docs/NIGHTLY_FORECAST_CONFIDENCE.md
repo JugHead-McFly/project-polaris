@@ -1,8 +1,9 @@
 # Nightly forecast track record
 
-The collapsed card shows a neutral clock icon and **Learning**. Tap/click or use
+The collapsed card shows a neutral clock icon and **Collecting** until at least
+one horizon reaches its evidence review threshold, then **Review ready**. Tap/click or use
 the keyboard to open evidence, including separate afternoon and dusk counts.
-Loading is distinct from Learning. Reaching 30 nights does not promote the badge
+Loading is distinct from collection. Reaching 30 nights does not promote the badge
 to Reliable: a reviewed calibration policy is still required. The historical
 individual-time checks and graph remain under View history; they do not count as
 nightly forecast evidence. No confidence probability or recommendation penalty is
@@ -54,6 +55,14 @@ individually; interrupted batches resume. Network failures get three attempts,
 then remain missing. Up to 14 days of incomplete observation windows can catch up.
 A usable night requires at least 90% temporal coverage with no gap over 30 minutes.
 Incomplete/poor-quality nights never become clear-sky zeros.
+
+Collector diagnostics distinguish `processed_nights` (all attempts resolved) from
+`completed_nights` (complete and adequate satellite observations) and
+`inadequate_nights` (resolved but insufficient observations). They also report
+`satellite_failed_attempts`. These are per-invocation counters. A successful job
+exit does not prove that usable evidence was collected; compare these counters
+and the per-horizon comparable counts. Adequate observations still need a saved,
+comparable forecast to count toward the 30-night review threshold.
 
 ## Interpretation
 

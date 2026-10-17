@@ -322,34 +322,21 @@
           </a>
         </div>
 
-        <section
-          class="hosted-condition-alerts"
-          id="hosted-condition-alerts"
-          aria-labelledby="hosted-condition-alerts-title"
-        >
-          <div>
-            <strong id="hosted-condition-alerts-title">Conditions alerts</strong>
-            <p id="hosted-condition-alerts-status" role="status" aria-live="polite">
-              Off. Alerts work only while this page remains open.
-            </p>
-          </div>
-          <button
-            class="account-button condition-alerts-toggle"
-            id="hosted-condition-alerts-button"
-            type="button"
-            role="switch"
-            aria-checked="false"
-          >
-            <span>Notify me if tonight improves</span>
-            <span class="condition-alerts-toggle-control" aria-hidden="true">
-              <span class="condition-alerts-toggle-track"></span>
-              <span id="hosted-condition-alerts-state">Off</span>
-            </span>
-          </button>
-        </section>
+
 
         <section class="hosted-recommendation status-loading" id="hosted-recommendation">
-          <div class="hosted-score-command">
+
+          <div class="hosted-command-board">
+            <div class="hosted-decision">
+              <p class="eyebrow">Tonight's recommendation</p>
+              <div class="decision-line">
+                <span class="status-light" aria-hidden="true"></span>
+                <h2 id="hosted-decision">Checking conditions…</h2>
+              </div>
+              <p id="hosted-decision-message" class="compact-condition-message">
+                Comparing weather, darkness, Moon conditions, and target visibility.
+              </p>
+          <details class="hosted-score-command compact-disclosure"><summary>Conditions &amp; score breakdown</summary>
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
               <div class="hosted-opportunity-total">
@@ -362,19 +349,8 @@
                 <p>Score factors will appear after conditions load.</p>
               </div>
             </div>
-          </div>
-
-          <div class="hosted-command-board">
-            <div class="hosted-decision">
-              <p class="eyebrow">Tonight's recommendation</p>
-              <div class="decision-line">
-                <span class="status-light" aria-hidden="true"></span>
-                <h2 id="hosted-decision">Checking conditions…</h2>
-              </div>
-              <p id="hosted-decision-message">
-                Comparing weather, darkness, Moon conditions, and target visibility.
-              </p>
-              <details class="cloud-source-details"><summary>Compare cloud forecasts</summary><p id="cloud-source-summary"></p></details>
+          </details>
+              <details class="cloud-source-details"><summary>Forecast details</summary><p id="hosted-decision-detail"></p><p id="cloud-source-summary"></p></details>
               <div class="hosted-decision-support" id="hosted-decision-support">
                 <section aria-labelledby="hosted-blockers-title">
                   <p class="eyebrow" id="hosted-blockers-title">Why not tonight</p>
@@ -388,55 +364,41 @@
                 </section>
               </div>
             </div>
-            <dl class="hosted-command-summary" aria-label="Tonight's command summary">
-              <div>
-                <dt id="hosted-command-window-label">Best imaging window</dt>
-                <dd id="hosted-command-window">—</dd>
-                <dd
-                  class="conditions-trend trend-unavailable"
-                  id="hosted-window-trend"
-                  aria-live="polite"
-                >Trend loading…</dd>
-              </div>
-              <div class="hosted-command-target-card">
-                <dt>Best target</dt>
-                <dd id="hosted-command-target">—</dd>
-                <span
-                  class="hosted-command-target-illustration"
-                  id="hosted-command-target-illustration"
-                  aria-hidden="true"
-                ></span>
-              </div>
-              <div class="hosted-command-fallback-card">
-                <dt>Fallback target</dt>
-                <dd id="hosted-command-fallback">—</dd>
-                <span
-                  class="hosted-command-target-illustration"
-                  id="hosted-command-fallback-illustration"
-                  aria-hidden="true"
-                ></span>
-              </div>
-            </dl>
-            <section
-              class="hosted-session-plan status-loading"
-              id="hosted-session-plan"
-              aria-labelledby="hosted-session-plan-title"
-              aria-live="polite"
-            >
-              <div class="hosted-session-plan-heading">
-                <p class="eyebrow" id="hosted-session-plan-title">Session plan</p>
-                <button
-                  class="hosted-session-timeline-link"
-                  id="hosted-session-timeline-link"
-                  type="button"
-                  aria-controls="hosted-schedule-panel"
-                >View full Advisory timeline</button>
-              </div>
-              <ol class="hosted-session-steps" id="hosted-session-steps"></ol>
-              <p id="hosted-plan-end-reason" class="forecast-chart-caption" hidden></p>
+            <section class="hosted-setup-cautions" aria-labelledby="hosted-cautions-title">
+              <p class="eyebrow" id="hosted-cautions-title">Before you start</p>
+              <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
+              <p id="hosted-cautions-empty">No special cautions for this setup.</p>
             </section>
+
           </div>
 
+
+        </section>
+
+        <details
+          class="panel hosted-schedule-panel"
+          id="hosted-schedule-panel"
+          aria-labelledby="hosted-schedule-title"
+          open
+        >
+          <summary class="panel-heading hosted-schedule-summary" id="hosted-schedule-summary">
+            <div>
+              <p class="eyebrow hosted-schedule-label">Advisory plan</p>
+              <h2 id="hosted-schedule-title">Tonight's schedule</h2>
+            </div>
+            <span class="hosted-schedule-summary-meta">
+              <span id="hosted-schedule-count">0 blocks</span>
+              <span class="hosted-schedule-toggle" aria-hidden="true"></span>
+            </span>
+          </summary>
+          <div class="hosted-schedule-list" id="hosted-schedule-list">
+            <div class="empty-state">Building tonight's schedule…</div>
+          </div>
+        </details>
+
+        <details class="panel compact-planning-details" id="compact-planning-details">
+          <summary>Target &amp; planning details</summary>
+          <div class="compact-target-details">
           <button
             class="hosted-secondary-toggle"
             id="hosted-secondary-toggle"
@@ -462,7 +424,7 @@
                 ></div>
               </div>
             </div>
-            <p id="hosted-target-reason">Waiting for tonight's target.</p>
+            <details class="compact-disclosure"><summary>Why this target</summary><p id="hosted-target-reason">Waiting for tonight's target.</p></details>
             <dl class="hosted-target-project" id="hosted-target-project" hidden>
               <div>
                 <dt>Project progress</dt>
@@ -501,8 +463,7 @@
               <div class="hosted-target-altitude-chart" id="hosted-target-altitude-chart"></div>
             </div>
             <div class="hosted-rig-match">
-              <p class="eyebrow">Target framing</p>
-              <p id="hosted-target-rig-match">Rig match will appear after a target is selected.</p>
+              <details class="compact-disclosure"><summary>Framing details</summary><p id="hosted-target-rig-match">Rig match will appear after a target is selected.</p></details>
             </div>
           </div>
 
@@ -534,33 +495,13 @@
                 <dd id="hosted-target-tracking">—</dd>
               </div>
             </dl>
-            <section class="hosted-setup-cautions" aria-labelledby="hosted-cautions-title">
-              <p class="eyebrow" id="hosted-cautions-title">What to watch</p>
-              <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
-              <p id="hosted-cautions-empty">No special cautions for this setup.</p>
-            </section>
-          </div>
-        </section>
 
-        <details
-          class="panel hosted-schedule-panel"
-          id="hosted-schedule-panel"
-          aria-labelledby="hosted-schedule-title"
-          open
-        >
-          <summary class="panel-heading hosted-schedule-summary" id="hosted-schedule-summary">
-            <div>
-              <p class="eyebrow hosted-schedule-label">Advisory timeline</p>
-              <h2 id="hosted-schedule-title">Tonight's schedule</h2>
-            </div>
-            <span class="hosted-schedule-summary-meta">
-              <span id="hosted-schedule-count">0 blocks</span>
-              <span class="hosted-schedule-toggle" aria-hidden="true"></span>
-            </span>
-          </summary>
-          <div class="hosted-schedule-list" id="hosted-schedule-list">
-            <div class="empty-state">Building tonight's schedule…</div>
           </div>
+          </div>
+
+          <details class="compact-disclosure"><summary>Planner notes</summary>
+            <ul id="hosted-plan-details-notes"></ul>
+          </details>
         </details>
 
         <section
