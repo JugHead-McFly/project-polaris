@@ -78,6 +78,10 @@ capture allocations and yield to later-rising single-frame targets.
 
 ## Realistic Phoenix evidence
 
+The following is the pre-suitability-review result, retained as defect evidence.
+The corrected ranking, current tests and preview are documented in
+[recommendation-quality-review.md](recommendation-quality-review.md).
+
 Synthetic clear weather/history (M31 completed, other objects with zero credited
 time), real October17–18,2026 Phoenix geometry, Dwarf Mini, Bortle8, 35-degree floor:
 

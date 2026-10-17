@@ -158,6 +158,66 @@ def automatic_exclusion(entry, rig):
     return None
 
 
+def imaging_suitability(entry, rig, bortle_class=None):
+    """Explainable beginner preference, not a predicted SNR or measured rig limit.
+
+    Integrated V magnitude never substitutes for surface brightness. Catalog
+    surface brightness is the upstream B-band mean within its B=25 isophote;
+    it is not directly compared to a fabricated Bortle sky magnitude.
+    """
+    if entry is None:
+        return {"adjustment": -44, "reasons": ["Imaging suitability metadata is unavailable; conservative uncertainty penalty (-44)."],
+                "major_pixels": None, "minor_pixels": None}
+    adjustment, reasons = 0, []
+    major_pixels = minor_pixels = None
+    magnitude = entry['v_magnitude']
+    if magnitude is None:
+        adjustment -= 6
+        reasons.append("Visual magnitude unknown; no brightness advantage assumed (-6).")
+    elif magnitude <= 6:
+        adjustment += 8
+        reasons.append(f"Bright integrated V magnitude {magnitude:g} (+8); extended contrast is assessed separately.")
+    elif magnitude <= 9:
+        adjustment += 4
+        reasons.append(f"Integrated V magnitude {magnitude:g} (+4); not a surface-brightness measurement.")
+    if rig and rig.focal_length_mm and rig.pixel_size_um and entry['major_arcmin']:
+        scale = 206.265 * rig.pixel_size_um / rig.focal_length_mm
+        major_pixels = entry['major_arcmin'] * 60 / scale
+        minor_pixels = entry['minor_arcmin'] * 60 / scale if entry['minor_arcmin'] else None
+        reasons.append(f"Catalog extent spans about {major_pixels:.0f} native pixels on the long axis" +
+                       (f" and {minor_pixels:.0f} on the short axis." if minor_pixels else "; short-axis extent unknown."))
+        if major_pixels >= 120:
+            adjustment += 8
+            reasons.append("Broad native image footprint (+8); no upper-size penalty, mosaics remain eligible.")
+        if entry['type_code'] == 'G':
+            if major_pixels < 120:
+                adjustment -= 8
+                reasons.append("Compact galaxy footprint lowers beginner framing preference (-8).")
+            if minor_pixels is None:
+                adjustment -= 12
+                reasons.append("Galaxy short-axis sampling unknown; conservative footprint penalty (-12).")
+            elif minor_pixels < 60:
+                adjustment -= 12
+                reasons.append("Galaxy spans fewer than 60 native pixels on its short axis (-12).")
+    else:
+        uncertainty = 20 if entry['type_code'] == 'G' else 8
+        adjustment -= uncertainty
+        reasons.append(f"Image scale or extent unknown; conservative sampling penalty (-{uncertainty}).")
+    if entry['type_code'] in {'G', 'RfN', 'HII', 'EmN', 'Neb', 'SNR', 'PN', 'Cl+N'}:
+        surface = entry['surface_brightness']
+        if surface is None:
+            adjustment -= 8
+            reasons.append("Catalog surface brightness unknown; conservative contrast penalty (-8).")
+        elif surface >= 23:
+            adjustment -= 8
+            reasons.append(f"Faint catalog B-band mean surface brightness {surface:g} mag/arcsec² (-8).")
+        if (bortle_class is None or bortle_class >= 7) and entry['type_code'] in {'G', 'RfN'}:
+            adjustment -= 10
+            reasons.append("Bright urban sky or unmeasured sky background reduces confidence in extended broadband detail (-10); this is a preference, not a visibility veto.")
+    return {"adjustment": adjustment, "reasons": reasons,
+            "major_pixels": major_pixels, "minor_pixels": minor_pixels}
+
+
 def shortlist(context, dark_start, dark_end, rig, completed=(), per_slot=6):
     """Cheap whole-night altitude sieve; detailed Astropy visibility stays decisive.
 
@@ -180,8 +240,23 @@ def shortlist(context, dark_start, dark_end, rig, completed=(), per_slot=6):
     altitude = np.degrees(np.arcsin(np.clip(np.sin(lat)*np.sin(dec)[None,:]
         + np.cos(lat)*np.cos(dec)[None,:]*np.cos(np.radians(lst)[:,None]-ra[None,:]), -1, 1)))
     selected = set()
+    quality = [imaging_suitability(entry, rig, context.bortle_class)['adjustment'] for entry in entries]
     for row in altitude:
         eligible = [i for i, alt in enumerate(row) if alt >= 32]
-        eligible.sort(key=lambda i: (-(row[i] - 3*entries[i]['v_magnitude']), entries[i]['id']))
-        selected.update(entries[i]['id'] for i in eligible[:per_slot])
+        eligible.sort(key=lambda i: (-(row[i] - 3*entries[i]['v_magnitude'] + quality[i]), entries[i]['id']))
+        # Retain different imaging tradeoffs; a slot full of bright clusters
+        # must not erase its best nebula/galaxy before detailed assessment.
+        picks = eligible[:max(1, per_slot-3)]
+        for family in ({'OCl', 'GCl'}, {'G'}, {'PN', 'HII', 'EmN', 'Neb', 'RfN', 'SNR', 'Cl+N'}):
+            if len(picks) >= per_slot:
+                break
+            choice = next((i for i in eligible if entries[i]['type_code'] in family and i not in picks), None)
+            if choice is not None:
+                picks.append(choice)
+        for i in eligible:
+            if len(picks) >= per_slot:
+                break
+            if i not in picks:
+                picks.append(i)
+        selected.update(entries[i]['id'] for i in picks)
     return sorted(selected)

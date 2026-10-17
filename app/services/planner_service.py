@@ -10,7 +10,7 @@ from app.core.planning_context import use_observatory_context
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import TARGETS, get_target_angular_size
 from app.data.seasonal_targets import SEASONAL_TARGETS
-from app.services.deep_sky_catalog import shortlist, get_entry
+from app.services.deep_sky_catalog import shortlist, get_entry, imaging_suitability
 from app.models import Capture
 from app.services.advisor_service import get_catalog_exposure_advice
 from app.services.advisor_service import get_exposure_advice, build_advisor_recommendation
@@ -566,8 +566,12 @@ def build_target_plan(
         ]
     )
 
+    quality = imaging_suitability(get_entry(object_name),
+        get_rig_profile(use_observatory_context(observatory).rig_profile_key or ""),
+        use_observatory_context(observatory).bortle_class)
     score = (
-        confidence_score
+        quality["adjustment"]
+        + confidence_score
         + priority_score
         + maximum_altitude_score
         + average_altitude_score
@@ -607,8 +611,12 @@ def build_target_plan(
         moon_warning=moon_warning,
     )
 
+    suitability_note = "Beginner imaging preference (heuristic, not an image-quality guarantee): " + " ".join(quality["reasons"])
+    selection_reason += " " + suitability_note
     return {
         "advisor": advisor,
+        "suitability_note": suitability_note,
+        "imaging_suitability": quality,
         "planner_score": round(score, 1),
         "observable": observable,
         "current_altitude": get_altitude_at(

@@ -540,6 +540,7 @@ def build_schedule_blocks(
                     "planner_score": selected["planner_score"],
                     "reason": (
                         "Highest-ranked available target; stay until its goal or visibility limit."
+                        + (" " + selected["suitability_note"] if selected.get("suitability_note") else "")
                     ),
                 }
             )
