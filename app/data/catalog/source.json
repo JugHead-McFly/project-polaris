@@ -1,0 +1,11 @@
+{
+  "source": "OpenNGC",
+  "author": "Mattia Verga and contributors",
+  "revision": "4e2398a263de663d83f7b86be80c368c34335764",
+  "url": "https://github.com/mattiaverga/OpenNGC",
+  "license": "CC-BY-SA-4.0",
+  "sha256": "211ddbb3e319bb04b52b0cb7ca3b13862079a022dbe577f2367bd3846b0fa85f",
+  "usable_deep_sky_entries": 12036,
+  "aliases": 12935,
+  "schema_version": 1
+}

@@ -42,3 +42,7 @@ Physical Safari and the authenticated production account plan remain unverified.
 ## Forecast evidence update
 
 The user's current screenshot reports afternoon 9/30 and dusk 10/30. This confirms accumulation beyond the old stored audit. October 11's 88.7% satellite coverage is below the unchanged 90% threshold and correctly excluded. Actual Render cron schedule and execution health remain unverified; this UI/policy change does not claim to repair them.
+
+## Seasonal follow-up
+
+See [seasonal-catalog.md](seasonal-catalog.md) for the subsequent six-target expansion, preserved goals, unverified settings policy and real Phoenix scenarios. Its 8112 preview supersedes the synthetic-window 8111 fixture for assessing October 17 coverage.

@@ -1,6 +1,8 @@
 from typing import Any, Dict, List
 
 from app.data.targets import TARGETS
+from app.services.deep_sky_catalog import get_entry
+from app.data.seasonal_targets import SEASONAL_TARGETS
 from app.services.goal_engine_service import build_integration_goal
 
 INTEGRATION_GOALS_HOURS = {
@@ -109,6 +111,11 @@ def get_portfolio_level(progress_percent: float) -> str:
 
 def get_target_metadata(object_name: str) -> Dict[str, Any]:
     normalized_name = object_name.strip().upper()
+    entry = SEASONAL_TARGETS.get(normalized_name) or (get_entry(normalized_name) if normalized_name not in TARGETS else None)
+    if entry:
+        return {"constellation": entry["constellation"], "target_type": entry["object_type"],
+                "difficulty": "Unrated", "recommended_filter": None, "exposure_seconds": None,
+                "gain": None, "best_window": "Calculated for site and date"}
     return TARGET_METADATA.get(
         normalized_name,
         {
@@ -156,13 +163,15 @@ def get_recommended_exposure(
 ) -> Dict[str, int]:
     metadata = get_target_metadata(object_name)
     exposure_seconds = metadata["exposure_seconds"]
+    if exposure_seconds is None:
+        return None
 
     return {
         "exposure_seconds": exposure_seconds,
         "gain": metadata["gain"],
         "goal_subframes": int(
             goal_hours * 3600 / exposure_seconds
-        ),
+        ) if exposure_seconds else None,
     }
 
 def get_target_status(progress_percent: float) -> str:

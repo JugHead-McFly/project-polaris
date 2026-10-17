@@ -108,6 +108,7 @@ def workflow():
     # validation and account filtering run unmodified.
     inputs = {
         "TARGETS": ("M27", "M57"),
+        "shortlist": lambda *a, **kw: [],
         "get_weather_summary": lambda *a, **kw: deepcopy(weather),
         "get_moon_info": lambda **kw: deepcopy(moon),
         "get_darkness_info": lambda **kw: deepcopy(darkness),

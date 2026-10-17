@@ -1062,7 +1062,7 @@ const renderHostedSchedule = (schedule) => {
     const identity = appendTextElement(body, "div", "hosted-schedule-identity", "");
     const runLabel = block.total_runs > 1 ? ` · Run ${block.run_number}/${block.total_runs}` : "";
     appendTextElement(identity, "strong", "", `${block.object || "Unknown target"}${runLabel}`);
-    appendTextElement(identity, "span", "", block.common_name || "");
+    appendTextElement(identity, "span", "", block.common_name !== block.object ? (block.common_name || "") : "");
     const settings = appendTextElement(body, "div", "hosted-schedule-settings", "");
     if (block.mosaic_required) {
       appendTextElement(settings, "strong", "mosaic-label", "Mosaic candidate · setup required");
@@ -4753,4 +4753,20 @@ byId("hosted-library-revoke").addEventListener("click", async () => {
     const response = await apiFetch("/capture-history/pair", {method: "DELETE"});
     setText("hosted-library-message", response.ok ? "Importer disconnected. Recorded session history is preserved." : "Could not disconnect the importer.");
   } catch (error) { setText("hosted-library-message", "Could not disconnect the importer."); }
+});
+
+byId("catalog-search-form")?.addEventListener("submit", async event => {
+  event.preventDefault();
+  const output = byId("catalog-search-results");
+  output.replaceChildren();
+  try {
+    const response = await apiFetch(`/objects/catalog/search?q=${encodeURIComponent(byId("catalog-query").value)}&limit=30&rig_profile_key=${encodeURIComponent(hostedObservatory?.rig_profile_key || "")}`);
+    if (!response.ok) throw new Error("Catalog search is unavailable.");
+    const payload = await response.json();
+    appendTextElement(output, "p", "", `${payload.total.toLocaleString()} matches · OpenNGC · CC BY-SA 4.0 (showing up to 30)`);
+    for (const item of payload.items) {
+      const size = item.major_arcmin == null ? "extent unknown" : `${item.major_arcmin}′ × ${item.minor_arcmin ?? "unknown"}′`;
+      appendTextElement(output, "p", "", `${item.id} · ${item.name} · ${item.object_type} · ${size} · V magnitude ${item.v_magnitude ?? "unknown"} · ${item.mosaic_required ? "Mosaic candidate" : item.single_frame_fit === true ? "Fits catalog extent" : "Field fit unconfirmed"} · ${item.automatic_discovery_exclusion || "Eligible for automatic visibility assessment"}`);
+    }
+  } catch (error) { appendTextElement(output, "p", "", error.message); }
 });

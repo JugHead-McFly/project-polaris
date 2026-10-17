@@ -69,11 +69,24 @@ def progress_map(summary):
 
 
 def history_advice(object_name, progress):
+    from app.services.deep_sky_catalog import get_entry
     advice = get_catalog_exposure_advice(object_name)
-    entry = (progress or {}).get(normalize_target(object_name))
-    if entry is None:
+    catalog_entry = get_entry(object_name)
+    matches = []
+    for name, item in (progress or {}).items():
+        other = get_entry(name)
+        if normalize_target(name) == normalize_target(object_name) or (catalog_entry and other and catalog_entry["id"] == other["id"]):
+            matches.append((name, item))
+    if not matches:
         return advice
-    current = entry["seconds"]
+    current = sum(item["seconds"] for _, item in matches)
+    # Read-only alias reconciliation. Retain the smallest existing goal so a
+    # newly recognized designation never reopens a completed project.
+    retained_goal = min([advice["goal_hours"]] + [get_catalog_exposure_advice(name)["goal_hours"] for name, _ in matches])
+    if retained_goal < advice["goal_hours"]:
+        advice["goal_hours"] = retained_goal
+        advice["integration_goal_note"] = "Existing lower integration goal retained across catalog aliases; observation records are unchanged."
+    advice["goal_options"] = [{**option, "hours": retained_goal * factor} for option, factor in zip(advice["goal_options"], (0.5, 1, 2))]
     remaining = max(0, advice["goal_hours"] * 3600 - current)
     exposure = advice["recommended_sub_exposure_seconds"]
     frames = math.ceil(remaining / exposure) if exposure else None

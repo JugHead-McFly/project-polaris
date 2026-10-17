@@ -9,9 +9,11 @@ from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import TARGETS, get_target_angular_size
+from app.data.seasonal_targets import SEASONAL_TARGETS
+from app.services.deep_sky_catalog import shortlist, get_entry
 from app.models import Capture
 from app.services.advisor_service import get_catalog_exposure_advice
-from app.services.advisor_service import get_exposure_advice
+from app.services.advisor_service import get_exposure_advice, build_advisor_recommendation
 from app.services.astronomy_service import (
     get_altitude_at,
     get_altitudes_at,
@@ -424,6 +426,25 @@ def build_selection_reason(
     )
 
 
+def _merge_local_alias_advice(db, object_name, advisor, aliases):
+    others = [name for name in aliases if name != object_name]
+    if not others:
+        return advisor
+    progress = {object_name: {"seconds": advisor["current_integration_seconds"]}}
+    for name in others:
+        progress[name] = {"seconds": get_exposure_advice(db=db, object_name=name)["current_integration_seconds"]}
+    combined = history_advice(object_name, progress)
+    result = dict(advisor)
+    for key in ("current_integration_seconds", "current_integration_hours", "remaining_seconds",
+                "remaining_hours", "goal_hours", "goal_options", "integration_goal_note", "status"):
+        result[key] = combined[key]
+    exposure = result.get("recommended_sub_exposure_seconds")
+    result["additional_subframes_needed"] = math.ceil(result["remaining_seconds"]/exposure) if exposure else None
+    result["recommendation"] = build_advisor_recommendation(object_name, result["remaining_hours"],
+        result["additional_subframes_needed"], exposure, result.get("recommended_gain"), result.get("recommended_filter"))
+    return result
+
+
 def build_target_plan(
     db: Session,
     object_name: str,
@@ -432,6 +453,7 @@ def build_target_plan(
     observatory: Optional[ObservatoryContext] = None,
     use_capture_history: bool = True,
     capture_progress: Optional[Dict] = None,
+    history_aliases: Optional[List[str]] = None,
 ) -> Dict:
     if use_capture_history:
         try:
@@ -440,6 +462,7 @@ def build_target_plan(
             if str(error) != f"Target '{object_name.strip().upper()}' was not found.":
                 raise
             advisor = get_catalog_exposure_advice(object_name)
+        advisor = _merge_local_alias_advice(db, object_name, advisor, history_aliases or [])
     else:
         advisor = history_advice(object_name, capture_progress)
 
@@ -850,8 +873,13 @@ def get_tonight_plan(
     plans = []
     notes = []
 
+    local_history_names = set(get_distinct_targets(db)) if use_capture_history else set()
+    discovery_progress = capture_progress or {}
+    if use_capture_history:
+        discovery_progress = {name: {"seconds": get_exposure_advice(db=db, object_name=name)["current_integration_seconds"]}
+                              for name in local_history_names}
     planning_targets = (
-        sorted(set(get_distinct_targets(db)) | set(TARGETS))
+        sorted(local_history_names | set(TARGETS))
         if target_names is None and use_capture_history
         else sorted(
             {
@@ -861,6 +889,30 @@ def get_tonight_plan(
             }
         )
     )
+
+    if target_names is None:
+        completed = [name for name in discovery_progress
+                     if history_advice(name, discovery_progress)["remaining_seconds"] == 0]
+        discovered = shortlist(context, dark_start, dark_end,
+            get_rig_profile(context.rig_profile_key or ""), completed)
+        # Existing curated IDs and history retain their policy; discovery adds
+        # finite, time-stratified candidates without an external refresh request.
+        planning_targets = sorted(set(planning_targets) | set(discovered))
+        notes.append(f"Offline OpenNGC discovery adds {len(discovered)} candidates across the whole night. Conservative brightness, angular-resolution and known-data filters apply; the searchable catalog is larger. A remaining gap can require reviewing additional catalog objects rather than lowering the altitude floor.")
+
+    # Keep a history's original ID when discovery resolves to the same object.
+    history_names = set(capture_progress or {}) | local_history_names
+    grouped = {}
+    grouped_history = {}
+    for name in history_names:
+        entry = get_entry(name)
+        grouped_history.setdefault(entry["id"] if entry else name, []).append(name)
+    for name in sorted(set(planning_targets) | (history_names if target_names is None else set())):
+        entry = get_entry(name)
+        identity = entry["id"] if entry else name
+        if identity not in grouped or name in history_names:
+            grouped[identity] = name
+    planning_targets = list(grouped.values())
 
     for object_name in planning_targets:
         rig = get_rig_profile(context.rig_profile_key or "")
@@ -876,6 +928,7 @@ def get_tonight_plan(
                     observatory=context,
                     use_capture_history=use_capture_history,
                     capture_progress=capture_progress,
+                    history_aliases=grouped_history.get((get_entry(object_name) or {}).get("id", object_name), []),
                 )
             )
             plans[-1]["mosaic_required"] = mosaic_required
@@ -913,6 +966,11 @@ def get_tonight_plan(
     for plan in plans:
         if plan.get("mosaic_required"):
             plan["advisor"] = mosaic_advice(plan["advisor"])
+            continue
+        if plan["advisor"].get("recommended_sub_exposure_seconds") is None:
+            plan["advisor"].update(settings_confidence="Capture settings need confirmation",
+                settings_reasons=["Catalog geometry is verified; exposure, gain and filter are not validated for this rig."],
+                settings_setup_guidance=["Confirm exposure, gain and filter before capture; no frame count is prescribed."])
             continue
         plan["advisor"] = apply_tonight_settings(
             advisor=plan["advisor"],

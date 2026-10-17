@@ -7,7 +7,9 @@ object-specific adjustments so every number can be explained to the operator.
 
 from typing import Dict, List, Optional
 
-from app.data.targets import get_target_profile
+from app.data.targets import get_target_profile, TARGETS
+from app.services.deep_sky_catalog import get_entry
+from app.data.seasonal_targets import SEASONAL_TARGETS
 
 
 DEFAULT_GOAL_TIER = "detailed"
@@ -134,6 +136,9 @@ def build_integration_goal(
     profile = get_target_profile(normalized_name) or {}
     target_class = _classify_target(normalized_name, profile.get("object_type"))
     class_goal = TARGET_CLASS_GOALS[target_class]
+    if normalized_name in SEASONAL_TARGETS or (normalized_name not in TARGETS and get_entry(normalized_name)):
+        class_goal = {"hours": 4.0, "label": "catalog expansion target",
+                      "reason": "The previous four-hour fallback is retained to preserve existing integration goals."}
     adjustment = TARGET_GOAL_ADJUSTMENTS.get(normalized_name)
     detailed_hours = class_goal["hours"]
     factors: List[str] = [

@@ -19,6 +19,7 @@ from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
 from app.data.targets import SOLAR_SYSTEM_TARGETS
 from app.data.targets import TARGETS
+from app.services.deep_sky_catalog import get_entry
 from app.services.ephemeris_service import (
     get_ephemeris_coordinate_at,
     get_ephemeris_coordinates,
@@ -70,9 +71,7 @@ def _moon_phase_name(phase_angle_degrees: float) -> str:
 def get_target(
     target_name: str,
 ) -> Optional[Dict]:
-    return TARGETS.get(
-        target_name.strip().upper()
-    )
+    return TARGETS.get(target_name.strip().upper()) or get_entry(target_name)
 
 
 def normalize_datetime(

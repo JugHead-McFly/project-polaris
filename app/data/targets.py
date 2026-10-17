@@ -1,3 +1,5 @@
+from app.services.deep_sky_catalog import get_entry
+
 TARGETS = {
     "C 20": {
         "name": "North America Nebula",
@@ -111,7 +113,12 @@ def get_target_angular_size(target_name):
     if not target_name:
         return None
 
-    return TARGET_ANGULAR_SIZES.get(target_name.strip().upper())
+    size = TARGET_ANGULAR_SIZES.get(target_name.strip().upper())
+    entry = get_entry(target_name) if size is None else None
+    if entry and entry["major_arcmin"]:
+        # Major-axis circle is a conservative bound when minor axis is unknown.
+        return (entry["major_arcmin"]/60, (entry["minor_arcmin"] or entry["major_arcmin"])/60)
+    return size
 
 
 # These are educational reference images only.  They are deliberately kept
@@ -498,7 +505,7 @@ def get_target_common_name(target_name):
     if not target_name:
         return None
 
-    target = TARGETS.get(target_name.strip().upper())
+    target = TARGETS.get(target_name.strip().upper()) or get_entry(target_name)
     return target.get("name") if target else None
 
 
@@ -506,7 +513,10 @@ def get_target_profile(target_name):
     if not target_name:
         return None
 
-    return TARGET_PROFILES.get(target_name.strip().upper())
+    profile = TARGET_PROFILES.get(target_name.strip().upper())
+    entry = get_entry(target_name) if profile is None else None
+    return profile or ({"object_type": entry["object_type"], "summary": entry["name"],
+                        "source_url": entry["source_url"]} if entry else None)
 
 
 # Solar-system coordinates change with time and must never be stored as a
@@ -521,3 +531,14 @@ SOLAR_SYSTEM_TARGETS = {
 EPHEMERIS_TARGETS = {
     "C 2026 B3 PANSTARRS": "DES=2026 B3;",
 }
+
+# Catalog geometry only; no changes to observations or equipment settings.
+from app.data.seasonal_targets import SEASONAL_TARGETS
+for _key, _entry in SEASONAL_TARGETS.items():
+    TARGETS[_key] = {key: _entry[key] for key in ("name", "ra", "dec")}
+    TARGET_ANGULAR_SIZES[_key] = _entry["size"]
+    TARGET_PROFILES[_key] = {"object_type": _entry["object_type"],
+                             "summary": _entry["name"],
+                             "source_url": ("https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=" + _key
+                                            if _key in {"M33", "M45", "M42"}
+                                            else "https://github.com/mattiaverga/OpenNGC")}

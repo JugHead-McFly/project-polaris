@@ -465,9 +465,13 @@ def build_schedule_blocks(
             cursor = next_boundary
             continue
 
+        # Manual mosaics are fallback opportunities, not executable capture plans.
+        capture_candidates = [candidate for candidate in active if not candidate.get("mosaic_required")]
+        used_targets = {block["object"] for block in blocks}
         highest_ranked = max(
-            active,
-            key=lambda candidate: candidate["planner_score"],
+            capture_candidates or active,
+            key=lambda candidate: (candidate["planner_score"],
+                len(used_targets) >= 3 and candidate["advisor"]["object"] in used_targets),
         )
         selected = highest_ranked
 
@@ -485,6 +489,14 @@ def build_schedule_blocks(
         # interrupt a selected target before its goal or visibility limit.
         exposure = _advisor_settings(selected)["sub_exposure_seconds"]
         next_boundary = active_end(selected)
+        if selected.get("mosaic_required"):
+            # A later-rising single-frame target can replace a manual opportunity.
+            starts = [window["start"] for window in windows
+                      if cursor < window["start"] < next_boundary
+                      and not window["candidate"].get("mosaic_required")
+                      and remaining_minutes[window["candidate"]["advisor"]["object"]] != 0]
+            if starts:
+                next_boundary = min(starts)
         interval_minutes = (next_boundary - cursor).total_seconds() / 60
         setup_minutes = (
             min(SETUP_BUFFER_MINUTES, interval_minutes)
@@ -635,7 +647,7 @@ def _gap_reason(start, end, candidates, blocks, timezone_name):
                         if block["object"] == name and datetime.fromisoformat(block["end_at"]) <= start)
         if budget is not None and allocated >= budget:
             exhausted.add(name)
-    explanation = "No suitable unfinished catalog target fits this interval above 35° under the setup, exposure and minimum-block constraints."
+    explanation = "No suitable unfinished evaluated target fits this interval above 35° under the setup, exposure and minimum-block constraints."
     if exhausted:
         explanation += " Goals complete, allocated, or too small for another full exposure: " + ", ".join(sorted(exhausted)) + "."
     return explanation
@@ -721,7 +733,8 @@ def build_tonight_schedule(
     if blocks and dark_end is not None and datetime.fromisoformat(blocks[-1]["end_at"]) >= dark_end:
         end_reason = "Plan reaches the end of astronomical darkness."
 
-    date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
+    date = (dark_start.astimezone(ZoneInfo(timezone_name)) if dark_start
+            else datetime.now(ZoneInfo(timezone_name))).date().isoformat()
 
     return {
         "date": date,
