@@ -372,6 +372,7 @@ def _build_tonight_payload(
     db: Session,
     *,
     equatorial_mode_enabled: bool = False,
+    include_forecast_summary: bool = True,
 ):
     try:
         observatory = get_planning_context(
@@ -445,7 +446,7 @@ def _build_tonight_payload(
         ),
     )
     forecast_accuracy = unavailable_forecast_accuracy_summary()
-    if current_user.auth_mode != "local":
+    if current_user.auth_mode != "local" and include_forecast_summary:
         hosted_observatory = get_primary_observatory(
             db,
             user_id=current_user.user_id,
@@ -537,6 +538,7 @@ def create_tonight_recommendation(
         current_user,
         db,
         equatorial_mode_enabled=equatorial_mode_enabled,
+        include_forecast_summary=False,  # track_forecast_accuracy returns the updated summary below
     )
     if current_user.auth_mode == "local":
         return payload

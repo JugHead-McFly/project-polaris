@@ -859,11 +859,15 @@ def get_tonight_plan(
     capture_progress: Optional[Dict] = None,
     equatorial_mode_enabled: bool = False,
 ) -> Dict:
+    from time import perf_counter
+    import logging
+    started = perf_counter()
     context = use_observatory_context(observatory)
     weather = get_weather_summary(
         context.postal_code or "",
         observatory=context,
     )
+    weather_seconds = perf_counter() - started
     moon = get_moon_info(observatory=context)
     darkness = get_darkness_info(observatory=context)
 
@@ -1125,6 +1129,10 @@ def get_tonight_plan(
         )
 
     notes.append("Local horizon obstructions are not modeled on this release; verify trees, buildings and overhead clearance.")
+    logging.getLogger(__name__).info(
+        "planning_timing weather_ms=%.1f computation_ms=%.1f candidates=%d",
+        weather_seconds * 1000, (perf_counter() - started - weather_seconds) * 1000, len(plans),
+    )
     return {
         "recommended_target": recommended_target,
         "best_theoretical_target": best_theoretical_target,
