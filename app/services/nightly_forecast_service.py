@@ -111,7 +111,9 @@ def collect_nightly(db, *, user_id, observatory, now=None,
         db.commit()
     start, end = utc(row.window_start), utc(row.window_end)
     snapshots = dict(row.forecasts)
-    report = {"snapshots_saved": 0, "satellite_samples": 0, "completed_nights": 0}
+    report = {"snapshots_saved": 0, "satellite_samples": 0,
+              "satellite_failed_attempts": 0, "processed_nights": 0,
+              "completed_nights": 0, "inadequate_nights": 0}
     for horizon, lead in HORIZONS.items():
         if horizon in snapshots:
             continue
@@ -173,6 +175,7 @@ def collect_nightly(db, *, user_id, observatory, now=None,
                 report["satellite_samples"] += 1
             except Exception:
                 cell.pop("reference", None)
+                report["satellite_failed_attempts"] += 1
                 LOGGER.exception("Nightly satellite sample will retry within its retry budget")
             # Persist each result so an interrupted batch is resumable.
             night.observation = {"cells": cells, "complete": False}
@@ -182,7 +185,11 @@ def collect_nightly(db, *, user_id, observatory, now=None,
                              **observation_summary(cells), "updated_at": utc(clock()).isoformat()}
         db.commit()
         if complete:
-            report["completed_nights"] += 1
+            report["processed_nights"] += 1
+            if night.observation["adequate"]:
+                report["completed_nights"] += 1
+            else:
+                report["inadequate_nights"] += 1
         if budget <= 0:
             break
     return report

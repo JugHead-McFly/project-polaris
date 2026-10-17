@@ -197,6 +197,14 @@ def _build_legacy_target(
         target["object"],
         rig_profile_key,
     )
+    target["mosaic_required"] = planner_target.get("mosaic_required", False)
+    target["mosaic_note"] = planner_target.get("mosaic_note")
+    if target["mosaic_required"]:
+        target["recommended_settings"] = {"source": "manual_mosaic"}
+        target["recommended_exposure"] = None
+        target["recommended_filter"] = "Confirm per panel manually"
+        target["reason"] = target["mosaic_note"]
+        target["next_action"] = target["mosaic_note"]
     target["artwork"] = resolve_target_artwork(
         target.get("object"),
         common_name=target.get("common_name"),

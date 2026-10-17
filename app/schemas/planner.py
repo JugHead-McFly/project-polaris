@@ -9,6 +9,8 @@ from app.schemas.weather import WeatherSummary
 
 
 class PlannerTarget(BaseModel):
+    mosaic_required: bool = False
+    mosaic_note: Optional[str] = None
     advisor: ExposureAdvisorResponse
 
     planner_score: float

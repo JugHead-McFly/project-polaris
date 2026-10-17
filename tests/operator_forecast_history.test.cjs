@@ -29,7 +29,7 @@ test('individual-time comparisons do not inflate the nightly confidence card', (
   render({satellite_reliability: {check_count: 39}, saved_forecast_count: 40});
   assert.equal(labels['forecast-accuracy-history-label'], 'Building forecast confidence');
   assert.equal(labels['forecast-accuracy-insight'], 'Afternoon: 0/30 nights · Dusk: 0/30 nights');
-  assert.equal(labels['forecast-confidence-state'], 'Learning');
+  assert.equal(labels['forecast-confidence-state'], 'Collecting');
 });
 
 test('sample size alone never promotes the badge to reliable', () => {
@@ -42,7 +42,8 @@ test('sample size alone never promotes the badge to reliable', () => {
     appendTextElement: () => ({}),
   });
   render({nightly: {horizons: [{horizon: 'dusk', count: 40, within_10: 40, bias: 0, review_ready: true}]}});
-  assert.equal(labels['forecast-confidence-state'], 'Learning');
-  assert.equal(labels['forecast-accuracy-link-count'], 'Learning');
+  assert.equal(labels['forecast-confidence-state'], 'Review ready');
+  assert.equal(labels['forecast-accuracy-link-count'], 'Review ready');
+  assert.match(labels['forecast-accuracy-history-message'], /not a calibrated reliability rating/);
   assert.match(labels['forecast-accuracy-insight'], /40 of 40/);
 });

@@ -23,6 +23,7 @@ from app.services.astronomy_service import (
     get_transit_time,
 )
 from app.services.imaging_settings_service import apply_tonight_settings
+from app.services.mosaic_service import MOSAIC_NOTE, mosaic_advice
 from app.services.portfolio_service import TARGET_PRIORITY
 from app.services.weather_service import ASTRO_FORECAST_MAX_MATCH_HOURS
 from app.services.weather_service import HEAT_CAUTION_F
@@ -842,9 +843,7 @@ def get_tonight_plan(
     for object_name in planning_targets:
         rig = get_rig_profile(context.rig_profile_key or "")
         size = get_target_angular_size(object_name)
-        if rig is not None and size is not None and rig.assess_target_fit(*size).fits is False:
-            notes.append(f"{object_name} excluded: larger than the selected rig's single-frame field of view.")
-            continue
+        mosaic_required = bool(rig is not None and size is not None and rig.assess_target_fit(*size).fits is False)
         try:
             plans.append(
                 build_target_plan(
@@ -857,6 +856,10 @@ def get_tonight_plan(
                     capture_progress=capture_progress,
                 )
             )
+            plans[-1]["mosaic_required"] = mosaic_required
+            plans[-1]["mosaic_note"] = MOSAIC_NOTE if mosaic_required else None
+            if mosaic_required:
+                notes.append(f"{object_name}: {MOSAIC_NOTE}")
         except ValueError:
             continue
 
@@ -886,6 +889,9 @@ def get_tonight_plan(
     )
 
     for plan in plans:
+        if plan.get("mosaic_required"):
+            plan["advisor"] = mosaic_advice(plan["advisor"])
+            continue
         plan["advisor"] = apply_tonight_settings(
             advisor=plan["advisor"],
             weather=weather,
