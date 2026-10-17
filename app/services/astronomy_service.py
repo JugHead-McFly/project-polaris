@@ -174,6 +174,20 @@ def get_altitudes_at(
     observation_datetimes: list,
     observatory: Optional[ObservatoryContext] = None,
 ) -> list:
+    if not observation_datetimes:
+        return []
+    normalized_name = target_name.strip().upper()
+    # A fixed deep-sky coordinate broadcasts over all sample times in one
+    # Astropy transform. Keep moving/ephemeris targets on their existing path.
+    if normalized_name not in SOLAR_SYSTEM_TARGETS and not is_ephemeris_target(normalized_name):
+        coordinate = get_target_coordinate(normalized_name)
+        if coordinate is None:
+            return [None] * len(observation_datetimes)
+        times = Time([normalize_datetime(value, observatory).astimezone(timezone.utc)
+                      for value in observation_datetimes])
+        altitudes = coordinate.transform_to(AltAz(obstime=times,
+            location=_get_location(observatory))).alt.deg
+        return [round(float(value), 1) for value in altitudes]
     if is_ephemeris_target(target_name):
         coordinates = get_ephemeris_coordinates(
             target_name=target_name,

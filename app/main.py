@@ -164,6 +164,7 @@ async def log_request(request: Request, call_next):
 
     duration_ms = round((perf_counter() - started_at) * 1000, 1)
     response.headers["X-Request-ID"] = request_id
+    response.headers["Server-Timing"] = f"app;dur={duration_ms}"
     apply_browser_security_headers(response)
     logger.info(
         (

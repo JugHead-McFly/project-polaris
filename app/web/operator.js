@@ -2,10 +2,56 @@
 
 const byId = (id) => document.getElementById(id);
 
+let loadingRun = null;
+let localPlanReady = false;
+const loadingCoordinator = createLoadCoordinator((run) => {
+  const restoreFocus = byId("initial-loader").contains(document.activeElement);
+  const pending = !run.finished;
+  const initial = !run.retained && (pending || run.failed);
+  document.body.classList.toggle("initial-load", initial);
+  byId("initial-loader").hidden = !initial;
+  byId("load-title").textContent = run.failed ? "We couldn't finish loading" : "Preparing your night";
+  byId("load-message").textContent = run.message || "Weather, sky visibility and your imaging progress are combined into one plan.";
+  byId("load-retry").hidden = !run.failed;
+  byId("initial-loader").setAttribute("aria-busy", String(pending));
+  const stages = byId("load-stages");
+  stages.replaceChildren();
+  Object.entries(run.stages).forEach(([label, state]) => {
+    const item = document.createElement("li");
+    item.dataset.state = state;
+    const ring = document.createElement("span");
+    ring.className = "load-ring";
+    ring.setAttribute("aria-hidden", "true");
+    ring.textContent = state === "done" ? "✓" : state === "error" ? "!" : "";
+    const name = document.createElement("strong");
+    name.textContent = label;
+    const status = document.createElement("span");
+    status.textContent = { waiting: "Waiting", loading: "Loading", done: "Ready", error: "Unavailable" }[state];
+    item.append(ring, name, status);
+    stages.append(item);
+  });
+  const banner = byId("refresh-status");
+  banner.hidden = !run.retained || (!pending && !run.failed);
+  banner.textContent = run.failed ? `${run.message} ${run.planUpdated ? "Your plan is available; some supporting data could not be refreshed." : "Showing your previous plan; it has not been refreshed."} Use Refresh to retry.` : "Updating your night… Your previous plan remains visible.";
+  if (restoreFocus && run.finished && !run.failed) {
+    const heading = byId(usesHostedAuth ? "hosted-tonight-title" : "decision");
+    heading.setAttribute("tabindex", "-1");
+    heading.focus({ preventScroll: true });
+  }
+});
+const dismissLoading = () => {
+  loadingCoordinator.cancel();
+  document.body.classList.remove("initial-load");
+  byId("initial-loader").hidden = true;
+  byId("refresh-status").hidden = true;
+};
+
 const authConfig = window.POLARIS_AUTH_CONFIG || { mode: "local" };
 const usesHostedAuth = authConfig.mode === "supabase";
 const EQ_MODE_PREFERENCE_KEY = "polaris.eqModeEnabled";
 let supabaseClient = null;
+let authListenerInstalled = false;
+let displayedAccountId = null;
 let hostedSession = null;
 let hostedObservatory = null;
 let hostedProfile = null;
@@ -113,15 +159,22 @@ const alignHostedNavigation = () => {
 const setHostedShell = (signedIn) => {
   byId("auth-gate").hidden = signedIn;
   byId("hosted-account-main").hidden = !signedIn;
-  byId("main-content").hidden = signedIn;
-  document.querySelector(".app-nav").hidden = signedIn;
+  byId("main-content").hidden = usesHostedAuth || signedIn;
+  document.querySelector(".app-nav").hidden = usesHostedAuth || signedIn;
   byId("simulation-banner").hidden = true;
   byId("account-control").hidden = !signedIn;
   byId("mobile-header-actions").hidden = !signedIn;
-  byId("refresh-button").closest(".refresh-control").hidden = signedIn;
-  byId("eq-mode-checkbox").closest(".tracking-mode-control").hidden = signedIn;
-  document.querySelector(".readonly-badge").hidden = signedIn;
-  if (!signedIn) setMobileHeaderMenu(false);
+  byId("refresh-button").closest(".refresh-control").hidden = usesHostedAuth || signedIn;
+  byId("eq-mode-checkbox").closest(".tracking-mode-control").hidden = usesHostedAuth || signedIn;
+  document.querySelector(".readonly-badge").hidden = usesHostedAuth || signedIn;
+  if (!signedIn) {
+    dismissLoading();
+    setMobileHeaderMenu(false);
+    byId("hosted-feedback-panel").hidden = true;
+    hostedRecommendationRunId = null;
+    setText("hosted-plan-message", "");
+    setText("data-updated", "");
+  }
   if (signedIn) alignHostedNavigation();
 };
 
@@ -264,6 +317,8 @@ const useDeviceLocation = () => {
 };
 
 const showHostedAccountLoading = (message = "") => {
+  if (message) loadingRun?.finish(message);
+  else loadingRun = loadingCoordinator.begin({ Observatory: "loading", "Weather & plan": "waiting" });
   byId("target-art-preview").hidden = true;
   document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-panel").hidden = true;
@@ -279,6 +334,7 @@ const showHostedAccountLoading = (message = "") => {
 };
 
 const showHostedAccountSetup = (message = "") => {
+  dismissLoading();
   byId("target-art-preview").hidden = true;
   document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
@@ -291,6 +347,7 @@ const showHostedAccountSetup = (message = "") => {
 };
 
 const showHostedReadyHandoff = () => {
+  dismissLoading();
   byId("target-art-preview").hidden = true;
   document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
@@ -302,6 +359,7 @@ const showHostedReadyHandoff = () => {
 };
 
 const showHostedTonight = () => {
+  if (!latestHostedTonightData && !loadingRun?.current()) { loadHostedTonight(); return; }
   byId("target-art-preview").hidden = true;
   document.body.classList.remove("target-art-preview-mode");
   byId("hosted-account-loading").hidden = true;
@@ -313,6 +371,7 @@ const showHostedTonight = () => {
 };
 
 const showTargetArtPreview = () => {
+  dismissLoading();
   byId("hosted-account-loading").hidden = true;
   byId("hosted-account-retry").hidden = true;
   byId("hosted-account-panel").hidden = true;
@@ -339,84 +398,6 @@ const showStandaloneTargetArtPreview = () => {
   document.querySelector(".skip-link").href = "#target-art-preview";
   document.title = "Target Artwork Preview — Project Polaris";
   showTargetArtPreview();
-};
-
-const resetHostedPlanDetails = () => {
-
-  setText("hosted-tonight-date", "Building tonight's recommendation…");
-  setText("hosted-target-label", "Primary target");
-  setText("hosted-target-name", "—");
-  setText("hosted-target-common-name", "");
-  setText("hosted-target-reason", "Waiting for tonight's target.");
-  setText("hosted-target-rig-match", "Rig match will appear after a target is selected.");
-  setText("hosted-target-rig", "—");
-  setText("hosted-target-fit", "—");
-  byId("hosted-target-project").hidden = true;
-  setText("hosted-target-progress", "—");
-  setText("hosted-target-remaining", "—");
-  setText("hosted-target-quality", "—");
-  setText("hosted-target-history", "—");
-  setText("hosted-target-exposure", "—");
-  setText("hosted-target-gain", "—");
-  setText("hosted-target-filter", "—");
-
-
-
-
-
-  byId("hosted-decision-blockers").replaceChildren(
-    document.createElement("li"),
-  );
-  byId("hosted-decision-blockers").firstElementChild.textContent =
-    "Waiting for conditions data.";
-  byId("hosted-decision-support").hidden = true;
-  setText(
-    "hosted-decision-recovery",
-    "Polaris will reassess after the forecast loads.",
-  );
-
-
-  renderTargetIllustration("hosted-target-illustration", null);
-  renderTargetGeometry(null);
-  setText("hosted-target-tracking", "—");
-  renderOpportunityScore(null);
-  setHardStopDetailsVisibility("Conditions Unknown");
-  renderForecastAccuracyHistory(null);
-  const notes = byId("hosted-plan-notes");
-  byId("hosted-weather-strip").replaceChildren();
-  notes.replaceChildren();
-  notes.hidden = true;
-  byId("hosted-cautions-empty").hidden = false;
-  const scheduleList = byId("hosted-schedule-list");
-  scheduleList.replaceChildren();
-  appendTextElement(
-    scheduleList,
-    "div",
-    "empty-state",
-    "Building tonight's schedule…",
-  );
-  setText("hosted-schedule-count", "0 blocks");
-  byId("hosted-schedule-panel").hidden = false;
-  byId("hosted-schedule-panel").open = true;
-};
-
-const setHostedPlanLoading = () => {
-  const card = byId("hosted-recommendation");
-  card.className = "hosted-recommendation status-loading";
-  setText("hosted-decision", "Checking conditions…");
-  setText(
-    "hosted-decision-message",
-    "Comparing weather, darkness, Moon conditions, and target visibility.",
-  );
-  resetHostedPlanDetails();
-  setText("hosted-plan-message", "Refreshing tonight's recommendation…");
-  hostedRecommendationRunId = null;
-  byId("hosted-feedback-panel").hidden = true;
-  byId("hosted-feedback-yes").classList.remove("selected");
-  byId("hosted-feedback-no").classList.remove("selected");
-  byId("hosted-feedback-detail").hidden = true;
-  byId("hosted-feedback-reason").value = "";
-  setText("hosted-feedback-message", "");
 };
 
 const hostedPlanFailureMessage = (requestId = "") => {
@@ -697,7 +678,8 @@ const renderNightlyConfidence = (data) => {
   const threshold = nightly.review_after || 30;
   // Reaching the evidence threshold enables review, not a calibrated reliability claim.
   const reviewReady = groups.some(item => item.review_ready);
-  const evidenceState = reviewReady ? "Review ready" : "Collecting";
+  const recordedNights = Number(nightly.completed_nights ?? Math.max(afternoon.count || 0, dusk.count || 0));
+  const evidenceState = data?.state === "unavailable" ? "History unavailable" : `${recordedNights} ${recordedNights === 1 ? "night" : "nights"} recorded`;
   setText("forecast-confidence-state", evidenceState);
   setText("forecast-accuracy-history-label", reviewReady ? "Early forecast track record" : "Building forecast confidence");
   const progress = item => item.review_ready ? `${item.within_10} of ${item.count} within 10 points` : `${item.count}/${threshold} nights`;
@@ -870,7 +852,7 @@ const appendOpportunityComponent = (container, component) => {
     "strong",
     "",
     component.points === null || component.points === undefined
-      ? `— / ${component.max}`
+      ? "Unavailable"
       : `${displayMeasuredNumber(component.points)} / ${component.max}`,
   );
   const earnedPercent = component.points === null || component.points === undefined
@@ -1003,9 +985,6 @@ const renderHostedSchedule = (schedule) => {
   container.replaceChildren();
   renderNightAxis(schedule);
   const distinctCount = new Set(blocks.map(block => block.object)).size;
-  setText("schedule-policy", distinctCount > 4
-    ? `${distinctCount} targets selected to use available windows; 3–4 is a preference, not a cutoff.`
-    : "Best target first · Stay until goal, 35° limit or dawn");
   timeline.hidden = schedule?.decision === "Do Not Image" && blocks.length === 0;
   timeline.open = blocks.length > 0;
   setText(
@@ -1049,6 +1028,7 @@ const renderHostedSchedule = (schedule) => {
     }
     const card = appendTextElement(container, "article", "hosted-schedule-block", "");
     card.id = `scheduled-target-${index}`;
+    container.style.setProperty("--target-columns", String(Math.min(blocks.length, 4)));
     const time = appendTextElement(card, "div", "hosted-schedule-time", "");
     appendTextElement(time, "strong", "", `${shortTime(block.start)} – ${shortTime(block.end)}`);
     appendTextElement(time, "span", "", durationLabel(block.duration_minutes));
@@ -1069,15 +1049,10 @@ const renderHostedSchedule = (schedule) => {
       appendTextElement(body, "p", "schedule-action", "Confirm mosaic layout and capture plan before starting.");
     } else {
       const chips = equipmentChips(block).filter(chip => !/ min (imaging|setup)$/.test(chip.label));
-      appendTextElement(settings, "span", "capture-setting-line", chips.map(chip => chip.label).join(" · ") || "Verify capture settings");
+      appendTextElement(settings, "span", "capture-setting-line", chips.map(chip => chip.label).join(" · ") || "Settings not configured");
       if (block.setup_minutes) appendTextElement(body, "p", "schedule-action", `${Math.round(block.setup_minutes)} min setup included`);
     }
-    const details = appendTextElement(body, "details", "compact-disclosure schedule-details", "");
-    appendTextElement(details, "summary", "", "Setup & details");
-    if (block.mosaic_note) appendTextElement(details, "p", "", block.mosaic_note);
-    (block.setup_changes || []).forEach(change => appendTextElement(details, "p", "", change));
-    appendTextElement(details, "p", "", block.reason || "Review live conditions before starting.");
-    if (!block.mosaic_required) appendSettingsInfoButton(details, block);
+
   });
   (schedule.gaps || []).filter(gap => gap.minutes >= 1 && gap.start === blocks[blocks.length - 1].end)
     .forEach(gap => appendPause(gap.start, gap.end));
@@ -1160,7 +1135,7 @@ const compactConditionMessage = (data) => {
   }
   if (weather.cache_status === "stale") items.push("Forecast is stale");
   if (decision === "Conditions Unknown") items.push("Conditions unverified");
-  return `${items.join(" · ") || "Forecast unavailable"}. Check live conditions before starting.`;
+  return items.join(" · ") || "Forecast unavailable";
 };
 
 const softenAdvisoryNote = (note) => note
@@ -1180,7 +1155,7 @@ const renderConditionsTrend = (elementId, trend) => {
   const direction = trend?.direction || "unavailable";
   element.className = `conditions-trend trend-${direction}`;
   element.textContent = trend?.message || (
-    "Trend unavailable: check live conditions at the window start."
+    "Trend unavailable."
   );
 };
 
@@ -1478,6 +1453,11 @@ const renderLibraryHistory = (history) => {
 };
 
 const renderHostedTonight = (data) => {
+  byId("hosted-feedback-yes").classList.remove("selected");
+  byId("hosted-feedback-no").classList.remove("selected");
+  byId("hosted-feedback-detail").hidden = true;
+  byId("hosted-feedback-reason").value = "";
+  setText("hosted-feedback-message", "");
   renderLibraryHistory(data.capture_history);
   latestHostedTonightData = data;
   const schedule = data.schedule || {};
@@ -1486,10 +1466,8 @@ const renderHostedTonight = (data) => {
   byId("hosted-recommendation").className = `hosted-recommendation ${statusClass}`;
   setText("hosted-tonight-observatory", data.observatory?.name, "your observatory");
   setText("observatory-name", data.observatory?.name, "Your observatory");
-  setText("hosted-tonight-date", [`Plan for ${displayDate(data.date)}`, data.observatory?.rig_profile_label, data.observatory?.timezone].filter(Boolean).join(" · "));
   setText("hosted-decision", displayedDecisionLabel(decision));
   setText("hosted-decision-message", compactConditionMessage(data));
-  setText("hosted-decision-detail", displayedDecisionMessage(decision, data.message));
   renderDecisionSupport(data);
 
   const target = data.recommended_target || data.backup_target;
@@ -1504,13 +1482,12 @@ const renderHostedTonight = (data) => {
 
   setText(
     "hosted-setup-title",
-    target?.mosaic_required ? "Mosaic setup required" : decision === "Do Not Image" ? "Setup if conditions improve" : "Recommended setup",
+    target?.mosaic_required ? "Mosaic capture settings" : "Capture settings",
   );
   if (target) {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");
     setText("hosted-target-common-name", target.common_name, "");
-    setText("hosted-target-reason", target.reason, "Planner recommendation available.");
     setText("hosted-target-rig-match", targetRigMatchLabel(target));
     setText("hosted-target-fit", target.mosaic_required ? "Mosaic candidate" : targetFitLabel(target));
 
@@ -1526,6 +1503,9 @@ const renderHostedTonight = (data) => {
     );
     setText("hosted-target-gain", displayNumber(settings.gain));
     renderFilterValue("hosted-target-filter", settings.filter_name, false);
+    const fields = { "hosted-target-exposure": settings.exposure_seconds, "hosted-target-gain": settings.gain, "hosted-target-filter": settings.filter_name };
+    Object.entries(fields).forEach(([id, value]) => { byId(id).closest("div").hidden = value == null || value === ""; });
+    byId("capture-settings-state").hidden = Object.values(fields).every(value => value != null && value !== "");
     setText("hosted-target-tracking", hostedTrackingModeLabel());
   } else {
 
@@ -1534,7 +1514,6 @@ const renderHostedTonight = (data) => {
     renderTargetGeometry(null);
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
-    setText("hosted-target-reason", "No target currently meets the planner requirements.");
     setText("hosted-target-rig-match", "Rig-specific reasoning is not available without a selected target.");
     setText("hosted-target-fit", "No target selected");
     setText("hosted-target-exposure", null);
@@ -1568,15 +1547,12 @@ const renderHostedTonight = (data) => {
   const plannerNotes = (schedule.notes || []).filter(note => note && !/unallocated|remain unallocated/i.test(note));
   const visibleNotes = [];
   if (["watch", "high"].includes(data.dew_risk?.level)) visibleNotes.push(`Dew: ${data.dew_risk.action || "Use dew control and check the lens."}`);
-  if (plannerNotes.some(note => /obstructions.*not modeled/i.test(note))) visibleNotes.push("Local obstructions are not modeled. Check the sky path.");
   if ((schedule.blocks || []).some(block => block.mosaic_required)) visibleNotes.push("Mosaic candidates need a confirmed layout and capture plan.");
-  if ((schedule.blocks || []).some(block => !block.mosaic_required && (block.recommended_sub_exposure_seconds == null || block.recommended_gain == null))) visibleNotes.push("Some capture settings are unknown. Verify them before starting.");
+
   notes.hidden = visibleNotes.length === 0;
-  byId("hosted-cautions-empty").hidden = !notes.hidden;
+  byId("hosted-cautions-empty").hidden = true;
+  notes.closest(".hosted-setup-cautions").hidden = notes.hidden;
   renderAdvisoryNotes(notes, visibleNotes);
-  const detailNotes = byId("hosted-plan-details-notes");
-  detailNotes.replaceChildren();
-  renderAdvisoryNotes(detailNotes, plannerNotes.filter(note => note !== data.message).map(softenAdvisoryNote));
   renderHostedSchedule(schedule);
 
   setHardStopDetailsVisibility(decision);
@@ -1586,17 +1562,6 @@ const renderHostedTonight = (data) => {
     "hosted-plan-message",
     `Plan refreshed ${new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}.`,
   );
-  const cloudSources = weather.planned_cloud_forecast_sources || [];
-  const cloudReadings = cloudSources.map(source =>
-    `${source.provider}: ${Math.round(source.cloud_cover_percent)}%`).join(" / ");
-  const cloudWindow = weather.cloud_dark_window || {};
-  const nightCloud = cloudWindow.average_cloud_cover_percent;
-  setText("cloud-source-summary", [
-    cloudReadings ? `Clouds at start — ${cloudReadings}.` : "Cloud comparison unavailable at start.",
-    cloudSources.length > 1 ? `Average ${Math.round(weather.planned_cloud_cover_percent)}%; source spread ${Math.round(weather.planned_cloud_forecast_spread)} percentage points.` : "Only one or no forecast source covers the start.",
-    nightCloud != null ? `Astronomical-darkness average: ${Math.round(nightCloud)}% cloud (${Math.round(cloudWindow.multi_source_coverage_percent)}% of the window has both sources).` : "Full-night cloud average unavailable: incomplete hourly coverage.",
-    "Source agreement is not a guarantee. Check the sky before skipping the night.",
-  ].join(" "));
   setText(
     "data-updated",
     weather.fetched_at
@@ -1610,36 +1575,25 @@ const loadHostedTonight = async () => {
     showTargetArtPreview();
     return;
   }
+  const run = loadingRun = loadingCoordinator.begin({ Observatory: "done", "Weather & plan": "loading" }, Boolean(latestHostedTonightData));
   setHostedRefreshState(true);
-  setHostedPlanLoading();
   showHostedTonight();
-
   try {
     const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
-    const response = await apiFetch(
-      `/tonight?equatorial_mode_enabled=${eqEnabled}`,
-      {
-        method: "POST",
-        cache: "no-store",
-      },
-    );
-    if (response.status === 409) {
-      showHostedAccountSetup("Add an observing home before building tonight's plan.");
-      return;
-    }
-    if (!response.ok) {
-      throw new Error(hostedPlanFailureMessage(response.headers.get("X-Request-ID") || ""));
-    }
-    renderHostedTonight(await response.json());
+    const data = await run.request("Weather & plan", async signal => {
+      const response = await apiFetch(`/tonight?equatorial_mode_enabled=${eqEnabled}`, { method: "POST", cache: "no-store", signal });
+      if (response.status === 409) return null;
+      if (!response.ok) throw new Error(hostedPlanFailureMessage(response.headers.get("X-Request-ID") || ""));
+      return response.json();
+    });
+    if (!run.current()) return;
+    if (!data) { showHostedAccountSetup("Add an observing home before building tonight's plan."); return; }
+    renderHostedTonight(data);
+    run.finish();
   } catch (error) {
-    byId("hosted-recommendation").className = "hosted-recommendation status-error";
-    setText("hosted-decision", "Plan unavailable");
-    setText("hosted-decision-message", error.message);
-    setText("hosted-target-reason", "Your observing home is still saved. This is a planning refresh problem, not a telescope-control action.");
-    renderHostedSchedule({ decision: "Plan unavailable", blocks: [] });
-    setText("hosted-plan-message", "Try Refresh plan again. If it fails twice, send Doug the request ID and a screenshot.");
+    if (run.current()) run.finish(error.message);
   } finally {
-    setHostedRefreshState(false);
+    if (loadingRun === run) setHostedRefreshState(false);
   }
 };
 
@@ -1682,27 +1636,25 @@ const saveHostedPlanFeedback = async (useful, reason = null) => {
 };
 
 const loadHostedAccount = async () => {
-  await loadRigProfiles();
-
-  const profileResponse = await apiFetch("/profile", { cache: "no-store" });
-  let profile = null;
-  if (profileResponse.status === 404) {
-    setText("hosted-account-state", "Setup needed");
-    setText(
-      "hosted-account-intro",
-      "Add your name and one observing location. You can use an approximate location if you prefer not to save your exact address.",
-    );
-  } else if (!profileResponse.ok) {
-    throw new Error("Polaris could not load your account. Please sign out and try again.");
-  } else {
-    profile = await profileResponse.json();
-  }
-
-  const observatoryResponse = await apiFetch("/observatories", { cache: "no-store" });
-  if (!observatoryResponse.ok) {
-    throw new Error("Polaris could not load your observing location. Please try again.");
-  }
-  const observatories = await observatoryResponse.json();
+  const run = loadingRun;
+  const { profile, observatories } = await run.request("Observatory", async signal => {
+    // These independent reads do not need three serial network round trips.
+    const [profileResponse, observatoryResponse, rigsResponse] = await Promise.all([
+      apiFetch("/profile", { cache: "no-store", signal }),
+      apiFetch("/observatories", { cache: "no-store", signal }),
+      apiFetch("/rig-profiles", { cache: "no-store", signal }).catch(() => null),
+    ]);
+    if (!profileResponse.ok && profileResponse.status !== 404) throw new Error("Polaris could not load your account. Please try again.");
+    if (!observatoryResponse.ok) throw new Error("Polaris could not load your observing location. Please try again.");
+    const profile = profileResponse.status === 404 ? null : await profileResponse.json();
+    const observatories = await observatoryResponse.json();
+    const rigs = rigsResponse?.ok ? await rigsResponse.json() : { profiles: [] };
+    if (!run.current()) throw new Error("Superseded account request");
+    rigProfiles = Array.isArray(rigs.profiles) ? rigs.profiles : [];
+    populateRigProfileSelect(rigProfiles);
+    return { profile, observatories };
+  });
+  if (!run.current()) return;
   hostedObservatory = observatories[0] || null;
   hostedProfile = profile;
   updateHostedAccountForm(profile, hostedObservatory);
@@ -1792,9 +1744,19 @@ const saveHostedAccount = async (event) => {
 };
 
 const handleHostedSession = async (session) => {
+  const accountId = session?.user?.id || session?.user?.email || null;
+  if (accountId !== displayedAccountId) {
+    dismissLoading();
+    latestHostedTonightData = null;
+    hostedObservatory = null;
+    hostedProfile = null;
+    displayedAccountId = accountId;
+  }
   hostedSession = session;
   if (!session) {
     latestHostedTonightData = null;
+    hostedObservatory = null;
+    hostedProfile = null;
     setHostedShell(false);
     showSignIn();
     setAuthMessage("");
@@ -1807,20 +1769,22 @@ const handleHostedSession = async (session) => {
   setHostedShell(true);
   setText("account-email", session.user?.email || "Signed in");
   showHostedAccountLoading();
+  const accountRun = loadingRun;
   try {
     await loadHostedAccount();
   } catch (error) {
-    showHostedAccountLoading(error.message);
+    if (hostedSession && accountRun.current()) showHostedAccountLoading(error.message);
   }
 };
 
 const retryHostedAccountLoad = async () => {
   if (!hostedSession) return;
   showHostedAccountLoading();
+  const accountRun = loadingRun;
   try {
     await loadHostedAccount();
   } catch (error) {
-    showHostedAccountLoading(error.message);
+    if (hostedSession && accountRun.current()) showHostedAccountLoading(error.message);
   }
 };
 
@@ -1836,13 +1800,13 @@ const initializeHostedAuth = async () => {
     return;
   }
 
-  supabaseClient = window.supabase.createClient(
+  supabaseClient ||= window.supabase.createClient(
     authConfig.supabaseUrl,
     authConfig.supabasePublishableKey,
   );
   // Register immediately: Supabase emits PASSWORD_RECOVERY while it restores
   // the session embedded in a password-reset link.
-  supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (!authListenerInstalled) supabaseClient.auth.onAuthStateChange((event, session) => {
     hostedSession = session;
     if (event === "PASSWORD_RECOVERY") {
       isPasswordRecoveryFlow = true;
@@ -1850,12 +1814,23 @@ const initializeHostedAuth = async () => {
       return;
     }
     if (!session) void handleHostedSession(null);
+    else if (displayedAccountId && displayedAccountId !== (session.user?.id || session.user?.email)) void handleHostedSession(session);
   });
+  authListenerInstalled = true;
 
   // The browser client detects both implicit and PKCE recovery links during
   // initialization. Do not exchange a code here: doing so races that built-in
   // handling and consumes the link before the recovery event can reach the UI.
-  const { data, error } = await supabaseClient.auth.getSession();
+  const run = loadingRun = loadingCoordinator.begin({ "Secure session": "loading" });
+  let result;
+  try {
+    result = await run.request("Secure session", () => supabaseClient.auth.getSession());
+  } catch (error) {
+    if (run.current()) run.finish("Secure sign-in did not finish. Please try again.");
+    return;
+  }
+  if (!run.current()) return;
+  const { data, error } = result;
   if (error) {
     setAuthMessage("Polaris could not complete the secure invitation link. Please request a new invitation.");
   }
@@ -2958,9 +2933,7 @@ const renderSchedule = (schedule) => {
     );
     appendTextElement(heading, "span", "", durationLabel(block.duration_minutes));
 
-    if (block.reason) {
-      appendTextElement(card, "p", "schedule-reason", block.reason);
-    }
+
 
     const chips = appendTextElement(card, "div", "equipment-row", "");
     equipmentChips(block).forEach((chip) => {
@@ -4447,26 +4420,24 @@ const showPlanError = (message) => {
 };
 
 const loadDashboard = async () => {
+  const run = loadingRun = loadingCoordinator.begin({ "Weather & plan": "waiting", System: "waiting", History: "waiting" }, localPlanReady);
   const refresh = byId("refresh-button");
   refresh.disabled = true;
   refresh.textContent = "Refreshing…";
   byId("load-error").hidden = true;
 
   const eqEnabled = byId("eq-mode-checkbox").checked;
+  const read = (key, url) => run.request(key, async signal => {
+    const response = await apiFetch(url, { cache: "no-store", signal });
+    if (!response.ok) throw new Error(`${key} is unavailable. Please try again.`);
+    return response.json();
+  });
   const [planResult, systemResult, dashboardResult] = await Promise.allSettled([
-    apiFetch(`/tonight?equatorial_mode_enabled=${eqEnabled}`, { cache: "no-store" }).then((response) => {
-      if (!response.ok) throw new Error(`Tonight endpoint returned ${response.status}.`);
-      return response.json();
-    }),
-    apiFetch("/system", { cache: "no-store" }).then((response) => {
-      if (!response.ok) throw new Error(`System endpoint returned ${response.status}.`);
-      return response.json();
-    }),
-    apiFetch(`/dashboard?include_all_history=${historyExpanded}`, { cache: "no-store" }).then((response) => {
-      if (!response.ok) throw new Error(`Dashboard endpoint returned ${response.status}.`);
-      return response.json();
-    }),
+    read("Weather & plan", `/tonight?equatorial_mode_enabled=${eqEnabled}`),
+    read("System", "/system"),
+    read("History", `/dashboard?include_all_history=${historyExpanded}`),
   ]);
+  if (!run.current()) return;
 
   if (planResult.status === "fulfilled") {
     const data = isImmaculateDemo
@@ -4475,6 +4446,7 @@ const loadDashboard = async () => {
         dashboardResult.status === "fulfilled" ? dashboardResult.value : null,
       )
       : planResult.value;
+    localPlanReady = true;
     renderDecision(data);
     renderSchedule(data.schedule);
     renderConditions(data);
@@ -4492,7 +4464,7 @@ const loadDashboard = async () => {
       appendTextElement(visitedList, "div", "empty-state", error.message);
     }
   } else {
-    showPlanError(planResult.reason.message);
+    if (!localPlanReady) showPlanError(planResult.reason.message);
     setText("candidate-site-summary", "Unavailable");
     setText("visited-site-summary", "Unavailable");
   }
@@ -4513,6 +4485,11 @@ const loadDashboard = async () => {
     renderHistoryError();
   }
 
+  if (!run.current()) return;
+  if (localPlanReady) run.retained = true;
+  run.planUpdated = planResult.status === "fulfilled";
+  const failures = [planResult, systemResult, dashboardResult].filter(result => result.status === "rejected");
+  run.finish(failures.length ? failures.map(result => result.reason.message).join(" ") : "");
   const refreshedAt = new Date();
   setText("page-refreshed", `Page refreshed ${refreshedAt.toLocaleTimeString()}`);
   const weatherFetchedAt = planResult.status === "fulfilled"
@@ -4557,7 +4534,8 @@ const toggleHistory = async () => {
 
 const runDashboardLoad = () => {
   loadDashboard().catch((error) => {
-    showPlanError(error.message);
+    loadingRun?.finish(error.message);
+    if (!localPlanReady) showPlanError(error.message);
     const refresh = byId("refresh-button");
     refresh.disabled = false;
     refresh.textContent = refreshButtonLabel();
@@ -4704,12 +4682,21 @@ byId("hosted-ready-edit-home").addEventListener("click", () => {
   showHostedAccountSetup();
 });
 
+byId("load-retry").addEventListener("click", () => {
+  if (!usesHostedAuth) runDashboardLoad();
+  else if (!hostedSession) initializeHostedAuth();
+  else if (hostedObservatory) loadHostedTonight();
+  else retryHostedAccountLoad();
+});
+
 const bootApplication = async () => {
   if (targetArtPreviewMode) {
     showStandaloneTargetArtPreview();
     return;
   }
   if (usesHostedAuth) {
+    setHostedShell(false);
+    byId("auth-gate").hidden = true;
     await initializeHostedAuth();
     return;
   }
@@ -4753,20 +4740,4 @@ byId("hosted-library-revoke").addEventListener("click", async () => {
     const response = await apiFetch("/capture-history/pair", {method: "DELETE"});
     setText("hosted-library-message", response.ok ? "Importer disconnected. Recorded session history is preserved." : "Could not disconnect the importer.");
   } catch (error) { setText("hosted-library-message", "Could not disconnect the importer."); }
-});
-
-byId("catalog-search-form")?.addEventListener("submit", async event => {
-  event.preventDefault();
-  const output = byId("catalog-search-results");
-  output.replaceChildren();
-  try {
-    const response = await apiFetch(`/objects/catalog/search?q=${encodeURIComponent(byId("catalog-query").value)}&limit=30&rig_profile_key=${encodeURIComponent(hostedObservatory?.rig_profile_key || "")}`);
-    if (!response.ok) throw new Error("Catalog search is unavailable.");
-    const payload = await response.json();
-    appendTextElement(output, "p", "", `${payload.total.toLocaleString()} matches · OpenNGC · CC BY-SA 4.0 (showing up to 30)`);
-    for (const item of payload.items) {
-      const size = item.major_arcmin == null ? "extent unknown" : `${item.major_arcmin}′ × ${item.minor_arcmin ?? "unknown"}′`;
-      appendTextElement(output, "p", "", `${item.id} · ${item.name} · ${item.object_type} · ${size} · V magnitude ${item.v_magnitude ?? "unknown"} · ${item.mosaic_required ? "Mosaic candidate" : item.single_frame_fit === true ? "Fits catalog extent" : "Field fit unconfirmed"} · ${item.automatic_discovery_exclusion || "Eligible for automatic visibility assessment"}`);
-    }
-  } catch (error) { appendTextElement(output, "p", "", error.message); }
 });

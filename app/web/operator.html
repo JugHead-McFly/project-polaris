@@ -15,9 +15,10 @@
     <script nonce="__SCRIPT_NONCE__">window.POLARIS_AUTH_CONFIG = __POLARIS_AUTH_CONFIG__;</script>
     <script defer src="/operator-assets/leaflet.js"></script>
     __SUPABASE_CLIENT_SCRIPT__
+    <script defer src="/operator-assets/loading.js?v=__ASSET_VERSION__"></script>
     <script defer src="/operator-assets/operator.js?v=__ASSET_VERSION__"></script>
   </head>
-  <body>
+  <body class="initial-load">
     <a class="skip-link" href="#main-content">Skip to tonight's plan</a>
 
     <header class="site-header">
@@ -153,6 +154,16 @@
         <p class="auth-message" id="invite-message" role="status" aria-live="polite"></p>
       </form>
     </section>
+
+    <section id="initial-loader" class="initial-loader" aria-labelledby="load-title" tabindex="-1">
+      <p class="eyebrow">Your night, coming into focus</p>
+      <h1 id="load-title">Preparing your observatory</h1>
+      <p id="load-message" role="status" aria-live="polite">Connecting to Polaris.</p>
+      <ul id="load-stages" class="load-stages" aria-label="Loading stages"></ul>
+      <button id="load-retry" class="account-button" type="button" hidden>Try again</button>
+    </section>
+    <div id="refresh-status" class="refresh-status" role="status" aria-live="polite" hidden></div>
+    <noscript><p>Enable JavaScript to load your observing plan.</p></noscript>
 
     <nav class="app-nav" aria-label="Project Polaris sections">
       <a href="/operator" data-view-link="tonight">Tonight</a>
@@ -305,16 +316,7 @@
           <div>
             <p class="eyebrow">Tonight at <span id="hosted-tonight-observatory">your observatory</span></p>
             <h1 id="hosted-tonight-title">Your imaging plan</h1>
-            <p id="hosted-tonight-date">Building tonight's recommendation…</p>
-            <details id="hosted-library-history">
-              <summary>Imaging progress: <span id="hosted-library-summary">Not synced yet</span></summary>
-              <p id="hosted-library-basis"></p>
-              <p id="hosted-library-sync-time"></p>
-              <div id="hosted-library-targets"></div>
-              <button type="button" id="hosted-library-pair">Connect NAS importer</button>
-              <button type="button" id="hosted-library-revoke">Disconnect NAS importer</button>
-              <p id="hosted-library-message" role="status"></p>
-            </details>
+
           </div>
           <a class="hosted-forecast-history-link" href="#forecast-accuracy-history">
             <span>Forecast history</span>
@@ -336,7 +338,7 @@
               <p id="hosted-decision-message" class="compact-condition-message">
                 Comparing weather, darkness, Moon conditions, and target visibility.
               </p>
-          <details class="hosted-score-command compact-disclosure"><summary>Conditions &amp; score breakdown</summary>
+          <div class="hosted-score-command">
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
               <div class="hosted-opportunity-total">
@@ -349,8 +351,7 @@
                 <p>Score factors will appear after conditions load.</p>
               </div>
             </div>
-          </details>
-              <details class="cloud-source-details"><summary>Forecast details</summary><p id="hosted-decision-detail"></p><p id="cloud-source-summary"></p></details>
+          </div>
               <div class="hosted-decision-support" id="hosted-decision-support">
                 <section aria-labelledby="hosted-blockers-title">
                   <p class="eyebrow" id="hosted-blockers-title">Why not tonight</p>
@@ -392,7 +393,6 @@
               <span class="hosted-schedule-toggle" aria-hidden="true"></span>
             </span>
           </summary>
-          <p class="schedule-policy" id="schedule-policy">Best target first · Stay until goal, 35° limit or dawn</p>
           <div id="night-plan-axis" class="night-plan-axis" aria-label="Scheduled targets across astronomical darkness"></div>
           <div class="hosted-schedule-list" id="hosted-schedule-list">
             <div class="empty-state">Building tonight's schedule…</div>
@@ -401,13 +401,6 @@
 
         <details class="panel compact-planning-details" id="compact-planning-details">
           <summary>Target &amp; planning details</summary>
-          <form id="catalog-search-form" class="compact-target-details">
-            <label for="catalog-query">Search the deep-sky catalog</label>
-            <input id="catalog-query" name="q" maxlength="100" placeholder="Name or designation, e.g. M101" />
-            <button type="submit">Search catalog</button>
-            <p>Catalog geometry does not establish capture settings. Large objects may need a mosaic.</p>
-            <div id="catalog-search-results" aria-live="polite"></div>
-          </form>
           <div class="compact-target-details">
           <button
             class="hosted-secondary-toggle"
@@ -434,7 +427,6 @@
                 ></div>
               </div>
             </div>
-            <details class="compact-disclosure"><summary>Why this target</summary><p id="hosted-target-reason">Waiting for tonight's target.</p></details>
             <dl class="hosted-target-project" id="hosted-target-project" hidden>
               <div>
                 <dt>Project progress</dt>
@@ -478,7 +470,8 @@
           </div>
 
           <div class="hosted-setup-card" id="hosted-setup-card">
-            <p class="eyebrow" id="hosted-setup-title">Recommended setup</p>
+            <p class="eyebrow" id="hosted-setup-title">Capture settings</p>
+            <p id="capture-settings-state" hidden>Settings not configured</p>
             <dl class="hosted-target-facts">
               <div>
                 <dt>Rig profile</dt>
@@ -509,9 +502,6 @@
           </div>
           </div>
 
-          <details class="compact-disclosure"><summary>Planner notes</summary>
-            <ul id="hosted-plan-details-notes"></ul>
-          </details>
         </details>
 
         <section
@@ -523,7 +513,6 @@
             <summary aria-label="Cloud forecast reliability — view evidence">
               <span id="forecast-accuracy-history-title">Forecast reliability</span>
               <span class="confidence-badge" role="status" aria-live="polite">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
                 <span id="forecast-confidence-state">Loading…</span>
               </span>
               <span class="confidence-chevron" aria-hidden="true">⌄</span>
@@ -571,6 +560,16 @@
       </section>
 
       <section class="panel hosted-account-panel" id="hosted-account-panel" hidden aria-labelledby="hosted-account-title">
+            <details id="hosted-library-history">
+              <summary>Capture history: <span id="hosted-library-summary">Not synced yet</span></summary>
+              <p id="hosted-library-basis"></p>
+              <p id="hosted-library-sync-time"></p>
+              <div id="hosted-library-targets"></div>
+              <button type="button" id="hosted-library-pair">Connect NAS importer</button>
+              <button type="button" id="hosted-library-revoke">Disconnect NAS importer</button>
+              <p id="hosted-library-message" role="status"></p>
+            </details>
+
         <div class="panel-heading">
           <div>
             <p class="eyebrow">First-time setup</p>

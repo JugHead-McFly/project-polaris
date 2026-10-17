@@ -1,0 +1,59 @@
+"use strict";
+
+// One generation owns the screen. Aborted or late responses cannot replace it.
+const createLoadCoordinator = (render, timeoutMs = 90000) => {
+  let active = null;
+  return {
+    cancel() { active?.controller.abort(); active = null; },
+    begin(stages, retained = false) {
+      active?.controller.abort();
+      const run = { controller: new AbortController(), stages: { ...stages }, retained, message: "", failed: false };
+      active = run;
+      run.current = () => active === run && !run.controller.signal.aborted;
+      run.update = (key, state) => {
+        if (!run.current()) return;
+        run.stages[key] = state;
+        render(run);
+      };
+      run.request = async (key, action) => {
+        if (!run.current()) throw new Error("Superseded request");
+        run.update(key, "loading");
+        let timer;
+        const controller = new AbortController();
+        const cancel = () => controller.abort();
+        run.controller.signal.addEventListener("abort", cancel, { once: true });
+        try {
+          const timeout = new Promise((_, reject) => {
+            timer = setTimeout(() => {
+              controller.abort();
+              reject(new Error("This is taking longer than expected. Please try again."));
+            }, timeoutMs);
+          });
+          const aborted = new Promise((_, reject) => {
+            controller.signal.addEventListener("abort", () => reject(new Error("Request stopped. Please try again.")), { once: true });
+          });
+          const value = await Promise.race([action(controller.signal), timeout, aborted]);
+          if (!run.current()) throw new Error("Superseded request");
+          run.update(key, "done");
+          return value;
+        } catch (error) {
+          run.update(key, "error");
+          throw error;
+        } finally {
+          clearTimeout(timer);
+          run.controller.signal.removeEventListener("abort", cancel);
+        }
+      };
+      run.finish = (message = "") => {
+        if (!run.current()) return;
+        run.failed = Boolean(message);
+        run.message = message;
+        run.finished = true;
+        render(run);
+      };
+      render(run);
+      return run;
+    },
+  };
+};
+if (typeof module !== "undefined") module.exports = { createLoadCoordinator };

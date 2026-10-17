@@ -5395,3 +5395,53 @@ footer {
   .compact-target-details { grid-template-columns: 1fr; }
   #hosted-tonight-panel .hosted-target-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* A quiet first view; no empty plan metrics are exposed before data arrives. */
+body.initial-load { background: #07151d; }
+body.initial-load #main-content,
+body.initial-load #hosted-account-main,
+body.initial-load .app-nav,
+body.initial-load footer { display: none !important; }
+.initial-loader { min-height: min(65vh, 620px); max-width: 740px; margin: 0 auto;
+  padding: clamp(56px, 12vh, 140px) 24px 60px; text-align: center; }
+.initial-loader h1 { font-size: clamp(26px, 4vw, 38px); margin: 16px 0; font-weight: 600; }
+.initial-loader > p:not(.eyebrow) { color: #a7bdc8; line-height: 1.6; max-width: 470px; margin: 0 auto; }
+.load-stages { display: flex; justify-content: center; gap: clamp(20px, 5vw, 64px);
+  padding: 0; margin: 38px 0 30px; list-style: none; }
+.load-stages li { display: grid; justify-items: center; gap: 10px; flex: 1; max-width: 165px; font-size: 13px; color: #a7bdc8; }
+.load-stages strong { color: #e0edf0; font-size: 14px; }
+.load-ring { display: grid; place-items: center; width: 54px; height: 54px;
+  border: 2px solid #23444d; border-radius: 50%; color: #61ded0; font-size: 23px; }
+[data-state="loading"] .load-ring { border-top-color: #61ded0; border-right-color: #61ded0; animation: load-orbit 1.6s linear infinite; }
+[data-state="done"] .load-ring { border-color: #61ded0; background: #102b30; }
+[data-state="error"] .load-ring { border-color: #e7b980; color: #e7b980; }
+.refresh-status { margin: 12px auto; max-width: 1100px; padding: 10px 18px; color: #c1d7dc; border-left: 2px solid #61ded0; background: #10252d; }
+@keyframes load-orbit { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { [data-state="loading"] .load-ring { animation: none; } }
+@media (max-width: 480px) { .initial-loader { padding: 52px 18px; } .load-stages { gap: 15px; } .load-ring { width: 46px; height: 46px; } }
+
+#hosted-tonight-panel .hosted-opportunity-score { display: grid; grid-template-columns: 160px minmax(0,1fr); column-gap: 24px; }
+#hosted-tonight-panel .hosted-opportunity-score > .eyebrow { grid-column: 1; }
+#hosted-tonight-panel .hosted-opportunity-total { grid-column: 1; align-self: start; margin-top: 14px; }
+#hosted-tonight-panel #hosted-opportunity-score { font-size: 42px; }
+#hosted-tonight-panel .hosted-score-components { grid-column: 2; grid-row: 1 / span 2; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
+#hosted-tonight-panel .hosted-score-component { padding: 10px; min-width: 0; }
+#hosted-tonight-panel .hosted-score-factor-description { display: none; }
+@media(max-width:1000px) { #hosted-tonight-panel .hosted-score-components { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) {
+  #hosted-tonight-panel .hosted-opportunity-score { grid-template-columns: 1fr; }
+  #hosted-tonight-panel .hosted-score-components { grid-column: 1; grid-row: auto; margin-top: 16px; }
+}
+#hosted-tonight-panel .hosted-command-board { grid-template-columns: minmax(0,1fr); }
+#hosted-weather-strip { display: none; }
+#hosted-tonight-panel .hosted-opportunity-score > .eyebrow { font-size: 12px; letter-spacing: .12em; }
+#hosted-tonight-panel .hosted-score-component { grid-template-columns: 32px minmax(0,1fr); gap: 6px 8px; }
+#hosted-tonight-panel .hosted-score-component > strong { grid-column: 2; text-align: left; }
+#hosted-tonight-panel .hosted-score-factor-label { font-size: 13px; line-height: 1.3; }
+#hosted-tonight-panel .hosted-score-factor-label em { display: none; }
+#hosted-tonight-panel .hosted-schedule-settings { padding: 0; background: none; border: 0; font-size: 13px; color: var(--muted); }
+#hosted-tonight-panel .hosted-schedule-list { grid-template-columns: repeat(var(--target-columns, 3), minmax(0, 1fr)); }
+#hosted-tonight-panel .hosted-opportunity-reading { aspect-ratio: auto; }
+#hosted-tonight-panel .hosted-opportunity-score { min-height: 0; row-gap: 10px; }
+@media(max-width:1200px) { #hosted-tonight-panel .hosted-schedule-list { grid-template-columns: repeat(auto-fit,minmax(min(100%,280px),1fr)); } }
+@media(max-width:760px) { #hosted-tonight-panel .hosted-schedule-list { grid-template-columns: minmax(0,1fr); } }

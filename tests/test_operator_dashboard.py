@@ -121,14 +121,14 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'document.title = "Project Polaris — Night Operations"' in script.text
     assert 'byId("eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
     assert 'byId("hosted-eq-mode-checkbox").addEventListener("change", rememberEqModePreference)' in script.text
-    assert 'apiFetch("/system"' in script.text
+    assert 'read("System", "/system")' in script.text
     assert 'apiFetch("/rig-profiles"' in script.text
     assert "has_equatorial_tracking === false" in script.text
     assert "does not list EQ tracking in its official profile" in script.text
     assert 'byId("hosted-rig-profile").addEventListener("change", updateHostedEqModeAvailability)' in script.text
     assert 'rig_profile_key: byId("hosted-rig-profile").value || null' in script.text
     assert 'byId("hosted-rig-profile").value = observatory?.rig_profile_key || ""' in script.text
-    assert 'apiFetch(`/dashboard?include_all_history=${historyExpanded}`' in script.text
+    assert 'read("History", `/dashboard?include_all_history=${historyExpanded}`)' in script.text
     assert "capture.polaris_id" not in script.text
     assert "Capture quality" in script.text
     assert "Average capture quality" not in script.text
@@ -202,7 +202,7 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert "/operator-assets/leaflet.js" in response.text
     assert ").slice(0, 3)" in script.text
     assert "setupMinutes = 5" in script.text
-    assert "schedule-reason" in script.text
+    assert "schedule-reason" not in script.text
     assert "quality-component-grid" in script.text
     assert "appendObjectProfile" in script.text
     assert "Why it’s remarkable" in script.text
@@ -404,10 +404,9 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "softenAdvisoryNote" in script
     assert "Best move tonight" not in script
     assert "renderHostedSchedule" in script
-    assert "resetHostedPlanDetails" in script
-    assert 'setText("hosted-target-exposure", "—")' in script
-    assert 'setText("hosted-target-rig", "—")' in script
-    assert 'setText("hosted-target-fit", "—")' in script
+    assert "Boolean(latestHostedTonightData)" in script
+    assert 'byId(id).closest("div").hidden = value == null' in script
+    assert '"Settings not configured"' in script
     assert "targetRigMatchLabel(target)" in script
     assert "renderTargetGeometry(target)" in script
     assert "renderTargetGeometry(null)" in script
@@ -491,7 +490,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "profile?.label || observatory.telescope_model || observatory.rig_profile_key" in script
     assert 'setText("hosted-weather-summary", "—")' not in script
     assert 'notes.replaceChildren()' in script
-    assert "Building tonight's schedule…" in script
+    assert 'createLoadCoordinator' in script
     assert "displayedTargetSettings" in script
     assert "showHostedReadyHandoff" in script
     assert "retryHostedAccountLoad" in script
@@ -505,7 +504,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "hosted-weather-diagnostic" not in script
     assert "hostedPlanFailureMessage" in script
     assert "send Doug request ID" in script
-    assert "This is a planning refresh problem, not a telescope-control action." in script
+    assert "Showing your previous plan; it has not been refreshed." in script
     assert "Tonight's schedule could not be refreshed yet. Try again in a moment." in script
     assert "Conditions are usable, but one or more factors need attention" in script
     assert 'startsWith("use caution:")' in script
@@ -529,16 +528,16 @@ def test_essential_cautions_remain_visible_before_timeline():
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
     assert html.index('id="hosted-plan-notes"') < html.index('id="hosted-schedule-panel"')
     assert '["watch", "high"].includes(data.dew_risk?.level)' in script
-    assert 'Local obstructions are not modeled. Check the sky path.' in script
+    assert 'Local horizon obstructions are not configured.' not in script
     assert '!/unallocated|remain unallocated/i.test(note)' in script
-    assert 'id="hosted-plan-details-notes"' in html
+    assert 'id="hosted-plan-details-notes"' not in html
 
 
 def test_conditions_explanations_are_available_without_duplicate_window():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
     assert 'id="hosted-command-window"' not in html
-    assert 'id="hosted-decision-detail"' in html
+    assert 'id="hosted-decision-detail"' not in html
     assert 'id="target-window-trend"' in html  # Existing local-mode display.
     assert 'renderConditionsTrend("target-window-trend", data.conditions_trend)' in script
 
@@ -576,7 +575,7 @@ def test_advisory_timeline_collapses_only_when_no_blocks_exist():
     assert 'class="eyebrow hosted-schedule-label"' in html
     assert 'const timeline = byId("hosted-schedule-panel")' in script
     assert "timeline.open = blocks.length > 0" in script
-    assert 'byId("hosted-schedule-panel").open = true' in script
+    assert 'timeline.open = blocks.length > 0' in script
     assert ".hosted-schedule-panel:not([open]) > .hosted-schedule-summary" in css
     assert ".hosted-schedule-panel[open] .hosted-schedule-toggle::before" in css
     assert '.hosted-schedule-label::before' in css
