@@ -35,13 +35,13 @@ def test_eight_targets_cover_to_dawn_beyond_four_blocks_and_six_candidate_shortl
     assert "end of astronomical darkness" in result["end_reason"]
 
 
-def test_short_high_ranked_goal_does_not_steal_time_from_viable_target():
+def test_short_remaining_goal_finishes_before_replacement():
     end = START + timedelta(hours=3)
     blocks = build_schedule_blocks([
         target("tiny-goal", START, end, remaining_seconds=600),
         target("replacement", START, end, score=50),
     ], timezone_name="UTC")
-    assert [(b["object"], b["duration_minutes"]) for b in blocks] == [("replacement", 180)]
+    assert [(b["object"], b["duration_minutes"]) for b in blocks] == [("tiny-goal", 15), ("replacement", 165)]
 
 
 def test_disjoint_windows_never_merge_across_obstruction_and_need_fresh_setup():
@@ -70,16 +70,17 @@ def test_short_boundary_does_not_discard_an_allocated_block():
         target("later", START + timedelta(minutes=10), END, score=100),
     ], timezone_name="UTC")
     assert sum(b["duration_minutes"] for b in blocks) == 480
-    assert blocks[0]["duration_minutes"] == 30
+    assert blocks[0]["duration_minutes"] == 480
 
 
-def test_finite_flexible_goal_is_reserved_for_after_early_target_sets():
+def test_best_target_goal_takes_priority_over_lower_ranked_setting_target():
     blocks = build_schedule_blocks([
         target("flexible", START, END, score=100, remaining_seconds=4*3600),
         target("sets-early", START, START + timedelta(hours=4), score=50),
     ], timezone_name="UTC")
-    assert blocks[0]["object"] == "sets-early"
-    assert sum(b["duration_minutes"] for b in blocks) == 480
+    assert blocks[0]["object"] == "flexible"
+    assert sum(b["imaging_minutes"] for b in blocks) == 240
+    assert len(blocks) == 1
 
 
 def test_schedule_clips_to_darkness_and_reports_true_visibility_gap():
@@ -108,7 +109,9 @@ def test_dst_uses_elapsed_time_and_retains_unambiguous_instants(start, end, minu
 
 
 def test_visibility_stops_before_below_floor_sample():
-    with patch("app.services.planner_service.get_altitudes_at", return_value=[30, 25, 21, 19, 10]):
+    def altitudes(**kw):
+        return [41 - (stamp - START).total_seconds() / 300 for stamp in kw["observation_datetimes"]]
+    with patch("app.services.planner_service.get_altitudes_at", side_effect=altitudes):
         visibility = get_dark_visibility("M31", START, START + timedelta(hours=1))
     assert visibility["recommended_end_datetime"] == START + timedelta(minutes=30)
 
@@ -158,9 +161,11 @@ def test_split_run_durations_equal_actual_elapsed_time():
         assert block["imaging_minutes"] * 60 == pytest.approx(block["planned_subframes"] * 10)
 
 
-def test_too_little_goal_for_whole_frames_does_not_create_short_block():
+def test_short_goal_uses_only_whole_frames_without_exceeding_goal():
     blocks = build_schedule_blocks([target("M27", START, END, exposure=120, remaining_seconds=1510)])
-    assert blocks == []  # 24 minutes of whole frames + five setup is below minimum.
+    assert len(blocks) == 1
+    assert blocks[0]["imaging_minutes"] == 24
+    assert blocks[0]["planned_subframes"] == 12
 
 
 def test_dst_visibility_samples_cover_every_real_quarter_hour():

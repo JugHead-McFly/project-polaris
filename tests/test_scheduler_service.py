@@ -38,7 +38,7 @@ def candidate(
     }
 
 
-def test_schedule_selects_the_highest_ranked_target_in_each_window():
+def test_schedule_holds_selected_target_when_higher_ranked_target_rises():
     blocks = build_schedule_blocks(
         [
             candidate("M42", 90, "2026-07-17 09:00 PM", "2026-07-18 01:00 AM"),
@@ -47,9 +47,7 @@ def test_schedule_selects_the_highest_ranked_target_in_each_window():
     )
 
     assert [(block["object"], block["duration_minutes"]) for block in blocks] == [
-        ("M42", 60),
-        ("M31", 120),
-        ("M42", 60),
+        ("M42", 240),
     ]
 
 
@@ -92,7 +90,7 @@ def test_schedule_avoids_a_low_value_equipment_change():
     assert blocks[0]["object"] == "M42"
     assert blocks[0]["duration_minutes"] == 240
     assert blocks[0]["reason"] == (
-        "Retained to avoid a low-value equipment change."
+        "Highest-ranked available target; stay until its goal or visibility limit."
     )
 
 

@@ -118,7 +118,7 @@ class TargetSummary(BaseModel):
     constellation: str
     target_type: str
     difficulty: str
-    recommended_filter: str
+    recommended_filter: Optional[str] = None
     recommended_exposure: Optional[RecommendedExposure] = None
 
     season_score: int

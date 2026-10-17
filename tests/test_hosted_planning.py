@@ -489,7 +489,8 @@ def test_target_geometry_is_absent_when_position_is_unknown():
     assert visibility["target_geometry"] is None
 
 
-def test_hosted_catalog_recommends_a_filter_for_every_supported_target():
+def test_hosted_catalog_preserves_filters_and_leaves_new_unverified_settings_unset():
+    from app.data.seasonal_targets import SEASONAL_TARGETS
     recommendations = {
         target_name: get_catalog_exposure_advice(target_name)[
             "recommended_filter"
@@ -498,4 +499,5 @@ def test_hosted_catalog_recommends_a_filter_for_every_supported_target():
     }
 
     assert recommendations["C 20"] == "Duo-Band"
-    assert set(recommendations.values()) <= {"Duo-Band", "Astro"}
+    assert {value for name, value in recommendations.items() if name not in SEASONAL_TARGETS} <= {"Duo-Band", "Astro"}
+    assert all(recommendations[name] is None for name in SEASONAL_TARGETS)

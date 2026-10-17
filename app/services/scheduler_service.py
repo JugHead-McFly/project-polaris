@@ -12,12 +12,12 @@ from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_common_name
 from app.services.planner_service import get_tonight_plan
 from app.services.mosaic_service import MOSAIC_NOTE
+from app.services.target_art_library_service import resolve_target_artwork
 
 
 SCHEDULE_TIME_FORMAT = "%Y-%m-%d %I:%M %p"
 MINIMUM_BLOCK_MINUTES = 30
 SETUP_BUFFER_MINUTES = 5
-EQUIPMENT_CHANGE_SCORE_MARGIN = 12.0
 DWARF_MAXIMUM_SUBFRAMES_PER_RUN = 999
 
 
@@ -253,6 +253,8 @@ def _dwarf_run_blocks(
     )
 
     base_block = {
+        "artwork": resolve_target_artwork(block["object"]),
+        "target_geometry": block["candidate"].get("target_geometry"),
         "object": block["object"],
         "common_name": get_target_common_name(block["object"]),
         "planner_score": block["planner_score"],
@@ -437,7 +439,8 @@ def build_schedule_blocks(
         exposure = _advisor_settings(window["candidate"])["sub_exposure_seconds"]
         if exposure and exposure > 0:
             available = math.floor((available * 60 + 1e-7) / exposure) * exposure / 60
-        return available > 0 and (continuing or setup + available >= MINIMUM_BLOCK_MINUTES)
+        return available > 0 and (continuing or setup + available >= MINIMUM_BLOCK_MINUTES
+                                 or (budget is not None and available >= budget))
 
     while cursor < boundaries[-1]:
         next_boundary = min(
@@ -462,50 +465,19 @@ def build_schedule_blocks(
             cursor = next_boundary
             continue
 
+        # Manual mosaics are fallback opportunities, not executable capture plans.
+        capture_candidates = [candidate for candidate in active if not candidate.get("mosaic_required")]
+        used_targets = {block["object"] for block in blocks}
         highest_ranked = max(
-            active,
-            key=lambda candidate: candidate["planner_score"],
+            capture_candidates or active,
+            key=lambda candidate: (candidate["planner_score"],
+                len(used_targets) >= 3 and candidate["advisor"]["object"] in used_targets),
         )
-        # Preserve finite integration on flexible targets for later hours when
-        # another suitable target's window will have closed.
+        selected = highest_ranked
+
         def active_end(candidate):
             return max(window["end"] for window in windows
                        if window["candidate"] is candidate and window["start"] <= cursor < window["end"])
-
-        if remaining_minutes[highest_ranked["advisor"]["object"]] is not None:
-            highest_ranked = min(active, key=lambda candidate: (active_end(candidate), -candidate["planner_score"]))
-        selected = highest_ranked
-        equipment_hold = False
-
-        if blocks:
-            current_candidate = blocks[-1]["candidate"]
-            current_object = current_candidate["advisor"]["object"]
-            active_current = next(
-                (
-                    candidate
-                    for candidate in active
-                    if candidate["advisor"]["object"] == current_object
-                ),
-                None,
-            )
-
-            if (
-                active_current is not None
-                and highest_ranked["advisor"]["object"] != current_object
-                and _equipment_setting_changes(
-                    active_current,
-                    highest_ranked,
-                )
-                and (remaining_minutes[current_object] is None
-                     or active_end(active_current) <= active_end(highest_ranked))
-                and (
-                    highest_ranked["planner_score"]
-                    - active_current["planner_score"]
-                    < EQUIPMENT_CHANGE_SCORE_MARGIN
-                )
-            ):
-                selected = active_current
-                equipment_hold = True
 
         selected_object = selected["advisor"]["object"]
         starting_new_block = (
@@ -513,14 +485,18 @@ def build_schedule_blocks(
             or blocks[-1]["object"] != selected_object
             or blocks[-1]["end_datetime"] != cursor
         )
-        # Commit a viable minimum block before considering another rising target.
-        # Previously short allocations were charged to the goal then discarded.
+        # Commit the whole continuous opportunity. Rising targets do not
+        # interrupt a selected target before its goal or visibility limit.
         exposure = _advisor_settings(selected)["sub_exposure_seconds"]
-        setup = SETUP_BUFFER_MINUTES if starting_new_block else 0
-        minimum_imaging_seconds = (MINIMUM_BLOCK_MINUTES - setup) * 60 if starting_new_block else 0
-        if exposure and exposure > 0:
-            minimum_imaging_seconds = max(exposure, math.ceil(minimum_imaging_seconds / exposure) * exposure)
-        next_boundary = min(active_end(selected), max(next_boundary, cursor + timedelta(seconds=setup * 60 + minimum_imaging_seconds)))
+        next_boundary = active_end(selected)
+        if selected.get("mosaic_required"):
+            # A later-rising single-frame target can replace a manual opportunity.
+            starts = [window["start"] for window in windows
+                      if cursor < window["start"] < next_boundary
+                      and not window["candidate"].get("mosaic_required")
+                      and remaining_minutes[window["candidate"]["advisor"]["object"]] != 0]
+            if starts:
+                next_boundary = min(starts)
         interval_minutes = (next_boundary - cursor).total_seconds() / 60
         setup_minutes = (
             min(SETUP_BUFFER_MINUTES, interval_minutes)
@@ -552,10 +528,6 @@ def build_schedule_blocks(
         if not starting_new_block:
             blocks[-1]["end_datetime"] = block_end
             blocks[-1]["imaging_minutes"] += imaging_minutes
-            if equipment_hold:
-                blocks[-1]["reason"] = (
-                    "Retained to avoid a low-value equipment change."
-                )
         else:
             blocks.append(
                 {
@@ -567,7 +539,8 @@ def build_schedule_blocks(
                     "imaging_minutes": imaging_minutes,
                     "planner_score": selected["planner_score"],
                     "reason": (
-                        "Highest-ranked observable target for this time window."
+                        "Highest-ranked available target; stay until its goal or visibility limit."
+                        + (" " + selected["suitability_note"] if selected.get("suitability_note") else "")
                     ),
                 }
             )
@@ -599,9 +572,6 @@ def build_schedule_blocks(
             .total_seconds()
             / 60
         )
-        if duration_minutes < MINIMUM_BLOCK_MINUTES:
-            continue
-
         settings = _advisor_settings(block["candidate"])
         setup_minutes = block["setup_minutes"]
         imaging_minutes = block["imaging_minutes"]
@@ -613,6 +583,8 @@ def build_schedule_blocks(
 
         if block["candidate"].get("mosaic_required"):
             scheduled_blocks.append({
+                "artwork": resolve_target_artwork(block["object"]),
+                "target_geometry": block["candidate"].get("target_geometry"),
                 "object": block["object"], "common_name": get_target_common_name(block["object"]),
                 "start": _format_schedule_time(block["start_datetime"], timezone_name=timezone_name),
                 "end": _format_schedule_time(block["end_datetime"], timezone_name=timezone_name),
@@ -663,6 +635,25 @@ def _plan_end_reason(blocks, candidates):
     return "End of selected plan. Additional dark time may remain; check target visibility and current conditions before extending it."
 
 
+def _gap_reason(start, end, candidates, blocks, timezone_name):
+    """Explain actual goal exclusions without claiming weather ended the night."""
+    exhausted = set()
+    for window in _candidate_windows(candidates, timezone_name):
+        if window["start"] >= end or window["end"] <= start:
+            continue
+        candidate = window["candidate"]
+        budget = _remaining_imaging_minutes(candidate)
+        name = candidate["advisor"]["object"]
+        allocated = sum(block["imaging_minutes"] for block in blocks
+                        if block["object"] == name and datetime.fromisoformat(block["end_at"]) <= start)
+        if budget is not None and allocated >= budget:
+            exhausted.add(name)
+    explanation = "No suitable unfinished evaluated target fits this interval above 35° under the setup, exposure and minimum-block constraints."
+    if exhausted:
+        explanation += " Goals complete, allocated, or too small for another full exposure: " + ", ".join(sorted(exhausted)) + "."
+    return explanation
+
+
 def build_tonight_schedule(
     planner: Dict,
     timezone_name: str = TIMEZONE,
@@ -695,7 +686,7 @@ def build_tonight_schedule(
 
         if not blocks:
             notes.append(
-                "No schedule blocks met the 30-minute minimum duration."
+                "No blocks fit the current visibility, remaining-goal, setup and exposure constraints."
             )
 
         if decision == "Use Caution":
@@ -724,7 +715,7 @@ def build_tonight_schedule(
                 reason = (
                     "Imaging withheld by the weather safety decision."
                     if decision == "Do Not Image" else
-                    "No block selected under the remaining integration-goal, visibility and 30-minute minimum-block constraints."
+                    _gap_reason(cursor, start, candidates, blocks, timezone_name)
                 )
                 gaps.append({"start": _format_schedule_time(cursor, timezone_name=timezone_name),
                              "end": _format_schedule_time(start, timezone_name=timezone_name),
@@ -735,11 +726,16 @@ def build_tonight_schedule(
         notes.append(f"{unscheduled_dark_minutes} dark minutes remain unallocated under the current target, visibility, goal and minimum-block constraints.")
     if any(block.get("mosaic_required") for block in blocks):
         notes.append("Allocated time includes manual mosaic visibility opportunities, not confirmed imaging or setup durations. " + MOSAIC_NOTE)
+    distinct_targets = len({block["object"] for block in blocks})
+    notes.append("Best target first; stay until the integration goal, 35° altitude limit or dawn. Prefer 3–4 targets without forcing extra switches.")
+    if distinct_targets > 4:
+        notes.append(f"{distinct_targets} targets were selected to use available windows without exceeding integration goals; the 3–4 target preference is not a hard cutoff.")
     end_reason = _plan_end_reason(blocks, candidates)
     if blocks and dark_end is not None and datetime.fromisoformat(blocks[-1]["end_at"]) >= dark_end:
         end_reason = "Plan reaches the end of astronomical darkness."
 
-    date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
+    date = (dark_start.astimezone(ZoneInfo(timezone_name)) if dark_start
+            else datetime.now(ZoneInfo(timezone_name))).date().isoformat()
 
     return {
         "date": date,

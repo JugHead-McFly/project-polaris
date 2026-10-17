@@ -8,6 +8,8 @@ from app.schemas.weather import WeatherSummary
 
 
 class ScheduledImagingBlock(BaseModel):
+    artwork: Optional[dict] = None
+    target_geometry: Optional[dict] = None
     mosaic_required: bool = False
     mosaic_note: Optional[str] = None
     opportunity_only: bool = False

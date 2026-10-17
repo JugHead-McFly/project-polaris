@@ -9,9 +9,11 @@ from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import TARGETS, get_target_angular_size
+from app.data.seasonal_targets import SEASONAL_TARGETS
+from app.services.deep_sky_catalog import shortlist, get_entry, imaging_suitability
 from app.models import Capture
 from app.services.advisor_service import get_catalog_exposure_advice
-from app.services.advisor_service import get_exposure_advice
+from app.services.advisor_service import get_exposure_advice, build_advisor_recommendation
 from app.services.astronomy_service import (
     get_altitude_at,
     get_altitudes_at,
@@ -38,9 +40,9 @@ from app.core.planner_config import (
 )
 
 
-MINIMUM_ALTITUDE_DEGREES = 20.0
+MINIMUM_ALTITUDE_DEGREES = 35.0
 SAMPLE_INTERVAL_MINUTES = 15
-MINIMUM_USABLE_DARK_MINUTES = 45
+MINIMUM_USABLE_DARK_MINUTES = 30
 
 
 def _context_equipment_label(context: ObservatoryContext) -> str:
@@ -224,7 +226,33 @@ def get_dark_visibility(
             "target_geometry": target_geometry,
         }
 
-    longest_run = find_longest_usable_run(usable_samples)
+    # Refine only threshold crossings to one-minute sampling. This preserves
+    # efficient coarse sky curves without ending a run fifteen minutes early.
+    refinements = []
+    for (left, low), (right, high) in zip(altitude_samples, altitude_samples[1:]):
+        if (low >= MINIMUM_ALTITUDE_DEGREES) == (high >= MINIMUM_ALTITUDE_DEGREES):
+            continue
+        at = left.astimezone(timezone.utc) + timedelta(minutes=1)
+        while at < right.astimezone(timezone.utc):
+            refinements.append(at.astimezone(dark_start.tzinfo))
+            at += timedelta(minutes=1)
+    if refinements:
+        refined_altitudes = get_altitudes_at(target_name=object_name,
+            observation_datetimes=refinements, observatory=observatory)
+        altitude_samples.extend(zip(refinements, refined_altitudes))
+        altitude_samples.sort(key=lambda sample: sample[0].astimezone(timezone.utc))
+    runs = []
+    current_run = []
+    for sample in altitude_samples:
+        if sample[1] is not None and math.isfinite(sample[1]) and sample[1] >= MINIMUM_ALTITUDE_DEGREES:
+            current_run.append(sample)
+        elif current_run:
+            runs.append(current_run)
+            current_run = []
+    if current_run:
+        runs.append(current_run)
+    longest_run = max(runs, key=lambda run: (run[-1][0].astimezone(timezone.utc)
+                      - run[0][0].astimezone(timezone.utc)).total_seconds(), default=[])
 
     if not longest_run:
         return {
@@ -245,11 +273,6 @@ def get_dark_visibility(
     # Stop at the last verified clear sample, not the next (possibly below-floor)
     # sample. Preserve every disjoint clear interval for the scheduler.
     recommended_end = longest_run[-1][0]
-    runs = []
-    for sample in usable_samples:
-        if not runs or sample[0].astimezone(timezone.utc) - runs[-1][-1][0].astimezone(timezone.utc) > timedelta(minutes=SAMPLE_INTERVAL_MINUTES + 1):
-            runs.append([])
-        runs[-1].append(sample)
     usable_minutes = int(
         (recommended_end.astimezone(timezone.utc) - recommended_start.astimezone(timezone.utc)).total_seconds() / 60
     )
@@ -403,6 +426,25 @@ def build_selection_reason(
     )
 
 
+def _merge_local_alias_advice(db, object_name, advisor, aliases):
+    others = [name for name in aliases if name != object_name]
+    if not others:
+        return advisor
+    progress = {object_name: {"seconds": advisor["current_integration_seconds"]}}
+    for name in others:
+        progress[name] = {"seconds": get_exposure_advice(db=db, object_name=name)["current_integration_seconds"]}
+    combined = history_advice(object_name, progress)
+    result = dict(advisor)
+    for key in ("current_integration_seconds", "current_integration_hours", "remaining_seconds",
+                "remaining_hours", "goal_hours", "goal_options", "integration_goal_note", "status"):
+        result[key] = combined[key]
+    exposure = result.get("recommended_sub_exposure_seconds")
+    result["additional_subframes_needed"] = math.ceil(result["remaining_seconds"]/exposure) if exposure else None
+    result["recommendation"] = build_advisor_recommendation(object_name, result["remaining_hours"],
+        result["additional_subframes_needed"], exposure, result.get("recommended_gain"), result.get("recommended_filter"))
+    return result
+
+
 def build_target_plan(
     db: Session,
     object_name: str,
@@ -411,6 +453,7 @@ def build_target_plan(
     observatory: Optional[ObservatoryContext] = None,
     use_capture_history: bool = True,
     capture_progress: Optional[Dict] = None,
+    history_aliases: Optional[List[str]] = None,
 ) -> Dict:
     if use_capture_history:
         try:
@@ -419,6 +462,7 @@ def build_target_plan(
             if str(error) != f"Target '{object_name.strip().upper()}' was not found.":
                 raise
             advisor = get_catalog_exposure_advice(object_name)
+        advisor = _merge_local_alias_advice(db, object_name, advisor, history_aliases or [])
     else:
         advisor = history_advice(object_name, capture_progress)
 
@@ -459,7 +503,8 @@ def build_target_plan(
 
     observable = (
         visibility["known_position"]
-        and usable_dark_minutes >= MINIMUM_USABLE_DARK_MINUTES
+        and (usable_dark_minutes >= MINIMUM_USABLE_DARK_MINUTES
+             or 0 < advisor["remaining_seconds"] <= max(usable_dark_minutes - 5, 0) * 60)
     )
 
     confidence_score = (
@@ -521,8 +566,12 @@ def build_target_plan(
         ]
     )
 
+    quality = imaging_suitability(get_entry(object_name),
+        get_rig_profile(use_observatory_context(observatory).rig_profile_key or ""),
+        use_observatory_context(observatory).bortle_class)
     score = (
-        confidence_score
+        quality["adjustment"]
+        + confidence_score
         + priority_score
         + maximum_altitude_score
         + average_altitude_score
@@ -562,8 +611,12 @@ def build_target_plan(
         moon_warning=moon_warning,
     )
 
+    suitability_note = "Beginner imaging preference (heuristic, not an image-quality guarantee): " + " ".join(quality["reasons"])
+    selection_reason += " " + suitability_note
     return {
         "advisor": advisor,
+        "suitability_note": suitability_note,
+        "imaging_suitability": quality,
         "planner_score": round(score, 1),
         "observable": observable,
         "current_altitude": get_altitude_at(
@@ -828,8 +881,13 @@ def get_tonight_plan(
     plans = []
     notes = []
 
+    local_history_names = set(get_distinct_targets(db)) if use_capture_history else set()
+    discovery_progress = capture_progress or {}
+    if use_capture_history:
+        discovery_progress = {name: {"seconds": get_exposure_advice(db=db, object_name=name)["current_integration_seconds"]}
+                              for name in local_history_names}
     planning_targets = (
-        sorted(set(get_distinct_targets(db)) | set(TARGETS))
+        sorted(local_history_names | set(TARGETS))
         if target_names is None and use_capture_history
         else sorted(
             {
@@ -839,6 +897,30 @@ def get_tonight_plan(
             }
         )
     )
+
+    if target_names is None:
+        completed = [name for name in discovery_progress
+                     if history_advice(name, discovery_progress)["remaining_seconds"] == 0]
+        discovered = shortlist(context, dark_start, dark_end,
+            get_rig_profile(context.rig_profile_key or ""), completed)
+        # Existing curated IDs and history retain their policy; discovery adds
+        # finite, time-stratified candidates without an external refresh request.
+        planning_targets = sorted(set(planning_targets) | set(discovered))
+        notes.append(f"Offline OpenNGC discovery adds {len(discovered)} candidates across the whole night. Conservative brightness, angular-resolution and known-data filters apply; the searchable catalog is larger. A remaining gap can require reviewing additional catalog objects rather than lowering the altitude floor.")
+
+    # Keep a history's original ID when discovery resolves to the same object.
+    history_names = set(capture_progress or {}) | local_history_names
+    grouped = {}
+    grouped_history = {}
+    for name in history_names:
+        entry = get_entry(name)
+        grouped_history.setdefault(entry["id"] if entry else name, []).append(name)
+    for name in sorted(set(planning_targets) | (history_names if target_names is None else set())):
+        entry = get_entry(name)
+        identity = entry["id"] if entry else name
+        if identity not in grouped or name in history_names:
+            grouped[identity] = name
+    planning_targets = list(grouped.values())
 
     for object_name in planning_targets:
         rig = get_rig_profile(context.rig_profile_key or "")
@@ -854,6 +936,7 @@ def get_tonight_plan(
                     observatory=context,
                     use_capture_history=use_capture_history,
                     capture_progress=capture_progress,
+                    history_aliases=grouped_history.get((get_entry(object_name) or {}).get("id", object_name), []),
                 )
             )
             plans[-1]["mosaic_required"] = mosaic_required
@@ -891,6 +974,11 @@ def get_tonight_plan(
     for plan in plans:
         if plan.get("mosaic_required"):
             plan["advisor"] = mosaic_advice(plan["advisor"])
+            continue
+        if plan["advisor"].get("recommended_sub_exposure_seconds") is None:
+            plan["advisor"].update(settings_confidence="Capture settings need confirmation",
+                settings_reasons=["Catalog geometry is verified; exposure, gain and filter are not validated for this rig."],
+                settings_setup_guidance=["Confirm exposure, gain and filter before capture; no frame count is prescribed."])
             continue
         plan["advisor"] = apply_tonight_settings(
             advisor=plan["advisor"],

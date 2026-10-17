@@ -364,6 +364,7 @@
                 </section>
               </div>
             </div>
+            <dl id="hosted-weather-strip" class="observing-weather-strip" aria-label="Conditions at planned start"></dl>
             <section class="hosted-setup-cautions" aria-labelledby="hosted-cautions-title">
               <p class="eyebrow" id="hosted-cautions-title">Before you start</p>
               <ul class="hosted-plan-notes" id="hosted-plan-notes" hidden></ul>
@@ -391,6 +392,8 @@
               <span class="hosted-schedule-toggle" aria-hidden="true"></span>
             </span>
           </summary>
+          <p class="schedule-policy" id="schedule-policy">Best target first · Stay until goal, 35° limit or dawn</p>
+          <div id="night-plan-axis" class="night-plan-axis" aria-label="Scheduled targets across astronomical darkness"></div>
           <div class="hosted-schedule-list" id="hosted-schedule-list">
             <div class="empty-state">Building tonight's schedule…</div>
           </div>
@@ -398,6 +401,13 @@
 
         <details class="panel compact-planning-details" id="compact-planning-details">
           <summary>Target &amp; planning details</summary>
+          <form id="catalog-search-form" class="compact-target-details">
+            <label for="catalog-query">Search the deep-sky catalog</label>
+            <input id="catalog-query" name="q" maxlength="100" placeholder="Name or designation, e.g. M101" />
+            <button type="submit">Search catalog</button>
+            <p>Catalog geometry does not establish capture settings. Large objects may need a mosaic.</p>
+            <div id="catalog-search-results" aria-live="polite"></div>
+          </form>
           <div class="compact-target-details">
           <button
             class="hosted-secondary-toggle"
