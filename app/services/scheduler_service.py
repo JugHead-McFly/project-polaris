@@ -1,5 +1,5 @@
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Iterable, List, Optional
 from zoneinfo import ZoneInfo
 
@@ -15,7 +15,6 @@ from app.services.planner_service import get_tonight_plan
 
 SCHEDULE_TIME_FORMAT = "%Y-%m-%d %I:%M %p"
 MINIMUM_BLOCK_MINUTES = 30
-MAXIMUM_BLOCKS = 4
 SETUP_BUFFER_MINUTES = 5
 EQUIPMENT_CHANGE_SCORE_MARGIN = 12.0
 DWARF_MAXIMUM_SUBFRAMES_PER_RUN = 999
@@ -28,15 +27,16 @@ def _parse_schedule_time(
     if not value:
         return None
 
-    return datetime.strptime(
-        value,
-        SCHEDULE_TIME_FORMAT,
-    ).replace(tzinfo=ZoneInfo(timezone_name))
+    parsed = datetime.fromisoformat(value) if "T" in value else datetime.strptime(value, SCHEDULE_TIME_FORMAT)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=ZoneInfo(timezone_name))
+    return parsed.astimezone(timezone.utc)
 
 
 def _format_schedule_time(
     value: datetime,
     round_up_to_minute: bool = False,
+    timezone_name: Optional[str] = None,
 ) -> str:
     if round_up_to_minute and (
         value.second
@@ -46,6 +46,8 @@ def _format_schedule_time(
             second=0,
             microsecond=0,
         ) + timedelta(minutes=1)
+    if timezone_name:
+        value = value.astimezone(ZoneInfo(timezone_name))
     return value.strftime(SCHEDULE_TIME_FORMAT)
 
 
@@ -78,25 +80,18 @@ def _candidate_windows(
         if not candidate or not candidate.get("observable"):
             continue
 
-        start = _parse_schedule_time(
-            candidate.get("recommended_start"),
-            timezone_name=timezone_name,
-        )
-        end = _parse_schedule_time(
-            candidate.get("recommended_end"),
-            timezone_name=timezone_name,
-        )
-
-        if start is None or end is None or end <= start:
-            continue
-
-        windows.append(
-            {
-                "candidate": candidate,
-                "start": start,
-                "end": end,
-            }
-        )
+        intervals = candidate.get("schedule_windows")
+        if intervals is None:
+            intervals = [{"start": candidate.get("recommended_start"), "end": candidate.get("recommended_end")}]
+        for interval in intervals:
+            start = _parse_schedule_time(interval.get("start"), timezone_name)
+            end = _parse_schedule_time(interval.get("end"), timezone_name)
+            if start is not None and (start.second or start.microsecond):
+                start = start.replace(second=0, microsecond=0) + timedelta(minutes=1)
+            if end is not None:
+                end = end.replace(second=0, microsecond=0)
+            if start is not None and end is not None and end > start:
+                windows.append({"candidate": candidate, "start": start, "end": end})
 
     return windows
 
@@ -248,6 +243,7 @@ def _dwarf_run_blocks(
     setup_changes: List[str],
     frame_limit: Optional[int] = DWARF_MAXIMUM_SUBFRAMES_PER_RUN,
     frame_limit_label: Optional[str] = "DWARF",
+    timezone_name: str = TIMEZONE,
 ) -> List[Dict]:
     """Turn an oversized block into individually startable rig-limited runs."""
     subframe_runs = _subframe_runs(planned_subframes, frame_limit)
@@ -280,11 +276,15 @@ def _dwarf_run_blocks(
         return [
             {
                 **base_block,
+                "start_at": block["start_datetime"].isoformat(),
+                "end_at": block["end_datetime"].isoformat(),
                 "start": _format_schedule_time(
                     block["start_datetime"],
+                    timezone_name=timezone_name,
                 ),
                 "end": _format_schedule_time(
                     block["end_datetime"],
+                    timezone_name=timezone_name,
                 ),
                 "duration_minutes": int(
                     (
@@ -326,13 +326,17 @@ def _dwarf_run_blocks(
         run_blocks.append(
             {
                 **base_block,
+                "start_at": run_start.isoformat(),
+                "end_at": run_end.isoformat(),
                 "start": _format_schedule_time(
                     run_start,
                     round_up_to_minute=index > 1,
+                    timezone_name=timezone_name,
                 ),
                 "end": _format_schedule_time(
                     run_end,
                     round_up_to_minute=True,
+                    timezone_name=timezone_name,
                 ),
                 "duration_minutes": setup_minutes + imaging_minutes,
                 "setup_minutes": setup_minutes,
@@ -390,12 +394,20 @@ def build_schedule_blocks(
     candidates: Iterable[Dict],
     timezone_name: str = TIMEZONE,
     rig_profile_key: Optional[str] = None,
+    dark_start: Optional[datetime] = None,
+    dark_end: Optional[datetime] = None,
 ) -> List[Dict]:
     """Build a non-overlapping, advisory schedule from Planner V2 windows."""
     windows = _candidate_windows(
         candidates,
         timezone_name=timezone_name,
     )
+    for window in windows:
+        if dark_start is not None:
+            window["start"] = max(window["start"], dark_start)
+        if dark_end is not None:
+            window["end"] = min(window["end"], dark_end)
+    windows = [window for window in windows if window["end"] > window["start"]]
     boundaries = sorted(
         {
             boundary
@@ -430,6 +442,16 @@ def build_schedule_blocks(
                 and remaining_minutes[
                     window["candidate"]["advisor"]["object"]
                 ] != 0
+                and (
+                    (blocks and blocks[-1]["object"] == window["candidate"]["advisor"]["object"]
+                     and blocks[-1]["end_datetime"] == cursor)
+                    or min(
+                        (window["end"] - cursor).total_seconds() / 60,
+                        (remaining_minutes[window["candidate"]["advisor"]["object"]]
+                         if remaining_minutes[window["candidate"]["advisor"]["object"]] is not None
+                         else float("inf")) + SETUP_BUFFER_MINUTES,
+                    ) >= MINIMUM_BLOCK_MINUTES
+                )
             )
         ]
 
@@ -441,6 +463,14 @@ def build_schedule_blocks(
             active,
             key=lambda candidate: candidate["planner_score"],
         )
+        # Preserve finite integration on flexible targets for later hours when
+        # another suitable target's window will have closed.
+        def active_end(candidate):
+            return max(window["end"] for window in windows
+                       if window["candidate"] is candidate and window["start"] <= cursor < window["end"])
+
+        if remaining_minutes[highest_ranked["advisor"]["object"]] is not None:
+            highest_ranked = min(active, key=lambda candidate: (active_end(candidate), -candidate["planner_score"]))
         selected = highest_ranked
         equipment_hold = False
 
@@ -463,6 +493,8 @@ def build_schedule_blocks(
                     active_current,
                     highest_ranked,
                 )
+                and (remaining_minutes[current_object] is None
+                     or active_end(active_current) <= active_end(highest_ranked))
                 and (
                     highest_ranked["planner_score"]
                     - active_current["planner_score"]
@@ -476,7 +508,12 @@ def build_schedule_blocks(
         starting_new_block = (
             not blocks
             or blocks[-1]["object"] != selected_object
+            or blocks[-1]["end_datetime"] != cursor
         )
+        # Commit a viable minimum block before considering another rising target.
+        # Previously short allocations were charged to the goal then discarded.
+        if starting_new_block:
+            next_boundary = max(next_boundary, cursor + timedelta(minutes=MINIMUM_BLOCK_MINUTES))
         interval_minutes = int(
             (next_boundary - cursor).total_seconds() / 60
         )
@@ -549,10 +586,7 @@ def build_schedule_blocks(
         if rig_profile is not None
         else "DWARF"
     )
-    # Limit target selections before expanding a long target into rig-limited runs.
-    # A split run is still part of the same selected target and must not cause
-    # later portions of that target to disappear from the schedule.
-    for block in blocks[:MAXIMUM_BLOCKS]:
+    for block in blocks:
         duration_minutes = int(
             (block["end_datetime"] - block["start_datetime"])
             .total_seconds()
@@ -581,6 +615,7 @@ def build_schedule_blocks(
                 ),
                 frame_limit=frame_limit,
                 frame_limit_label=frame_limit_label,
+                timezone_name=timezone_name,
             )
         )
         previous_candidate = block["candidate"]
@@ -612,18 +647,24 @@ def build_tonight_schedule(
     fallback = planner.get("best_theoretical_target")
     notes = list(planner["notes"])
     blocks = []
-    candidates = [planner.get("recommended_target"), *planner["alternatives"]]
+    candidates = planner.get("schedule_candidates", [planner.get("recommended_target"), *planner["alternatives"]])
+    dark_start = _parse_schedule_time(planner["darkness"].get("astronomical_darkness_start"), timezone_name)
+    dark_end = _parse_schedule_time(planner["darkness"].get("astronomical_darkness_end"), timezone_name)
 
     if decision == "Do Not Image":
         notes.append(
             "The scheduler is advisory only and will not create imaging blocks "
             "while the weather decision is Do Not Image."
         )
+    elif dark_start is None or dark_end is None or dark_end <= dark_start:
+        notes.append("No valid astronomical-darkness interval is available; no imaging blocks were created.")
     else:
         blocks = build_schedule_blocks(
             candidates,
             timezone_name=timezone_name,
             rig_profile_key=rig_profile_key,
+            dark_start=dark_start,
+            dark_end=dark_end,
         )
 
         if not blocks:
@@ -648,6 +689,27 @@ def build_tonight_schedule(
         - allocated_minutes,
         0,
     )
+    gaps = []
+    if dark_start is not None and dark_end is not None and dark_end > dark_start:
+        cursor = dark_start
+        intervals = [(datetime.fromisoformat(b["start_at"]), datetime.fromisoformat(b["end_at"])) for b in blocks]
+        for start, end in [*intervals, (dark_end, dark_end)]:
+            if start > cursor:
+                reason = (
+                    "Imaging withheld by the weather safety decision."
+                    if decision == "Do Not Image" else
+                    "No block selected under the remaining integration-goal, visibility and 30-minute minimum-block constraints."
+                )
+                gaps.append({"start": _format_schedule_time(cursor, timezone_name=timezone_name),
+                             "end": _format_schedule_time(start, timezone_name=timezone_name),
+                             "minutes": round((start - cursor).total_seconds() / 60, 2), "reason": reason})
+            cursor = max(cursor, end)
+        unscheduled_dark_minutes = math.ceil(sum(gap["minutes"] for gap in gaps))
+    if gaps and decision != "Do Not Image":
+        notes.append(f"{unscheduled_dark_minutes} dark minutes remain unallocated under the current target, visibility, goal and minimum-block constraints.")
+    end_reason = _plan_end_reason(blocks, candidates)
+    if blocks and dark_end is not None and datetime.fromisoformat(blocks[-1]["end_at"]) >= dark_end:
+        end_reason = "Plan reaches the end of astronomical darkness."
 
     date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
 
@@ -658,7 +720,8 @@ def build_tonight_schedule(
         "blocks": blocks,
         "allocated_minutes": allocated_minutes,
         "unscheduled_dark_minutes": unscheduled_dark_minutes,
-        "end_reason": _plan_end_reason(blocks, candidates),
+        "end_reason": end_reason,
+        "gaps": gaps,
         "weather": planner["weather"],
         "moon": planner["moon"],
         "darkness": planner["darkness"],
@@ -685,4 +748,5 @@ def get_tonight_schedule(
             capture_progress=capture_progress,
         ),
         timezone_name=context.timezone_name,
+        rig_profile_key=context.rig_profile_key,
     )

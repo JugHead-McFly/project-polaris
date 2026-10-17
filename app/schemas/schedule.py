@@ -12,6 +12,8 @@ class ScheduledImagingBlock(BaseModel):
     common_name: Optional[str] = None
     start: str
     end: str
+    start_at: Optional[str] = None
+    end_at: Optional[str] = None
     duration_minutes: int
     setup_minutes: int
     imaging_minutes: int
@@ -43,6 +45,7 @@ class TonightScheduleResponse(BaseModel):
     allocated_minutes: int
     unscheduled_dark_minutes: int
     end_reason: Optional[str] = None
+    gaps: List[dict] = Field(default_factory=list)
     weather: WeatherSummary
     moon: MoonSummary
     darkness: DarknessSummary

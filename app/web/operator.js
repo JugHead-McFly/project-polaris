@@ -1260,6 +1260,14 @@ const renderHostedSchedule = (schedule) => {
     });
     appendSettingsInfoButton(settings, block);
   });
+  (schedule?.gaps || []).forEach((gap) => {
+    appendTextElement(
+      container,
+      "p",
+      "empty-state",
+      `Unallocated ${shortTime(gap.start)} to ${shortTime(gap.end)} (${gap.minutes} minutes): ${gap.reason}`,
+    );
+  });
 };
 
 const displayedTargetSettings = (target, schedule) => {

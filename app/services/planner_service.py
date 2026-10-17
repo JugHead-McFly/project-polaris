@@ -1,4 +1,5 @@
 from app.services.capture_history_service import history_advice
+import math
 from datetime import datetime, timedelta
 from typing import Dict, Iterable, List, Optional
 
@@ -161,7 +162,7 @@ def get_dark_visibility(
         sample_times,
         sampled_altitudes,
     ):
-        if altitude is None:
+        if altitude is None or not math.isfinite(altitude):
             return {
                 "known_position": False,
                 "usable_dark_minutes": 0,
@@ -239,10 +240,14 @@ def get_dark_visibility(
         }
 
     recommended_start = longest_run[0][0]
-    recommended_end = min(
-        longest_run[-1][0] + timedelta(minutes=SAMPLE_INTERVAL_MINUTES),
-        dark_end,
-    )
+    # Stop at the last verified clear sample, not the next (possibly below-floor)
+    # sample. Preserve every disjoint clear interval for the scheduler.
+    recommended_end = longest_run[-1][0]
+    runs = []
+    for sample in usable_samples:
+        if not runs or sample[0] - runs[-1][-1][0] > timedelta(minutes=SAMPLE_INTERVAL_MINUTES + 1):
+            runs.append([])
+        runs[-1].append(sample)
     usable_minutes = int(
         (recommended_end - recommended_start).total_seconds() / 60
     )
@@ -259,6 +264,10 @@ def get_dark_visibility(
         ),
         "recommended_start_datetime": recommended_start,
         "recommended_end_datetime": recommended_end,
+        "schedule_windows": [
+            {"start": run[0][0].isoformat(), "end": run[-1][0].isoformat()}
+            for run in runs if run[-1][0] > run[0][0]
+        ],
         "target_geometry": target_geometry,
     }
 
@@ -401,14 +410,15 @@ def build_target_plan(
     use_capture_history: bool = True,
     capture_progress: Optional[Dict] = None,
 ) -> Dict:
-    advisor = (
-        get_exposure_advice(
-            db=db,
-            object_name=object_name,
-        )
-        if use_capture_history
-        else history_advice(object_name, capture_progress)
-    )
+    if use_capture_history:
+        try:
+            advisor = get_exposure_advice(db=db, object_name=object_name)
+        except ValueError as error:
+            if str(error) != f"Target '{object_name.strip().upper()}' was not found.":
+                raise
+            advisor = get_catalog_exposure_advice(object_name)
+    else:
+        advisor = history_advice(object_name, capture_progress)
 
     midpoint = dark_start + (dark_end - dark_start) / 2
     current_time = datetime.now(dark_start.tzinfo)
@@ -571,6 +581,7 @@ def build_target_plan(
         ),
         "recommended_start": recommended_start,
         "recommended_end": recommended_end,
+        "schedule_windows": visibility.get("schedule_windows"),
         "moon_separation_degrees": moon_separation,
         "moon_warning": moon_warning,
         "selection_reason": selection_reason,
@@ -810,7 +821,7 @@ def get_tonight_plan(
     notes = []
 
     planning_targets = (
-        get_distinct_targets(db)
+        sorted(set(get_distinct_targets(db)) | set(TARGETS))
         if target_names is None and use_capture_history
         else sorted(
             {
@@ -1007,10 +1018,13 @@ def get_tonight_plan(
             "Cloud cover may significantly reduce image quality."
         )
 
+    notes.append("Local horizon obstructions are not modeled on this release; verify trees, buildings and overhead clearance.")
     return {
         "recommended_target": recommended_target,
         "best_theoretical_target": best_theoretical_target,
         "alternatives": alternatives,
+        # The UI shortlist is not the full-night scheduling pool.
+        "schedule_candidates": observable_plans,
         "weather": weather,
         "moon": moon,
         "darkness": darkness,
