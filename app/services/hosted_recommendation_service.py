@@ -23,12 +23,12 @@ def _parse_local_time(
     if not value:
         return None
     try:
-        local_time = datetime.strptime(value, LOCAL_DATE_TIME_FORMAT)
+        local_time = datetime.fromisoformat(value) if "T" in value else datetime.strptime(value, "%Y-%m-%d %I:%M:%S %p" if value.count(":") == 2 else LOCAL_DATE_TIME_FORMAT)
     except (TypeError, ValueError):
         return None
-    return local_time.replace(
-        tzinfo=ZoneInfo(timezone_name)
-    ).astimezone(timezone.utc)
+    if local_time.tzinfo is None:
+        local_time = local_time.replace(tzinfo=ZoneInfo(timezone_name))
+    return local_time.astimezone(timezone.utc)
 
 
 def _parse_iso_time(value: Optional[str]) -> Optional[datetime]:
@@ -56,7 +56,7 @@ def create_recommendation_run(
     recommended_target = payload.get("recommended_target")
     schedule_blocks = schedule.get("blocks") or []
     planned_start = (
-        schedule_blocks[0].get("start")
+        (schedule_blocks[0].get("start_at") or schedule_blocks[0].get("start"))
         if schedule_blocks
         else darkness.get("astronomical_darkness_start")
     )

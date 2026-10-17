@@ -43,6 +43,8 @@ router = APIRouter(prefix="/tonight", tags=["Tonight"])
 
 
 def _build_operator_message(schedule: Dict) -> str:
+    if "darkness" in schedule and not schedule["darkness"].get("astronomical_darkness_start"):
+        return "No bounded astronomical-darkness interval is available for this date and location. No imaging is scheduled."
     decision = schedule["decision"]
     weather = schedule["weather"]
     rating = weather.get("observing_rating")
@@ -144,16 +146,15 @@ def _build_legacy_target(
     if planner_target is None:
         return None
 
-    target = (
-        build_target_response(
-            db=db,
-            target_name=planner_target["advisor"]["object"],
-        )
-        if use_capture_history
-        else build_catalog_target_response(
-            planner_target["advisor"]["object"]
-        )
-    )
+    if use_capture_history:
+        try:
+            target = build_target_response(db=db, target_name=planner_target["advisor"]["object"])
+        except ValueError as error:
+            if str(error) != f"Target '{planner_target['advisor']['object']}' was not found.":
+                raise
+            target = build_catalog_target_response(planner_target["advisor"]["object"])
+    else:
+        target = build_catalog_target_response(planner_target["advisor"]["object"])
     if not use_capture_history:
         advisor = planner_target["advisor"]
         target.update(build_portfolio_target(target["object"], advisor["current_integration_hours"]))

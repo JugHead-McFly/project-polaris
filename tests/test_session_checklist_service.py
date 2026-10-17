@@ -72,6 +72,17 @@ def test_good_night_uses_real_setup_start_and_stop_times():
     assert result["actions"] == []
 
 
+def test_checklist_uses_exact_instants_across_fall_fold():
+    result = build_session_checklist(
+        schedule={"date": "2026-11-01", "decision": "Proceed", "blocks": [_block(
+            start_at="2026-11-01T01:58:00-04:00", end_at="2026-11-01T01:30:45-05:00")]},
+        recommended_target=_target(), backup_target=None, dew_risk={"level": "low"},
+        timezone_name="America/New_York",
+    )
+    assert result["status"] == "ready"
+    assert [step["time_label"] for step in result["steps"]] == ["1:58 AM", "1:03 AM", "1:30:45 AM"]
+
+
 def test_caution_night_keeps_only_exceptional_dew_action():
     dew_action = "Use dew control from the start and check for condensation."
     result = _checklist(

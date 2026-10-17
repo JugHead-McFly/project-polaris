@@ -1260,6 +1260,14 @@ const renderHostedSchedule = (schedule) => {
     });
     appendSettingsInfoButton(settings, block);
   });
+  (schedule?.gaps || []).forEach((gap) => {
+    appendTextElement(
+      container,
+      "p",
+      "empty-state",
+      `Unallocated ${shortTime(gap.start)} to ${shortTime(gap.end)} (${gap.minutes} minutes): ${gap.reason}`,
+    );
+  });
 };
 
 const displayedTargetSettings = (target, schedule) => {
@@ -2453,17 +2461,18 @@ const bortleLabel = (bortleClass) => {
 
 const shortTime = (value) => {
   if (!value) return "—";
-  const match = value.match(/(\d{1,2}:\d{2} [AP]M)$/);
+  const match = value.match(/(\d{1,2}:\d{2}(?::\d{2})? [AP]M)$/);
   return match ? match[1] : value;
 };
 
 const durationLabel = (minutes) => {
   if (minutes === null || minutes === undefined) return "—";
-  const hours = Math.floor(minutes / 60);
-  const remaining = minutes % 60;
-  if (!hours) return `${remaining} min`;
-  if (!remaining) return `${hours} hr`;
-  return `${hours} hr ${remaining} min`;
+  const seconds = Math.round(minutes * 60);
+  const parts = [];
+  if (seconds >= 3600) parts.push(`${Math.floor(seconds / 3600)} hr`);
+  if (Math.floor(seconds % 3600 / 60)) parts.push(`${Math.floor(seconds % 3600 / 60)} min`);
+  if (seconds % 60) parts.push(`${seconds % 60} sec`);
+  return parts.join(" ") || "0 min";
 };
 
 const uptimeLabel = (seconds) => {

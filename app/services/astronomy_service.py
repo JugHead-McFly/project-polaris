@@ -468,11 +468,11 @@ def get_moon_info(
         context.timezone_name
     )
 
-    moonrise_local = moonrise.to_datetime(
+    moonrise_local = None if bool(moonrise.mask) else moonrise.to_datetime(
         timezone=local_timezone
     )
 
-    moonset_local = moonset.to_datetime(
+    moonset_local = None if bool(moonset.mask) else moonset.to_datetime(
         timezone=local_timezone
     )
 
@@ -481,12 +481,12 @@ def get_moon_info(
         "next_moonrise": (
             moonrise_local.strftime(
                 "%Y-%m-%d %I:%M %p"
-            )
+            ) if moonrise_local is not None else None
         ),
         "next_moonset": (
             moonset_local.strftime(
                 "%Y-%m-%d %I:%M %p"
-            )
+            ) if moonset_local is not None else None
         ),
     }
 
@@ -616,7 +616,7 @@ def get_moon_warning(
 def get_darkness_window_datetimes(
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,
-) -> Tuple[datetime, datetime, datetime]:
+) -> Tuple[Optional[datetime], Optional[datetime], Optional[datetime]]:
     context = use_observatory_context(observatory)
     observer = _get_observer(context)
     reference_time = to_astropy_time(
@@ -638,6 +638,8 @@ def get_darkness_window_datetimes(
                 which="previous",
             )
         )
+        if bool(astronomical_dusk.mask):
+            return None, None, None
 
         sunset = observer.sun_set_time(
             astronomical_dusk,
@@ -660,6 +662,8 @@ def get_darkness_window_datetimes(
                 which="next",
             )
         )
+        if bool(astronomical_dusk.mask):
+            return None, None, None
 
         sunset = observer.sun_set_time(
             astronomical_dusk,
@@ -678,7 +682,10 @@ def get_darkness_window_datetimes(
         context.timezone_name
     )
 
-    sunset_local = sunset.to_datetime(
+    if bool(astronomical_dawn.mask):
+        return None, None, None
+
+    sunset_local = None if bool(sunset.mask) else sunset.to_datetime(
         timezone=local_timezone
     )
 
@@ -693,6 +700,9 @@ def get_darkness_window_datetimes(
             timezone=local_timezone
         )
     )
+    elapsed = dawn_local.astimezone(timezone.utc) - dusk_local.astimezone(timezone.utc)
+    if not timedelta(0) < elapsed <= timedelta(hours=24):
+        return None, None, None
 
     return (
         sunset_local,
@@ -717,15 +727,17 @@ def get_darkness_info(
     return {
         "sunset": sunset_local.strftime(
             "%Y-%m-%d %I:%M %p"
-        ),
+        ) if sunset_local is not None else None,
         "astronomical_darkness_start": (
             dusk_local.strftime(
                 "%Y-%m-%d %I:%M %p"
-            )
+            ) if dusk_local is not None else None
         ),
         "astronomical_darkness_end": (
             dawn_local.strftime(
                 "%Y-%m-%d %I:%M %p"
-            )
+            ) if dawn_local is not None else None
         ),
+        "astronomical_darkness_start_at": dusk_local.isoformat() if dusk_local is not None else None,
+        "astronomical_darkness_end_at": dawn_local.isoformat() if dawn_local is not None else None,
     }
