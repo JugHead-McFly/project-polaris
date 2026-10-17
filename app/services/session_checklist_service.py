@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from typing import Dict, List, Optional
 from zoneinfo import ZoneInfo
 
@@ -13,9 +13,10 @@ def _parse_schedule_time(
     if not value:
         return None
     try:
-        return datetime.strptime(value, SCHEDULE_TIME_FORMAT).replace(
-            tzinfo=ZoneInfo(timezone_name)
-        )
+        parsed = datetime.fromisoformat(value) if "T" in value else datetime.strptime(value, "%Y-%m-%d %I:%M:%S %p" if value.count(":") == 2 else SCHEDULE_TIME_FORMAT)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=ZoneInfo(timezone_name))
+        return parsed.astimezone(ZoneInfo(timezone_name))
     except (ValueError, TypeError):
         return None
 
@@ -23,7 +24,7 @@ def _parse_schedule_time(
 def _time_label(value: Optional[datetime], plan_date: date) -> Optional[str]:
     if value is None:
         return None
-    label = value.strftime("%I:%M %p").lstrip("0")
+    label = value.strftime("%I:%M:%S %p" if value.second else "%I:%M %p").lstrip("0")
     if value.date() > plan_date:
         return f"{label} next day"
     return label
@@ -40,7 +41,7 @@ def _step(
     return {
         "key": key,
         "label": label,
-        "at": at.strftime(SCHEDULE_TIME_FORMAT) if at else None,
+        "at": at.strftime("%Y-%m-%d %I:%M:%S %p" if at.second else SCHEDULE_TIME_FORMAT) if at else None,
         "time_label": _time_label(at, plan_date),
         "instruction": instruction,
     }
@@ -129,8 +130,8 @@ def build_session_checklist(
 
     first_block = blocks[0]
     last_block = blocks[-1]
-    setup_at = _parse_schedule_time(first_block.get("start"), timezone_name)
-    stop_at = _parse_schedule_time(last_block.get("end"), timezone_name)
+    setup_at = _parse_schedule_time(first_block.get("start_at") or first_block.get("start"), timezone_name)
+    stop_at = _parse_schedule_time(last_block.get("end_at") or last_block.get("end"), timezone_name)
     setup_minutes = first_block.get("setup_minutes")
     if (
         setup_at is None
@@ -141,8 +142,8 @@ def build_session_checklist(
     ):
         return _unavailable_checklist(plan_date)
 
-    start_at = setup_at + timedelta(minutes=float(setup_minutes))
-    if start_at > stop_at:
+    start_at = (setup_at.astimezone(timezone.utc) + timedelta(minutes=float(setup_minutes))).astimezone(ZoneInfo(timezone_name))
+    if start_at.astimezone(timezone.utc) > stop_at.astimezone(timezone.utc):
         return _unavailable_checklist(plan_date)
 
     target_name = first_block.get("object") or (

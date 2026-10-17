@@ -114,7 +114,7 @@ def test_visibility_stops_before_below_floor_sample():
 
 
 def test_hosted_endpoint_keeps_later_rising_targets_outside_shortlist():
-    names = ["M27", "M57", "M31", "M42", "M13", "M51", "M63", "M64"]
+    names = ["M27", "M57", "M81", "M42", "M13", "M51", "M63", "M64"]
     def visibility(object_name, **kwargs):
         index = names.index(object_name)
         return {"known_position": True, "usable_dark_minutes": 60,
@@ -129,3 +129,100 @@ def test_hosted_endpoint_keeps_later_rising_targets_outside_shortlist():
     assert {b["object"] for b in plan["schedule"]["blocks"]} == set(names)
     assert plan["schedule"]["unscheduled_dark_minutes"] == 0
     assert plan["schedule"]["blocks"][-1]["end"] == "2025-01-16 04:00 AM"
+
+
+def test_returning_target_keeps_one_exact_integration_budget():
+    selected = target("M27", START, END, exposure=15, remaining_seconds=3020, additional_subframes=202)
+    selected["schedule_windows"] = [
+        {"start": START.isoformat(), "end": (START + timedelta(minutes=30)).isoformat()},
+        {"start": (START + timedelta(hours=2)).isoformat(), "end": (START + timedelta(hours=3)).isoformat()},
+    ]
+    blocks = build_schedule_blocks([selected], timezone_name="UTC")
+    assert [b["planned_subframes"] for b in blocks] == [100, 101]
+    assert sum(b["imaging_minutes"] * 60 for b in blocks) == 3015
+    assert all(b["duration_minutes"] >= 30 for b in blocks)
+
+
+def test_split_run_durations_equal_actual_elapsed_time():
+    end = START + timedelta(hours=7)
+    selected = target("M27", START, end, exposure=10)
+    result = build_tonight_schedule({"decision": "Proceed", "notes": [], "weather": {}, "moon": {},
+        "recommended_target": selected, "alternatives": [], "darkness": {
+            "astronomical_darkness_start": START.isoformat(), "astronomical_darkness_end": end.isoformat()}}, "UTC")
+    assert result["allocated_minutes"] == 420
+    assert result["unscheduled_dark_minutes"] == 0
+    assert result["gaps"] == []
+    for block in result["blocks"]:
+        elapsed = (datetime.fromisoformat(block["end_at"]) - datetime.fromisoformat(block["start_at"])).total_seconds()
+        assert block["duration_minutes"] * 60 == pytest.approx(elapsed)
+        assert block["imaging_minutes"] * 60 == pytest.approx(block["planned_subframes"] * 10)
+
+
+def test_too_little_goal_for_whole_frames_does_not_create_short_block():
+    blocks = build_schedule_blocks([target("M27", START, END, exposure=120, remaining_seconds=1510)])
+    assert blocks == []  # 24 minutes of whole frames + five setup is below minimum.
+
+
+def test_dst_visibility_samples_cover_every_real_quarter_hour():
+    from zoneinfo import ZoneInfo
+    from app.services.planner_service import generate_sample_times
+    start = datetime(2026, 11, 1, 0, tzinfo=ZoneInfo("America/New_York"))
+    end = start.replace(hour=4)
+    samples = generate_sample_times(start, end)
+    assert len(samples) == 21
+    assert all((b.astimezone(timezone.utc) - a.astimezone(timezone.utc)).total_seconds() == 900
+               for a, b in zip(samples, samples[1:]))
+
+
+def test_visibility_interval_crossing_fall_fold_remains_schedulable():
+    from zoneinfo import ZoneInfo
+    start = datetime(2026, 11, 1, 1, 30, tzinfo=ZoneInfo("America/New_York"))
+    end = start.replace(minute=15, fold=1)
+    with patch("app.services.planner_service.get_altitudes_at", return_value=[40, 40, 40, 40]):
+        visibility = get_dark_visibility("M27", start, end)
+    assert visibility["usable_dark_minutes"] == 45
+    selected = target("M27", start, end)
+    selected["schedule_windows"] = visibility["schedule_windows"]
+    blocks = build_schedule_blocks([selected], timezone_name="America/New_York")
+    assert sum(block["duration_minutes"] for block in blocks) == 45
+
+
+def test_explicit_empty_target_selection_stays_empty():
+    from app.services.planner_service import get_tonight_plan
+    with workflow(), patch("app.services.planner_service.build_target_plan") as build:
+        plan = get_tonight_plan(None, target_names=[], use_capture_history=False)
+    build.assert_not_called()
+    assert plan["schedule_candidates"] == []
+
+
+def test_known_rig_rejects_target_that_cannot_fit_single_frame():
+    from app.core.planning_context import ObservatoryContext
+    from app.services.planner_service import get_tonight_plan
+    context = ObservatoryContext("test", 0, 0, "UTC", rig_profile_key="dwarf-mini")
+    with workflow(), patch("app.services.planner_service.build_target_plan") as build:
+        plan = get_tonight_plan(None, context, target_names=["M31"], use_capture_history=False)
+    build.assert_not_called()
+    assert plan["schedule_candidates"] == []
+    assert any("single-frame" in note for note in plan["notes"])
+
+
+@pytest.mark.parametrize("latitude,month", [(89, 6), (-89, 12), (89, 12)])
+def test_polar_unbounded_darkness_returns_no_fabricated_interval(latitude, month):
+    from astropy.utils import iers
+    from app.core.planning_context import ObservatoryContext
+    from app.services.astronomy_service import get_darkness_info
+    context = ObservatoryContext("polar", latitude, 0, "UTC")
+    with iers.conf.set_temp("auto_download", False):
+        info = get_darkness_info(datetime(2026, month, 21, 12, tzinfo=timezone.utc), context)
+    assert info["astronomical_darkness_start"] is None
+    assert info["astronomical_darkness_end"] is None
+
+
+def test_hosted_no_darkness_response_is_explicit():
+    darkness = {"sunset": None, "astronomical_darkness_start": None, "astronomical_darkness_end": None}
+    with workflow() as flow, patch("app.services.planner_service.get_darkness_info", return_value=darkness), \
+            patch("app.services.planner_service.get_darkness_window_datetimes", return_value=(None, None, None)), \
+            TestClient(flow.app) as client:
+        plan = flow.plan(client)
+    assert plan["schedule"]["blocks"] == []
+    assert "bounded" in plan["message"]

@@ -43,6 +43,8 @@ router = APIRouter(prefix="/tonight", tags=["Tonight"])
 
 
 def _build_operator_message(schedule: Dict) -> str:
+    if "darkness" in schedule and not schedule["darkness"].get("astronomical_darkness_start"):
+        return "No bounded astronomical-darkness interval is available for this date and location. No imaging is scheduled."
     decision = schedule["decision"]
     weather = schedule["weather"]
     rating = weather.get("observing_rating")

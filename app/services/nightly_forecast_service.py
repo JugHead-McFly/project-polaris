@@ -95,6 +95,8 @@ def collect_nightly(db, *, user_id, observatory, now=None,
     now = utc(now or clock())
     context = planning_context_from_observatory(observatory)
     _, dusk, dawn = darkness(reference_datetime=now, observatory=context)
+    if dusk is None or dawn is None:
+        raise ValueError("No valid astronomical darkness window")
     start, end = utc(dusk), utc(dawn)
     if end <= start or end-start > timedelta(hours=24):
         raise ValueError("No valid astronomical darkness window")

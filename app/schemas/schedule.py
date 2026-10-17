@@ -14,9 +14,9 @@ class ScheduledImagingBlock(BaseModel):
     end: str
     start_at: Optional[str] = None
     end_at: Optional[str] = None
-    duration_minutes: int
+    duration_minutes: float
     setup_minutes: int
-    imaging_minutes: int
+    imaging_minutes: float
     planner_score: float
     reason: str
     recommended_sub_exposure_seconds: Optional[int] = None
@@ -42,8 +42,8 @@ class TonightScheduleResponse(BaseModel):
     decision: str
     advisory_only: bool = True
     blocks: List[ScheduledImagingBlock]
-    allocated_minutes: int
-    unscheduled_dark_minutes: int
+    allocated_minutes: float
+    unscheduled_dark_minutes: float
     end_reason: Optional[str] = None
     gaps: List[dict] = Field(default_factory=list)
     weather: WeatherSummary

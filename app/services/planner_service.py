@@ -1,6 +1,6 @@
 from app.services.capture_history_service import history_advice
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Iterable, List, Optional
 
 from sqlalchemy.orm import Session
@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.planning_context import ObservatoryContext
 from app.core.planning_context import use_observatory_context
 from app.data.rig_profiles import get_rig_profile
-from app.data.targets import TARGETS
+from app.data.targets import TARGETS, get_target_angular_size
 from app.models import Capture
 from app.services.advisor_service import get_catalog_exposure_advice
 from app.services.advisor_service import get_exposure_advice
@@ -94,13 +94,14 @@ def generate_sample_times(
     dark_end: datetime,
 ) -> List[datetime]:
     sample_times = []
-    current_time = dark_start
+    current_time = dark_start.astimezone(timezone.utc)
+    end_utc = dark_end.astimezone(timezone.utc)
 
-    while current_time <= dark_end:
-        sample_times.append(current_time)
+    while current_time <= end_utc:
+        sample_times.append(current_time.astimezone(dark_start.tzinfo))
         current_time += timedelta(minutes=SAMPLE_INTERVAL_MINUTES)
 
-    if not sample_times or sample_times[-1] < dark_end:
+    if not sample_times or sample_times[-1].astimezone(timezone.utc) < end_utc:
         sample_times.append(dark_end)
 
     return sample_times
@@ -117,7 +118,7 @@ def find_longest_usable_run(usable_samples: List) -> List:
     for sample_time, altitude in usable_samples:
         if (
             previous_time is None
-            or sample_time - previous_time
+            or sample_time.astimezone(timezone.utc) - previous_time.astimezone(timezone.utc)
             <= timedelta(minutes=SAMPLE_INTERVAL_MINUTES + 1)
         ):
             current_run.append((sample_time, altitude))
@@ -245,11 +246,11 @@ def get_dark_visibility(
     recommended_end = longest_run[-1][0]
     runs = []
     for sample in usable_samples:
-        if not runs or sample[0] - runs[-1][-1][0] > timedelta(minutes=SAMPLE_INTERVAL_MINUTES + 1):
+        if not runs or sample[0].astimezone(timezone.utc) - runs[-1][-1][0].astimezone(timezone.utc) > timedelta(minutes=SAMPLE_INTERVAL_MINUTES + 1):
             runs.append([])
         runs[-1].append(sample)
     usable_minutes = int(
-        (recommended_end - recommended_start).total_seconds() / 60
+        (recommended_end.astimezone(timezone.utc) - recommended_start.astimezone(timezone.utc)).total_seconds() / 60
     )
     usable_altitudes = [altitude for _, altitude in longest_run]
 
@@ -266,7 +267,7 @@ def get_dark_visibility(
         "recommended_end_datetime": recommended_end,
         "schedule_windows": [
             {"start": run[0][0].isoformat(), "end": run[-1][0].isoformat()}
-            for run in runs if run[-1][0] > run[0][0]
+            for run in runs if run[-1][0].astimezone(timezone.utc) > run[0][0].astimezone(timezone.utc)
         ],
         "target_geometry": target_geometry,
     }
@@ -420,7 +421,8 @@ def build_target_plan(
     else:
         advisor = history_advice(object_name, capture_progress)
 
-    midpoint = dark_start + (dark_end - dark_start) / 2
+    midpoint = (dark_start.astimezone(timezone.utc) +
+                (dark_end.astimezone(timezone.utc) - dark_start.astimezone(timezone.utc)) / 2).astimezone(dark_start.tzinfo)
     current_time = datetime.now(dark_start.tzinfo)
 
     visibility = get_dark_visibility(
@@ -814,6 +816,11 @@ def get_tonight_plan(
     _sunset, dark_start, dark_end = get_darkness_window_datetimes(
         observatory=context
     )
+    if dark_start is None or dark_end is None:
+        return {"recommended_target": None, "best_theoretical_target": None,
+                "alternatives": [], "schedule_candidates": [], "weather": weather,
+                "moon": moon, "darkness": darkness, "decision": get_weather_decision(weather),
+                "notes": ["No bounded astronomical-darkness interval is available for this date and location; no targets were allocated."]}
     from app.services.cloud_forecast_service import summarize_dark_window
     weather["cloud_dark_window"] = summarize_dark_window(weather, dark_start, dark_end)
 
@@ -826,13 +833,18 @@ def get_tonight_plan(
         else sorted(
             {
                 name.strip().upper()
-                for name in (target_names or TARGETS)
+                for name in (TARGETS if target_names is None else target_names)
                 if name
             }
         )
     )
 
     for object_name in planning_targets:
+        rig = get_rig_profile(context.rig_profile_key or "")
+        size = get_target_angular_size(object_name)
+        if rig is not None and size is not None and rig.assess_target_fit(*size).fits is False:
+            notes.append(f"{object_name} excluded: larger than the selected rig's single-frame field of view.")
+            continue
         try:
             plans.append(
                 build_target_plan(

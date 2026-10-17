@@ -5,7 +5,7 @@ import uvicorn
 from serve_import_plan_fixture import add_browser_fixture
 from import_plan_fixture import workflow, START
 
-NAMES = ["M27", "M57", "M31", "M42", "M13", "M51", "M63", "M64"]
+NAMES = ["M27", "M57", "M81", "M42", "M13", "M51", "M63", "M64"]
 
 def visibility(object_name, **kwargs):
     index = NAMES.index(object_name)

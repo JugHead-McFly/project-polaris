@@ -149,8 +149,8 @@ def test_schedule_moves_to_an_alternative_after_goal_is_met():
     )
 
     assert [(block["object"], block["duration_minutes"]) for block in blocks] == [
-        ("M57", 130),
-        ("M27", 110),
+        ("M57", 129.25),
+        ("M27", 110.75),
     ]
     assert blocks[0]["planned_subframes"] == 497
     assert blocks[0]["subframe_runs"] == [497]
@@ -210,8 +210,8 @@ def test_schedule_splits_more_than_999_subframes_into_timed_dwarf_runs():
     )
 
     assert [(block["start"], block["end"]) for block in blocks] == [
-        ("2026-07-17 09:00 PM", "2026-07-18 01:15 AM"),
-        ("2026-07-18 01:15 AM", "2026-07-18 04:00 AM"),
+        ("2026-07-17 09:00 PM", "2026-07-18 01:14:45 AM"),
+        ("2026-07-18 01:14:45 AM", "2026-07-18 04:00 AM"),
     ]
     assert [block["planned_subframes"] for block in blocks] == [999, 661]
     assert [block["total_planned_subframes"] for block in blocks] == [1660, 1660]

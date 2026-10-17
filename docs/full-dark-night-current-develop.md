@@ -93,3 +93,51 @@ No push, merge or deployment is authorized or performed. The original checkout,
 all observations, calibration output and backups remain untouched. Rollback is
 the unchanged current base `eef6088`; the earlier feature branch is also retained.
 `develop` auto-deploys on Render and must not be merged without approval.
+
+## Independent review and follow-up
+
+The independent review of `502367a` found two accounting defects: repeated windows
+could overshoot a target goal, and per-run rounding contradicted exact elapsed
+time. Both are fixed: the 3,020-second returning-target case now allocates 201
+15-second frames (3,015 seconds), and the seven-hour split-run case reports exactly
+420 allocated minutes. Goals are rounded down to whole exposures, setup is charged
+once per contiguous block, and returning windows receive a fresh setup. Short
+residuals remain explicit gaps. Fractional-minute API durations and second-precision
+labels preserve the same instants through the dashboard and session checklist.
+
+Additional review fixes preserve explicit empty target selection, exclude known
+single-frame equipment mismatches, avoid assigning an invented frame cap to unknown
+rigs, and sample/compare visibility on the UTC timeline through DST changes. The
+reviewer found one final local-time comparison that discarded a 45-minute interval
+crossing the fall-back fold; it now compares UTC instants and has its own regression.
+
+Masked polar twilight/moonrise results are handled without a server error. Where
+there is no bounded dusk-to-dawn interval (including continuous polar darkness),
+the API explicitly declines to fabricate a nightly interval. This is a conservative
+limitation, not a claim that polar winter has no darkness. Full-night seasonal tests
+remain synthetic. Real polar astronomy tests disable IERS downloads; their expected
+warnings note outdated bundled polar-motion data and nonexistent twilight crossings.
+
+Validation: 147 Python cases passed in the expanded isolated suite; after the final
+DST comparison correction, 32 relevant cases passed, including one new case (148
+unique cases total). Five Node UI tests, JavaScript syntax validation, and whitespace
+checks passed. The exact deployed-code before/after evidence remains 4 blocks / 180
+minutes versus 8 blocks / 360 minutes through dawn. All databases used for these
+tests and the local preview are isolated synthetic data.
+
+### Proposed release sequence — not executed
+
+1. Fetch origin and confirm develop is still `eef6088`; if it moved, rebase/review
+   and rerun affected tests before publishing.
+2. With authorization, push only `codex/full-dark-night-current` and open a PR to
+   `develop`, including both the scheduling fix and this review follow-up.
+3. Obtain explicit merge/deployment approval. Merging that PR triggers Render's
+   develop deployment; do not merge to obtain a preview.
+4. Verify the production health endpoint reports the merged revision, then inspect
+   Doug's authenticated plan with his actual observing home, rig and history.
+
+Before deployment, rollback requires no production action: develop remains
+`eef6088`. The pre-review feature commit `502367a` and old-base feature `394d749`
+remain available. After an approved deployment, use a reviewed revert PR for the
+two feature commits (or an explicitly approved Render rollback to `eef6088`),
+without resetting the original checkout or touching observations/backups.
