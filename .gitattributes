@@ -1,1 +1,3 @@
 *.pdf binary
+# Preserve upstream bytes: the pinned catalog is verified by SHA-256.
+app/data/catalog/openngc.csv -text
