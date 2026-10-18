@@ -216,6 +216,7 @@ def get_weather_summary(
     cache_key = _weather_cache_key(context)
     cached_weather = _get_cached_weather(cache_key, checked_at)
     if cached_weather is not None:
+        cached_weather["postal_code"] = postal_code
         return cached_weather
 
     params = {
@@ -339,6 +340,7 @@ def get_weather_summary(
             allow_stale=True,
         )
         if stale_weather is not None:
+            stale_weather["postal_code"] = postal_code
             stale_weather["status"] = (
                 f"Using recent cached weather because live weather "
                 f"is unavailable: {error}"
@@ -483,9 +485,12 @@ def _get_weatherapi_summary(
 
 
 def _weather_cache_key(context: ObservatoryContext):
+    # The payload includes local forecast times and coordinate provenance.
+    # Nearby sites or different timezone selections cannot share that payload.
     return (
-        round(context.latitude, 2),
-        round(context.longitude, 2),
+        context.latitude,
+        context.longitude,
+        context.timezone_name,
     )
 
 
@@ -507,7 +512,7 @@ def _get_cached_weather(
         age_seconds = (
             checked_at - cached["cached_at"]
         ).total_seconds()
-        if age_seconds > max_age_seconds:
+        if age_seconds < 0 or age_seconds > max_age_seconds:
             return None
         weather = deepcopy(cached["weather"])
 
