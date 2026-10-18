@@ -429,6 +429,7 @@ def _moon_coordinate_at(observation_datetime, observatory=None):
 
 
 @reuse_exact
+@timed("moon_current")
 def get_moon_info_at(
     observation_datetime: datetime,
     observatory: Optional[ObservatoryContext] = None,
@@ -513,15 +514,8 @@ def get_moon_info(
         observatory=context,
     )
 
-    moonrise = observer.moon_rise_time(
-        observation_time,
-        which="next",
-    )
-
-    moonset = observer.moon_set_time(
-        observation_time,
-        which="next",
-    )
+    moonrise = _next_moonrise(observer, observation_time)
+    moonset = _next_moonset(observer, observation_time)
 
     local_timezone = ZoneInfo(
         context.timezone_name
@@ -548,6 +542,22 @@ def get_moon_info(
             ) if moonset_local is not None else None
         ),
     }
+
+
+@timed("moon_rise")
+def _next_moonrise(observer, observation_time):
+    return observer.moon_rise_time(
+        observation_time,
+        which="next",
+    )
+
+
+@timed("moon_set")
+def _next_moonset(observer, observation_time):
+    return observer.moon_set_time(
+        observation_time,
+        which="next",
+    )
 
 
 @reuse_exact

@@ -40,6 +40,7 @@ from app.core.runtime_logging import configure_logging
 from app.core.startup_preflight import format_preflight_failure
 from app.core.startup_preflight import log_preflight_report
 from app.core.startup_preflight import run_startup_preflight
+from app.services.planning_runtime_service import prepare_planning_runtime
 from app.database.database import get_db
 from app.database.database import get_tenant_db
 from app.services.capture_service import (
@@ -90,6 +91,8 @@ async def lifespan(_: FastAPI):
     log_preflight_report(report, logger)
     if not report["ready"]:
         raise RuntimeError(format_preflight_failure(report))
+    if settings.ENVIRONMENT == "production":
+        await asyncio.to_thread(prepare_planning_runtime)
     target_art_task = (
         asyncio.create_task(maintain_target_art_cache())
         if settings.ENVIRONMENT == "production"
