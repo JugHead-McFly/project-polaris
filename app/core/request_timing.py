@@ -9,6 +9,7 @@ from functools import wraps
 import logging
 from threading import Lock
 from time import perf_counter, thread_time
+from app.core.runtime_diagnostics import mark, planner_scope
 
 _current = ContextVar("request_timings", default=None)
 logger = logging.getLogger(__name__)
@@ -50,6 +51,14 @@ def timed(name):
     def decorate(function):
         @wraps(function)
         def measured(*args, **kwargs):
+            if name == 'auth':
+                mark('auth_entry')
+            if name == 'planner':
+                with planner_scope():
+                    return measure_call(*args, **kwargs)
+            return measure_call(*args, **kwargs)
+
+        def measure_call(*args, **kwargs):
             timings = _current.get()
             if timings is None:
                 return function(*args, **kwargs)
