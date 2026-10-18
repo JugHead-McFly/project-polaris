@@ -317,10 +317,7 @@
             <h1 id="hosted-tonight-title">Your imaging plan</h1>
 
           </div>
-          <a class="hosted-forecast-history-link" href="#forecast-accuracy-history">
-            <span>Forecast history</span>
-            <strong id="forecast-accuracy-link-count">Loading…</strong>
-          </a>
+
         </div>
 
 
@@ -338,10 +335,10 @@
                 Comparing weather, darkness, Moon conditions, and target visibility.
               </p>
           <div class="hosted-score-command">
-            <details class="forecast-agreement" id="forecast-agreement">
-              <summary id="forecast-agreement-label">Forecast comparison unavailable</summary>
+            <div class="forecast-agreement" id="forecast-agreement">
+              <p id="forecast-agreement-label">Forecast comparison unavailable</p>
               <p id="forecast-agreement-detail"></p>
-            </details>
+            </div>
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
               <div class="hosted-opportunity-total">
@@ -467,23 +464,13 @@
               </div>
               <div class="hosted-target-altitude-chart" id="hosted-target-altitude-chart"></div>
             </div>
-            <div class="hosted-rig-match">
-              <details class="compact-disclosure"><summary>Framing details</summary><p id="hosted-target-rig-match">Rig match will appear after a target is selected.</p></details>
-            </div>
+
           </div>
 
           <div class="hosted-setup-card" id="hosted-setup-card">
             <p class="eyebrow" id="hosted-setup-title">Capture settings</p>
             <p id="capture-settings-state" hidden>Capture settings unavailable</p>
             <dl class="hosted-target-facts">
-              <div>
-                <dt>Rig profile</dt>
-                <dd id="hosted-target-rig">—</dd>
-              </div>
-              <div>
-                <dt>Target fit</dt>
-                <dd id="hosted-target-fit">—</dd>
-              </div>
               <div>
                 <dt>Sub-exposure <button class="quality-info-button term-info-button" data-term-info="sub-exposure" type="button" aria-label="About sub-exposure">i</button></dt>
                 <dd id="hosted-target-exposure">—</dd>
@@ -507,57 +494,8 @@
 
         </details>
 
-        <section
-          class="panel forecast-accuracy-history"
-          id="forecast-accuracy-history"
-          aria-labelledby="forecast-accuracy-history-title"
-        >
-          <details class="forecast-history-details confidence-disclosure" id="nightly-confidence-details">
-            <summary aria-label="Cloud forecast reliability — view evidence">
-              <span id="forecast-accuracy-history-title">Forecast reliability</span>
-              <span class="confidence-badge" role="status" aria-live="polite">
-                <span id="forecast-confidence-state">Loading…</span>
-              </span>
-            </summary>
-          <span id="forecast-accuracy-history-count">Loading history…</span>
-          <div class="forecast-accuracy-guidance" role="status" aria-live="polite">
-            <span id="forecast-accuracy-history-label">Nightly track record</span>
-            <strong id="forecast-accuracy-insight">Building forecast confidence</strong>
-            <p id="forecast-accuracy-history-message">Satellite estimates will be compared with saved forecasts.</p>
-          </div>
-            <p class="forecast-chart-caption">Afternoon and dusk forecasts are kept separate. Review begins at 30 comparable nights per group, not a guaranteed confidence level. A night needs at least 90% satellite coverage, with no gap over 30 minutes.</p>
-            <div id="nightly-confidence-summary"></div>
-            <div id="nightly-confidence-nights"></div>
-            <details class="forecast-history-details">
-              <summary>Earlier individual-time checks</summary>
-              <p class="forecast-chart-caption">These older checks are not whole-night averages and do not count toward the nightly track record.</p>
-          <figure class="forecast-accuracy-visual" id="forecast-accuracy-visual" hidden>
-            <figcaption class="forecast-accuracy-visual-heading">
-              <strong>Forecast vs. satellite cloud cover</strong>
-              <div class="forecast-accuracy-legend">
-                <span><i class="forecast"></i>Forecast</span>
-                <span><i class="observed"></i>Satellite estimate</span>
-              </div>
-            </figcaption>
-            <div class="forecast-accuracy-chart" id="forecast-accuracy-chart"></div>
-            <p class="forecast-chart-caption">Lower means clearer skies. Each point is a saved forecast time, not a whole-night average. Select a point for its values.</p>
-            <p id="forecast-chart-selection" class="forecast-chart-selection" role="status" aria-live="polite"></p>
-          </figure>
-          <dl class="forecast-accuracy-metrics" id="forecast-accuracy-metrics" hidden></dl>
-          <label class="forecast-reliability-tolerance" for="forecast-accuracy-tolerance">
-            Comparison tolerance
-            <select id="forecast-accuracy-tolerance">
-              <option value="10">Within 10 percentage points</option>
-              <option value="20">Within 20 percentage points</option>
-              <option value="30">Within 30 percentage points</option>
-            </select>
-          </label>
-          <details class="forecast-history-details" id="forecast-history-details">
-            <summary>View nightly details</summary>
-            <div id="forecast-accuracy-nights"></div>
-          </details>
-            </details>
-          </details>
+        <section class="panel forecast-accuracy-history" id="forecast-accuracy-history" aria-label="Forecast reliability">
+          <p id="forecast-confidence-state" role="status" aria-live="polite">Forecast reliability: Unavailable</p>
         </section>
       </section>
 

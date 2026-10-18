@@ -5443,13 +5443,15 @@ body.initial-load footer { display: none !important; }
 #operator-page details > summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
 .forecast-agreement { margin: 4px 0 12px; color: var(--muted); max-width: 100%; font-size: 13px; }
-.forecast-agreement > summary { width: fit-content; max-width: 100%; }
-.forecast-agreement[data-state="close"] > summary { color: #65d5a0; }
-.forecast-agreement[data-state="mixed"] > summary { color: #e9c16a; }
-.forecast-agreement[data-state="split"] > summary { color: #f1a16d; }
+.forecast-agreement > #forecast-agreement-label { width: fit-content; max-width: 100%; }
+.forecast-agreement[data-state="close"] > #forecast-agreement-label { color: #65d5a0; }
+.forecast-agreement[data-state="mixed"] > #forecast-agreement-label { color: #e9c16a; }
+.forecast-agreement[data-state="split"] > #forecast-agreement-label { color: #f1a16d; }
 .forecast-agreement p { max-width: 75ch; line-height: 1.5; }
 .filter-progress { display: grid; gap: 10px; margin: 12px 0; }
 .filter-progress > div { padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
 .filter-progress dt { font-weight: 700; }
 .filter-progress dd { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
 .filter-progress-note { font-size: 13px; color: var(--muted); }
+
+#hosted-tonight-panel #hosted-setup-card .hosted-target-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
