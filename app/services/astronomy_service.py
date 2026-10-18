@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from functools import lru_cache
 from app.core.calculation_cache import reuse_exact, reuse_altitude_samples, calculation_scope_active
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Tuple
@@ -116,11 +117,17 @@ def get_target_coordinate(
     if target is None:
         return None
 
-    return SkyCoord(
-        target["ra"],
-        target["dec"],
-        frame="icrs",
-    )
+    ra, dec = target["ra"], target["dec"]
+    if isinstance(ra, str) and isinstance(dec, str):
+        # Public static catalog coordinates only. Value keys invalidate changed
+        # catalog entries immediately; copies prevent cross-caller mutation.
+        return _fixed_catalog_coordinate(ra, dec).copy()
+    return SkyCoord(ra, dec, frame="icrs")
+
+
+@lru_cache(maxsize=512)
+def _fixed_catalog_coordinate(ra, dec):
+    return SkyCoord(ra, dec, frame="icrs")
 
 
 def get_target_coordinate_at(
@@ -543,7 +550,6 @@ def get_moon_info(
     observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
     context = use_observatory_context(observatory)
-    observer = _get_observer(context)
     now = datetime.now(timezone.utc)
     observation_time = to_astropy_time(
         now,
@@ -555,8 +561,7 @@ def get_moon_info(
         observatory=context,
     )
 
-    moonrise = _next_moonrise(observer, observation_time)
-    moonset = _next_moonset(observer, observation_time)
+    moonrise, moonset = _next_moon_events(context, observation_time)
 
     local_timezone = ZoneInfo(
         context.timezone_name
@@ -925,3 +930,29 @@ def _seed_refinement_pairs(coordinates, indices, pairs, observatory):
     for (name, at), result in zip(pairs, results):
         if math.isfinite(result):
             get_altitudes_at.seed_exact_samples(name, [at], [result], observatory)
+
+class _MoonEventObserver(Observer):
+    """Private, single-pair observer; reuse one identical Moon altitude grid."""
+    def altaz(self, time, target=None, obswl=None, grid_times_targets=False):
+        from astroplan.target import MoonFlag
+        # Restrict reuse to the exact normal rise/set call shape. Other inputs
+        # retain Astroplan behavior, without allocating cache keys for big grids.
+        key = None
+        if (target is MoonFlag and isinstance(time, Time) and time.size <= 1024
+                and time.location is None and obswl is None and not grid_times_targets):
+            key = (time.scale, time.shape, time.jd1.tobytes(), time.jd2.tobytes(),
+                   np.asarray(time.mask).tobytes())
+        cached = getattr(self, '_exact_moon_grid', None)
+        if key is not None and cached is not None and cached[0] == key:
+            return cached[1].copy()
+        result = super().altaz(time, target, obswl=obswl, grid_times_targets=grid_times_targets)
+        if key is not None:
+            self._exact_moon_grid = (key, result.copy())
+        return result
+
+
+def _next_moon_events(context, observation_time):
+    # The observer and its fixed site/atmosphere exist only for this pair. Never
+    # share them across requests or reuse moving-body results at a new instant.
+    observer = _MoonEventObserver(location=_get_location(context), timezone=context.timezone_name)
+    return _next_moonrise(observer, observation_time), _next_moonset(observer, observation_time)

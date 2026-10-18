@@ -6,6 +6,7 @@ from time import perf_counter, process_time, thread_time
 from app.core.planning_context import ObservatoryContext
 from app.services.astronomy_service import get_moon_info_at
 from app.services.deep_sky_catalog import catalog
+from app.services.target_art_library_service import prepare_target_art_library
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,7 @@ def prepare_planning_runtime():
     operations = {
         "astronomy_reference": lambda: get_moon_info_at(datetime.now(timezone.utc), context),
         "catalog_reference": catalog,
+        "art_catalog_reference": prepare_target_art_library,
     }
     for name, operation in operations.items():
         wall, thread, process = perf_counter(), thread_time(), process_time()
