@@ -1,49 +1,21 @@
-const { test } = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const vm = require('node:vm');
-
-test('loading account history never claims zero saved records', () => {
-  const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
-  const code = source.slice(source.indexOf('let latestForecastAccuracy ='), source.indexOf('const clampPercent ='));
-  const labels = {};
-  const render = vm.runInNewContext(`${code}\nrenderForecastAccuracyHistory;`, {
-    setText: (id, text) => { labels[id] = text; },
-    byId: () => ({ replaceChildren() {}, hidden: false }),
-  });
-  render(null);
-  assert.equal(labels['forecast-accuracy-history-count'], 'Loading history…');
-  assert.equal(labels['forecast-accuracy-link-count'], 'Loading…');
-  assert.doesNotMatch(Object.values(labels).join(' '), /0 saved|No forecasts saved/);
-});
-
-test('individual-time comparisons do not inflate the nightly confidence card', () => {
-  const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
-  const code = source.slice(source.indexOf('const renderNightlyConfidence ='), source.indexOf('const clampPercent ='));
-  const labels = {};
-  const render = vm.runInNewContext(`${code}\nrenderNightlyConfidence;`, {
-    setText: (id, text) => { labels[id] = text; },
-    byId: () => ({ replaceChildren() {} }),
-  });
-  render({satellite_reliability: {check_count: 39}, saved_forecast_count: 40});
-  assert.equal(labels['forecast-accuracy-history-label'], 'Building forecast confidence');
-  assert.equal(labels['forecast-accuracy-insight'], 'Afternoon: 0/30 nights · Dusk: 0/30 nights');
-  assert.equal(labels['forecast-confidence-state'], '0 nights recorded');
-});
-
-test('sample size alone never promotes the badge to reliable', () => {
-  const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
-  const code = source.slice(source.indexOf('const renderNightlyConfidence ='), source.indexOf('const clampPercent ='));
-  const labels = {};
-  const render = vm.runInNewContext(`${code}\nrenderNightlyConfidence;`, {
-    setText: (id, text) => { labels[id] = text; },
-    byId: () => ({ replaceChildren() {} }),
-    appendTextElement: () => ({}),
-  });
-  render({nightly: {horizons: [{horizon: 'dusk', count: 40, within_10: 40, bias: 0, review_ready: true}]}});
-  assert.equal(labels['forecast-confidence-state'], '40 nights recorded');
-  assert.equal(labels['forecast-accuracy-link-count'], '40 nights recorded');
-  assert.match(labels['forecast-accuracy-history-message'], /not a calibrated reliability rating/);
-  assert.match(labels['forecast-accuracy-insight'], /40 of 40/);
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+test('reliability stays concise, honest and leaves data unchanged',()=>{
+ const source=fs.readFileSync(path.join(__dirname,'../app/web/operator.js'),'utf8');
+ const code=source.slice(source.indexOf('const forecastReliabilityLabel ='),source.indexOf('const clampPercent ='));
+ let label;
+ const render=vm.runInNewContext(code+'\nrenderForecastAccuracyHistory;', {setText:(id,text)=>{label=text;}});
+ for(const value of [null,{}, {state:'unavailable'}, {state:'unknown'}]) {
+   render(value); assert.equal(label,'Forecast reliability: Unavailable');
+ }
+ for(const state of ['building','ready_for_calibration']) {
+   const data={state,nightly:{completed_nights:100,horizons:[{count:100,review_ready:true,within_10:100}],nights:[{night:'private-date'}]}};
+   const before=JSON.stringify(data); render(data);
+   assert.equal(label,'Forecast reliability: Still being assessed');
+   assert.equal(JSON.stringify(data),before);
+   assert.doesNotMatch(label,/100|private-date|reliable|%|pending/i);
+ }
 });

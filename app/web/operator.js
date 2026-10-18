@@ -526,187 +526,14 @@ const formatForecastMetric = (value, suffix = "") => (
   hasForecastMetric(value) ? `${Number(value)}${suffix}` : "Not enough data"
 );
 
-let latestForecastAccuracy = null;
-
-const renderForecastComparisonChart = (checks, timezone) => {
-  const chart = byId("forecast-accuracy-chart");
-  chart.replaceChildren();
-  byId("forecast-accuracy-visual").hidden = !checks.length;
-  setText("forecast-chart-selection", "");
-  if (!checks.length) return;
-  const points = [...checks].sort((a, b) => Date.parse(a.forecast_for) - Date.parse(b.forecast_for));
-  const width = Math.max(280, chart.clientWidth || 720);
-  const height = 260;
-  const left = 44, right = width - 16, top = 16, bottom = height - 38;
-  const first = Date.parse(points[0].forecast_for);
-  const last = Date.parse(points[points.length - 1].forecast_for);
-  const x = (point) => first === last ? (left + right) / 2 : left + (Date.parse(point.forecast_for) - first) / (last - first) * (right - left);
-  const y = (value) => bottom - value / 100 * (bottom - top);
-  const svgNode = (name, attributes, text) => {
-    const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-    Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-    if (text !== undefined) node.textContent = text;
-    return node;
-  };
-  const svg = svgNode("svg", { viewBox: `0 0 ${width} ${height}`, role: "group", "aria-label": `Cloud cover comparison for ${points.length} saved forecast times. Forecast is solid green; satellite is dashed gold. Vertical scale is zero to 100 percent.` });
-  [0, 25, 50, 75, 100].forEach((value) => {
-    svg.append(svgNode("line", { x1: left, x2: right, y1: y(value), y2: y(value), class: "forecast-accuracy-grid-line" }));
-    svg.append(svgNode("text", { x: left - 8, y: y(value) + 4, "text-anchor": "end", class: "forecast-accuracy-axis-label" }, `${value}%`));
-  });
-  const date = new Intl.DateTimeFormat([], { timeZone: timezone || "UTC", month: "short", day: "numeric" });
-  const fullDate = new Intl.DateTimeFormat([], { timeZone: timezone || "UTC", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
-  const tickCount = first === last ? 1 : Math.min(5, Math.max(2, Math.floor((right - left) / 85)));
-  for (let i = 0; i < tickCount; i += 1) {
-    const fraction = tickCount === 1 ? .5 : i / (tickCount - 1);
-    svg.append(svgNode("text", { x: left + fraction * (right - left), y: bottom + 24, "text-anchor": i === 0 && tickCount > 1 ? "start" : i === tickCount - 1 && tickCount > 1 ? "end" : "middle", class: "forecast-accuracy-date-label" }, date.format(new Date(first + fraction * (last - first)))));
-  }
-  const describe = (point) => `${fullDate.format(new Date(point.forecast_for))} (${timezone || "UTC"}): forecast ${Number(point.forecast_cloud_cover_percent.toFixed(1))}%, satellite ${Number(point.satellite_cloud_cover_percent.toFixed(1))}% — difference ${Number(point.absolute_difference.toFixed(1))} percentage points.`;
-  [["forecast_cloud_cover_percent", "forecast"], ["satellite_cloud_cover_percent", "observed"]].forEach(([field, style]) => {
-    // Break lines across missing nights; never imply measurements in a data gap.
-    let path = "";
-    points.forEach((point, index) => {
-      const gap = index === 0 || Date.parse(point.forecast_for) - Date.parse(points[index - 1].forecast_for) > 36 * 3600 * 1000;
-      path += `${gap ? "M" : "L"}${x(point)},${y(point[field])} `;
-    });
-    svg.append(svgNode("path", { d: path, class: `forecast-accuracy-line ${style}` }));
-    points.forEach((point) => {
-      const label = describe(point);
-      const dot = svgNode("circle", { cx: x(point), cy: y(point[field]), r: 4, tabindex: 0, role: "button", "aria-label": label, class: `forecast-accuracy-point ${style}` });
-      dot.append(svgNode("title", {}, label));
-      const select = () => setText("forecast-chart-selection", label);
-      dot.addEventListener("click", select);
-      dot.addEventListener("focus", select);
-      dot.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(); }
-      });
-      svg.append(dot);
-    });
-  });
-  chart.append(svg);
-  setText("forecast-chart-selection", `Latest — ${describe(points[points.length - 1])}`);
+const forecastReliabilityLabel = (data) => {
+  if (!data || !["building", "ready_for_calibration"].includes(data.state)) return "Unavailable";
+  // Sample size enables assessment, not a calibrated reliability claim.
+  return "Still being assessed";
 };
 
-const renderForecastAccuracyHistory = (forecastAccuracy) => {
-  latestForecastAccuracy = forecastAccuracy;
-  if (!forecastAccuracy) {
-    setText("forecast-confidence-state", "Loading…");
-    setText("forecast-accuracy-history-count", "Loading history…");
-    setText("forecast-accuracy-link-count", "Loading…");
-    setText("forecast-accuracy-history-label", "Satellite comparison");
-    setText("forecast-accuracy-insight", "Loading your saved forecast history…");
-    setText("forecast-accuracy-history-message", "Retrieving history for your account and observing home.");
-    byId("forecast-accuracy-metrics").replaceChildren();
-    byId("forecast-accuracy-metrics").hidden = true;
-    byId("forecast-accuracy-nights").replaceChildren();
-    renderForecastComparisonChart([], "UTC");
-    byId("nightly-confidence-summary").replaceChildren();
-    byId("nightly-confidence-nights").replaceChildren();
-    return;
-  }
-  const data = forecastAccuracy?.satellite_reliability || {};
-  const nights = Array.isArray(data.nights) ? data.nights : [];
-  const checks = nights.flatMap((night) => night.checks);
-  renderForecastComparisonChart(checks, data.timezone);
-  const tolerance = Number(byId("forecast-accuracy-tolerance").value);
-  const within = checks.filter((check) => check.absolute_difference <= tolerance).length;
-  const count = checks.length;
-  const number = (value) => hasForecastMetric(value)
-    ? Number(Number(value).toFixed(1)).toString() : "—";
-  const dateTime = (value) => new Intl.DateTimeFormat([], {
-    timeZone: data.timezone || "UTC", month: "short", day: "numeric",
-    hour: "numeric", minute: "2-digit",
-  }).format(new Date(value));
-  const saved = Number(forecastAccuracy?.saved_forecast_count || 0);
-  const pending = Number(forecastAccuracy?.pending_satellite_count || 0);
-  const future = Number(forecastAccuracy?.future_forecast_count || 0);
-  setText("forecast-accuracy-history-count", `${saved} saved forecasts · ${count} satellite checks · ${nights.length} nights`);
-  setText("forecast-accuracy-link-count", `${saved} saved · ${count} compared`);
-  setText("forecast-accuracy-history-label", "Satellite comparison");
-  setText("forecast-accuracy-insight", count ? `${within} of ${count} checks within ${tolerance} points` : saved ? "Forecast history saved; satellite comparisons pending" : "No forecasts saved for this observing home yet");
-  setText("forecast-accuracy-history-message", `Shared across your devices. ${pending} awaiting satellite data · ${future} future forecasts. Historical differences are not a probability for tonight.`);
-  const metrics = byId("forecast-accuracy-metrics");
-  metrics.replaceChildren();
-  metrics.hidden = !count;
-  [
-    ["Average difference", `${number(data.average_absolute_difference)} points`],
-    ["Reference", "NOAA satellite estimate"],
-  ].forEach(([label, value]) => {
-    const item = appendTextElement(metrics, "div", "", "");
-    appendTextElement(item, "dt", "", label);
-    appendTextElement(item, "dd", "", value);
-  });
-  const list = byId("forecast-accuracy-nights");
-  const expanded = new Set(Array.from(list.querySelectorAll("details[open]")).map((item) => item.dataset.evening));
-  list.replaceChildren();
-  nights.forEach((night) => {
-    const details = document.createElement("details");
-    details.className = "forecast-reliability-night";
-    details.dataset.evening = night.evening;
-    details.open = expanded.has(night.evening);
-    const summary = document.createElement("summary");
-    const date = new Intl.DateTimeFormat([], { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(`${night.evening}T12:00:00Z`));
-    appendTextElement(summary, "span", "", date);
-    const matched = night.checks.filter((check) => check.absolute_difference <= tolerance).length;
-    appendTextElement(summary, "span", "forecast-reliability-result", `${matched}/${night.checks.length} within tolerance`);
-    details.append(summary);
-    night.checks.forEach((check) => {
-      const content = appendTextElement(details, "div", "forecast-reliability-check", "");
-      appendTextElement(content, "strong", "", `Target: ${dateTime(check.forecast_for)}`);
-      const values = appendTextElement(content, "dl", "forecast-accuracy-metrics", "");
-      [
-        ["Forecast clouds", `${number(check.forecast_cloud_cover_percent)}%`],
-        ["Satellite clouds", `${number(check.satellite_cloud_cover_percent)}%`],
-        ["Difference", `${number(check.absolute_difference)} points`],
-      ].forEach(([label, value]) => {
-        const item = appendTextElement(values, "div", "", "");
-        appendTextElement(item, "dt", "", label);
-        appendTextElement(item, "dd", "", value);
-      });
-      appendTextElement(content, "p", "", `Forecast saved ${dateTime(check.forecast_created_at)} (${number(check.lead_hours)} hours ahead). Satellite scan ${dateTime(check.satellite_at)}. Times: ${data.timezone || "UTC"}.`);
-      appendTextElement(content, "p", "", `Satellite estimate covers a ${number(check.radius_km)} km radius; ${number(check.good_pixel_fraction * 100)}% of pixels passed quality checks. It is not a direct measurement of the sky at the telescope.`);
-    });
-    list.append(details);
-  });
-  renderNightlyConfidence(forecastAccuracy);
-};
-
-
-const renderNightlyConfidence = (data) => {
-  const nightly = data?.nightly || {};
-  const groups = nightly.horizons || [];
-  const group = (name) => groups.find(item => item.horizon === name) || {count: 0};
-  const afternoon = group("afternoon"), dusk = group("dusk");
-  const threshold = nightly.review_after || 30;
-  // Reaching the evidence threshold enables review, not a calibrated reliability claim.
-  const reviewReady = groups.some(item => item.review_ready);
-  const recordedNights = Number(nightly.completed_nights ?? Math.max(afternoon.count || 0, dusk.count || 0));
-  const evidenceState = data?.state === "unavailable" ? "History unavailable" : `${recordedNights} ${recordedNights === 1 ? "night" : "nights"} recorded`;
-  setText("forecast-confidence-state", evidenceState);
-  setText("forecast-accuracy-history-label", reviewReady ? "Early forecast track record" : "Building forecast confidence");
-  const progress = item => item.review_ready ? `${item.within_10} of ${item.count} within 10 points` : `${item.count}/${threshold} nights`;
-  setText("forecast-accuracy-insight", `Afternoon: ${progress(afternoon)} · Dusk: ${progress(dusk)}`);
-  setText("forecast-accuracy-history-count", `${nightly.completed_nights || 0} nights observed`);
-  setText("forecast-accuracy-link-count", evidenceState);
-  setText("forecast-accuracy-history-message", reviewReady
-    ? "At least one forecast horizon has enough comparable nights for review. This is not a calibrated reliability rating."
-    : "Accumulating comparable whole-night cloud forecasts and satellite estimates. Collection is independent of imaging sessions; elapsed days alone do not qualify.");
-  const summary = byId("nightly-confidence-summary");
-  summary.replaceChildren();
-  groups.forEach(item => {
-    const title = item.horizon === "afternoon" ? "Six hours before darkness" : "At dusk";
-    const article = appendTextElement(summary, "div", "forecast-reliability-check", "");
-    appendTextElement(article, "strong", "", title);
-    appendTextElement(article, "p", "", item.count ? `${item.within_10} of ${item.count} nights within 10 cloud-cover points. Forecast averaged ${Math.abs(item.bias).toFixed(1)} points ${item.bias >= 0 ? "cloudier" : "clearer"} than the satellite estimate.` : "Waiting for comparable nights.");
-    appendTextElement(article, "p", "", `${item.missed_clear || 0} missed clear nights · ${item.unexpected_cloud || 0} unexpectedly cloudy nights. For these diagnostics, “clear” means a nightly average at or below ${nightly.clear_threshold || 20}% cloud cover. This does not decide whether to image.`);
-  });
-  const nights = byId("nightly-confidence-nights");
-  nights.replaceChildren();
-  (nightly.nights || []).forEach(night => {
-    const entry = appendTextElement(nights, "details", "forecast-reliability-night", "");
-    const value = v => v === null || v === undefined ? "Pending" : `${Number(v.toFixed(1))}%`;
-    appendTextElement(entry, "summary", "", `${night.night} · ${night.horizon === "afternoon" ? "Afternoon" : "Dusk"} · ${night.comparable ? `Forecast ${value(night.forecast)} → Satellite ${value(night.observed)}` : night.status.replaceAll("_", " ")}`);
-    appendTextElement(entry, "p", "", `Forecast ${value(night.forecast)}; satellite ${value(night.observed)}. Satellite coverage ${(night.coverage * 100).toFixed(1)}%.${night.comparable ? " Included in this track record." : " Not yet eligible for this track record."}`);
-  });
+const renderForecastAccuracyHistory = (data) => {
+  setText("forecast-confidence-state", `Forecast reliability: ${forecastReliabilityLabel(data)}`);
 };
 
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
@@ -983,9 +810,7 @@ const appendScheduleSky = (parent, block) => {
   if (b>a) svg.append(svgElement("rect", {x:x(new Date(a).toISOString()), y:3, width:(b-a)/(last-first)*204, height:64, fill:"rgba(91,221,205,.12)"}));
   svg.append(svgElement("line", {x1:8,x2:212,y1:y(35),y2:y(35),stroke:"#f3c66f","stroke-dasharray":"3 3"}));
   svg.append(svgElement("polyline", {points:samples.map(sample=>`${x(sample.at)},${y(sample.altitude_degrees)}`).join(" "),fill:"none",stroke:"#5bddcd","stroke-width":2}));
-  const label = svgElement("text", {x:8,y:81,fill:"#9bafb4","font-size":10});
-  label.textContent = "Night path · 35° floor";
-  svg.append(label); figure.append(svg);
+  figure.append(svg);
 };
 
 const renderHostedSchedule = (schedule) => {
@@ -1060,13 +885,10 @@ const renderHostedSchedule = (schedule) => {
     } else {
       const chips = equipmentChips(block).filter(chip => !/ min (imaging|setup)$/.test(chip.label));
       appendTextElement(settings, "span", "capture-setting-line", chips.map(chip => chip.label).join(" · ") || "Capture settings unavailable");
-      if (block.recommendation_source === "rig_category_starting_point") {
-        const partial = block.recommended_gain == null || !block.recommended_filter;
-        appendTextElement(body, "p", "schedule-action", partial
-          ? "Starting exposure · confirm gain/filter on device"
-          : "Category starting settings · verify with a test capture");
+      if (block.recommendation_source === "rig_category_starting_point"
+          && (block.recommended_gain == null || !block.recommended_filter)) {
+        appendTextElement(body, "p", "schedule-action", "Starting exposure · confirm gain/filter on device");
       }
-      if (block.setup_minutes) appendTextElement(body, "p", "schedule-action", `${Math.round(block.setup_minutes)} min setup included`);
     }
 
   });
@@ -1504,13 +1326,15 @@ const renderFilterProgress = (container, rows) => {
 const renderForecastAgreement = (agreement) => {
   const panel = byId("forecast-agreement");
   panel.dataset.state = agreement?.state || "unavailable";
-  const available = agreement && agreement.state !== "unavailable";
+  const available = ["close", "mixed", "split"].includes(agreement?.state);
+  const label = agreement?.state === "close" ? "Cloud forecasts broadly agree" : "Cloud forecasts vary";
   setText("forecast-agreement-label", available
-    ? `${agreement.label}${agreement.partial ? " · partial window" : ""}`
+    ? `${label}${agreement.partial ? " · partial window" : ""}`
     : "Forecast comparison unavailable");
-  setText("forecast-agreement-detail", available
-    ? `${agreement.providers.join(" + ")}: average cloud-cover difference ${agreement.average_spread_points} percentage points; largest ${agreement.maximum_spread_points}. Compared ${agreement.compared_minutes} minutes (${agreement.coverage_percent}% of darkness), ${displayDateTime(agreement.start)} to ${displayDateTime(agreement.end)}. Source agreement is not a clear-sky probability; the underlying models may overlap.`
-    : agreement?.reason || "Matching hours from two forecast sources are not available.");
+  const detail = byId("forecast-agreement-detail");
+  detail.hidden = Boolean(available);
+  detail.textContent = available ? ""
+    : agreement?.reason || "Matching hours from two forecast sources are not available.";
 };
 
 const renderHostedTonight = (data) => {
@@ -1540,7 +1364,6 @@ const renderHostedTonight = (data) => {
     "hosted-target-label",
     data.recommended_target ? "Primary target" : "Fallback if conditions improve",
   );
-  setText("hosted-target-rig", rigProfileLabel(data.observatory));
 
   setText(
     "hosted-setup-title",
@@ -1550,8 +1373,6 @@ const renderHostedTonight = (data) => {
     const settings = displayedTargetSettings(target, schedule);
     setText("hosted-target-name", target.object, "Unknown target");
     setText("hosted-target-common-name", target.common_name, "");
-    setText("hosted-target-rig-match", targetRigMatchLabel(target));
-    setText("hosted-target-fit", target.mosaic_required ? "Mosaic candidate" : targetFitLabel(target));
 
 
 
@@ -1576,8 +1397,6 @@ const renderHostedTonight = (data) => {
     renderTargetGeometry(null);
     setText("hosted-target-name", "No target");
     setText("hosted-target-common-name", "");
-    setText("hosted-target-rig-match", "Rig-specific reasoning is not available without a selected target.");
-    setText("hosted-target-fit", "No target selected");
     setText("hosted-target-exposure", null);
     setText("hosted-target-gain", null);
     setText("hosted-target-filter", null);
@@ -4775,21 +4594,6 @@ const bootApplication = async () => {
   }
   runDashboardLoad();
 };
-
-byId("forecast-accuracy-tolerance").addEventListener("change", () => {
-  renderForecastAccuracyHistory(latestForecastAccuracy);
-});
-
-const accuracyChart = byId("forecast-accuracy-chart");
-let accuracyChartWidth = 0;
-if (typeof ResizeObserver !== "undefined") {
-  new ResizeObserver(([entry]) => {
-    const width = Math.round(entry.contentRect.width);
-    if (width <= 0 || width === accuracyChartWidth) return;
-    accuracyChartWidth = width;
-    if (latestForecastAccuracy) renderForecastAccuracyHistory(latestForecastAccuracy);
-  }).observe(accuracyChart);
-}
 
 bootApplication();
 

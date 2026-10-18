@@ -321,12 +321,12 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'aria-controls="account-control"' in html
     assert "Edit home" in html
     assert 'id="hosted-target-illustration"' in html
-    assert 'id="hosted-target-rig"' in html
-    assert "Rig profile" in html
-    assert 'id="hosted-target-fit"' in html
-    assert "Target fit" in html
-    assert 'id="hosted-target-rig-match"' in html
-    assert "Framing details" in html
+    assert 'id="hosted-target-rig"' not in html
+    assert "Rig profile" not in html
+    assert 'id="hosted-target-fit"' not in html
+    assert "Target fit" not in html
+    assert "Framing details" not in html
+    assert 'id="hosted-target-rig-match"' not in html
     assert 'id="hosted-target-project"' in html
     assert "Project progress" in html
     assert "Remaining goal" in html
@@ -358,7 +358,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert 'nonce="safe-test-nonce"' in html
 
     script = (operator_api.WEB_DIRECTORY / "operator.js").read_text(encoding="utf-8")
-    assert 'setText("hosted-target-fit", "No target selected")' in script
+    assert 'setText("hosted-target-fit",' not in script
     assert "loadHostedTonight" in script
     assert "showHostedAccountLoading" in script
     assert "renderHostedTonight" in script
@@ -408,7 +408,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "Boolean(latestHostedTonightData)" in script
     assert 'byId(id).closest("div").hidden = value == null' in script
     assert '"Capture settings unavailable"' in script
-    assert "targetRigMatchLabel(target)" in script
+    assert "targetRigMatchLabel(target)" not in script
     assert "renderTargetGeometry(target)" in script
     assert "renderTargetGeometry(null)" in script
     assert "renderTargetProjectContext(target)" in script
@@ -486,8 +486,8 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "setMobileHeaderMenu" in script
     assert "setHostedRefreshState" in script
     assert 'byId("mobile-refresh-button").addEventListener("click", loadHostedTonight)' in script
-    assert "rigProfileLabel(data.observatory)" in script
-    assert "targetFitLabel(target)" in script
+    assert "rigProfileLabel(data.observatory)" not in script
+    assert "targetFitLabel(target)" not in script
     assert "profile?.label || observatory.telescope_model || observatory.rig_profile_key" in script
     assert 'setText("hosted-weather-summary", "—")' not in script
     assert 'notes.replaceChildren()' in script
@@ -674,11 +674,12 @@ def test_operator_dashboard_sets_restrictive_content_policy():
 
 def test_hosted_weather_summary_shows_honest_forecast_history_state():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
-    assert 'id="forecast-accuracy-tolerance"' in html
-    assert 'id="forecast-accuracy-nights"' in html
-    assert 'id="forecast-accuracy-chart"' in html
-    assert '<details class="forecast-history-details"' in html
-    assert "Cloud forecast reliability" in html
+    assert 'id="forecast-confidence-state"' in html
+    assert "Forecast reliability: Unavailable" in html
+    assert 'id="forecast-accuracy-tolerance"' not in html
+    assert 'id="forecast-accuracy-nights"' not in html
+    assert 'id="forecast-accuracy-chart"' not in html
+    assert 'hosted-forecast-history-link' not in html
 
 
 def test_hard_stop_mode_is_decisive_and_keeps_secondary_planning_optional():
