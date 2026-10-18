@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from app.core.calculation_cache import reuse_exact, reuse_altitude_samples
+from app.core.calculation_cache import reuse_exact, reuse_altitude_samples, calculation_scope_active
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Tuple
 from zoneinfo import ZoneInfo
@@ -226,6 +226,47 @@ def get_altitudes_at(
             observation_datetimes,
         )
     ]
+
+
+@timed("altitude_common_grid")
+def prepare_fixed_target_altitudes(target_names, observation_datetimes, observatory=None):
+    """Seed only the exact shared samples; current times/refinements stay lazy.
+
+    Broadcast fixed coordinates across the original Astropy time grid. Moving
+    and unknown targets retain their scalar paths. Bound matrix size for callers
+    supplying larger candidate pools; results live only in this calculation.
+    """
+    if not calculation_scope_active() or not observation_datetimes:
+        return
+    context = use_observatory_context(observatory)
+    times = list(observation_datetimes)
+    astropy_times = Time([normalize_datetime(at, context).astimezone(timezone.utc) for at in times])
+    frame = AltAz(obstime=astropy_times, location=_get_location(context))
+    names, coordinates = [], []
+    for name in dict.fromkeys(target_names):
+        normalized = name.strip().upper()
+        if normalized in SOLAR_SYSTEM_TARGETS or is_ephemeris_target(normalized):
+            continue
+        try:
+            coordinate = get_target_coordinate(normalized)
+        except ValueError:
+            # Leave invalid coordinates to the existing per-target error path.
+            continue
+        if coordinate is not None:
+            names.append(name)
+            coordinates.append(coordinate)
+        if len(names) == 64:
+            _seed_fixed_altitude_chunk(names, coordinates, times, frame, observatory)
+            names, coordinates = [], []
+    if names:
+        _seed_fixed_altitude_chunk(names, coordinates, times, frame, observatory)
+
+
+def _seed_fixed_altitude_chunk(names, coordinates, times, frame, context):
+    altitudes = SkyCoord(coordinates).reshape(-1, 1).transform_to(frame).alt.deg
+    for name, row in zip(names, altitudes):
+        get_altitudes_at.seed_exact_samples(name, times,
+            [round(float(value), 1) for value in row], context)
 
 
 def get_altitude_at(

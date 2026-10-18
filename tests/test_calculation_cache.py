@@ -108,7 +108,7 @@ def test_altitude_sample_reuse_preserves_order_fold_context_and_lists():
     assert len(calls) == 4
 
 
-@pytest.mark.parametrize('target', ['M31', 'MARS', 'NGC7092'])
+@pytest.mark.parametrize('target', ['M31', 'JUPITER', 'NGC7092'])
 def test_real_altitude_batches_equal_scalar_results(target):
     context = ObservatoryContext('Synthetic', 40.7, -74.0, 'America/New_York', elevation_meters=50)
     zone = ZoneInfo(context.timezone_name)
@@ -145,7 +145,7 @@ def test_transit_batch_excludes_moving_and_unknown_targets():
     at = datetime(2026, 10, 18, tzinfo=timezone.utc)
     with patch.object(astronomy, 'is_ephemeris_target', side_effect=lambda name: name == 'COMET'), \
             patch.object(astronomy, '_get_observer', side_effect=AssertionError('unexpected batch')):
-        astronomy.prepare_fixed_target_transits(['MARS', 'COMET', 'UNKNOWN'], at)
+        astronomy.prepare_fixed_target_transits(['JUPITER', 'COMET', 'UNKNOWN'], at)
 
 
 def test_exact_cache_scope_location_fold_and_mutation():
@@ -176,14 +176,19 @@ def test_exact_cache_scope_location_fold_and_mutation():
     assert cache._values.get() is None
 
 
-@pytest.mark.parametrize('date', ['2026-10-18T02:02:00+00:00', '2026-12-16T02:02:00+00:00'])
-def test_55_candidate_plan_and_schedule_exactly_match_without_reuse(date):
+@pytest.mark.parametrize('date,latitude,longitude,zone', [
+    ('2026-10-18T02:02:00+00:00', 33.4484, -112.074, 'America/Phoenix'),
+    ('2026-12-16T02:02:00+00:00', 33.4484, -112.074, 'America/Phoenix'),
+    ('2026-11-01T04:30:00+00:00', 40.7, -74, 'America/New_York'),
+    ('2026-02-18T10:00:00+00:00', -33.8, 151.2, 'Australia/Sydney'),
+])
+def test_55_candidate_plan_and_schedule_exactly_match_without_reuse(date, latitude, longitude, zone):
     instant = datetime.fromisoformat(date)
     class FrozenDateTime(datetime):
         @classmethod
         def now(cls, tz=None):
             return instant.astimezone(tz) if tz else instant.replace(tzinfo=None)
-    context = ObservatoryContext('Synthetic Phoenix', 33.4484, -112.074, 'America/Phoenix',
+    context = ObservatoryContext('Synthetic', latitude, longitude, zone,
                                  elevation_meters=331, bortle_class=8, rig_profile_key='dwarf-mini')
     # 55 distinct physical catalog objects including the existing curated pool.
     from app.services.deep_sky_catalog import get_entry
@@ -207,6 +212,9 @@ def test_55_candidate_plan_and_schedule_exactly_match_without_reuse(date):
         with patch.object(cache, '_values', DisabledCache()):
             before = planner.get_tonight_plan(db, **args)
         before_calls = bodies.call_count
+        with patch.object(planner, 'prepare_fixed_target_altitudes'):
+            deployed_baseline = planner.get_tonight_plan(db, **args)
+        assert deployed_baseline == before
         bodies.reset_mock()
         after = planner.get_tonight_plan(db, **args)
         assert after == before
@@ -214,3 +222,61 @@ def test_55_candidate_plan_and_schedule_exactly_match_without_reuse(date):
         assert before_calls >= 55 * 3
         assert build_tonight_schedule(after, timezone_name=context.timezone_name, rig_profile_key=context.rig_profile_key) == \
                build_tonight_schedule(before, timezone_name=context.timezone_name, rig_profile_key=context.rig_profile_key)
+
+@pytest.mark.parametrize('latitude,names', [(40.7, ['M31']), (-33.8, ['M31', 'M42', 'NGC7092']), (89, ['M31', 'M42'])])
+def test_common_altitude_grid_exact_across_sites_and_dst(latitude, names):
+    context = ObservatoryContext('Synthetic', latitude, -74, 'America/New_York', elevation_meters=331)
+    at = datetime(2026, 11, 1, 1, 30, tzinfo=ZoneInfo(context.timezone_name))
+    times = [at, at.replace(fold=1), at]
+    with iers.conf.set_temp('auto_download', False):
+        expected = {name: astronomy.get_altitudes_at(name, times, context) for name in names}
+        @cache.astronomy_calculation
+        def run():
+            astronomy.prepare_fixed_target_altitudes(names, times, context)
+            with patch.object(astronomy, 'get_target_coordinate', side_effect=AssertionError('recomputed')):
+                for name in names:
+                    assert astronomy.get_altitudes_at(name, times, context) == expected[name]
+        run()
+    assert cache._values.get() is None
+
+
+def test_common_grid_chunk_boundary_and_lazy_current_refinement():
+    context = ObservatoryContext('Synthetic', 33.4, -112, 'America/Phoenix')
+    at = datetime(2026, 10, 18, tzinfo=timezone.utc)
+    from datetime import timedelta
+    names = [f'SYNTHETIC{i}' for i in range(65)]
+    coordinate = astronomy.get_target_coordinate('M31')
+    with iers.conf.set_temp('auto_download', False), patch.object(astronomy, 'get_target_coordinate', return_value=coordinate):
+        expected = astronomy.get_altitudes_at(names[0], [at], context)
+        @cache.astronomy_calculation
+        def run():
+            with patch.object(astronomy, '_seed_fixed_altitude_chunk', wraps=astronomy._seed_fixed_altitude_chunk) as chunks:
+                astronomy.prepare_fixed_target_altitudes(names, [at], context)
+                assert [len(call.args[0]) for call in chunks.call_args_list] == [64, 1]
+            with patch.object(astronomy, 'get_target_coordinate', wraps=astronomy.get_target_coordinate) as coordinates:
+                for name in names:
+                    assert astronomy.get_altitudes_at(name, [at], context) == expected
+                assert coordinates.call_count == 0
+                astronomy.get_altitudes_at(names[0], [at + timedelta(microseconds=1), at + timedelta(minutes=1)], context)
+                assert coordinates.call_count == 1
+                astronomy.get_altitudes_at(names[0], [at], None)
+                assert coordinates.call_count == 2
+        run()
+
+
+def test_common_grid_empty_unknown_moving_and_invalid_remain_unseeded():
+    at = datetime(2026, 10, 18, tzinfo=timezone.utc)
+    def coordinate(name):
+        if name == 'INVALID': raise ValueError('invalid fixture coordinate')
+        assert name not in ('JUPITER', 'COMET')
+        return None
+    @cache.astronomy_calculation
+    def run():
+        with patch.object(astronomy, 'is_ephemeris_target', side_effect=lambda name: name == 'COMET'), \
+                patch.object(astronomy, 'get_target_coordinate', side_effect=coordinate), \
+                patch.object(astronomy, '_seed_fixed_altitude_chunk', side_effect=AssertionError('unexpected batch')):
+            astronomy.prepare_fixed_target_altitudes(['M31'], [])
+            astronomy.prepare_fixed_target_altitudes([], [at])
+            astronomy.prepare_fixed_target_altitudes(['JUPITER', 'COMET', 'UNKNOWN', 'INVALID'], [at])
+            assert cache._values.get() == {}
+    run()
