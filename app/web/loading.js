@@ -66,4 +66,30 @@ const createLoadCoordinator = (render, timeoutMs = 90000) => {
     },
   };
 };
-if (typeof module !== "undefined") module.exports = { createLoadCoordinator };
+// Optional maps must not hold up authentication or the hosted night plan.
+const createMapLibraryLoader = (doc, scope, timeoutMs = 15000) => {
+  let pending = null;
+  return () => {
+    if (scope.L) return Promise.resolve(scope.L);
+    if (pending) return pending;
+    pending = new Promise((resolve, reject) => {
+      const script = doc.createElement("script");
+      script.src = "/operator-assets/leaflet.js";
+      script.async = true;
+      const finish = (error) => {
+        clearTimeout(timer);
+        script.onload = script.onerror = null;
+        if (error) {
+          script.remove();
+          reject(error);
+        } else resolve(scope.L);
+      };
+      const timer = setTimeout(() => finish(new Error("Map library timed out. Refresh to retry.")), timeoutMs);
+      script.onload = () => finish(scope.L ? null : new Error("Map controls are unavailable. Refresh to retry."));
+      script.onerror = () => finish(new Error("Map controls could not load. Refresh to retry."));
+      doc.head.append(script);
+    }).catch(error => { pending = null; throw error; });
+    return pending;
+  };
+};
+if (typeof module !== "undefined") module.exports = { createLoadCoordinator, createMapLibraryLoader };

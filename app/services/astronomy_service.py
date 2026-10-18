@@ -720,6 +720,7 @@ def get_moon_warning(
     )
 
 
+@timed("darkness")
 def get_darkness_window_datetimes(
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,
@@ -818,16 +819,22 @@ def get_darkness_window_datetimes(
     )
 
 
-@timed("darkness")
 def get_darkness_info(
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,
+    *,
+    window: Optional[Tuple[Optional[datetime], Optional[datetime], Optional[datetime]]] = None,
 ) -> Dict:
+    """Format a computed window, or calculate one for standalone callers.
+
+    A planner passes its own window so presentation and scheduling use the same
+    night, even when computation straddles dawn. No cross-request reuse occurs.
+    """
     (
         sunset_local,
         dusk_local,
         dawn_local,
-    ) = get_darkness_window_datetimes(
+    ) = window if window is not None else get_darkness_window_datetimes(
         reference_datetime,
         observatory=observatory,
     )

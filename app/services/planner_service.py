@@ -872,11 +872,11 @@ def get_tonight_plan(
     )
     weather_seconds = perf_counter() - started
     moon = get_moon_info(observatory=context)
-    darkness = get_darkness_info(observatory=context)
-
-    _sunset, dark_start, dark_end = get_darkness_window_datetimes(
+    dark_window = get_darkness_window_datetimes(
         observatory=context
     )
+    darkness = get_darkness_info(observatory=context, window=dark_window)
+    _sunset, dark_start, dark_end = dark_window
     if dark_start is None or dark_end is None:
         return {"recommended_target": None, "best_theoretical_target": None,
                 "alternatives": [], "schedule_candidates": [], "weather": weather,
