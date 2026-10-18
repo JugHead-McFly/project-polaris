@@ -42,6 +42,28 @@ def owner(db):
     return user
 
 
+def test_filter_progress_is_unassessed_preserves_shared_goal_and_owner(db):
+    alice,bob=owner(db),owner(db)
+    data=manifest(3600)
+    second=data.sessions[0].model_copy(update={'source_key':'2'*64,'filter_name':'Astro','integration_seconds':1800,'frame_count':60,'evidence_hash':'b'*64})
+    data.sessions.append(second)
+    import_manifest(db,alice,data)
+    summary=library_summary(db,alice)
+    target=summary['targets'][0]
+    assert target['seconds']==5400
+    assert target['filters']=={'Astro':1800,'Duo-Band':3600}
+    assert sum(row['captured_seconds'] for row in target['filter_progress'])==5400
+    for row in target['filter_progress']:
+        assert row['quality_state']=='unassessed'
+        assert row['accepted_seconds'] is None and row['rejected_frames'] is None
+        assert row['goal_seconds'] is None
+        assert row['unassessed_seconds']==row['captured_seconds']
+    from app.services.capture_history_service import filter_progress_for_target
+    assert filter_progress_for_target('NGC7000',progress_map(summary))==target['filter_progress']
+    assert library_summary(db,bob)['targets']==[]
+    assert history_advice('C 20',progress_map(summary))['current_integration_seconds']==5400
+
+
 def test_idempotent_owned_history_updates_without_adding_twice(db):
     alice, bob = owner(db), owner(db)
     assert import_manifest(db, alice, manifest())["sessions_changed"] == 1

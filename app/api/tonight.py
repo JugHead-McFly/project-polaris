@@ -163,6 +163,8 @@ def _build_legacy_target(
         entry = (capture_progress or {}).get(normalize_target(target["object"]))
         target["session_count"] = entry["sessions"] if entry else 0
         target["best_quality"] = None
+        from app.services.capture_history_service import filter_progress_for_target
+        target["filter_progress"] = filter_progress_for_target(target["object"], capture_progress)
     target.update(
         {
             "observable": planner_target["observable"],

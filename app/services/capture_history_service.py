@@ -50,14 +50,24 @@ def library_summary(db, user_id):
     totals = {}
     for row in rows:
         name = normalize_target(row.target)
-        item = totals.setdefault(name, {"seconds": 0.0, "frames": 0, "sessions": 0, "filters": {}})
+        item = totals.setdefault(name, {"seconds": 0.0, "frames": 0, "sessions": 0, "filters": {}, "filter_progress": {}})
         item["seconds"] += row.integration_seconds
         item["frames"] += row.frame_count
         item["sessions"] += 1
         item["filters"][row.filter_name] = item["filters"].get(row.filter_name, 0) + row.integration_seconds
+        by_filter = item["filter_progress"].setdefault(row.filter_name, {
+            "filter": row.filter_name, "captured_seconds": 0.0, "captured_frames": 0,
+            "quality_state": "unassessed", "accepted_seconds": None, "rejected_seconds": None,
+            "accepted_frames": None, "rejected_frames": None,
+            "goal_seconds": None, "goal_basis": "Shared target goal; no separate filter allocation",
+        })
+        by_filter["captured_seconds"] += row.integration_seconds
+        by_filter["captured_frames"] += row.frame_count
     credential = db.get(LibrarySyncCredential, user_id)
     targets = []
     for name, item in sorted(totals.items()):
+        item["filter_progress"] = [dict(values, unassessed_seconds=values["captured_seconds"],
+            unassessed_frames=values["captured_frames"]) for _, values in sorted(item["filter_progress"].items())]
         progress = build_portfolio_target(name, item["seconds"] / 3600)
         targets.append({"object": name, **item, "hours": round(item["seconds"] / 3600, 2),
                         "goal_hours": progress["goal_hours"], "remaining_hours": progress["remaining_hours"],
@@ -69,6 +79,22 @@ def library_summary(db, user_id):
 
 def progress_map(summary):
     return {row["object"]: row for row in summary["targets"]}
+
+
+def filter_progress_for_target(object_name, progress):
+    from app.services.deep_sky_catalog import get_entry
+    entry = get_entry(object_name)
+    totals = {}
+    for name, record in (progress or {}).items():
+        other = get_entry(name)
+        if normalize_target(name) != normalize_target(object_name) and not (entry and other and entry['id'] == other['id']):
+            continue
+        for row in record.get('filter_progress', []):
+            item = totals.setdefault(row['filter'], dict(row, captured_seconds=0.0, captured_frames=0,
+                unassessed_seconds=0.0, unassessed_frames=0))
+            for field in ('captured_seconds', 'captured_frames', 'unassessed_seconds', 'unassessed_frames'):
+                item[field] += row[field]
+    return [totals[name] for name in sorted(totals)]
 
 
 def history_advice(object_name, progress):
