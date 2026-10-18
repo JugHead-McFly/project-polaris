@@ -2,7 +2,7 @@ services:
   - type: web
     name: project-polaris-private-alpha
     runtime: python
-    plan: free
+    plan: 0.5c-512mb
     region: oregon
     branch: develop
     autoDeployTrigger: "commit"
