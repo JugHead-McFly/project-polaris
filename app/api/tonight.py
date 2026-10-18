@@ -9,7 +9,6 @@ from app.core.auth import CurrentUser
 from app.core.auth import get_current_user
 from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
-from app.schemas.capture_history import normalize_target
 from app.data.rig_profiles import get_rig_profile
 from app.data.targets import get_target_angular_size
 from app.services.conditions_trend_service import assess_conditions_trend
@@ -160,8 +159,9 @@ def _build_legacy_target(
         target.update(build_portfolio_target(target["object"], advisor["current_integration_hours"]))
         target["total_integration_seconds"] = advisor["current_integration_seconds"]
         target["total_integration_hours"] = advisor["current_integration_hours"]
-        entry = (capture_progress or {}).get(normalize_target(target["object"]))
-        target["session_count"] = entry["sessions"] if entry else 0
+        from app.services.capture_history_service import history_records_for_target
+        target["session_count"] = sum(record.get("sessions", 0) for _, record in
+                                      history_records_for_target(target["object"], capture_progress))
         target["best_quality"] = None
         from app.services.capture_history_service import filter_progress_for_target
         target["filter_progress"] = filter_progress_for_target(target["object"], capture_progress)

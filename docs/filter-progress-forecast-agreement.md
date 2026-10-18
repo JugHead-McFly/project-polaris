@@ -71,6 +71,33 @@ The in-memory preview is on http://127.0.0.1:8115/operator on Gamerig; it uses
 synthetic observatory, weather, targets and history. Its deliberate visibility
 gap demonstrates the timeline and is not a live-night prediction.
 
-No push, merge or deployment has been performed. Develop auto-deploys; release
-requires the parent's deployment coordination and explicit approval. Rollback
-of these features is their base 17571d2; currently deployed code is 547feb0.
+No push, merge or deployment of this feature branch has been performed. Develop
+auto-deploys; this feature remains held for the parent's release coordination.
+The independently reviewed speed/UI release is now deployed as merge commit
+30c5dc9102a306f477808ff7db5118012a60116c, with rollback
+547feb013ebf3b4c54f94ce5b7c285964ab6aa0a. This feature branch's base remains 17571d2.
+
+## Independent review follow-up
+
+Review found that case/whitespace variants of filter names appeared as separate
+filters. The read-side breakdown now combines those variants without changing
+stored imports, evidence identity, the original filters map or scheduler credit.
+Duo-Band, Dual-Band and instrument-specific labels remain distinct. Unknown
+brands are retained; no optical equivalence is inferred from similar names.
+Catalog-alias session counts now use the same matching rule as integration and
+filter totals, avoiding a zero-session label beside recorded alias integration.
+
+Regression coverage includes repeated imports, alias aggregation, case and
+whitespace variants, unknown brand labels, instrument distinctions, unchanged
+stored evidence and goal credit, and the target API's alias session count.
+Automatic usable/rejected quality assessment remains incomplete; all displayed
+quality quantities stay explicitly unassessed. Forecast review found no blocking
+issue with the validated source intervals, location matching, DST handling,
+provider deduplication or explicit missing/partial coverage policy.
+
+The review rerun passed 188 Python tests across 21 relevant files, 10 Node tests,
+and the synthetic browser checks at four widths with no page errors. Evidence
+is saved outside the repository in filter-independent-final.txt,
+filter-independent-node.txt and filter-independent-browser.txt. A first
+non-escalated focused run was interrupted after stalling; the complete rerun
+used the project environment and an isolated in-memory test database.

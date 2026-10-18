@@ -11,6 +11,14 @@ from app.services.portfolio_service import build_portfolio_target
 
 from app.core.request_timing import timed
 
+
+def _filter_label(value):
+    """Read-side presentation only; never rewrite import/evidence identity."""
+    cleaned = " ".join(value.split())
+    known = {"astro": "Astro", "vis": "VIS", "duo-band": "Duo-Band",
+             "dual-band": "Dual-Band", "mixed": "Mixed"}
+    return known.get(cleaned.casefold(), cleaned or "Unknown filter")
+
 def import_manifest(db, user_id, manifest):
     keys = [row.source_key for row in manifest.sessions]
     if len(keys) != len(set(keys)):
@@ -55,8 +63,9 @@ def library_summary(db, user_id):
         item["frames"] += row.frame_count
         item["sessions"] += 1
         item["filters"][row.filter_name] = item["filters"].get(row.filter_name, 0) + row.integration_seconds
-        by_filter = item["filter_progress"].setdefault(row.filter_name, {
-            "filter": row.filter_name, "captured_seconds": 0.0, "captured_frames": 0,
+        label = _filter_label(row.filter_name)
+        by_filter = item["filter_progress"].setdefault(label.casefold(), {
+            "filter": label, "captured_seconds": 0.0, "captured_frames": 0,
             "quality_state": "unassessed", "accepted_seconds": None, "rejected_seconds": None,
             "accepted_frames": None, "rejected_frames": None,
             "goal_seconds": None, "goal_basis": "Shared target goal; no separate filter allocation",
@@ -81,16 +90,22 @@ def progress_map(summary):
     return {row["object"]: row for row in summary["targets"]}
 
 
-def filter_progress_for_target(object_name, progress):
+def history_records_for_target(object_name, progress):
     from app.services.deep_sky_catalog import get_entry
     entry = get_entry(object_name)
-    totals = {}
     for name, record in (progress or {}).items():
         other = get_entry(name)
         if normalize_target(name) != normalize_target(object_name) and not (entry and other and entry['id'] == other['id']):
             continue
+        yield name, record
+
+
+def filter_progress_for_target(object_name, progress):
+    totals = {}
+    for _, record in history_records_for_target(object_name, progress):
         for row in record.get('filter_progress', []):
-            item = totals.setdefault(row['filter'], dict(row, captured_seconds=0.0, captured_frames=0,
+            label = _filter_label(row['filter'])
+            item = totals.setdefault(label.casefold(), dict(row, filter=label, captured_seconds=0.0, captured_frames=0,
                 unassessed_seconds=0.0, unassessed_frames=0))
             for field in ('captured_seconds', 'captured_frames', 'unassessed_seconds', 'unassessed_frames'):
                 item[field] += row[field]
@@ -98,14 +113,8 @@ def filter_progress_for_target(object_name, progress):
 
 
 def history_advice(object_name, progress):
-    from app.services.deep_sky_catalog import get_entry
     advice = get_catalog_exposure_advice(object_name)
-    catalog_entry = get_entry(object_name)
-    matches = []
-    for name, item in (progress or {}).items():
-        other = get_entry(name)
-        if normalize_target(name) == normalize_target(object_name) or (catalog_entry and other and catalog_entry["id"] == other["id"]):
-            matches.append((name, item))
+    matches = list(history_records_for_target(object_name, progress))
     if not matches:
         return advice
     current = sum(item["seconds"] for _, item in matches)
