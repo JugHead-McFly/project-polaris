@@ -300,10 +300,10 @@ RIG_PROFILES: Dict[str, RigProfile] = {
         sensor_size_mm=None,
         native_fov_degrees=None,
         supported_exposures_seconds=(15, 30, 60, 90),
-        default_gain=None,
+        default_gain=60,
         read_noise_electrons=None,
         full_well_electrons=None,
-        filters=(),
+        filters=("Astro", "Duo-Band"),
         mount_type="Alt-azimuth; EQ mode supported",
         tracking_modes=("alt_az", "equatorial"),
         frame_limit=None,
@@ -325,6 +325,11 @@ RIG_PROFILES: Dict[str, RigProfile] = {
             "a 2.13x1.20 degree framing field without estimating. DWARFLAB "
             "also highlights 90s EQ exposures; Kenko-Tokina's official "
             "regional page lists 64GB storage and 4h battery life."
+            " Mini manual section 3.2 recommends 15-60s and gain 60-80, "
+            "Astro for galaxies/star clusters and Duo-Band for emission nebulae. "
+            "Polaris selects gain 60 as an application starting value within "
+            "that range, not a measured or user-configured device default "
+            "(manufacturer manual checked 2026-10-18)."
         ),
     ),
     "seestar-s50": RigProfile(

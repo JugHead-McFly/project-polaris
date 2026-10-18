@@ -21,6 +21,8 @@ SETUP_BUFFER_MINUTES = 5
 DWARF_MAXIMUM_SUBFRAMES_PER_RUN = 999
 
 
+from app.core.request_timing import timed
+
 def _parse_schedule_time(
     value: Optional[str],
     timezone_name: str = TIMEZONE,
@@ -654,6 +656,7 @@ def _gap_reason(start, end, candidates, blocks, timezone_name):
     return explanation
 
 
+@timed("schedule")
 def build_tonight_schedule(
     planner: Dict,
     timezone_name: str = TIMEZONE,

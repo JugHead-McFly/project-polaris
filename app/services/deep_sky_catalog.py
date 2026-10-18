@@ -24,6 +24,8 @@ TYPES = {"G": "Galaxy", "GPair": "Galaxy pair", "GTrpl": "Galaxy triplet",
 LEGACY_MESSIER = {1, 8, 11, 13, 16, 17, 20, 22, 27, 31, 33, 42, 45, 51, 57, 63, 64, 78, 97}
 
 
+from app.core.request_timing import timed
+
 def identifier(value):
     value = value.strip().upper()
     match = re.fullmatch(r"(NGC|IC|M|C)\s*0*(\d+)([A-Z]*)", value)
@@ -96,6 +98,7 @@ def parse_rows(rows):
 
 
 @lru_cache(maxsize=1)
+@timed("catalog_load")
 def catalog():
     manifest = json.loads((DATA/'source.json').read_text())
     if hashlib.sha256((DATA/'openngc.csv').read_bytes()).hexdigest() != manifest['sha256']:
@@ -218,6 +221,7 @@ def imaging_suitability(entry, rig, bortle_class=None):
             "major_pixels": major_pixels, "minor_pixels": minor_pixels}
 
 
+@timed("catalog_shortlist")
 def shortlist(context, dark_start, dark_end, rig, completed=(), per_slot=6):
     """Cheap whole-night altitude sieve; detailed Astropy visibility stays decisive.
 

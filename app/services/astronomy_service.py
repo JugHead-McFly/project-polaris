@@ -1,4 +1,5 @@
 import math
+from app.core.calculation_cache import reuse_exact
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Tuple
 from zoneinfo import ZoneInfo
@@ -26,6 +27,8 @@ from app.services.ephemeris_service import (
     is_ephemeris_target,
 )
 
+
+from app.core.request_timing import timed
 
 def _get_location(
     observatory: Optional[ObservatoryContext] = None,
@@ -169,6 +172,7 @@ def _altitude_from_coordinate(
     return round(float(altitude), 1)
 
 
+@timed("altitude_series")
 def get_altitudes_at(
     target_name: str,
     observation_datetimes: list,
@@ -380,6 +384,13 @@ def get_recommended_window(
     }
 
 
+@reuse_exact
+def _moon_coordinate_at(observation_datetime, observatory=None):
+    return get_body("moon", to_astropy_time(observation_datetime, observatory=observatory),
+                    _get_location(observatory))
+
+
+@reuse_exact
 def get_moon_info_at(
     observation_datetime: datetime,
     observatory: Optional[ObservatoryContext] = None,
@@ -390,11 +401,7 @@ def get_moon_info_at(
         observatory=observatory,
     )
 
-    moon = get_body(
-        "moon",
-        observation_time,
-        location,
-    )
+    moon = _moon_coordinate_at(observation_datetime, observatory)
 
     moon_altaz = moon.transform_to(
         AltAz(
@@ -451,6 +458,7 @@ def get_moon_info_at(
     }
 
 
+@timed("moon")
 def get_moon_info(
     observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
@@ -504,6 +512,7 @@ def get_moon_info(
     }
 
 
+@reuse_exact
 def get_moon_separation_at(
     target_name: str,
     observation_datetime: datetime,
@@ -518,16 +527,7 @@ def get_moon_separation_at(
     if target_coordinate is None:
         return None
 
-    observation_time = to_astropy_time(
-        observation_datetime,
-        observatory=observatory,
-    )
-
-    moon_coordinate = get_body(
-        "moon",
-        observation_time,
-        _get_location(observatory),
-    )
+    moon_coordinate = _moon_coordinate_at(observation_datetime, observatory)
 
     separation = target_coordinate.separation(
         moon_coordinate
@@ -724,6 +724,7 @@ def get_darkness_window_datetimes(
     )
 
 
+@timed("darkness")
 def get_darkness_info(
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,

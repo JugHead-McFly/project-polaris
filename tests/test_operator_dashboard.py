@@ -406,7 +406,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "renderHostedSchedule" in script
     assert "Boolean(latestHostedTonightData)" in script
     assert 'byId(id).closest("div").hidden = value == null' in script
-    assert '"Settings not configured"' in script
+    assert '"Capture settings unavailable"' in script
     assert "targetRigMatchLabel(target)" in script
     assert "renderTargetGeometry(target)" in script
     assert "renderTargetGeometry(null)" in script

@@ -16,6 +16,8 @@ PLANNER_VERSION = "Planner V3"
 LOCAL_DATE_TIME_FORMAT = "%Y-%m-%d %I:%M %p"
 
 
+from app.core.request_timing import timed
+
 def _parse_local_time(
     value: Optional[str],
     timezone_name: str,
@@ -43,6 +45,7 @@ def _parse_iso_time(value: Optional[str]) -> Optional[datetime]:
     return parsed.astimezone(timezone.utc)
 
 
+@timed("save_recommendation")
 def create_recommendation_run(
     db: Session,
     *,

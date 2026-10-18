@@ -1,3 +1,4 @@
+from app.core.request_timing import request_timings
 import asyncio
 import os
 import tempfile
@@ -128,56 +129,61 @@ app = FastAPI(
 @app.middleware("http")
 async def log_request(request: Request, call_next):
     request_id = uuid4().hex[:12]
-    started_at = perf_counter()
+    with request_timings(request_id) as timings:
+        started_at = perf_counter()
 
-    try:
-        response = await call_next(request)
-    except Exception as error:
+        try:
+            response = await call_next(request)
+        except Exception as error:
+            duration_ms = round((perf_counter() - started_at) * 1000, 1)
+            capture_request_exception(
+                error,
+                request_id=request_id,
+                method=request.method,
+                path=request.url.path,
+            )
+            logger.error(
+                (
+                    "request_failed request_id=%s method=%s path=%s "
+                    "duration_ms=%s error_type=%s"
+                ),
+                request_id,
+                request.method,
+                request.url.path,
+                duration_ms,
+                type(error).__name__,
+            )
+            return apply_browser_security_headers(
+                JSONResponse(
+                    status_code=500,
+                    content={
+                        "detail": "Internal server error.",
+                        "request_id": request_id,
+                    },
+                    headers={
+                        "X-Request-ID": request_id,
+                        "Server-Timing": f"app;dur={duration_ms}" + (", " + timings.header() if timings.values else ""),
+                    },
+                )
+            )
+
         duration_ms = round((perf_counter() - started_at) * 1000, 1)
-        capture_request_exception(
-            error,
-            request_id=request_id,
-            method=request.method,
-            path=request.url.path,
-        )
-        logger.error(
+        response.headers["X-Request-ID"] = request_id
+        response.headers["Server-Timing"] = f"app;dur={duration_ms}" + (", " + timings.header() if timings.values else "")
+        apply_browser_security_headers(response)
+        logger.info(
             (
-                "request_failed request_id=%s method=%s path=%s "
-                "duration_ms=%s error_type=%s"
+                "request_complete request_id=%s method=%s path=%s "
+                "status=%s duration_ms=%s"
             ),
             request_id,
             request.method,
             request.url.path,
+            response.status_code,
             duration_ms,
-            type(error).__name__,
         )
-        return apply_browser_security_headers(
-            JSONResponse(
-                status_code=500,
-                content={
-                    "detail": "Internal server error.",
-                    "request_id": request_id,
-                },
-                headers={"X-Request-ID": request_id},
-            )
-        )
+        return response
 
-    duration_ms = round((perf_counter() - started_at) * 1000, 1)
-    response.headers["X-Request-ID"] = request_id
-    response.headers["Server-Timing"] = f"app;dur={duration_ms}"
-    apply_browser_security_headers(response)
-    logger.info(
-        (
-            "request_complete request_id=%s method=%s path=%s "
-            "status=%s duration_ms=%s"
-        ),
-        request_id,
-        request.method,
-        request.url.path,
-        response.status_code,
-        duration_ms,
-    )
-    return response
 
 WEB_DIRECTORY = settings.BASE_DIR / "app" / "web"
 app.mount(

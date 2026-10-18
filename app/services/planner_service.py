@@ -1,5 +1,6 @@
 from app.services.capture_history_service import history_advice
 import math
+from app.core.calculation_cache import astronomy_calculation
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Iterable, List, Optional
 
@@ -44,6 +45,8 @@ MINIMUM_ALTITUDE_DEGREES = 35.0
 SAMPLE_INTERVAL_MINUTES = 15
 MINIMUM_USABLE_DARK_MINUTES = 30
 
+
+from app.core.request_timing import timed
 
 def _context_equipment_label(context: ObservatoryContext) -> str:
     if context.rig_profile_key:
@@ -850,6 +853,8 @@ def _apply_planned_heat_safeguard(
         weather["observing_rating"] = min(rating, 3)
 
 
+@timed("planner")
+@astronomy_calculation
 def get_tonight_plan(
     db: Session,
     observatory: Optional[ObservatoryContext] = None,
@@ -978,11 +983,6 @@ def get_tonight_plan(
     for plan in plans:
         if plan.get("mosaic_required"):
             plan["advisor"] = mosaic_advice(plan["advisor"])
-            continue
-        if plan["advisor"].get("recommended_sub_exposure_seconds") is None:
-            plan["advisor"].update(settings_confidence="Capture settings need confirmation",
-                settings_reasons=["Catalog geometry is verified; exposure, gain and filter are not validated for this rig."],
-                settings_setup_guidance=["Confirm exposure, gain and filter before capture; no frame count is prescribed."])
             continue
         plan["advisor"] = apply_tonight_settings(
             advisor=plan["advisor"],

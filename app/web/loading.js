@@ -18,6 +18,7 @@ const createLoadCoordinator = (render, timeoutMs = 90000) => {
       run.request = async (key, action) => {
         if (!run.current()) throw new Error("Superseded request");
         run.update(key, "loading");
+        const timingStart = globalThis.performance?.now();
         let timer;
         const controller = new AbortController();
         const cancel = () => controller.abort();
@@ -42,6 +43,15 @@ const createLoadCoordinator = (render, timeoutMs = 90000) => {
         } finally {
           clearTimeout(timer);
           run.controller.signal.removeEventListener("abort", cancel);
+          // Local DevTools timing only: no session, account or response data.
+          // Keep one measure per stage instead of growing the performance buffer.
+          if (timingStart != null && globalThis.performance?.measure) {
+            try {
+              const name = `polaris:${key}`;
+              performance.clearMeasures(name);
+              performance.measure(name, { start: timingStart, end: performance.now() });
+            } catch (_) { /* Optional diagnostics must not interrupt loading. */ }
+          }
         }
       };
       run.finish = (message = "") => {

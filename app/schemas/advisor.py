@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -28,6 +28,7 @@ class ExposureAdvisorResponse(BaseModel):
     settings_reasons: List[str] = Field(default_factory=list)
     settings_setup_guidance: List[str] = Field(default_factory=list)
     settings_adjustments: List[str] = Field(default_factory=list)
+    settings_provenance: Dict = Field(default_factory=dict)
     target_type: Optional[str] = None
 
     additional_subframes_needed: Optional[int] = None
