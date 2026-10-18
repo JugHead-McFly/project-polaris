@@ -3,27 +3,46 @@
 Review branch: `codex/load-latency-investigation`, based on deployed
 `b4d9f155fee41cdda1cc8d1a583930681cf5b14c`. No new release is authorized or deployed.
 
-## Production evidence and blocker
+## Production evidence
 
-Doug reported a 67-second full load at 2026-10-18 02:03:37 UTC. That is a user
-observation, not a captured request trace. This executor has no Render connector,
-Render CLI, exposed Render token environment variable, or browser-session tool.
-No browser credential store was accessed and no new persistent access was created.
-The earlier public shell timings cannot establish the authenticated load time.
+Doug supplied the relevant production log excerpt, read from Library file
+`libfile_0f330e5c3a788191a40e4d6834c2153f`. At 02:03:20 UTC it records
+`weather_ms=2645.3 computation_ms=62112.8 candidates=55`; at 02:03:23 it records
+POST `/tonight`, request `3a2bec7c3d98`, duration 70898.8 ms. The matching incident
+is dominated by planner computation, not weather. This bucket can include
+astronomy-library I/O and CPU throttling; it is not a process CPU-time measurement.
 
-The smallest useful input is the existing Render service log excerpt around
-02:02–02:04 UTC containing `request_complete`, `planning_timing`, and any process
-startup lines. A browser Network timing capture of the slow load, with request IDs
-and Server-Timing but no cookies or Authorization headers, would separate the
-document/session/account/plan stages. Parent handles this request to the user.
+The app was already healthy at 02:01:20. The document took 1.6 ms, account requests
+1.3–1.5 seconds each in parallel, and health requests slowed during planning then
+returned to about 10 ms. No IERS warnings or startup messages appear in the
+provided excerpt. No browser credentials or new persistent access were used.
 
-`render.yaml` specifies the free web-service plan. Render's documentation says
-free services idle after 15 minutes without traffic and take about one minute to
-wake: https://render.com/docs/free#spinning-down-on-idle . This is a plausible
-hypothesis, not confirmation of the actual live plan or this request's delay.
-No paid-plan, keep-alive, worker-count or deployment changes were made.
+The earlier free-service wake-up hypothesis is superseded for this incident by
+the healthy-before-request evidence. No paid-plan, keep-alive, worker-count or
+deployment changes were made. Actual service CPU allocation/throttling and
+production astronomy substages remain unmeasured.
 
 ## Confirmed code finding and correction
+
+Independent profiling of the incident's date/time and a synthetic 50-candidate
+workflow found 51 Moon-information calculations, 100 Moon separations and 153
+body ephemerides. Every candidate recomputed the same midpoint Moon state, and
+its warning recomputed the separation already obtained by the planner.
+
+The planner now reuses exact Moon state and separation only within one calculation.
+Keys include exact time (offset and DST fold), target where relevant, and the full
+immutable observatory context. No approximate astronomy, cross-request plan cache,
+IERS policy change, ranking change or candidate pruning is introduced. The cache
+is released on normal return and exceptions. Two real-astronomy 55-candidate tests
+compare the entire planner and scheduler outputs with reuse disabled: exact
+equality, with body calls reduced from at least 165 to at most three per run.
+
+The independent reviewer also reproduced repeated IERS primary/mirror attempts
+when Astropy 6.0.1 downloads fail immediately (mocked, no network). The pinned
+table is older than the incident date; silently disabling downloads is not an
+accuracy-preserving correction. This remains a possible contributing path, not
+an established production cause. The existing local benchmark disables those
+downloads and runs on Gamerig, so it cannot predict Render latency.
 
 After a successful primary or fallback weather response, 7Timer astronomy and
 NWS cloud enrichment ran sequentially although their inputs are independent.
@@ -77,7 +96,7 @@ failure/cache behavior, thread propagation, concurrent request isolation,
 exception cleanup, failed-request headers, browser timings without private data,
 full-night visibility/goal constraints, and responsive UI/error/retry behavior.
 
-Final combined validation: 233 Python tests passed (53 existing dependency/IERS
+Final combined validation after independent review: 244 Python tests passed (57 dependency/IERS
 and polar-observation warnings), five Node loading tests passed, and headless
 Chrome checks passed with no page errors across 15 viewport/target-count layouts.
 The browser checks explicitly verify missing-settings wording, partial starting
@@ -90,7 +109,13 @@ gain/filter on the device; no empirical calibration is invented.
 
 ## Remaining decision
 
-Review and deployment approval are required for these changes. The production
-67-second cause remains unresolved until the authenticated trace/log evidence is
-available. These changes must not be presented as a verified resolution of that
-reported incident.
+Independent review passed after corrections. Deployment approval is still required.
+The dominant production stage is confirmed, but the improvement on Render remains
+unverified until an approved release is measured there. These changes must not
+be presented as a verified resolution of the full reported incident.
+
+Independent fixed-date after-profile: warm planner 4.773 to 2.327 seconds and
+4.879 to 2.370 seconds (about 51% lower); cold 5.247 to 2.916 seconds. These
+include profiling overhead. Moon-information calls fell from 51 to two, Moon
+separation calls from 100 to 50, and total body ephemerides from 153 to four
+(including observer rise/set calculations). Selected objects and coverage matched.

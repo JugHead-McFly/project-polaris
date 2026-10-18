@@ -76,6 +76,15 @@ const assert=require('node:assert/strict');
  assert.match(partialText,/15 sec subs/);
  assert.match(partialText,/Starting exposure · confirm gain\/filter on device/);
  assert.doesNotMatch(partialText,/Gain null|Gain undefined|Capture settings unavailable/);
+ await page.evaluate(schedule=>{
+   const blocks=schedule.blocks.map(block=>({...block,recommendation_source:'rig_category_starting_point',recommended_sub_exposure_seconds:15,recommended_gain:60,recommended_filter:'Astro'}));
+   renderHostedSchedule({...schedule,blocks});
+ },plan.schedule);
+ const startingText=await page.locator('#hosted-schedule-list').innerText();
+ assert.match(startingText,/15 sec subs/);
+ assert.match(startingText,/Gain 60/);
+ assert.match(startingText,/Category starting settings/);
+ assert.doesNotMatch(startingText,/confirm gain\/filter on device|Capture settings unavailable/);
  assert.equal(await page.evaluate(()=>performance.getEntriesByName('polaris:Weather & plan').length),1);
  const layoutChecks=[];
  for (const width of [1536,900,390]) {

@@ -1,4 +1,5 @@
 import math
+from app.core.calculation_cache import reuse_exact
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Tuple
 from zoneinfo import ZoneInfo
@@ -383,6 +384,13 @@ def get_recommended_window(
     }
 
 
+@reuse_exact
+def _moon_coordinate_at(observation_datetime, observatory=None):
+    return get_body("moon", to_astropy_time(observation_datetime, observatory=observatory),
+                    _get_location(observatory))
+
+
+@reuse_exact
 def get_moon_info_at(
     observation_datetime: datetime,
     observatory: Optional[ObservatoryContext] = None,
@@ -393,11 +401,7 @@ def get_moon_info_at(
         observatory=observatory,
     )
 
-    moon = get_body(
-        "moon",
-        observation_time,
-        location,
-    )
+    moon = _moon_coordinate_at(observation_datetime, observatory)
 
     moon_altaz = moon.transform_to(
         AltAz(
@@ -508,6 +512,7 @@ def get_moon_info(
     }
 
 
+@reuse_exact
 def get_moon_separation_at(
     target_name: str,
     observation_datetime: datetime,
@@ -522,16 +527,7 @@ def get_moon_separation_at(
     if target_coordinate is None:
         return None
 
-    observation_time = to_astropy_time(
-        observation_datetime,
-        observatory=observatory,
-    )
-
-    moon_coordinate = get_body(
-        "moon",
-        observation_time,
-        _get_location(observatory),
-    )
+    moon_coordinate = _moon_coordinate_at(observation_datetime, observatory)
 
     separation = target_coordinate.separation(
         moon_coordinate

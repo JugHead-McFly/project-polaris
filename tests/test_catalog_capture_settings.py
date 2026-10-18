@@ -20,12 +20,15 @@ def test_reported_clusters_receive_identical_alias_starting_exposure(ngc, messie
     first, second = settings(ngc), settings(messier)
     for result in (first, second):
         assert result["recommended_sub_exposure_seconds"] == 15
-        assert result["recommended_gain"] is None
-        assert result["recommended_filter"] is None
+        assert result["recommended_gain"] == 60
+        assert result["recommended_filter"] == "Astro"
         assert result["recommendation_source"] == "rig_category_starting_point"
         assert "not capture-calibrated" in result["settings_confidence"]
         assert result["settings_provenance"]["capture_history_used"] is False
         assert result["settings_provenance"]["rig_profile_key"] == "dwarf-mini"
+        assert result["settings_provenance"]["user_configuration_read"] is False
+        assert result["settings_provenance"]["manufacturer_default_claimed"] is False
+        assert "not a recovered user setting" in " ".join(result["settings_reasons"])
         assert result["additional_subframes_needed"] > 0
 
 
@@ -38,11 +41,13 @@ def test_curated_recipe_resolves_ngc_alias_without_rewriting_it():
 
 
 @pytest.mark.parametrize("name,filter_name", [("NGC7092", "Astro"), ("NGC7000", "Duo-Band")])
-def test_recorded_dwarf3_category_capabilities(name, filter_name):
+@pytest.mark.parametrize("rig", ["dwarf-mini", "dwarf-3"])
+@pytest.mark.parametrize("bortle", [3, 7])
+def test_recorded_category_capabilities(name, filter_name, rig, bortle):
     # Emission filter is selected in light polluted conditions.
     advice = get_catalog_exposure_advice(name)
     result = apply_tonight_settings(advisor=advice, weather={}, moon={}, moon_warning="Minimal",
-        moon_separation_degrees=90, bortle_class=7, rig_profile_key="dwarf-3")
+        moon_separation_degrees=90, bortle_class=bortle, rig_profile_key=rig)
     assert result["recommended_sub_exposure_seconds"] == 15
     assert result["recommended_gain"] == 60
     assert result["recommended_filter"] == filter_name

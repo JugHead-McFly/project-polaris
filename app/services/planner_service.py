@@ -1,5 +1,6 @@
 from app.services.capture_history_service import history_advice
 import math
+from app.core.calculation_cache import astronomy_calculation
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Iterable, List, Optional
 
@@ -853,6 +854,7 @@ def _apply_planned_heat_safeguard(
 
 
 @timed("planner")
+@astronomy_calculation
 def get_tonight_plan(
     db: Session,
     observatory: Optional[ObservatoryContext] = None,

@@ -83,7 +83,7 @@ def test_real_phoenix_seasonal_darkness(date, broad):
                 else:
                     assert block["planned_subframes"] > 0
                     assert block["recommended_sub_exposure_seconds"] == 15
-                    assert block["recommended_gain"] is None
-                    assert block["recommended_filter"] is None
+                    assert block["recommended_gain"] == 60
+                    assert block["recommended_filter"] in {"Astro", "Duo-Band"}
                     assert "not capture-calibrated" in block["settings_confidence"]
         assert schedule["allocated_minutes"] + schedule["unscheduled_dark_minutes"] == pytest.approx((datetime.fromisoformat(plan["darkness"]["astronomical_darkness_end_at"])-datetime.fromisoformat(plan["darkness"]["astronomical_darkness_start_at"])).total_seconds()/60)

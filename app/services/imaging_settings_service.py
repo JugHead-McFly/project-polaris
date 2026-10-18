@@ -388,9 +388,12 @@ def apply_tonight_settings(
             return {**advisor, "settings_confidence": "Capture settings unavailable",
                     "settings_reasons": ["No supported equipment/category starting point is recorded."],
                     "settings_setup_guidance": ["Confirm capture settings before imaging."]}
+        available_filters = {_normalized_filter(value.replace("Dual-", "Duo-")) for value in rig.filters}
+        category_filter = "Duo-Band" if _is_emission_target(target_type) else "Astro"
         advisor = {**advisor, "recommendation_source": "rig_category_starting_point",
                    "recommended_sub_exposure_seconds": _supported_exposure(15, rig.supported_exposures_seconds),
-                   "recommended_gain": rig.default_gain}
+                   "recommended_gain": rig.default_gain,
+                   "recommended_filter": category_filter if category_filter in available_filters else None}
     settings = recommend_imaging_settings(
         object_name=advisor["object"],
         base_exposure_seconds=advisor.get(
@@ -430,6 +433,9 @@ def apply_tonight_settings(
     if category_start:
         settings["confidence_label"] = "Equipment/category starting point; not capture-calibrated"
         settings["reasons"].insert(0, f"{target_type.title()} starting exposure uses {rig.model}'s recorded supported exposures; no successful capture recipe is claimed.")
+        if rig.key == "dwarf-mini":
+            settings["confidence_label"] = "Manufacturer-informed starting point; not capture-calibrated"
+            settings["reasons"].insert(0, "The Mini manual recommends 15-60 seconds and gain 60-80. Polaris starts at the low end; this is not a recovered user setting or target-specific calibration.")
 
     updated = dict(advisor)
     updated["recommended_sub_exposure_seconds"] = settings[
@@ -447,6 +453,13 @@ def apply_tonight_settings(
         "rig_profile_key": rig.key if rig else None,
         "capability_sources": list(rig.source_urls) if rig else [],
         "capture_history_used": historical,
+        "user_configuration_read": False,
+        "manufacturer_default_claimed": False,
+        "selection_basis": (
+            "successful_capture_history" if historical else
+            "application_category_policy_with_recorded_rig_capabilities" if category_start else
+            "curated_application_recipe"
+        ),
     }
 
     remaining_seconds = max(int(updated.get("remaining_seconds") or 0), 0)
