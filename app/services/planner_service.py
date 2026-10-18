@@ -25,6 +25,7 @@ from app.services.astronomy_service import (
     get_moon_warning_at,
     get_transit_time,
     prepare_fixed_target_transits,
+    prepare_fixed_target_altitudes,
 )
 from app.services.imaging_settings_service import apply_tonight_settings
 from app.services.mosaic_service import MOSAIC_NOTE, mosaic_advice
@@ -935,6 +936,10 @@ def get_tonight_plan(
     planning_targets = list(grouped.values())
 
     prepare_fixed_target_transits(planning_targets, dark_start, context)
+    midpoint = (dark_start.astimezone(timezone.utc) +
+                (dark_end.astimezone(timezone.utc) - dark_start.astimezone(timezone.utc)) / 2).astimezone(dark_start.tzinfo)
+    prepare_fixed_target_altitudes(planning_targets,
+        [*generate_sample_times(dark_start, dark_end), midpoint], context)
 
     for object_name in planning_targets:
         rig = get_rig_profile(context.rig_profile_key or "")

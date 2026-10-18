@@ -7,15 +7,30 @@ from inspect import signature
 _values = ContextVar("astronomy_calculation_values", default=None)
 
 
+def calculation_scope_active():
+    return _values.get() is not None
+
+
 def reuse_altitude_samples(function):
     """Reuse exact scalar results while retaining vector evaluation of misses."""
+    def keys_for(target_name, observation_datetimes, observatory):
+        return [(function, target_name, at.isoformat(), at.fold, observatory)
+                for at in observation_datetimes]
+
+    def seed(target_name, observation_datetimes, results, observatory=None):
+        values = _values.get()
+        if values is not None:
+            keys = keys_for(target_name, observation_datetimes, observatory)
+            if len(keys) != len(results):
+                raise ValueError("Altitude result count does not match sample count")
+            values.update(zip(keys, results))
+
     @wraps(function)
     def reused(target_name, observation_datetimes, observatory=None):
         values = _values.get()
         if values is None:
             return function(target_name, observation_datetimes, observatory)
-        keys = [(function, target_name, at.isoformat(), at.fold, observatory)
-                for at in observation_datetimes]
+        keys = keys_for(target_name, observation_datetimes, observatory)
         missing = {}
         for key, at in zip(keys, observation_datetimes):
             if key not in values:
@@ -27,6 +42,7 @@ def reuse_altitude_samples(function):
             values.update(zip(missing, results))
         # A fresh list prevents caller mutations leaking into later requests.
         return [values[key] for key in keys]
+    reused.seed_exact_samples = seed
     return reused
 
 
