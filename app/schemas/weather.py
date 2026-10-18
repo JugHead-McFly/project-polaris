@@ -14,6 +14,7 @@ class WeatherSummary(BaseModel):
     planned_cloud_forecast_spread: Optional[float] = None
     cloud_forecast_status: Optional[str] = None
     cloud_dark_window: Optional[dict] = None
+    forecast_agreement: Optional[dict] = None
     planned_humidity_percent: Optional[int] = None
     planned_dew_point_f: Optional[float] = None
     planned_wind_speed_mph: Optional[float] = None

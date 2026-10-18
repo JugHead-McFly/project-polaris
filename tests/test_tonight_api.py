@@ -77,6 +77,20 @@ def planner_target(name, score):
     }
 
 
+def test_hosted_target_session_count_combines_catalog_aliases():
+    from app.api.tonight import _build_legacy_target
+    from app.services.capture_history_service import history_advice
+    progress = {'M31': {'seconds': 100, 'sessions': 1},
+                'NGC224': {'seconds': 200, 'sessions': 2},
+                'M57': {'seconds': 900, 'sessions': 9}}
+    plan = planner_target('M31', 100)
+    plan['advisor'] = dict(history_advice('M31', progress), object='M31')
+    target = _build_legacy_target(None, plan, use_capture_history=False, capture_progress=progress)
+    assert target['session_count'] == 3
+    assert target['total_integration_seconds'] == 300
+    assert target['best_quality'] is None
+
+
 def planner_response():
     recommended = planner_target("M57", 149.6)
     return {

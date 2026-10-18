@@ -31,7 +31,7 @@ test('target card distinguishes unassessed quality and synced sessions from zero
   const labels = {};
   const render = vm.runInNewContext(code + '\nrenderTargetProjectContext;', {
     setText: (id, value) => labels[id] = value,
-    byId: () => ({}), displayHours: value => `${value} hr`,
+    byId: () => ({}), displayHours: value => `${value} hr`, renderFilterProgress: () => {},
   });
   render({best_quality: null, capture_count: 0, session_count: 2, current_hours: 3.11, goal_hours: 5, remaining_hours: 1.89});
   assert.equal(labels['hosted-target-quality'], 'Not assessed');

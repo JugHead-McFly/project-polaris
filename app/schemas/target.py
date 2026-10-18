@@ -94,6 +94,7 @@ class TargetCaptureSummary(BaseModel):
 
 
 class TargetSummary(BaseModel):
+    filter_progress: List[dict] = Field(default_factory=list)
     mosaic_required: bool = False
     mosaic_note: Optional[str] = None
     object: str

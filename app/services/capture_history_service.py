@@ -11,6 +11,14 @@ from app.services.portfolio_service import build_portfolio_target
 
 from app.core.request_timing import timed
 
+
+def _filter_label(value):
+    """Read-side presentation only; never rewrite import/evidence identity."""
+    cleaned = " ".join(value.split())
+    known = {"astro": "Astro", "vis": "VIS", "duo-band": "Duo-Band",
+             "dual-band": "Dual-Band", "mixed": "Mixed"}
+    return known.get(cleaned.casefold(), cleaned or "Unknown filter")
+
 def import_manifest(db, user_id, manifest):
     keys = [row.source_key for row in manifest.sessions]
     if len(keys) != len(set(keys)):
@@ -50,14 +58,25 @@ def library_summary(db, user_id):
     totals = {}
     for row in rows:
         name = normalize_target(row.target)
-        item = totals.setdefault(name, {"seconds": 0.0, "frames": 0, "sessions": 0, "filters": {}})
+        item = totals.setdefault(name, {"seconds": 0.0, "frames": 0, "sessions": 0, "filters": {}, "filter_progress": {}})
         item["seconds"] += row.integration_seconds
         item["frames"] += row.frame_count
         item["sessions"] += 1
         item["filters"][row.filter_name] = item["filters"].get(row.filter_name, 0) + row.integration_seconds
+        label = _filter_label(row.filter_name)
+        by_filter = item["filter_progress"].setdefault(label.casefold(), {
+            "filter": label, "captured_seconds": 0.0, "captured_frames": 0,
+            "quality_state": "unassessed", "accepted_seconds": None, "rejected_seconds": None,
+            "accepted_frames": None, "rejected_frames": None,
+            "goal_seconds": None, "goal_basis": "Shared target goal; no separate filter allocation",
+        })
+        by_filter["captured_seconds"] += row.integration_seconds
+        by_filter["captured_frames"] += row.frame_count
     credential = db.get(LibrarySyncCredential, user_id)
     targets = []
     for name, item in sorted(totals.items()):
+        item["filter_progress"] = [dict(values, unassessed_seconds=values["captured_seconds"],
+            unassessed_frames=values["captured_frames"]) for _, values in sorted(item["filter_progress"].items())]
         progress = build_portfolio_target(name, item["seconds"] / 3600)
         targets.append({"object": name, **item, "hours": round(item["seconds"] / 3600, 2),
                         "goal_hours": progress["goal_hours"], "remaining_hours": progress["remaining_hours"],
@@ -71,15 +90,31 @@ def progress_map(summary):
     return {row["object"]: row for row in summary["targets"]}
 
 
-def history_advice(object_name, progress):
+def history_records_for_target(object_name, progress):
     from app.services.deep_sky_catalog import get_entry
-    advice = get_catalog_exposure_advice(object_name)
-    catalog_entry = get_entry(object_name)
-    matches = []
-    for name, item in (progress or {}).items():
+    entry = get_entry(object_name)
+    for name, record in (progress or {}).items():
         other = get_entry(name)
-        if normalize_target(name) == normalize_target(object_name) or (catalog_entry and other and catalog_entry["id"] == other["id"]):
-            matches.append((name, item))
+        if normalize_target(name) != normalize_target(object_name) and not (entry and other and entry['id'] == other['id']):
+            continue
+        yield name, record
+
+
+def filter_progress_for_target(object_name, progress):
+    totals = {}
+    for _, record in history_records_for_target(object_name, progress):
+        for row in record.get('filter_progress', []):
+            label = _filter_label(row['filter'])
+            item = totals.setdefault(label.casefold(), dict(row, filter=label, captured_seconds=0.0, captured_frames=0,
+                unassessed_seconds=0.0, unassessed_frames=0))
+            for field in ('captured_seconds', 'captured_frames', 'unassessed_seconds', 'unassessed_frames'):
+                item[field] += row[field]
+    return [totals[name] for name in sorted(totals)]
+
+
+def history_advice(object_name, progress):
+    advice = get_catalog_exposure_advice(object_name)
+    matches = list(history_records_for_target(object_name, progress))
     if not matches:
         return advice
     current = sum(item["seconds"] for _, item in matches)

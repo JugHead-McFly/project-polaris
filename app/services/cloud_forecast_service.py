@@ -68,6 +68,7 @@ def get_nws_clouds(context, checked_at):
 
 
 def blend_cloud_forecasts(weather, context, checked_at):
+    from app.services.forecast_agreement_service import location_key
     nws = get_nws_clouds(context, checked_at)
     weather["cloud_forecast_status"] = (
         f"{weather.get('provider', 'Primary')} + NWS where both cover the hour; equal-weight mean."
@@ -86,11 +87,17 @@ def blend_cloud_forecasts(weather, context, checked_at):
         if original is not None:
             sources.append({"provider": weather.get("provider") or "primary",
                             "cloud_cover_percent": original,
-                            "fetched_at": weather.get("fetched_at")})
+                            "fetched_at": weather.get("fetched_at"),
+                            "location_key": location_key(context),
+                            "valid_from": when.astimezone(timezone.utc).isoformat(),
+                            "valid_to": (when.astimezone(timezone.utc)+timedelta(hours=1)).isoformat()})
         values = [v for start, end, v in nws["intervals"] if start <= when < end]
         if values:
+            matched = [(start, end) for start, end, _ in nws["intervals"] if start <= when < end][-1]
             sources.append({"provider": "nws", "cloud_cover_percent": values[-1],
-                            "updated_at": nws["updated_at"], "fetched_at": checked_at.isoformat()})
+                            "updated_at": nws["updated_at"], "fetched_at": checked_at.isoformat(),
+                            "location_key": location_key(context),
+                            "valid_from": matched[0].isoformat(), "valid_to": matched[1].isoformat()})
         conditions["cloud_forecast_sources"] = sources
         conditions["cloud_cover_percent"] = None
         conditions["cloud_forecast_spread"] = None

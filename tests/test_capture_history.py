@@ -42,6 +42,28 @@ def owner(db):
     return user
 
 
+def test_filter_progress_is_unassessed_preserves_shared_goal_and_owner(db):
+    alice,bob=owner(db),owner(db)
+    data=manifest(3600)
+    second=data.sessions[0].model_copy(update={'source_key':'2'*64,'filter_name':'Astro','integration_seconds':1800,'frame_count':60,'evidence_hash':'b'*64})
+    data.sessions.append(second)
+    import_manifest(db,alice,data)
+    summary=library_summary(db,alice)
+    target=summary['targets'][0]
+    assert target['seconds']==5400
+    assert target['filters']=={'Astro':1800,'Duo-Band':3600}
+    assert sum(row['captured_seconds'] for row in target['filter_progress'])==5400
+    for row in target['filter_progress']:
+        assert row['quality_state']=='unassessed'
+        assert row['accepted_seconds'] is None and row['rejected_frames'] is None
+        assert row['goal_seconds'] is None
+        assert row['unassessed_seconds']==row['captured_seconds']
+    from app.services.capture_history_service import filter_progress_for_target
+    assert filter_progress_for_target('NGC7000',progress_map(summary))==target['filter_progress']
+    assert library_summary(db,bob)['targets']==[]
+    assert history_advice('C 20',progress_map(summary))['current_integration_seconds']==5400
+
+
 def test_idempotent_owned_history_updates_without_adding_twice(db):
     alice, bob = owner(db), owner(db)
     assert import_manifest(db, alice, manifest())["sessions_changed"] == 1
@@ -54,6 +76,37 @@ def test_idempotent_owned_history_updates_without_adding_twice(db):
     assert library_summary(db, alice)["targets"][0]["seconds"] == 36000
     with pytest.raises(ValueError):
         import_manifest(db, alice, manifest(9999, "b"))
+
+
+def test_filter_display_normalizes_labels_without_changing_evidence_or_credit(db):
+    from app.models.capture_history import HostedCaptureSession
+    from app.services.capture_history_service import filter_progress_for_target
+    from sqlalchemy import select
+    user = owner(db)
+    labels = ['Duo-Band', 'duo-band', ' Duo-Band ', 'Dual-Band',
+              'Duo-Band (Mini)', 'Dual-Band (DWARF3)', ' Acme   H-alpha ', 'acme h-alpha']
+    data = manifest(100)
+    original = data.sessions[0]
+    data.sessions = [original.model_copy(update={
+        'source_key': str(i)*64, 'evidence_hash': str(i)*64,
+        'target': 'M31' if i % 2 else 'NGC224', 'filter_name': label,
+        'frame_count': 10,
+    }) for i, label in enumerate(labels, 1)]
+    assert import_manifest(db, user, data)['sessions_changed'] == len(labels)
+    assert import_manifest(db, user, data)['sessions_changed'] == 0
+    progress = progress_map(library_summary(db, user))
+    rows = filter_progress_for_target('M31', progress)
+    by_name = {row['filter'].casefold(): row for row in rows}
+    assert len(rows) == 5
+    assert by_name['duo-band']['captured_seconds'] == 300
+    assert by_name['duo-band']['captured_frames'] == 30
+    assert by_name['acme h-alpha']['captured_seconds'] == 200
+    assert sum(row['captured_seconds'] for row in rows) == 800
+    assert sum(row['captured_frames'] for row in rows) == 80
+    assert history_advice('M31', progress)['current_integration_seconds'] == 800
+    assert {row.filter_name for row in db.scalars(select(HostedCaptureSession)).all()} == set(labels)
+    assert set().union(*(set(row['filters']) for row in progress.values())) == set(labels)
+    assert all(row['accepted_seconds'] is None and row['goal_seconds'] is None for row in rows)
 
 
 def test_duplicate_manifest_rejected(db):
