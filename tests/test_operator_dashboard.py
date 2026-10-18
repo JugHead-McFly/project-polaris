@@ -368,7 +368,7 @@ def test_hosted_dashboard_includes_only_browser_safe_auth_config(monkeypatch):
     assert "hosted-opportunity-total-bar" not in html
     assert "hosted-opportunity-total-bar" not in script
     assert "hosted-total-score-bar" not in html
-    assert "Number(opportunityScore).toFixed(1)" in script
+    assert "clampPercent(opportunityScore).toFixed(1)" in script
     assert "scoreBreakdown.label || opportunityScoreLabel(opportunityScore)" in script
     assert "scoreBreakdown.guidance" in script
     assert "data.opportunity_score" in script
@@ -577,7 +577,7 @@ def test_advisory_timeline_collapses_only_when_no_blocks_exist():
     assert "timeline.open = blocks.length > 0" in script
     assert 'timeline.open = blocks.length > 0' in script
     assert ".hosted-schedule-panel:not([open]) > .hosted-schedule-summary" in css
-    assert ".hosted-schedule-panel[open] .hosted-schedule-toggle::before" in css
+    assert "#operator-page details[open] > summary::after" in css
     assert '.hosted-schedule-label::before' in css
     assert 'content: "05";' in css
     assert 'font-size: 24px;' in css
