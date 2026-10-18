@@ -505,8 +505,18 @@ def get_target_common_name(target_name):
     if not target_name:
         return None
 
-    target = TARGETS.get(target_name.strip().upper()) or get_entry(target_name)
-    return target.get("name") if target else None
+    target = TARGETS.get(target_name.strip().upper())
+    if target:
+        return target.get("name")
+    entry = get_entry(target_name)
+    if not entry:
+        return None
+    messier = next((alias for alias in entry.get("aliases", [])
+                    if alias.startswith("M") and alias[1:].isdigit()), None)
+    common_name = entry.get("name")
+    if messier and messier != target_name.strip().upper():
+        return f"{messier} · {common_name}" if common_name not in {entry["id"], messier} else messier
+    return common_name
 
 
 def get_target_profile(target_name):

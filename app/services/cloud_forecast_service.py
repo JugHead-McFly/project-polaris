@@ -8,6 +8,8 @@ from urllib.error import URLError
 from zoneinfo import ZoneInfo
 
 
+from app.core.request_timing import timed
+
 def cloud_value(value):
     if value is None or isinstance(value, bool):
         return None
@@ -52,6 +54,7 @@ def parse_nws_clouds(properties, checked_at):
     return intervals, updated.isoformat()
 
 
+@timed("weather_nws")
 def get_nws_clouds(context, checked_at):
     try:
         point = _request(f"https://api.weather.gov/points/{context.latitude:.4f},{context.longitude:.4f}")

@@ -27,6 +27,8 @@ from app.services.ephemeris_service import (
 )
 
 
+from app.core.request_timing import timed
+
 def _get_location(
     observatory: Optional[ObservatoryContext] = None,
 ) -> EarthLocation:
@@ -169,6 +171,7 @@ def _altitude_from_coordinate(
     return round(float(altitude), 1)
 
 
+@timed("altitude_series")
 def get_altitudes_at(
     target_name: str,
     observation_datetimes: list,
@@ -451,6 +454,7 @@ def get_moon_info_at(
     }
 
 
+@timed("moon")
 def get_moon_info(
     observatory: Optional[ObservatoryContext] = None,
 ) -> Dict:
@@ -724,6 +728,7 @@ def get_darkness_window_datetimes(
     )
 
 
+@timed("darkness")
 def get_darkness_info(
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,

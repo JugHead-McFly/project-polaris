@@ -37,6 +37,8 @@ HORIZON_BUCKETS = (
 )
 
 
+from app.core.request_timing import timed
+
 def _round(value: Optional[float], digits: int = 1) -> Optional[float]:
     if value is None:
         return None
@@ -251,6 +253,7 @@ def _apply_retention(
     )
 
 
+@timed("forecast_history")
 def forecast_accuracy_summary(
     db: Session,
     *,
@@ -560,6 +563,7 @@ def _recent_checks(snapshots: List[ForecastAccuracySnapshot]) -> List[Dict]:
     return checks
 
 
+@timed("forecast_tracking")
 def track_forecast_accuracy(
     db: Session,
     *,

@@ -111,6 +111,14 @@ def get_portfolio_level(progress_percent: float) -> str:
 
 def get_target_metadata(object_name: str) -> Dict[str, Any]:
     normalized_name = object_name.strip().upper()
+    # Catalog designations describe the same physical object. Reuse a saved
+    # curated recipe before falling back to geometry-only catalog metadata.
+    catalog_entry = get_entry(normalized_name)
+    if catalog_entry:
+        for name in TARGET_METADATA:
+            candidate = get_entry(name)
+            if candidate and candidate["id"] == catalog_entry["id"]:
+                return {**TARGET_METADATA[name], "settings_preset_target": name}
     entry = SEASONAL_TARGETS.get(normalized_name) or (get_entry(normalized_name) if normalized_name not in TARGETS else None)
     if entry:
         return {"constellation": entry["constellation"], "target_type": entry["object_type"],

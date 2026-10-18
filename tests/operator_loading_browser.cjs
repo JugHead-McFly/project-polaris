@@ -31,7 +31,7 @@ const assert=require('node:assert/strict');
  assert.equal(await page.locator('#hosted-tonight-panel #hosted-library-history').count(),0);
  const text=await page.locator('#hosted-tonight-panel').innerText();
  assert.doesNotMatch(text,/Setup & details|native pixels|Beginner imaging|Search catalog|Planner notes|Check live conditions|Forecast details|Verify capture settings/);
- assert.match(text,/Settings not configured/);
+ assert.match(text,/Capture settings unavailable/);
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  await page.screenshot({path:'../clean-plan-mobile.png',fullPage:true});
  await page.setViewportSize({width:1440,height:1100});
@@ -66,8 +66,17 @@ const assert=require('node:assert/strict');
  for (const id of ['hosted-target-exposure','hosted-target-gain','hosted-target-filter']) {
    assert.equal(await page.locator(`#${id}`).isVisible(),false);
  }
- assert.equal(await page.locator('#capture-settings-state').innerText(),'Settings not configured');
+ assert.equal(await page.locator('#capture-settings-state').innerText(),'Capture settings unavailable');
  await page.locator('#compact-planning-details').evaluate(e=>e.open=false);
+ await page.evaluate(schedule=>{
+   const blocks=schedule.blocks.map(block=>({...block,recommendation_source:'rig_category_starting_point',recommended_sub_exposure_seconds:15,recommended_gain:null,recommended_filter:null}));
+   renderHostedSchedule({...schedule,blocks});
+ },plan.schedule);
+ const partialText=await page.locator('#hosted-schedule-list').innerText();
+ assert.match(partialText,/15 sec subs/);
+ assert.match(partialText,/Starting exposure · confirm gain\/filter on device/);
+ assert.doesNotMatch(partialText,/Gain null|Gain undefined|Capture settings unavailable/);
+ assert.equal(await page.evaluate(()=>performance.getEntriesByName('polaris:Weather & plan').length),1);
  const layoutChecks=[];
  for (const width of [1536,900,390]) {
    await page.setViewportSize({width,height:1000});

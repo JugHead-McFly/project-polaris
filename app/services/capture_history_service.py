@@ -9,6 +9,8 @@ from app.services.advisor_service import get_catalog_exposure_advice, build_advi
 from app.services.portfolio_service import build_portfolio_target
 
 
+from app.core.request_timing import timed
+
 def import_manifest(db, user_id, manifest):
     keys = [row.source_key for row in manifest.sessions]
     if len(keys) != len(set(keys)):
@@ -41,6 +43,7 @@ def import_manifest(db, user_id, manifest):
     return {"sessions_received": len(keys), "sessions_changed": changed}
 
 
+@timed("capture_history")
 def library_summary(db, user_id):
     from app.services.legacy_capture_service import legacy_summary
     rows = db.scalars(select(HostedCaptureSession).where(HostedCaptureSession.user_id == user_id)).all()

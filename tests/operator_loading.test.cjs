@@ -1,6 +1,18 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {createLoadCoordinator} = require('../app/web/loading.js');
+
+test('browser stage measures contain timings without response or session data', async()=>{
+  const loader=createLoadCoordinator(()=>{});
+  for(let i=0;i<2;i++) {
+    const run=loader.begin({'Secure session':'waiting'});
+    await run.request('Secure session',async()=>({access_token:'private-token'}));
+  }
+  const entries=performance.getEntriesByName('polaris:Secure session');
+  assert.equal(entries.length,1);
+  assert.ok(entries[0].duration>=0);
+  assert.doesNotMatch(JSON.stringify(entries),/private-token/);
+});
 test('stages follow responses, including out-of-order and partial failures', async () => {
   let snapshot;
   const loader = createLoadCoordinator(run => snapshot = {...run.stages});

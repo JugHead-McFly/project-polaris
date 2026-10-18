@@ -106,6 +106,8 @@ class SupabaseAuthService:
         )
 
 
+from app.core.request_timing import timed
+
 def build_auth_service(config: Settings):
     if config.AUTH_MODE == "local":
         return LocalAuthService(config.LOCAL_USER_ID)
@@ -121,6 +123,7 @@ def get_auth_service():
     return build_auth_service(settings)
 
 
+@timed("auth")
 def get_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(
         bearer_scheme

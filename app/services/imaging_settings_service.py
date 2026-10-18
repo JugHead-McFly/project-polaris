@@ -377,6 +377,20 @@ def apply_tonight_settings(
     equatorial_mode_enabled: Optional[bool] = None,
     rig_profile_key: Optional[str] = None,
 ) -> Dict:
+    rig = get_rig_profile(rig_profile_key or "")
+    category_start = advisor.get("recommended_sub_exposure_seconds") is None
+    target_type = _target_type(advisor["object"])
+    if category_start:
+        # A catalog position is not a calibrated recipe. Offer a conservative
+        # category starting point only with explicit supported rig exposures.
+        if (rig is None or not rig.supported_exposures_seconds
+                or not (_is_broadband_target(target_type) or _is_emission_target(target_type))):
+            return {**advisor, "settings_confidence": "Capture settings unavailable",
+                    "settings_reasons": ["No supported equipment/category starting point is recorded."],
+                    "settings_setup_guidance": ["Confirm capture settings before imaging."]}
+        advisor = {**advisor, "recommendation_source": "rig_category_starting_point",
+                   "recommended_sub_exposure_seconds": _supported_exposure(15, rig.supported_exposures_seconds),
+                   "recommended_gain": rig.default_gain}
     settings = recommend_imaging_settings(
         object_name=advisor["object"],
         base_exposure_seconds=advisor.get(
@@ -394,6 +408,29 @@ def apply_tonight_settings(
         rig_profile_key=rig_profile_key,
     )
 
+    historical = advisor.get("recommendation_source") in {"best_capture", "capture_history"}
+    if rig is not None and not historical:
+        # Never translate DWARF 3 gain/filter defaults into another device's
+        # unrecorded capabilities. A partial recommendation is still useful.
+        if rig.default_gain is None:
+            settings["gain"] = None
+            settings["reasons"] = [reason for reason in settings["reasons"] if not reason.startswith("Gain does not")]
+            settings["setup_guidance"] = [reason for reason in settings["setup_guidance"] if "gain" not in reason.lower()]
+            settings["adjustments"] = [value for value in settings["adjustments"] if value != "gain"]
+            settings["setup_guidance"].append("Gain is not recorded for this rig; retain your configured device value.")
+        filters = {_normalized_filter(value.replace("Dual-", "Duo-")) for value in rig.filters}
+        if settings["filter"] not in filters:
+            settings["filter"] = None
+            settings["reasons"] = [reason for reason in settings["reasons"] if "filter" not in reason.lower() and "Duo-Band" not in reason]
+            settings["adjustments"] = [value for value in settings["adjustments"] if value != "filter"]
+            settings["setup_guidance"].append("No matching filter capability is recorded for this rig; confirm the device's filter setting.")
+            if category_start:
+                settings["sub_exposure_seconds"] = advisor["recommended_sub_exposure_seconds"]
+                settings["adjustments"] = [value for value in settings["adjustments"] if value != "exposure"]
+    if category_start:
+        settings["confidence_label"] = "Equipment/category starting point; not capture-calibrated"
+        settings["reasons"].insert(0, f"{target_type.title()} starting exposure uses {rig.model}'s recorded supported exposures; no successful capture recipe is claimed.")
+
     updated = dict(advisor)
     updated["recommended_sub_exposure_seconds"] = settings[
         "sub_exposure_seconds"
@@ -405,6 +442,12 @@ def apply_tonight_settings(
     updated["settings_setup_guidance"] = settings["setup_guidance"]
     updated["settings_adjustments"] = settings["adjustments"]
     updated["target_type"] = settings["target_type"]
+    updated["settings_provenance"] = {
+        "source": updated.get("recommendation_source"),
+        "rig_profile_key": rig.key if rig else None,
+        "capability_sources": list(rig.source_urls) if rig else [],
+        "capture_history_used": historical,
+    }
 
     remaining_seconds = max(int(updated.get("remaining_seconds") or 0), 0)
     exposure_seconds = settings["sub_exposure_seconds"]

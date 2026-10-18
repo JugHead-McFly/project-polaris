@@ -18,6 +18,9 @@ class MissingObservatoryError(Exception):
     """Raised when a hosted user has not completed observing-home setup."""
 
 
+from app.core.request_timing import timed
+
+@timed("account_context")
 def get_planning_context(
     db: Session,
     *,
@@ -69,6 +72,7 @@ def get_primary_observatory(
     )
 
 
+@timed("account_profile")
 def get_profile(
     db: Session,
     *,
@@ -104,6 +108,7 @@ def upsert_profile(
     return profile
 
 
+@timed("account_observatories")
 def list_observatories(
     db: Session,
     *,

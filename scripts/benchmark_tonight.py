@@ -18,6 +18,7 @@ from app.models import HostedObservatory, ForecastAccuracySnapshot
 from app.core.planning_context import ObservatoryContext
 from app.services import planner_service as planner
 from app.services import scheduler_service as scheduler
+from app.main import log_request
 
 names = ['TARGETS', 'shortlist', 'get_moon_info', 'get_darkness_info',
          'get_darkness_window_datetimes', 'get_dark_visibility', 'get_altitude_at',
@@ -26,7 +27,9 @@ original = {name: getattr(planner, name) for name in names}
 context = ObservatoryContext('Synthetic Phoenix', 33.4484, -112.074, 'America/Phoenix',
                              elevation_meters=331, bortle_class=8, rig_profile_key='dwarf-mini')
 results = []
-with workflow() as flow, ExitStack() as stack, TestClient(flow.app) as client:
+with workflow() as flow, ExitStack() as stack:
+    flow.app.middleware('http')(log_request)
+    client = stack.enter_context(TestClient(flow.app))
     for name, value in original.items():
         stack.enter_context(patch.object(planner, name, value))
     stack.enter_context(patch.object(scheduler, 'datetime', datetime))
@@ -60,6 +63,7 @@ with workflow() as flow, ExitStack() as stack, TestClient(flow.app) as client:
         assert response.status_code == 200, response.text
         body = response.json()
         result = {'iteration':iteration, 'seconds':round(elapsed,3),
+                  'server_timing': response.headers.get('Server-Timing'),
                   'targets':[b['object'] for b in body['schedule']['blocks']],
                   'gap_minutes':body['schedule']['unscheduled_dark_minutes']}
         results.append(result)

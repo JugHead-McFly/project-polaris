@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+from contextvars import copy_context
 import json
 import os
 from datetime import datetime, timedelta, timezone
@@ -37,6 +39,8 @@ ASTRO_FORECAST_MAX_MATCH_HOURS = 4
 _weather_cache = {}
 _weather_cache_lock = RLock()
 
+
+from app.core.request_timing import timed
 
 def _empty_astro_forecast(status: str) -> dict:
     return {
@@ -152,6 +156,7 @@ def _parse_astro_forecast(
     }
 
 
+@timed("weather_astro")
 def _get_astro_forecast(
     context: ObservatoryContext,
     checked_at: datetime,
@@ -201,6 +206,7 @@ def calculate_observing_rating(
     return max(1, rating)
 
 
+@timed("weather")
 def get_weather_summary(
     postal_code: str,
     observatory: Optional[ObservatoryContext] = None,
@@ -317,13 +323,12 @@ def get_weather_summary(
             # The planner selects the relevant value for the scheduled start.
             "hourly_temperature_f": hourly_temperature_f,
             "hourly_forecast": hourly_forecast,
-            **_get_astro_forecast(context, checked_at),
             "observing_rating": rating,
             "status": "Live weather connected.",
             "observed_at": current.get("time"),
             "fetched_at": checked_at.isoformat(),
         }
-        blend_cloud_forecasts(weather, context, checked_at)
+        _enrich_weather(weather, context, checked_at)
         _store_cached_weather(cache_key, weather, checked_at)
         return weather
 
@@ -351,8 +356,7 @@ def get_weather_summary(
             checked_at,
         )
         if fallback_weather is not None:
-            fallback_weather.update(_get_astro_forecast(context, checked_at))
-            blend_cloud_forecasts(fallback_weather, context, checked_at)
+            _enrich_weather(fallback_weather, context, checked_at)
             record_service_success(
                 "weather",
                 "Fallback weather data received successfully.",
@@ -376,7 +380,6 @@ def get_weather_summary(
             "wind_speed_mph": None,
             "hourly_temperature_f": {},
             "hourly_forecast": {},
-            **_get_astro_forecast(context, checked_at),
             # A missing live forecast must never be interpreted as safe
             # observing conditions by the planner.
             "observing_rating": 0,
@@ -388,6 +391,7 @@ def get_weather_summary(
         }
 
 
+@timed("weather_primary")
 def _fetch_weather_data(url: str):
     last_error = None
     for attempt in range(WEATHER_REQUEST_ATTEMPTS):
@@ -407,6 +411,7 @@ def _is_rate_limited(error) -> bool:
     return isinstance(error, HTTPError) and error.code == 429
 
 
+@timed("weather_fallback")
 def _get_weatherapi_summary(
     postal_code: str,
     context: ObservatoryContext,
@@ -528,3 +533,15 @@ def _store_cached_weather(
 def reset_weather_cache() -> None:
     with _weather_cache_lock:
         _weather_cache.clear()
+
+
+def _enrich_weather(weather, context, checked_at):
+    """Independent providers overlap; only this thread mutates the payload.
+
+    Start only after primary/fallback success so cache and unavailable paths do
+    not introduce extra requests. Join before returning or caching the payload.
+    """
+    with ThreadPoolExecutor(max_workers=1, thread_name_prefix="weather-astro") as pool:
+        astronomy = pool.submit(copy_context().run, _get_astro_forecast, context, checked_at)
+        blend_cloud_forecasts(weather, context, checked_at)
+        weather.update(astronomy.result())

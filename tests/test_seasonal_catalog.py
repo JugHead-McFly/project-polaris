@@ -74,7 +74,16 @@ def test_real_phoenix_seasonal_darkness(date, broad):
             sample = [start+timedelta(minutes=m) for m in range(int((end-start).total_seconds()/60)+1)]
             assert min(astronomy.get_altitudes_at(target_name=name, observation_datetimes=sample, observatory=context)) >= 35
             if name in SEASONAL_TARGETS:
-                assert block["planned_subframes"] is None
-                if not block.get("mosaic_required"):
-                    assert "confirmation" in block["settings_confidence"]
+                if block.get("mosaic_required"):
+                    assert block["planned_subframes"] is None
+                elif name == "M1":
+                    # Supernova remnants have no supported category recipe.
+                    assert block["planned_subframes"] is None
+                    assert block["settings_confidence"] == "Capture settings unavailable"
+                else:
+                    assert block["planned_subframes"] > 0
+                    assert block["recommended_sub_exposure_seconds"] == 15
+                    assert block["recommended_gain"] is None
+                    assert block["recommended_filter"] is None
+                    assert "not capture-calibrated" in block["settings_confidence"]
         assert schedule["allocated_minutes"] + schedule["unscheduled_dark_minutes"] == pytest.approx((datetime.fromisoformat(plan["darkness"]["astronomical_darkness_end_at"])-datetime.fromisoformat(plan["darkness"]["astronomical_darkness_start_at"])).total_seconds()/60)

@@ -1049,7 +1049,13 @@ const renderHostedSchedule = (schedule) => {
       appendTextElement(body, "p", "schedule-action", "Confirm mosaic layout and capture plan before starting.");
     } else {
       const chips = equipmentChips(block).filter(chip => !/ min (imaging|setup)$/.test(chip.label));
-      appendTextElement(settings, "span", "capture-setting-line", chips.map(chip => chip.label).join(" · ") || "Settings not configured");
+      appendTextElement(settings, "span", "capture-setting-line", chips.map(chip => chip.label).join(" · ") || "Capture settings unavailable");
+      if (block.recommendation_source === "rig_category_starting_point") {
+        const partial = block.recommended_gain == null || !block.recommended_filter;
+        appendTextElement(body, "p", "schedule-action", partial
+          ? "Starting exposure · confirm gain/filter on device"
+          : "Category starting settings · verify with a test capture");
+      }
       if (block.setup_minutes) appendTextElement(body, "p", "schedule-action", `${Math.round(block.setup_minutes)} min setup included`);
     }
 
