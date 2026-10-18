@@ -1,5 +1,6 @@
 import math
-from app.core.calculation_cache import reuse_exact
+import numpy as np
+from app.core.calculation_cache import reuse_exact, reuse_altitude_samples
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Optional, Tuple
 from zoneinfo import ZoneInfo
@@ -173,6 +174,8 @@ def _altitude_from_coordinate(
 
 
 @timed("altitude_series")
+@reuse_altitude_samples
+@timed("altitude_compute")
 def get_altitudes_at(
     target_name: str,
     observation_datetimes: list,
@@ -287,6 +290,8 @@ def is_observable(
     )
 
 
+@reuse_exact
+@timed("transit")
 def get_transit_datetime(
     target_name: str,
     reference_datetime: Optional[datetime] = None,
@@ -322,6 +327,32 @@ def get_transit_datetime(
     return transit.to_datetime(
         timezone=ZoneInfo(context.timezone_name)
     )
+
+
+@timed("transit_batch")
+def prepare_fixed_target_transits(target_names, reference_datetime, observatory=None):
+    """Use Astroplan's identical time grid, broadcasting only fixed coordinates."""
+    context = use_observatory_context(observatory)
+    names, coordinates = [], []
+    for name in target_names:
+        normalized = name.strip().upper()
+        if normalized in SOLAR_SYSTEM_TARGETS or is_ephemeris_target(normalized):
+            continue
+        coordinate = get_target_coordinate(normalized)
+        if coordinate is not None:
+            names.append(name)
+            coordinates.append(coordinate)
+    if not names:
+        return
+    # Shape (1, M) broadcasts with Astroplan's (N, 1) time grid. Explicit
+    # grid_times_targets=True uses a different axis convention in Astroplan.
+    transits = _get_observer(context).target_meridian_transit_time(
+        to_astropy_time(reference_datetime, context),
+        SkyCoord(coordinates).reshape(1, -1), which="next",
+    ).to_datetime(timezone=ZoneInfo(context.timezone_name))
+    for name, result in zip(names, np.atleast_1d(transits)):
+        get_transit_datetime.seed_exact_result(result, name,
+            reference_datetime=reference_datetime, observatory=observatory)
 
 
 def get_transit_time(

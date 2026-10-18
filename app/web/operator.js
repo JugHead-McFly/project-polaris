@@ -883,12 +883,17 @@ const opportunityScoreLabel = (score) => {
 const renderOpportunityScore = (scoreBreakdown) => {
   const drivers = byId("hosted-opportunity-drivers");
   const reading = document.querySelector(".hosted-opportunity-reading");
+  const scoreCard = reading.closest(".hosted-opportunity-score");
+  reading.setAttribute("role", "img");
   drivers.replaceChildren();
 
   if (!scoreBreakdown || !Array.isArray(scoreBreakdown.components)) {
     setText("hosted-opportunity-score", "--");
     setText("hosted-opportunity-label", "Unavailable");
     reading.classList.remove("is-hard-stop");
+    scoreCard.dataset.tone = "unavailable";
+    reading.setAttribute("aria-label", "Opportunity score unavailable");
+    reading.removeAttribute("title");
     reading.style.setProperty("--opportunity-score", "0%");
     appendTextElement(drivers, "p", "", "Score drivers unavailable");
     return null;
@@ -899,10 +904,14 @@ const renderOpportunityScore = (scoreBreakdown) => {
     ? Number(scoreBreakdown.total)
     : opportunityComponentScore(components);
   const hardStopScore = scoreBreakdown.label === "No imaging window";
+  const percent = clampPercent(opportunityScore).toFixed(1);
+  scoreCard.dataset.tone = hardStopScore ? "poor" : opportunityScore >= 85 ? "excellent"
+    : opportunityScore >= 70 ? "good" : opportunityScore >= 55 ? "fair"
+      : opportunityScore >= 35 ? "challenging" : "poor";
 
   setText(
     "hosted-opportunity-score",
-    hardStopScore ? "STOP" : Number(opportunityScore).toFixed(1),
+    hardStopScore ? "STOP" : `${percent}%`,
   );
   setText(
     "hosted-opportunity-label",
@@ -921,8 +930,8 @@ const renderOpportunityScore = (scoreBreakdown) => {
   reading.setAttribute(
     "aria-label",
     hardStopScore
-      ? `Hard stop. The underlying planning score before the stop was ${Number(opportunityScore).toFixed(1)}.`
-      : `Opportunity score ${Number(opportunityScore).toFixed(1)}.`,
+      ? `Hard stop. No imaging window. The underlying planning score before the stop was ${percent} percent.`
+      : `Opportunity score ${percent} percent. ${scoreBreakdown.label || opportunityScoreLabel(opportunityScore)}.`,
   );
   expandedOpportunityComponents(components).forEach((component) => {
     appendOpportunityComponent(drivers, component);
@@ -1107,8 +1116,21 @@ const setHostedRefreshState = (loading) => {
   });
 };
 
-const displayedDecisionLabel = (decision) => {
+const displayedDecisionLabel = (decision, weather = {}) => {
   if (decision === "Do Not Image") return "Wait for better conditions";
+  if (decision === "Use Caution") {
+    const value = (key) => weather[`planned_${key}`] ?? weather[key];
+    // Preserve equipment/weather advisories; cloud quality alone is not a hazard.
+    const risk = (key, threshold) => [weather[key], weather[`planned_${key}`]].some(v => v != null && Number(v) >= threshold);
+    if (risk("temperature_f", 95) || risk("wind_speed_mph", 15)
+        || risk("humidity_percent", 80)) return "Use caution";
+    if (weather.cache_status === "stale" || /cached weather/i.test(weather.status || "")) return "Check current conditions";
+    if (value("cloud_cover_percent") >= 70) return "Challenging conditions";
+    if (weather.planned_cloud_forecast_spread >= 30
+        || (Array.isArray(weather.planned_cloud_forecast_sources) && weather.planned_cloud_forecast_sources.length < 2)) return "Check the forecast";
+    if (["temperature_f", "wind_speed_mph", "humidity_percent"].some(key => value(key) == null || !Number.isFinite(Number(value(key))))) return "Review conditions";
+    return "Fair conditions";
+  }
   return decision;
 };
 
@@ -1133,6 +1155,7 @@ const displayedDecisionMessage = (decision, message) => {
 const compactConditionMessage = (data) => {
   const decision = data.schedule?.decision;
   if (decision === "Do Not Image" || decision === "Plan unavailable") return displayedDecisionMessage(decision, data.message);
+  if (displayedDecisionLabel(decision, data.weather) === "Use caution") return displayedDecisionMessage(decision, data.message);
   const weather = data.weather || {};
   const items = [];
   for (const [key, suffix] of [["cloud_cover_percent", "% cloud"], ["wind_speed_mph", " mph wind"], ["temperature_f", "°F"]]) {
@@ -1472,7 +1495,7 @@ const renderHostedTonight = (data) => {
   byId("hosted-recommendation").className = `hosted-recommendation ${statusClass}`;
   setText("hosted-tonight-observatory", data.observatory?.name, "your observatory");
   setText("observatory-name", data.observatory?.name, "Your observatory");
-  setText("hosted-decision", displayedDecisionLabel(decision));
+  setText("hosted-decision", displayedDecisionLabel(decision, data.weather));
   setText("hosted-decision-message", compactConditionMessage(data));
   renderDecisionSupport(data);
 
@@ -2813,7 +2836,7 @@ const renderDecision = (data) => {
 
   panel.className = `decision-panel ${statusClass}`;
   setText("observatory-name", data.observatory?.name, "Local observatory");
-  setText("decision", decision);
+  setText("decision", displayedDecisionLabel(decision, data.weather));
   setText(
     "decision-message",
     decision === "Use Caution"

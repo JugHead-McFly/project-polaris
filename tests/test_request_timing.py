@@ -10,6 +10,21 @@ from app.core.request_timing import request_timings, timed
 from import_plan_fixture import workflow
 
 
+def test_stage_records_cpu_separately_from_elapsed(monkeypatch, caplog):
+    import app.core.request_timing as timing
+    wall = iter([10.0, 12.0])
+    cpu = iter([1.0, 1.25])
+    monkeypatch.setattr(timing, 'perf_counter', lambda: next(wall))
+    monkeypatch.setattr(timing, 'thread_time', lambda: next(cpu))
+    @timed('fixture')
+    def operation(): return 7
+    with caplog.at_level(logging.INFO), request_timings('cpu-test') as timings:
+        assert operation() == 7
+    assert timings.values['fixture'] == (2000.0, 1)
+    assert timings.thread_cpu['fixture'] == 250.0
+    assert 'thread_cpu_ms=250.0' in caplog.text
+
+
 def test_thread_timings_are_correlated_and_do_not_log_arguments(caplog):
     @timed('fixture')
     def operation(secret):

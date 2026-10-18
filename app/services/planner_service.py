@@ -24,6 +24,7 @@ from app.services.astronomy_service import (
     get_moon_separation_at,
     get_moon_warning_at,
     get_transit_time,
+    prepare_fixed_target_transits,
 )
 from app.services.imaging_settings_service import apply_tonight_settings
 from app.services.mosaic_service import MOSAIC_NOTE, mosaic_advice
@@ -930,6 +931,8 @@ def get_tonight_plan(
         if identity not in grouped or name in history_names:
             grouped[identity] = name
     planning_targets = list(grouped.values())
+
+    prepare_fixed_target_transits(planning_targets, dark_start, context)
 
     for object_name in planning_targets:
         rig = get_rig_profile(context.rig_profile_key or "")

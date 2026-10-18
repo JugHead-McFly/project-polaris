@@ -18,7 +18,7 @@
     <script defer src="/operator-assets/loading.js?v=__ASSET_VERSION__"></script>
     <script defer src="/operator-assets/operator.js?v=__ASSET_VERSION__"></script>
   </head>
-  <body class="initial-load">
+  <body id="operator-page" class="initial-load">
     <a class="skip-link" href="#main-content">Skip to tonight's plan</a>
 
     <header class="site-header">
@@ -390,7 +390,6 @@
             </div>
             <span class="hosted-schedule-summary-meta">
               <span id="hosted-schedule-count">0 blocks</span>
-              <span class="hosted-schedule-toggle" aria-hidden="true"></span>
             </span>
           </summary>
           <div id="night-plan-axis" class="night-plan-axis" aria-label="Scheduled targets across astronomical darkness"></div>
@@ -515,7 +514,6 @@
               <span class="confidence-badge" role="status" aria-live="polite">
                 <span id="forecast-confidence-state">Loading…</span>
               </span>
-              <span class="confidence-chevron" aria-hidden="true">⌄</span>
             </summary>
           <span id="forecast-accuracy-history-count">Loading history…</span>
           <div class="forecast-accuracy-guidance" role="status" aria-live="polite">

@@ -19,6 +19,69 @@ class DisabledCache:
     def reset(self, token): pass
 
 
+def test_altitude_sample_reuse_preserves_order_fold_context_and_lists():
+    calls = []
+    @cache.reuse_altitude_samples
+    def calculate(target, times, observatory=None):
+        calls.append((target, list(times), observatory))
+        return [float(at.fold) for at in times]
+    at = datetime(2026, 11, 1, 1, 30, tzinfo=ZoneInfo('America/New_York'))
+    other = at.replace(fold=1)
+    @cache.astronomy_calculation
+    def run():
+        result = calculate('M31', [at, other, at], 'a')
+        assert result == [0, 1, 0]
+        result[0] = 99
+        assert calculate('M31', [other, at], 'a') == [1, 0]
+        assert calculate('M31', [], 'a') == []
+        calculate('M31', [at], 'b')
+        calculate('M33', [at], 'a')
+    run()
+    assert [len(times) for _, times, _ in calls] == [2, 1, 1]
+    calculate('M31', [at], 'a')
+    assert len(calls) == 4
+
+
+@pytest.mark.parametrize('target', ['M31', 'MARS', 'NGC7092'])
+def test_real_altitude_batches_equal_scalar_results(target):
+    context = ObservatoryContext('Synthetic', 40.7, -74.0, 'America/New_York', elevation_meters=50)
+    zone = ZoneInfo(context.timezone_name)
+    times = [datetime(2026, 11, 1, 1, 30, tzinfo=zone, fold=fold) for fold in (0, 1)]
+    with iers.conf.set_temp('auto_download', False):
+        expected = [astronomy.get_altitude_at(target, at, context) for at in times]
+        @cache.astronomy_calculation
+        def run():
+            assert astronomy.get_altitudes_at(target, times, context) == expected
+            assert [astronomy.get_altitude_at(target, at, context) for at in reversed(times)] == expected[::-1]
+        run()
+
+
+@pytest.mark.parametrize('latitude,month,names', [
+    (33.4, 10, ['M31']),
+    (-33.8, 2, ['M31', 'M42', 'NGC7092', 'NGC2099']),
+    (65, 6, ['M31', 'M42', 'NGC7092', 'NGC2099']),
+])
+def test_batched_transits_exactly_equal_scalar_transits(latitude, month, names):
+    context = ObservatoryContext('Synthetic', latitude, -112.074, 'America/Phoenix', elevation_meters=331)
+    at = datetime(2026, month, 18, 2, 49, tzinfo=timezone.utc)
+    with iers.conf.set_temp('auto_download', False):
+        expected = [astronomy.get_transit_datetime(name, at, context) for name in names]
+        @cache.astronomy_calculation
+        def run():
+            astronomy.prepare_fixed_target_transits(names, at, context)
+            with patch.object(astronomy, '_get_observer', side_effect=AssertionError('scalar transit recomputed')):
+                actual = [astronomy.get_transit_datetime(name, at, context) for name in names]
+            assert actual == expected
+        run()
+
+
+def test_transit_batch_excludes_moving_and_unknown_targets():
+    at = datetime(2026, 10, 18, tzinfo=timezone.utc)
+    with patch.object(astronomy, 'is_ephemeris_target', side_effect=lambda name: name == 'COMET'), \
+            patch.object(astronomy, '_get_observer', side_effect=AssertionError('unexpected batch')):
+        astronomy.prepare_fixed_target_transits(['MARS', 'COMET', 'UNKNOWN'], at)
+
+
 def test_exact_cache_scope_location_fold_and_mutation():
     calls = []
     @cache.reuse_exact

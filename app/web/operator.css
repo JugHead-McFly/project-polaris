@@ -1026,7 +1026,7 @@ footer {
 .hosted-opportunity-reading::before {
   position: absolute;
   inset: 0;
-  background: conic-gradient(var(--cyan) var(--opportunity-score), rgba(156, 181, 187, 0.16) 0);
+  background: conic-gradient(var(--score-color, var(--cyan)) var(--opportunity-score), rgba(156, 181, 187, 0.16) 0);
   border-radius: inherit;
   content: "";
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 15px), #000 calc(100% - 14px));
@@ -1068,11 +1068,11 @@ footer {
 }
 
 .hosted-opportunity-reading.is-hard-stop::before {
-  background: conic-gradient(var(--red) var(--opportunity-score), rgba(156, 181, 187, 0.14) 0);
+  background: conic-gradient(var(--score-color, var(--red)) var(--opportunity-score), rgba(156, 181, 187, 0.14) 0);
 }
 
 #hosted-opportunity-label {
-  color: var(--cyan);
+  color: var(--score-color, var(--cyan));
   font-size: 16px;
   font-weight: 800;
 }
@@ -2171,27 +2171,6 @@ footer {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.hosted-schedule-toggle {
-  display: grid;
-  width: 28px;
-  height: 28px;
-  place-items: center;
-  color: var(--cyan);
-  border: 1px solid rgba(82, 214, 199, 0.28);
-  border-radius: 50%;
-}
-
-.hosted-schedule-toggle::before {
-  content: "+";
-  font-size: 19px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.hosted-schedule-panel[open] .hosted-schedule-toggle::before {
-  content: "\2212";
 }
 
 .hosted-schedule-list {
@@ -3798,20 +3777,6 @@ dd {
   display: none;
 }
 
-.location-research-panel summary::after,
-.candidate-site-form-details summary::after {
-  content: "+";
-  color: var(--accent-bright);
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.location-research-panel[open] summary::after,
-.candidate-site-form-details[open] summary::after {
-  content: "−";
-}
-
 .location-research-panel summary span:first-child {
   display: grid;
   gap: 5px;
@@ -5311,11 +5276,16 @@ footer {
 #hosted-tonight-panel .compact-condition-message { margin: 8px 0 12px; }
 #hosted-tonight-panel .hosted-score-command { display: block; padding: 0; border: 0; box-shadow: none; background: none; }
 #hosted-tonight-panel .hosted-opportunity-score { margin-top: 12px; }
-#hosted-tonight-panel .hosted-opportunity-total { display: flex; align-items: center; gap: 12px; }
-#hosted-tonight-panel .hosted-opportunity-reading { width: auto; height: auto; min-width: 0; min-height: 0; background: none; border: 0; box-shadow: none; border-radius: 0; }
-#hosted-tonight-panel .hosted-opportunity-reading::before,
-#hosted-tonight-panel .hosted-opportunity-reading::after { display: none; }
-#hosted-tonight-panel #hosted-opportunity-score { font-size: 26px; }
+#hosted-tonight-panel .hosted-opportunity-total { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+#hosted-tonight-panel .hosted-opportunity-reading { width: 148px; height: 148px; min-width: 0; min-height: 0; background: #07161e; border: 1px solid var(--score-color); box-shadow: inset 0 0 28px var(--score-tint); border-radius: 50%; }
+#hosted-tonight-panel #hosted-opportunity-score { font-size: 32px; }
+.hosted-opportunity-score { --score-color: #a5b4bb; --score-tint: #a5b4bb18; }
+.hosted-opportunity-score[data-tone="excellent"] { --score-color: #65d5a0; --score-tint: #65d5a024; }
+.hosted-opportunity-score[data-tone="good"] { --score-color: #64cfcf; --score-tint: #64cfcf24; }
+.hosted-opportunity-score[data-tone="fair"] { --score-color: #e9c16a; --score-tint: #e9c16a24; }
+.hosted-opportunity-score[data-tone="challenging"] { --score-color: #f1a16d; --score-tint: #f1a16d24; }
+.hosted-opportunity-score[data-tone="poor"] { --score-color: #ed8b83; --score-tint: #ed8b8324; }
+@media (prefers-reduced-motion: reduce) { .hosted-opportunity-reading, .hosted-opportunity-reading::before { animation: none; transition: none; } }
 #hosted-tonight-panel .hosted-score-components { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .compact-disclosure > summary, .compact-planning-details > summary { cursor: pointer; padding: 10px 0; color: var(--text); font-weight: 600; }
 .compact-disclosure > summary:focus-visible, .compact-planning-details > summary:focus-visible { outline: 2px solid var(--teal, #5bddcd); outline-offset: 3px; }
@@ -5423,7 +5393,7 @@ body.initial-load footer { display: none !important; }
 #hosted-tonight-panel .hosted-opportunity-score { display: grid; grid-template-columns: 160px minmax(0,1fr); column-gap: 24px; }
 #hosted-tonight-panel .hosted-opportunity-score > .eyebrow { grid-column: 1; }
 #hosted-tonight-panel .hosted-opportunity-total { grid-column: 1; align-self: start; margin-top: 14px; }
-#hosted-tonight-panel #hosted-opportunity-score { font-size: 42px; }
+#hosted-tonight-panel #hosted-opportunity-score { font-size: 32px; }
 #hosted-tonight-panel .hosted-score-components { grid-column: 2; grid-row: 1 / span 2; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
 #hosted-tonight-panel .hosted-score-component { padding: 10px; min-width: 0; }
 #hosted-tonight-panel .hosted-score-factor-description { display: none; }
@@ -5441,7 +5411,33 @@ body.initial-load footer { display: none !important; }
 #hosted-tonight-panel .hosted-score-factor-label em { display: none; }
 #hosted-tonight-panel .hosted-schedule-settings { padding: 0; background: none; border: 0; font-size: 13px; color: var(--muted); }
 #hosted-tonight-panel .hosted-schedule-list { grid-template-columns: repeat(var(--target-columns, 3), minmax(0, 1fr)); }
-#hosted-tonight-panel .hosted-opportunity-reading { aspect-ratio: auto; }
+#hosted-tonight-panel .hosted-opportunity-reading { aspect-ratio: 1; }
 #hosted-tonight-panel .hosted-opportunity-score { min-height: 0; row-gap: 10px; }
 @media(max-width:1200px) { #hosted-tonight-panel .hosted-schedule-list { grid-template-columns: repeat(auto-fit,minmax(min(100%,280px),1fr)); } }
 @media(max-width:760px) { #hosted-tonight-panel .hosted-schedule-list { grid-template-columns: minmax(0,1fr); } }
+
+/* Native details provide keyboard activation and accessible expanded state.
+   One right-aligned chevron covers static and dynamically rendered disclosures. */
+#operator-page details > summary {
+  position: relative;
+  min-height: 44px;
+  padding-right: 32px;
+  list-style: none;
+  cursor: pointer;
+  align-content: center;
+}
+#operator-page details > summary::-webkit-details-marker { display: none; }
+#operator-page details > summary::marker { content: ""; }
+#operator-page details > summary::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+#operator-page details[open] > summary::after { transform: translateY(-50%) rotate(225deg); }
+#operator-page details > summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
