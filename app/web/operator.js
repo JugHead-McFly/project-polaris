@@ -1409,6 +1409,7 @@ const renderTargetGeometry = (target) => {
 };
 
 const renderTargetProjectContext = (target) => {
+  renderFilterProgress(byId("hosted-filter-progress"), target?.filter_progress);
   const container = byId("hosted-target-project");
   container.hidden = !target;
   if (!target) {
@@ -1469,6 +1470,10 @@ const renderLibraryHistory = (history) => {
   container.replaceChildren();
   for (const target of history?.targets || []) {
     appendTextElement(container, "p", "", `${target.object}: ${target.hours} h recorded / ${target.goal_hours} h goal; ${target.remaining_hours ? `${target.remaining_hours} h remaining` : "goal reached"}`);
+    if (target.filter_progress?.length) {
+      const filters = appendTextElement(container, "div", "", "");
+      renderFilterProgress(filters, target.filter_progress);
+    }
   }
   if (history?.legacy?.record_count) {
     const legacy = document.createElement("details");
@@ -1479,6 +1484,32 @@ const renderLibraryHistory = (history) => {
     }
     container.appendChild(legacy);
   }
+};
+
+const renderFilterProgress = (container, rows) => {
+  container.replaceChildren();
+  container.hidden = !rows?.length;
+  if (container.hidden) return;
+  appendTextElement(container, "p", "filter-progress-note", "Captured by filter · quality unassessed. The existing goal is shared across the target.");
+  const list = appendTextElement(container, "dl", "filter-progress", "");
+  for (const row of rows) {
+    const item = appendTextElement(list, "div", "", "");
+    appendTextElement(item, "dt", "", row.filter);
+    appendTextElement(item, "dd", "", `${(row.captured_seconds / 3600).toFixed(2)} h captured · ${row.captured_frames} frames`);
+    appendTextElement(item, "dd", "", "Usable / rejected: not assessed");
+  }
+};
+
+const renderForecastAgreement = (agreement) => {
+  const panel = byId("forecast-agreement");
+  panel.dataset.state = agreement?.state || "unavailable";
+  const available = agreement && agreement.state !== "unavailable";
+  setText("forecast-agreement-label", available
+    ? `${agreement.label}${agreement.partial ? " · partial window" : ""}`
+    : "Forecast comparison unavailable");
+  setText("forecast-agreement-detail", available
+    ? `${agreement.providers.join(" + ")}: average cloud-cover difference ${agreement.average_spread_points} percentage points; largest ${agreement.maximum_spread_points}. Compared ${agreement.compared_minutes} minutes (${agreement.coverage_percent}% of darkness), ${displayDateTime(agreement.start)} to ${displayDateTime(agreement.end)}. Source agreement is not a clear-sky probability; the underlying models may overlap.`
+    : agreement?.reason || "Matching hours from two forecast sources are not available.");
 };
 
 const renderHostedTonight = (data) => {
@@ -1501,6 +1532,7 @@ const renderHostedTonight = (data) => {
 
   const target = data.recommended_target || data.backup_target;
   renderOpportunityScore(data.opportunity_score);
+  renderForecastAgreement(data.weather?.forecast_agreement);
 
 
   setText(

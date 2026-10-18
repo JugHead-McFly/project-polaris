@@ -339,6 +339,10 @@
                 Comparing weather, darkness, Moon conditions, and target visibility.
               </p>
           <div class="hosted-score-command">
+            <details class="forecast-agreement" id="forecast-agreement">
+              <summary id="forecast-agreement-label">Forecast comparison unavailable</summary>
+              <p id="forecast-agreement-detail"></p>
+            </details>
             <div class="hosted-opportunity-score" aria-label="Tonight's opportunity score">
               <p class="eyebrow">Opportunity score</p>
               <div class="hosted-opportunity-total">
@@ -444,6 +448,7 @@
                 <dd id="hosted-target-history">—</dd>
               </div>
             </dl>
+            <div id="hosted-filter-progress" hidden></div>
             <div class="hosted-target-geometry" id="hosted-target-geometry" hidden>
               <div class="hosted-target-geometry-heading">
                 <div>
