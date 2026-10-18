@@ -1,4 +1,5 @@
 from app.core.request_timing import request_timings
+from app.core.runtime_diagnostics import request_scope, run_art_refresh, mark
 import asyncio
 import os
 import tempfile
@@ -80,7 +81,7 @@ def apply_browser_security_headers(response):
 
 async def maintain_target_art_cache() -> None:
     while True:
-        statuses = await asyncio.to_thread(refresh_target_art_cache)
+        statuses = await asyncio.to_thread(run_art_refresh, refresh_target_art_cache)
         logger.info("target_art_cache_refresh statuses=%s", statuses)
         await asyncio.sleep(24 * 60 * 60)
 
@@ -132,7 +133,7 @@ app = FastAPI(
 @app.middleware("http")
 async def log_request(request: Request, call_next):
     request_id = uuid4().hex[:12]
-    with request_timings(request_id) as timings:
+    with request_scope(request_id, request.url.path == "/tonight"), request_timings(request_id) as timings:
         started_at = perf_counter()
 
         try:
@@ -156,7 +157,7 @@ async def log_request(request: Request, call_next):
                 duration_ms,
                 type(error).__name__,
             )
-            return apply_browser_security_headers(
+            response = apply_browser_security_headers(
                 JSONResponse(
                     status_code=500,
                     content={
@@ -169,6 +170,8 @@ async def log_request(request: Request, call_next):
                     },
                 )
             )
+            mark('response_headers_ready')
+            return response
 
         duration_ms = round((perf_counter() - started_at) * 1000, 1)
         response.headers["X-Request-ID"] = request_id
@@ -185,6 +188,7 @@ async def log_request(request: Request, call_next):
             response.status_code,
             duration_ms,
         )
+        mark('response_headers_ready')
         return response
 
 

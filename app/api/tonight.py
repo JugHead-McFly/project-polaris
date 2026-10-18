@@ -376,6 +376,8 @@ def _build_tonight_payload(
     equatorial_mode_enabled: bool = False,
     include_forecast_summary: bool = True,
 ):
+    from app.core.runtime_diagnostics import mark
+    mark('route_entry')
     try:
         observatory = get_planning_context(
             db,
