@@ -8,6 +8,7 @@ from functools import lru_cache
 from typing import Dict, Optional
 
 from app.core.config import settings
+from app.core.request_timing import timed
 
 
 CATALOG_PATH = settings.BASE_DIR / "app" / "data" / "target_art_library.json"
@@ -61,6 +62,7 @@ def _fallback_category(target_type: Optional[str]) -> str:
 
 
 @lru_cache(maxsize=1)
+@timed("art_catalog_load")
 def _catalog() -> Dict:
     data = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
     if data.get("target_count") != 1000 or len(data.get("targets", [])) != 1000:
@@ -68,11 +70,12 @@ def _catalog() -> Dict:
 
     by_slug = {}
     by_exact_name = {}
+    resolved_root = ASSET_ROOT.resolve()
     for entry in data["targets"]:
         slug = entry["slug"]
         asset = entry["asset"]
         asset_path = (ASSET_ROOT / asset).resolve()
-        if ASSET_ROOT.resolve() not in asset_path.parents or not asset_path.is_file():
+        if resolved_root not in asset_path.parents or not asset_path.is_file():
             raise RuntimeError(f"Unsafe or missing bundled target art: {asset}")
         by_slug[slug] = entry
         by_exact_name.setdefault(_normalize(entry["display_name"]), []).append(entry)
@@ -87,6 +90,11 @@ def _catalog() -> Dict:
         "by_slug": by_slug,
         "by_exact_name": by_exact_name,
     }
+
+
+def prepare_target_art_library():
+    """Validate the same bundled assets before the first schedule request."""
+    _catalog()
 
 
 def _exact_entry(object_name: Optional[str], common_name: Optional[str]) -> Optional[Dict]:

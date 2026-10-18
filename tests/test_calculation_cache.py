@@ -19,6 +19,11 @@ class DisabledCache:
     def reset(self, token): pass
 
 
+def original_moon_events(context, at):
+    observer = astronomy._get_observer(context)
+    return astronomy._next_moonrise(observer, at), astronomy._next_moonset(observer, at)
+
+
 def test_altitude_cache_concurrent_calculations_and_exception_cleanup():
     from concurrent.futures import ThreadPoolExecutor
     from threading import Barrier, local
@@ -178,6 +183,7 @@ def test_exact_cache_scope_location_fold_and_mutation():
 
 @pytest.mark.parametrize('date,latitude,longitude,zone', [
     ('2026-10-18T02:02:00+00:00', 33.4484, -112.074, 'America/Phoenix'),
+    ('2026-10-18T18:24:00+00:00', 33.4484, -112.074, 'America/Phoenix'),
     ('2026-12-16T02:02:00+00:00', 33.4484, -112.074, 'America/Phoenix'),
     ('2026-11-01T04:30:00+00:00', 40.7, -74, 'America/New_York'),
     ('2026-02-18T10:00:00+00:00', -33.8, 151.2, 'Australia/Sydney'),
@@ -209,7 +215,9 @@ def test_55_candidate_plan_and_schedule_exactly_match_without_reuse(date, latitu
             patch.object(astronomy, 'get_body', wraps=astronomy.get_body) as bodies:
         args = dict(observatory=context, use_capture_history=False,
                     capture_progress={'M31': {'seconds': 999999}}, target_names=list(candidates.values()))
-        with patch.object(cache, '_values', DisabledCache()):
+        with patch.object(cache, '_values', DisabledCache()), \
+                patch.object(astronomy, '_next_moon_events', original_moon_events), \
+                patch.object(astronomy, '_fixed_catalog_coordinate', astronomy._fixed_catalog_coordinate.__wrapped__):
             before = planner.get_tonight_plan(db, **args)
         before_calls = bodies.call_count
         with patch.object(planner, 'prepare_fixed_target_altitudes'), patch.object(planner, 'prepare_fixed_target_details'):
