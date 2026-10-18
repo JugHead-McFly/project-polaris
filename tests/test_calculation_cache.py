@@ -19,6 +19,72 @@ class DisabledCache:
     def reset(self, token): pass
 
 
+def test_altitude_cache_concurrent_calculations_and_exception_cleanup():
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier, local
+    barrier = Barrier(2)
+    worker = local()
+    at = datetime(2026, 10, 18, tzinfo=timezone.utc)
+    @cache.reuse_altitude_samples
+    def calculate(target, times, observatory=None):
+        worker.calls += 1
+        return [worker.value] * len(times)
+    @cache.astronomy_calculation
+    def run(value):
+        worker.calls, worker.value = 0, value
+        first = calculate('M31', [at], 'same-observatory')
+        barrier.wait(timeout=10)
+        assert calculate('M31', [at], 'same-observatory') == first == [value]
+        assert worker.calls == 1
+        return first
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        assert list(pool.map(run, [10.0, 20.0])) == [[10.0], [20.0]]
+    assert cache._values.get() is None
+    @cache.astronomy_calculation
+    def failed():
+        worker.calls, worker.value = 0, 99.0
+        calculate('M31', [at])
+        raise RuntimeError('fixture')
+    with pytest.raises(RuntimeError, match='fixture'):
+        failed()
+    assert cache._values.get() is None
+
+
+def test_nested_calculations_restore_outer_seeded_transit_values():
+    @cache.reuse_exact
+    def value(at, observatory=None): return 'computed'
+    at = datetime(2026, 10, 18, tzinfo=timezone.utc)
+    @cache.astronomy_calculation
+    def inner():
+        assert value(at, 'a') == 'computed'
+        value.seed_exact_result('inner', at, 'a')
+        assert value(at, 'a') == 'inner'
+    @cache.astronomy_calculation
+    def outer():
+        value.seed_exact_result('outer', at, 'a')
+        inner()
+        assert value(at, 'a') == 'outer'
+    outer()
+    assert value(at, 'a') == 'computed'
+
+
+def test_implicit_now_transit_is_resolved_before_cache_lookup():
+    first = datetime(2026, 10, 18, tzinfo=timezone.utc)
+    second = datetime(2026, 10, 19, tzinfo=timezone.utc)
+    class Clock:
+        instants = iter([first, second])
+        @classmethod
+        def now(cls, tz=None): return next(cls.instants)
+    context = ObservatoryContext('Synthetic', 33.4, -112.074, 'America/Phoenix')
+    with iers.conf.set_temp('auto_download', False), patch.object(astronomy, 'datetime', Clock):
+        @cache.astronomy_calculation
+        def run():
+            a = astronomy.get_transit_datetime('M31', observatory=context)
+            b = astronomy.get_transit_datetime('M31', observatory=context)
+            assert b > a
+        run()
+
+
 def test_altitude_sample_reuse_preserves_order_fold_context_and_lists():
     calls = []
     @cache.reuse_altitude_samples

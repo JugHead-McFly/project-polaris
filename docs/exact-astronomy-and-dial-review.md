@@ -78,6 +78,16 @@ No production records, observations, calibration output or backups were changed.
 No new merge or deployment is authorized. Further release review/approval is
 required before deploying this branch.
 
+Independent release review completed with no blocking findings. The reviewer
+ran a separate 16-case real-Astropy experiment covering equator, both poles,
+circumpolar targets, Sydney, New York DST, moving Mars and unknown targets;
+scalar and optimized results matched. Browser checks were independently rerun.
+One nonblocking advisory was fixed: an omitted transit reference now resolves
+to the current instant before cache lookup. The reviewer reran all 16 edge
+cases after that hardening and approved the follow-up. Nineteen focused cache
+and timing tests passed, including new concurrent, nested, exception-cleanup
+and implicit-now checks. This adds three tests to the earlier 122-test total.
+
 ## Storage and feature inventory requested by the operator
 
 Catalog facts are bundled files, not a target database table:

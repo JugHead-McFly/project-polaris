@@ -290,13 +290,20 @@ def is_observable(
     )
 
 
-@reuse_exact
-@timed("transit")
 def get_transit_datetime(
     target_name: str,
     reference_datetime: Optional[datetime] = None,
     observatory: Optional[ObservatoryContext] = None,
 ) -> Optional[datetime]:
+    context = use_observatory_context(observatory)
+    # Resolve an implicit "now" before cache lookup; None is not an instant.
+    reference = normalize_datetime(reference_datetime, observatory=context)
+    return _get_transit_datetime_at(target_name, reference, context)
+
+
+@reuse_exact
+@timed("transit")
+def _get_transit_datetime_at(target_name, reference_datetime, observatory):
     context = use_observatory_context(observatory)
     normalized_reference = normalize_datetime(
         reference_datetime,
@@ -351,8 +358,8 @@ def prepare_fixed_target_transits(target_names, reference_datetime, observatory=
         SkyCoord(coordinates).reshape(1, -1), which="next",
     ).to_datetime(timezone=ZoneInfo(context.timezone_name))
     for name, result in zip(names, np.atleast_1d(transits)):
-        get_transit_datetime.seed_exact_result(result, name,
-            reference_datetime=reference_datetime, observatory=observatory)
+        _get_transit_datetime_at.seed_exact_result(result, name,
+            reference_datetime=normalize_datetime(reference_datetime, context), observatory=context)
 
 
 def get_transit_time(
