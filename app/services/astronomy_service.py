@@ -844,3 +844,84 @@ def get_darkness_info(
         "astronomical_darkness_start_at": dusk_local.isoformat() if dusk_local is not None else None,
         "astronomical_darkness_end_at": dawn_local.isoformat() if dawn_local is not None else None,
     }
+
+@timed("geometry_details_batch")
+def prepare_fixed_target_details(target_names, *, coarse_times, midpoint,
+                                 minimum_altitude, observatory=None):
+    """Prepare exact refinements and midpoint Moon separation in bounded chunks.
+
+    No current-time sample is created here. Unsupported/invalid targets and
+    failed optimization chunks retain the existing per-target calculation path.
+    """
+    if not calculation_scope_active() or not coarse_times or len(coarse_times) > 4096:
+        return
+    names, coordinates = [], []
+    for name in target_names:
+        normalized = name.strip().upper()
+        if normalized in SOLAR_SYSTEM_TARGETS or is_ephemeris_target(normalized):
+            continue
+        try:
+            coordinate = get_target_coordinate(normalized)
+        except ValueError:
+            continue
+        if coordinate is None:
+            continue
+        names.append(name)
+        coordinates.append(coordinate)
+        if len(names) == 64:
+            _prepare_detail_chunk(names, coordinates, coarse_times, midpoint,
+                                  minimum_altitude, observatory)
+            names, coordinates = [], []
+    if names:
+        _prepare_detail_chunk(names, coordinates, coarse_times, midpoint,
+                              minimum_altitude, observatory)
+
+
+def _prepare_detail_chunk(names, coordinates, coarse_times, midpoint,
+                          minimum_altitude, observatory):
+    from app.services.astronomy_samples import threshold_refinement_times
+    try:
+        coordinate_array = SkyCoord(coordinates)
+    except ValueError:
+        return
+    pairs, indices = [], []
+    for index, name in enumerate(names):
+        try:
+            altitudes = get_altitudes_at(name, coarse_times, observatory)
+        except ValueError:
+            continue
+        if any(value is None or not math.isfinite(value) for value in altitudes):
+            continue
+        if not any(value >= minimum_altitude for value in altitudes):
+            continue
+        for at in threshold_refinement_times(coarse_times, altitudes, minimum_altitude):
+            pairs.append((name, at))
+            indices.append(index)
+            if len(pairs) == 512:
+                _seed_refinement_pairs(coordinate_array, indices, pairs, observatory)
+                pairs, indices = [], []
+    if pairs:
+        _seed_refinement_pairs(coordinate_array, indices, pairs, observatory)
+    try:
+        values = coordinate_array.separation(_moon_coordinate_at(midpoint, observatory)).deg
+        results = [round(float(value), 1) for value in values]
+    except ValueError:
+        return
+    for name, result in zip(names, results):
+        if math.isfinite(result):
+            get_moon_separation_at.seed_exact_result(result, name, midpoint, observatory)
+
+
+def _seed_refinement_pairs(coordinates, indices, pairs, observatory):
+    try:
+        frame = AltAz(
+            obstime=Time([normalize_datetime(at, observatory).astimezone(timezone.utc)
+                          for _, at in pairs]), location=_get_location(observatory))
+        values = coordinates[indices].transform_to(frame).alt.deg
+        results = [round(float(value), 1) for value in values]
+    except ValueError:
+        # Do not replace a failed optimization with synthetic geometry.
+        return
+    for (name, at), result in zip(pairs, results):
+        if math.isfinite(result):
+            get_altitudes_at.seed_exact_samples(name, [at], [result], observatory)
