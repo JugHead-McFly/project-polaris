@@ -66,9 +66,10 @@ Reproduce focused frontend checks with
 
 ## Remaining work and constraints
 
-- Actual browser map rendering/tiles/clicks and a held-Leaflet-response hosted
-  startup check remain unverified. Browser-control Node REPL tool is unavailable;
-  no user's Chrome session was accessed. Synthetic Node tests are not visual QA.
+- Browser verification is now complete using the installed standalone Playwright
+  runtime and temporary headless Chrome; see browser-and-cpu-verification.md.
+  The app-browser tool remains unavailable, but that is no longer a verification
+  blocker. No user's Chrome session was accessed.
 - Remaining warm planner cost is dominated by per-target current altitude
   transforms. Fresh per-target timestamps are preserved. Replacing them with a
   common timestamp or interpolation would require a deliberate contract change;
