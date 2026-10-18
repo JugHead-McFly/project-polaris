@@ -199,7 +199,8 @@ def test_operator_dashboard_is_read_only_and_loads_local_assets():
     assert 'demoMode === "immaculate"' in script.text
     assert 'demoMode === "map-overlap"' in script.text
     assert 'id="location-map-demo"' in response.text
-    assert "/operator-assets/leaflet.js" in response.text
+    assert '<script defer src="/operator-assets/leaflet.js"' not in response.text
+    assert "/operator-assets/leaflet.js" in client.get("/operator-assets/loading.js").text
     assert ").slice(0, 3)" in script.text
     assert "setupMinutes = 5" in script.text
     assert "schedule-reason" not in script.text

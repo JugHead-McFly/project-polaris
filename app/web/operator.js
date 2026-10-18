@@ -1,6 +1,7 @@
 "use strict";
 
 const byId = (id) => document.getElementById(id);
+const ensureMapLibrary = createMapLibraryLoader(document, window);
 
 let loadingRun = null;
 let localPlanReady = false;
@@ -3702,7 +3703,8 @@ const BORTLE_NAMES = {
   9: "inner city sky",
 };
 
-const renderCaptureLocations = (data) => {
+const renderCaptureLocations = async (data) => {
+  const run = loadingRun;
   const container = byId("capture-location-map");
   const bortleMapKey = byId("bortle-map-key");
   bortleMapKey.replaceChildren();
@@ -3760,6 +3762,10 @@ const renderCaptureLocations = (data) => {
     return;
   }
 
+  try {
+    await ensureMapLibrary();
+  } catch (_) { /* Preserve the existing unavailable-map state. */ }
+  if (run && !run.current()) return;
   if (!window.L) {
     container.replaceChildren();
     appendTextElement(container, "div", "empty-state", "Interactive map controls are unavailable.");
@@ -4376,9 +4382,15 @@ const renderCandidateSites = (origin, sites) => {
 };
 
 const loadCandidateSites = async (origin) => {
+  const run = loadingRun;
   const response = await apiFetch("/candidate-sites", { cache: "no-store" });
   if (!response.ok) throw new Error(`Candidate sites endpoint returned ${response.status}.`);
-  renderCandidateSites(origin, await response.json());
+  const sites = await response.json();
+  try {
+    await ensureMapLibrary();
+  } catch (_) { /* Saved sites and directions remain useful without a map. */ }
+  if (run && !run.current()) return;
+  renderCandidateSites(origin, sites);
 };
 
 const updateCandidateSite = async (siteId, payload) => {
