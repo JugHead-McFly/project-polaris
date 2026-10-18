@@ -887,6 +887,8 @@ def get_tonight_plan(
                 "notes": ["No bounded astronomical-darkness interval is available for this date and location; no targets were allocated."]}
     from app.services.cloud_forecast_service import summarize_dark_window
     weather["cloud_dark_window"] = summarize_dark_window(weather, dark_start, dark_end)
+    from app.services.forecast_agreement_service import summarize_agreement
+    weather["forecast_agreement"] = summarize_agreement(weather, context, dark_start, dark_end)
 
     plans = []
     notes = []
