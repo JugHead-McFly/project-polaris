@@ -114,6 +114,7 @@ def test_valid_startup_configuration_is_ready(tmp_path):
         database_file=database_file,
         database_url=f"sqlite:///{database_file}",
         library_root=library_root,
+        require_local_capture_library=True,
         log_level="INFO",
         web_directory=web_directory,
     )
@@ -136,6 +137,7 @@ def test_preflight_reports_all_independent_configuration_failures(tmp_path):
         database_file=database_file,
         database_url=f"sqlite:///{database_file}",
         library_root=library_root / "missing",
+        require_local_capture_library=True,
         log_level="VERBOSE",
         web_directory=web_directory,
     )
