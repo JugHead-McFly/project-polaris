@@ -1,3 +1,5 @@
+Historical research record at commit7c630b6. The subsequent application integration and current status are documented in exact-geometry-integration.md.
+
 # Deeper latency investigation, 2026-10-18
 
 Isolated branch: codex/deeper-latency, base d783e4bd0cb0b5fe37a6e2e11a0588e7b00544aa.

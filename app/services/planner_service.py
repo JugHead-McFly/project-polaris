@@ -26,6 +26,7 @@ from app.services.astronomy_service import (
     get_transit_time,
     prepare_fixed_target_transits,
     prepare_fixed_target_altitudes,
+    prepare_fixed_target_details,
 )
 from app.services.imaging_settings_service import apply_tonight_settings
 from app.services.mosaic_service import MOSAIC_NOTE, mosaic_advice
@@ -233,14 +234,9 @@ def get_dark_visibility(
 
     # Refine only threshold crossings to one-minute sampling. This preserves
     # efficient coarse sky curves without ending a run fifteen minutes early.
-    refinements = []
-    for (left, low), (right, high) in zip(altitude_samples, altitude_samples[1:]):
-        if (low >= MINIMUM_ALTITUDE_DEGREES) == (high >= MINIMUM_ALTITUDE_DEGREES):
-            continue
-        at = left.astimezone(timezone.utc) + timedelta(minutes=1)
-        while at < right.astimezone(timezone.utc):
-            refinements.append(at.astimezone(dark_start.tzinfo))
-            at += timedelta(minutes=1)
+    from app.services.astronomy_samples import threshold_refinement_times
+    refinements = list(threshold_refinement_times(
+        sample_times, sampled_altitudes, MINIMUM_ALTITUDE_DEGREES))
     if refinements:
         refined_altitudes = get_altitudes_at(target_name=object_name,
             observation_datetimes=refinements, observatory=observatory)
@@ -940,6 +936,10 @@ def get_tonight_plan(
                 (dark_end.astimezone(timezone.utc) - dark_start.astimezone(timezone.utc)) / 2).astimezone(dark_start.tzinfo)
     prepare_fixed_target_altitudes(planning_targets,
         [*generate_sample_times(dark_start, dark_end), midpoint], context)
+    prepare_fixed_target_details(planning_targets,
+        coarse_times=generate_sample_times(dark_start, dark_end),
+        midpoint=midpoint, minimum_altitude=MINIMUM_ALTITUDE_DEGREES,
+        observatory=context)
 
     for object_name in planning_targets:
         rig = get_rig_profile(context.rig_profile_key or "")

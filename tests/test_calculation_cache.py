@@ -212,9 +212,12 @@ def test_55_candidate_plan_and_schedule_exactly_match_without_reuse(date, latitu
         with patch.object(cache, '_values', DisabledCache()):
             before = planner.get_tonight_plan(db, **args)
         before_calls = bodies.call_count
-        with patch.object(planner, 'prepare_fixed_target_altitudes'):
+        with patch.object(planner, 'prepare_fixed_target_altitudes'), patch.object(planner, 'prepare_fixed_target_details'):
             deployed_baseline = planner.get_tonight_plan(db, **args)
         assert deployed_baseline == before
+        with patch.object(planner, 'prepare_fixed_target_details'):
+            reviewed_common_grid_baseline = planner.get_tonight_plan(db, **args)
+        assert reviewed_common_grid_baseline == before
         bodies.reset_mock()
         after = planner.get_tonight_plan(db, **args)
         assert after == before

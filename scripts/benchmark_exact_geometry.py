@@ -17,8 +17,6 @@ class Clock(datetime):
 original['datetime']=Clock
 astronomy.datetime=Clock
 prepare_planning_runtime()
-from probe_exact_geometry import install
-install()
 '''
 source=source.replace('results = []',injection+'\nresults = []').replace("patch.object(scheduler, 'datetime', datetime)","patch.object(scheduler, 'datetime', Clock)")
 exec(compile(source,str(root/'scripts/benchmark_tonight.py'),'exec'),{'__file__':str(root/'scripts/benchmark_tonight.py')})
