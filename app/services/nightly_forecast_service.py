@@ -143,20 +143,28 @@ def collect_nightly(db, *, user_id, observatory, now=None,
 
     # Catch up after dawn, across restarts. Stored coordinates never follow later
     # changes to the home. No raw satellite files accumulate on the server.
-    pending = db.query(NightlyForecast).filter(
+    pending = db.query(NightlyForecast.id).filter(
         NightlyForecast.user_id == user_id, NightlyForecast.observatory_id == observatory.id,
         NightlyForecast.window_end < now-timedelta(minutes=30),
         NightlyForecast.window_end > now-timedelta(days=14),
+        NightlyForecast.observation["complete"].as_boolean().is_not(True),
     ).order_by(NightlyForecast.window_start).all()
     budget = 24
-    for night in pending:
+    for (night_id,) in pending:
+        night = db.query(NightlyForecast).filter_by(
+            id=night_id, user_id=user_id, observatory_id=observatory.id,
+        ).one()
         if night.observation.get("complete"):
             continue
+        # Commits expire ORM attributes. Keep this immutable sampling context
+        # local so every sample does not reload the growing observation JSON.
+        latitude, longitude = night.latitude, night.longitude
+        night_start, night_end = utc(night.window_start), utc(night.window_end)
         observation = deepcopy(night.observation)
         cells = observation.get("cells")
         if cells is None:
             cells = []
-            at, finish = utc(night.window_start), utc(night.window_end)
+            at, finish = night_start, night_end
             while at < finish:
                 stop = min(finish, at+timedelta(minutes=5))
                 cells.append({"target": (at+(stop-at)/2).isoformat(),
@@ -168,9 +176,9 @@ def collect_nightly(db, *, user_id, observatory, now=None,
             budget -= 1
             cell["attempts"] += 1
             try:
-                cell["reference"] = satellite_fetch(datetime.fromisoformat(cell["target"]), night.latitude, night.longitude)
+                cell["reference"] = satellite_fetch(datetime.fromisoformat(cell["target"]), latitude, longitude)
                 scan = datetime.fromisoformat(cell["reference"]["scan_midpoint"])
-                if not utc(night.window_start) <= utc(scan) < utc(night.window_end):
+                if not night_start <= utc(scan) < night_end:
                     cell["reference"] = {**cell["reference"], "status": "outside_darkness_window"}
                 report["satellite_samples"] += 1
             except Exception:
@@ -181,12 +189,13 @@ def collect_nightly(db, *, user_id, observatory, now=None,
             night.observation = {"cells": cells, "complete": False}
             db.commit()
         complete = all(c.get("reference") or c["attempts"] >= 3 for c in cells)
-        night.observation = {"cells": cells, "complete": complete,
+        final_observation = {"cells": cells, "complete": complete,
                              **observation_summary(cells), "updated_at": utc(clock()).isoformat()}
+        night.observation = final_observation
         db.commit()
         if complete:
             report["processed_nights"] += 1
-            if night.observation["adequate"]:
+            if final_observation["adequate"]:
                 report["completed_nights"] += 1
             else:
                 report["inadequate_nights"] += 1
