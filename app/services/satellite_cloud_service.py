@@ -14,6 +14,7 @@ import xml.etree.ElementTree as ET
 
 import httpx
 import numpy as np
+from sqlalchemy import String, cast, or_
 
 from app.models import ForecastAccuracySnapshot
 
@@ -155,6 +156,9 @@ def collect_satellite_references(db, *, user_id, observatory, fetch=fetch_refere
         ForecastAccuracySnapshot.forecast_for < now-timedelta(minutes=15),
         ForecastAccuracySnapshot.forecast_for >= now-timedelta(days=90),
         ForecastAccuracySnapshot.forecast_created_at < ForecastAccuracySnapshot.forecast_for,
+        # JSON columns may contain SQL NULL or JSON null; both load as None.
+        or_(ForecastAccuracySnapshot.satellite_cloud_observation.is_(None),
+            cast(ForecastAccuracySnapshot.satellite_cloud_observation, String) == "null"),
     ).order_by(ForecastAccuracySnapshot.forecast_for).all()
     groups = {}
     for row in rows:
