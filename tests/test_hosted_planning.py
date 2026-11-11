@@ -176,7 +176,9 @@ def test_hosted_plan_requires_an_observing_home():
     assert raised.value.status_code == 409
 
 
-def test_hosted_read_only_plan_reports_saved_forecast_history():
+def test_hosted_read_only_plan_reports_saved_forecast_history_when_enabled(monkeypatch):
+    from app.core.config import settings
+    monkeypatch.setattr(settings, "FORECAST_ACCURACY_ENABLED", True)
     engine, db = _database()
     try:
         profile = Profile(user_id=ALICE_ID)

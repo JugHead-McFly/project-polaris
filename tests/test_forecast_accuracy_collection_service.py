@@ -142,7 +142,9 @@ def test_cli_skips_an_owner_when_a_second_worker_already_holds_the_lock(monkeypa
     from app.database import database
     from app.services import nightly_forecast_service
     from scripts import collect_forecast_accuracy as cli
+    from app.core.config import settings
 
+    monkeypatch.setattr(settings, "FORECAST_ACCURACY_ENABLED", True)
     factory = _session_factory()
     monkeypatch.setenv(cli.USER_IDS_ENV, str(ALICE_ID))
     monkeypatch.setattr(database, "SessionLocal", factory)

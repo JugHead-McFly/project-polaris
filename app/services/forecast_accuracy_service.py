@@ -616,3 +616,13 @@ def unavailable_forecast_accuracy_summary() -> Dict:
         "horizon_buckets": [],
         "has_horizon_analysis": False,
     }
+
+
+def paused_forecast_accuracy_summary() -> Dict:
+    """A status placeholder, without reading or modifying archived evidence."""
+    return {
+        **unavailable_forecast_accuracy_summary(),
+        "state": "paused",
+        "label": "Forecast accuracy paused",
+        "message": "Accuracy collection and assessment are paused. Existing history is preserved and was not loaded.",
+    }

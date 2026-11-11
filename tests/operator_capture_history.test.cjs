@@ -25,20 +25,88 @@ test('older records stay collapsed and separate from verified hours', () => {
   assert.equal(children.length,0);
 });
 
-test('target card distinguishes unassessed quality and synced sessions from zero', () => {
+const projectRenderer = () => {
   const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
   const code = source.slice(source.indexOf('const renderTargetProjectContext ='), source.indexOf('const renderLibraryHistory ='));
   const labels = {};
+  const container = {};
   const render = vm.runInNewContext(code + '\nrenderTargetProjectContext;', {
     setText: (id, value) => labels[id] = value,
-    byId: () => ({}), displayHours: value => `${value} hr`, renderFilterProgress: () => {},
+    byId: () => container, displayHours: value => `${value} hr`, renderFilterProgress: () => {},
   });
-  render({best_quality: null, capture_count: 0, session_count: 2, current_hours: 3.11, goal_hours: 5, remaining_hours: 1.89});
+  return {render, labels, container};
+};
+
+test('target card shows only total verified capture time, without date or frame count', () => {
+  const {render, labels} = projectRenderer();
+  render({best_quality: null, capture_count: 0, session_count: 2,
+    current_hours: 3.11, goal_hours: 5, remaining_hours: 1.89,
+    synced_capture_history: {session_count: 2, latest_session_at: '2026-10-31T23:30:00-07:00',
+      total_integration_seconds: 8100, frame_count: 270}});
   assert.equal(labels['hosted-target-quality'], 'Not assessed');
-  assert.equal(labels['hosted-target-history'], '2 sessions');
+  assert.equal(labels['hosted-target-history'], 'Total captured: 2h 15m (verified records)');
+  assert.doesNotMatch(labels['hosted-target-history'], /session|Nov|2026|UTC|frame|270/i);
   render({best_quality: 0, capture_count: 1});
   assert.equal(labels['hosted-target-quality'], '0%');
-  assert.equal(labels['hosted-target-history'], '1 capture');
+  assert.equal(labels['hosted-target-history'], 'Verified capture time unavailable');
+});
+
+test('unknown capture time never falls back to recorded or planned frames, or becomes zero', () => {
+  const {render, labels} = projectRenderer();
+  const history = {session_count: 1, latest_session_at: null, total_integration_seconds: null, frame_count: 1200};
+  render({synced_capture_history: history, planned_subframes: 9000, additional_subframes_needed: 8000});
+  assert.equal(labels['hosted-target-history'], 'Verified capture time unavailable');
+  render({synced_capture_history: {...history, frame_count: null}, planned_subframes: 9000});
+  assert.equal(labels['hosted-target-history'], 'Verified capture time unavailable');
+  render({synced_capture_history: {...history, latest_session_at: 'malformed', total_integration_seconds: 0}});
+  assert.equal(labels['hosted-target-history'], 'Total captured: 0s (verified records)');
+  render({synced_capture_history: {...history, total_integration_seconds: 30}});
+  assert.equal(labels['hosted-target-history'], 'Total captured: 30s (verified records)');
+  for (const seconds of [undefined, NaN, Infinity, -1]) {
+    render({synced_capture_history: {...history, total_integration_seconds: seconds}});
+    assert.equal(labels['hosted-target-history'], 'Verified capture time unavailable');
+  }
+});
+
+test('switching targets clears stale history, including empty, legacy-only and no target', () => {
+  const {render, labels, container} = projectRenderer();
+  render({synced_capture_history: {session_count: 1, latest_session_at: '2026-10-31T00:00:00Z', total_integration_seconds: 3600}});
+  assert.equal(labels['hosted-target-history'], 'Total captured: 1h (verified records)');
+  render({synced_capture_history: {session_count: 0, legacy_record_count: 2}, planned_subframes: 500});
+  assert.equal(labels['hosted-target-history'], 'No synced capture records · older stack records only');
+  render({synced_capture_history: {session_count: 0, legacy_record_count: 0}});
+  assert.equal(labels['hosted-target-history'], 'No synced capture records');
+  render({synced_capture_history: null});
+  assert.equal(labels['hosted-target-history'], 'Verified capture time unavailable');
+  render(null);
+  assert.equal(labels['hosted-target-history'], '—');
+  assert.equal(container.hidden, true);
+});
+
+test('plan loading and errors never become empty history and superseded requests cannot overwrite it', async () => {
+  const source = fs.readFileSync(path.join(__dirname, '../app/web/operator.js'), 'utf8');
+  const code = source.slice(source.indexOf('const loadHostedTonight ='), source.indexOf('const saveHostedPlanFeedback ='));
+  const labels = {}, results = [];
+  let resolveRequest, rejectRequest, current = true;
+  const run = {current: () => current, request: () => new Promise((resolve, reject) => {resolveRequest = resolve; rejectRequest = reject;}), finish: () => {}};
+  const load = vm.runInNewContext(code + '\nloadHostedTonight;', {
+    targetArtPreviewMode: false, loadingRun: null, latestHostedTonightData: {},
+    loadingCoordinator: {begin: () => run}, setHostedRefreshState: () => {}, showHostedTonight: () => {},
+    setText: (id, value) => labels[id] = value, byId: () => ({checked: false}),
+    renderHostedTonight: value => results.push(value),
+  });
+  let pending = load();
+  assert.equal(labels['hosted-target-history'], 'Loading capture time…');
+  rejectRequest(new Error('Fixture failure'));
+  await pending;
+  assert.equal(labels['hosted-target-history'], 'Verified capture time unavailable');
+  pending = load();
+  current = false;
+  labels['hosted-target-history'] = 'New target history';
+  resolveRequest({recommended_target: {object: 'Old target'}});
+  await pending;
+  assert.equal(labels['hosted-target-history'], 'New target history');
+  assert.deepEqual(results, []);
 });
 
 test('hosted progress shows imported time and completed goal without inventing quality', () => {

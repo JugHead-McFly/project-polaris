@@ -32,6 +32,14 @@ def parse_user_ids(value: str) -> tuple[UUID, ...]:
 
 
 def main() -> None:
+    from app.core.config import settings
+
+    # Stop before importing collectors, opening sessions, parsing the tenant
+    # allowlist or contacting providers. The scheduled service can remain intact.
+    if not settings.FORECAST_ACCURACY_ENABLED:
+        print(json.dumps({"status": "paused", "collection_enabled": False}))
+        return
+
     from app.services.forecast_accuracy_collection_service import (
         collect_forecast_accuracy,
     )

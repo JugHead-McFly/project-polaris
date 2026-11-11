@@ -6,7 +6,7 @@ import yaml
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_render_blueprint_keeps_the_web_service_free_and_deliberate():
+def test_render_blueprint_preserves_approved_web_plan_and_deploy_constraints():
     blueprint = yaml.safe_load(
         (PROJECT_ROOT / "render.yaml").read_text()
     )
@@ -14,7 +14,8 @@ def test_render_blueprint_keeps_the_web_service_free_and_deliberate():
 
     assert service["type"] == "web"
     assert service["runtime"] == "python"
-    assert service["plan"] == "free"
+    # d75336de aligned the Blueprint with the approved compute trial.
+    assert service["plan"] == "0.5c-512mb"
     assert service["branch"] == "develop"
     assert service["autoDeployTrigger"] == "commit"
     assert service["healthCheckPath"] == "/health/ready"
@@ -83,3 +84,11 @@ def test_render_blueprint_schedules_nightly_snapshot_checks_every_five_minutes()
             "name": "project-polaris-private-alpha",
             "envVarKey": secret_name,
         }
+
+
+def test_web_and_cron_release_configuration_keep_accuracy_paused():
+    blueprint = yaml.safe_load((PROJECT_ROOT / "render.yaml").read_text())
+    for service in blueprint["services"]:
+        environment = {item["key"]: item for item in service["envVars"]}
+        assert environment["POLARIS_FORECAST_ACCURACY_ENABLED"] == {
+            "key": "POLARIS_FORECAST_ACCURACY_ENABLED", "value": "false"}

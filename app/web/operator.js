@@ -533,6 +533,9 @@ const forecastReliabilityLabel = (data) => {
 };
 
 const renderForecastAccuracyHistory = (data) => {
+  const panel = byId("forecast-accuracy-history");
+  panel.hidden = !data || data.state === "paused";
+  if (panel.hidden) return;
   setText("forecast-confidence-state", `Forecast reliability: ${forecastReliabilityLabel(data)}`);
 };
 
@@ -1274,14 +1277,24 @@ const renderTargetProjectContext = (target) => {
       : "Not assessed",
   );
 
-  const captures = Number(target.capture_count);
+  const history = target.synced_capture_history;
+  let historyText = "Verified capture time unavailable";
+  if (history?.session_count === 0) {
+    historyText = "No synced capture records";
+    if (history.legacy_record_count > 0) historyText += " · older stack records only";
+  } else if (history?.session_count > 0) {
+    const seconds = history.total_integration_seconds;
+    if (seconds != null && Number.isFinite(seconds) && seconds >= 0) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const duration = hours ? `${hours}h${minutes ? ` ${minutes}m` : ""}`
+        : minutes ? `${minutes}m` : seconds > 0 && seconds < 1 ? "<1s" : `${Math.floor(seconds)}s`;
+      historyText = `Total captured: ${duration} (verified records)`;
+    }
+  }
   setText(
     "hosted-target-history",
-    target.session_count != null
-      ? `${target.session_count} session${target.session_count === 1 ? "" : "s"}`
-      : Number.isFinite(captures)
-      ? `${captures} capture${captures === 1 ? "" : "s"}`
-      : "No capture history yet",
+    historyText,
   );
 };
 
@@ -1459,6 +1472,7 @@ const loadHostedTonight = async () => {
   const run = loadingRun = loadingCoordinator.begin({ Observatory: "done", "Weather & plan": "loading" }, Boolean(latestHostedTonightData));
   setHostedRefreshState(true);
   showHostedTonight();
+  setText("hosted-target-history", "Loading capture time…");
   try {
     const eqEnabled = byId("hosted-eq-mode-checkbox").checked;
     const data = await run.request("Weather & plan", async signal => {
@@ -1472,7 +1486,10 @@ const loadHostedTonight = async () => {
     renderHostedTonight(data);
     run.finish();
   } catch (error) {
-    if (run.current()) run.finish(error.message);
+    if (run.current()) {
+      setText("hosted-target-history", "Verified capture time unavailable");
+      run.finish(error.message);
+    }
   } finally {
     if (loadingRun === run) setHostedRefreshState(false);
   }
