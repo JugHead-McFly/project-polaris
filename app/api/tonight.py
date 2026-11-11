@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.core.auth import CurrentUser
 from app.core.auth import get_current_user
+from app.core.config import settings
 from app.database.database import get_tenant_db
 from app.schemas.tonight import TonightResponse
 from app.data.rig_profiles import get_rig_profile
@@ -19,6 +20,7 @@ from app.services.forecast_accuracy_service import (
 )
 from app.services.forecast_accuracy_service import (
     unavailable_forecast_accuracy_summary,
+    paused_forecast_accuracy_summary,
 )
 from app.services.night_rating_service import calculate_night_rating
 from app.services.opportunity_score_service import calculate_opportunity_score
@@ -141,6 +143,7 @@ def _build_legacy_target(
     use_capture_history: bool = True,
     rig_profile_key: Optional[str] = None,
     capture_progress: Optional[Dict] = None,
+    legacy_targets: Optional[list] = None,
 ) -> Optional[Dict]:
     if planner_target is None:
         return None
@@ -165,6 +168,9 @@ def _build_legacy_target(
         target["best_quality"] = None
         from app.services.capture_history_service import filter_progress_for_target
         target["filter_progress"] = filter_progress_for_target(target["object"], capture_progress)
+        from app.services.capture_history_service import synced_history_for_target
+        target["synced_capture_history"] = synced_history_for_target(
+            target["object"], capture_progress, legacy_targets)
     target.update(
         {
             "observable": planner_target["observable"],
@@ -409,6 +415,7 @@ def _build_tonight_payload(
         use_capture_history=use_capture_history,
         rig_profile_key=observatory.rig_profile_key,
         capture_progress=progress_map(history) if history else None,
+        legacy_targets=history["legacy"]["targets"] if history else None,
     )
     backup_target = _build_legacy_target(
         db,
@@ -416,6 +423,7 @@ def _build_tonight_payload(
         use_capture_history=use_capture_history,
         rig_profile_key=observatory.rig_profile_key,
         capture_progress=progress_map(history) if history else None,
+        legacy_targets=history["legacy"]["targets"] if history else None,
     )
     rig_profile = get_rig_profile(observatory.rig_profile_key or "")
     opportunity_target = recommended_target or backup_target
@@ -449,8 +457,12 @@ def _build_tonight_payload(
             else None
         ),
     )
-    forecast_accuracy = unavailable_forecast_accuracy_summary()
-    if current_user.auth_mode != "local" and include_forecast_summary:
+    forecast_accuracy = (
+        unavailable_forecast_accuracy_summary()
+        if settings.FORECAST_ACCURACY_ENABLED
+        else paused_forecast_accuracy_summary()
+    )
+    if settings.FORECAST_ACCURACY_ENABLED and current_user.auth_mode != "local" and include_forecast_summary:
         hosted_observatory = get_primary_observatory(
             db,
             user_id=current_user.user_id,
@@ -564,11 +576,12 @@ def create_tonight_recommendation(
         observatory=observatory,
         payload=payload,
     )
-    payload["forecast_accuracy"] = track_forecast_accuracy(
-        db,
-        user_id=current_user.user_id,
-        observatory=observatory,
-        weather=payload["weather"],
-    )
+    if settings.FORECAST_ACCURACY_ENABLED:
+        payload["forecast_accuracy"] = track_forecast_accuracy(
+            db,
+            user_id=current_user.user_id,
+            observatory=observatory,
+            weather=payload["weather"],
+        )
     payload["recommendation_run_id"] = run.id
     return payload

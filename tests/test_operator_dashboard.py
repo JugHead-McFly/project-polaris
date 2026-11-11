@@ -676,6 +676,7 @@ def test_hosted_weather_summary_shows_honest_forecast_history_state():
     html = (operator_api.WEB_DIRECTORY / "operator.html").read_text(encoding="utf-8")
     assert 'id="forecast-confidence-state"' in html
     assert "Forecast reliability: Unavailable" in html
+    assert 'id="forecast-accuracy-history" aria-label="Forecast reliability" hidden' in html
     assert 'id="forecast-accuracy-tolerance"' not in html
     assert 'id="forecast-accuracy-nights"' not in html
     assert 'id="forecast-accuracy-chart"' not in html

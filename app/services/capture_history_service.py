@@ -100,6 +100,26 @@ def history_records_for_target(object_name, progress):
         yield name, record
 
 
+def synced_history_for_target(object_name, progress, legacy_targets=None):
+    """Presentation only, using the tenant history already loaded by the route.
+
+    Each progress entry contains disjoint source sessions. Resolve aliases once
+    per entry, without merging evidence identities or crediting older stacks.
+    None means unavailable; an empty map means a successful read with no records.
+    """
+    if progress is None:
+        return None
+    records = [record for _, record in history_records_for_target(object_name, progress)]
+    legacy = {row["object"]: row for row in (legacy_targets or [])}
+    legacy_count = sum(row["record_count"] for _, row in history_records_for_target(object_name, legacy))
+
+    seconds = [record.get("seconds") for record in records]
+    # Missing duration must not become zero or a misleading partial total.
+    total = sum(seconds) if seconds and all(value is not None for value in seconds) else None
+    return {"session_count": sum(record.get("sessions", 0) for record in records),
+            "total_integration_seconds": total, "legacy_record_count": legacy_count}
+
+
 def filter_progress_for_target(object_name, progress):
     totals = {}
     for _, record in history_records_for_target(object_name, progress):

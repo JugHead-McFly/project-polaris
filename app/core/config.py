@@ -37,6 +37,7 @@ class Settings:
         sentry_dsn: Optional[str] = None,
         sentry_allow_transmission: Optional[bool] = None,
         sentry_smoke_test_id: Optional[str] = None,
+        forecast_accuracy_enabled: Optional[bool] = None,
     ):
         self.ENVIRONMENT = (
             environment
@@ -65,6 +66,11 @@ class Settings:
             log_level
             or os.getenv("POLARIS_LOG_LEVEL", "INFO")
         ).upper().strip()
+        self.FORECAST_ACCURACY_ENABLED = (
+            forecast_accuracy_enabled
+            if forecast_accuracy_enabled is not None
+            else _environment_boolean("POLARIS_FORECAST_ACCURACY_ENABLED", default=False)
+        )
         self.REQUIRE_LOCAL_CAPTURE_LIBRARY = (
             require_local_capture_library
             if require_local_capture_library is not None

@@ -14,6 +14,20 @@ def test_local_settings_preserve_existing_database_default(tmp_path: Path):
     assert configured.DATABASE_URL == f"sqlite:///{tmp_path / 'polaris.db'}"
     assert configured.REQUIRE_LOCAL_CAPTURE_LIBRARY
     assert configured.SENTRY_SMOKE_TEST_ID is None
+    assert configured.FORECAST_ACCURACY_ENABLED is False
+
+
+@pytest.mark.parametrize("value, expected", [("true", True), ("false", False)])
+def test_forecast_accuracy_requires_explicit_opt_in(monkeypatch, value, expected):
+    monkeypatch.setenv("POLARIS_FORECAST_ACCURACY_ENABLED", value)
+    assert Settings().FORECAST_ACCURACY_ENABLED is expected
+    assert Settings(forecast_accuracy_enabled=False).FORECAST_ACCURACY_ENABLED is False
+
+
+def test_invalid_forecast_accuracy_switch_is_rejected(monkeypatch):
+    monkeypatch.setenv("POLARIS_FORECAST_ACCURACY_ENABLED", "sometimes")
+    with pytest.raises(ValueError, match="POLARIS_FORECAST_ACCURACY_ENABLED must be a boolean"):
+        Settings()
 
 
 def test_sentry_smoke_test_id_is_trimmed(tmp_path: Path):

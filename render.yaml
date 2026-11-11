@@ -20,6 +20,8 @@ services:
         value: "false"
       - key: POLARIS_LOG_LEVEL
         value: INFO
+      - key: POLARIS_FORECAST_ACCURACY_ENABLED
+        value: "false"
       - key: POLARIS_SENTRY_ALLOW_TRANSMISSION
         value: "false"
       - key: POLARIS_DATABASE_URL
@@ -50,6 +52,8 @@ services:
         value: "false"
       - key: POLARIS_LOG_LEVEL
         value: INFO
+      - key: POLARIS_FORECAST_ACCURACY_ENABLED
+        value: "false"
       - key: POLARIS_SENTRY_ALLOW_TRANSMISSION
         value: "false"
       - key: POLARIS_DATABASE_URL

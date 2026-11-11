@@ -93,7 +93,15 @@ class TargetCaptureSummary(BaseModel):
     quality_score: Optional[int] = None
 
 
+class SyncedCaptureHistory(BaseModel):
+    """Recorded integration totals; separate from legacy stacks and plans."""
+    session_count: int
+    total_integration_seconds: Optional[float] = None
+    legacy_record_count: int = 0
+
+
 class TargetSummary(BaseModel):
+    synced_capture_history: Optional[SyncedCaptureHistory] = None
     filter_progress: List[dict] = Field(default_factory=list)
     mosaic_required: bool = False
     mosaic_note: Optional[str] = None

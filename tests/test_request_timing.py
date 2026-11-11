@@ -61,15 +61,20 @@ def test_concurrent_requests_and_errors_are_isolated():
     assert first.values['operation'][1] == second.values['operation'][1] == 1
 
 
-def test_hosted_request_exposes_correlated_stages(caplog):
+@pytest.mark.parametrize('accuracy_enabled', [False, True])
+def test_hosted_request_exposes_correlated_stages(caplog, monkeypatch, accuracy_enabled):
     from app.main import log_request
+    from app.core.config import settings
+    monkeypatch.setattr(settings, 'FORECAST_ACCURACY_ENABLED', accuracy_enabled)
     with caplog.at_level(logging.INFO), workflow() as flow:
         flow.app.middleware('http')(log_request)
         with TestClient(flow.app) as client:
             response = client.post('/tonight')
         assert response.status_code == 200, response.text
-        for name in ('app', 'capture_history', 'planner', 'schedule', 'save_recommendation', 'forecast_tracking'):
+        for name in ('app', 'capture_history', 'planner', 'schedule', 'save_recommendation'):
             assert f'{name};dur=' in response.headers['Server-Timing']
+        for name in ('forecast_tracking', 'forecast_history'):
+            assert (f'{name};dur=' in response.headers['Server-Timing']) is accuracy_enabled
         request_id = response.headers['X-Request-ID']
         assert f'request_id={request_id} stage=planner' in caplog.text
 
